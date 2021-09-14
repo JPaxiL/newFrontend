@@ -29,3 +29,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## try new update
 ## second try new update
+
+## create route module
+## ng g m about --route=about -m app-routing.module.ts
