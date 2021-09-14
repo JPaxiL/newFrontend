@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import {NgbCarouselConfig} from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngxs/store';
 import { SignIn } from 'src/app/core/store/auth.actions';
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private store: Store,
+    private router: Router,
     config: NgbCarouselConfig, private fb: FormBuilder) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
@@ -48,7 +50,9 @@ export class LoginComponent implements OnInit {
       const params = <User>this.loginForm.value;
       // params['registrador_id'] = params['registrador']['id'];
       console.log(params);
-      this.store.dispatch(new SignIn( params.name,params.password));
+      this.store.dispatch(new SignIn( params.name,params.password)).subscribe((data) => {
+        this.router.navigate(['/dashboard']);
+     });
 
       // let categoria = <Categoria>params;
       // this.confirmSave(categoria);

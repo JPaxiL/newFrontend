@@ -6,6 +6,8 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthState } from '../store/auth.state';
+import { Store } from '@ngxs/store';
 
 // @Injectable()
 // export class TokenInterceptor implements HttpInterceptor {
