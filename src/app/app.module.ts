@@ -7,6 +7,8 @@ import { NavbarComponent } from './panel/components/navbar/navbar.component';
 import { SidebarComponent } from './panel/components/sidebar/sidebar.component';
 import { MapareaComponent } from './panel/components/maparea/maparea.component';
 import { PanelConfComponent } from './panel/components/panel-conf/panel-conf.component';
+import { VehiclesComponent } from './vehicles/components/vehicles/vehicles.component';
+import { VehicleComponent } from './vehicles/components/vehicle/vehicle.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { PanelConfComponent } from './panel/components/panel-conf/panel-conf.com
     NavbarComponent,
     SidebarComponent,
     MapareaComponent,
-    PanelConfComponent
+    PanelConfComponent,
+    VehiclesComponent,
+    VehicleComponent
   ],
   imports: [
     BrowserModule,
