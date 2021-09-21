@@ -9,4 +9,8 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ]
 })
-export class VehicleModule { }
+export class VehicleModule {
+  IMEI:string;
+  name:string;
+  icon:string;
+}
