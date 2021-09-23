@@ -23,6 +23,7 @@ import { PanelConfComponent } from './panel/components/panel-conf/panel-conf.com
 import { VehiclesComponent } from './vehicles/components/vehicles/vehicles.component';
 import { VehicleComponent } from './vehicles/components/vehicle/vehicle.component';
 import { SessionComponent } from './vehicles/components/session/session.component';
+import { MapComponent } from './vehicles/components/map/map.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { SessionComponent } from './vehicles/components/session/session.componen
     PanelConfComponent,
     VehiclesComponent,
     VehicleComponent,
-    SessionComponent
+    SessionComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
