@@ -1,0 +1,145 @@
+.tab-content {
+  /* border-left: 2px solid #34518D; */
+  /* border-right: 2px solid #34518D; */
+  background: #fff;
+  height: -webkit-fill-available;
+  width: 100%;
+  max-width: 400px;
+  /*
+  float: left;
+  clear: both; */
+  position: absolute;
+  /* border: 2px;
+  border-style: solid;
+  border-color: #34518D; */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+  z-index: 20001;
+  border-radius: 4px;
+  top: auto;
+  bottom: auto;
+  left: 65px;
+}
+
+
+.label-form-gl{
+  font-size: 11px;
+  text-align: right;
+  font-weight: bold;
+}
+
+.ng-select.custom {
+  border:0px;
+  min-height: 0px;
+  border-radius: 0;
+  font-size: 12px;
+  height: 30px;
+}
+.ng-select.custom .ng-select-container  {
+  min-height: 30px;
+  border-radius: 0;
+  height: 30px;
+}
+
+
+.claseinputs {
+  margin-top: 4px;
+  // display: block;
+  width: 100%;
+  height: 22px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.claseinputschck{
+  margin-top: 7px;
+}
+
+.header-Historial {
+  margin-bottom: 0px;
+  background-color: #6D99CB;
+  color: #fff;
+  text-align: right;
+}
+
+.btn-xs-gl {
+  padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+.form-control-color-gl {
+  width: 50px;
+  //height: 20px; // Override fixed browser height
+  padding: 3px;
+  margin-bottom: 3px;;
+  background-color: #EEE;
+}
+
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: 11px;
+  line-height: inherit;
+  color: #333;
+  border: 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+
+
+#tooltip {
+  display: inline-block;
+  background: #ffffff;
+  color: #643045;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+#arrow,
+#arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+#arrow {
+  visibility: hidden;
+}
+
+#arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+#tooltip[data-popper-placement^='top'] > #arrow {
+  bottom: -4px;
+}
+
+#tooltip[data-popper-placement^='bottom'] > #arrow {
+  top: -4px;
+}
+
+#tooltip[data-popper-placement^='left'] > #arrow {
+  right: -4px;
+}
+
+#tooltip[data-popper-placement^='right'] > #arrow {
+  left: -4px;
+}

@@ -1,5 +1,27 @@
-#panel_sidebar { 
-    position: absolute !important;
 
-    z-index: 10;
+#panel_sidebar {
+  /* border-left: 2px solid #34518D; */
+  /* border-right: 2px solid #34518D; */
+  background: #335375;
+  color: white;
+  height: auto; //-webkit-fill-available;
+  width: 100%;
+  max-width: 65px;
+  /*
+  float: left;
+  clear: both; */
+  position: absolute;
+  /* border: 2px;
+  border-style: solid;
+  border-color: #34518D; */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+  z-index: 20002;
+  border-radius: 4px;
+  top: auto;
+  bottom: auto;
+  left: 0px;
+}
+
+.nav-link {
+  color: white;
 }

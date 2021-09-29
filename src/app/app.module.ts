@@ -7,6 +7,9 @@ import {AuthInterceptor} from './vehicles/services/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
+
+
 
 
 
@@ -24,6 +27,9 @@ import { VehiclesComponent } from './vehicles/components/vehicles/vehicles.compo
 import { VehicleComponent } from './vehicles/components/vehicle/vehicle.component';
 import { SessionComponent } from './vehicles/components/session/session.component';
 import { MapComponent } from './vehicles/components/map/map.component';
+import { PanelHistorialComponent } from './historial/components/panel-historial/panel-historial.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 
 @NgModule({
@@ -36,7 +42,8 @@ import { MapComponent } from './vehicles/components/map/map.component';
     VehiclesComponent,
     VehicleComponent,
     SessionComponent,
-    MapComponent
+    MapComponent,
+    PanelHistorialComponent
   ],
   imports: [
     BrowserModule,
@@ -47,12 +54,14 @@ import { MapComponent } from './vehicles/components/map/map.component';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
+    NgSelectModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
+    BrowserAnimationsModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }, 
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     // {
     //   provide: HTTP_INTERCEPTORS,
