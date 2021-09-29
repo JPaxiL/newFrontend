@@ -6,10 +6,10 @@ import { VehiclesComponent } from './vehicles/components/vehicles/vehicles.compo
 import { SessionComponent } from './vehicles/components/session/session.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
-//import { AuthGuard } from './vehicles/services/auth.guard';
+// import { AuthGuard } from './vehicles/services/auth.guard';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) }, 
+  { path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) , canActivate: [AuthGuard]},
 
   {
