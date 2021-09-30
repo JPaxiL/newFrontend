@@ -47,7 +47,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
     NgxsModule.forRoot([AuthState]),
     AppRoutingModule,
     HttpClientModule,
