@@ -36,10 +36,10 @@ export class ErrorInterceptor implements HttpInterceptor {
 //      catchError(error => {
 //         if (request.url.includes('/auth/token') || error.status !== 401) {
 //           return throwError(error);
-//         }       
+//         }
 //         this.store.dispatch(new LogOut());
-//         this.router.navigateByUrl('/auth/login');  
-//         return throwError(error);      
+//         this.router.navigateByUrl('/auth/login');
+//         return throwError(error);
 //       //  if (error.status === 401) {
 //       //   // remove Bearer token and redirect to login page
 //       //    this.router.navigate(['/auth/login']);

@@ -1,16 +1,14 @@
-import { Action } from "@ngxs/store";
-import { User } from "../interfaces/User";
+import { Action } from '@ngxs/store';
+import { User } from '../interfaces/User';
 
 export class SignIn {
-    static readonly type = '[Auth] Sign In';
-  
-    constructor(public name: string, public password: string) {}
-  }
-  
-export class UpdateUser {
-static readonly type = '[Auth] Update User';
+  static readonly type = '[Auth] Sign In';
+  constructor(public name: string, public password: string) {}
+}
 
-constructor(public user: User) {}
+export class UpdateUser {
+  static readonly type = '[Auth] Update User';
+  constructor(public user: User) {}
 }
 
 export class LogOut  {
@@ -18,7 +16,6 @@ export class LogOut  {
 
   constructor() {
     console.log('LOGOUT');
-
   }
 }
 

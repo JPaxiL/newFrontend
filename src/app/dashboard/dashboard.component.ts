@@ -8,8 +8,8 @@ import { first } from 'rxjs/operators';
 
 export interface User {
 
-  name: String;
-  email: String;
+  name: string;
+  email: string;
 }
 
 @Component({
@@ -19,11 +19,11 @@ export interface User {
 })
 export class DashboardComponent implements OnInit {
 
-  users: User[] = [];
+  private users: User[] = [];
 
 
   constructor(
-    private userService :UsersService
+    private userService: UsersService
   ) { }
 
   ngOnInit(): void {
@@ -34,13 +34,13 @@ export class DashboardComponent implements OnInit {
     //   }),
     //   catchError((error: HttpErrorResponse) => throwError(error))
     //   )
-    
   }
 
-  private loadAllUsers() {
+  private loadAllUsers(): void {
     this.userService.getAll().pipe(first()).subscribe(users => {
-        this.users = users;
+        // this.users = users;
+        console.log(users);
     });
-}
+  }
 
 }

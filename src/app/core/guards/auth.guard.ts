@@ -18,7 +18,6 @@ import { AuthState } from '../store/auth.state';
 //     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 //     return true;
 //   }
-  
 // }
 
 
@@ -47,11 +46,10 @@ export class AuthGuard implements CanActivate {
     }
 
     return true;
-    ///return this.userService.current().pipe(
+    // return this.userService.current().pipe(
     // return this.http.get('hol').pipe(
     //   map((user: any) => {
     //     this.store.dispatch(new UpdateUser(user));
-
     //     return true;
     //   }),
     //   catchError(() => of(false)),
