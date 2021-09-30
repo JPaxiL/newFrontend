@@ -46,7 +46,7 @@ deploy:github:
   <<: *docker
   stage: deploy
   only:
-    - tags
+    - feature/deploy
   script:
     # Setup ssh with the key and trust the destination.
     - eval $(ssh-agent -s)
@@ -65,7 +65,7 @@ deploy:npm:
   <<: *docker
   stage: deploy
   only:
-    - tags
+    - feature/deploy
   script:
     # Build the library, publish dist.
     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
