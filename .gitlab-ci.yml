@@ -28,11 +28,13 @@ build:
     - npm run build
 
 # Verify it passes linting.
-# test:lint:
-#   <<: *docker
-#   stage: test
-#   script:
-#     - npm run lint
+test:lint:
+  <<: *docker
+  stage: test
+  only:
+    - develop    
+  script:
+    - npm run lint
 
 # Pass Karma
 test:karma:
