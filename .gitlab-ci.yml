@@ -23,7 +23,7 @@ build:
   artifacts:
     paths:
     - dist
-    expire_in: 1 week
+    # expire_in: 1 week
   script:
     - npm run build
 
