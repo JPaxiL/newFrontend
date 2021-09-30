@@ -38,6 +38,8 @@ build:
 test:karma:
   <<: *docker
   stage: test
+  only:
+    - develop  
   script:
     - npm run test
 
@@ -46,7 +48,7 @@ deploy:github:
   <<: *docker
   stage: deploy
   only:
-    - feature/deploy
+    - develop
   script:
     # Setup ssh with the key and trust the destination.
     - eval $(ssh-agent -s)
