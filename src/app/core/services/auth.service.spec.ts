@@ -8,7 +8,7 @@ describe('AuthServiceCore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports:[
+      imports: [
         HttpClientModule,
       ]
     });

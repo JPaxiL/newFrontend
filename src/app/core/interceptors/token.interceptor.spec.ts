@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 describe('TokenInterceptorCore', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports:[
+    imports: [
       HttpClientModule,
       NgxsModule.forRoot([AuthState]),
       NgxsStoragePluginModule.forRoot({

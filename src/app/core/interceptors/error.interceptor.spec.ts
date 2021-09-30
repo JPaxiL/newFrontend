@@ -9,7 +9,7 @@ import { ErrorInterceptor } from './error.interceptor';
 
 describe('ErrorInterceptorCore', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports:[
+    imports: [
       HttpClientModule,
       RouterTestingModule,
       NgxsModule.forRoot([AuthState]),

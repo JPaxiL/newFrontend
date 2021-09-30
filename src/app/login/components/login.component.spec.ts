@@ -6,7 +6,7 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { Store } from '@ngxs/store';
 import { AuthState } from 'src/app/core/store/auth.state';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { RouterTestingModule } from "@angular/router/testing";
+import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
