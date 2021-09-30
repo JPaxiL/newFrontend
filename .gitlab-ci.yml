@@ -40,6 +40,9 @@ test:lint:
 test:karma:
   <<: *docker
   stage: test
+  image: svaseghi/node-chrome:v1
+  before_script: 
+    - export CHROME_BIN=/usr/bin/google-chrome   
   only:
     - feature/deploy  
   script:
