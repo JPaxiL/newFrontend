@@ -1,23 +1,7 @@
-stages:
-  - install
-
-install_dependencies:
-  stage: install
+job_1:
+  stage: stage_a
   image: node:12-alpine
   tags:
     - docker
   script:
-    - yarn install
-    - yarn ngcc --properties es2015 --create-ivy-entry-points
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - node_modules
-  only:
-    refs:
-      - merge_requests
-      - master
-    changes:
-      - yarn.lock
+    - node --version
