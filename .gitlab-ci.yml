@@ -43,7 +43,8 @@ test:karma:
   only:
     - feature/deploy  
   script:
-    - npm run test
+    - npm run testKarma
+    # - npm run test
 
 # Push to GITHUB
 deploy:github:
