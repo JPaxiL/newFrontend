@@ -1,0 +1,7 @@
+job_1:
+  stage: stage_a
+  image: node:12-alpine
+  tags:
+    - docker
+  script:
+    - node --version
