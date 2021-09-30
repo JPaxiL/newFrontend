@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { OAuthResource } from '../interfaces/User';
 
 
 // import { Http, Headers, RequestOptions, Response,URLSearchParams } from '@angular/http';
@@ -17,8 +19,8 @@ export class UserService {
     users: any;
     constructor(private http: HttpClient) {
     }
-    getUsers(currentPage: string) {
-      return this.http.get(this.urlApi + 'clientes?page='+currentPage);
+    getUsers(currentPage: string): Observable<OAuthResource> {
+      return this.http.get<OAuthResource>(this.urlApi + 'clientes?page='+currentPage);
         // .map(res => res.json());
     }
     showOneUser(id: string){
@@ -49,8 +51,8 @@ export class UserService {
         //     return res.json();
         //   });
     }
-    getAll(){
-      return this.http.get(this.urlApi + 'clientes?page=1&per_page=50');
+    getAll(): Observable<OAuthResource>{
+      return this.http.get<OAuthResource>(this.urlApi + 'clientes?page=1&per_page=50');
         // .map(res => res.json());
     }
     //falta el search

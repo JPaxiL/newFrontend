@@ -8,7 +8,7 @@ import { SignIn } from 'src/app/core/store/auth.actions';
 
 export interface User {
   name: string;
-  password: string
+  password: string;
 }
 
 @Component({
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     `./assets/images/login/fondo1.jpg`,
     `./assets/images/login/fondo2.jpg`
   ];
-  
+
   loginForm!: FormGroup;
 
   constructor(
@@ -45,12 +45,12 @@ export class LoginComponent implements OnInit {
 
   }
 
-  save(){
+  save(): void{
     if (this.loginForm.valid) {
-      const params = <User>this.loginForm.value;
+      const params = this.loginForm.value;
       // params['registrador_id'] = params['registrador']['id'];
       console.log(params);
-      this.store.dispatch(new SignIn( params.name,params.password)).subscribe((data) => {
+      this.store.dispatch(new SignIn( params.name, params.password)).subscribe((data) => {
         this.router.navigate(['/dashboard']);
      });
 
