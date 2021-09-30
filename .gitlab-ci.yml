@@ -61,13 +61,13 @@ deploy:github:
     - git push origin master --follow-tags
 
 # Push to NPM
-deploy:npm:
-  <<: *docker
-  stage: deploy
-  only:
-    - feature/deploy
-  script:
-    # Build the library, publish dist.
-    - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-    - npm run build
-    - npm run dist
+# deploy:npm:
+#   <<: *docker
+#   stage: deploy
+#   only:
+#     - feature/deploy
+#   script:
+#     # Build the library, publish dist.
+#     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+#     - npm run build
+#     - npm run dist
