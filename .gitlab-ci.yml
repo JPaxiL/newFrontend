@@ -32,7 +32,7 @@ test:lint:
   <<: *docker
   stage: test
   only:
-    - develop    
+    - feature/deploy     
   script:
     - npm run lint
 
@@ -41,7 +41,7 @@ test:karma:
   <<: *docker
   stage: test
   only:
-    - develop  
+    - feature/deploy  
   script:
     - npm run test
 
@@ -50,7 +50,7 @@ deploy:github:
   <<: *docker
   stage: deploy
   only:
-    - develop
+    - main
   script:
     # Setup ssh with the key and trust the destination.
     - eval $(ssh-agent -s)
