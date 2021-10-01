@@ -23,7 +23,7 @@ build:
   artifacts:
     paths:
     - dist
-    expire_in: 1 week
+    # expire_in: 1 week
   script:
     - npm run build
 
@@ -32,7 +32,7 @@ test:lint:
   <<: *docker
   stage: test
   only:
-    - develop    
+    - develop     
   script:
     - npm run lint
 
@@ -40,17 +40,24 @@ test:lint:
 test:karma:
   <<: *docker
   stage: test
+  #image: svaseghi/node-chrome:v1
+  before_script:
+    - curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -     && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+    - apt-get update && apt-get install  google-chrome-stable     --no-install-recommends -y &> /dev/null
+    # - export CHROME_BIN=/usr/bin/chromium-browser
+    - export CHROME_BIN=/usr/bin/google-chrome   
   only:
     - develop  
   script:
-    - npm run test
+    - npm run testKarma
+    # - npm run test
 
 # Push to GITHUB
 deploy:github:
   <<: *docker
   stage: deploy
   only:
-    - develop
+    - main
   script:
     # Setup ssh with the key and trust the destination.
     - eval $(ssh-agent -s)
