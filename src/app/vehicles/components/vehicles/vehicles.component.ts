@@ -12,21 +12,20 @@ import { MapService } from '../../services/map.service';
 export class VehiclesComponent implements OnInit {
 
 
-  vehicles:Vehicle[]=[];
+  vehicles: Vehicle[] = [];
 
   constructor(
-    private vehicleService:VehicleService,
-    private mapService:MapService
+    private vehicleService: VehicleService,
+    private mapService: MapService
   ) {}
 
   ngOnInit(): void {
-    this.vehicleService.getVehicles().subscribe(vehicles=>{
+    this.vehicleService.getVehicles().subscribe(vehicles => {
         this.vehicles = vehicles;
         this.mapService.sendDataMap(this.vehicles);
     });
+  }
 
-  };
-  
 
 
 

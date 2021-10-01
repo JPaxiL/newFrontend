@@ -90,7 +90,7 @@ export class AuthService {
     return this.http.get<any>(API_URL + 'secret')
       .pipe(catchError(AuthService.handleError));
   }
-  getVehicles():Observable<any>{
+  getVehicles(): Observable<any>{
     return this.http.get<any>(API_URL + 'api/tracker')
       .pipe(catchError(AuthService.handleError));
   }
