@@ -20,6 +20,9 @@ stages:
 build:
   <<: *docker
   stage: build
+  only:
+    - develop
+    - main
   artifacts:
     paths:
     - dist
@@ -60,16 +63,35 @@ deploy:github:
     - main
   script:
     # Setup ssh with the key and trust the destination.
-    - eval $(ssh-agent -s)
-    - echo "${GITHUB_TOKEN}" | ssh-add -
-    - mkdir -p ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
-    # (Re)configure git and push w/ tags.
-    - git config user.name "${GITHUB_USER_NAME}"
-    - git config user.email "${GITHUB_USER_EMAIL}"
-    - git remote set-url origin ${GITHUB_REPO}
-    - git push origin master --follow-tags
+    - echo "====== Deploy to production server ======"
+    # Add target server`s secret key
+    - mkdir ~/.ssh
+     - echo -e "${TARGET_SERVER_SECRET_KEY_BASE64//_/\\n}" > ~/.ssh/id_rsa
+    #- eval $(ssh-agent -s)
+    #- echo "$TARGET_SERVER_SECRET_KEY_BASE64" | tr -d '\r' | ssh-add - > /dev/null
+    - chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
+    - echo "Test ssh connection"
+    #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
+    - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
+    # Delploy
+    - echo "Setup tagget server directories"
+    - cat package.json
+    # - pm2 deploy ecosystem.config.js production setup 2>&1 || true
+    - echo "make deploy"
+    # - pm2 deploy ecosystem.config.js production
+
+
+    # - eval $(ssh-agent -s)
+    # - echo "${GITHUB_TOKEN}" | ssh-add -
+    # - mkdir -p ~/.ssh
+    # - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+    # # (Re)configure git and push w/ tags.
+    # - git config user.name "${GITHUB_USER_NAME}"
+    # - git config user.email "${GITHUB_USER_EMAIL}"
+    # - git remote set-url origin ${GITHUB_REPO}
+    # - git push origin master --follow-tags
 
 # Push to NPM
 # deploy:npm:
