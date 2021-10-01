@@ -67,7 +67,7 @@ deploy:github:
     - echo "====== Deploy to production server ======"
     # Add target server`s secret key
     - mkdir ~/.ssh
-     - echo -e "${TARGET_SERVER_SECRET_KEY_BASE64//_/\\n}" > ~/.ssh/id_rsa
+    - echo -e "${TARGET_SERVER_SECRET_KEY_BASE64//_/\\n}" > ~/.ssh/id_rsa
     #- eval $(ssh-agent -s)
     #- echo "$TARGET_SERVER_SECRET_KEY_BASE64" | tr -d '\r' | ssh-add - > /dev/null
     - chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
