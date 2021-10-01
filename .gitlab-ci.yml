@@ -46,7 +46,7 @@ test:karma:
   stage: test
   #image: svaseghi/node-chrome:v1
   before_script: 
-    - export CHROME_BIN=/usr/bin/chromium-browser
+    #- export CHROME_BIN=/usr/bin/chromium-browser
     # - export CHROME_BIN=/usr/bin/google-chrome   
   only:
     - feature/deploy  
