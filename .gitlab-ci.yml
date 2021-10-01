@@ -28,13 +28,13 @@ build:
     - npm run build
 
 # Verify it passes linting.
-# test:lint:
-#   <<: *docker
-#   stage: test
-#   only:
-#     - feature/deploy     
-#   script:
-#     - npm run lint
+test:lint:
+  <<: *docker
+  stage: test
+  only:
+    - develop     
+  script:
+    - npm run lint
 
 # Pass Karma
 test:karma:
@@ -47,7 +47,7 @@ test:karma:
     # - export CHROME_BIN=/usr/bin/chromium-browser
     - export CHROME_BIN=/usr/bin/google-chrome   
   only:
-    - feature/deploy  
+    - develop  
   script:
     - npm run testKarma
     # - npm run test
