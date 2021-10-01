@@ -10,7 +10,7 @@ export class MapService {
 
   constructor() { }
 
-  sendDataMap(data:Vehicle[]){
+  sendDataMap(data: Vehicle[]): any{
     this.sendData.emit(data);
   }
 }
