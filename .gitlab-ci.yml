@@ -22,7 +22,7 @@ build:
   stage: build
   only:
     - develop
-    - main
+    - master
   artifacts:
     paths:
     - dist
@@ -60,7 +60,7 @@ deploy:github:
   <<: *docker
   stage: deploy
   only:
-    - main
+    - master
   script:
     # Setup ssh with the key and trust the destination.
 
