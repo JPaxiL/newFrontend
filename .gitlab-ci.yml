@@ -77,6 +77,7 @@ deploy:github:
     # Delploy
     - echo "Setup tagget server directories"
     - cat package.json
+    - cp -r dist ~/
     # - pm2 deploy ecosystem.config.js production setup 2>&1 || true
     - echo "make deploy"
     # - pm2 deploy ecosystem.config.js production
