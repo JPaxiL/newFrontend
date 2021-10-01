@@ -73,7 +73,8 @@ deploy:github:
     - chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
     - echo "Test ssh connection"
     #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
-    - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
+    - scp -r dist "gltracker@$TARGET_SERVER_HOST:/home/gltracker"
+    # - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
     # Delploy
     - echo "Setup tagget server directories"
     - cat package.json
