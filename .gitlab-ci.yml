@@ -74,6 +74,7 @@ deploy:github:
     - echo "Test ssh connection"
     - ls -al
     - ls ~/.ssh/
+    - cat /root/.ssh/id_rsa
     #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
     - scp -r dist "gltracker@$TARGET_SERVER_HOST:/home/gltracker" -i ~/.ssh/id_rsa
     # - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
