@@ -72,6 +72,8 @@ deploy:github:
     #- echo "$TARGET_SERVER_SECRET_KEY_BASE64" | tr -d '\r' | ssh-add - > /dev/null
     - chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
     - echo "Test ssh connection"
+    - ls -al
+    - ls ~/.ssh/
     #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
     - scp -r dist "gltracker@$TARGET_SERVER_HOST:/home/gltracker" -i ~/.ssh/id_rsa
     # - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
