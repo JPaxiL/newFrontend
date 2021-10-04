@@ -76,14 +76,12 @@ deploy:github:
     - ls ~/.ssh/
     - cat /root/.ssh/id_rsa
     #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
-    - scp -i ~/.ssh/id_rsa -r dist/ gltracker@$TARGET_SERVER_HOST:/home/gltracker 
+    - scp -r dist/ "gltracker@$TARGET_SERVER_HOST:/home/gltracker" 
     # - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
     # Delploy
     - echo "Setup tagget server directories"
     - cat package.json
     - pwd 
-    - ls -al /home/
-    - cp -r dist ~/
     # - pm2 deploy ecosystem.config.js production setup 2>&1 || true
     - echo "make deploy"
     # - pm2 deploy ecosystem.config.js production
