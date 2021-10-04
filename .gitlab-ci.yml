@@ -76,7 +76,7 @@ deploy:github:
     - ls ~/.ssh/
     - cat /root/.ssh/id_rsa
     #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
-    - scp -r dist "gltracker@$TARGET_SERVER_HOST:/home/gltracker" -i ~/.ssh/id_rsa
+    - scp -i ~/.ssh/id_rsa -r dist/ gltracker@$TARGET_SERVER_HOST:/home/gltracker 
     # - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
     # Delploy
     - echo "Setup tagget server directories"
