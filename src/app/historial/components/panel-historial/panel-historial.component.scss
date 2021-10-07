@@ -1,25 +1,3 @@
-.tab-content {
-  /* border-left: 2px solid #34518D; */
-  /* border-right: 2px solid #34518D; */
-  background: #fff;
-  height: -webkit-fill-available;
-  width: 100%;
-  max-width: 400px;
-  /*
-  float: left;
-  clear: both; */
-  position: absolute;
-  /* border: 2px;
-  border-style: solid;
-  border-color: #34518D; */
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
-  z-index: 20001;
-  border-radius: 4px;
-  top: auto;
-  bottom: auto;
-  left: 65px;
-}
-
 
 .label-form-gl{
   font-size: 11px;
@@ -98,48 +76,3 @@ legend {
   border-bottom: 1px solid #e5e5e5;
 }
 
-
-
-#tooltip {
-  display: inline-block;
-  background: #ffffff;
-  color: #643045;
-  font-weight: bold;
-  padding: 5px 10px;
-  font-size: 13px;
-  border-radius: 4px;
-}
-
-#arrow,
-#arrow::before {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: inherit;
-}
-
-#arrow {
-  visibility: hidden;
-}
-
-#arrow::before {
-  visibility: visible;
-  content: '';
-  transform: rotate(45deg);
-}
-
-#tooltip[data-popper-placement^='top'] > #arrow {
-  bottom: -4px;
-}
-
-#tooltip[data-popper-placement^='bottom'] > #arrow {
-  top: -4px;
-}
-
-#tooltip[data-popper-placement^='left'] > #arrow {
-  right: -4px;
-}
-
-#tooltip[data-popper-placement^='right'] > #arrow {
-  left: -4px;
-}

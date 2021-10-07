@@ -202,23 +202,6 @@ export class PanelHistorialComponent implements OnInit {
 
   }
 
-  hidePanelHistorial(): void {
-
-    console.log("Esconder panel");
-    $("#panelHistorial").hide( "slow" );
-
-
-    // if (this.visible) {
-    //   $("#panel_sidebar").hide( "slow" );
-    // } else {
-    //   $("#panel_sidebar").show( "slow" );
-    // }
-
-    // this.buttonTitle = this.visible?"Hide":"Show";
-  }
-
-
-
 
   // Busacdor de vehiculos en el historial
   customSearch(term: string, item: ItemHistorial) {

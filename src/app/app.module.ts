@@ -29,6 +29,8 @@ import { SessionComponent } from './vehicles/components/session/session.componen
 import { MapComponent } from './vehicles/components/map/map.component';
 import { PanelHistorialComponent } from './historial/components/panel-historial/panel-historial.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PanelMonitoreoComponent } from './panel/components/panel-monitoreo/panel-monitoreo.component';
+import { PanelGeopointsComponent } from './geopoints/components/panel-geopoints/panel-geopoints.component';
 
 
 
@@ -43,7 +45,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     VehicleComponent,
     SessionComponent,
     MapComponent,
-    PanelHistorialComponent
+    PanelHistorialComponent,
+    PanelMonitoreoComponent,
+    PanelGeopointsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PanelService } from '../../services/panel.service';
+
 declare var $: any;
 
 @Component({
@@ -8,15 +10,29 @@ declare var $: any;
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor( public panelService: PanelService ) { }
+
+  options = new Array(
+    { id:'GEOPOINTS' , name:"Geopunto"},
+    { id:'HISTORIAL' , name:"Historial"},
+  );
+
+
 
   ngOnInit(): void {
   }
 
-  showPanelHistorial(): void {
 
-    $("#panelHistorial").show( "slow" );
+  clickShowPanel( nomComponent:string ): void {
+
+    $("#panelMonitoreo").show( "slow" );
+    this.panelService.nombreComponente = nomComponent;
+
+    const item = this.options.filter((item)=> item.id == nomComponent);
+    this.panelService.nombreCabecera =   item[0].name;
+
   }
+
 
 
 

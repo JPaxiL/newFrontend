@@ -22,12 +22,12 @@
     </li>
 
     <li>
-      <a  class="nav-link py-3 border-bottom" title="Geopuntos"  data-bs-toggle="tooltip" data-bs-placement="right">
+      <a  class="nav-link py-3 border-bottom" (click)="clickShowPanel('GEOPOINTS')" title="Geopuntos"  data-bs-toggle="tooltip" data-bs-placement="right">
           <i class="fa far fa-street-view"></i>
       </a>
     </li>
     <li>
-      <a class="nav-link py-3 border-bottom" (click)="showPanelHistorial()" title="Historial" data-bs-toggle="tooltip" data-bs-placement="right">
+      <a class="nav-link py-3 border-bottom" (click)="clickShowPanel('HISTORIAL')" title="Historial" data-bs-toggle="tooltip" data-bs-placement="right">
           <i class="fa fas fa-map"></i>
       </a>
     </li>

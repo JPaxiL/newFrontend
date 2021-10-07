@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 
+declare var $: any;
+
 @Component({
   selector: 'app-maparea',
   templateUrl: './maparea.component.html',
@@ -15,6 +17,7 @@ export class MapareaComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.createMap();
+    $("#panelMonitoreo").hide( "slow" )
   }
 
 
