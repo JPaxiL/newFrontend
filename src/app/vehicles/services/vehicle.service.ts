@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http'
 })
 export class VehicleService {
 
-  private URL_LIST = 'http://127.0.0.1:8000/api/tracker';
+  private URL_LIST = 'http://api_monitoreo_gltracker.test/api/tracker';
 
   constructor(private http:HttpClient) {}
 

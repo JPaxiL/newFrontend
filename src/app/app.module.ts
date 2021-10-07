@@ -13,7 +13,8 @@ import { PanelConfComponent } from './panel/components/panel-conf/panel-conf.com
 import { VehiclesComponent } from './vehicles/components/vehicles/vehicles.component';
 import { VehicleComponent } from './vehicles/components/vehicle/vehicle.component';
 import { SessionComponent } from './vehicles/components/session/session.component';
-
+import { AlertModule } from './alerts/alert.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -27,11 +28,14 @@ import { SessionComponent } from './vehicles/components/session/session.componen
     SessionComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
+    AlertModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
   ],
   providers: [
     {
