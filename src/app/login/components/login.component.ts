@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
       // params['registrador_id'] = params['registrador']['id'];
       console.log(params);
       this.store.dispatch(new SignIn( params.name, params.password)).subscribe((data) => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/panel']);
      });
 
       // let categoria = <Categoria>params;
