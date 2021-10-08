@@ -1,48 +1,40 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-4 mb-4">
-      <div class="card card-cascade narrower">
-        <!--Card image-->
-        <div class="view view-cascade gradient-card-header blue-gradient">
-          <h5 class="mb-0">Lista de unidades</h5>
-        </div>
-        <!--/Card image-->
-        <div class="card-body card-body-cascade text-center">
-          <div id="map-container-google-8" class="z-depth-1-half map-container-5" style="height: 300px">
-            <!-- <div class="" *ngFor="let vehicle of vehicles">
-              <div class=""> {{vehicle.plate_number}}
-              </div>
-            </div> -->
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Placa</th>
-                  <th scope="col">Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let vehicle of vehicles">
-                  <td>{{vehicle.plate_number}}</td>
-                  <td>{{vehicle.dt_tracker}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+<div class="col">
+  <div class="row" style="margin-right: 0px; margin-left: 15px;">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="padding-left: 0px; padding-right: 0px;">
+      <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Buscar..." class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false" style="">
     </div>
-    <div class="col-md-8 mb-4">
-      <div class="card card-cascade narrower">
-        <!-- <div class="card-body card-body-cascade text-center"> -->
-          <div id="map-container-google-8" class="z-depth-1-half map-container-5" style="height: 500px">
-            <app-map></app-map>
-            <!-- <div class="" *ngFor="let vehicle of vehicles">
-              <div class=""> {{vehicle.plate_number}}
-              </div>
-            </div> -->
-          </div>
-        <!-- </div> -->
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left: 0px; padding-right: 0px;">
+      <button type="button" class="btn btn-primary">
+        <i class="fa fa-plus"></i>
+      </button>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right" style="padding-left: 0px; padding-right: 0px;">
+      <div ngbDropdown container="body">
+        <button class="btn btn-primary" ngbDropdownToggle>
+          <i class="fa fa-fw fa-sliders fa-1"></i>
+        </button>
+        <div ngbDropdownMenu>
+          <button ngbDropdownItem>Vista por Grupo</button>
+          <button ngbDropdownItem>Vista General</button>
+          <button ngbDropdownItem>Vista por Estado de Transmisión</button>
+          <div class="dropdown-divider"></div>
+          <button ngbDropdownItem>Otros ...</button>
+        </div>
       </div>
     </div>
   </div>
+</div>
+<div class="ag-theme-alpine" >
+    <ag-grid-angular
+    #agGrid
+    style="width: 100%; height: 450px; font-size: 10px;"
+    class="ag-theme-alpine"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    rowSelection="multiple"
+    [defaultColDef]="defaultColDef"
+    [rowHeight]="rowHeight"
+    (gridReady)="onGridReady($event)"
+    >
+    </ag-grid-angular>
 </div>

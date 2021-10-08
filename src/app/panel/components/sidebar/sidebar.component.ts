@@ -15,6 +15,7 @@ export class SidebarComponent implements OnInit {
   options = new Array(
     { id:'GEOPOINTS' , name:"Geopunto"},
     { id:'HISTORIAL' , name:"Historial"},
+    { id:'VEHICLES' , name:"Vehículos"},
   );
 
 

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-vehicle',
-  templateUrl: './vehicle.component.html',
-  styleUrls: ['./vehicle.component.scss']
+  selector: 'app-eye',
+  templateUrl: './eye.component.html',
+  styleUrls: ['./eye.component.scss']
 })
-export class VehicleComponent implements OnInit {
+export class EyeComponent implements OnInit {
 
   params: any;
-  
+
   constructor() { }
 
   ngOnInit(): void {
