@@ -57,6 +57,7 @@ export class VehiclesComponent implements OnInit {
     //     this.mapService.sendDataMap(this.vehicles);
     // });
     this.vehicles = RefData.data; //<---- data demo
+    this.mapService.sendDataMap(this.vehicles);
 
   }
 

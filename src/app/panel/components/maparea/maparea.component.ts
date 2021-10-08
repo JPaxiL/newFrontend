@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 
+import { MapService } from '../../../vehicles/services/map.service';
+
 declare var $: any;
 
 @Component({
@@ -10,13 +12,16 @@ declare var $: any;
 })
 export class MapareaComponent implements OnInit, AfterViewInit {
 
-  constructor() { }
+  private map!: L.Map;
+
+  constructor(private mapService: MapService) { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
     this.createMap();
+    // this.mapService.drawIcon(this.map);
     $("#panelMonitoreo").hide( "slow" )
   }
 
@@ -30,7 +35,7 @@ export class MapareaComponent implements OnInit, AfterViewInit {
 
     const zoomLevel = 7;
 
-    const map = L.map('map', {
+    this.map = L.map('map', {
       center: [parcThabor.lat, parcThabor.lng],
       zoom: zoomLevel
     });
@@ -42,7 +47,9 @@ export class MapareaComponent implements OnInit, AfterViewInit {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
-    mainLayer.addTo(map);
+    if(mainLayer.addTo(this.map)){
+      this.mapService.onDrawIcon(this.map);
+    }
 
   }
 
