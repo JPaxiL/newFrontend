@@ -50,15 +50,15 @@ deploy:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f frontend || true"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run \
-      --detach \
-      --restart always \
-      --name frontend \
-      --network service-network \
-      --env VIRTUAL_HOST=hello-world.example.com \
-      --env LETSENCRYPT_HOST=hello-world.example.com \
-      --env LETSENCRYPT_EMAIL="youremail@example.com" \
-      $TAG_COMMIT"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run 
+      --detach 
+      --restart always 
+      --name frontend 
+      --network service-network 
+      --env VIRTUAL_HOST=hello-world.example.com 
+      --env LETSENCRYPT_HOST=hello-world.example.com 
+      --env LETSENCRYPT_EMAIL="youremail@example.com" 
+      $TAG_COMMIT "
 
   environment:
     name: production
