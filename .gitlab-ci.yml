@@ -27,6 +27,8 @@ publish:
     - docker:dind
   script:
     - echo $TAG_LATEST."====== Deploy to production server ======".$TAG_COMMIT
+    - docker ps 
+    - ping -c 2  www.google.com
     - docker build -t $TAG_COMMIT -t $TAG_LATEST .
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker push $TAG_COMMIT
