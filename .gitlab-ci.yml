@@ -21,10 +21,17 @@ variables:
 # Verify it can build.
 
 publish:
-  image: docker:latest
+  image: docker:stable
   stage: publish
   services:
-    - docker:dind
+    - name: docker:dind
+      entrypoint: ["env", "-u", "DOCKER_HOST"]
+      command: ["dockerd-entrypoint.sh"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    # See https://github.com/docker-library/docker/pull/166
+    DOCKER_TLS_CERTDIR: ""
   script:
     - echo $TAG_LATEST."====== Deploy to production server ======".$TAG_COMMIT
     - docker ps 
