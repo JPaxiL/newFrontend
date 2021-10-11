@@ -1,47 +1,37 @@
+<div id="panel_sidebar">
+  <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+    <li class="nav-item">
+      <a class="nav-link py-3 border-bottom" (click)="clickShowPanel('VEHICLES')" title="Vehículos" data-bs-toggle="tooltip" data-bs-placement="right">
+          <i class="fa fal fa-bus"></i>
+      </a>
+    </li>
+    <li>
+      <a  class="nav-link py-3 border-bottom" title="Eventos" data-bs-toggle="tooltip" data-bs-placement="right">
+          <i class="fa far fa-bell"></i>
+      </a>
+    </li>
+    <li>
+      <a  class="nav-link py-3 border-bottom" title="Alertas" data-bs-toggle="tooltip" data-bs-placement="right">
+          <i class="fa far fa-exclamation-circle"></i>
+      </a>
+    </li>
+    <li>
+      <a class="nav-link py-3 border-bottom" title="Geocercas" data-bs-toggle="tooltip" data-bs-placement="right">
+          <i class="fa far fa-globe"></i>
+      </a>
+    </li>
 
-<div class="d-flex flex-column flex-shrink-0 bg-light" id="panel_sidebar" style="width: 4.5rem;">
-
-    <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
-      <li class="nav-item">
-        <a href="#" class="nav-link active py-3 border-bottom" aria-current="page" title="Home" data-bs-toggle="tooltip" data-bs-placement="right">
-            <i class="fa fal fa-bus"></i>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link py-3 border-bottom" title="Dashboard" data-bs-toggle="tooltip" data-bs-placement="right">
-            <i class="fa far fa-bell"></i>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link py-3 border-bottom dropdown-toggle" id="dropdownAlert" title="Alertas" role="button" data-bs-toggle="dropdown" data-bs-placement="right" aria-expanded="false">
-            <i class="fa far fa-exclamation-circle"></i>
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="dropdownAlert">
-            <li><a class="dropdown-item" routerLink="/alerts/list">Todas las alertas</a></li>
-            <li><a class="dropdown-item" routerLink="/alerts/gps">Alertas GPS</a></li>
-            <li><a class="dropdown-item" href="#">Alertas plataformas</a></li>
-            <li><a class="dropdown-item" href="#">Alertas accesorios</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#" class="nav-link py-3 border-bottom" title="Products" data-bs-toggle="tooltip" data-bs-placement="right">
-            <i class="fa far fa-globe"></i>
-        </a>
-      </li>
-
-      <li>
-        <a href="#" class="nav-link py-3 border-bottom" title="Orders" data-bs-toggle="tooltip" data-bs-placement="right">
-            <i class="fa far fa-street-view"></i>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link py-3 border-bottom" title="Orders" data-bs-toggle="tooltip" data-bs-placement="right">
-            <i class="fa fas fa-map"></i>
-        </a>
-      </li>
+    <li>
+      <a  class="nav-link py-3 border-bottom" (click)="clickShowPanel('GEOPOINTS')" title="Geopuntos"  data-bs-toggle="tooltip" data-bs-placement="right">
+          <i class="fa far fa-street-view"></i>
+      </a>
+    </li>
+    <li>
+      <a class="nav-link py-3 border-bottom" (click)="clickShowPanel('HISTORIAL')" title="Historial" data-bs-toggle="tooltip" data-bs-placement="right">
+          <i class="fa fas fa-map"></i>
+      </a>
+    </li>
 
 
-    </ul>
-    <!-- <router-outlet></router-outlet> -->
+  </ul>
 </div>
-

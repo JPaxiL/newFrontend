@@ -18,11 +18,11 @@ export class TokenService {
     return localStorage.getItem(REFRESH_TOKEN);
   }
 
-  saveToken(token:string):void {
+  saveToken(token: string): void {
     localStorage.setItem(ACCESS_TOKEN, token);
   }
 
-  saveRefreshToken(refreshToken:string):void {
+  saveRefreshToken(refreshToken: string): void {
     localStorage.setItem(REFRESH_TOKEN, refreshToken);
   }
 

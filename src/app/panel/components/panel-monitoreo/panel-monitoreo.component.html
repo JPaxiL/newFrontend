@@ -1,0 +1,25 @@
+<div class="content-panel-monitoreo" id="panelMonitoreo">
+
+  <div class="card">
+    <div class="card-header header-panel-monitoreo" (click)="clickHidePanel()" >{{panelService.nombreCabecera}}
+      <i class="fa fas fa-caret-left"></i>
+    </div>
+
+
+    <div *ngIf="(panelService.nombreComponente == 'GEOPOINTS')">
+      <app-panel-geopoints></app-panel-geopoints>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'HISTORIAL')">
+      <app-panel-historial ></app-panel-historial>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'VEHICLES')">
+      <app-panel-vehicles></app-panel-vehicles>
+    </div>
+
+
+
+
+  </div>
+</div>

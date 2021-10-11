@@ -6,7 +6,7 @@ import {TokenService} from './token.service';
 
 const OAUTH_CLIENT = '84';
 const OAUTH_SECRET = 'LUTj1k8Tley9SvQ1Jwmrha1HPHJs87ShfiQVB18S';
-const API_URL = 'http://127.0.0.1:8000/';
+const API_URL = 'http://127.0.0.1:8001/';
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -90,7 +90,7 @@ export class AuthService {
     return this.http.get<any>(API_URL + 'secret')
       .pipe(catchError(AuthService.handleError));
   }
-  getVehicles():Observable<any>{
+  getVehicles(): Observable<any>{
     return this.http.get<any>(API_URL + 'api/tracker')
       .pipe(catchError(AuthService.handleError));
   }
