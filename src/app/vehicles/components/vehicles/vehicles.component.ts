@@ -26,13 +26,15 @@ import { VehicleComponent } from '../../components/vehicle/vehicle.component';
 export class VehiclesComponent implements OnInit {
 
   public vehicles: Vehicle[] = [];
+  private init: boolean = true;
   public rowHeight: number = 38;
   public api: GridApi = new GridApi();
   public columnApi: ColumnApi = new ColumnApi();
   public defaultColDef:any = [];
 
+
    columnDefs: ColDef[] = [
-       { headerName: '', field: 'icon', cellRendererFramework: EyeComponent, resizable: true, width: 60, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
+       { headerName: '', field: 'active', cellRendererFramework: EyeComponent, resizable: true, width: 60, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
        { headerName: 'VehículohIDE', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
        { headerName: 'Vehículo', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent },
        { headerName: 'Monstrar Nombre', field: 'activo', sortable: false, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: TagHeaderComponent },
@@ -45,6 +47,7 @@ export class VehiclesComponent implements OnInit {
     ];
 
    public rowData: any = RefData.data;
+   // public rowData: [];
 
   constructor(
     private vehicleService: VehicleService,
@@ -52,12 +55,27 @@ export class VehiclesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log( "data",this.rowData);
     // this.vehicleService.getVehicles().subscribe(vehicles => {
     //     this.vehicles = vehicles;
     //     this.mapService.sendDataMap(this.vehicles);
     // });
-    this.vehicles = RefData.data; //<---- data demo
-    this.mapService.sendDataMap(this.vehicles);
+    // this.mapService.sendDataMap(this.vehicles);
+    if(this.init){
+      this.vehicles = RefData.data; //<---- data demo
+      console.log("cargando datos");
+      this.init=false;
+    }else{
+      console.log("datos ya se encuentran cargados");
+    }
+
+    this.mapService.changeEye.subscribe(id => {
+      this.changeEye(id);
+    });
+    console.log("On Init");
+
+  }
+  private changeEye(id: number) :void {
 
   }
 
@@ -69,6 +87,11 @@ export class VehiclesComponent implements OnInit {
 
   public onQuickFilterChanged($event: any) {
       this.api.setQuickFilter($event.target.value);
+  }
+
+  demo(vehicle: Vehicle){
+    this.vehicles = this.vehicles.filter(x => x.IMEI == vehicle.IMEI);
+
   }
 
 

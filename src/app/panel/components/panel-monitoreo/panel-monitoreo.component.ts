@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PanelService } from '../../services/panel.service';
 
 declare var $: any;
@@ -12,9 +12,7 @@ export class PanelMonitoreoComponent implements OnInit {
 
   constructor( public panelService: PanelService ) { }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 
   clickHidePanel(): void {
     $("#panelMonitoreo").hide( "slow" );

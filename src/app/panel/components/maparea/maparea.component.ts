@@ -12,7 +12,7 @@ declare var $: any;
 })
 export class MapareaComponent implements OnInit, AfterViewInit {
 
-  private map!: L.Map;
+  private map!: L.Map;  
 
   constructor(private mapService: MapService) { }
 
@@ -21,7 +21,6 @@ export class MapareaComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.createMap();
-    // this.mapService.drawIcon(this.map);
     $("#panelMonitoreo").hide( "slow" )
   }
 
