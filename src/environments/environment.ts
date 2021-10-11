@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://api_monitoreo_gltracker.test/api/',
+  apiUrl: 'http://api_monitoreo_gltracker.test',
+
 };
 
 /*
