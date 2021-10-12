@@ -32,7 +32,7 @@ export class VehicleService {
   //app
   updateVehicleActive(data: Vehicle): void{
     this.vehicles = data;
-    this.drawIconMap.emit();    
+    this.drawIconMap.emit(data);    
   }
 
 }

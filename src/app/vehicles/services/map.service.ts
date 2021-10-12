@@ -17,7 +17,6 @@ export class MapService {
 
   @Output() sendData = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
-  // @Output() drawIcon = new EventEmitter<any>();
 
   constructor(private vehicleService:VehicleService) {
     this.vehicleService.drawIconMap.subscribe(e=>{
@@ -37,7 +36,6 @@ export class MapService {
     this.map = map;
 
     const e = this.vehicleService.getVehiclesDemo();
-
 
     for (const layer in this.marker){
       this.map.removeLayer(this.marker[layer]);

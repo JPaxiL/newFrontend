@@ -52,7 +52,13 @@ export class VehiclesComponent implements OnInit {
   constructor(
     private vehicleService: VehicleService,
     private mapService: MapService
-  ) {}
+  ) {
+
+    this.vehicleService.drawIconMap.subscribe(e=>{
+        this.api.setRowData([]);
+        this.api.updateRowData({add:e});
+    });
+  }
 
   ngOnInit(): void {
     console.log( "data",this.rowData);
@@ -61,18 +67,12 @@ export class VehiclesComponent implements OnInit {
     //     this.mapService.sendDataMap(this.vehicles);
     // });
     // this.mapService.sendDataMap(this.vehicles);
-    if(this.init){
-      this.vehicles = RefData.data; //<---- data demo
-      console.log("cargando datos");
-      this.init=false;
-    }else{
-      console.log("datos ya se encuentran cargados");
-    }
+
+    this.vehicles = RefData.data; //<---- data demo
 
     this.mapService.changeEye.subscribe(id => {
       this.changeEye(id);
     });
-    console.log("On Init");
 
   }
   private changeEye(id: number) :void {
