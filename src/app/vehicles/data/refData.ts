@@ -1,8 +1,9 @@
 export default class RefData {
   static data = [
-
     {
         IMEI:"868899043955117",
+        active:true,
+        altitud:531,
         name:"BLA-244",
         icon:"42.png",
         model:null,
@@ -22,12 +23,10 @@ export default class RefData {
         dat_correctivo_fin:"2018-01-01 00:00:00",
         dt_tracker:"2021-08-17 08:45:15",
         dt_server:"2021-08-17 08:46:05",
-        altitud:531,
         angulo:"226.7",
         speed:0,
         latitud:"-18.0188965",
         longitud:"-70.2613499",
-        active:true,
         tanque:"0,0,0,0,0,0",
         idgrupo:null,
         idconvoy:null,
