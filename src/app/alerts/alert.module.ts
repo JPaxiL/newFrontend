@@ -6,11 +6,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertListComponent } from './components/alert-list/alert-list.component';
-
+import { AgGridModule } from 'ag-grid-angular';
+import { ActiveAlertComponent } from './components/active-alert/active-alert.component';
+import { SystemAlertComponent } from './components/system-alert/system-alert.component';
+import { EmailAlertComponent } from './components/email-alert/email-alert.component';
 
 @NgModule({
   declarations: [
-    AlertListComponent
+    AlertListComponent,
+    ActiveAlertComponent,
+    SystemAlertComponent,
+    EmailAlertComponent
   ],
   imports: [
     CommonModule,
@@ -19,6 +25,13 @@ import { AlertListComponent } from './components/alert-list/alert-list.component
     FormsModule,
     ReactiveFormsModule,
     AlertRoutingModule,
+    AgGridModule
+  ],
+  exports:[
+    AlertListComponent,
+    ActiveAlertComponent
   ]
 })
-export class AlertModule { }
+export class AlertModule {
+
+ }

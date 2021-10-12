@@ -43,6 +43,7 @@ import { GsmHeaderComponent } from './vehicles/components/gsm-header/gsm-header.
 
 import { AlertModule } from './alerts/alert.module';
 import { CommonModule } from '@angular/common';
+import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-alerts.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { CommonModule } from '@angular/common';
     EyeComponent,
     GpsHeaderComponent,
     GsmHeaderComponent,
+    PanelAlertsComponent,
   ],
   imports: [
     CommonModule,

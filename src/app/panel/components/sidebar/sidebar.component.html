@@ -6,14 +6,21 @@
       </a>
     </li>
     <li>
-      <a  class="nav-link py-3 border-bottom" title="Eventos" data-bs-toggle="tooltip" data-bs-placement="right">
+      <a  class="nav-link py-3 border-bottom"  title="Eventos" data-bs-toggle="tooltip" data-bs-placement="right">
           <i class="fa far fa-bell"></i>
       </a>
     </li>
-    <li>
-      <a  class="nav-link py-3 border-bottom" title="Alertas" data-bs-toggle="tooltip" data-bs-placement="right">
+
+    <li ngbDropdown placement="right-bottom">
+      <a href="#"  id="dropdownAlert" ngbDropdownToggle  class="nav-link py-3 border-bottom dropdown-toggle" id="dropdownAlert" title="Alertas" role="button" data-bs-toggle="dropdown" data-bs-placement="right" aria-expanded="false">
           <i class="fa far fa-exclamation-circle"></i>
       </a>
+      <ul ngbDropdownMenu aria-labelledby="dropdownAlert">
+          <li><a ngbDropdownItem (click)="clickShowPanel('ALERTS')">Todas las alertas</a></li>
+          <li><a ngbDropdownItem (click)="clickShowPanel('ALERTS-GPS')">Alertas GPS</a></li>
+          <li><a ngbDropdownItem (click)="clickShowPanel('ALERTS-platforms')">Alertas plataformas</a></li>
+          <li><a ngbDropdownItem (click)="clickShowPanel('ALERTS-accessories')">Alertas accesorios</a></li>
+      </ul>
     </li>
     <li>
       <a class="nav-link py-3 border-bottom" title="Geocercas" data-bs-toggle="tooltip" data-bs-placement="right">
@@ -31,7 +38,5 @@
           <i class="fa fas fa-map"></i>
       </a>
     </li>
-
-
   </ul>
 </div>

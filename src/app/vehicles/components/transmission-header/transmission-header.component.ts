@@ -12,7 +12,7 @@ export class TransmissionHeaderComponent implements IHeaderAngularComp {
   agInit(headerParams: IHeaderParams): void {}
 
   constructor() { }
-  
+
   refresh(params: any) : boolean {
         return true;
   }
