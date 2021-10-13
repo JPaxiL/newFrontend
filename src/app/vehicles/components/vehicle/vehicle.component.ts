@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VehicleComponent implements OnInit {
 
+  params: any;
+  
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  agInit(params: any){
+    this.params = params;
   }
 
 }

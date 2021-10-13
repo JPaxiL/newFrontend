@@ -25,6 +25,8 @@ export class NavbarComponent implements OnInit {
     console.log("Mostrar-Esconder sidebar");
     if(this.sidevarIZ){
       $("#panel_sidebar").hide( "slow" );
+      $("#panelMonitoreo").hide( "slow" );
+
       this.sidevarIZ = false;
     } else {
       $("#panel_sidebar").show( "slow" );

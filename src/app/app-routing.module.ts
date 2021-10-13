@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'vehicles',
-    canActivate: [ AuthGuard ],
+    // canActivate: [ AuthGuard ],
     component: VehiclesComponent },
   {
     path: 'session',

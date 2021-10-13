@@ -47,6 +47,6 @@ export class SessionComponent implements OnInit {
         this.isSubmitted = false;
       });
   }
-  get formControls() { return this.loginForm.controls; }
+  get formControls(): any { return this.loginForm.controls; }
 
 }

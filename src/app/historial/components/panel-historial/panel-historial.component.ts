@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { ItemHistorial } from 'src/app/historial/models/vehicle';
 
 import * as moment from 'moment';
+import * as L from 'leaflet';
 
+import { MapServicesService } from '../../../map/services/map-services.service';
 
 
 declare var $: any;
@@ -165,21 +167,23 @@ export class PanelHistorialComponent implements OnInit {
       { nombre: 'DRF-345',imei:'444444444' },
   ];
 
-  constructor() {
-      // // const today = new Date();
-      // // const month = today.getMonth();
-      // // const year = today.getFullYear();
+  constructor(public mapService: MapServicesService) { }
 
-      // this.campaignOne = new FormGroup({
-      // //   // start: new FormControl(new Date(year, month, 13)),
-      // //   // end: new FormControl(new Date(year, month, 16))
-      // });
+  // constructor() {
+  //     // // const today = new Date();
+  //     // // const month = today.getMonth();
+  //     // // const year = today.getFullYear();
 
-      // this.campaignTwo = new FormGroup({
-      // //   // start: new FormControl(new Date(year, month, 15)),
-      // //   // end: new FormControl(new Date(year, month, 19))
-      // });
-  }
+  //     // this.campaignOne = new FormGroup({
+  //     // //   // start: new FormControl(new Date(year, month, 13)),
+  //     // //   // end: new FormControl(new Date(year, month, 16))
+  //     // });
+
+  //     // this.campaignTwo = new FormGroup({
+  //     // //   // start: new FormControl(new Date(year, month, 15)),
+  //     // //   // end: new FormControl(new Date(year, month, 19))
+  //     // });
+  // }
 
   ngOnInit(): void {
     // $( "#datepicker" ).datepicker();
@@ -200,24 +204,21 @@ export class PanelHistorialComponent implements OnInit {
 
 
 
+    const iconMarker = L.icon({
+      iconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png', //'./marker-icon.png',
+      iconSize: [30, 50],
+      iconAnchor: [15, 50]
+    });
+
+    const tempMarker = L.marker([0, 0], {icon: iconMarker}).addTo(this.mapService.map);
+    console.log(this.mapService.nombreMap);
+    // setTimeout(() => {
+    //   const tempMarker = L.marker([0, 0], {icon: iconMarker}).addTo(this.mapService.map);
+    //   console.log(this.mapService.nombreMap);
+
+    // }, 5000)
+
   }
-
-  hidePanelHistorial(): void {
-
-    console.log("Esconder panel");
-    $("#panelHistorial").hide( "slow" );
-
-
-    // if (this.visible) {
-    //   $("#panel_sidebar").hide( "slow" );
-    // } else {
-    //   $("#panel_sidebar").show( "slow" );
-    // }
-
-    // this.buttonTitle = this.visible?"Hide":"Show";
-  }
-
-
 
 
   // Busacdor de vehiculos en el historial

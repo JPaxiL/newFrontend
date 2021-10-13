@@ -1,0 +1,6 @@
+<div *ngIf="params.value == true" class="">
+  <span (click)="onClickEye()" class="btn-label"><i class="fas fa-eye"></i></span>
+</div>
+<div *ngIf="params.value == false" class="">    
+  <span (click)="onClickEye()" class="btn-label"><i class="fa fa-eye-slash"></i></span>
+</div>
