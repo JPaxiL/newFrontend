@@ -38,6 +38,8 @@ publish:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker push $TAG_COMMIT
     - docker push $TAG_LATEST
+  only:
+    - develop
 
 deploy:
   image: alpine:latest
@@ -65,4 +67,4 @@ deploy:
     name: production
     url: http://23.29.124.174
   only:
-    - master
+    - develop
