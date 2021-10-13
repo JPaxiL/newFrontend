@@ -55,8 +55,8 @@ deploy:
       --restart always 
       --name frontend 
       --network service-network 
-      --env VIRTUAL_HOST=nginx.glmonitoreo.com 
-      --env LETSENCRYPT_HOST=nginx.glmonitoreo.com 
+      --env VIRTUAL_HOST=monitoreoprueba.glmonitoreo.com 
+      --env LETSENCRYPT_HOST=monitoreoprueba.glmonitoreo.com 
       --env LETSENCRYPT_EMAIL="neil20fc@gmail.com"  
       --env REDIRECT_STATUS_CODE=301 
       $TAG_COMMIT "
