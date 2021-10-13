@@ -22,6 +22,9 @@ export class MapService {
     this.vehicleService.drawIconMap.subscribe(e=>{
       this.onDrawIcon(this.map);
     });
+    this.vehicleService.dataCompleted.subscribe(vehicles=>{
+      this.onDrawIcon(this.map);
+    });
   }
 
   changeStatusEye(id: number): void {
@@ -32,11 +35,16 @@ export class MapService {
     this.sendData.emit(data);
   }
 
-  onDrawIcon(map: any): void{
+  loadMap(map: any): void{
     this.map = map;
+  }
 
-    const e = this.vehicleService.getVehiclesDemo();
+  onDrawIcon(map: any): void{
+    console.log("onDrawIcon");
+    // this.map = map;
 
+    const e = this.vehicleService.vehicles;
+    console.log("vehicles",e);
     for (const layer in this.marker){
       this.map.removeLayer(this.marker[layer]);
     }

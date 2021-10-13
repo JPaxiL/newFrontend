@@ -40,6 +40,12 @@ import { EyeComponent } from './vehicles/components/eye/eye.component';
 import { GpsHeaderComponent } from './vehicles/components/gps-header/gps-header.component';
 import { GsmHeaderComponent } from './vehicles/components/gsm-header/gsm-header.component';
 import { MapViewComponent } from './map/components/map-view/map-view.component';
+import { TransmissionComponent } from './vehicles/components/transmission/transmission.component';
+import { GpsComponent } from './vehicles/components/gps/gps.component';
+import { GsmComponent } from './vehicles/components/gsm/gsm.component';
+import { SettingComponent } from './vehicles/components/setting/setting.component';
+import { TagComponent } from './vehicles/components/tag/tag.component';
+import { FollowComponent } from './vehicles/components/follow/follow.component';
 
 
 
@@ -68,6 +74,12 @@ import { MapViewComponent } from './map/components/map-view/map-view.component';
     GpsHeaderComponent,
     GsmHeaderComponent,
     MapViewComponent,
+    TransmissionComponent,
+    GpsComponent,
+    GsmComponent,
+    SettingComponent,
+    TagComponent,
+    FollowComponent,
   ],
   imports: [
     BrowserModule,

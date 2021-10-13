@@ -35,7 +35,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10237,
-        tolva:""},
+        tolva:"",
+        point_color:100
+      },
     {
         IMEI:"869530043811872",
         name:"D0A-968",
@@ -71,7 +73,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10180,
-        tolva:""},
+        tolva:"",
+        point_color:60
+      },
     {
         IMEI:"869530043807524",
         name:"D5R-967",
@@ -107,7 +111,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10181,
-        tolva:""},
+        tolva:"",
+        point_color:50
+      },
     {
         IMEI:"863003042116160",
         name:"D5S-957",
@@ -143,7 +149,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10156,
-        tolva:""},
+        tolva:"",
+        point_color:40
+      },
     {
         IMEI:"865851039594916",
         name:"D7L-951",
@@ -179,7 +187,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10200,
-        tolva:""
+        tolva:"",
+        point_color:30
+
     },
     {
         IMEI:"869530043777073",
@@ -216,7 +226,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10183,
-        tolva:""},
+        tolva:"",
+        point_color:20
+      },
     {
         IMEI:"869530043785456",
         name:"D8P-950",
@@ -252,7 +264,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10182,
-        tolva:""},
+        tolva:"",
+        point_color:10
+      },
     {
         IMEI:"869530043787213",
         name:"D8P-963",
@@ -288,7 +302,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10179,
-        tolva:""},
+        tolva:"",
+        point_color:40
+      },
     {
         IMEI:"867688038826602",
         name:"D9R-952",
@@ -324,7 +340,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10152,
-        tolva:""},
+        tolva:"",
+        point_color:40
+      },
     {
         IMEI:"869530043816574",
         name:"F3Z-962",
@@ -360,7 +378,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10192,
-        tolva:""},
+        tolva:"",
+        point_color:40
+      },
     {
         IMEI:"869530043785274",
         name:"F4A-952",
@@ -396,7 +416,9 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10178,
-        tolva:""},
+        tolva:"",
+        point_color:40
+      },
     {
         IMEI:"868899043971726",
         name:"F5Y-954",
@@ -432,5 +454,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10236,
-        tolva:""}]
+        tolva:"",
+        point_color:40
+      }]
 }

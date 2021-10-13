@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ColDef, GridApi, GridReadyEvent,  ColumnApi } from 'ag-grid-community';
+import { Observable } from 'rxjs';
 
 import { Vehicle } from '../../models/vehicle';
 
 import { VehicleService } from '../../services/vehicle.service';
 import { MapService } from '../../services/map.service';
-import RefData from '../../data/refData';
+// import RefData from '../../data/refData';
 
 import { EyeHeaderComponent } from '../../components/eye-header/eye-header.component';
 import { TagHeaderComponent } from '../../components/tag-header/tag-header.component';
@@ -17,6 +18,7 @@ import { GpsHeaderComponent } from '../../components/gps-header/gps-header.compo
 import { GsmHeaderComponent } from '../../components/gsm-header/gsm-header.component';
 import { EyeComponent } from '../../components/eye/eye.component';
 import { VehicleComponent } from '../../components/vehicle/vehicle.component';
+import { TransmissionComponent } from '../../components/transmission/transmission.component';
 
 @Component({
   selector: 'app-vehicles',
@@ -42,12 +44,13 @@ export class VehiclesComponent implements OnInit {
        { headerName: 'Limite de velocidad', field: 'speed', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
        { headerName: 'GPS', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, headerComponentFramework: GpsHeaderComponent },
        { headerName: 'GSM', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, headerComponentFramework: GsmHeaderComponent },
-       { headerName: 'Estado de transmision', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: TransmissionHeaderComponent },
+       { headerName: 'Estado de transmision', field: 'point_color', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'},cellRendererFramework: TransmissionComponent, headerComponentFramework: TransmissionHeaderComponent },
        { headerName: 'Configurar', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: SettingHeaderComponent }
     ];
 
-   public rowData: any = RefData.data;
-   // public rowData: [];
+   // public rowData: any = RefData.data;
+   // rowData: Observable<any[]>;
+   public rowData: any;
 
   constructor(
     private vehicleService: VehicleService,
@@ -58,24 +61,22 @@ export class VehiclesComponent implements OnInit {
         this.api.setRowData([]);
         this.api.updateRowData({add:e});
     });
+
+    this.vehicleService.dataCompleted.subscribe(vehicles=>{
+      this.vehicles = vehicles;
+      this.api.setRowData([]);
+      this.api.updateRowData({add:vehicles});
+    });
   }
 
   ngOnInit(): void {
-    console.log( "data",this.rowData);
-    // this.vehicleService.getVehicles().subscribe(vehicles => {
-    //     this.vehicles = vehicles;
-    //     this.mapService.sendDataMap(this.vehicles);
-    // });
-    // this.mapService.sendDataMap(this.vehicles);
-
-    this.vehicles = RefData.data; //<---- data demo
-
-    this.mapService.changeEye.subscribe(id => {
-      this.changeEye(id);
-    });
-
-  }
-  private changeEye(id: number) :void {
+    setTimeout(()=>{
+      if(this.vehicleService.statusDataVehicle){
+        this.vehicles = this.vehicleService.vehicles;
+        this.api.setRowData([]);
+        this.api.updateRowData({add:this.vehicleService.vehicles});
+      }
+    },300);
 
   }
 
@@ -88,11 +89,5 @@ export class VehiclesComponent implements OnInit {
   public onQuickFilterChanged($event: any) {
       this.api.setQuickFilter($event.target.value);
   }
-
-  demo(vehicle: Vehicle){
-    this.vehicles = this.vehicles.filter(x => x.IMEI == vehicle.IMEI);
-
-  }
-
 
 }
