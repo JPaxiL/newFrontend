@@ -1,106 +1,70 @@
-image: node:latest
+#image: node:latest
 
-.docker: &docker
-  tags:
-  - docker
+#.docker: &docker
+#  tags:
+#  - docker
 
-before_script:
-  - npm install
+#before_script:
+#  - npm install
 
-cache:
-  paths:
-    - node_modules/
+#cache:
+#  paths:
+#    - node_modules/
 
 stages:
-  - build
-  - test
+  - publish
   - deploy
 
+variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
 # Verify it can build.
-build:
-  <<: *docker
-  stage: build
+
+publish:
+  image: docker:stable
+  stage: publish
+  services:
+    - name: docker:dind
+      entrypoint: ["env", "-u", "DOCKER_HOST"]
+      command: ["dockerd-entrypoint.sh"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    # See https://github.com/docker-library/docker/pull/166
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - echo $TAG_LATEST."====== Deploy to production server ======".$TAG_COMMIT
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
   only:
     - develop
-    - main
-  artifacts:
-    paths:
-    - dist
-    # expire_in: 1 week
-  script:
-    - npm run build
 
-# Verify it passes linting.
-test:lint:
-  <<: *docker
-  stage: test
-  only:
-    - develop     
-  script:
-    - npm run lint
-
-# Pass Karma
-test:karma:
-  <<: *docker
-  stage: test
-  #image: svaseghi/node-chrome:v1
-  before_script:
-    - curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -     && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
-    - apt-get update && apt-get install  google-chrome-stable     --no-install-recommends -y &> /dev/null
-    # - export CHROME_BIN=/usr/bin/chromium-browser
-    - export CHROME_BIN=/usr/bin/google-chrome   
-  only:
-    - develop  
-  script:
-    - npm run testKarma
-    # - npm run test
-
-# Push to GITHUB
-deploy:github:
-  <<: *docker
+deploy:
+  image: alpine:latest
   stage: deploy
-  only:
-    - main
+  tags:
+    - deployment
   script:
-    # Setup ssh with the key and trust the destination.
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f frontend || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run 
+      --detach 
+      --restart always 
+      --name frontend 
+      --network service-network 
+      --env VIRTUAL_HOST=monitoreoprueba.glmonitoreo.com 
+      --env LETSENCRYPT_HOST=monitoreoprueba.glmonitoreo.com 
+      --env LETSENCRYPT_EMAIL="neil20fc@gmail.com"  
+      --env REDIRECT_STATUS_CODE=301 
+      $TAG_COMMIT "
 
-    - echo "====== Deploy to production server ======"
-    # Add target server`s secret key
-    - mkdir ~/.ssh
-     - echo -e "${TARGET_SERVER_SECRET_KEY_BASE64//_/\\n}" > ~/.ssh/id_rsa
-    #- eval $(ssh-agent -s)
-    #- echo "$TARGET_SERVER_SECRET_KEY_BASE64" | tr -d '\r' | ssh-add - > /dev/null
-    - chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
-    - echo "Test ssh connection"
-    #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
-    - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
-    # Delploy
-    - echo "Setup tagget server directories"
-    - cat package.json
-    # - pm2 deploy ecosystem.config.js production setup 2>&1 || true
-    - echo "make deploy"
-    # - pm2 deploy ecosystem.config.js production
-
-
-    # - eval $(ssh-agent -s)
-    # - echo "${GITHUB_TOKEN}" | ssh-add -
-    # - mkdir -p ~/.ssh
-    # - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
-    # # (Re)configure git and push w/ tags.
-    # - git config user.name "${GITHUB_USER_NAME}"
-    # - git config user.email "${GITHUB_USER_EMAIL}"
-    # - git remote set-url origin ${GITHUB_REPO}
-    # - git push origin master --follow-tags
-
-# Push to NPM
-# deploy:npm:
-#   <<: *docker
-#   stage: deploy
-#   only:
-#     - feature/deploy
-#   script:
-#     # Build the library, publish dist.
-#     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-#     - npm run build
-#     - npm run dist
+  environment:
+    name: production
+    url: http://23.29.124.174
+  only:
+    - develop

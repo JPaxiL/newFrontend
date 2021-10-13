@@ -1,0 +1,140 @@
+image: node:latest
+
+.docker: &docker
+  tags:
+  - docker
+
+before_script:
+  - npm install
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
+# Verify it can build.
+build:
+  <<: *docker
+  stage: build
+  only:
+    - develop
+    - master
+  artifacts:
+    paths:
+    - dist
+    # expire_in: 1 week
+  script:
+    - npm run build
+
+# Verify it passes linting.
+test:lint:
+  <<: *docker
+  stage: test
+  only:
+    - develop     
+  script:
+    - npm run lint
+
+# Pass Karma
+test:karma:
+  <<: *docker
+  stage: test
+  #image: svaseghi/node-chrome:v1
+  before_script:
+    - curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -     && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+    - apt-get update && apt-get install  google-chrome-stable     --no-install-recommends -y &> /dev/null
+    # - export CHROME_BIN=/usr/bin/chromium-browser
+    - export CHROME_BIN=/usr/bin/google-chrome   
+  only:
+    - develop  
+  script:
+    - npm run testKarma
+    # - npm run test
+
+# Push to GITHUB
+deploy:github:
+  <<: *docker
+  stage: deploy
+  only:
+    - master
+  script:
+    # Setup ssh with the key and trust the destination.
+
+    - echo "====== Deploy to production server ======"
+    # Add target server`s secret key
+    - mkdir ~/.ssh
+    - echo -e "${TARGET_SERVER_SECRET_KEY_BASE64//_/\\n}" > ~/.ssh/id_rsa
+    #- eval $(ssh-agent -s)
+    #- echo "$TARGET_SERVER_SECRET_KEY_BASE64" | tr -d '\r' | ssh-add - > /dev/null
+    - chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
+    - echo "Test ssh connection"
+    #- ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST"
+    - scp -o StrictHostKeyChecking=no -T  -r dist/ "gltracker@$TARGET_SERVER_HOST:/usr/share/nginx/html" 
+    # - ssh -o StrictHostKeyChecking=no -T "gltracker@$TARGET_SERVER_HOST" -p 22
+    # Delploy
+    - echo "Setup tagget server directories"
+    - cat package.json
+    - pwd 
+    # - pm2 deploy ecosystem.config.js production setup 2>&1 || true
+    - echo "make deploy"
+    # - pm2 deploy ecosystem.config.js production
+
+
+    # - eval $(ssh-agent -s)
+    # - echo "${GITHUB_TOKEN}" | ssh-add -
+    # - mkdir -p ~/.ssh
+    # - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+    # # (Re)configure git and push w/ tags.
+    # - git config user.name "${GITHUB_USER_NAME}"
+    # - git config user.email "${GITHUB_USER_EMAIL}"
+    # - git remote set-url origin ${GITHUB_REPO}
+    # - git push origin master --follow-tags
+
+# Push to NPM
+# deploy:npm:
+#   <<: *docker
+#   stage: deploy
+#   only:
+#     - feature/deploy
+#   script:
+#     # Build the library, publish dist.
+#     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+#     - npm run build
+#     - npm run dist
+
+publish:
+  image: docker:latest
+  stage: publish
+  services:
+    - docker:dind
+  script:
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
+    
+deploy:
+  image: alpine:latest
+  stage: deploy
+  tags:
+    - deployment
+  script:
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f my-app || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 80:80 --name my-app $TAG_COMMIT"
+  environment:
+    name: production
+    url: http://your_server_IP
+  only:
+    - master
