@@ -39,6 +39,7 @@ import { SettingHeaderComponent } from './vehicles/components/setting-header/set
 import { EyeComponent } from './vehicles/components/eye/eye.component';
 import { GpsHeaderComponent } from './vehicles/components/gps-header/gps-header.component';
 import { GsmHeaderComponent } from './vehicles/components/gsm-header/gsm-header.component';
+import { MapViewComponent } from './map/components/map-view/map-view.component';
 
 
 
@@ -66,6 +67,7 @@ import { GsmHeaderComponent } from './vehicles/components/gsm-header/gsm-header.
     EyeComponent,
     GpsHeaderComponent,
     GsmHeaderComponent,
+    MapViewComponent,
   ],
   imports: [
     BrowserModule,
