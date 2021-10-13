@@ -19,6 +19,11 @@ import { GsmHeaderComponent } from '../../components/gsm-header/gsm-header.compo
 import { EyeComponent } from '../../components/eye/eye.component';
 import { VehicleComponent } from '../../components/vehicle/vehicle.component';
 import { TransmissionComponent } from '../../components/transmission/transmission.component';
+import { SettingComponent } from '../../components/setting/setting.component';
+import { GpsComponent } from '../../components/gps/gps.component';
+import { GsmComponent } from '../../components/gsm/gsm.component';
+import { TagComponent } from '../../components/tag/tag.component';
+import { FollowComponent } from '../../components/follow/follow.component';
 
 @Component({
   selector: 'app-vehicles',
@@ -39,13 +44,13 @@ export class VehiclesComponent implements OnInit {
        { headerName: '', field: 'active', cellRendererFramework: EyeComponent, resizable: true, width: 60, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
        { headerName: 'VehículohIDE', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
        { headerName: 'Vehículo', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent },
-       { headerName: 'Monstrar Nombre', field: 'activo', sortable: false, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: TagHeaderComponent },
-       { headerName: 'Seguir', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: FollowHeaderComponent },
+       { headerName: 'Monstrar Nombre', field: 'activo', sortable: false, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },
+       { headerName: 'Seguir', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
        { headerName: 'Limite de velocidad', field: 'speed', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
-       { headerName: 'GPS', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, headerComponentFramework: GpsHeaderComponent },
-       { headerName: 'GSM', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, headerComponentFramework: GsmHeaderComponent },
-       { headerName: 'Estado de transmision', field: 'point_color', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'},cellRendererFramework: TransmissionComponent, headerComponentFramework: TransmissionHeaderComponent },
-       { headerName: 'Configurar', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: SettingHeaderComponent }
+       { headerName: 'GPS', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GpsComponent, headerComponentFramework: GpsHeaderComponent },
+       { headerName: 'GSM', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GsmComponent, headerComponentFramework: GsmHeaderComponent },
+       { headerName: 'Estado de transmision', field: 'point_color', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TransmissionComponent, headerComponentFramework: TransmissionHeaderComponent },
+       { headerName: 'Configurar', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: SettingComponent, headerComponentFramework: SettingHeaderComponent }
     ];
 
    // public rowData: any = RefData.data;

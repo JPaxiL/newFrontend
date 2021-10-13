@@ -104,7 +104,12 @@ import { FollowComponent } from './vehicles/components/follow/follow.component';
       SettingHeaderComponent,
       VehicleComponent,
       GpsHeaderComponent,
-      GsmHeaderComponent
+      GsmHeaderComponent,
+      SettingComponent,
+      GpsComponent,
+      GsmComponent,
+      TagComponent,
+      FollowComponent
     ])
   ],
   providers: [

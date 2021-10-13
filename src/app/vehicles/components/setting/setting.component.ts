@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingComponent implements OnInit {
 
+  private params: any;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+  agInit(params: any){
+    this.params = params;
   }
 
 }
