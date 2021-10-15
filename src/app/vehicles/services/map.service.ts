@@ -50,7 +50,7 @@ export class MapService {
     }
 
     for (const property in e){
-        if (e.hasOwnProperty(property)&&e[property].active==true) {
+        if (e.hasOwnProperty(property)&&e[property].eye==true) {
           const aux2: [string, string] = [e[property].latitud, e[property].longitud];
           this.datafitBounds.push(aux2);
           this.map.removeLayer(this.demo);
@@ -66,9 +66,9 @@ export class MapService {
 
   private drawIcon(IMEI:string, map: any, lat: number, lng: number): void{
     const iconMarker = L.icon({
-      iconUrl: './marker-icon.png',
-      iconSize: [30, 50],
-      iconAnchor: [15, 50]
+      iconUrl: './assets/images/batgps.png',
+      iconSize: [30, 30],
+      iconAnchor: [15, 30]
     });
 
     const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map);

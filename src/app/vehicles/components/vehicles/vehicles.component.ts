@@ -41,7 +41,7 @@ export class VehiclesComponent implements OnInit {
 
 
    columnDefs: ColDef[] = [
-       { headerName: '', field: 'active', cellRendererFramework: EyeComponent, resizable: true, width: 60, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
+       { headerName: '', field: 'eye', cellRendererFramework: EyeComponent, resizable: true, width: 50, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
        { headerName: 'VehículohIDE', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
        { headerName: 'Vehículo', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent },
        { headerName: 'Monstrar Nombre', field: 'activo', sortable: false, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },

@@ -35,8 +35,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10237,
-        tolva:"",
-        point_color:100
+        tolva:""        
       },
     {
         IMEI:"869530043811872",
@@ -73,8 +72,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10180,
-        tolva:"",
-        point_color:60
+        tolva:""        
       },
     {
         IMEI:"869530043807524",
@@ -111,8 +109,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10181,
-        tolva:"",
-        point_color:50
+        tolva:""        
       },
     {
         IMEI:"863003042116160",
@@ -149,8 +146,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10156,
-        tolva:"",
-        point_color:40
+        tolva:""        
       },
     {
         IMEI:"865851039594916",
@@ -187,8 +183,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10200,
-        tolva:"",
-        point_color:30
+        tolva:""        
 
     },
     {
@@ -226,8 +221,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10183,
-        tolva:"",
-        point_color:20
+        tolva:""        
       },
     {
         IMEI:"869530043785456",
@@ -264,8 +258,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10182,
-        tolva:"",
-        point_color:10
+        tolva:""        
       },
     {
         IMEI:"869530043787213",
@@ -302,8 +295,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10179,
-        tolva:"",
-        point_color:40
+        tolva:""        
       },
     {
         IMEI:"867688038826602",
@@ -340,8 +332,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10152,
-        tolva:"",
-        point_color:40
+        tolva:""        
       },
     {
         IMEI:"869530043816574",
@@ -378,8 +369,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10192,
-        tolva:"",
-        point_color:40
+        tolva:""        
       },
     {
         IMEI:"869530043785274",
@@ -416,8 +406,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10178,
-        tolva:"",
-        point_color:40
+        tolva:""        
       },
     {
         IMEI:"868899043971726",
@@ -454,7 +443,6 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10236,
-        tolva:"",
-        point_color:40
+        tolva:""        
       }]
 }

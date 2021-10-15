@@ -24,11 +24,11 @@ export class EyeComponent implements OnInit {
 
     this.params.value = !this.params.value;
 
-    const data = this.vehicleService.getVehiclesDemo();
+    const data = this.vehicleService.getVehiclesData();
 
     for (let x of data){
       if(this.params.data.IMEI == x.IMEI){
-        x.active = !x.active;
+        x.eye = !x.eye;
       }
     }
     this.vehicleService.updateVehicleActive(data);
