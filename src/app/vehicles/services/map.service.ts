@@ -11,9 +11,9 @@ import { VehicleService } from './vehicle.service';
 export class MapService {
 
   private map!: L.Map;
-  private datafitBounds: [string, string][] = [];
-  private marker: any=[];
-  private demo: any = [];
+  private dataFitBounds: [string, string][] = [];
+  private marker: any = [];
+  // private demo: any = [];
 
   @Output() sendData = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
@@ -44,24 +44,24 @@ export class MapService {
     // this.map = map;
 
     const e = this.vehicleService.vehicles;
-    console.log("vehicles",e);
+
     for (const layer in this.marker){
       this.map.removeLayer(this.marker[layer]);
     }
 
     for (const property in e){
-        if (e.hasOwnProperty(property)&&e[property].eye==true) {
+        if (e.hasOwnProperty(property)&&e[property].eye == true) {
           const aux2: [string, string] = [e[property].latitud, e[property].longitud];
-          this.datafitBounds.push(aux2);
-          this.map.removeLayer(this.demo);
+          this.dataFitBounds.push(aux2);
+          // this.map.removeLayer(this.demo);
           this.drawIcon(e[property].IMEI, map, Number(e[property].latitud), Number(e[property].longitud));
         }
     }
 
-    if(this.datafitBounds.length>0){
-      map.fitBounds(this.datafitBounds);
+    if(this.dataFitBounds.length>0){
+      map.fitBounds(this.dataFitBounds);
     }
-    this.datafitBounds = [];
+    this.dataFitBounds = [];
   }
 
   private drawIcon(IMEI:string, map: any, lat: number, lng: number): void{

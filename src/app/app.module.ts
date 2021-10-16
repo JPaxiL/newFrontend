@@ -46,6 +46,7 @@ import { GsmComponent } from './vehicles/components/gsm/gsm.component';
 import { SettingComponent } from './vehicles/components/setting/setting.component';
 import { TagComponent } from './vehicles/components/tag/tag.component';
 import { FollowComponent } from './vehicles/components/follow/follow.component';
+import { VehicleHeaderComponent } from './vehicles/components/vehicle-header/vehicle-header.component';
 
 
 
@@ -80,6 +81,7 @@ import { FollowComponent } from './vehicles/components/follow/follow.component';
     SettingComponent,
     TagComponent,
     FollowComponent,
+    VehicleHeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -109,7 +111,8 @@ import { FollowComponent } from './vehicles/components/follow/follow.component';
       GpsComponent,
       GsmComponent,
       TagComponent,
-      FollowComponent
+      FollowComponent,
+      VehicleHeaderComponent
     ])
   ],
   providers: [
