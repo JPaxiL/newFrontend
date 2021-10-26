@@ -4,6 +4,8 @@ import { ItemHistorial } from 'src/app/historial/models/vehicle';
 
 import * as moment from 'moment';
 import * as L from 'leaflet';
+import 'leaflet-polylinedecorator';
+
 
 import { MapServicesService } from '../../../map/services/map-services.service';
 
@@ -714,6 +716,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           dH[0].ruta_sub = this.get_historial_line( [] , color_sub); //Sub linea del historial
 
 
+          dH[0].rutaH2_trace = L.polylineDecorator( dH[0].rutaH , {
+            patterns: [
+                //{ offset: 12, repeat: 25, symbol: L.Symbol.dash({pixelSize: 10, pathOptions: {color: 'black', weight: 2}})},
+                { offset: 2, repeat: 30, symbol: L.Symbol.arrowHead({pixelSize: 4.3,polygon: false,pathOptions: {stroke: true,weight: 1.4,color: 'black',opacity: 1}})}
+            ]
+          }).addTo(this.mapService.map);
+
+
 
 
           // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
@@ -805,6 +815,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.mapService.map.removeLayer(dH[dH.length-1].layerN);
 
       this.mapService.map.removeLayer(dH[0].rutaH2);
+      this.mapService.map.removeLayer(dH[0].rutaH2_trace);
+
       this.mapService.map.removeLayer(dH[0].ruta_sub);
 
       for (let i = 0; i < dH.length; i++) {
