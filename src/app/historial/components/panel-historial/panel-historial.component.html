@@ -1,109 +1,137 @@
 
-    <div class="card-body">
+  <div id="panel_historial">
 
-      <legend>Datos Vehículo</legend>
+   <div class="card-body">
 
-      <div class=" row">
-        <label for="selectVehiculo" class="col-sm-4 col-form-label label-form-gl">Vehículo:</label>
-        <div class="col-sm-6">
+      <div *ngIf="!conHistorial">
 
-          <ng-select class="custom" id="selectVehiculo"
-              [items]="cars"
-              bindLabel="nombre"
-              bindValue="imei"
-              placeholder="Selecciona el Vehículo"
-              [(ngModel)]="selectedCar"
-              [searchFn]="customSearch"
-              >
-          </ng-select>
+          <legend>Datos Vehículo</legend>
 
-        </div>
-      </div>
+          <div class=" row">
+            <label for="selectVehiculo" class="col-sm-4 col-form-label label-form-gl">Vehículo:</label>
+            <div class="col-sm-6">
 
-      <!-- <p>
-        {{selectedCar | json}}
-      </p> -->
+              <ng-select class="custom" id="selectVehiculo"
+                  [items]="cars"
+                  bindLabel="nombre"
+                  bindValue="imei"
+                  placeholder="Selecciona el Vehículo"
+                  [(ngModel)]="form.selectedCar"
+                  [searchFn]="customSearch"
+                  >
+              </ng-select>
 
-
-      <legend>Fecha</legend>
-
-
-
-      <div class="row">
-          <label for="selectFiltrarPor" class="col-sm-4 col-form-label label-form-gl">Filtrar por:</label>
-          <div class="col-sm-5">
-
-            <select class="claseinputs" name="miselect" [(ngModel)]="selectedRango">
-              <option [value]="item.id" *ngFor="let item of availableOptionsDay">{{item.name}}</option>
-            </select>
-
+            </div>
           </div>
+
+          <!-- <p>
+            {{selectedCar | json}}
+          </p> -->
+
+
+          <legend>Fecha</legend>
+
+
+
+          <div class="row">
+            <label for="selectFiltrarPor" class="col-sm-4 col-form-label label-form-gl">Filtrar por:</label>
+            <div class="col-sm-5">
+
+              <select class="claseinputs" name="miselect" [(ngModel)]="form.selectedRango">
+                <option [value]="item.id" *ngFor="let item of availableOptionsDay">{{item.name}}</option>
+              </select>
+
+            </div>
+          </div>
+          <!-- <p>
+            {{selectedRango | json}}
+          </p> -->
+
+
+          <div class="row">
+            <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Inicial:</label>
+            <div class="col-sm-4">
+              <input class="claseinputs"  type="text" id="fechaInicial" [(ngModel)]="form.fecha_desde">
+            </div>
+          </div>
+
+          <div class="row">
+            <label for="horaInicial" class="col-sm-4 col-form-label label-form-gl">Hora Inicial:</label>
+            <div class="col-sm-3">
+              <select class="claseinputs" [(ngModel)]="form.hora_desde">
+                <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
+              </select>
+            </div>
+            <div class="col-sm-1">
+              :
+            </div>
+            <div class="col-sm-3">
+              <select class="claseinputs" name="miselect" [(ngModel)]="form.min_desde">
+                <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <label for="fechaFinal" class="col-sm-4 col-form-label label-form-gl">Fecha Final:</label>
+            <div class="col-sm-4">
+              <input class="claseinputs"  type="text" id="fechaFinal" [(ngModel)]="form.fecha_hasta">
+            </div>
+              <!-- <i class="fa fas fa-calendar"></i> -->
+          </div>
+
+
+          <div class="row">
+            <label for="horaFinal" class="col-sm-4 col-form-label label-form-gl">Hora Final:</label>
+            <div class="col-sm-3">
+              <select class="claseinputs" [(ngModel)]="form.hora_hasta">
+                <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
+              </select>
+            </div>
+            <div class="col-sm-1">
+              :
+            </div>
+            <div class="col-sm-3">
+              <select class="claseinputs" [(ngModel)]="form.min_hasta">
+                <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
+              </select>
+            </div>
+          </div>
+
+
+
       </div>
-      <!-- <p>
-        {{selectedRango | json}}
-      </p> -->
 
+      <div *ngIf="conHistorial">
 
-      <div class="row">
-        <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Inicial:</label>
-        <div class="col-sm-4">
-          <input class="claseinputs"  type="text" id="fechaInicial" [(ngModel)]="fechaInicio">
+        <legend>Datos Historial</legend>
+
+        <div class="row">
+          <label class="col-sm-12 text-center">
+
+            <small>Vehículo : {{nombreUnidad}}</small>
+            <p><small>{{form.fecha_desde}} {{form.hora_desde}}:{{form.min_desde}}:00 - {{form.fecha_hasta}} {{form.hora_hasta}}:{{form.min_hasta}}:00</small></p>
+
+          </label>
+
         </div>
+
+
+
       </div>
 
 
-      <div class="row">
-        <label for="horaInicial" class="col-sm-4 col-form-label label-form-gl">Hora Inicial:</label>
-        <div class="col-sm-3">
-          <select class="claseinputs" [(ngModel)]="horaInicio">
-            <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
-          </select>
-        </div>
-        <div class="col-sm-1">
-          :
-        </div>
-        <div class="col-sm-3">
-          <select class="claseinputs" name="miselect" [(ngModel)]="minutoInicio">
-            <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row">
-        <label for="fechaFinal" class="col-sm-4 col-form-label label-form-gl">Fecha Final:</label>
-        <div class="col-sm-4">
-          <input class="claseinputs"  type="text" id="fechaFinal" [(ngModel)]="fechaFinal">
-        </div>
-          <!-- <i class="fa fas fa-calendar"></i> -->
-      </div>
-
-
-      <div class="row">
-        <label for="horaFinal" class="col-sm-4 col-form-label label-form-gl">Hora Final:</label>
-        <div class="col-sm-3">
-          <select class="claseinputs" [(ngModel)]="horaFin">
-            <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
-          </select>
-        </div>
-        <div class="col-sm-1">
-          :
-        </div>
-        <div class="col-sm-3">
-          <select class="claseinputs" [(ngModel)]="minutoFin">
-            <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
-          </select>
-        </div>
-      </div>
 
       <legend>Opciones</legend>
 
       <div class="row">
         <label for="chckParada" class="col-sm-4 col-form-label label-form-gl">Paradas:</label>
         <div class="col-sm-1">
-          <input class="form-check-input claseinputschck" type="checkbox" id="chckParada" [(ngModel)]="chckParada">
+          <input class="form-check-input claseinputschck"  (change)="changeShowingParadasHistorial()" type="checkbox" id="chckParada" [(ngModel)]="form.chckParada">
         </div>
+
         <div class="col-sm-4">
-          <select class="claseinputs"  [(ngModel)]="duracionParada">
+          <select class="claseinputs"  [(ngModel)]="form.duracionParada">
             <option [value]="item.id" *ngFor="let item of availableOptionsTempoParada">{{item.name}}</option>
           </select>
         </div>
@@ -113,17 +141,17 @@
       <div class="row">
         <label for="chckTrama" class="col-sm-4 col-form-label label-form-gl">Tramas:</label>
         <div class="col-sm-1">
-          <input class="form-check-input claseinputschck" type="checkbox" id="chckTrama" [(ngModel)]="chckTrama">
+          <input class="form-check-input claseinputschck"  (change)="changeShowingTramas()" type="checkbox" id="chckTrama" [(ngModel)]="form.chckTrama">
         </div>
       </div>
 
       <div class="row">
         <label for="chckGrafico" class="col-sm-4 col-form-label label-form-gl">Gráfico:</label>
         <div class="col-sm-1">
-          <input class="form-check-input claseinputschck" type="checkbox" id="chckGrafico" [(ngModel)]="chckGrafico">
+          <input class="form-check-input claseinputschck" type="checkbox" id="chckGrafico" [(ngModel)]="form.chckGrafico">
         </div>
         <div class="col-sm-3">
-          <input type="color" class="form-control form-control-color form-control-color-gl" id="chckGrafico" [(ngModel)]="colorHistorial" title="Elige un color">
+          <input type="color" class="form-control form-control-color form-control-color-gl" id="chckGrafico" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color">
         </div>
 
       </div>
@@ -132,7 +160,7 @@
       <div class="row">
         <label for="chckEvento" class="col-sm-4 col-form-label label-form-gl">Eventos:</label>
         <div class="col-sm-1">
-          <input class="form-check-input claseinputschck" type="checkbox" id="chckEvento" [(ngModel)]="chckEvento">
+          <input class="form-check-input claseinputschck" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento">
         </div>
 
         <div class="col-sm-4">
@@ -148,15 +176,76 @@
       <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-3">
-          <button type="button" class="btn btn-success btn-sm">Mostrar</button>
+          <button type="button" (click)="clickCargarHistorial()"  class="btn btn-success btn-sm">Mostrar</button>
         </div>
         <div class="col-sm-3">
-          <button type="button" class="btn btn-success btn-sm">Ocultar</button>
+          <button type="button" (click)="clickEliminarHistorial()"  class="btn btn-success btn-sm">Ocultar</button>
         </div>
         <div class="col-sm-3"></div>
       </div>
 
-
-
-
     </div>
+
+    <legend></legend>
+
+    <table id="tbl_fechas" class="table table-hover">
+      <colgroup>
+        <col width="20%" />
+        <col width="50%" />
+        <col width="30%" />
+      </colgroup>
+      <!-- <thead>
+          <tr>
+              <td>Id</td>
+              <td>Title</td>
+              <td>Amount</td>
+          </tr>
+      </thead> -->
+      <tbody>
+
+
+
+          <tr *ngFor="let transfer of transfers;let indice=index"  (click)="clickLocate(transfer)"  >
+
+              <td class="text-center" style="padding: 1px !important;" >
+                <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
+                  <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
+                </div>
+              </td>
+
+              <td>{{transfer.trama.dt_tracker}}</td>
+
+              <td *ngIf="indice==0">x</td>
+              <td *ngIf="indice!=0 && indice!=transfers.length-1">{{transfer.trama.temp}}</td>
+              <td *ngIf="indice!=0 && indice==transfers.length-1">x</td>
+
+          </tr>
+      </tbody>
+  </table>
+
+</div>
+
+
+  <!-- <td class="text-center" style="padding: 1px !important;">
+    <button class="btn btn-xs btn-link p-n" title="Localizar" tooltipster data-side="bottom" >
+      <img class="icon-car" ng-src="{{ row.icono }}" height="{{ row.icono_height }}" width="{{ row.icono_width }}" />
+    </button>
+  </td>
+
+  <td class="text-center" style="padding: 1px !important;">
+    {{row.dt_tracker}}
+  </td>
+  <td class="text-center" style="padding: 1px !important;">
+    {{row.temp}}
+  </td>
+ -->
+
+
+
+
+    <!-- <ag-grid-angular
+        style="width: 400px; height: 400px;"
+        class="ag-theme-alpine"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs">
+    </ag-grid-angular> -->

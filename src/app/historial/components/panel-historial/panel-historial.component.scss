@@ -1,3 +1,6 @@
+#panel_historial {
+  //font-family: 'Roboto-Light,"Helvetica Neue",Helvetica,Arial,sans-serif';
+}
 
 .label-form-gl{
   font-size: 11px;
@@ -42,12 +45,7 @@
   margin-top: 7px;
 }
 
-.header-Historial {
-  margin-bottom: 0px;
-  background-color: #6D99CB;
-  color: #fff;
-  text-align: right;
-}
+
 
 .btn-xs-gl {
   padding: 1px 5px;
@@ -74,5 +72,42 @@ legend {
   color: #333;
   border: 0;
   border-bottom: 1px solid #e5e5e5;
+
+  // color: #FFF;
+  // color: #000;
+  // color: #FF0;
+  // color: #00E;
+  // color: #0EE;
+
 }
 
+
+#tbl_fechas tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+#tbl_fechas tr:nth-child(even) {
+background-color: #ffffff !important;
+}
+#tbl_fechas thead th {
+  background-color: #EFF0F4;
+  color: #1f1d1d;
+}
+#tbl_fechas tbody td { /* 4 tables */
+  border: 1px solid #EFF0F4;
+  border-left: none;
+  border-right: none;
+  padding: 3px;
+}
+#tbl_fechas tbody tr:hover { /* 4 tables */
+  background-color: #EFF0F4 !important;
+}
+#tbl_fechas tbody {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+#tbl_fechas {
+  font-size: 11px;
+  text-align: center;
+  vertical-align: middle;
+}
