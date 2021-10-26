@@ -2,6 +2,7 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../models/vehicle';
+// import { SocketWebService } from '../services/socket-web.service';
 import * as moment from 'moment';
 
 import RefData from '../data/refData';
@@ -12,14 +13,17 @@ import RefData from '../data/refData';
 export class VehicleService {
 
   private URL_LIST = 'http://127.0.0.1:8001/api/tracker';
+
   public vehicles: any = [];
-  private demo:boolean = true;
+  private demo:boolean = false;
   private timeDemo: number = 1000;
   public statusDataVehicle: boolean = false;
 
   @Output() dataCompleted = new EventEmitter<any>();
 
   @Output() drawIconMap = new EventEmitter<any>();
+  @Output() reloadTable = new EventEmitter<any>();
+  @Output() sortLimit = new EventEmitter<any>();
 
   constructor(private http: HttpClient) {
     /*
@@ -31,20 +35,26 @@ export class VehicleService {
     //tiempo critico
     if(this.demo){
       setTimeout(()=>{
-        console.log("carga de data");
+        // console.log("carga de data");
         this.vehicles = this.dataFormatVehicle(RefData.data);
         this.statusDataVehicle = true;
         this.dataCompleted.emit(this.vehicles);
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
-        console.log("vehicles",vehicles);
+        // console.log("vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.statusDataVehicle = true;
         this.dataCompleted.emit(this.vehicles);
       });
     }
 
+  }
+  public reloadTableVehicles():void{
+    this.reloadTable.emit();
+  }
+  public sortLimitVehicle(): void{
+    this.sortLimit.emit();
   }
 
   public getVehicles(): Observable<any>{
@@ -62,10 +72,15 @@ export class VehicleService {
   }
 
   //app
-  updateVehicleActive(data: Vehicle): void{
+  public updateVehiclesData(data: Vehicle):void {
     this.vehicles = data;
     this.drawIconMap.emit(data);
   }
+
+  // public updateVehicleActive(data: Vehicle): void{
+  //   this.vehicles = data;
+  //   this.drawIconMap.emit(data);
+  // }
   private dataFormatVehicle(vehicles: any): any{
     const items = vehicles;
     const today = moment();
@@ -231,6 +246,9 @@ export class VehicleService {
   }
 
   private addVel(vehicle : any){
+    if(this.statusDataVehicle==false){
+      vehicle.speed=0;
+    }
     const v_gps = vehicle.speed;
     vehicle.v_sat = Number(vehicle.parametrosGet["sat"]);
     const v_di4 = vehicle.parametrosGet["di4"];

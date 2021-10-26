@@ -30,7 +30,7 @@ export class EyeHeaderComponent implements IHeaderAngularComp {
     for (let x of data){
       x.eye=this.value;
     }
-    this.vehicleService.updateVehicleActive(data);
+    this.vehicleService.updateVehiclesData(data);
   }
 
 }

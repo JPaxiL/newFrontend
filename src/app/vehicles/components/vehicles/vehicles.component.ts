@@ -42,6 +42,7 @@ export class VehiclesComponent implements OnInit {
   public defaultColDef:any = [];
   public setting: any = {
     eye: false,
+    imei: true,
     vehicle: false,
     tag: false,
     follow: false,
@@ -56,11 +57,12 @@ export class VehiclesComponent implements OnInit {
 
    columnDefs: ColDef[] = [
        { headerName: '', colId:"eye", field: 'eye', cellRendererFramework: EyeComponent, resizable: true, width: 50, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
+       { headerName: 'IMEI',  colId: "imei", field: 'IMEI', sortable: true, filter: true, resizable: true, width: 130, minWidth: 80, maxWidth: 140, cellStyle: { 'font-size': '10px'}, hide: true},
        { headerName: 'VehículoHide', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
        { headerName: 'Vehículo', colId: "vehicle" , field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent, headerComponentFramework: VehicleHeaderComponent },
        { headerName: 'Monstrar Nombre', colId:"tag", field: 'activo', sortable: false, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },
-       { headerName: 'Seguir', colId:"follow", field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
-       { headerName: 'Limite de velocidad', colId:"limit", field: 'speed', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
+       { headerName: 'Seguir', colId:"follow", field: 'follow', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
+       { headerName: 'Limite de velocidad', colId:"limit", sort: 'desc', field: 'speed', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
        { headerName: 'GPS', colId:"gps", field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GpsComponent, headerComponentFramework: GpsHeaderComponent },
        { headerName: 'GSM', colId:"gsm", field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GsmComponent, headerComponentFramework: GsmHeaderComponent },
        { headerName: 'Estado de transmision', colId:"transmission", field: 'point_color', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TransmissionComponent, headerComponentFramework: TransmissionHeaderComponent },
@@ -90,6 +92,28 @@ export class VehiclesComponent implements OnInit {
       this.api.setRowData([]);
       this.api.updateRowData({add:vehicles});
     });
+    this.vehicleService.reloadTable.subscribe(res=>{
+      // console.log("volver a cargar tabla");
+      const vehicles = this.vehicleService.vehicles;
+      this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
+      // this.api.setRowData([]);
+      // this.api.updateRowData({add:vehicles});
+    });
+    this.vehicleService.sortLimit.subscribe(res=>{
+      // this.
+      // this.api = params.api;
+      // this.columnApi = params.columnApi;
+      // sort: 'asc'
+      console.log("desde vehicles coponent");
+      this.columnApi.applyColumnState({
+          state: [
+              {
+                  colId: 'limit',
+                  sort: 'desc'
+              }
+          ]
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -103,6 +127,9 @@ export class VehiclesComponent implements OnInit {
 
   }
 
+  public resultCallback () {
+      // console.log('transactionApplied() - ');
+  }
   public onGridReady(params: GridReadyEvent) {
       this.api = params.api;
       this.columnApi = params.columnApi;

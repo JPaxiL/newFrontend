@@ -1,3 +1,14 @@
-<span class="btn-label" title="Seguir vehículo">
-  <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i>
-</span>
+<div (click)="onClick()" *ngIf="params.value == true" class="">
+  <span class="btn-label" title="Seguir vehículo">
+    <i class="fas fa-compass" style="color:green; font-size: 14px;"></i>
+  </span>
+</div>
+<div (click)="onClick()" *ngIf="params.value == false" class="">
+  <span *ngIf="params.value == false" class="btn-label" title="Seguir vehículo">
+    <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i>
+  </span>
+</div>
+
+<!-- fas fa-bullseye -->
+<!-- brightness-high-fill -->
+<!-- fa-crosshairs -->

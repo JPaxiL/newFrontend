@@ -31,7 +31,7 @@ export class EyeComponent implements OnInit {
         x.eye = !x.eye;
       }
     }
-    this.vehicleService.updateVehicleActive(data);
+    this.vehicleService.updateVehiclesData(data);
   }
 
 }

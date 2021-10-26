@@ -1,4 +1,40 @@
 export default class RefData {
+  static userData =   [
+  	{
+  		id_usu: null,
+  		activo: "true",
+  		privilegios: "user",
+  		id_administrador: 1,
+  		nombre_usuario: "corporacioneleyon",
+  		contrasena: "c893bad68927b457dbed39460e6afd62",
+  		encrypted_password: null,
+  		email: "corporacioneleyon@gltracker.pe",
+  		api: "false",
+  		llave_api: null,
+  		fecha_registro: null,
+  		fecha_login: null,
+  		ip: null,
+  		notificacion_caducidad_objeto: null,
+  		informacion: null,
+  		comentario: null,
+  		agregar_objeto: null,
+  		numero_objeto: null,
+  		fecha_objeto: null,
+  		zona_horaria: "- 5 hour",
+  		idioma: null,
+  		unidades: null,
+  		map_rmp: null,
+  		map_ts: "true",
+  		map_tc: null,
+  		map_rc: "#161814",
+  		map_rhc: "#0b19e5",
+  		map_icono: "icon",
+  		_extra_props: "default",
+  		id: 718,
+  		bol_eliminado: false
+  	}
+  ]
+
   static data = [
     {
         IMEI:"868899043955117",
@@ -35,7 +71,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10237,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"869530043811872",
@@ -72,7 +108,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10180,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"869530043807524",
@@ -109,7 +145,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10181,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"863003042116160",
@@ -146,7 +182,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10156,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"865851039594916",
@@ -183,7 +219,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10200,
-        tolva:""        
+        tolva:""
 
     },
     {
@@ -221,7 +257,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10183,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"869530043785456",
@@ -258,7 +294,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10182,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"869530043787213",
@@ -295,7 +331,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10179,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"867688038826602",
@@ -332,7 +368,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10152,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"869530043816574",
@@ -369,7 +405,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10192,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"869530043785274",
@@ -406,7 +442,7 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10178,
-        tolva:""        
+        tolva:""
       },
     {
         IMEI:"868899043971726",
@@ -443,6 +479,6 @@ export default class RefData {
         tipo:"2",
         id_conductor:null,
         id:10236,
-        tolva:""        
+        tolva:""
       }]
 }

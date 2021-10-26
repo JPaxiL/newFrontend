@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+
+import { FollowService } from '../../services/follow.service';
 
 @Component({
   selector: 'app-follow',
@@ -7,15 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FollowComponent implements OnInit {
 
-  private params: any;
+  params: any;
 
-  constructor() { }
+
+  constructor(private followService:FollowService) { }
 
   ngOnInit(): void {
   }
 
   agInit(params: any){
     this.params = params;
+  }
+
+  onClick(){
+    this.params.value = !this.params.value;
+    this.followService.add(this.params.data);
+
   }
 
 }
