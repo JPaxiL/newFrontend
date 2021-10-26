@@ -11,7 +11,7 @@ import { VehicleService } from '../../services/vehicle.service';
 })
 export class EyeHeaderComponent implements IHeaderAngularComp {
 
-  public value: boolean=true;
+  public value: boolean = true;
 
 
   agInit(headerParams: IHeaderParams): void {}
@@ -28,11 +28,7 @@ export class EyeHeaderComponent implements IHeaderAngularComp {
     const data = this.vehicleService.getVehiclesDemo();
 
     for (let x of data){
-      // console.log("x", x.active=);
-      x.active=this.value;
-      // if(this.params.data.IMEI == x.IMEI){
-      //   x.active = !x.active;
-      // }
+      x.eye=this.value;
     }
     this.vehicleService.updateVehicleActive(data);
   }

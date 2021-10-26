@@ -57,7 +57,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     mainLayer.addTo(this.mapServicesService.map);
 
     // if(mainLayer.addTo(this.map)){
-      this.mapService.onDrawIcon(this.mapServicesService.map);
+      this.mapService.loadMap(this.mapServicesService.map);
     // }
 
   }

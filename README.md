@@ -35,3 +35,42 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## hotfix
 ## second hotfix
+docker network create --subnet 10.10.0.0/24 service-network
+
+
+docker run \
+  --detach \
+  --restart always \
+  --publish 80:80 \
+  --publish 443:443 \
+  --name nginx-proxy \
+  --network service-network \
+  --volume /var/run/docker.sock:/tmp/docker.sock:ro \
+  --volume nginx-certs:/etc/nginx/certs \
+  --volume nginx-vhost:/etc/nginx/vhost.d \
+  --volume nginx-html:/usr/share/nginx/html \
+  jwilder/nginx-proxy
+
+
+
+docker run \
+  --detach \
+  --restart always \
+  --name nginx-proxy-letsencrypt \
+  --network service-network \
+  --volumes-from nginx-proxy \
+  --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+  --volume /etc/acme.sh \
+  --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
+  jrcs/letsencrypt-nginx-proxy-companion
+
+
+docker run \
+  --detach \
+  --restart always \
+  --name hello-world \
+  --network service-network \
+  --env VIRTUAL_HOST=hello-world.example.com \
+  --env LETSENCRYPT_HOST=hello-world.example.com \
+  --env LETSENCRYPT_EMAIL="youremail@example.com" \
+  tutum/hello-world

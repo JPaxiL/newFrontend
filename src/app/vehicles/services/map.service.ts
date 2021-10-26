@@ -11,15 +11,18 @@ import { VehicleService } from './vehicle.service';
 export class MapService {
 
   private map!: L.Map;
-  private datafitBounds: [string, string][] = [];
-  private marker: any=[];
-  private demo: any = [];
+  private dataFitBounds: [string, string][] = [];
+  private marker: any = [];
+  // private demo: any = [];
 
   @Output() sendData = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
 
   constructor(private vehicleService:VehicleService) {
     this.vehicleService.drawIconMap.subscribe(e=>{
+      this.onDrawIcon(this.map);
+    });
+    this.vehicleService.dataCompleted.subscribe(vehicles=>{
       this.onDrawIcon(this.map);
     });
   }
@@ -32,35 +35,40 @@ export class MapService {
     this.sendData.emit(data);
   }
 
-  onDrawIcon(map: any): void{
+  loadMap(map: any): void{
     this.map = map;
+  }
 
-    const e = this.vehicleService.getVehiclesDemo();
+  onDrawIcon(map: any): void{
+    console.log("onDrawIcon");
+    // this.map = map;
+
+    const e = this.vehicleService.vehicles;
 
     for (const layer in this.marker){
       this.map.removeLayer(this.marker[layer]);
     }
 
     for (const property in e){
-        if (e.hasOwnProperty(property)&&e[property].active==true) {
+        if (e.hasOwnProperty(property)&&e[property].eye == true) {
           const aux2: [string, string] = [e[property].latitud, e[property].longitud];
-          this.datafitBounds.push(aux2);
-          this.map.removeLayer(this.demo);
+          this.dataFitBounds.push(aux2);
+          // this.map.removeLayer(this.demo);
           this.drawIcon(e[property].IMEI, map, Number(e[property].latitud), Number(e[property].longitud));
         }
     }
 
-    if(this.datafitBounds.length>0){
-      map.fitBounds(this.datafitBounds);
+    if(this.dataFitBounds.length>0){
+      map.fitBounds(this.dataFitBounds);
     }
-    this.datafitBounds = [];
+    this.dataFitBounds = [];
   }
 
   private drawIcon(IMEI:string, map: any, lat: number, lng: number): void{
     const iconMarker = L.icon({
-      iconUrl: './marker-icon.png',
-      iconSize: [30, 50],
-      iconAnchor: [15, 50]
+      iconUrl: './assets/images/batgps.png',
+      iconSize: [30, 30],
+      iconAnchor: [15, 30]
     });
 
     const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map);
