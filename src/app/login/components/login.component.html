@@ -14,12 +14,12 @@
               <div style="background-color: #17476C; padding-top: 40px; padding-left: 20px; padding-right: 20px; padding-bottom:20px;">
                 <form [formGroup]="loginForm" autocomplete="on"  novalidate>
                     <div class="form-group">
-                        <input class="form-control" formControlName="name" type="text" placeholder="Nombre de Usuario" >
+                        <input class="form-control" formControlName="name" type="text" placeholder="Nombre de Usuario prueba" >
                     </div>
               
                     <div *ngIf="loginForm.controls['name'].invalid && (loginForm.controls['name'].dirty || loginForm.controls['name'].touched)" class="alert alert-danger">
                         <div *ngIf="loginForm.controls['name'].errors">
-                          Nombre de Usuario es Requerido.
+                          Nombre de Usuario es Requerido...
                         </div>
                     </div>
                      <div class="form-group">

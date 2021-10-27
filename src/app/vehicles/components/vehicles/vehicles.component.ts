@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ColDef, GridApi, GridReadyEvent,  ColumnApi } from 'ag-grid-community';
+import { Observable } from 'rxjs';
+import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import { Vehicle } from '../../models/vehicle';
 
 import { VehicleService } from '../../services/vehicle.service';
 import { MapService } from '../../services/map.service';
-import RefData from '../../data/refData';
+// import RefData from '../../data/refData';
 
 import { EyeHeaderComponent } from '../../components/eye-header/eye-header.component';
 import { TagHeaderComponent } from '../../components/tag-header/tag-header.component';
@@ -17,6 +19,13 @@ import { GpsHeaderComponent } from '../../components/gps-header/gps-header.compo
 import { GsmHeaderComponent } from '../../components/gsm-header/gsm-header.component';
 import { EyeComponent } from '../../components/eye/eye.component';
 import { VehicleComponent } from '../../components/vehicle/vehicle.component';
+import { TransmissionComponent } from '../../components/transmission/transmission.component';
+import { SettingComponent } from '../../components/setting/setting.component';
+import { GpsComponent } from '../../components/gps/gps.component';
+import { GsmComponent } from '../../components/gsm/gsm.component';
+import { TagComponent } from '../../components/tag/tag.component';
+import { FollowComponent } from '../../components/follow/follow.component';
+import { VehicleHeaderComponent } from '../../components/vehicle-header/vehicle-header.component';
 
 @Component({
   selector: 'app-vehicles',
@@ -31,54 +40,96 @@ export class VehiclesComponent implements OnInit {
   public api: GridApi = new GridApi();
   public columnApi: ColumnApi = new ColumnApi();
   public defaultColDef:any = [];
+  public setting: any = {
+    eye: false,
+    imei: true,
+    vehicle: false,
+    tag: false,
+    follow: false,
+    limit: false,
+    gps: false,
+    gsm: false,
+    transmission: false,
+    config: false,
+    sort: 'asc'
+  }
 
 
    columnDefs: ColDef[] = [
-       { headerName: '', field: 'active', cellRendererFramework: EyeComponent, resizable: true, width: 60, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
-       { headerName: 'VehículohIDE', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
-       { headerName: 'Vehículo', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent },
-       { headerName: 'Monstrar Nombre', field: 'activo', sortable: false, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: TagHeaderComponent },
-       { headerName: 'Seguir', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: FollowHeaderComponent },
-       { headerName: 'Limite de velocidad', field: 'speed', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
-       { headerName: 'GPS', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, headerComponentFramework: GpsHeaderComponent },
-       { headerName: 'GSM', field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, headerComponentFramework: GsmHeaderComponent },
-       { headerName: 'Estado de transmision', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: TransmissionHeaderComponent },
-       { headerName: 'Configurar', field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: SettingHeaderComponent }
+       { headerName: '', colId:"eye", field: 'eye', cellRendererFramework: EyeComponent, resizable: true, width: 50, minWidth: 40, maxWidth: 90, headerComponentFramework: EyeHeaderComponent},
+       { headerName: 'IMEI',  colId: "imei", field: 'IMEI', sortable: true, filter: true, resizable: true, width: 130, minWidth: 80, maxWidth: 140, cellStyle: { 'font-size': '10px'}, hide: true},
+       { headerName: 'VehículoHide', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
+       { headerName: 'Vehículo', colId: "vehicle" , field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent, headerComponentFramework: VehicleHeaderComponent },
+       { headerName: 'Monstrar Nombre', colId:"tag", field: 'activo', sortable: false, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },
+       { headerName: 'Seguir', colId:"follow", field: 'follow', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
+       { headerName: 'Limite de velocidad', colId:"limit", sort: 'desc', field: 'speed', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
+       { headerName: 'GPS', colId:"gps", field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GpsComponent, headerComponentFramework: GpsHeaderComponent },
+       { headerName: 'GSM', colId:"gsm", field: 'activo', sortable: true, filter: false, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GsmComponent, headerComponentFramework: GsmHeaderComponent },
+       { headerName: 'Estado de transmision', colId:"transmission", field: 'point_color', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TransmissionComponent, headerComponentFramework: TransmissionHeaderComponent },
+       { headerName: 'Configurar', colId:"config", field: 'activo', sortable: true, filter: true, resizable: true, width: 60, minWidth: 33, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: SettingComponent, headerComponentFramework: SettingHeaderComponent }
     ];
 
-   public rowData: any = RefData.data;
-   // public rowData: [];
+   // public rowData: any = RefData.data;
+   // rowData: Observable<any[]>;
+   public rowData: any;
 
   constructor(
     private vehicleService: VehicleService,
-    private mapService: MapService
-  ) {}
+    private mapService: MapService,
+    private config: NgbDropdownConfig
+  ) {
+
+    config.placement = 'right-top';
+    config.autoClose = false;
+
+    this.vehicleService.drawIconMap.subscribe(e=>{
+        this.api.setRowData([]);
+        this.api.updateRowData({add:e});
+    });
+
+    this.vehicleService.dataCompleted.subscribe(vehicles=>{
+      this.vehicles = vehicles;
+      this.api.setRowData([]);
+      this.api.updateRowData({add:vehicles});
+    });
+    this.vehicleService.reloadTable.subscribe(res=>{
+      // console.log("volver a cargar tabla");
+      const vehicles = this.vehicleService.vehicles;
+      this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
+      // this.api.setRowData([]);
+      // this.api.updateRowData({add:vehicles});
+    });
+    this.vehicleService.sortLimit.subscribe(res=>{
+      // this.
+      // this.api = params.api;
+      // this.columnApi = params.columnApi;
+      // sort: 'asc'
+      console.log("desde vehicles coponent");
+      this.columnApi.applyColumnState({
+          state: [
+              {
+                  colId: 'limit',
+                  sort: 'desc'
+              }
+          ]
+      });
+    });
+  }
 
   ngOnInit(): void {
-    console.log( "data",this.rowData);
-    // this.vehicleService.getVehicles().subscribe(vehicles => {
-    //     this.vehicles = vehicles;
-    //     this.mapService.sendDataMap(this.vehicles);
-    // });
-    // this.mapService.sendDataMap(this.vehicles);
-    if(this.init){
-      this.vehicles = RefData.data; //<---- data demo
-      console.log("cargando datos");
-      this.init=false;
-    }else{
-      console.log("datos ya se encuentran cargados");
-    }
-
-    this.mapService.changeEye.subscribe(id => {
-      this.changeEye(id);
-    });
-    console.log("On Init");
-
-  }
-  private changeEye(id: number) :void {
+    setTimeout(()=>{
+      if(this.vehicleService.statusDataVehicle){
+        this.vehicles = this.vehicleService.vehicles;
+        this.api.setRowData([]);
+        this.api.updateRowData({add:this.vehicleService.vehicles});
+      }
+    },300);
 
   }
 
+  public resultCallback () {
+      // console.log('transactionApplied() - ');
+  }
   public onGridReady(params: GridReadyEvent) {
       this.api = params.api;
       this.columnApi = params.columnApi;
@@ -89,10 +140,19 @@ export class VehiclesComponent implements OnInit {
       this.api.setQuickFilter($event.target.value);
   }
 
-  demo(vehicle: Vehicle){
-    this.vehicles = this.vehicles.filter(x => x.IMEI == vehicle.IMEI);
+  public onClickSetting(e: any){
+    console.log("setting",this.setting);
+    this.setting[e] = !this.setting[e];
+    console.log(this.setting[e]);
+
+    this.columnApi.applyColumnState({
+      state: [
+        {
+          colId: e,
+          hide: this.setting[e],
+        }
+      ],
+    });
 
   }
-
-
 }

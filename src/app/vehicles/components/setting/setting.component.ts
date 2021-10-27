@@ -1,0 +1,20 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-setting',
+  templateUrl: './setting.component.html',
+  styleUrls: ['./setting.component.scss']
+})
+export class SettingComponent implements OnInit {
+
+  private params: any;
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+  agInit(params: any){
+    this.params = params;
+  }
+
+}

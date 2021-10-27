@@ -14,11 +14,62 @@
           <i class="fa fa-fw fa-sliders fa-1"></i>
         </button>
         <div ngbDropdownMenu>
-          <button ngbDropdownItem>Vista por Grupo</button>
-          <button ngbDropdownItem>Vista General</button>
-          <button ngbDropdownItem>Vista por Estado de Transmisión</button>
-          <div class="dropdown-divider"></div>
-          <button ngbDropdownItem>Otros ...</button>
+          <div class="container">
+            <!-- <button ngbDropdownItem>Personalizar Panel</button> -->
+            <label>
+              Personalizar Panel
+            </label>
+            <div class="dropdown-divider"></div>
+            <div class="">
+              <input (click)="onClickSetting('eye')" style="padding: 5px" type="checkbox" name="" value="" checked>
+              <label for="">Ver</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('imei')" style="padding: 5px" type="checkbox" name="" value="">
+              <label for="">IMEI</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('vehicle')" type="checkbox" name="" value="" checked>
+              <label for="">Vehículos</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('tag')" type="checkbox" name="" value="" checked>
+              <label for="">Mostrar nombre</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('follow')" type="checkbox" name="" value="" checked>
+              <label for="">Seguir Vehículo</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('limit')" type="checkbox" name="" value="" checked>
+              <label for="">Limite de velocidad</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('gps')" type="checkbox" name="" value="" checked>
+              <label for="">GPS</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('gsm')" type="checkbox" name="" value="" checked>
+              <label for="">GSM</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('transmission')" type="checkbox" name="" value="" checked>
+              <label for="">Transmisión</label>
+            </div>
+            <div class="">
+              <input (click)="onClickSetting('config')" type="checkbox" name="" value="" checked>
+              <label for="">Configurar</label>
+            </div>
+            <!-- <div class="">
+              <input type="checkbox" name="" value="">
+              <label for="">Recorrido</label>
+            </div>
+            <div class="">
+              <input type="checkbox" name="" value="">
+              <label for="">Localización</label>
+            </div> -->
+          </div>
+
         </div>
       </div>
     </div>
@@ -27,7 +78,7 @@
 <div class="ag-theme-alpine" >
     <ag-grid-angular
     #agGrid
-    style="width: 100%; height: 450px; font-size: 10px;"
+    style="width: 100%; height: 450px; font-size: 14px;"
     class="ag-theme-alpine"
     [rowData]="rowData"
     [columnDefs]="columnDefs"
