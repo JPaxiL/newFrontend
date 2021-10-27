@@ -22,6 +22,14 @@
       <app-panel-alerts></app-panel-alerts>
     </div>
 
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-GPS')">
+      <app-panel-alerts-gps></app-panel-alerts-gps>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-CREATE')">
+      <app-gps-alerts-create></app-gps-alerts-create>
+    </div>
+
 
 
 

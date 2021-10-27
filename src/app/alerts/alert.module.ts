@@ -10,13 +10,19 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ActiveAlertComponent } from './components/active-alert/active-alert.component';
 import { SystemAlertComponent } from './components/system-alert/system-alert.component';
 import { EmailAlertComponent } from './components/email-alert/email-alert.component';
+import { PanelAlertsGpsComponent } from './components/panel-alerts-gps/panel-alerts-gps.component';
+import { GpsAlertsListComponent } from './components/gps-alerts-list/gps-alerts-list.component';
+import { GpsAlertsCreateComponent } from './components/gps-alerts-create/gps-alerts-create.component';
 
 @NgModule({
   declarations: [
     AlertListComponent,
     ActiveAlertComponent,
     SystemAlertComponent,
-    EmailAlertComponent
+    EmailAlertComponent,
+    PanelAlertsGpsComponent,
+    GpsAlertsListComponent,
+    GpsAlertsCreateComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +35,10 @@ import { EmailAlertComponent } from './components/email-alert/email-alert.compon
   ],
   exports:[
     AlertListComponent,
-    ActiveAlertComponent
+    ActiveAlertComponent,
+    PanelAlertsGpsComponent,
+    GpsAlertsListComponent,
+    GpsAlertsCreateComponent
   ]
 })
 export class AlertModule {

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://api_monitoreo_gltracker.test',
+  apiUrl: 'http://newbackendgltracker.test',
 
 };
 

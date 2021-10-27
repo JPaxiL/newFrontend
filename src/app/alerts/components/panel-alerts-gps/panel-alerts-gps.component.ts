@@ -1,34 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { PanelService } from '../../services/panel.service';
+import { PanelService } from 'src/app/panel/services/panel.service';
 
 declare var $: any;
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  selector: 'app-panel-alerts-gps',
+  templateUrl: './panel-alerts-gps.component.html',
+  styleUrls: ['./panel-alerts-gps.component.scss']
 })
-export class SidebarComponent implements OnInit {
-
-  constructor( public panelService: PanelService ) { }
-
+export class PanelAlertsGpsComponent implements OnInit {
   options = new Array(
-    { id:'GEOPOINTS' , name:"Geopunto"},
-    { id:'HISTORIAL' , name:"Historial"},
-    { id:'VEHICLES' , name:"Vehículos"},
     { id:'ALERTS', name:"Alertas"},
     { id:'ALERTS-GPS', name:"Alertas Gps"},
     { id:'ALERTS-GPS-CREATE', name:"Alertas Gps"},
   );
 
-
+  constructor(public panelService: PanelService) { }
 
   ngOnInit(): void {
   }
 
-
   clickShowPanel( nomComponent:string ): void {
-
+    console.log("nomComponent ======> ", nomComponent);
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = nomComponent;
 
@@ -36,8 +29,5 @@ export class SidebarComponent implements OnInit {
     this.panelService.nombreCabecera =   item[0].name;
 
   }
-
-
-
 
 }
