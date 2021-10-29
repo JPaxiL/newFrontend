@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://apiprueba.glmonitoreo.com/:8001',
+  apiUrl: 'https://apiprueba.glmonitoreo.com/:8001',
 };
