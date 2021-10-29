@@ -74,3 +74,6 @@ docker run \
   --env LETSENCRYPT_HOST=hello-world.example.com \
   --env LETSENCRYPT_EMAIL="youremail@example.com" \
   tutum/hello-world
+
+
+  -- prod
