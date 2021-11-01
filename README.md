@@ -76,7 +76,7 @@ docker run \
   tutum/hello-world
 
 
-  -- prod
+  -- prod --
 
 
 Encryption keys generated successfully.
