@@ -1,0 +1,27 @@
+<a class="btn btn-warning" id="btn-monitoreo" type="button" name="button"  title="Crear alerta" href="alerts/gps/create">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+</a>
+
+<table class="table-alerts">
+    <thead>
+      <tr>
+        <th scope="col">Nº</th>
+        <th scope="col">NOMBRE</th>
+        <th scope="col">TIPO</th>
+        <th scope="col">ACTIVOS</th>
+        <th scope="col">SISTEMA</th>
+        <th scope="col">E-MAIL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let alert of alerts">
+        <td>{{ alert.nro }}</td>
+        <td>{{ alert.nombre }}</td>
+        <td>{{ alert.tipo }}</td>
+        <td>{{ alert.nro }}</td>
+        <td>{{ alert.nro }}</td>
+        <td>{{ alert.nro }}</td>
+      </tr>
+
+    </tbody>
+  </table>

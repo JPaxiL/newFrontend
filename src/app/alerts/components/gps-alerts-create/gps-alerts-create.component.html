@@ -1,0 +1,48 @@
+<div class="loading-gral" *ngIf="loading"></div>
+<div>
+    <div class="modal-header">
+        <h4>Crear Alerta Gps</h4>
+    </div>
+    <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" #form="ngForm">
+            <div class="row mb-3">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form.group">
+                        <div class="col-12">
+                            <select class="form-select" aria-label="Alerta"  >
+                                <option value=""></option>
+                                <option *ngFor="let event of events" [value]="event.id">{{ event.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Evento activado :</label>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <div class="form-check">
+                        <input class="form-check-input" ng-model="$ctrl.formAlert.chkEventoActivado" type="checkbox" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-label">Nombre:</label>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <div class="text">
+                        <input class="form-control" placeholder="nombre del evento" aria-label="nombre del evento" ng-model="$ctrl.formAlert.nombre" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px"></div>
+
+            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+                <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

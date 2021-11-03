@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
+import { TreeTableModule } from 'primeng-lts/treetable';
 
 
 import { NgxsModule } from '@ngxs/store';
@@ -50,6 +51,10 @@ import { VehicleHeaderComponent } from './vehicles/components/vehicle-header/veh
 import { PanelHistorialGraficoComponent } from './historial/components/panel-historial-grafico/panel-historial-grafico.component';
 
 
+import { AlertModule } from './alerts/alert.module';
+import { CommonModule } from '@angular/common';
+import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-alerts.component';
+import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.component';
 
 @NgModule({
   declarations: [
@@ -84,16 +89,21 @@ import { PanelHistorialGraficoComponent } from './historial/components/panel-his
     FollowComponent,
     VehicleHeaderComponent,
     PanelHistorialGraficoComponent,
+    PanelAlertsComponent,
+    TreeTableComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     NgxsModule.forRoot([AuthState]),
+    AlertModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
     NgSelectModule,
+    TreeTableModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
@@ -116,6 +126,7 @@ import { PanelHistorialGraficoComponent } from './historial/components/panel-his
       FollowComponent,
       VehicleHeaderComponent
     ])
+
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

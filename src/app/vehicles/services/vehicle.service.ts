@@ -2,6 +2,7 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../models/vehicle';
+import {TreeNode} from 'primeng-lts/api';
 // import { SocketWebService } from '../services/socket-web.service';
 import * as moment from 'moment';
 
@@ -15,7 +16,7 @@ export class VehicleService {
   private URL_LIST = 'http://127.0.0.1:8001/api/tracker';
 
   public vehicles: any = [];
-  private demo:boolean = false;
+  private demo:boolean = true;
   private timeDemo: number = 1000;
   public statusDataVehicle: boolean = false;
 
@@ -24,6 +25,8 @@ export class VehicleService {
   @Output() drawIconMap = new EventEmitter<any>();
   @Output() reloadTable = new EventEmitter<any>();
   @Output() sortLimit = new EventEmitter<any>();
+  @Output() clickIcon = new EventEmitter<any>();
+  @Output() clickEye = new EventEmitter<any>();
 
   constructor(private http: HttpClient) {
     /*
@@ -36,9 +39,19 @@ export class VehicleService {
     if(this.demo){
       setTimeout(()=>{
         // console.log("carga de data");
-        this.vehicles = this.dataFormatVehicle(RefData.data);
-        this.statusDataVehicle = true;
-        this.dataCompleted.emit(this.vehicles);
+        this.http.get<any>('assets/trackers.json')
+                    .toPromise()
+                    .then(res => {
+                      // console
+                      // console.log("data json",<TreeNode[]>res.data);
+                      this.vehicles = this.dataFormatVehicle(<TreeNode[]>res.data);
+                      this.statusDataVehicle = true;
+                      this.dataCompleted.emit(this.vehicles);
+                    });
+
+        // this.vehicles = this.dataFormatVehicle(RefData.data);
+        // this.statusDataVehicle = true;
+        // this.dataCompleted.emit(this.vehicles);
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
@@ -49,6 +62,15 @@ export class VehicleService {
       });
     }
 
+  }
+  /*tree table*/
+  // public get
+  /*end tree table*/
+  public onClickEye(IMEI: string):void{
+    this.clickEye.emit(IMEI);
+  }
+  public onClickIcon(IMEI: string):void{
+    this.clickIcon.emit(IMEI);
   }
   public reloadTableVehicles():void{
     this.reloadTable.emit();

@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8001',
-
+  apiUrl: 'http://newbackendgltracker.lap',
+  idClient: '9',
+  secretClient: '9IG3ZVQkE0JjGhCZA9JeQN5hlwKP673TeWDjwAU6'
 };
 
 /*

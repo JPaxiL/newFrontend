@@ -1,0 +1,105 @@
+<p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="500px" styleClass="p-treetable-sm" sortField="name">
+  <ng-template pTemplate="caption">
+      <div style="text-align: right">
+          <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+          <input type="text" pInputText size="20" placeholder="Buscar ..." (input)="globalFilter($event)" style="width:auto">
+      </div>
+  </ng-template>
+  <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <!-- <col *ngFor="let col of columns" style="width:100px"> -->
+            <col style="width:7px">
+            <col style="width:15px">
+            <col style="width:4px">
+            <col style="width:4px">
+            <col style="width:4px">
+            <col style="width:4px">
+            <col style="width:4px">
+            <col style="width:4px">
+            <col style="width:4px">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+
+      <tr>
+          <th><app-eye-header></app-eye-header></th>
+          <th><app-vehicle-header></app-vehicle-header></th>
+          <th><app-tag-header></app-tag-header></th>
+          <th><app-follow-header></app-follow-header></th>
+          <th><app-limit-header></app-limit-header></th>
+          <th><app-gps-header></app-gps-header></th>
+          <th><app-gsm-header></app-gsm-header></th>
+          <th><app-transmission-header></app-transmission-header></th>
+          <th><app-setting-header></app-setting-header></th>
+
+      </tr>
+      <!-- <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
+              {{col.header}}
+              <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+          </th> -->
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+        <!-- <tr>
+          <td *ngFor="let col of columns; let i = index" [attr.colspan]="columns.length">
+            <div class="">
+              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+              {{rowData[col.field]}}->{{columns.length}}
+            </div>
+          </td>
+        </tr> -->
+        <tr *ngIf="rowData['col']==3">
+            <td colspan="8">
+                <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
+                {{rowData["name"]}}
+            </td>
+        </tr>
+        <tr *ngIf="rowData['col']!=3">
+            <td>
+              <!-- <span class="btn-label"><i class="fa fa-eye-slash" style="color:#444444;"></i></span> -->
+              <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
+              <div *ngIf="rowData['eye'] == true" class="">
+                <span (click)="onClickEye(rowData['IMEI'])" class="btn-label"><i class="fas fa-eye" style="color:#444444;"></i></span>
+              </div>
+              <div *ngIf="rowData['eye'] == false" class="">
+                <span (click)="onClickEye(rowData['IMEI'])" class="btn-label"><i class="fa fa-eye-slash" style="color:#444444;"></i></span>
+              </div>
+              <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
+            </td>
+            <td>
+                <p>
+                  <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
+                  {{rowData['name']}} <br>
+                  <small>
+                    {{rowData['dt_tracker']}}
+                  </small>
+                </p>
+            </td>
+            <td>
+              <input type="checkbox" name="" value="" checked>
+            </td>
+            <td>
+              <span  class="btn-label" title="Seguir vehículo">
+                <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i>
+              </span>
+            </td>
+            <td>
+              0
+            </td>
+            <td>
+              <span class="btn-label" title="Configurar"><i class="fa fa-wifi"></i></span>
+            </td>
+            <td>
+              <span class="btn-label" title="Configurar"><i class="fa fa-wifi"></i></span>
+            </td>
+            <td>
+              <span class="btn-label">
+                <i class="fa fa-circle" style="color:{{color[rowData['point_color']]}}"></i>
+                <!-- <i class="fa fa-circle" style="color:black"></i> -->
+              </span>
+            </td>
+            <td>
+                <i class="fa fa-wrench" style="color:#444444"></i>
+            </td>
+        </tr>
+    </ng-template>
+</p-treeTable>
