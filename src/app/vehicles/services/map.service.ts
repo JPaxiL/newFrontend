@@ -39,6 +39,38 @@ export class MapService {
       // console.log("desde map service");
       this.followVehicle(res, this.map);
     });
+    this.vehicleService.clickIcon.subscribe(res=>{
+      this.followClickIcon(this.map, res);
+    });
+    this.vehicleService.clickEye.subscribe(res=>{
+
+      this.eyeClick(this.map, res);
+    });
+  }
+  eyeClick(map: any, IMEI: string){
+    const vehicles = this.vehicleService.vehicles;
+    for (const i in vehicles){
+      if(vehicles[i].IMEI==IMEI){
+        vehicles[i].eye=!vehicles[i].eye;
+      }
+    }
+    this.vehicleService.vehicles = vehicles;
+    this.onDrawIcon(map);
+  }
+  followClickIcon(map: any, IMEI: string){
+    const vehicles = this.vehicleService.vehicles;
+    this.dataFitBounds = [];
+    //
+    for (const i in vehicles){
+      if(vehicles[i].IMEI==IMEI){
+        const aux2: [string, string] = [vehicles[i].latitud, vehicles[i].longitud];
+        this.dataFitBounds.push(aux2);
+      }
+    }
+    //
+    if(this.dataFitBounds.length>0){
+      map.fitBounds(this.dataFitBounds);
+    }
   }
   followVehicle(data: any, map: any): void{
     /*

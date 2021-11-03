@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
+import { TreeTableModule } from 'primeng-lts/treetable';
 
 
 import { NgxsModule } from '@ngxs/store';
@@ -52,6 +53,7 @@ import { VehicleHeaderComponent } from './vehicles/components/vehicle-header/veh
 import { AlertModule } from './alerts/alert.module';
 import { CommonModule } from '@angular/common';
 import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-alerts.component';
+import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +88,7 @@ import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-ale
     FollowComponent,
     VehicleHeaderComponent,
     PanelAlertsComponent,
+    TreeTableComponent,
   ],
   imports: [
     CommonModule,
@@ -98,6 +101,7 @@ import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-ale
     ReactiveFormsModule,
     NgbModule,
     NgSelectModule,
+    TreeTableModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
