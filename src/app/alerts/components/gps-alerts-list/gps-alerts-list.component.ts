@@ -34,7 +34,7 @@ export class GpsAlertsListComponent implements OnInit {
     this.loadData();
   }
 
-  public loadData(){
+   public async loadData(){
     // this.AlertService
     // .get('/api/alert')
     // .subscribe( ( response:Alert[] ) => {
@@ -50,6 +50,8 @@ export class GpsAlertsListComponent implements OnInit {
     //   });
 
     // });
+
+    this.alerts = await this.AlertService.getAlertsByType('gps');
   }
 
   public onGridReady(params: GridReadyEvent) {

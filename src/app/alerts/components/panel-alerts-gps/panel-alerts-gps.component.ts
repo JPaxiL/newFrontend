@@ -21,7 +21,7 @@ export class PanelAlertsGpsComponent implements OnInit {
   }
 
   clickShowPanel( nomComponent:string ): void {
-    console.log("nomComponent ======> ", nomComponent);
+
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = nomComponent;
 

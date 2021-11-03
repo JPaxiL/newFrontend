@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Select2Module } from 'ng-select2-component';
 
 import { AlertRoutingModule } from './alert-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -31,7 +32,8 @@ import { GpsAlertsCreateComponent } from './components/gps-alerts-create/gps-ale
     FormsModule,
     ReactiveFormsModule,
     AlertRoutingModule,
-    AgGridModule
+    AgGridModule,
+    Select2Module
   ],
   exports:[
     AlertListComponent,

@@ -37,6 +37,7 @@
     "leaflet": "^1.7.1",
     "leaflet-polylinedecorator": "^1.6.0",
     "moment": "^2.29.1",
+    "ng-select2-component": "^8.0.5",
     "ngx-socket-io": "^3.0.1",
     "rxjs": "~6.6.0",
     "save": "^2.4.0",

@@ -48,4 +48,10 @@ export class AlertService {
     let event = response.data;
     return event;
   }
+
+  public async getAlertsByType(type:string){
+    const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts/${type}`).toPromise();
+    let event = response.data;
+    return event;
+  }
 }
