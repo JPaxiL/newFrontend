@@ -47,6 +47,7 @@ import { SettingComponent } from './vehicles/components/setting/setting.componen
 import { TagComponent } from './vehicles/components/tag/tag.component';
 import { FollowComponent } from './vehicles/components/follow/follow.component';
 import { VehicleHeaderComponent } from './vehicles/components/vehicle-header/vehicle-header.component';
+import { PanelHistorialGraficoComponent } from './historial/components/panel-historial-grafico/panel-historial-grafico.component';
 
 
 
@@ -82,6 +83,7 @@ import { VehicleHeaderComponent } from './vehicles/components/vehicle-header/veh
     TagComponent,
     FollowComponent,
     VehicleHeaderComponent,
+    PanelHistorialGraficoComponent,
   ],
   imports: [
     BrowserModule,

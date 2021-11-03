@@ -1,0 +1,86 @@
+
+
+#graficohistorial{
+  height:200px;
+
+  width: calc(100% - 465px);
+
+  background: #fff; background-color:#FFF;
+  display: none;
+  position:absolute;
+  right:0px;
+  bottom:0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 5px;
+  z-index: 20000;
+}
+
+
+#datoslegend {
+  font-size: 11px;
+}
+
+.claseinputs {
+  margin-top: 4px;
+  // display: block;
+  width: 100%;
+  height: 22px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.claseicon {
+  font-size: 14px;
+  width: 35px;
+  text-align: center;
+}
+
+.btn-xss {
+  padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+#tbl_consola tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+#tbl_consola tr:nth-child(even) {
+background-color: #ffffff !important;
+}
+#tbl_consola thead th {
+  background-color: #EFF0F4;
+  color: #1f1d1d;
+}
+#tbl_consola tbody td { /* 4 tables */
+  border: 1px solid #EFF0F4;
+  border-left: none;
+  border-right: none;
+  padding: 3px;
+}
+#tbl_consola tbody tr:hover { /* 4 tables */
+  background-color: #EFF0F4 !important;
+}
+#tbl_consola tbody {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+#tbl_consola {
+  font-size: 11px;
+  text-align: center;
+  vertical-align: middle;
+}

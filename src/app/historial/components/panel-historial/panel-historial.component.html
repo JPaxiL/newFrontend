@@ -37,7 +37,7 @@
             <label for="selectFiltrarPor" class="col-sm-4 col-form-label label-form-gl">Filtrar por:</label>
             <div class="col-sm-5">
 
-              <select class="claseinputs" name="miselect" [(ngModel)]="form.selectedRango">
+              <select class="claseinputs" (change)="changeRangoFechas()" name="miselect" [(ngModel)]="form.selectedRango">
                 <option [value]="item.id" *ngFor="let item of availableOptionsDay">{{item.name}}</option>
               </select>
 
@@ -146,9 +146,9 @@
       </div>
 
       <div class="row">
-        <label for="chckGrafico" class="col-sm-4 col-form-label label-form-gl">Gráfico:</label>
+        <label for="chckGrafico" class="col-sm-4 col-form-label label-form-gl">Gráfico: </label>
         <div class="col-sm-1">
-          <input class="form-check-input claseinputschck" type="checkbox" id="chckGrafico" [(ngModel)]="form.chckGrafico">
+          <input class="form-check-input claseinputschck" (change)="changeShowingGrafico()" type="checkbox" id="chckGrafico" [(ngModel)]="form.chckGrafico">
         </div>
         <div class="col-sm-3">
           <input type="color" class="form-control form-control-color form-control-color-gl" id="chckGrafico" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color">
@@ -176,7 +176,7 @@
       <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-3">
-          <button type="button" (click)="clickCargarHistorial()"  class="btn btn-success btn-sm">Mostrar</button>
+          <button type="button" (click)="clickCargarHistorial()" id="btnMostrarHistorial" class="btn btn-success btn-sm">Mostrar</button>
         </div>
         <div class="col-sm-3">
           <button type="button" (click)="clickEliminarHistorial()"  class="btn btn-success btn-sm">Ocultar</button>
@@ -221,9 +221,10 @@
 
           </tr>
       </tbody>
-  </table>
+    </table>
 
-</div>
+
+  </div>
 
 
   <!-- <td class="text-center" style="padding: 1px !important;">
@@ -249,3 +250,4 @@
         [rowData]="rowData"
         [columnDefs]="columnDefs">
     </ag-grid-angular> -->
+
