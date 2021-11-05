@@ -91,20 +91,14 @@ export class VehiclesComponent implements OnInit {
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
       this.vehicles = vehicles;
       this.dataLoading();
-      // this.api.setRowData([]);
-      // this.api.updateRowData({add:vehicles});
-      // this.statusTable=true;
     });
-    // this.vehicleService.reloadTable.subscribe(res=>{
-    //   // console.log("volver a cargar tabla");
-    //   const vehicles = this.vehicleService.vehicles;
-    //   if(this.vehicleService.listTable==0&&this.statusTable){
-    //     console.log("this api asing reloading ...");
-    //     this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
-    //   }
-    //   // this.api.setRowData([]);
-    //   // this.api.updateRowData({add:vehicles});
-    // });
+    this.vehicleService.reloadTable.subscribe(res=>{
+      const vehicles = this.vehicleService.vehicles;
+      if(this.vehicleService.listTable==0&&this.statusTable){
+        // console.log("this api asing reloading ...");
+        this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
+      }
+    });
     this.vehicleService.sortLimit.subscribe(res=>{
       // this.
       // this.api = params.api;
@@ -140,17 +134,14 @@ export class VehiclesComponent implements OnInit {
     this.api.setRowData([]);
     this.api.updateRowData({add:this.vehicleService.vehicles});
     this.statusTable=true;
-    console.log("data loading...",this.statusTable);
 
-    this.vehicleService.reloadTable.subscribe(res=>{
-      const vehicles = this.vehicleService.vehicles;
-      if(this.vehicleService.listTable==0&&this.statusTable){
-        // console.log("this api asing reloading ...this.vehicleService.listTable / status table ",this.vehicleService.listTable+" / "+this.statusTable);
-        this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
-      }
-      // this.api.setRowData([]);
-      // this.api.updateRowData({add:vehicles});
-    });
+    // this.vehicleService.reloadTable.subscribe(res=>{
+    //   const vehicles = this.vehicleService.vehicles;
+    //   if(this.vehicleService.listTable==0&&this.statusTable){
+    //     // console.log("this api asing reloading ...this.vehicleService.listTable / status table ",this.vehicleService.listTable+" / "+this.statusTable);
+    //     this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
+    //   }
+    // });
   }
 
   public resultCallback () {

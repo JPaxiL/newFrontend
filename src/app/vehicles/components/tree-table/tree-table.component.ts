@@ -27,12 +27,21 @@ export class TreeTableComponent implements OnInit {
 
   constructor( private vehicleService:VehicleService ) {
     this.vehicleService.dataTreeCompleted.subscribe(vehicles=>{
-      this.vehicles = vehicles;
+      // this.vehicles = vehicles;
+      this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
       console.log("vehicles map",this.vehicles);
     });
 
+    this.vehicleService.reloadTableTree.subscribe(res=>{
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
 
+    });
+
+
+  }
+  test_rendimiento(){
+    // this.vehicles[index_group]['children'][aux_index]["children"][0]['data'];
   }
 
   ngOnInit(): void {
@@ -60,7 +69,7 @@ export class TreeTableComponent implements OnInit {
     // console.log("click eye",IMEI);
     this.vehicleService.onClickEye(IMEI);
   }
-  onClickIcon(IMEI: string){    
+  onClickIcon(IMEI: string){
     this.vehicleService.onClickIcon(IMEI);
   }
 

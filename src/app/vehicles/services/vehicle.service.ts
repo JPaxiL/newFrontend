@@ -22,15 +22,14 @@ export class VehicleService {
   public statusDataVehicle: boolean = false;
   public statusDataVehicleTree: boolean = false;
 
-  public listTable = 0; // 0 general, 1 = group
-  // public listGeneral = true;
-  // public listTransmission = false;
+  public listTable = 1; // 0 general, 1 = group
 
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() dataTreeCompleted = new EventEmitter<any>();
 
   @Output() drawIconMap = new EventEmitter<any>();
   @Output() reloadTable = new EventEmitter<any>();
+  @Output() reloadTableTree = new EventEmitter<any>();
   @Output() sortLimit = new EventEmitter<any>();
   @Output() clickIcon = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
@@ -83,9 +82,9 @@ export class VehicleService {
   public onClickIcon(IMEI: string):void{
     this.clickIcon.emit(IMEI);
   }
-  public reloadTableVehicles():void{
-    this.reloadTable.emit();
-  }
+  // public reloadTableVehicles():void{
+  //   this.reloadTable.emit();
+  // }
   public sortLimitVehicle(): void{
     this.sortLimit.emit();
   }

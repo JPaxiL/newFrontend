@@ -134,7 +134,12 @@ export class MapService {
         vehicles[index].speed = data.Velocidad;
         // vehicles[index].
         this.vehicleService.vehicles = vehicles;
-        this.vehicleService.reloadTableVehicles();
+        if(this.vehicleService.listTable==0){
+          this.vehicleService.reloadTable.emit();
+        }else{
+          // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+          this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
+        }
         this.map.removeLayer(this.marker[data.IMEI]);
         this.drawIconMov(vehicles[index], this.map, data.Latitud, data.Longitud);
 
