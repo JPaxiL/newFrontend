@@ -26,9 +26,8 @@ export class TreeTableComponent implements OnInit {
   @ViewChild('tt') tt!:any;
 
   constructor( private vehicleService:VehicleService ) {
-
-    this.vehicleService.dataCompleted.subscribe(vehicles=>{
-      this.vehicles = this.createNode(vehicles);
+    this.vehicleService.dataTreeCompleted.subscribe(vehicles=>{
+      this.vehicles = vehicles;
       this.loading=false;
       console.log("vehicles map",this.vehicles);
     });
@@ -37,8 +36,9 @@ export class TreeTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.vehicleService.statusDataVehicle){
-      this.vehicles = this.createNode(this.vehicleService.vehicles);
+    console.log("tree on init");
+    if(this.vehicleService.statusDataVehicleTree){
+      this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
       // this.vehicles = this.vehicleService.vehicles;
     }
@@ -53,21 +53,27 @@ export class TreeTableComponent implements OnInit {
           { field: 'activo', header: 'speed' }
       ];
   }
+  onClickSetting(e: string):void{
+    console.log("clikc setting",e);
+  }
   onClickEye(IMEI: string){
     // console.log("click eye",IMEI);
     this.vehicleService.onClickEye(IMEI);
   }
-  onClickIcon(IMEI: string){
-    // console.log("click icon",IMEI);
+  onClickIcon(IMEI: string){    
     this.vehicleService.onClickIcon(IMEI);
   }
 
-  globalFilter(data: any){
-    // console.log("tt",this.tt);
+  // globalFilter(data: any){
+  //   // console.log("tt",this.tt);
+  //   this.tt.filterGlobal(data.target.value, 'contains')
+  // }
+  public onQuickFilterChanged(data: any) {
     this.tt.filterGlobal(data.target.value, 'contains')
   }
 
   createNode(data: any): any{
+    console.log("create node");
     //variables de inicio
 
     //identificando grupos

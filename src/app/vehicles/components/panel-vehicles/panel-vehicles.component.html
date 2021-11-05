@@ -1,2 +1,3 @@
-<!-- <app-vehicles></app-vehicles> -->
-<app-tree-table></app-tree-table>
+
+<app-vehicles *ngIf="listTable==0"></app-vehicles>
+<app-tree-table *ngIf="listTable==1"></app-tree-table>

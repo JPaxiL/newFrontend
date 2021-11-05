@@ -2,7 +2,10 @@
   <span class="btn-label" ngbPopover="Popover content" title="Ordenar" data-bs-toggle="tooltip" data-bs-placement="top" style="padding: 5px;">
     <i class="fas fa-sort-alpha-down" style="color:#444444"></i>
   </span>
-  <span class="btn-label" title="Mostrar por grupos" data-bs-toggle="tooltip" data-bs-placement="top" style="padding: 5px;">
+  <span #spanGroup class="btn-label" title="Mostrar por grupos" data-bs-toggle="tooltip" data-bs-placement="top" style="padding: 5px;">
+    <i (click)="onGroup()" class="fas fa-sitemap" style="color:#444444"></i>
+  </span>
+  <span #spanGeneral (click)="onGeneral()" class="btn-label" title="Mostrar vista general" data-bs-toggle="tooltip" data-bs-placement="top" style="padding: 5px;">
     <i class="fas fa-list" style="color:#444444"></i>
   </span>
 </div>
