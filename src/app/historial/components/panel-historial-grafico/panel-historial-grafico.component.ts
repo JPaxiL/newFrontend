@@ -118,6 +118,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
   verTabla = false;
 
+  idUnico = new Array(); // arrays de id que no se repiten
+
   icoGplay = L.marker([0, 0],
     { icon: L.icon({
         iconUrl: 'assets/images/objects/nuevo/4.png',
@@ -187,6 +189,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
   }
 
 
+
   cargarGrafico(): void {
 
     var dH =  this.historialService.tramasHistorial; // Data Historial
@@ -207,7 +210,39 @@ export class PanelHistorialGraficoComponent implements OnInit {
       temporizadorConsola:""
     };
 
+    // //========= 0Fusionar parametros ====================
+    // var fUnico = dH[0].dt_js.getTime();
+    // dH[0].paramsGetAll = dH[0].paramsGet.slice();
+    // var un = 0;
+    // var id_uno = 0;
+    // this.idUnico.push(0);
+    // //========= 0Fusionar parametros ====================
+
+
     for (let i = 0; i < dH.length; i++) {
+
+      dH[i].params2 = dH[i].params.replaceAll("|union|", "</br><strong><small><i>|union|</i></small></strong></br>");
+      dH[i].params2 = dH[i].params2.replaceAll("|", "| ");
+      if (dH[i].repeticiones > 1) {
+        dH[i].params2 = dH[i].params2 +'</br><strong><small><i>Repeticiones:'+ dH[i].repeticiones+'</i></small></strong></br>';
+      }
+
+
+
+      // //========= 1Fusionar parametros ====================
+      // if(fUnico == dH[i].dt_js.getTime()){
+      //   if (i != 0) {
+      //     Array.prototype.push.apply(dH[id_uno].paramsGetAll,dH[i].paramsGet);
+      //   }
+      // } else {
+      //   fUnico = dH[i].dt_js.getTime();
+      //   dH[i].paramsGetAll = dH[i].paramsGet.slice();
+      //   un = 0;
+      //   id_uno = i;
+      //   this.idUnico.push(i);
+      // }
+      // //========= 1Fusionar parametros ====================
+
       let a = dH[i].dt_js.getTime();
       if (dH[i].speed <= 6) {
           this.cl.sin.push([a, 0])
@@ -216,6 +251,12 @@ export class PanelHistorialGraficoComponent implements OnInit {
       }
       this.cl.altitudConsola.push([a, dH[i].altitude])
     }
+    console.log(dH[0].params2 );
+
+
+    // console.log("=======================>");
+
+    // console.log(this.idUnico);
 
     // console.log("--------");
     // console.log(this.cl);
@@ -265,76 +306,98 @@ export class PanelHistorialGraficoComponent implements OnInit {
       if (n) {
           var m = n.dataIndex;
           var a = n.series.yaxis.ticks[0].label;
+
+          // console.log(o);
+          // console.log(p);
+          // console.log(n);
+          // console.log(a);
           var b = Math.floor(m / 2);
           var c = Math.ceil(m / 2);
           var d = n.datapoint[1];
-          if (a.indexOf("km/h") > -1) {
-              var k = '<span>' + dH[m].dt_tracker.replace(/\//g, "-") + '</span>';
-              if (dH[m].speed <= 6) {
-                  var s = '<span>0</span>'
-              } else {
-                  var s = '<span>' + dH[m].speed + '</span>'
-              }
-              // document.getElementById("datoslegend")
-              //     .innerHTML = "<strong>" + s + " km/h </strong> - " + k
-              this.datosLegend = "<strong>" + s + " km/h </strong> - " + k;
-          } else if (a.indexOf(" m") > -1) {
-              if (this.cl.altitudConsola.length == 2) {
-                  if (m == 0) {
-                      var k = '<span>' + dH[0].dt_tracker.replace(/\//g, "-") + '</span>';
-                      var s = '<span>' + dH[0].altitude + '</span>'
-                  } else {
-                      var k = '<span>' + dH[dH.length - 1].dt_tracker.replace(/\//g, "-") + '</span>';
-                      var s = '<span>' + dH[dH.length - 1].altitude + '</span>'
-                  }
-              } else {
-                  var k = '<span>' + dH[m].dt_tracker.replace(/\//g, "-") + '</span>';
-                  var s = '<span>' + dH[m].altitude + '</span>'
-              }
-              // document.getElementById("datoslegend")
-              //     .innerHTML = "<strong>" + s + " m </strong> - " + k
-              this.datosLegend = "<strong>" + s + " m </strong> - " + k;
 
-          } else if (a.indexOf(" v.") > -1) {
 
-              console.log(dH[m]);
-              console.log(d);
-              //var k = '<span>' + motorcos[c].dt_tracker.replace(/\//g, "-") + '</span>';
-              var k = '<span>' + dH[m].dt_tracker.replace(/\//g, "-") + '</span>';
-              if (d == 5 || d == '5' || d == 1 || d == '1') {
-                  var s = '<span>Encendido</span>'
-              } else {
-                  var s = '<span>Apagado</span>'
-              }
-              // document.getElementById("datoslegend")
-              //     .innerHTML = "<strong>" + s + "</strong> - " + k
-              this.datosLegend = "<strong>" + s + "</strong> - " + k;
+          switch (this.opcionGraficoConsola) {
+
+            case '1':
+                var k = '<span>' + dH[m].dt_tracker.replace(/\//g, "-") + '</span>';
+                if (dH[m].speed <= 6) {
+                    var s = '<span>0</span>'
+                } else {
+                    var s = '<span>' + dH[m].speed + '</span>'
+                }
+                // document.getElementById("datoslegend")
+                //     .innerHTML = "<strong>" + s + " km/h </strong> - " + k
+                this.datosLegend = "<strong>" + s + " km/h </strong> - " + k;
+                break;
+
+            case '2':
+                if (this.cl.altitudConsola.length == 2) {
+                    if (m == 0) {
+                        var k = '<span>' + dH[0].dt_tracker.replace(/\//g, "-") + '</span>';
+                        var s = '<span>' + dH[0].altitude + '</span>'
+                    } else {
+                        var k = '<span>' + dH[dH.length - 1].dt_tracker.replace(/\//g, "-") + '</span>';
+                        var s = '<span>' + dH[dH.length - 1].altitude + '</span>'
+                    }
+                } else {
+                    var k = '<span>' + dH[m].dt_tracker.replace(/\//g, "-") + '</span>';
+                    var s = '<span>' + dH[m].altitude + '</span>'
+                }
+                // document.getElementById("datoslegend")
+                //     .innerHTML = "<strong>" + s + " m </strong> - " + k
+                this.datosLegend = "<strong>" + s + " m </strong> - " + k;
+                break;
+
+            case '3':
+                console.log( dH[m]);
+                console.log(d);
+                //var k = '<span>' + motorcos[c].dt_tracker.replace(/\//g, "-") + '</span>';
+                var k = '<span>' + dH[m].dt_tracker.replace(/\//g, "-") + '</span>';
+                if (d == 5 || d == '5' || d == 1 || d == '1') {
+                    var s = '<span>Encendido</span>'
+                } else {
+                    var s = '<span>Apagado</span>'
+                }
+                // document.getElementById("datoslegend")
+                //     .innerHTML = "<strong>" + s + "</strong> - " + k
+                this.datosLegend = "<strong>" + s + "</strong> - " + k;
+                break;
+
+            case '4':
+
+                k = '<span>' + moment( new Date(this.cl.datasets.velocidad.data[m][0]) ).format("YYYY-MM-DD HH:mm:ss") + '</span>';
+                //console.log(vm.cl.datasets.velocidad.data);
+                //var k = '<span>' + vm.cl.datasets.velocidad.data[m][0] + '</span>';
+                //console.log(k);
+                var s = '<span>Velocidad&#160;&#160;&#160;&#160;:&#160;' + this.cl.datasets.velocidad.data[m][1] + '&#160;km/h&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Fecha&#160;&#160;&#160;&#160;:&#160;' + k + '</span>';
+                var e = '<span>Combustible Consumido&#160;:&#160;' + (this.cl.datasets.CConsumido.data[m][1] * 0.264172051 ).toFixed(2) + ' gal. || ' + (this.cl.datasets.CConsumido.data[m][1] )
+                    .toFixed(2) + ' l.</span>';
+                var f = '<span>Combustible Restante&#160;:&#160;' + (this.cl.datasets.CRestante.data[m][1]).toFixed(2) + ' gal. || ' + (this.cl.datasets.CRestante.data[m][1] * 3.7854118)
+                    .toFixed(2) + ' l.</span>';
+                var g = '<span>Od&#243;metro&#160;&#160;&#160;:&#160;' + this.cl.datasets.CInput.data[m][1].toFixed(2) + '</span>';
+                var h = parseInt(this.cl.datasets.OnOff.data[m][1]);
+                var i = '<span>Rev.x Min.&#160;&#160;:&#160;' + this.cl.datasets.RxM.data[m][1].toFixed(2) + '</span>';
+
+                $("#mostrarvelocidad").html(s);
+                $("#mostrarCConsumido").html(e);
+                $("#mostrarCRestante").html(f);
+                $("#mostrarCInput").html(g);
+                // document.getElementById("mostrarvelocidad").innerHTML = s;
+                // document.getElementById("mostrarCConsumido").innerHTML = e;
+                // document.getElementById("mostrarCRestante").innerHTML = f;
+                // document.getElementById("mostrarCInput").innerHTML = g;
+                if (h == 1) {
+                    var j = '<span>Motor (On/Off)&#160;&#160;&#160;&#160;:&#160;Encendido</span>'
+                } else {
+                    var j = '<span>Motor (On/Off)&#160;&#160;&#160;&#160;:&#160;Apagado</span>'
+                }
+                $("#mostrarOnOff").html(j);
+                $("#mostrarRxM").html(i);
+                // document.getElementById("mostrarOnOff").innerHTML = j;
+                // document.getElementById("mostrarRxM").innerHTML = i
+                break;
           }
-          if (a.indexOf("..") > -1) {
-              // k = '<span>' + moment( new Date(this.cl.datasets.velocidad.data[m][0]) ).format("YYYY-MM-DD hh:mm:ss") + '</span>';
-              // //console.log(vm.cl.datasets.velocidad.data);
-              // //var k = '<span>' + vm.cl.datasets.velocidad.data[m][0] + '</span>';
-              // //console.log(k);
-              // var s = '<span>Velocidad&#160;&#160;&#160;&#160;:&#160;' + this.cl.datasets.velocidad.data[m][1] + '&#160;km/h&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Fecha&#160;&#160;&#160;&#160;:&#160;' + k + '</span>';
-              // var e = '<span>Combustible Consumido&#160;:&#160;' + (this.cl.datasets.CConsumido.data[m][1] * 0.264172051 ).toFixed(2) + ' gal. || ' + (this.cl.datasets.CConsumido.data[m][1] )
-              //     .toFixed(2) + ' l.</span>';
-              // var f = '<span>Combustible Restante&#160;:&#160;' + (this.cl.datasets.CRestante.data[m][1]).toFixed(2) + ' gal. || ' + (this.cl.datasets.CRestante.data[m][1] * 3.7854118)
-              //     .toFixed(2) + ' l.</span>';
-              // var g = '<span>Od&#243;metro&#160;&#160;&#160;:&#160;' + this.cl.datasets.CInput.data[m][1].toFixed(2) + '</span>';
-              // var h = parseInt(this.cl.datasets.OnOff.data[m][1]);
-              // var i = '<span>Rev.x Min.&#160;&#160;:&#160;' + this.cl.datasets.RxM.data[m][1].toFixed(2) + '</span>';
-              // document.getElementById("mostrarvelocidad").innerHTML = s;
-              // document.getElementById("mostrarCConsumido").innerHTML = e;
-              // document.getElementById("mostrarCRestante").innerHTML = f;
-              // document.getElementById("mostrarCInput").innerHTML = g;
-              // if (h == 1) {
-              //     var j = '<span>Motor (On/Off)&#160;&#160;&#160;&#160;:&#160;Encendido</span>'
-              // } else {
-              //     var j = '<span>Motor (On/Off)&#160;&#160;&#160;&#160;:&#160;Apagado</span>'
-              // }
-              // document.getElementById("mostrarOnOff").innerHTML = j;
-              // document.getElementById("mostrarRxM").innerHTML = i
-          }
+
       }
     });
 
@@ -346,46 +409,17 @@ export class PanelHistorialGraficoComponent implements OnInit {
     $("#placeholder").unbind("plotclick");
 
     $("#placeholder").bind("plotclick",  (o:any, p:any, n:any ) => {
-      if (n) {
-          var m = n.dataIndex;
-          var a = n.series.yaxis.ticks[0].label;
-          var b = Math.floor(m / 2);
-          var c = Math.ceil(m / 2);
-          var d = n.datapoint[1];
-          if (a.indexOf("km/h") > -1) {
-              var e = dH[m].lat;
-              var f = dH[m].lng;
-              this.cl.position = m;
-              //fnc_ubicar_historial_unidad(e, f)
-
-          } else if (a.indexOf(" m") > -1) {
-              if (this.cl.altitudConsola.length == 2) {
-                  if (m == 0) {
-                      var e = dH[0].lat;
-                      var f = dH[0].lng;
-                      //fnc_ubicar_historial_unidad(e, f)
-                  } else {
-                      var e = dH[dH.length - 1].lat;
-                      var f = dH[dH.length - 1].lng;
-                      //fnc_ubicar_historial_unidad(e, f)
-
-                  }
-              } else {
-                  var e = dH[m].lat;
-                  var f = dH[m].lng;
-                  this.cl.position = m;
-                  //fnc_ubicar_historial_unidad(e, f)
-
-              }
-          } else if (a.indexOf("..") > -1) {
-              var e = dH[m].lat;
-              var f = dH[m].lng;
-              //fnc_ubicar_historial_unidad(e, f)
-
-
-          }
-          this.moveIconG(dH[m]);
-      }
+        if (n) {
+            var m = n.dataIndex;
+            switch (this.opcionGraficoConsola) {
+              case '1':
+              case '2':
+              case '3':
+                this.cl.position = m; //Actualiza el punto de inicio de la simulación de movimiento
+              break;
+            }
+            this.moveIconG(dH[m]);
+        }
     });
     //================== FIN UBICAR PUNTO EN EL HISTORIAL ==================
 
@@ -394,9 +428,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
     $("#placeholder").bind  ("plotselected", (c:any, d:any) => {
       //var f = document.getElementById("opcionGraficoConsola").value;
-      var f = this.opcionGraficoConsola;
 
-      switch (f) {
+      switch (this.opcionGraficoConsola) {
         case '1':
             this.plot_historial = $.plot($("#placeholder"), [{
                 data: this.cl.sin
@@ -463,90 +496,33 @@ export class PanelHistorialGraficoComponent implements OnInit {
                     max: d.xaxis.to
                 },
                 yaxis: {
-                    min: 0,
+                    min: -0.25, //0min: 0,
                     tickFormatter: function (v:any, a:any) {
                         var k = Math.round(v * 100) / 100;
                         return k + " v."
                     },
                 },
-                lines: {
-                    show: true,
-                    steps: true
-                }
+                // lines: {
+                //     show: true,
+                //     steps: true
+                // }
+                panRange: false
             }));
             break;
-        // case '4':
-        //     // var h = marcadores_bd_base.map(function (e) {return e.idMarcador}).indexOf(datarow[0].imei);
-        //     // var j = marcadores_bd_base[h].tanque;
-        //     var j = 100;
-        //     var l = $("#datoslegend");
+        case '4':
 
-        //     function plotAccordingToChoices() {
-        //         var b = [];
-        //         l.find("input:checked")
-        //             .each(function () {
-        //                 var a = $(this).attr("name");
-        //                 if (a && vm.cl.datasets[a]) {
-        //                     b.push(vm.cl.datasets[a])
-        //                 }
-        //             });
-        //         if (b.length > 0) {
-        //             vm.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, vm.options_grafico, {
-        //                 xaxis: {
-        //                     min: d.xaxis.from,
-        //                     max: d.xaxis.to
-        //                 },
-        //                 yaxis: {
-        //                     zoomRange: false,
-        //                     tickFormatter: function (v, a) {
-        //                         var k = Math.round(v * 100) / 100;
-        //                         return ".."
-        //                     },
-        //                     panRange: false
-        //                 },
-        //                 lines: {
-        //                     show: true,
-        //                     lineWidth: 1.3,
-        //                     fill: false
-        //                 },
-        //                 colors: ["#08088A", "#FF0000", "#00FF00", "#F3A405", "#9440ed", "#0B8EE0"],
-        //                 legend: {
-        //                     show: false
-        //                 },
-        //                 yaxes: [{
-        //                     position: 'left',
-        //                     min: 0,
-        //                     tickFormatter: function (v, a) {
-        //                         var k = Math.round(v * 100) / 100;
-        //                         return k + ".."
-        //                     },
-        //                 }, {
-        //                     position: 'left',
-        //                     min: vm.cl.datasets.CConsumido.data[vm.cl.datasets.CConsumido.data.length - 1][1] - 3,
-        //                     max: vm.cl.datasets.CConsumido.data[0][1] + 3
-        //                 }, {
-        //                     position: 'left',
-        //                     min: 0,
-        //                     max: j
-        //                 }, {
-        //                     position: 'left',
-        //                     min: vm.cl.datasets.CInput.data[0][1] - 3,
-        //                     max: vm.cl.datasets.CInput.data[vm.cl.datasets.CInput.data.length - 1][1] + 3
-        //                 }, {
-        //                     position: 'left',
-        //                     min: -1,
-        //                     max: 2
-        //                 }, {
-        //                     position: 'left',
-        //                 }]
-        //             }))
-        //         }
-        //     }
-        //     l.find("input").click(plotAccordingToChoices);
-        //     plotAccordingToChoices();
-        //     break
+            //=============== FUNCION
+            $("#datoslegend").find("input").click(() => {
+              this.plotAccordingToChoices_selected(c, d);
+            });
+
+            this.plotAccordingToChoices_selected(c, d);
+            break
+
         }
     });
+
+
     //================== FIN ZOOM A LA PARTE DELECCIONADA ==================
 
     this.icoGclick.on('popupclose', (e) => {
@@ -580,6 +556,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
   changeOpcionGraficoConsola() {
     // var c = $("#opcionGraficoConsola").val();
+
+
 
     $("#choices").empty();
     $("#datoslegend").empty();
@@ -641,6 +619,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
           this.cl.motor.length = 0;
 
+
+
           for (let i = 0; i < dH.length; i++) {
 
               let di4 = (dH[i].paramsGet.filter((item:any)=> item.id == "di4"))[0];
@@ -661,20 +641,23 @@ export class PanelHistorialGraficoComponent implements OnInit {
               data: this.cl.motor
           }], $.extend(true, {}, this.options_grafico, {
               yaxis: {
-                  min: 0,
+                  min: -0.25, //0
                   tickFormatter: function (v:any, a:any) {
                       var k = Math.round(v * 100) / 100;
                       return k + " v."
                   },
               },
-              lines: {
-                  show: true,
-                  steps: true
-              }
+              // lines: {
+              //     show: true,
+              //     steps: true
+              // }
+              panRange: false
           }));
 
           break;
       case '4':
+
+          console.log("dijugar la opcion 4");
 
           this.cl.m.length = 0;//-CRestante
           this.cl.h.length = 0;//-Velocidad
@@ -758,15 +741,15 @@ export class PanelHistorialGraficoComponent implements OnInit {
               //*****************************************************
           };
 
-          // console.log("*****************************************************vm.cl.m");
-          // console.log(this.cl.m);//-CRestante
-          // console.log(this.cl.h);//-Velocidad
-          // console.log(this.cl.datasdatos);//i
-          // console.log(this.cl.l);//-C.Consumido
-          // console.log(this.cl.n);//-Odómetro
-          // console.log(this.cl.o);//-Rev.x Min.
-          // console.log(this.cl.p);//-On/Off
-          // console.log("*****************************************************vm.cl.m");
+          console.log("*****************************************************vm.cl.m");
+          console.log(this.cl.m);//-CRestante
+          console.log(this.cl.h);//-Velocidad
+          console.log(this.cl.datasdatos);//i
+          console.log(this.cl.l);//-C.Consumido
+          console.log(this.cl.n);//-Odómetro
+          console.log(this.cl.o);//-Rev.x Min.
+          console.log(this.cl.p);//-On/Off
+          console.log("*****************************************************vm.cl.m");
 
           this.cl.datasets = {
               "velocidad": {
@@ -812,9 +795,12 @@ export class PanelHistorialGraficoComponent implements OnInit {
               ++i
           });
           var E = $("#datoslegend");
-          $("#datoslegend").empty();
+          E.empty();
           if (this.cl.h.length > 2 && this.cl.l.length > 2 && this.cl.n.length > 2) {
               $.each(this.cl.datasets, function (a:any, b:any) {
+                  // console.log('xxxxxxxxxxx');
+                  // console.log(a);
+                  // console.log(b);
                   E.append("<span><label style='height:11px; width:11px; margin-bottom:-5px; background: " + b.colorx + "; color: " + b.colorx + ";border-style: dotted;'>-</label>" + "<input type='checkbox' name='" + a + "' checked='checked' id='id" + a + "'></input>" + "<label style='margin-bottom:-5px;' for='id" + a + "' id='mostrar" + a + "'>" + b.label + "</label></span><br>")
               })
           } else {
@@ -826,83 +812,171 @@ export class PanelHistorialGraficoComponent implements OnInit {
           $('#idOnOff').attr('checked', false);
           $('#idRxM').attr('checked', false);
 
-          // function plotAccordingToChoices() {
-          //     var b = [];
-          //     E.find("input:checked").each(function () {
-          //             var a = $(this).attr("name");
-          //             if (a && vm.cl.datasets[a]) {
-          //                 b.push(vm.cl.datasets[a])
-          //             }
-          //         });
+        //=================>> FUNCION
 
 
-          //     if (vm.cl.h.length > 2 && vm.cl.l.length > 2 && vm.cl.n.length > 2) {
-          //         console.log("solo mas de 2 elementos en velocidad __");
-          //         vm.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, vm.options_grafico, {
-          //             xaxis: {
-          //                 mode: "time",
-          //                 timezone: "browser",
-          //             },
-          //             yaxis: {
-          //                 zoomRange: false,
-          //                 tickFormatter: function (v, a) {
-          //                     var k = Math.round(v * 100) / 100;
-          //                     return ".."
-          //                 },
-          //                 panRange: false
-          //             },
-          //             lines: {
-          //                 show: true,
-          //                 lineWidth: 1.3,
-          //                 fill: false
-          //             },
-          //             colors: ["#08088A", "#FF0000", "#00FF00", "#F3A405", "#9440ed", "#0B8EE0"],
-          //             legend: {
-          //                 show: false
-          //             },
-          //             yaxes: [{
-          //                 position: 'left',
-          //                 min: 0,
-          //                 tickFormatter: function (v, a) {
-          //                     var k = Math.round(v * 100) / 100;
-          //                     return k + ".."
-          //                 },
-          //             }, {
-          //                 position: 'left',
-          //                 min: vm.cl.datasets.CConsumido.data[vm.cl.datasets.CConsumido.data.length - 1][1] - 3,
-          //                 max: vm.cl.datasets.CConsumido.data[0][1] + 3
-          //             }, {
-          //                 position: 'left',
-          //                 min: 0,
-          //                 max: x
-          //             }, {
-          //                 position: 'left',
-          //                 min: vm.cl.datasets.CInput.data[0][1] - 3,
-          //                 max: vm.cl.datasets.CInput.data[vm.cl.datasets.CInput.data.length - 1][1] + 3
-          //             }, {
-          //                 position: 'left',
-          //                 min: -1,
-          //                 max: 2
-          //             }, {
-          //                 position: 'left',
-          //             }]
-          //         }));
-          //         $("#placeholder").css('height', '100%').css('height', '-=150px');
+          // $("#btnZoomOutConsola").click(() => {
+          //   this.plot_historial.zoomOut()
+          // });
 
-          //     } else {
-          //         notificationService.success('NO CUENTA CON PARAMETROS DE COMBUSTIBLE PARA SU EVALUACIÓN.');
-          //         vm.plot_historial = $.plot("#placeholder", [{  data: [] }], vm.options_grafico);
-          //         $("#placeholder").css("height", "100%").css("height", "-=35px");
+          E.find("input").click(() => {
+            this.plotAccordingToChoices();
+          });
 
-          //     }
-          // }
-          // E.find("input").click(plotAccordingToChoices);
-          // plotAccordingToChoices();
+
+          this.plotAccordingToChoices();
 
           break;
     }
+    this.changeOpcionTamanoConsola();
   }
 
+
+  plotAccordingToChoices() {
+    var b = new Array();
+    var x = 200;
+    $("#datoslegend").find("input:checked").each((id:any,chbox:any) => {
+            // var a = $(this).attr("name");
+            // console.log("-------------");
+            // console.log(id);
+            // console.log(chbox);
+            // console.log(chbox.getAttribute("name"));
+
+            var a = chbox.getAttribute("name");
+
+            if (a && this.cl.datasets[a]) {
+                b.push(this.cl.datasets[a])
+            }
+        });
+
+    // console.log("==============================");
+    // console.log(b);
+
+    if (this.cl.h.length > 2 && this.cl.l.length > 2 && this.cl.n.length > 2) {
+        console.log("solo mas de 2 elementos en velocidad __");
+        this.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, this.options_grafico, {
+            xaxis: {
+                mode: "time",
+                timezone: "browser",
+            },
+            yaxis: {
+                zoomRange: false,
+                tickFormatter: function (v:any, a:any) {
+                    var k = Math.round(v * 100) / 100;
+                    return ".."
+                },
+                panRange: false
+            },
+            lines: {
+                show: true,
+                lineWidth: 1.3,
+                fill: false
+            },
+            colors: ["#08088A", "#FF0000", "#00FF00", "#F3A405", "#9440ed", "#0B8EE0"],
+            legend: {
+                show: false
+            },
+            yaxes: [{
+                position: 'left',
+                min: 0,
+                tickFormatter: function (v:any, a:any) {
+                    var k = Math.round(v * 100) / 100;
+                    return k + ".."
+                },
+            }, {
+                position: 'left',
+                min: this.cl.datasets.CConsumido.data[this.cl.datasets.CConsumido.data.length - 1][1] - 3,
+                max: this.cl.datasets.CConsumido.data[0][1] + 3
+            }, {
+                position: 'left',
+                min: 0,
+                max: x
+            }, {
+                position: 'left',
+                min: this.cl.datasets.CInput.data[0][1] - 3,
+                max: this.cl.datasets.CInput.data[this.cl.datasets.CInput.data.length - 1][1] + 3
+            }, {
+                position: 'left',
+                min: -1,
+                max: 2
+            }, {
+                position: 'left',
+            }]
+        }));
+        $("#placeholder").css('height', '100%').css('height', '-=150px');
+
+    } else {
+        // notificationService.success('NO CUENTA CON PARAMETROS DE COMBUSTIBLE PARA SU EVALUACIÓN.');
+        this.plot_historial = $.plot("#placeholder", [{  data: [] }], this.options_grafico);
+        $("#placeholder").css("height", "100%").css("height", "-=35px");
+
+    }
+  }
+
+  plotAccordingToChoices_selected(c:any , d:any) {
+    var b = new Array();
+    var j = 100;
+
+    $("#datoslegend").find("input:checked").each((id:any,chbox:any) => {
+            //var a = $(this).attr("name");
+            var a = chbox.getAttribute("name");
+            if (a && this.cl.datasets[a]) {
+                b.push(this.cl.datasets[a])
+            }
+        });
+
+    if (b.length > 0) {
+        this.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, this.options_grafico, {
+            xaxis: {
+                min: d.xaxis.from,
+                max: d.xaxis.to
+            },
+            yaxis: {
+                zoomRange: false,
+                tickFormatter: function (v:any, a:any) {
+                    var k = Math.round(v * 100) / 100;
+                    return ".."
+                },
+                panRange: false
+            },
+            lines: {
+                show: true,
+                lineWidth: 1.3,
+                fill: false
+            },
+            colors: ["#08088A", "#FF0000", "#00FF00", "#F3A405", "#9440ed", "#0B8EE0"],
+            legend: {
+                show: false
+            },
+            yaxes: [{
+                position: 'left',
+                min: 0,
+                tickFormatter: function (v:any, a:any) {
+                    var k = Math.round(v * 100) / 100;
+                    return k + ".."
+                },
+            }, {
+                position: 'left',
+                min: this.cl.datasets.CConsumido.data[this.cl.datasets.CConsumido.data.length - 1][1] - 3,
+                max: this.cl.datasets.CConsumido.data[0][1] + 3
+            }, {
+                position: 'left',
+                min: 0,
+                max: j
+            }, {
+                position: 'left',
+                min: this.cl.datasets.CInput.data[0][1] - 3,
+                max: this.cl.datasets.CInput.data[this.cl.datasets.CInput.data.length - 1][1] + 3
+            }, {
+                position: 'left',
+                min: -1,
+                max: 2
+            }, {
+                position: 'left',
+            }]
+        }))
+    }
+  }
 
 
   changeOpcionVelocidadGraficoConsola() {
@@ -920,7 +994,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
           // $("#divprincipal").css( "height", "70%" );
 
           $("#graficohistorial").css( "height", "200px" ); //30%
-          $("#placeholder").css('height', '100%').css('height', '-=35px');
+          // $("#placeholder").css('height', '100%').css('height', '-=35px');
 
           // if ($("#opcionGraficoConsola").val() == '4') {
           //     $("#placeholder").css('height', '100%').css('height', '-=150px');
@@ -934,7 +1008,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
           // $("#map").css( "height", "50%" );
 
           $("#graficohistorial").css( "height", "50%" );
-          $("#placeholder").css('height', '100%').css('height', '-=35px');
+          // $("#placeholder").css('height', '100%').css('height', '-=35px');
 
           // if ($("#opcionGraficoConsola").val() == '4') {
           //     $("#placeholder").css('height', '100%').css('height', '-=150px');
@@ -946,7 +1020,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
       case '3':
           // $("#divprincipal").css( "height", "0%" );
           $("#graficohistorial").css( "height", "100%" );
-          $("#placeholder").css('height', '100%').css('height', '-=35px');
+          // $("#placeholder").css('height', '100%').css('height', '-=35px');
 
           // if ($("#opcionGraficoConsola").val() == '4') {
           //     $("#placeholder").css('height', '100%').css('height', '-=150px');
@@ -956,6 +1030,15 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
           break;
     }
+
+    if ( this.opcionGraficoConsola == '4') {
+        $("#placeholder").css('height', '100%').css('height', '-=123px'); //-=150px
+    } else {
+      console.log("gaaaaaaaa");
+
+        $("#placeholder").css("height", "100%").css("height", "-=35px");
+    }
+
 
   }
 
@@ -984,8 +1067,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
         console.log("position : "+this.cl.position);
         //console.log("--1");
 
-        var a = $("#opcionGraficoConsola").val();
-        switch (a) {
+        // var a = $("#opcionGraficoConsola").val();
+
+        switch (this.opcionGraficoConsola) {
           case '1':
               $("#datoslegend").html( "<strong>" + dH[pos].speed + " km/h</strong> - " + d );
               break;
@@ -993,12 +1077,21 @@ export class PanelHistorialGraficoComponent implements OnInit {
               $("#datoslegend").html( "<strong>" + dH[pos].altitude + " m</strong> - " + d );
               break;
           case '3':
-              $("#datoslegend").html( "<strong></strong> - " + d );
+
+              let di4  = (dH[pos].paramsGet.filter((item:any)=> item.id == "di4"))[0];
+              di4 = di4.value;
+              if (di4 == 5 || di4 == '5' || di4 == 1 || di4 == '1') {
+                  var s = '<span>Encendido</span>'
+              } else {
+                  var s = '<span>Apagado</span>'
+              }
+
+              $("#datoslegend").html( "<strong>" + s + "</strong> - " + d );
               break;
         }
 
 
-        if (a != '4' && a != 4) {
+        if (this.opcionGraficoConsola != '4') {
             // var b = marcadores_bd_base.map(function (e) { return e.idMarcador }).indexOf(datarow[0].imei);
             // var f = [vm.tramas[vm.cl.position].lat, vm.tramas[vm.cl.position].lng];
             //

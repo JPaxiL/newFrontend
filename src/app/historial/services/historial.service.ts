@@ -45,7 +45,12 @@ export class HistorialService {
   }
 
   public getHistorial (){
-    this.tramasHistorial = RefDataHistorial.data;
+    // this.tramasHistorial = RefDataHistorial.data;
+    // this.tramasHistorial = RefDataHistorial.data2;
+    // this.tramasHistorial = RefDataHistorial.data3;
+    this.tramasHistorial = RefDataHistorial.data4;
+
+
   }
 
 

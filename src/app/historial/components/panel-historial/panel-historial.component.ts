@@ -398,6 +398,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     this.historialService.getHistorial();
     var dH =  this.historialService.tramasHistorial; // Data Historial
 
+    console.log(dH);
 
 
     var h1 = new Array();

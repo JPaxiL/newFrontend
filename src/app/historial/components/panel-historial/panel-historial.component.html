@@ -188,40 +188,43 @@
 
     <legend></legend>
 
-    <table id="tbl_fechas" class="table table-hover">
-      <colgroup>
-        <col width="20%" />
-        <col width="50%" />
-        <col width="30%" />
-      </colgroup>
-      <!-- <thead>
-          <tr>
-              <td>Id</td>
-              <td>Title</td>
-              <td>Amount</td>
-          </tr>
-      </thead> -->
-      <tbody>
+    <div style="height: calc(100vh - 470px); overflow-y: auto;">
+      <table id="tbl_fechas" class="table table-hover">
+        <colgroup>
+          <col width="20%" />
+          <col width="50%" />
+          <col width="30%" />
+        </colgroup>
+        <!-- <thead>
+            <tr>
+                <td>Id</td>
+                <td>Title</td>
+                <td>Amount</td>
+            </tr>
+        </thead> -->
+        <tbody style="height: 300px;">
 
 
 
-          <tr *ngFor="let transfer of transfers;let indice=index"  (click)="clickLocate(transfer)"  >
+            <tr *ngFor="let transfer of transfers;let indice=index"  (click)="clickLocate(transfer)"  >
 
-              <td class="text-center" style="padding: 1px !important;" >
-                <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
-                  <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
-                </div>
-              </td>
+                <td class="text-center" style="padding: 1px !important;" >
+                  <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
+                    <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
+                  </div>
+                </td>
 
-              <td>{{transfer.trama.dt_tracker}}</td>
+                <td>{{transfer.trama.dt_tracker}}</td>
 
-              <td *ngIf="indice==0">x</td>
-              <td *ngIf="indice!=0 && indice!=transfers.length-1">{{transfer.trama.temp}}</td>
-              <td *ngIf="indice!=0 && indice==transfers.length-1">x</td>
+                <td *ngIf="indice==0">x</td>
+                <td *ngIf="indice!=0 && indice!=transfers.length-1">{{transfer.trama.temp}}</td>
+                <td *ngIf="indice!=0 && indice==transfers.length-1">x</td>
 
-          </tr>
-      </tbody>
-    </table>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
 
 
   </div>
