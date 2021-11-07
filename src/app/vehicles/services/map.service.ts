@@ -16,6 +16,7 @@ export class MapService {
   public map!: L.Map;
   private dataFitBounds: [string, string][] = [];
   private marker: any = [];
+  private statusMap: boolean = false;
   // private demo: any = [];
 
   @Output() sendData = new EventEmitter<any>();
@@ -133,7 +134,12 @@ export class MapService {
         vehicles[index].speed = data.Velocidad;
         // vehicles[index].
         this.vehicleService.vehicles = vehicles;
-        this.vehicleService.reloadTableVehicles();
+        if(this.vehicleService.listTable==0){
+          this.vehicleService.reloadTable.emit();
+        }else{
+          // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+          this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
+        }
         this.map.removeLayer(this.marker[data.IMEI]);
         this.drawIconMov(vehicles[index], this.map, data.Latitud, data.Longitud);
 
@@ -171,8 +177,10 @@ export class MapService {
 
     for (const property in e){
         if (e.hasOwnProperty(property)&&e[property].eye == true) {
-          const aux2: [string, string] = [e[property].latitud, e[property].longitud];
-          this.dataFitBounds.push(aux2);
+          if(this.statusMap==false){
+            const aux2: [string, string] = [e[property].latitud, e[property].longitud];
+            this.dataFitBounds.push(aux2);
+          }
           // this.map.removeLayer(this.demo);
           this.drawIcon(e[property].IMEI, map, Number(e[property].latitud), Number(e[property].longitud));
         }
@@ -182,6 +190,7 @@ export class MapService {
       // console.log("dataFitBounds map",this.dataFitBounds);
       map.fitBounds(this.dataFitBounds);
     }
+    this.statusMap=true;
     this.dataFitBounds = [];
   }
 
