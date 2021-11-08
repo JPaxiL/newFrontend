@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { ColDef, GridApi, GridReadyEvent,  ColumnApi } from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
@@ -34,6 +34,7 @@ import { VehicleHeaderComponent } from '../../components/vehicle-header/vehicle-
 })
 export class VehiclesComponent implements OnInit {
 
+  public statusTable: boolean = false;
   public vehicles: Vehicle[] = [];
   private init: boolean = true;
   public rowHeight: number = 38;
@@ -89,15 +90,14 @@ export class VehiclesComponent implements OnInit {
 
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
       this.vehicles = vehicles;
-      this.api.setRowData([]);
-      this.api.updateRowData({add:vehicles});
+      this.dataLoading();
     });
     this.vehicleService.reloadTable.subscribe(res=>{
-      // console.log("volver a cargar tabla");
       const vehicles = this.vehicleService.vehicles;
-      this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
-      // this.api.setRowData([]);
-      // this.api.updateRowData({add:vehicles});
+      if(this.vehicleService.listTable==0&&this.statusTable){
+        // console.log("this api asing reloading ...");
+        this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
+      }
     });
     this.vehicleService.sortLimit.subscribe(res=>{
       // this.
@@ -116,15 +116,32 @@ export class VehiclesComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    setTimeout(()=>{
-      if(this.vehicleService.statusDataVehicle){
-        this.vehicles = this.vehicleService.vehicles;
-        this.api.setRowData([]);
-        this.api.updateRowData({add:this.vehicleService.vehicles});
-      }
-    },300);
+  ngAfterViewInit(): void {
+    console.log("ngAfterViewInit table ag GRIDstatus table = ",this.statusTable);
 
+  }
+  ngOnInit(): void {
+    console.log("ngOnInit table ag GRID status table = ",this.statusTable);
+
+  }
+  ngOnDestroy(): void {
+    console.log("destroy component table...");
+    this.statusTable=false;
+     // this.vehicleService.reloadTable.unsubscribe();
+  }
+  public dataLoading(){
+    this.vehicles = this.vehicleService.vehicles;
+    this.api.setRowData([]);
+    this.api.updateRowData({add:this.vehicleService.vehicles});
+    this.statusTable=true;
+
+    // this.vehicleService.reloadTable.subscribe(res=>{
+    //   const vehicles = this.vehicleService.vehicles;
+    //   if(this.vehicleService.listTable==0&&this.statusTable){
+    //     // console.log("this api asing reloading ...this.vehicleService.listTable / status table ",this.vehicleService.listTable+" / "+this.statusTable);
+    //     this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
+    //   }
+    // });
   }
 
   public resultCallback () {
@@ -134,6 +151,9 @@ export class VehiclesComponent implements OnInit {
       this.api = params.api;
       this.columnApi = params.columnApi;
       this.api.sizeColumnsToFit();
+      console.log("onGridReady ....");
+      this.statusTable=true;
+      this.dataLoading();
   }
 
   public onQuickFilterChanged($event: any) {

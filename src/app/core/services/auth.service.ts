@@ -18,8 +18,8 @@ export class AuthService {
 ): Observable<OAuthResource> {
     return this.http.post<OAuthResource>(environment.apiUrl + '/oauth/token', {
       grant_type: 'password',
-      client_id: '84',
-      client_secret: 'LUTj1k8Tley9SvQ1Jwmrha1HPHJs87ShfiQVB18S',
+      client_id: environment.idClient ,
+      client_secret: environment.secretClient ,
       username: '' + username,
       password: '' + password,
       scope: '*'

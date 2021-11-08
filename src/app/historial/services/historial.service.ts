@@ -3,11 +3,26 @@ import { Injectable } from '@angular/core';
 import RefDataHistorial from '../data/refDataHistorial';
 import * as moment from 'moment';
 
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class HistorialService {
+
+
+  //----------------- INICIO mensaje entre componentes ------------------
+  private messageSource = new BehaviorSubject('default message');
+  currentMessage = this.messageSource.asObservable();
+
+
+  changeMessage(message: string) {
+    this.messageSource.next(message)
+  }
+  //----------------- FIN mensaje entre componentes ------------------
+
+
 
   public tramasHistorial: any = [];
 
@@ -16,6 +31,9 @@ export class HistorialService {
   public dataFormulario: any = {};
 
   public inicio = true;
+
+  public nombreUnidad = '';
+
 
 
 
@@ -27,7 +45,12 @@ export class HistorialService {
   }
 
   public getHistorial (){
-    this.tramasHistorial = RefDataHistorial.data;
+    // this.tramasHistorial = RefDataHistorial.data;
+    // this.tramasHistorial = RefDataHistorial.data2;
+    // this.tramasHistorial = RefDataHistorial.data3;
+    this.tramasHistorial = RefDataHistorial.data4;
+
+
   }
 
 

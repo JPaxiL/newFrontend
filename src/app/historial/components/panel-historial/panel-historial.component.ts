@@ -11,6 +11,8 @@ import { MapServicesService } from '../../../map/services/map-services.service';
 
 import { HistorialService } from '../../services/historial.service';
 
+
+
 import { ColDef } from 'ag-grid-community';
 
 declare var $: any;
@@ -193,9 +195,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   transfers = new Array();
 
+  // message:string='';
 
 
-  constructor(public mapService: MapServicesService, public historialService: HistorialService) { }
+  constructor(public mapService: MapServicesService, public historialService: HistorialService ) {
+
+    // this.historialService.currentMessage.subscribe(message => this.message = message);
+    // this.historialService.currentMessage.subscribe( () => {console.log('com 1 -> gaaaaaaaaa');
+    // });
+
+  }
+
 
   // constructor() {
   //     // // const today = new Date();
@@ -218,6 +228,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // $('#datepicker').datetimepicker({
     //   language: 'pt-es'
     // });
+
+    // this.historialService.currentMessage.subscribe(message => this.message = message)
 
     if(this.historialService.inicio){
       this.historialService.initialize();
@@ -261,11 +273,19 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     //   console.log(this.mapService.nombreMap);
 
     // }, 5000)
+    let dH =  this.historialService.tramasHistorial; // Data Historial
 
     this.conHistorial = this.historialService.conHistorial;
     this.form = this.historialService.dataFormulario;
 
     this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+
+    if (this.conHistorial) {
+      this.mostrar_tabla(dH, dH[0].index_historial);
+
+    }
+
+
 
 
   }
@@ -319,6 +339,58 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   }
 
+
+  changeRangoFechas() {
+
+      switch (this.form.selectedRango)
+      {
+          case ('0'):
+                this.form.fecha_desde = moment().startOf('day').format("YYYY-MM-DD");
+                this.form.fecha_hasta = moment().startOf('day').format("YYYY-MM-DD");
+              break;
+          case ('1')://hoy
+                this.form.fecha_desde = moment().startOf('day').format("YYYY-MM-DD");
+                this.form.fecha_hasta = moment().add(1, 'days').startOf('day').format("YYYY-MM-DD");
+              break;
+          case ('2'):
+                this.form.fecha_desde = moment().add(-1, 'days').startOf('day').format("YYYY-MM-DD");
+                this.form.fecha_hasta = moment().startOf('day').format("YYYY-MM-DD");
+              break;
+          case ('3'):
+                this.form.fecha_desde = moment().add(-2, 'days').startOf('day').format("YYYY-MM-DD");
+                this.form.fecha_hasta = moment().add(-1, 'days').startOf('day').format("YYYY-MM-DD");
+              break;
+          case ('4'):
+                this.form.fecha_desde = moment().add(-3, 'days').startOf('day').format("YYYY-MM-DD");
+                this.form.fecha_hasta = moment().add(-2, 'days').startOf('day').format("YYYY-MM-DD");
+              break;
+          case ('5'):
+                this.form.fecha_desde = moment().startOf('isoWeek').format("YYYY-MM-DD");
+                this.form.fecha_hasta = moment().startOf('isoWeek').add(7, 'days').format("YYYY-MM-DD");
+              break;
+          case ('6'):
+                this.form.fecha_desde = moment().startOf('isoWeek').add(-7, 'days').format("YYYY-MM-DD");;
+                this.form.fecha_hasta = moment().startOf('isoWeek').format("YYYY-MM-DD");
+              break;
+          case ('7'):
+                this.form.fecha_desde = moment().startOf('month').format("YYYY-MM-DD");
+                this.form.fecha_hasta = moment().startOf('month').add(1, 'month').format("YYYY-MM-DD");
+              break;
+          case ('8'):
+                this.form.fecha_desde = moment().startOf('month').add(-1, 'month').format("YYYY-MM-DD");;
+                this.form.fecha_hasta = moment().startOf('month').format("YYYY-MM-DD");;;
+              break;
+      }
+
+      this.form.hora_desde  = '00';//{id: '00', name: '00'};
+      this.form.min_desde   = '00';//{id: '00', name: '00'};
+      this.form.hora_hasta  = '00';//{id: '00', name: '00'};
+      this.form.min_hasta   = '00';//{id: '00', name: '00'};
+
+  };
+
+
+
   clickCargarHistorial() {
 
     this.clickEliminarHistorial();
@@ -326,6 +398,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     this.historialService.getHistorial();
     var dH =  this.historialService.tramasHistorial; // Data Historial
 
+    console.log(dH);
 
 
     var h1 = new Array();
@@ -337,8 +410,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-    this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
-
+    this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
 
 
 
@@ -706,6 +778,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
           this.mostrar_tabla(dH, dH[0].index_historial);
           this.changeShowingTramas();
+          this.changeShowingGrafico();
+
 
           this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
 
@@ -724,6 +798,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           }).addTo(this.mapService.map);
 
 
+          this.historialService.changeMessage("desde com panel-historial")
 
 
           // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
@@ -832,6 +907,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.conHistorial = false;
       this.transfers = [];
 
+      $("#graficohistorial").css("display", "none");
 
     }
 
@@ -966,6 +1042,18 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       }
     }
 
+  }
+
+  changeShowingGrafico(){
+      if (this.conHistorial) {
+
+          if (this.form.chckGrafico) {
+              $("#graficohistorial").css( "display", "block" );
+          } else {
+              $("#graficohistorial").css( "display", "none" );
+          }
+
+      }
   }
 
 
@@ -1234,10 +1322,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     }
     return g;
   }
-
-
-
-
 
 
 }

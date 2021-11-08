@@ -1,0 +1,112 @@
+
+<div id="graficohistorial" class="col-md-9">
+  <table>
+    <tbody>
+      <tr>
+        <td width="150px">
+
+
+        <select class="claseinputs" id="opcionGraficoConsola" (change)="changeOpcionGraficoConsola()" [(ngModel)]="opcionGraficoConsola" title="Tipo de Gráfico"  data-bs-toggle="tooltip" data-bs-placement="top">
+          <option [value]="item.id" *ngFor="let item of availableOpcionGraficoConsola">{{item.name}}</option>
+        </select>
+
+
+        </td>
+        <td class="claseicon" id="btnPlayConsola" title="Iniciar recorrido" data-bs-toggle="tooltip" data-bs-placement="top" ><span class="fa fa-play"></span></td>
+        <td class="claseicon" id="btnPauseConsola" title="Pausar recorrido" data-bs-toggle="tooltip" data-bs-placement="top" ><span class="fa fa-pause"></span></td>
+        <td class="claseicon" id="btnStopConsola" title="Terminar recorrido" data-bs-toggle="tooltip" data-bs-placement="top"><span class="fa fa-stop"></span></td>
+        <td width="80px">
+
+          <select class="claseinputs" id="opcionVelocidadGraficoConsola" (change)="changeOpcionVelocidadGraficoConsola()" [(ngModel)]="opcionVelocidadGraficoConsola" title="Velocidad de Recorrido" data-bs-toggle="tooltip" data-bs-placement="top"  >
+            <option [value]="item.id" *ngFor="let item of availableOpcionVelocidadGraficoConsola">{{item.name}}</option>
+          </select>
+
+        </td>
+        <td width="60px">
+          <!-- <select id="opcionTamanoConsola" onchange="cambioTamanoConsolaHistorial();" class="claseinputs">
+            <option value="1" selected="selected">x1</option>
+            <option value="2">x2</option>
+            <option value="3">x3</option>
+          </select> -->
+
+          <select class="claseinputs" id="opcionTamanoConsola" (change)="changeOpcionTamanoConsola()" [(ngModel)]="opcionTamanoConsola" title="Tamaño de Consola" data-bs-toggle="tooltip" data-bs-placement="top" >
+            <option [value]="item.id" *ngFor="let item of availableOpcionTamanoConsola">{{item.name}}</option>
+          </select>
+
+
+        </td>
+        <td id="choices" width="20px" align="left" style="padding-left: 40px;"></td>
+        <td id="datoslegend" width="400px" align="left" [innerHTML]="datosLegend" >
+        </td>
+        <td class="claseicon" id="btnIzqConsola" title="Desplazar a la Izquierda" data-bs-toggle="tooltip" data-bs-placement="top" ><span class="fa fa-chevron-left"></span></td>
+        <td class="claseicon" id="btnDerConsola" title="Desplazar a la Derecha" data-bs-toggle="tooltip" data-bs-placement="top" ><span class="fa fa-chevron-right"></span></td>
+        <td class="claseicon" id="btnZoomInConsola" title="Zoom +" data-bs-toggle="tooltip" data-bs-placement="top" ><span class="fa fa-search-plus"></span></td>
+        <td class="claseicon" id="btnZoomOutConsola" title="Zoom -" data-bs-toggle="tooltip" data-bs-placement="top" ><span class="fa fa-search-minus"></span></td>
+
+        <td width="35px" align="center">
+            <div>
+                <button id="botonverconsola" (click)="clickVerTablaRecorrido()" title="Ver Tabla del Recorrido" data-bs-toggle="tooltip" data-bs-placement="top" type="button" class="btn btn-success btn-sm btn-xss">Ver Mensaje</button>
+                <button id="botonocultarconsola" (click)="clickOcultarTablaRecorrido()" title="Ocultar Tabla del Recorrido" data-bs-toggle="tooltip" data-bs-placement="top" type="button" style="display : none;" class="btn btn-primary btn-sm btn-xss">Ocultar Mensaje</button>
+                <!-- <button (click)="newMessage()">New Message</button> -->
+              </div>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+  <div id="placeholder" style="margin-top: 5px; border: black 1px solid;height: 156px;width: 100%;" class="demo-placeholder"></div>
+  <!-- <div id="placeholder" style="width:600px;height:300px"></div> -->
+  <!-- <div id="tab-mensaje"></div> -->
+
+  <table id="tbl_consola" *ngIf="verTabla" class="table table-hover">
+    <colgroup>
+      <col width="100px" />
+      <col width="70px" />
+      <col width="70px" />
+      <col width="50px" />
+      <col width="50px" />
+      <col width="50px" />
+      <col width="500px" />
+
+    </colgroup>
+    <thead>
+        <tr>
+            <td>Hora</td>
+            <td>Latitud</td>
+            <td>Longitud</td>
+            <td>Altitud</td>
+            <td>Ángulo</td>
+            <td>Velocidad</td>
+            <td>Parámetros</td>
+
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+        <tr *ngFor="let row of tConsola;let indice=index"  (click)="moveIconG(row)"  >
+
+            <!-- <td class="text-center" style="padding: 1px !important;" >
+              <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
+                <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
+              </div>
+            </td> -->
+
+            <td>{{row.dt_tracker}}</td>
+            <td>{{row.lat}}</td>
+            <td>{{row.lng}}</td>
+            <td>{{row.altitude}}</td>
+            <td>{{row.angle}}</td>
+            <td>{{row.speed}}</td>
+            <td style="text-align: left;overflow-y: hidden;"><div [innerHTML]="row.params2"></div></td>
+
+            <!-- <td *ngIf="indice==0">x</td>
+            <td *ngIf="indice!=0 && indice!=transfers.length-1">{{transfer.trama.temp}}</td>
+            <td *ngIf="indice!=0 && indice==transfers.length-1">x</td> -->
+
+        </tr>
+    </tbody>
+  </table>
+
+</div>

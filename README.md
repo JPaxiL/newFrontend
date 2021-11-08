@@ -74,3 +74,15 @@ docker run \
   --env LETSENCRYPT_HOST=hello-world.example.com \
   --env LETSENCRYPT_EMAIL="youremail@example.com" \
   tutum/hello-world
+
+
+  -- prod --
+
+
+Encryption keys generated successfully.
+Personal access client created successfully.
+Client ID: 9
+Client secret: 9IG3ZVQkE0JjGhCZA9JeQN5hlwKP673TeWDjwAU6
+Password grant client created successfully.
+Client ID: 10
+Client secret: IvTvY4GoWXvvcoJg2YvjUNgXbG5YGnnrpuPHA4bf

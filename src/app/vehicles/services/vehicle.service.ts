@@ -2,6 +2,7 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../models/vehicle';
+import {TreeNode} from 'primeng-lts/api';
 // import { SocketWebService } from '../services/socket-web.service';
 import * as moment from 'moment';
 
@@ -15,15 +16,24 @@ export class VehicleService {
   private URL_LIST = 'http://newbackendgltracker.test/api/tracker';
 
   public vehicles: any = [];
-  private demo:boolean = false;
+  public vehiclesTree: TreeNode[]=[];
+  private demo:boolean = true;
   private timeDemo: number = 1000;
   public statusDataVehicle: boolean = false;
+  public statusDataVehicleTree: boolean = false;
+
+  public listTable = 1; // 0 general, 1 = group
 
   @Output() dataCompleted = new EventEmitter<any>();
+  @Output() dataTreeCompleted = new EventEmitter<any>();
 
   @Output() drawIconMap = new EventEmitter<any>();
   @Output() reloadTable = new EventEmitter<any>();
+  @Output() reloadTableTree = new EventEmitter<any>();
   @Output() sortLimit = new EventEmitter<any>();
+  @Output() clickIcon = new EventEmitter<any>();
+  @Output() clickEye = new EventEmitter<any>();
+  @Output() clickListTable = new EventEmitter<any>();
 
   constructor(private http: HttpClient) {
     /*
@@ -36,9 +46,22 @@ export class VehicleService {
     if(this.demo){
       setTimeout(()=>{
         // console.log("carga de data");
-        this.vehicles = this.dataFormatVehicle(RefData.data);
-        this.statusDataVehicle = true;
-        this.dataCompleted.emit(this.vehicles);
+        this.http.get<any>('assets/trackers.json')
+                    .toPromise()
+                    .then(res => {
+                      // console
+                      // console.log("data json",<TreeNode[]>res.data);
+                      this.vehicles = this.dataFormatVehicle(<TreeNode[]>res.data);
+                      this.vehiclesTree = this.createNode(this.vehicles);
+                      this.dataCompleted.emit(this.vehicles);
+                      this.dataTreeCompleted.emit(this.vehiclesTree);
+                      this.statusDataVehicle = true;
+                      this.statusDataVehicleTree = true;
+                    });
+
+        // this.vehicles = this.dataFormatVehicle(RefData.data);
+        // this.statusDataVehicle = true;
+        // this.dataCompleted.emit(this.vehicles);
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
@@ -50,9 +73,18 @@ export class VehicleService {
     }
 
   }
-  public reloadTableVehicles():void{
-    this.reloadTable.emit();
+  /*tree table*/
+  // public get
+  /*end tree table*/
+  public onClickEye(IMEI: string):void{
+    this.clickEye.emit(IMEI);
   }
+  public onClickIcon(IMEI: string):void{
+    this.clickIcon.emit(IMEI);
+  }
+  // public reloadTableVehicles():void{
+  //   this.reloadTable.emit();
+  // }
   public sortLimitVehicle(): void{
     this.sortLimit.emit();
   }
@@ -384,6 +416,131 @@ export class VehicleService {
       vehicle.capacidad_tanque_text = vehicle.capacidad_tanque+" gal. || "+( vehicle.capacidad_tanque * 3.7854118).toFixed(2) +' l.';
     }
     return vehicle;
+  }
+  createNode(data: any): any{
+    console.log("create node");
+    //variables de inicio
+
+    //identificando grupos
+    let map: any=[];
+    let groups: any = [];
+    let convoys: any = [];
+    let status_group = false;
+    let status_convoy = false;
+    let prueba = [];
+
+    for(const index in data){
+      if(groups.includes(data[index]['grupo'])){
+      }else{
+        groups.push(data[index]['grupo']);
+        status_group= true;
+      }
+      if(convoys.includes(data[index]['convoy'])){
+      }else{
+        convoys.push(data[index]['convoy']);
+        status_convoy= true;
+      }
+
+      // posibilidades
+      // 1 1
+      // 0 1
+      // 1 0
+      // 0 0
+      if(status_group&&status_convoy){
+        prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
+        map.push(
+          {
+            data:{name: data[index]['grupo'], col:3},
+            expanded: true,
+            children:[
+              {
+                data:{name:data[index]['convoy'], col:3},
+                expanded: true,
+                children: [
+                  {
+                    data:data[index]
+                  }
+                ]
+              }
+            ]
+          }
+        );
+
+      }else if(!status_group&&status_convoy){
+        prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
+        //recuperar el id del grupo
+        let index_group = groups.indexOf(data[index]["grupo"]);
+        //reucperar id del convoy
+        // let index_convoy = map[index_group]['children']['data']
+        map[index_group]['children'].push(
+          {
+            data : {name: data[index]['convoy'], col: 3},
+            expanded: true,
+            children: [
+              {
+                data:data[index]
+              }
+            ]
+          }
+        );
+        // console.log("index_group",index_group)
+        // map[data]
+      }else if(status_group&&!status_convoy){//igual que el caso 1 1
+        prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
+        // console.log("data[index]['convoy']",data[index]['convoy']);
+        map.push(
+          {
+            data:{name: data[index]['grupo'], col: 3},
+            expanded: true,
+            children:[
+              {
+                data:{name: data[index]['convoy'], col: 3},
+                expanded: true,
+                children: [
+                  {
+                    data:data[index]
+                  }
+                ]
+              }
+            ]
+          }
+        );
+      }else if(!status_group&&!status_convoy){
+        prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
+        //recuperar el id del grupo
+        let index_group = groups.indexOf(data[index]["grupo"]);
+        //recuperar el id del convoy dentro del grupo
+        // let index_convoy = map[index_group]['children']['data']
+
+        // console.log("mar de opciones", map[index_group]['children'].indexOf({data:{name:"GRUPO LINARES"}}));
+        // console.log("mar de opciones", map[index_group]['children']);
+        let e = map[index_group]['children'];
+        let b = {data:{name:data[index]['convoy']}};
+        // console.log("index-->",e.indexOf(b));
+        let aux_index: string = "0";
+        for(const i in e){
+          // console.log("convoy",e[i]['data']['name'])
+          if(e[i]['data']['name']==data[index]['convoy']){
+            // console.log("exito en "+data[index]["grupo"]+"/"+data[index]['convoy']+" -->",i);
+            aux_index = i;
+          }
+        }
+        // console.log("aux_index",aux_index);
+        map[index_group]['children'][aux_index]["children"].push({
+          data:data[index]
+        });
+      }
+      status_group=false;
+      status_convoy=false;
+
+    }
+    // console.log("groups",groups);
+    // console.log("convoys",convoys);
+    // console.log("map",map);
+    // console.log("prueba",prueba);
+
+
+    return map;
   }
 
 }

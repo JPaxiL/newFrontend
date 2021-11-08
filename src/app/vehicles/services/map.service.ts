@@ -16,6 +16,7 @@ export class MapService {
   public map!: L.Map;
   private dataFitBounds: [string, string][] = [];
   private marker: any = [];
+  private statusMap: boolean = false;
   // private demo: any = [];
 
   @Output() sendData = new EventEmitter<any>();
@@ -39,6 +40,38 @@ export class MapService {
       // console.log("desde map service");
       this.followVehicle(res, this.map);
     });
+    this.vehicleService.clickIcon.subscribe(res=>{
+      this.followClickIcon(this.map, res);
+    });
+    this.vehicleService.clickEye.subscribe(res=>{
+
+      this.eyeClick(this.map, res);
+    });
+  }
+  eyeClick(map: any, IMEI: string){
+    const vehicles = this.vehicleService.vehicles;
+    for (const i in vehicles){
+      if(vehicles[i].IMEI==IMEI){
+        vehicles[i].eye=!vehicles[i].eye;
+      }
+    }
+    this.vehicleService.vehicles = vehicles;
+    this.onDrawIcon(map);
+  }
+  followClickIcon(map: any, IMEI: string){
+    const vehicles = this.vehicleService.vehicles;
+    this.dataFitBounds = [];
+    //
+    for (const i in vehicles){
+      if(vehicles[i].IMEI==IMEI){
+        const aux2: [string, string] = [vehicles[i].latitud, vehicles[i].longitud];
+        this.dataFitBounds.push(aux2);
+      }
+    }
+    //
+    if(this.dataFitBounds.length>0){
+      map.fitBounds(this.dataFitBounds);
+    }
   }
   followVehicle(data: any, map: any): void{
     /*
@@ -101,7 +134,12 @@ export class MapService {
         vehicles[index].speed = data.Velocidad;
         // vehicles[index].
         this.vehicleService.vehicles = vehicles;
-        this.vehicleService.reloadTableVehicles();
+        if(this.vehicleService.listTable==0){
+          this.vehicleService.reloadTable.emit();
+        }else{
+          // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+          this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
+        }
         this.map.removeLayer(this.marker[data.IMEI]);
         this.drawIconMov(vehicles[index], this.map, data.Latitud, data.Longitud);
 
@@ -139,8 +177,10 @@ export class MapService {
 
     for (const property in e){
         if (e.hasOwnProperty(property)&&e[property].eye == true) {
-          const aux2: [string, string] = [e[property].latitud, e[property].longitud];
-          this.dataFitBounds.push(aux2);
+          if(this.statusMap==false){
+            const aux2: [string, string] = [e[property].latitud, e[property].longitud];
+            this.dataFitBounds.push(aux2);
+          }
           // this.map.removeLayer(this.demo);
           this.drawIcon(e[property].IMEI, map, Number(e[property].latitud), Number(e[property].longitud));
         }
@@ -150,6 +190,7 @@ export class MapService {
       // console.log("dataFitBounds map",this.dataFitBounds);
       map.fitBounds(this.dataFitBounds);
     }
+    this.statusMap=true;
     this.dataFitBounds = [];
   }
 
