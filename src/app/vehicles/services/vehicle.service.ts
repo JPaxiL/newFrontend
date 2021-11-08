@@ -13,7 +13,7 @@ import RefData from '../data/refData';
 })
 export class VehicleService {
 
-  private URL_LIST = 'http://newbackendgltracker.test/api/tracker';
+  private URL_LIST = 'http://127.0.0.1:8001/api/tracker';
 
   public vehicles: any = [];
   public vehiclesTree: TreeNode[]=[];
