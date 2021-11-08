@@ -4,8 +4,11 @@ import { Alert } from '../../models/alert.interface';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { Select2Data } from 'ng-select2-component';
+import * as moment from 'moment';
+import Swal from 'sweetalert2';
+import { PanelService } from 'src/app/panel/services/panel.service';
 
-
+declare var $: any;
 
 @Component({
   selector: 'app-gps-alerts-create',
@@ -13,6 +16,11 @@ import { Select2Data } from 'ng-select2-component';
   styleUrls: ['./gps-alerts-create.component.scss']
 })
 export class GpsAlertsCreateComponent implements OnInit {
+
+  options = new Array(
+    { id:'ALERTS-GPS', name:"Alertas Gps"},
+  );
+
   public alertForm!: FormGroup;
   public events:any = [];
 
@@ -27,21 +35,26 @@ export class GpsAlertsCreateComponent implements OnInit {
   constructor(
     private AlertService: AlertService,
     private VehicleService : VehicleService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public panelService: PanelService
   ) { }
 
   ngOnInit(): void {
     this.alertForm = this.formBuilder.group({
-      event: ['',[Validators.required]],
-      eventActive: [''],
-      eventName: [''],
       vehicles: ['', [Validators.required]],
-      eventSoundActive:[false],
-      eventSound: [{value:'sonidos/alarm8.mp3', disabled: this.disabledEventSoundActive}],
+      // geocercas: [[]],
+      // geocircles: [[]],
+      tipoAlerta: ['',[Validators.required]],
+      chkEventoActivado: [true],
+      chkSonido: [false],
+      chkCorreo: [false],
+      sonido: [{value:'sonidos/alarm8.mp3', disabled: this.disabledEventSoundActive}],
+      nombre:  [''],
+      lista_emails: [[]],
+      fecha_desde: [moment(new Date("2000/01/01")).format("YYYY-MM-DD")],
+      fecha_hasta: [moment(new Date("2000/01/01")).format("YYYY-MM-DD")],
       email: [{value: '', disabled:this.disabledEmail},[Validators.required, Validators.email]],
-      emails: [[]],
-      emailActive: [false],
-      eventType: ['gps']
+      eventType: ['gps'],
     });
     this.loading = false;
     this.loadData();
@@ -52,18 +65,14 @@ export class GpsAlertsCreateComponent implements OnInit {
     this.setDataVehicles();
   }
 
-  onSubmit(){
-    console.log('this.alertForm.value =====> ',this.alertForm.value);
-  }
-
   setDataVehicles(){
     let vehicles = this.VehicleService.getVehiclesData();
 
     this.vehicles = vehicles.map( (vehicle:any) => {
       return {
-        value: vehicle.IMEI,
-        label: vehicle.IMEI,
-        data: { color: 'white', name: vehicle.IMEI },
+        value: {IMEI:vehicle.IMEI,name:vehicle.name},
+        label: vehicle.name,
+        data: { color: 'white', name: vehicle.name },
       }
     });
   }
@@ -74,24 +83,30 @@ export class GpsAlertsCreateComponent implements OnInit {
 
   changeDisabled($event: any){
     if($event.target.checked){
-      this.alertForm.controls['eventSound'].enable();
+      this.alertForm.controls['sonido'].enable();
     } else{
-      this.alertForm.controls['eventSound'].disable();
+      this.alertForm.controls['sonido'].disable();
     }
   }
 
   addEmail(){
-   if(this.validateEmail(this.alertForm.value.email)){
-    if(!this.isInArray(this.alertForm.value.email, this.alertForm.value.emails)){
-      this.alertForm.value.emails.push(this.alertForm.value.email);
+    if(this.alertForm.value.chkCorreo){
+      if(this.validateEmail(this.alertForm.value.email)){
+        if(!this.isInArray(this.alertForm.value.email, this.alertForm.value.lista_emails)){
+          this.alertForm.value.lista_emails.push(this.alertForm.value.email);
+        }
+      } else {
+        Swal.fire(
+          'Error',
+          'debe ingresar un email valido.',
+          'warning'
+        );
+      }
     }
-   } else {
-    alert('debe ingresar un email valido.');
-   }
   }
 
   restEmail(index: any){
-    this.alertForm.value.emails.splice(index, 1);
+    this.alertForm.value.lista_emails.splice(index, 1);
   }
 
   validateEmail(email: any) {
@@ -109,6 +124,63 @@ export class GpsAlertsCreateComponent implements OnInit {
     } else{
       this.alertForm.controls['email'].disable();
     }
+  }
+
+
+   onSubmit(event: any){
+
+    event.preventDefault();
+
+    this.alertForm.value.vehiculos = JSON.stringify(this.alertForm.value.vehicles);
+    // this.alertForm.value.geocercas = JSON.stringify(this.alertForm.value.geocercas);
+    // this.alertForm.value.geocercascirculares = JSON.stringify(this.alertForm.value.geocercascirculares);
+
+
+    if (this.alertForm.value.vehicles.length != 0) {
+
+      Swal.fire({
+            title: 'Actualizando',
+            text: 'Espere un momento...',
+            icon: 'warning',
+            showLoaderOnConfirm: true,
+            preConfirm:() => {
+              this.AlertService.create(this.alertForm.value).then(res => {
+                this.clickShowPanel( 'ALERTS-GPS' );
+              });
+            }
+        }).then(function() {
+          Swal.fire(
+                'Actualizado',
+                'Los datos se actualizaron correctamente!!',
+                'success'
+            );
+        });
+
+    } else {
+      Swal.fire(
+            'Error',
+            'Debe seleccionar un vehículo',
+            'warning'
+        );
+    }
+
+
+
+
+    // let response = this.AlertService.create(this.alertForm.value);
+    // console.log("response =====> ",response);
+    // console.log("event ======> ",event);
+    // console.log('this.alertForm.value =====> ',this.alertForm.value);
+  }
+
+  clickShowPanel( nomComponent:string ): void {
+
+    $("#panelMonitoreo").show( "slow" );
+    this.panelService.nombreComponente = nomComponent;
+
+    const item = this.options.filter((item)=> item.id == nomComponent);
+    this.panelService.nombreCabecera =   item[0].name;
+
   }
 
 

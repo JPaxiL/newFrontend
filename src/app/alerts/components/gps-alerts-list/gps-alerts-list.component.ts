@@ -5,6 +5,7 @@ import { ActiveAlertComponent } from '../active-alert/active-alert.component';
 import { EmailAlertComponent } from '../email-alert/email-alert.component';
 import { SystemAlertComponent } from '../system-alert/system-alert.component';
 import { AlertService } from '../../../alerts/service/alert.service';
+import { ActionsAlertComponent } from '../actions-alert/actions-alert.component';
 
 @Component({
   selector: 'app-gps-alerts-list',
@@ -26,6 +27,14 @@ export class GpsAlertsListComponent implements OnInit {
     { headerName: 'Activos', field: 'activo_bol', resizable: true, wrapText: true,width: 150, valueGetter: params=>{return params.data}, cellRendererFramework: ActiveAlertComponent},
     { headerName: 'Sistema', field: 'sonido_sistema_bol', resizable: true, wrapText: true,width: 150, valueGetter: params=>{return params.data}, cellRendererFramework: SystemAlertComponent},
     { headerName: 'E-Mail', field: 'notificacion_email_bol', resizable: true, wrapText: true,width: 150, valueGetter: params=>{return params.data}, cellRendererFramework: EmailAlertComponent},
+    { icons: {
+        menu: '<i class="fa fa-wrench fa-lg"></i>',
+        filter: '<i class="fa fa-wrench fa-lg"></i>',
+        columns: '<i class="fa fa-wrench fa-lg"></i>',
+        sortAscending: '<i class="fa fa-sort-alpha-up"/>',
+        sortDescending: '<i class="fa fa-sort-alpha-down"/>',
+      },
+    resizable: true, wrapText: true,width: 150, valueGetter: params=>{return params.data}, cellRendererFramework: ActionsAlertComponent},
   ];
 
   constructor(private AlertService: AlertService) { }
@@ -35,22 +44,6 @@ export class GpsAlertsListComponent implements OnInit {
   }
 
    public async loadData(){
-    // this.AlertService
-    // .get('/api/alert')
-    // .subscribe( ( response:Alert[] ) => {
-    //   console.log("response =======> ", response);
-    //   return 0
-    //   this.alerts = response.map((alert:Alert)=> {
-    //     let sistema_notificacion = alert?.sistema_notificacion?.split(",");
-    //     alert.sonido_sistema_bol = (sistema_notificacion[2] == 'true');
-    //     alert.activo_bol = (alert.activo == 'true');
-    //     alert.notificacion_email_bol = (alert.notificacion_email == 'true');
-
-    //     return alert;
-    //   });
-
-    // });
-
     this.alerts = await this.AlertService.getAlertsByType('gps');
   }
 

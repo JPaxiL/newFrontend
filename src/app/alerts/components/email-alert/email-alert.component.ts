@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmailAlertComponent implements OnInit {
   params: any;
+  notificacion_email: boolean = false;
 
   constructor() { }
 
@@ -15,6 +16,7 @@ export class EmailAlertComponent implements OnInit {
 
   agInit(params: any){
     this.params = params;
+    this.notificacion_email = (this.params.value.notificacion_email.toLowerCase() === 'true');
   }
 
 }

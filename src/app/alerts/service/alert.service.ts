@@ -10,6 +10,8 @@ import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 })
 export class AlertService {
 
+  public alerts:Alert[] = [];
+
   constructor(private http: HttpClient) { }
 
   public async get(id:string):Promise <Alert[]> {
@@ -20,7 +22,7 @@ export class AlertService {
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1): Promise<Alert[]>{
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts`).toPromise();
     let i = 1;
-    let alerts: Alert[] = response.data.map((data: Alert): Alert => {
+    this.alerts = response.data.map((data: Alert): Alert => {
 
       let sistema_notificacion = data?.sistema_notificacion?.split(",");
       data.sonido_sistema_bol = (sistema_notificacion[2] == 'true');
@@ -34,7 +36,7 @@ export class AlertService {
 
     });
 
-    return alerts;
+    return this.alerts;
   }
 
   public async getAllEvents() {
@@ -53,5 +55,14 @@ export class AlertService {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts/${type}`).toPromise();
     let event = response.data;
     return event;
+  }
+
+  public async create(alert: any) {
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/alerts`,alert).toPromise();
+    return response.data;
+  }
+
+  public getDataAlerts(){
+    return this.alerts;
   }
 }

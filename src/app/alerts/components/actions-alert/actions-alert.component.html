@@ -1,0 +1,36 @@
+<!-- <li ngbDropdown placement="right-bottom">
+
+    <a id="dropdownActions" ngbDropdownToggle class="btn btn-xs btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" data-bs-placement="right" aria-expanded="false">
+        <i class="fa fa-wrench fa-lg"></i>
+    </a>
+    <ul ngbDropdownMenu aria-labelledby="dropdownActions">
+        <li><a ngbDropdownItem ui-sref="alertas-gps-edit({id: row.id})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</a></li>
+        <li><a ngbDropdownItem ng-click="remove($event, row)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</a></li>
+    </ul>
+</li> -->
+
+<!--
+<li ngbDropdown placement="right-bottom">
+    <a href="#"  id="dropdownAlert" ngbDropdownToggle  class="nav-link py-3 border-bottom dropdown-toggle" id="dropdownAlert" title="Alertas" role="button" data-bs-toggle="dropdown" data-bs-placement="right" aria-expanded="false">
+        <i class="fa far fa-exclamation-circle"></i>
+    </a>
+    <ul ngbDropdownMenu aria-labelledby="dropdownAlert">
+        <li><a ngbDropdownItem >Todas las alertas</a></li>
+        <li><a ngbDropdownItem >Alertas GPS</a></li>
+        <li><a ngbDropdownItem >Alertas plataformas</a></li>
+        <li><a ngbDropdownItem >Alertas accesorios</a></li>
+    </ul>
+  </li> -->
+
+  <div class="row">
+    <div class="col">
+      <div ngbDropdown >
+        <button class="btn btn-xs btn-link dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle><i class="fa fa-wrench fa-lg"></i></button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem>Action - 1</button>
+          <button ngbDropdownItem>Another Action</button>
+          <button ngbDropdownItem>Something else is here</button>
+        </div>
+      </div>
+    </div>
+</div>

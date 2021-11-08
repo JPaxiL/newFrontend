@@ -4,14 +4,14 @@
         <h4>Crear Alerta Gps</h4>
     </div>
     <div class="modal-body">
-        <form [formGroup]="alertForm" (submit)="onSubmit()">
+        <form [formGroup]="alertForm" (submit)="onSubmit($event)">
             <div class="row mb-3">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="form.group">
                         <div class="col-12">
-                            <select class="form-select" aria-label="Alerta"  formControlName="event">
+                            <select class="form-select" aria-label="Alerta"  formControlName="tipoAlerta">
                                 <option value=""></option>
-                                <option *ngFor="let event of events" [value]="event.id">{{ event.name }}</option>
+                                <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
                             </select>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                 <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Evento activado :</label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                     <div class="form-check">
-                        <input class="form-check-input" formControlName="eventActive" type="checkbox" />
+                        <input class="form-check-input" formControlName="chkEventoActivado" type="checkbox" />
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                 <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-label">Nombre:</label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                     <div class="text">
-                        <input class="form-control" placeholder="nombre del evento" aria-label="nombre del evento" formControlName="eventName" type="text" />
+                        <input class="form-control" placeholder="nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
                     </div>
                 </div>
             </div>
@@ -49,14 +49,14 @@
                 <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Alerta del Sistema:</label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                     <div class="form-check">
-                        <input class="form-check-input"  type="checkbox" formControlName="eventSoundActive" (change)="changeDisabled($event)"/>
+                        <input class="form-check-input"  type="checkbox" formControlName="chkSonido" (change)="changeDisabled($event)"/>
                     </div>
                 </div>
             </div>
 
             <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
                 <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <select  class="form-control" (change)="playAudio" formControlName="eventSound">
+                    <select  class="form-control" (change)="playAudio" formControlName="sonido">
                         <option value="sonidos/alarm8.mp3">Sonido 1</option>
                         <option value="sonidos/alarm2.mp3">Sonido 2</option>
                         <option value="sonidos/CartoonBullets3.mp3">Sonido 3</option>
@@ -75,7 +75,7 @@
                 <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Agregar Correo:</label>
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" formControlName="emailActive" (change)="changeDisabledEmail($event)" />
+                        <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" />
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                     <div class="text">
                         <ul>
-                          <li *ngFor="let email of alertForm.value.emails; let i = index"  ng-bind-html-unsafe="opt" >
+                          <li *ngFor="let email of alertForm.value.lista_emails; let i = index"  ng-bind-html-unsafe="opt" >
                               {{ email }}
                               <i class="col-lg-2 col-md-2 col-sm-2 col-xs-2 fa fa-minus-circle" (click)="restEmail(i)" data-placement="bottom" aria-hidden="true"></i>
 
@@ -107,12 +107,10 @@
 
             <div class="modal-footer">
                 <div class="row" style="margin-right: 0px; margin-left: 0px">
-                    <!-- <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-3 col-xs-offset-2" style="padding-left: 0px; padding-right: 0px;">
-                        <button type="button" class="button btn-block btn btn-default" ui-sref="alertas-accesorios">Cancelar</button>
-                    </div> -->
+                    <div class="d-grid gap-2 d-md-block">
+                        <button type="button" class="btn btn-light float-left" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-GPS')">Cancelar</button>
 
-                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-3 col-xs-offset-2" style="padding-left: 0px; padding-right: 0px;">
-                        <button type="submit"  class="btn btn-block btn-success">Guardar</button>
+                        <button type="submit"  class="btn btn-success">Guardar</button>
                     </div>
                 </div>
             </div>

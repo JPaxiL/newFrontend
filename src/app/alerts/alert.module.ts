@@ -14,6 +14,7 @@ import { EmailAlertComponent } from './components/email-alert/email-alert.compon
 import { PanelAlertsGpsComponent } from './components/panel-alerts-gps/panel-alerts-gps.component';
 import { GpsAlertsListComponent } from './components/gps-alerts-list/gps-alerts-list.component';
 import { GpsAlertsCreateComponent } from './components/gps-alerts-create/gps-alerts-create.component';
+import { ActionsAlertComponent } from './components/actions-alert/actions-alert.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { GpsAlertsCreateComponent } from './components/gps-alerts-create/gps-ale
     EmailAlertComponent,
     PanelAlertsGpsComponent,
     GpsAlertsListComponent,
-    GpsAlertsCreateComponent
+    GpsAlertsCreateComponent,
+    ActionsAlertComponent
   ],
   imports: [
     CommonModule,

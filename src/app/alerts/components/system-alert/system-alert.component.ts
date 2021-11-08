@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SystemAlertComponent implements OnInit {
   params: any;
-
+  notificacion_system: boolean = false;
   constructor() { }
 
   ngOnInit(): void {
@@ -15,6 +15,8 @@ export class SystemAlertComponent implements OnInit {
 
   agInit(params: any){
     this.params = params;
+    let arrayNotificationSystem = this.params.value.sistema_notificacion.split(',');
+    this.notificacion_system = (arrayNotificationSystem[2].toLowerCase() === 'true');
   }
 
 }
