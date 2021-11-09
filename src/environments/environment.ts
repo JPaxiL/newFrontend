@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   apiUrl: 'http://newbackendgltracker.lap',
   idClient: '9',
-  secretClient: '9IG3ZVQkE0JjGhCZA9JeQN5hlwKP673TeWDjwAU6'
+  secretClient: '9IG3ZVQkE0JjGhCZA9JeQN5hlwKP673TeWDjwAU6',
+  socketUrl: 'http://escucha.glmonitoreo.com/'
 };
 
 /*
