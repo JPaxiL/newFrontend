@@ -132,6 +132,17 @@ export class MapService {
         vehicles[index].latitud = data.Latitud.toString();
         vehicles[index].longitud = data.Longitud.toString();
         vehicles[index].speed = data.Velocidad;
+
+        vehicles[index].dt_server = data.fecha_server;
+        vehicles[index].dt_tracker = data.fecha_tracker;
+        vehicles[index].altitud = data.Altitud;
+        vehicles[index].señal_gps = data.señal_gps;
+        vehicles[index].señal_gsm = data.señal_gsm;
+        vehicles[index].parametros = data.Parametros;
+
+        vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
+
+
         // vehicles[index].
         this.vehicleService.vehicles = vehicles;
         if(this.vehicleService.listTable==0){

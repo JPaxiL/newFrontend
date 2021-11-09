@@ -15,6 +15,8 @@ export class VehicleService {
 
   private URL_LIST = 'http://127.0.0.1:8001/api/tracker';
 
+  public treeTableStatus: boolean = false;
+  public TableStatus: boolean = false;
   public vehicles: any = [];
   public vehiclesTree: TreeNode[]=[];
   private demo:boolean = true;
@@ -115,22 +117,35 @@ export class VehicleService {
   // }
   private dataFormatVehicle(vehicles: any): any{
     const items = vehicles;
-    const today = moment();
     const userConfigId = 0;//configuracion de usuario
 
     for (const i in items){
+      items[i] = this.formatVehicle(items[i]);
       items[i].user_id = userConfigId;
-      items[i] = this.addSelect(items[i]);
-      items[i] = this.addTank(items[i]);
-      items[i].parametrosGet = this.addParams(items[i].parametros);
-      items[i].tipoGps = this.addTypeGps(items[i].parametros);
-      items[i]=this.addSignal(items[i],today);
-      items[i] = this.addVel(items[i]);
-      items[i] = this.addPointColor(items[i]);
+      // items[i] = this.addSelect(items[i]);
+      // items[i] = this.addTank(items[i]);
+      // items[i].parametrosGet = this.addParams(items[i].parametros);
+      // items[i].tipoGps = this.addTypeGps(items[i].parametros);
+      // items[i]=this.addSignal(items[i],today);
+      // items[i] = this.addVel(items[i]);
+      // items[i] = this.addPointColor(items[i]);
 
 
     }
     return items
+  }
+  public formatVehicle(vehicle: any): any{
+    const today = moment();
+
+    vehicle = this.addSelect(vehicle);
+    vehicle = this.addTank(vehicle);
+    vehicle.parametrosGet = this.addParams(vehicle.parametros);
+    vehicle.tipoGps = this.addTypeGps(vehicle.parametros);
+    vehicle=this.addSignal(vehicle,today);
+    vehicle = this.addVel(vehicle);
+    vehicle = this.addPointColor(vehicle);
+
+    return vehicle;
   }
 
   private addPointColor(vehicle : any){

@@ -10,6 +10,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
 import { TreeTableModule } from 'primeng-lts/treetable';
+import { DialogModule } from 'primeng-lts/dialog';
+import { DropdownModule } from 'primeng-lts/dropdown';
+import { InputTextModule } from 'primeng-lts/inputtext';
 
 
 import { NgxsModule } from '@ngxs/store';
@@ -104,6 +107,9 @@ import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.
     NgbModule,
     NgSelectModule,
     TreeTableModule,
+    DropdownModule,
+    DialogModule,
+    InputTextModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
