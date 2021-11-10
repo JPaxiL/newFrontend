@@ -1,7 +1,8 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
-import { environment } from '../../../environments/environment';
+
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class SocketWebService extends Socket {
   }
 
   listen = ()=>{
-    this.ioSocket.on('envio', (res:string, data: any) => {      
+    this.ioSocket.on('envio', (res:string, data: any) => {
       this.callback.emit(data)
     });
   }

@@ -193,7 +193,7 @@ export class MapService {
             this.dataFitBounds.push(aux2);
           }
           // this.map.removeLayer(this.demo);
-          this.drawIcon(e[property].IMEI, map, Number(e[property].latitud), Number(e[property].longitud));
+          this.drawIcon(e[property], map, Number(e[property].latitud), Number(e[property].longitud));
         }
     }
 
@@ -205,15 +205,17 @@ export class MapService {
     this.dataFitBounds = [];
   }
 
-  private drawIcon(IMEI:string, map: any, lat: number, lng: number): void{
+  private drawIcon(data:any, map: any, lat: number, lng: number): void{
     const iconMarker = L.icon({
       iconUrl: './assets/images/batgps.png',
       iconSize: [30, 30],
-      iconAnchor: [15, 30]
+      iconAnchor: [15, 30],
+      popupAnchor:  [-3, -40]
     });
 
-    const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map);
-    this.marker[IMEI]=tempMarker;
+    const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup("IMEI : "+data.IMEI+ "<br>"+"Placa: "+data.name);;
+    // const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup("IMEI : "+data.IMEI+ "<br>"+"Placa: "+data.name);
+    this.marker[data.IMEI]=tempMarker;
 
 
   }
@@ -222,7 +224,7 @@ export class MapService {
       iconUrl: './assets/images/accbrusca.png',
       iconSize: [30, 30],
       iconAnchor: [15, 30],
-      popupAnchor:  [-3, -76]
+      popupAnchor:  [-3, -40]
     });
 
     const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup("IMEI : "+data.IMEI+ "<br>"+"Placa: "+data.name);
