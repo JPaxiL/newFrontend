@@ -13,7 +13,7 @@ import { VehicleConfigService } from '../../services/vehicle-config.service';
 })
 export class TreeTableComponent implements OnInit {
 
-
+  sortOrder: number=1;
   display: boolean = false;
   config: any=[];
   vehicles: TreeNode[]=[];
@@ -89,9 +89,15 @@ export class TreeTableComponent implements OnInit {
   onClickIcon(IMEI: string){
     this.vehicleService.onClickIcon(IMEI);
   }
+  onSort(data: any){
+    console.log("sort desde tree", data);
+    this.sortOrder=data;
+  }
 
   public onQuickFilterChanged(data: any) {
+    console.log("tt",this.tt);
     this.tt.filterGlobal(data.target.value, 'contains')
+    this.tt.defaultSortOrder=-1;
   }
 
 }

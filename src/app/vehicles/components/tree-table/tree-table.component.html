@@ -77,7 +77,7 @@
   </div>
 </div>
 <div class="">
-  <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="500px" styleClass="p-treetable-sm" sortField="name">
+  <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="480px" styleClass="p-treetable-sm" sortField="name" [sortOrder]="sortOrder">
     <!-- <ng-template pTemplate="caption">
       <div style="text-align: right">
         <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -88,7 +88,7 @@
       <colgroup>
         <!-- <col *ngFor="let col of columns" style="width:100px"> -->
         <col style="width:7px">
-        <col style="width:15px">
+        <col style="width:17px">
         <col style="width:4px">
         <col style="width:4px">
         <col style="width:4px">
@@ -102,7 +102,7 @@
 
       <tr>
         <th><app-eye-header></app-eye-header></th>
-        <th><app-vehicle-header></app-vehicle-header></th>
+        <th><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th>
         <th><app-tag-header></app-tag-header></th>
         <th><app-follow-header></app-follow-header></th>
         <th><app-limit-header></app-limit-header></th>
@@ -145,13 +145,19 @@
           <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
         </td>
         <td style="padding: 0rem 0rem;">
-          <p>
-            <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
-            {{rowData['name']}} <br>
-            <small>
-              {{rowData['dt_tracker']}}
-            </small>
-          </p>
+          <div class="row">
+            <div class="col-3">
+              <img class="izquierda" (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
+            </div>
+            <div class="col-9">
+              <aside class="">
+                {{rowData['name']}} <br>
+                <small>
+                  {{rowData['dt_tracker']}}
+                </small>
+              </aside>
+            </div>
+          </div>
         </td>
         <td style="padding: 0rem 0rem;">
           <input type="checkbox" name="" value="" checked>

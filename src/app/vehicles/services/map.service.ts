@@ -120,6 +120,7 @@ export class MapService {
       }
       */
       const vehicles = this.vehicleService.vehicles;
+      // console.log("vehicles socket",vehicles);
 
       const resultado = vehicles.find( (vehi: any) => vehi.IMEI == data.IMEI.toString() );
       if(resultado){
@@ -139,8 +140,8 @@ export class MapService {
         vehicles[index].señal_gps = data.señal_gps;
         vehicles[index].señal_gsm = data.señal_gsm;
         vehicles[index].parametros = data.Parametros;
-
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
+
 
 
         // vehicles[index].
@@ -152,7 +153,9 @@ export class MapService {
           this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
         }
         this.map.removeLayer(this.marker[data.IMEI]);
-        this.drawIconMov(vehicles[index], this.map, data.Latitud, data.Longitud);
+        if(vehicles[index].eye){          
+          this.drawIconMov(vehicles[index], this.map, data.Latitud, data.Longitud);
+        }
 
       }
 
@@ -181,7 +184,6 @@ export class MapService {
     this.map = map;
 
     const e = this.vehicleService.vehicles;
-
     for (const layer in this.marker){
       this.map.removeLayer(this.marker[layer]);
     }
