@@ -2,17 +2,18 @@ import { Injectable, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 
+import { environment } from 'src/environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class SocketWebService extends Socket {
-  
+
   @Output() callback: EventEmitter<any> = new EventEmitter();
 
   constructor() {
-
     super({
-      url: 'http://escucha.glmonitoreo.com/'
+      url: environment.socketUrl
     });
 
     this.listen();

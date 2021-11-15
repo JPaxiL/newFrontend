@@ -10,6 +10,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
 import { TreeTableModule } from 'primeng-lts/treetable';
+import { DialogModule } from 'primeng-lts/dialog';
+import { DropdownModule } from 'primeng-lts/dropdown';
+import { InputTextModule } from 'primeng-lts/inputtext';
 
 
 import { NgxsModule } from '@ngxs/store';
@@ -55,6 +58,7 @@ import { AlertModule } from './alerts/alert.module';
 import { CommonModule } from '@angular/common';
 import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-alerts.component';
 import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.component';
+import { VehicleConfigComponent } from './vehicles/components/vehicle-config/vehicle-config.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +95,7 @@ import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.
     PanelHistorialGraficoComponent,
     PanelAlertsComponent,
     TreeTableComponent,
+    VehicleConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -104,6 +109,9 @@ import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.
     NgbModule,
     NgSelectModule,
     TreeTableModule,
+    DropdownModule,
+    DialogModule,
+    InputTextModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

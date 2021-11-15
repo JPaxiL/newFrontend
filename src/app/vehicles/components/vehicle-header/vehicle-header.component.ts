@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { IHeaderAngularComp } from '@ag-grid-community/angular';
 import { IHeaderParams } from '@ag-grid-community/core';
 import { VehicleService } from '../../services/vehicle.service';
@@ -14,6 +14,8 @@ export class VehicleHeaderComponent implements IHeaderAngularComp {
   @ViewChild('spanGroup') spanGroup!: ElementRef;
   element: any=[];
   element1: any=[];
+  sortStatus: number=1; //1 a-z, -1 z-a
+  @Output() sort = new EventEmitter<number>();
 
   agInit(headerParams: IHeaderParams): void {}
 
@@ -44,5 +46,13 @@ export class VehicleHeaderComponent implements IHeaderAngularComp {
   refresh(params: any) : boolean {
         return true;
   }
+  onVehicleSort(status: number){
+    if(this.vehicleService.listTable==1){
+      console.log("status==",status);
+      this.sortStatus=status;
+      this.sort.emit(status);
+    }
+  }
+
 
 }
