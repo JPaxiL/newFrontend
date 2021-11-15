@@ -1,6 +1,9 @@
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Select2Module } from 'ng-select2-component';
+import { DataTablesModule } from "angular-datatables";
+
 
 import { AlertRoutingModule } from './alert-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +18,16 @@ import { PanelAlertsGpsComponent } from './components/panel-alerts-gps/panel-ale
 import { GpsAlertsListComponent } from './components/gps-alerts-list/gps-alerts-list.component';
 import { GpsAlertsCreateComponent } from './components/gps-alerts-create/gps-alerts-create.component';
 import { ActionsAlertComponent } from './components/actions-alert/actions-alert.component';
+import { PanelAlertsPlatformComponent } from 'src/app/alerts/components/panel-alerts-platform/panel-alerts-platform.component'
+import { PlatformAlertsListComponent } from './components/platform-alerts-list/platform-alerts-list.component';
+import { PlatformAlertsCreateComponent } from './components/platform-alerts-create/platform-alerts-create.component';
+import { PanelAlertsAccessoriesComponent } from './components/panel-alerts-accessories/panel-alerts-accessories.component';
+import { AccessoriesAlertsListComponent } from './components/accessories-alerts-list/accessories-alerts-list.component';
+import { AlertAccessoriesCreateComponent } from './components/alert-accessories-create/alert-accessories-create.component';
+import { AlertAccessoriesEditComponent } from './components/alert-accessories-edit/alert-accessories-edit.component';
+import { AlertGpsEditComponent } from './components/alert-gps-edit/alert-gps-edit.component';
+
+
 
 @NgModule({
   declarations: [
@@ -25,7 +38,15 @@ import { ActionsAlertComponent } from './components/actions-alert/actions-alert.
     PanelAlertsGpsComponent,
     GpsAlertsListComponent,
     GpsAlertsCreateComponent,
-    ActionsAlertComponent
+    ActionsAlertComponent,
+    PanelAlertsPlatformComponent,
+    PlatformAlertsListComponent,
+    PlatformAlertsCreateComponent,
+    PanelAlertsAccessoriesComponent,
+    AccessoriesAlertsListComponent,
+    AlertAccessoriesCreateComponent,
+    AlertAccessoriesEditComponent,
+    AlertGpsEditComponent
   ],
   imports: [
     CommonModule,
@@ -35,14 +56,23 @@ import { ActionsAlertComponent } from './components/actions-alert/actions-alert.
     ReactiveFormsModule,
     AlertRoutingModule,
     AgGridModule,
-    Select2Module
+    Select2Module,
+    NgbModule,
+    DataTablesModule
   ],
   exports:[
     AlertListComponent,
     ActiveAlertComponent,
     PanelAlertsGpsComponent,
     GpsAlertsListComponent,
-    GpsAlertsCreateComponent
+    GpsAlertsCreateComponent,
+    PanelAlertsPlatformComponent,
+    PlatformAlertsListComponent,
+    PlatformAlertsCreateComponent,
+    PanelAlertsAccessoriesComponent,
+    AlertAccessoriesCreateComponent,
+    AlertAccessoriesEditComponent,
+    AlertGpsEditComponent
   ]
 })
 export class AlertModule {

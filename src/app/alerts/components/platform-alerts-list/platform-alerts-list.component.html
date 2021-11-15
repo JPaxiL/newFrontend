@@ -1,0 +1,15 @@
+<div class="ag-theme-alpine" >
+    <ag-grid-angular
+    #agGrid
+    style="width: 100%; height: 450px; font-size: 12px;"
+    class="ag-theme-alpine"
+    [rowData]="alerts"
+    [columnDefs]="columnDefs"
+    rowSelection="multiple"
+    [defaultColDef]="defaultColDef"
+    [rowHeight]="rowHeight"
+
+    (gridReady)="onGridReady($event)"
+    >
+    </ag-grid-angular>
+  </div>

@@ -11,6 +11,7 @@ import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 export class AlertService {
 
   public alerts:Alert[] = [];
+  public alertEdit:any;
 
   constructor(private http: HttpClient) { }
 
@@ -62,7 +63,21 @@ export class AlertService {
     return response.data;
   }
 
+  public async delete(id:string){
+    const response:ResponseInterface = await this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/alerts/${id}`).toPromise();
+    return response.data;
+  }
+
+  public async edit(alert: any){
+    const response:ResponseInterface = await this.http.put<ResponseInterface>(`${environment.apiUrl}/api/alerts/${alert.id}`,alert).toPromise();
+    return response.data;
+  }
+
   public getDataAlerts(){
     return this.alerts;
+  }
+
+  public getAlertEditData(){
+    return this.alertEdit;
   }
 }

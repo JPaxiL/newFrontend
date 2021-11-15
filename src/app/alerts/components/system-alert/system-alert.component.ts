@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-system-alert',
@@ -6,11 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./system-alert.component.scss']
 })
 export class SystemAlertComponent implements OnInit {
+  @Input() alert:any;
   params: any;
   notificacion_system: boolean = false;
   constructor() { }
 
   ngOnInit(): void {
+    let arrayNotificationSystem = this.alert.sistema_notificacion.split(',');
+    this.notificacion_system = (arrayNotificationSystem[2].toLowerCase() === 'true');
   }
 
   agInit(params: any){
