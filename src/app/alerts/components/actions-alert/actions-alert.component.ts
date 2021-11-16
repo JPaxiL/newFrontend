@@ -52,7 +52,6 @@ export class ActionsAlertComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm:() => {
           this.alertService.delete(alert.id).then(res => {
-            console.log("nameComponent ========> ",this.nameComponent);
             this.deleteAlert.emit();
             this.clickShowPanel(this.nameComponent );
           });

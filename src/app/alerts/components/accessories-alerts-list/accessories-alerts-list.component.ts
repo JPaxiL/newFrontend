@@ -36,7 +36,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
   public async loadData(){
     this.alerts = await this.AlertService.getAlertsByType('accessories');
-    this.dtTrigger.next();
+    // this.dtTrigger.next();
   }
 
   ngOnDestroy(): void {

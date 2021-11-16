@@ -144,20 +144,20 @@ export class AlertAccessoriesEditComponent implements OnInit {
     if (this.alertForm.value.vehicles.length != 0) {
 
       Swal.fire({
-            title: 'Actualizando',
+            title: 'Desea guardar los cambios?',
             text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
-            preConfirm:() => {
-              this.alertService.edit(this.alertForm.value).then(res => {
-                Swal.fire(
-                  'Actualizado',
-                  'Los datos se actualizaron correctamente!!',
-                  'success'
-                );
-                this.clickShowPanel( 'ALERTS-ACCESSORIES' );
-              });
+            preConfirm:async () => {
+              const res = await this.alertService.edit(this.alertForm.value);
+              this.clickShowPanel('ALERTS-ACCESSORIES');
             }
+        }).then(function() {
+          Swal.fire(
+            'Actualizado',
+            'Los datos se actualizaron correctamente!!',
+            'success'
+          );
         });
     } else {
       Swal.fire(
@@ -177,11 +177,5 @@ export class AlertAccessoriesEditComponent implements OnInit {
     this.panelService.nombreCabecera =   item[0].name;
 
   }
-
-  formData() {
-    return {
-      vehicles: ["868899043955117","869530043811872"],
-    };
-}
 
 }

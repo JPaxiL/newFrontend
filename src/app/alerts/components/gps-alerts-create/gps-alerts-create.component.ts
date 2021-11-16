@@ -136,19 +136,18 @@ export class GpsAlertsCreateComponent implements OnInit {
     if (this.alertForm.value.vehicles.length != 0) {
 
       Swal.fire({
-            title: 'Actualizando',
+            title: 'Desea guardar los cambios?',
             text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
-            preConfirm:() => {
-              this.AlertService.create(this.alertForm.value).then(res => {
-                this.clickShowPanel( 'ALERTS-GPS' );
-              });
+            preConfirm:async () => {
+              const res = await this.AlertService.create(this.alertForm.value);
+              this.clickShowPanel('ALERTS-GPS');
             }
         }).then(function() {
           Swal.fire(
-                'Actualizado',
-                'Los datos se actualizaron correctamente!!',
+                'Datos guardados',
+                'Los datos se guardaron correctamente!!',
                 'success'
             );
         });

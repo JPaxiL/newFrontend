@@ -140,20 +140,20 @@ export class AlertGpsEditComponent implements OnInit {
     if (this.alertForm.value.vehicles.length != 0) {
 
       Swal.fire({
-            title: 'Actualizando',
+            title: 'Desea guardar los cambios?',
             text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
-            preConfirm:() => {
-              this.alertService.edit(this.alertForm.value).then(res => {
-                Swal.fire(
-                  'Actualizado',
-                  'Los datos se actualizaron correctamente!!',
-                  'success'
-                );
-                this.clickShowPanel( 'ALERTS-GPS' );
-              });
+            preConfirm:async () => {
+              const res = await this.alertService.edit(this.alertForm.value);
+              this.clickShowPanel('ALERTS-GPS');
             }
+        }).then(function(){
+          Swal.fire(
+            'Actualizado',
+            'Los datos se actualizaron correctamente!!',
+            'success'
+          );
         });
     } else {
       Swal.fire(
