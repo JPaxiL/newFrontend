@@ -50,14 +50,17 @@ export class ActionsAlertComponent implements OnInit {
         showLoaderOnConfirm: true,
         confirmButtonText: 'Eliminar',
         cancelButtonText: 'Cancelar',
-        preConfirm:() => {
-          this.alertService.delete(alert.id).then(res => {
-            this.deleteAlert.emit();
-            this.clickShowPanel(this.nameComponent );
-          });
+        preConfirm:async () => {
+          const res = await this.alertService.delete(alert.id);
+          this.deleteAlert.emit();
+          this.clickShowPanel(this.nameComponent);
         }
     }).then(data => {
-
+      Swal.fire(
+        'Eliminado',
+        'Los datos se eliminaron correctamente!!',
+        'success'
+      );
     });
   }
 
