@@ -30,7 +30,29 @@
       <app-gps-alerts-create></app-gps-alerts-create>
     </div>
 
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-EDIT')">
+      <app-alert-gps-edit></app-alert-gps-edit>
+    </div>
 
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORMS')">
+      <app-panel-alerts-platform></app-panel-alerts-platform>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-CREATE')">
+      <app-platform-alerts-create></app-platform-alerts-create>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIES')">
+      <app-panel-alerts-accessories></app-panel-alerts-accessories>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-CREATE')">
+      <app-alert-accessories-create></app-alert-accessories-create>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-EDIT')">
+      <app-alert-accessories-edit></app-alert-accessories-edit>
+    </div>
 
 
   </div>

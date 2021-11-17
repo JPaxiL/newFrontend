@@ -1,21 +1,17 @@
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { Alert } from '../../models/alert.interface';
+import { Select2Data } from 'ng-select2-component';
+import Swal from 'sweetalert2';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
-import { Select2Data } from 'ng-select2-component';
-import * as moment from 'moment';
-import Swal from 'sweetalert2';
 import { PanelService } from 'src/app/panel/services/panel.service';
 
-declare var $: any;
-
 @Component({
-  selector: 'app-gps-alerts-create',
-  templateUrl: './gps-alerts-create.component.html',
-  styleUrls: ['./gps-alerts-create.component.scss']
+  selector: 'app-alert-gps-edit',
+  templateUrl: './alert-gps-edit.component.html',
+  styleUrls: ['./alert-gps-edit.component.scss']
 })
-export class GpsAlertsCreateComponent implements OnInit {
+export class AlertGpsEditComponent implements OnInit {
 
   options = new Array(
     { id:'ALERTS-GPS', name:"Alertas Gps"},
@@ -23,46 +19,56 @@ export class GpsAlertsCreateComponent implements OnInit {
 
   public alertForm!: FormGroup;
   public events:any = [];
-
   public loading:boolean = true;
-
   public vehicles:Select2Data = [];
-
   public disabledEventSoundActive = true;
-
   public disabledEmail = true;
+  public vehiclesSelected:string[] = [];
+  overlay = false;
 
   constructor(
-    private AlertService: AlertService,
+    private alertService: AlertService,
     private VehicleService : VehicleService,
     private formBuilder: FormBuilder,
     public panelService: PanelService
-  ) { }
+  ) {
+    this.loadData();
+  }
 
   ngOnInit(): void {
+    let alert = this.alertService.getAlertEditData();
+
+    this.vehiclesSelected = alert.imei.split(',');
+    let arrayNotificationSystem = alert.sistema_notificacion.split(',');
+    let notificacion_system = (arrayNotificationSystem[2].toLowerCase() === 'true');
+    let emails = alert.notificacion_direcion_email.split(',');
+    let notificacion_email = (alert.notificacion_email.toLowerCase() === 'true')
+    this.disabledEventSoundActive = !notificacion_system;
+    this.disabledEmail = !notificacion_email;
+
     this.alertForm = this.formBuilder.group({
-      vehicles: ['', [Validators.required]],
+      vehicles: [this.vehiclesSelected,[Validators.required]],
       // geocercas: [[]],
       // geocircles: [[]],
-      tipoAlerta: ['',[Validators.required]],
-      chkEventoActivado: [true],
-      chkSonido: [false],
-      chkCorreo: [false],
-      sonido: [{value:'sonidos/alarm8.mp3', disabled: this.disabledEventSoundActive}],
-      nombre:  [''],
-      lista_emails: [[]],
-      fecha_desde: [moment(new Date("2000/01/01")).format("YYYY-MM-DD")],
-      fecha_hasta: [moment(new Date("2000/01/01")).format("YYYY-MM-DD")],
+      tipoAlerta: [alert.tipo,[Validators.required]],
+      chkEventoActivado: [alert.activo],
+      chkSonido: [notificacion_system],
+      chkCorreo: [notificacion_email],
+      sonido: [{value:`sonidos/${arrayNotificationSystem[3]}`, disabled: this.disabledEventSoundActive}],
+      nombre:  [alert.nombre],
+      lista_emails: [emails],
+      fecha_desde: [''],
+      fecha_hasta: [''],
       email: [{value: '', disabled:this.disabledEmail},[Validators.required, Validators.email]],
       eventType: ['gps'],
+      id:[alert.id]
     });
     this.loading = false;
-    this.loadData();
   }
 
   public async loadData(){
     this.setDataVehicles();
-    this.events = await this.AlertService.getEventsByType('gps');
+    this.events = await this.alertService.getEventsByType('gps');
   }
 
   setDataVehicles(){
@@ -70,7 +76,7 @@ export class GpsAlertsCreateComponent implements OnInit {
 
     this.vehicles = vehicles.map( (vehicle:any) => {
       return {
-        value: {IMEI:vehicle.IMEI,name:vehicle.name},
+        value: vehicle.IMEI,
         label: vehicle.name,
         data: { color: 'white', name: vehicle.name },
       }
@@ -126,11 +132,9 @@ export class GpsAlertsCreateComponent implements OnInit {
     }
   }
 
-
   onSubmit(event: any){
 
     event.preventDefault();
-
     this.alertForm.value.vehiculos = JSON.stringify(this.alertForm.value.vehicles);
 
     if (this.alertForm.value.vehicles.length != 0) {
@@ -144,19 +148,18 @@ export class GpsAlertsCreateComponent implements OnInit {
             confirmButtonText: 'Guardar',
             cancelButtonText: 'Cancelar',
             preConfirm:async () => {
-              const res = await this.AlertService.create(this.alertForm.value);
+              const res = await this.alertService.edit(this.alertForm.value);
               this.clickShowPanel('ALERTS-GPS');
             }
         }).then(data => {
-           if(data.isConfirmed){
+          if(data.isConfirmed){
             Swal.fire(
-              'Datos guardados',
-              'Los datos se guardaron correctamente!!',
+              'Actualizado',
+              'Los datos se actualizaron correctamente!!',
               'success'
             );
-           }
+          }
         });
-
     } else {
       Swal.fire(
             'Error',
@@ -175,4 +178,5 @@ export class GpsAlertsCreateComponent implements OnInit {
     this.panelService.nombreCabecera =   item[0].name;
 
   }
+
 }

@@ -1,35 +1,31 @@
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { Alert } from '../../models/alert.interface';
-import { AlertService } from '../../../alerts/service/alert.service';
-import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { Select2Data } from 'ng-select2-component';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Alert } from '../../models/alert.interface';
+import { AlertService } from '../../../alerts/service/alert.service';
+import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { PanelService } from 'src/app/panel/services/panel.service';
 
 declare var $: any;
 
 @Component({
-  selector: 'app-gps-alerts-create',
-  templateUrl: './gps-alerts-create.component.html',
-  styleUrls: ['./gps-alerts-create.component.scss']
+  selector: 'app-alert-accessories-create',
+  templateUrl: './alert-accessories-create.component.html',
+  styleUrls: ['./alert-accessories-create.component.scss']
 })
-export class GpsAlertsCreateComponent implements OnInit {
+export class AlertAccessoriesCreateComponent implements OnInit {
 
   options = new Array(
-    { id:'ALERTS-GPS', name:"Alertas Gps"},
+    { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
   );
 
   public alertForm!: FormGroup;
   public events:any = [];
-
   public loading:boolean = true;
-
   public vehicles:Select2Data = [];
-
   public disabledEventSoundActive = true;
-
   public disabledEmail = true;
 
   constructor(
@@ -40,6 +36,7 @@ export class GpsAlertsCreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.alertForm = this.formBuilder.group({
       vehicles: ['', [Validators.required]],
       // geocercas: [[]],
@@ -54,7 +51,7 @@ export class GpsAlertsCreateComponent implements OnInit {
       fecha_desde: [moment(new Date("2000/01/01")).format("YYYY-MM-DD")],
       fecha_hasta: [moment(new Date("2000/01/01")).format("YYYY-MM-DD")],
       email: [{value: '', disabled:this.disabledEmail},[Validators.required, Validators.email]],
-      eventType: ['gps'],
+      eventType: ['accessories'],
     });
     this.loading = false;
     this.loadData();
@@ -62,7 +59,7 @@ export class GpsAlertsCreateComponent implements OnInit {
 
   public async loadData(){
     this.setDataVehicles();
-    this.events = await this.AlertService.getEventsByType('gps');
+    this.events = await this.AlertService.getEventsByType('accessories');
   }
 
   setDataVehicles(){
@@ -126,7 +123,6 @@ export class GpsAlertsCreateComponent implements OnInit {
     }
   }
 
-
   onSubmit(event: any){
 
     event.preventDefault();
@@ -145,16 +141,16 @@ export class GpsAlertsCreateComponent implements OnInit {
             cancelButtonText: 'Cancelar',
             preConfirm:async () => {
               const res = await this.AlertService.create(this.alertForm.value);
-              this.clickShowPanel('ALERTS-GPS');
+              this.clickShowPanel('ALERTS-ACCESSORIES');
             }
         }).then(data => {
-           if(data.isConfirmed){
-            Swal.fire(
-              'Datos guardados',
-              'Los datos se guardaron correctamente!!',
-              'success'
-            );
-           }
+            if(data.isConfirmed){
+              Swal.fire(
+                'Datos guardados',
+                'Los datos se guardaron correctamente!!',
+                'success'
+              );
+            }
         });
 
     } else {

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Alert } from './../../models/alert.interface';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-active-alert',
@@ -6,11 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./active-alert.component.scss']
 })
 export class ActiveAlertComponent implements OnInit {
+  @Input() alert:any;
   params: any;
   activo:boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.activo = (this.alert.activo.toLowerCase() === 'true');
   }
 
   agInit(params: any){
