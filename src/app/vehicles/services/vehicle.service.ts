@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../models/vehicle';
 import {TreeNode} from 'primeng-lts/api';
+
+import { environment } from 'src/environments/environment';
 // import { SocketWebService } from '../services/socket-web.service';
 import * as moment from 'moment';
 
@@ -13,13 +15,13 @@ import RefData from '../data/refData';
 })
 export class VehicleService {
 
-  private URL_LIST = 'http://127.0.0.1:8001/api/tracker';
+  private URL_LIST = environment.apiUrl+'/api/tracker';
 
+  private demo:boolean = false;
   public treeTableStatus: boolean = false;
   public TableStatus: boolean = false;
   public vehicles: any = [];
   public vehiclesTree: TreeNode[]=[];
-  private demo:boolean = true;
   private timeDemo: number = 1000;
   public statusDataVehicle: boolean = false;
   public statusDataVehicleTree: boolean = false;
@@ -69,8 +71,11 @@ export class VehicleService {
       this.getVehicles().subscribe(vehicles=>{
         // console.log("vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
-        this.statusDataVehicle = true;
+        this.vehiclesTree = this.createNode(this.vehicles);
         this.dataCompleted.emit(this.vehicles);
+        this.dataTreeCompleted.emit(this.vehiclesTree);
+        this.statusDataVehicle = true;
+        this.statusDataVehicleTree = true;
       });
     }
 
@@ -106,7 +111,13 @@ export class VehicleService {
   }
 
   //app
-  public updateVehiclesData(data: Vehicle):void {
+  public getIndexToIMEI(IMEI: string):any{
+    ///implements
+  }
+  public updateVehicle(data : any){
+
+  }
+  public updateVehiclesData(data : Vehicle):void {
     this.vehicles = data;
     this.drawIconMap.emit(data);
   }
