@@ -61,8 +61,8 @@ export class GpsAlertsCreateComponent implements OnInit {
   }
 
   public async loadData(){
-    this.events = await this.AlertService.getEventsByType('gps');
     this.setDataVehicles();
+    this.events = await this.AlertService.getEventsByType('gps');
   }
 
   setDataVehicles(){
@@ -140,16 +140,21 @@ export class GpsAlertsCreateComponent implements OnInit {
             text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
             preConfirm:async () => {
               const res = await this.AlertService.create(this.alertForm.value);
               this.clickShowPanel('ALERTS-GPS');
             }
-        }).then(function() {
-          Swal.fire(
-                'Datos guardados',
-                'Los datos se guardaron correctamente!!',
-                'success'
+        }).then(data => {
+           if(data.isConfirmed){
+            Swal.fire(
+              'Datos guardados',
+              'Los datos se guardaron correctamente!!',
+              'success'
             );
+           }
         });
 
     } else {

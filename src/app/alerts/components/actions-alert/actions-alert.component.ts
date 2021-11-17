@@ -56,11 +56,13 @@ export class ActionsAlertComponent implements OnInit {
           this.clickShowPanel(this.nameComponent);
         }
     }).then(data => {
-      Swal.fire(
-        'Eliminado',
-        'Los datos se eliminaron correctamente!!',
-        'success'
-      );
+      if(data.isConfirmed){
+        Swal.fire(
+          'Eliminado',
+          'Los datos se eliminaron correctamente!!',
+          'success'
+        );
+      }
     });
   }
 

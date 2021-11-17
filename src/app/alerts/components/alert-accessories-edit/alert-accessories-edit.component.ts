@@ -7,6 +7,7 @@ import { Alert } from '../../models/alert.interface';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { PanelService } from 'src/app/panel/services/panel.service';
+import { data } from 'jquery';
 
 declare var $: any;
 
@@ -148,16 +149,21 @@ export class AlertAccessoriesEditComponent implements OnInit {
             text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
             preConfirm:async () => {
               const res = await this.alertService.edit(this.alertForm.value);
               this.clickShowPanel('ALERTS-ACCESSORIES');
             }
-        }).then(function() {
-          Swal.fire(
-            'Actualizado',
-            'Los datos se actualizaron correctamente!!',
-            'success'
-          );
+        }).then(data => {
+          if(data.isConfirmed){
+            Swal.fire(
+              'Actualizado',
+              'Los datos se actualizaron correctamente!!',
+              'success'
+            );
+          }
         });
     } else {
       Swal.fire(

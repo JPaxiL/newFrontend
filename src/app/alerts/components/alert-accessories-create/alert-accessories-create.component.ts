@@ -136,16 +136,21 @@ export class AlertAccessoriesCreateComponent implements OnInit {
             text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
             preConfirm:async () => {
               const res = await this.AlertService.create(this.alertForm.value);
               this.clickShowPanel('ALERTS-ACCESSORIES');
             }
-        }).then(function() {
-          Swal.fire(
+        }).then(data => {
+            if(data.isConfirmed){
+              Swal.fire(
                 'Datos guardados',
                 'Los datos se guardaron correctamente!!',
                 'success'
-            );
+              );
+            }
         });
 
     } else {
