@@ -13,7 +13,8 @@ import { TreeTableModule } from 'primeng-lts/treetable';
 import { DialogModule } from 'primeng-lts/dialog';
 import { DropdownModule } from 'primeng-lts/dropdown';
 import { InputTextModule } from 'primeng-lts/inputtext';
-
+import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
+import {ConfirmationService} from 'primeng-lts/api';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -95,7 +96,7 @@ import { VehicleConfigComponent } from './vehicles/components/vehicle-config/veh
     PanelHistorialGraficoComponent,
     PanelAlertsComponent,
     TreeTableComponent,
-    VehicleConfigComponent,
+    VehicleConfigComponent
   ],
   imports: [
     CommonModule,
@@ -112,6 +113,7 @@ import { VehicleConfigComponent } from './vehicles/components/vehicle-config/veh
     DropdownModule,
     DialogModule,
     InputTextModule,
+    ConfirmDialogModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
@@ -137,6 +139,7 @@ import { VehicleConfigComponent } from './vehicles/components/vehicle-config/veh
 
   ],
   providers: [
+    ConfirmationService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     // {
