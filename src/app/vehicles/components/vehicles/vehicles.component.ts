@@ -6,6 +6,7 @@ import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 import { Vehicle } from '../../models/vehicle';
 
 import { VehicleService } from '../../services/vehicle.service';
+import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { MapService } from '../../services/map.service';
 // import RefData from '../../data/refData';
 
@@ -41,6 +42,9 @@ export class VehiclesComponent implements OnInit {
   public api: GridApi = new GridApi();
   public columnApi: ColumnApi = new ColumnApi();
   public defaultColDef:any = [];
+  display: boolean = false;
+  config: any=[];
+
   public setting: any = {
     eye: false,
     imei: true,
@@ -76,12 +80,19 @@ export class VehiclesComponent implements OnInit {
 
   constructor(
     private vehicleService: VehicleService,
+    private vehicleConfigService: VehicleConfigService,
     private mapService: MapService,
-    private config: NgbDropdownConfig
+    private configDropdown: NgbDropdownConfig
   ) {
 
-    config.placement = 'right-top';
-    config.autoClose = false;
+    configDropdown.placement = 'right-top';
+    configDropdown.autoClose = false;
+
+    this.vehicleConfigService.displayOn.subscribe(e=>{
+      // console.log("desde vehicles..");
+      this.config=e;
+      this.display = true;
+    });
 
     this.vehicleService.drawIconMap.subscribe(e=>{
         this.api.setRowData([]);
@@ -129,6 +140,40 @@ export class VehiclesComponent implements OnInit {
     this.statusTable=false;
      // this.vehicleService.reloadTable.unsubscribe();
   }
+  onChangeDisplay(res : boolean){
+    this.display = res;
+  }
+  onUpdate(res :any){
+    const vehicles = this.vehicleService.vehicles;
+    // console.log("vehicles socket",vehicles);
+
+    const resultado = vehicles.find( (vehi: any) => vehi.IMEI == res.IMEI.toString() );
+    if(resultado){
+      const index = vehicles.indexOf( resultado);
+
+      vehicles[index].id_conductor = res.id_conductor;
+      vehicles[index].idgrupo = res.idgrupo;
+      vehicles[index].name  = res.name;
+      vehicles[index].model = res.model;
+      vehicles[index].sim_number  = res.sim_number;
+      vehicles[index].plate_number  = res.plate_number;
+      vehicles[index].tolva  = res.tolva;
+      vehicles[index].empresa  = res.empresa;
+      vehicles[index].tipo  = res.tipo;
+      vehicles[index].icon  = res.icon;
+
+      this.vehicleService.vehicles = vehicles;
+
+      //reload talbe
+      if(this.vehicleService.listTable==0){
+        this.vehicleService.reloadTable.emit();
+      }else{
+        // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+        this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
+      }
+    }
+  }
+
   public dataLoading(){
     this.vehicles = this.vehicleService.vehicles;
     this.api.setRowData([]);
