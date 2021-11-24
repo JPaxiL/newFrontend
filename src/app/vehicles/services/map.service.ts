@@ -153,8 +153,8 @@ export class MapService {
           this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
         }
         this.map.removeLayer(this.marker[data.IMEI]);
-        if(vehicles[index].eye){          
-          this.drawIconMov(vehicles[index], this.map, data.Latitud, data.Longitud);
+        if(vehicles[index].eye){
+          this.drawIcon(vehicles[index], this.map, data.Latitud, data.Longitud);
         }
 
       }
@@ -208,29 +208,41 @@ export class MapService {
   }
 
   private drawIcon(data:any, map: any, lat: number, lng: number): void{
+    let iconUrl = './assets/images/batgps.png';
+    if(data.speed>0){
+      iconUrl = './assets/images/accbrusca.png';
+    }
     const iconMarker = L.icon({
-      iconUrl: './assets/images/batgps.png',
+      iconUrl: iconUrl,
       iconSize: [30, 30],
       iconAnchor: [15, 30],
       popupAnchor:  [-3, -40]
     });
 
-    const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup("IMEI : "+data.IMEI+ "<br>"+"Placa: "+data.name);;
-    // const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup("IMEI : "+data.IMEI+ "<br>"+"Placa: "+data.name);
+    const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      '<aside class="">'+
+        '<small>CONVOY: '+data.convoy+'</small><br>'+
+        '<small>UBICACION: '+lat+', '+lng+'</small><br>'+
+        '<small>REFERENCIA: '+'NN'+'</small><br>'+
+        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+        '<small>TIEMPO DE PARADA: </small>'+
+      '</aside>';
+
+    const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup(popupText);
     this.marker[data.IMEI]=tempMarker;
 
 
   }
-  private drawIconMov(data:any, map: any, lat: number, lng: number): void{
-    const iconMarker = L.icon({
-      iconUrl: './assets/images/accbrusca.png',
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
-      popupAnchor:  [-3, -40]
-    });
-
-    const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup("IMEI : "+data.IMEI+ "<br>"+"Placa: "+data.name);
-    this.marker[data.IMEI]=tempMarker;
-
-  }
+  // private drawIconMov(data:any, map: any, lat: number, lng: number): void{
+  //   const iconMarker = L.icon({
+  //     iconUrl: './assets/images/accbrusca.png',
+  //     iconSize: [30, 30],
+  //     iconAnchor: [15, 30],
+  //     popupAnchor:  [-3, -40]
+  //   });
+  //
+  //   const tempMarker = L.marker([lat, lng], {icon: iconMarker}).addTo(map).bindPopup("IMEI : "+data.IMEI+ "<br>"+"Placa: "+data.name);
+  //   this.marker[data.IMEI]=tempMarker;
+  //
+  // }
 }
