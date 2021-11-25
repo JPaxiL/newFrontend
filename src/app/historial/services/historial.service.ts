@@ -166,7 +166,7 @@ export class HistorialService {
     // const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
     // const response2 = new Array();
     // response2.push(  await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise() );
-    this.tramasHistorial = await this.http.post(`${environment.apiUrl}/historial`,param).toPromise();
+    this.tramasHistorial = await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise();
     //const response2 = await this.http.get(`${environment.apiUrl}/api/historial2`).toPromise();
     //(console.log(response2);
 

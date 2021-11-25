@@ -253,7 +253,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   //     { nombre: 'DRF-345',imei:'444444444' },
   // ];
 
-    console.log(vehicles);
+    // console.log(vehicles);
 
     if(this.historialService.inicio){
       this.historialService.initialize();
@@ -262,9 +262,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-    console.log("se inicia xXX");
-    console.log(this.historialService);
-    console.log(this.historialService.conHistorial);
+    // console.log("se inicia xXX");
+    // console.log(this.historialService);
+    console.log('Con historial : '+this.historialService.conHistorial);
 
 
     // $( "#fechaInicial" ).datepicker({
@@ -302,7 +302,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     this.conHistorial = this.historialService.conHistorial;
     this.form = this.historialService.dataFormulario;
 
-    console.log(this.form.selectedCarC );
+    // console.log(this.form.selectedCarC );
 
     if (!(this.form.selectedCarC == null)) {
       this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
@@ -532,7 +532,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         dH[0].rutaH = [];
 
         dH[0].primero = h; // guardar el numero de elementos en la primera trama.
+        dH[0].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
+
         dH[h].ultimo  = h; // guardar el numero de elementos en la ultima trama.
+        dH[h].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
 
         for (let i = 0; i < dH.length; i++) {
 
