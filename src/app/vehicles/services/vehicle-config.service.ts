@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter  } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class VehicleConfigService {
+
+  @Output() displayOn = new EventEmitter<any>();
 
   constructor(private http: HttpClient) { }
 

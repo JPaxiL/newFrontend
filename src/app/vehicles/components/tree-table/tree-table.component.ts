@@ -69,7 +69,6 @@ export class TreeTableComponent implements OnInit {
 
   onChangeDisplay(res : boolean){
     this.display = res;
-    // console.log("display = ",this.display);
   }
   onUpdate(res :any){
     const vehicles = this.vehicleService.vehicles;

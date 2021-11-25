@@ -75,6 +75,7 @@
     </div>
   </div>
 </div>
+<app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
 <div class="ag-theme-alpine" >
     <ag-grid-angular
     #agGrid
