@@ -152,7 +152,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     // });
 
     this.historialService.currentMessage.subscribe( () => {
-      console.log('llamada = '+ this.llamadas);
+      // console.log('llamada = '+ this.llamadas);
 
       if (this.llamadas != 0) {
         this.cargarGrafico();
@@ -166,8 +166,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log("pane grafico historial");
-    console.log(this.historialService.conHistorial);
+    // console.log("pane grafico historial");
+    // console.log(this.historialService.conHistorial);
 
     // this.historialService.currentMessage.subscribe(message => this.message = message)
 
@@ -262,9 +262,13 @@ export class PanelHistorialGraficoComponent implements OnInit {
     // console.log(this.cl);
 
 
-    this.plot_historial = $.plot("#placeholder", [{
+  //   this.plot_historial = $.plot("#placeholder", [{
+  //     data: this.cl.sin
+  // }], this.options_grafico);
+
+    this.plot_historial = $.plot($("#placeholder"), [{
         data: this.cl.sin
-    }], this.options_grafico)
+    }], this.options_grafico);
 
 
     $("#btnIzqConsola").click(() => {

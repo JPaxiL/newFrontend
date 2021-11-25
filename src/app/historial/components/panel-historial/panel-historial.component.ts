@@ -7,17 +7,22 @@ import * as L from 'leaflet';
 import 'leaflet-polylinedecorator';
 
 
+import { VehicleService } from '../../../vehicles/services/vehicle.service';
+
 import { MapServicesService } from '../../../map/services/map-services.service';
 
 import { HistorialService } from '../../services/historial.service';
 
 
 
-import { ColDef } from 'ag-grid-community';
+// import { ColDef } from 'ag-grid-community';
+// import { threadId } from 'worker_threads';
 
 declare var $: any;
 
-
+// interface JQueryStatic {
+//   plot: any;
+// }
 
 @Component({
   selector: 'app-panel-historial',
@@ -170,7 +175,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-  columnDefs: ColDef[] = [
+  columnDefs = [
         { field: 'make' },
         { field: 'model' },
         { field: 'price' }
@@ -185,20 +190,23 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // campaignOne: FormGroup;
   // campaignTwo: FormGroup;
 
-  cars = [
-      { nombre: 'ABC-676',imei:'111111111' },
-      { nombre: 'DER-435',imei:'2222222222' },
-      { nombre: 'DRW-345',imei:'3333333333' },
-      { nombre: 'DRF-345',imei:'444444444' },
-  ];
+  cars : any = [];
 
+  // vehicles = [];
 
   transfers = new Array();
 
   // message:string='';
 
+  public expirationDate = false;
 
-  constructor(public mapService: MapServicesService, public historialService: HistorialService ) {
+
+
+  constructor(
+    public mapService: MapServicesService,
+    public historialService: HistorialService,
+    private VehicleService : VehicleService,
+    ) {
 
     // this.historialService.currentMessage.subscribe(message => this.message = message);
     // this.historialService.currentMessage.subscribe( () => {console.log('com 1 -> gaaaaaaaaa');
@@ -231,6 +239,22 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     // this.historialService.currentMessage.subscribe(message => this.message = message)
 
+    let vehicles = this.VehicleService.getVehiclesData();
+
+    for (let i = 0; i < vehicles.length; i++) {
+      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
+      this.cars.push(gaa);
+    }
+
+  //   cars = [
+  //     { nombre: 'ABC-676',imei:'111111111' },
+  //     { nombre: 'DER-435',imei:'2222222222' },
+  //     { nombre: 'DRW-345',imei:'3333333333' },
+  //     { nombre: 'DRF-345',imei:'444444444' },
+  // ];
+
+    console.log(vehicles);
+
     if(this.historialService.inicio){
       this.historialService.initialize();
       this.historialService.inicio = false;
@@ -243,13 +267,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     console.log(this.historialService.conHistorial);
 
 
-    $( "#fechaInicial" ).datepicker({
-      dateFormat: 'yy-mm-dd',
-    });
-    $( "#fechaFinal" ).datepicker({
-      // appendText:'dd-mm-yy',
-      dateFormat: 'yy-mm-dd'
-    });
+    // $( "#fechaInicial" ).datepicker({
+    //   dateFormat: 'yy-mm-dd',
+    // });
+    // $( "#fechaFinal" ).datepicker({
+    //   // appendText:'dd-mm-yy',
+    //   dateFormat: 'yy-mm-dd'
+    // });
 
     // this.fechaInicio = moment().startOf('day').format("YYYY-MM-DD");
     // this.fechaFinal = moment().startOf('day').add(1, 'days').format("YYYY-MM-DD");
@@ -278,20 +302,38 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     this.conHistorial = this.historialService.conHistorial;
     this.form = this.historialService.dataFormulario;
 
-    this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+    console.log(this.form.selectedCarC );
+
+    if (!(this.form.selectedCarC == null)) {
+      this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+      console.log("unidad diferente de null");
+    } else {
+      console.log("unidad es igual a null");
+    }
 
     if (this.conHistorial) {
       this.mostrar_tabla(dH, dH[0].index_historial);
 
     }
 
+    // (function($) {
+    //   $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+
+    //   // $['plot']($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+    // })(jQuery);
+
+    // $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
 
 
 
+    // $(function(){
+    //   $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+
+    // });
   }
 
   ngOnDestroy(){
-    console.log('me destruire gaaa');
+    //console.log('me destruire gaaa');
 
     this.historialService.conHistorial = this.conHistorial;
 
@@ -342,45 +384,59 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   changeRangoFechas() {
 
+      let fecha_desde:any = '';
+      let fecha_hasta:any = '';
       switch (this.form.selectedRango)
       {
           case ('0'):
-                this.form.fecha_desde = moment().startOf('day').format("YYYY-MM-DD");
-                this.form.fecha_hasta = moment().startOf('day').format("YYYY-MM-DD");
+                fecha_desde = moment().startOf('day');//.format("YYYY-MM-DD");
+                fecha_hasta = moment().startOf('day');//.format("YYYY-MM-DD");
               break;
           case ('1')://hoy
-                this.form.fecha_desde = moment().startOf('day').format("YYYY-MM-DD");
-                this.form.fecha_hasta = moment().add(1, 'days').startOf('day').format("YYYY-MM-DD");
+                fecha_desde = moment().startOf('day');//.format("YYYY-MM-DD");
+                fecha_hasta = moment().add(1, 'days');//.startOf('day').format("YYYY-MM-DD");
               break;
           case ('2'):
-                this.form.fecha_desde = moment().add(-1, 'days').startOf('day').format("YYYY-MM-DD");
-                this.form.fecha_hasta = moment().startOf('day').format("YYYY-MM-DD");
+                fecha_desde = moment().add(-1, 'days').startOf('day');//.format("YYYY-MM-DD");
+                fecha_hasta = moment().startOf('day');//.format("YYYY-MM-DD");
               break;
           case ('3'):
-                this.form.fecha_desde = moment().add(-2, 'days').startOf('day').format("YYYY-MM-DD");
-                this.form.fecha_hasta = moment().add(-1, 'days').startOf('day').format("YYYY-MM-DD");
+                fecha_desde = moment().add(-2, 'days').startOf('day');//.format("YYYY-MM-DD");
+                fecha_hasta = moment().add(-1, 'days').startOf('day');//.format("YYYY-MM-DD");
               break;
           case ('4'):
-                this.form.fecha_desde = moment().add(-3, 'days').startOf('day').format("YYYY-MM-DD");
-                this.form.fecha_hasta = moment().add(-2, 'days').startOf('day').format("YYYY-MM-DD");
+                fecha_desde = moment().add(-3, 'days').startOf('day');//.format("YYYY-MM-DD");
+                fecha_hasta = moment().add(-2, 'days').startOf('day');//.format("YYYY-MM-DD");
               break;
           case ('5'):
-                this.form.fecha_desde = moment().startOf('isoWeek').format("YYYY-MM-DD");
-                this.form.fecha_hasta = moment().startOf('isoWeek').add(7, 'days').format("YYYY-MM-DD");
+                fecha_desde = moment().startOf('isoWeek');//.format("YYYY-MM-DD");
+                fecha_hasta = moment().startOf('isoWeek').add(7, 'days');//.format("YYYY-MM-DD");
               break;
           case ('6'):
-                this.form.fecha_desde = moment().startOf('isoWeek').add(-7, 'days').format("YYYY-MM-DD");;
-                this.form.fecha_hasta = moment().startOf('isoWeek').format("YYYY-MM-DD");
+                fecha_desde = moment().startOf('isoWeek').add(-7, 'days');//.format("YYYY-MM-DD");;
+                fecha_hasta = moment().startOf('isoWeek');//.format("YYYY-MM-DD");
               break;
           case ('7'):
-                this.form.fecha_desde = moment().startOf('month').format("YYYY-MM-DD");
-                this.form.fecha_hasta = moment().startOf('month').add(1, 'month').format("YYYY-MM-DD");
+                fecha_desde = moment().startOf('month');//.format("YYYY-MM-DD");
+                fecha_hasta = moment().startOf('month').add(1, 'month');//.format("YYYY-MM-DD");
               break;
           case ('8'):
-                this.form.fecha_desde = moment().startOf('month').add(-1, 'month').format("YYYY-MM-DD");;
-                this.form.fecha_hasta = moment().startOf('month').format("YYYY-MM-DD");;;
+                fecha_desde = moment().startOf('month').add(-1, 'month');//.format("YYYY-MM-DD");;
+                fecha_hasta = moment().startOf('month');//.format("YYYY-MM-DD");;;
               break;
       }
+
+      this.form.fecha_desde = {
+        year: parseInt(fecha_desde.format("YYYY")),
+        month: parseInt(fecha_desde.format("MM")),
+        day: parseInt(fecha_desde.format("DD")),
+      };
+
+      this.form.fecha_hasta = {
+        year: parseInt(fecha_hasta.format("YYYY")),
+        month: parseInt(fecha_hasta.format("MM")),
+        day: parseInt(fecha_hasta.format("DD")),
+      };
 
       this.form.hora_desde  = '00';//{id: '00', name: '00'};
       this.form.min_desde   = '00';//{id: '00', name: '00'};
@@ -391,491 +447,538 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-  clickCargarHistorial() {
+  // format_mes_dia   1 -> 01
+  fStrMD(str:string) {
+    let str2 = ('00'+str).substring(str.length);
+    return str2;
+  };
+
+
+  async clickCargarHistorial() {
 
     this.clickEliminarHistorial();
 
     this.historialService.getHistorial();
-    var dH =  this.historialService.tramasHistorial; // Data Historial
-
-    console.log(dH);
+    // var dH =  this.historialService.tramasHistorial; // Data Historial
 
 
-    var h1 = new Array();
+    let MDstr = "" + this.form.fecha_desde.month;
+    let DDstr = "" + this.form.fecha_desde.day;
 
-    var index_historial2 = new Array();
-    var poly = [];
+    let MHstr = "" + this.form.fecha_hasta.month;
+    let DHstr = "" + this.form.fecha_hasta.day;
 
-    const duracion = parseInt(this.form.duracionParada);
+    var M1 = this.form.fecha_desde.year+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.form.hora_desde + ':' + this.form.min_desde + ':00-05:00';
+    var M2 = this.form.fecha_hasta.year+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.form.hora_hasta + ':' + this.form.min_hasta + ':00-05:00';
 
+    var param = {
+                fecha_desde:M1, fecha_hasta:M2,
+                imei:this.form.selectedCar
 
+                // , duracionParada:vm.form.duracionParada.id,
+                // conParada:vm.form.verParadasHistorial, nombreUnidad:vm.form.selectedUnidad.value.name,
+                // colorHistorial:vm.form.colorHistorial, colorSubHistorial:vm.form.colorSubHistorial,
+                // icono : values[0].icon
+              };
+    console.log(param);
 
     this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
 
+    this.historialService.get_tramas_recorrido(param).then( res => {
 
+      const duracion = parseInt(this.form.duracionParada);
+      //let dH = res[0];
+      var dH =  this.historialService.tramasHistorial; // Data Historial
 
-    if (dH.length > 1) {
+      console.log('HISTORIALLLLLL');
+      console.log(res);
+      // console.log(res[0]);
 
-      this.conHistorial = true;  // tenemos historial con datod
-
-
-      var d = 0;
-
-      var k = [];
-      let l = new Array();
-
-      k.length = 0;
-      l.length = 0;
-
-      var o;
-
-      const h = dH.length - 1; //Ultimo indice del array
-
-      var minLat = parseFloat(dH[0].lat);
-      var maxLat = parseFloat(dH[0].lat);
-      var minLng = parseFloat(dH[0].lng);
-      var maxLng = parseFloat(dH[0].lng);
-
-      dH[0].rutaH = [];
-
-      dH[0].primero = h; // guardar el numero de elementos en la primera trama.
-      dH[h].ultimo  = h; // guardar el numero de elementos en la ultima trama.
-
-      for (let i = 0; i < dH.length; i++) {
-
-          dH[i].dt_ss = new Date(dH[i].dt_server);
-          dH[i].dt_js = new Date(dH[i].dt_tracker);
-
-          dH[i].dt_tracker = dH[i].dt_tracker.replace(/\//g, "-");
-          dH[i].lat = parseFloat(dH[i].lat);
-          dH[i].lng = parseFloat(dH[i].lng);
-
-          dH[i].paramsGet = this.getParams(dH[i].params);
-
-          dH[i]._trama = this.get_trama_marker(dH[i]);//.addTo(this.mapService.map);
-
-          var arrayP = [];
-
-          dH[0].rutaH.push([dH[i].lat, dH[i].lng]); // guardar puntos para dibujar la linea del recorrido
-
-          if (dH[i].lat < minLat) {  minLat = dH[i].lat; }
-          if (dH[i].lat > maxLat) {  maxLat = dH[i].lat; }
-          if (dH[i].lng < minLng) {  minLng = dH[i].lng; }
-          if (dH[i].lng > maxLng) {  maxLng = dH[i].lng; }
-
-          dH[i].historial2 = 0;
-          dH[i].indice = i;
-
-
-          if (dH[i].speed <= 3) {
-              if (i == h) {
-                  if (l.length == 0) {
-                      //estado = 0;
-                      var p = dH[0].dt_js;
-                      var q = dH[h].dt_js;
-                      var r = this.string_diffechas(p, q);
-                      dH[0].historial2 = 1;
-                      dH[0].estado = 0;
-                      dH[0].temp = r;
-
-                      dH[0].marker = "PARADA";
-
-                      index_historial2[d] = 0;
-                      d++
-                  } else if (l.length > 0 && k.length > 0) {
-                      var p = dH[k[0]].dt_js;
-                      var q = dH[i].dt_js;
-                      var s = Math.floor((q - p) / 1000);
-                      if (s > duracion) {
-                          //estado = 1;
-                          var p = dH[l[0]].dt_js;
-                          var q = dH[k[0]].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[l[0]].historial2 = 1;
-                          dH[l[0]].estado = 1;
-                          dH[l[0]].temp = r;
-                          index_historial2[d] = l[0];
-                          d++;
-                          //estado = 0;
-                          var p = dH[k[0]].dt_js;
-                          var q = dH[i].dt_js;
-                          var t = this.string_diffechas(p, q);
-                          dH[k[0]].historial2 = 1;
-                          dH[k[0]].estado = 0;
-                          dH[k[0]].temp = t;
-
-                          // dH[k[0]].marker = new google.maps.Marker({
-                          //     map: mapa,
-                          //     visible: false,
-                          //     position: {
-                          //         lat: dH[k[0]].lat,
-                          //         lng: dH[k[0]].lng
-                          //     },
-                          //     icon: "images/stop.png"
-                          // });
-
-                          // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                          // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
-
-                          dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
-                          //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                          //dH[k[0]].marker.addTo(mymap);
-                          //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+      console.log('-----clickCargarHistorial');
+      console.log(this.form);
+      console.log(dH.length);
+      console.log(dH);
 
 
 
-                          index_historial2[d] = k[0];
-                          d++;
-                          l.length = 0;
-                          k.length = 0
-                      } else {
-                          //estado = 1;
-                          var p = dH[l[0]].dt_js;
-                          var q = dH[i].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[l[0]].historial2 = 1;
-                          dH[l[0]].estado = 1;
-                          dH[l[0]].temp = r;
-                          index_historial2[d] = l[0];
-                          d++
-                      }
-                  } else if (l.length > 0 && k.length == 0) {
-                      if (l.length >= 1) {
-                          //estado = 1;
-                          var p = dH[l[0]].dt_js;
-                          var q = dH[i].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[l[0]].historial2 = 1;
-                          dH[l[0]].estado = 1;
-                          dH[l[0]].temp = r;
-                          index_historial2[d] = l[0];
-                          d++
-                      }
-                  }
-              }
-              k.push(i)
-          } else {
-              if (k.length > 0) {
-                  var p = dH[k[0]].dt_js;
-                  var q = dH[i].dt_js;
-                  var t = this.string_diffechas(p, q);
-                  var s = Math.floor((q - p) / 1000);
-                  if (s > duracion) {
-                      if (o == 1) {
-                          //estado = 1;
-                          var p = dH[l[0]].dt_js;
-                          var q = dH[k[0]].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[l[0]].historial2 = 1;
-                          dH[l[0]].estado = 1;
-                          dH[l[0]].temp = r;
-                          index_historial2[d] = l[0];
-                          d++;
-                          //estado = 0;
-                          dH[k[0]].historial2 = 1;
-                          dH[k[0]].estado = 0;
-                          dH[k[0]].temp = t;
-                          // dH[k[0]].marker = new google.maps.Marker({
-                          //     map: mapa,
-                          //     visible: false,
-                          //     position: {
-                          //         lat: dH[k[0]].lat,
-                          //         lng: dH[k[0]].lng
-                          //     },
-                          //     icon: "images/stop.png"
-                          // });
+      // var h1 = new Array();
 
-                          // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                          // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
-
-                          dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
-                          //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                          //dH[k[0]].marker.addTo(mymap);
-                          //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
-
-                          index_historial2[d] = k[0];
-                          d++;
-                          l.length = 0;
-                          k.length = 0
-                      }
-                      if (l.length > 0 && dH[l[0]].dt_tracker == dH[0].dt_tracker) {
-                          //estado = 1;
-                          var p = dH[l[0]].dt_js;
-                          var q = dH[k[0]].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[l[0]].historial2 = 1;
-                          dH[l[0]].estado = 1;
-                          dH[l[0]].temp = r;
-                          index_historial2[d] = l[0];
-                          d++;
-                          //estado = 0;
-                          dH[k[0]].historial2 = 1;
-                          dH[k[0]].estado = 0;
-                          dH[k[0]].temp = t;
-                          // dH[k[0]].marker = new google.maps.Marker({
-                          //     map: mapa,
-                          //     visible: false,
-                          //     position: {
-                          //         lat: dH[k[0]].lat,
-                          //         lng: dH[k[0]].lng
-                          //     },
-                          //     icon: "images/stop.png"
-                          // });
-
-                          // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                          // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
-
-                          dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
-                          //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                          //dH[k[0]].marker.addTo(mymap);
-                          //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
-
-                          index_historial2[d] = k[0];
-                          d++;
-                          l.length = 0;
-                          k.length = 0;
-                          o = 1;
-                      }
-                      if (k.length > 0 && dH[k[0]].dt_tracker == dH[0].dt_tracker) {
-                          //estado = 0;
-                          dH[k[0]].historial2 = 1;
-                          dH[k[0]].estado = 0;
-                          dH[k[0]].temp = t;
-                          // dH[k[0]].marker = new google.maps.Marker({
-                          //     map: mapa,
-                          //     visible: false,
-                          //     position: {
-                          //         lat: dH[k[0]].lat,
-                          //         lng: dH[k[0]].lng
-                          //     },
-                          //     icon: "images/stop.png"
-                          // });
-
-                          // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                          // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
-
-                          dH[k[0]].marker = "PARADA";//marker_x("images/stop.png" , [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
-                          //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                          //dH[k[0]].marker.addTo(mymap);
-                          //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
-
-                          index_historial2[d] = k[0];
-                          d++;
-                          k.length = 0;
-                          o = 1
-                      }
-                  } else {
-                      var u = l.concat(k);
-                      k.length = 0;
-                      l.length = 0;
-                      l = u;
-                      if (i == h) {
-                          //estado = 1;
-                          var p = dH[l[0]].dt_js;
-                          var q = dH[i].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[l[0]].historial2 = 1;
-                          dH[l[0]].estado = 1;
-                          dH[l[0]].temp = r;
-                          index_historial2[d] = l[0];
-                          d++
-                      }
-                  }
-              } else {
-                  if (i == h) {
-                      if (l.length == 0) {
-                          //estado = 1;
-                          var p = dH[0].dt_js;
-                          var q = dH[h].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[0].historial2 = 1;
-                          dH[0].estado = 1;
-                          dH[0].temp = r;
-                          index_historial2[d] = 0;
-                          d++
-                      } else if (l.length > 0) {
-                          //estado = 1;
-                          var p = dH[l[0]].dt_js;
-                          var q = dH[i].dt_js;
-                          var r = this.string_diffechas(p, q);
-                          dH[l[0]].historial2 = 1;
-                          dH[l[0]].estado = 1;
-                          dH[l[0]].temp = r;
-                          index_historial2[d] = l[0];
-                          d++
-                      }
-                  }
-              }
-              l.push(i)
-          }
-
-      } //el for termina aqui
+      var index_historial2 = new Array();
+      // var poly = [];
 
 
-          var count = 1;
-          index_historial2.forEach((item, i) => {
-            // console.log("--------xD");
-            // console.log(item);
-            // console.log(dH[item]);
-            // console.log(i);
-            //Es parada y tiene el check de mostrar paradas
-            if ( dH[item].marker == "PARADA") {
+      if (dH.length > 1) {
 
-                if (i != index_historial2.length-1) {
-                  dH[item].paradaFin = dH[index_historial2[i+1]].dt_tracker;
-                } else {
-                  //console.log("--------xD-- ULTIMO");
-                  dH[item].paradaFin = dH[dH.length-1].dt_tracker;
+        this.conHistorial = true;  // tenemos historial con datod
+
+
+        var d = 0;
+
+        var k = [];
+        let l = new Array();
+
+        k.length = 0;
+        l.length = 0;
+
+        var o;
+
+        const h = dH.length - 1; //Ultimo indice del array
+
+        var minLat = parseFloat(dH[0].lat);
+        var maxLat = parseFloat(dH[0].lat);
+        var minLng = parseFloat(dH[0].lng);
+        var maxLng = parseFloat(dH[0].lng);
+
+        dH[0].rutaH = [];
+
+        dH[0].primero = h; // guardar el numero de elementos en la primera trama.
+        dH[h].ultimo  = h; // guardar el numero de elementos en la ultima trama.
+
+        for (let i = 0; i < dH.length; i++) {
+
+            dH[i].dt_ss = new Date(dH[i].dt_server);
+            dH[i].dt_js = new Date(dH[i].dt_tracker);
+
+            dH[i].dt_tracker = dH[i].dt_tracker.replace(/\//g, "-");
+            dH[i].lat = parseFloat(dH[i].lat);
+            dH[i].lng = parseFloat(dH[i].lng);
+
+            dH[i].paramsGet = this.getParams(dH[i].params);
+
+            dH[i]._trama = this.get_trama_marker(dH[i]);//.addTo(this.mapService.map);
+
+            var arrayP = [];
+
+            dH[0].rutaH.push([dH[i].lat, dH[i].lng]); // guardar puntos para dibujar la linea del recorrido
+
+            if (dH[i].lat < minLat) {  minLat = dH[i].lat; }
+            if (dH[i].lat > maxLat) {  maxLat = dH[i].lat; }
+            if (dH[i].lng < minLng) {  minLng = dH[i].lng; }
+            if (dH[i].lng > maxLng) {  maxLng = dH[i].lng; }
+
+            dH[i].historial2 = 0;
+            dH[i].indice = i;
+
+
+            if (dH[i].speed <= 3) {
+                if (i == h) {
+                    if (l.length == 0) {
+                        //estado = 0;
+                        var p = dH[0].dt_js;
+                        var q = dH[h].dt_js;
+                        var r = this.string_diffechas(p, q);
+                        dH[0].historial2 = 1;
+                        dH[0].estado = 0;
+                        dH[0].temp = r;
+
+                        dH[0].marker = "PARADA";
+
+                        index_historial2[d] = 0;
+                        d++
+                    } else if (l.length > 0 && k.length > 0) {
+                        var p = dH[k[0]].dt_js;
+                        var q = dH[i].dt_js;
+                        var s = Math.floor((q - p) / 1000);
+                        if (s > duracion) {
+                            //estado = 1;
+                            var p = dH[l[0]].dt_js;
+                            var q = dH[k[0]].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[l[0]].historial2 = 1;
+                            dH[l[0]].estado = 1;
+                            dH[l[0]].temp = r;
+                            index_historial2[d] = l[0];
+                            d++;
+                            //estado = 0;
+                            var p = dH[k[0]].dt_js;
+                            var q = dH[i].dt_js;
+                            var t = this.string_diffechas(p, q);
+                            dH[k[0]].historial2 = 1;
+                            dH[k[0]].estado = 0;
+                            dH[k[0]].temp = t;
+
+                            // dH[k[0]].marker = new google.maps.Marker({
+                            //     map: mapa,
+                            //     visible: false,
+                            //     position: {
+                            //         lat: dH[k[0]].lat,
+                            //         lng: dH[k[0]].lng
+                            //     },
+                            //     icon: "images/stop.png"
+                            // });
+
+                            // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
+
+                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
+                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                            //dH[k[0]].marker.addTo(mymap);
+                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+
+
+
+                            index_historial2[d] = k[0];
+                            d++;
+                            l.length = 0;
+                            k.length = 0
+                        } else {
+                            //estado = 1;
+                            var p = dH[l[0]].dt_js;
+                            var q = dH[i].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[l[0]].historial2 = 1;
+                            dH[l[0]].estado = 1;
+                            dH[l[0]].temp = r;
+                            index_historial2[d] = l[0];
+                            d++
+                        }
+                    } else if (l.length > 0 && k.length == 0) {
+                        if (l.length >= 1) {
+                            //estado = 1;
+                            var p = dH[l[0]].dt_js;
+                            var q = dH[i].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[l[0]].historial2 = 1;
+                            dH[l[0]].estado = 1;
+                            dH[l[0]].temp = r;
+                            index_historial2[d] = l[0];
+                            d++
+                        }
+                    }
                 }
-                //var icon = { iconUrl: 'images/stop.png', iconAnchor: [7, 26] };
-                dH[item].count = count++;
-                dH[item].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
-                dH[item].layer = this.get_parada_marker(dH[item]);
-
-
-
-                if (this.form.chckParada) {
-
-                  dH[item].layer.addTo(this.mapService.map);
-                }
-
+                k.push(i)
             } else {
-                dH[item].marker = "MOVIMIENTO";
+                if (k.length > 0) {
+                    var p = dH[k[0]].dt_js;
+                    var q = dH[i].dt_js;
+                    var t = this.string_diffechas(p, q);
+                    var s = Math.floor((q - p) / 1000);
+                    if (s > duracion) {
+                        if (o == 1) {
+                            //estado = 1;
+                            var p = dH[l[0]].dt_js;
+                            var q = dH[k[0]].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[l[0]].historial2 = 1;
+                            dH[l[0]].estado = 1;
+                            dH[l[0]].temp = r;
+                            index_historial2[d] = l[0];
+                            d++;
+                            //estado = 0;
+                            dH[k[0]].historial2 = 1;
+                            dH[k[0]].estado = 0;
+                            dH[k[0]].temp = t;
+                            // dH[k[0]].marker = new google.maps.Marker({
+                            //     map: mapa,
+                            //     visible: false,
+                            //     position: {
+                            //         lat: dH[k[0]].lat,
+                            //         lng: dH[k[0]].lng
+                            //     },
+                            //     icon: "images/stop.png"
+                            // });
 
-                let a1,a2;//Primer y ultimo punto de una sublinea
-                if ( i == 0 ) {
+                            // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
 
-                  a1 = 0;
-                  if (index_historial2.length == 1) {
+                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
+                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                            //dH[k[0]].marker.addTo(mymap);
+                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+
+                            index_historial2[d] = k[0];
+                            d++;
+                            l.length = 0;
+                            k.length = 0
+                        }
+                        if (l.length > 0 && dH[l[0]].dt_tracker == dH[0].dt_tracker) {
+                            //estado = 1;
+                            var p = dH[l[0]].dt_js;
+                            var q = dH[k[0]].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[l[0]].historial2 = 1;
+                            dH[l[0]].estado = 1;
+                            dH[l[0]].temp = r;
+                            index_historial2[d] = l[0];
+                            d++;
+                            //estado = 0;
+                            dH[k[0]].historial2 = 1;
+                            dH[k[0]].estado = 0;
+                            dH[k[0]].temp = t;
+                            // dH[k[0]].marker = new google.maps.Marker({
+                            //     map: mapa,
+                            //     visible: false,
+                            //     position: {
+                            //         lat: dH[k[0]].lat,
+                            //         lng: dH[k[0]].lng
+                            //     },
+                            //     icon: "images/stop.png"
+                            // });
+
+                            // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
+
+                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
+                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                            //dH[k[0]].marker.addTo(mymap);
+                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+
+                            index_historial2[d] = k[0];
+                            d++;
+                            l.length = 0;
+                            k.length = 0;
+                            o = 1;
+                        }
+                        if (k.length > 0 && dH[k[0]].dt_tracker == dH[0].dt_tracker) {
+                            //estado = 0;
+                            dH[k[0]].historial2 = 1;
+                            dH[k[0]].estado = 0;
+                            dH[k[0]].temp = t;
+                            // dH[k[0]].marker = new google.maps.Marker({
+                            //     map: mapa,
+                            //     visible: false,
+                            //     position: {
+                            //         lat: dH[k[0]].lat,
+                            //         lng: dH[k[0]].lng
+                            //     },
+                            //     icon: "images/stop.png"
+                            // });
+
+                            // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
+
+                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png" , [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
+                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                            //dH[k[0]].marker.addTo(mymap);
+                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+
+                            index_historial2[d] = k[0];
+                            d++;
+                            k.length = 0;
+                            o = 1
+                        }
+                    } else {
+                        var u = l.concat(k);
+                        k.length = 0;
+                        l.length = 0;
+                        l = u;
+                        if (i == h) {
+                            //estado = 1;
+                            var p = dH[l[0]].dt_js;
+                            var q = dH[i].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[l[0]].historial2 = 1;
+                            dH[l[0]].estado = 1;
+                            dH[l[0]].temp = r;
+                            index_historial2[d] = l[0];
+                            d++
+                        }
+                    }
+                } else {
+                    if (i == h) {
+                        if (l.length == 0) {
+                            //estado = 1;
+                            var p = dH[0].dt_js;
+                            var q = dH[h].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[0].historial2 = 1;
+                            dH[0].estado = 1;
+                            dH[0].temp = r;
+                            index_historial2[d] = 0;
+                            d++
+                        } else if (l.length > 0) {
+                            //estado = 1;
+                            var p = dH[l[0]].dt_js;
+                            var q = dH[i].dt_js;
+                            var r = this.string_diffechas(p, q);
+                            dH[l[0]].historial2 = 1;
+                            dH[l[0]].estado = 1;
+                            dH[l[0]].temp = r;
+                            index_historial2[d] = l[0];
+                            d++
+                        }
+                    }
+                }
+                l.push(i)
+            }
+
+        } //el for termina aqui
+
+
+            var count = 1;
+            index_historial2.forEach((item, i) => {
+              // console.log("--------xD");
+              // console.log(item);
+              // console.log(dH[item]);
+              // console.log(i);
+              //Es parada y tiene el check de mostrar paradas
+              if ( dH[item].marker == "PARADA") {
+
+                  if (i != index_historial2.length-1) {
+                    dH[item].paradaFin = dH[index_historial2[i+1]].dt_tracker;
+                  } else {
+                    //console.log("--------xD-- ULTIMO");
+                    dH[item].paradaFin = dH[dH.length-1].dt_tracker;
+                  }
+                  //var icon = { iconUrl: 'images/stop.png', iconAnchor: [7, 26] };
+                  dH[item].count = count++;
+                  dH[item].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
+                  dH[item].layer = this.get_parada_marker(dH[item]);
+
+
+
+                  if (this.form.chckParada) {
+
+                    dH[item].layer.addTo(this.mapService.map);
+                  }
+
+              } else {
+                  dH[item].marker = "MOVIMIENTO";
+
+                  let a1,a2;//Primer y ultimo punto de una sublinea
+                  if ( i == 0 ) {
+
+                    a1 = 0;
+                    if (index_historial2.length == 1) {
+                      a2 = dH.length-1;
+                    } else {
+                      a2 = index_historial2[i+1];
+                    }
+
+                  } else if( i == index_historial2.length-1 ) {
+                    a1 = index_historial2[i-1];
                     a2 = dH.length-1;
                   } else {
+                    a1 = index_historial2[i-1];
                     a2 = index_historial2[i+1];
                   }
 
-                } else if( i == index_historial2.length-1 ) {
-                  a1 = index_historial2[i-1];
-                  a2 = dH.length-1;
-                } else {
-                  a1 = index_historial2[i-1];
-                  a2 = index_historial2[i+1];
-                }
+                  dH[item].cc = [a1, a2];
+                  // for (let i = a1; i <= a2; i++) {
+                  //   dH[item].cc.push([dH[i].lat, dH[i].lng]);
+                  // }
 
-                dH[item].cc = [a1, a2];
-                // for (let i = a1; i <= a2; i++) {
-                //   dH[item].cc.push([dH[i].lat, dH[i].lng]);
-                // }
+              }
+            });
+            // console.log('------>>>>> '+index_historial2);
 
-            }
-          });
-          // console.log('------>>>>> '+index_historial2);
-
-          // console.log(index_historial2);
+            // console.log(index_historial2);
 
 
-          dH[0].index_historial = index_historial2;
-          dH[0].layer0 = this.get_inicial_marker(dH[0]).addTo(this.mapService.map);
-          dH[h].layerN = this.get_final_marker(dH[h]).addTo(this.mapService.map);
+            dH[0].index_historial = index_historial2;
+            dH[0].layer0 = this.get_inicial_marker(dH[0]).addTo(this.mapService.map);
+            dH[h].layerN = this.get_final_marker(dH[h]).addTo(this.mapService.map);
 
-          this.mostrar_tabla(dH, dH[0].index_historial);
-          this.changeShowingTramas();
-          this.changeShowingGrafico();
-
-
-          this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
+            this.mostrar_tabla(dH, dH[0].index_historial);
+            this.changeShowingTramas();
+            this.changeShowingGrafico();
 
 
-          var color = 'red';
-          var color_sub = 'blue';
-          dH[0].rutaH2 = this.get_historial_line( dH[0].rutaH , color).addTo(this.mapService.map); //Linea del historial
-          dH[0].ruta_sub = this.get_historial_line( [] , color_sub); //Sub linea del historial
+            this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
 
 
-          dH[0].rutaH2_trace = L.polylineDecorator( dH[0].rutaH , {
-            patterns: [
-                //{ offset: 12, repeat: 25, symbol: L.Symbol.dash({pixelSize: 10, pathOptions: {color: 'black', weight: 2}})},
-                { offset: 2, repeat: 30, symbol: L.Symbol.arrowHead({pixelSize: 4.3,polygon: false,pathOptions: {stroke: true,weight: 1.4,color: 'black',opacity: 1}})}
-            ]
-          }).addTo(this.mapService.map);
+            var color = 'red';
+            var color_sub = 'blue';
+            dH[0].rutaH2 = this.get_historial_line( dH[0].rutaH , color).addTo(this.mapService.map); //Linea del historial
+            dH[0].ruta_sub = this.get_historial_line( [] , color_sub); //Sub linea del historial
 
 
-          this.historialService.changeMessage("desde com panel-historial")
+            dH[0].rutaH2_trace = L.polylineDecorator( dH[0].rutaH , {
+              patterns: [
+                  //{ offset: 12, repeat: 25, symbol: L.Symbol.dash({pixelSize: 10, pathOptions: {color: 'black', weight: 2}})},
+                  { offset: 2, repeat: 30, symbol: L.Symbol.arrowHead({pixelSize: 4.3,polygon: false,pathOptions: {stroke: true,weight: 1.4,color: 'black',opacity: 1}})}
+              ]
+            }).addTo(this.mapService.map);
 
 
-          // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
-          // allmap._trace.addTo(overlay);
+            this.historialService.changeMessage("desde com panel-historial")
 
 
-          // var misOpciones2 = {
-          //     //color: '#E7AB1E',
-          //     color: 'red',
-          //     weight: 3,
-          //     opacity: 1.0
-          // }
+            // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
+            // allmap._trace.addTo(overlay);
 
-       // poly_h2 = L.polyline([], misOpciones2).addTo(mymap);
+
+            // var misOpciones2 = {
+            //     //color: '#E7AB1E',
+            //     color: 'red',
+            //     weight: 3,
+            //     opacity: 1.0
+            // }
+
+         // poly_h2 = L.polyline([], misOpciones2).addTo(mymap);
 
 
 
 
 
-          // // h1.push([dH[0].lat, dH[0].lng]);
-          // // h1.push([dH[dH.length-1].lat, dH[dH.length-1].lng]);
-          // // console.log("---- FF ------- 1");
-          // // console.log(overlay);
-          // // console.log("---- FF ------- 2");
-          // // console.log("------");
-          // // console.log(overlay);
-          // // console.log("------");
-          // // mapData.map.fitBounds(overlay.getBounds());
-          // //mapData.map.fitBounds(bounds);
+            // // h1.push([dH[0].lat, dH[0].lng]);
+            // // h1.push([dH[dH.length-1].lat, dH[dH.length-1].lng]);
+            // // console.log("---- FF ------- 1");
+            // // console.log(overlay);
+            // // console.log("---- FF ------- 2");
+            // // console.log("------");
+            // // console.log(overlay);
+            // // console.log("------");
+            // // mapData.map.fitBounds(overlay.getBounds());
+            // //mapData.map.fitBounds(bounds);
 
 
-          // mapData.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
-          // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
-          // allmap._trace.addTo(overlay);
+            // mapData.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
+            // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
+            // allmap._trace.addTo(overlay);
 
-          // var submap = new map.Movimiento([],{color: param.colorSubHistorial});//.addTo(overlay);
-          // var poly = [allmap, submap];
-          // // console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
-          // // //console.log(lili);
-          // // console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
-          // //------------------------ MOVIMEINTO DEL GRAFICO ------------------------------
-          // var iconc = { iconUrl: 'images/mm_20_red.png', iconAnchor: [6, 20] };
-          // var icoG1 = new map.Parada([0, 0], { icon: new L.Icon(iconc), showTrace: true })
-          //                   .bindPopup( {offset: new L.Point(0, -16)} );
+            // var submap = new map.Movimiento([],{color: param.colorSubHistorial});//.addTo(overlay);
+            // var poly = [allmap, submap];
+            // // console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
+            // // //console.log(lili);
+            // // console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
+            // //------------------------ MOVIMEINTO DEL GRAFICO ------------------------------
+            // var iconc = { iconUrl: 'images/mm_20_red.png', iconAnchor: [6, 20] };
+            // var icoG1 = new map.Parada([0, 0], { icon: new L.Icon(iconc), showTrace: true })
+            //                   .bindPopup( {offset: new L.Point(0, -16)} );
 
-          // var icons = { iconUrl: 'images/objects/nuevo/'+param.icono, iconSize: [32, 32], iconAnchor: [16, 16] };
-          // var icoG2 = new map.Parada([0, 0], { icon: new L.Icon(icons), showTrace: true })
-          //                   .bindPopup( {offset: new L.Point(-18, -10)} );
-
-
-
-          //   // console.log(this.getParams(this.historialService.tramasHistorial[0].params));
+            // var icons = { iconUrl: 'images/objects/nuevo/'+param.icono, iconSize: [32, 32], iconAnchor: [16, 16] };
+            // var icoG2 = new map.Parada([0, 0], { icon: new L.Icon(icons), showTrace: true })
+            //                   .bindPopup( {offset: new L.Point(-18, -10)} );
 
 
 
-      console.log(dH[0].paramsGet);
-
-
-      //this.panelService.nombreComponente = nomComponent;
-
-      const item1 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0].name;
-      const item2 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRdfdfdfd"))[0];
-
-      console.log("===================================");
-
-      console.log(item1);
-      console.log(item2);
-
-
-      // this.panelService.nombreCabecera =   item[0].name;
+            //   // console.log(this.getParams(this.historialService.tramasHistorial[0].params));
 
 
 
+        console.log(dH[0].paramsGet);
 
-    } else {
-      console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
-    }
+
+        //this.panelService.nombreComponente = nomComponent;
+
+        // const item1 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0].value;
+        // const item2 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0];
+
+        // console.log("===================================");
+
+        // console.log(item1);
+        // console.log(item2);
+
+
+        // this.panelService.nombreCabecera =   item[0].name;
+
+
+
+
+      } else {
+        console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
+      }
+
+
+    });
+
+    // var dH22  = await this.historialService.get_tramas_recorrido(param);
+    // console.log('================== DDD ');
+    // console.log(dH22);
+
+
+
 
 
   }

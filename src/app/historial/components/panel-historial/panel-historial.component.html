@@ -48,12 +48,37 @@
           </p> -->
 
 
+
+
           <div class="row">
+            <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Inicial:</label>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <input
+                  #dpFromDateH
+                  class="form-control claseinputs2"
+                  placeholder="yyyy-mm-dd"
+                  name="dpFromDateH"
+                  [(ngModel)]="form.fecha_desde"
+                  ngbDatepicker
+                  #h1="ngbDatepicker"
+                  (click)="h1.toggle()"
+                  [disabled]="expirationDate"
+               >
+                <div class="input-group-text claseinputs2">
+                  <i class="fa fa-lg fa-calendar"></i>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- <div class="row">
             <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Inicial:</label>
             <div class="col-sm-4">
               <input class="claseinputs"  type="text" id="fechaInicial" [(ngModel)]="form.fecha_desde">
             </div>
-          </div>
+          </div> -->
 
           <div class="row">
             <label for="horaInicial" class="col-sm-4 col-form-label label-form-gl">Hora Inicial:</label>
@@ -72,13 +97,38 @@
             </div>
           </div>
 
+
+
           <div class="row">
+            <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Final:</label>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <input
+                  #dpToDateH
+                  class="form-control claseinputs2"
+                  placeholder="yyyy-mm-dd"
+                  name="dpToDateH"
+                  [(ngModel)]="form.fecha_hasta"
+                  ngbDatepicker
+                  #h2="ngbDatepicker"
+                  (click)="h2.toggle()"
+                  [disabled]="expirationDate"
+               >
+                <div class="input-group-text claseinputs2">
+                  <i class="fa fa-lg fa-calendar"></i>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- <div class="row">
             <label for="fechaFinal" class="col-sm-4 col-form-label label-form-gl">Fecha Final:</label>
             <div class="col-sm-4">
               <input class="claseinputs"  type="text" id="fechaFinal" [(ngModel)]="form.fecha_hasta">
             </div>
-              <!-- <i class="fa fas fa-calendar"></i> -->
-          </div>
+            -<i class="fa fas fa-calendar"></i>
+          </div> -->
 
 
           <div class="row">
@@ -110,7 +160,7 @@
           <label class="col-sm-12 text-center">
 
             <small>Vehículo : {{nombreUnidad}}</small>
-            <p><small>{{form.fecha_desde}} {{form.hora_desde}}:{{form.min_desde}}:00 - {{form.fecha_hasta}} {{form.hora_hasta}}:{{form.min_hasta}}:00</small></p>
+            <p><small>{{form.fecha_desde.year}}-{{form.fecha_desde.month}}-{{form.fecha_desde.day}} {{form.hora_desde}}:{{form.min_desde}}:00 - {{form.fecha_hasta.year}}-{{form.fecha_hasta.month}}-{{form.fecha_hasta.day}} {{form.hora_hasta}}:{{form.min_hasta}}:00</small></p>
 
           </label>
 
