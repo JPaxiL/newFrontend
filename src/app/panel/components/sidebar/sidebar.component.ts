@@ -23,6 +23,8 @@ export class SidebarComponent implements OnInit {
     { id:'ALERTS-PLATFORM-CREATE', name:"Alertas Plataforma"},
     { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Accesorios"},
+    { id:'GEOFENCES', name:"Geocercas"},
+
 
   );
 
