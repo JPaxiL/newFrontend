@@ -1,0 +1,41 @@
+<div style="height: calc(100vh - 470px); overflow-y: auto;">
+  <table id="tbl_fechas" class="table table-hover">
+    <colgroup>
+      <col width="20%" />
+      <col width="50%" />
+      <col width="30%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Geocerca</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody style="height: 300px;">
+
+
+
+        <tr *ngFor="let geo of tblDataGeo;let indice=index"  (click)="clickLocate(geo)"  >
+
+            <!-- <td class="text-center" style="padding: 1px !important;" >
+              <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
+                <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
+              </div>
+            </td> -->
+            <td>{{geo.trama.zone_visible}}</td>
+            <td>{{geo.trama.zone_color}}</td>
+
+            <td>{{geo.trama.zone_name}}</td>
+
+            <td>{{geo.trama.zone_name_visible}}</td>
+            <td>{{geo.trama.vel_max}}</td>
+
+
+
+        </tr>
+    </tbody>
+  </table>
+</div>
