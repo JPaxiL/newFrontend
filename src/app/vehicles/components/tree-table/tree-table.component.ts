@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { TreeNode } from 'primeng-lts/api';
+import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import {DialogModule} from 'primeng-lts/dialog';
 
@@ -30,11 +31,29 @@ export class TreeTableComponent implements OnInit {
     60:"red",
     100:"green"
   }
+  public column: number = 9;
+  public setting: any = {
+    eye: true,
+    imei: false,
+    vehicle: true,
+    tag: true,
+    follow: true,
+    limit: true,
+    gps: true,
+    gsm: true,
+    trans: true,
+    config: true,
+    sort: 'asc'
+  }
 
   @ViewChild('tt') tt!:any;
 
-  constructor( private vehicleService:VehicleService) {
-
+  constructor(
+    private vehicleService:VehicleService,
+    private configDropdown: NgbDropdownConfig
+  ) {
+    configDropdown.placement = 'right-top';
+    configDropdown.autoClose = false;
     this.vehicleService.dataTreeCompleted.subscribe(vehicles=>{
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
@@ -99,7 +118,7 @@ export class TreeTableComponent implements OnInit {
       //reload talbe
       if(this.vehicleService.listTable==0){
         this.vehicleService.reloadTable.emit();
-      }else{        
+      }else{
         this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
       }
     }
@@ -109,6 +128,7 @@ export class TreeTableComponent implements OnInit {
     // console.log("config...vehicle ",data);
     this.config = data;
     this.display = !this.display;
+
     // console.log("display-->",this.display);
   }
   ngOnDestroy(): void {
@@ -120,7 +140,14 @@ export class TreeTableComponent implements OnInit {
     console.log('displaygroup true');
   }
   onClickSetting(e: string):void{
-    // console.log("clikc setting",e);
+    console.log("clikc setting",e);
+    this.setting[e] = !this.setting[e];
+    if(this.setting[e]){
+      this.column++;
+    }else{
+      this.column--;
+    }
+    console.log("colmun = ",this.column);
   }
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
