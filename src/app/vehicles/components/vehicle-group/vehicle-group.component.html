@@ -44,7 +44,7 @@
         </div>
         <div class="row">
           <h5>Seleccione vehiculos</h5>
-          <p-pickList [source]="list1" [target]="list2" [responsive]="true" [sourceStyle]="{'height':'200px'}" [targetStyle]="{'height':'200px'}"
+          <!-- <p-pickList [source]="list1" [target]="list2" [responsive]="true" [sourceStyle]="{'height':'200px'}" [targetStyle]="{'height':'200px'}"
             sourceFilterPlaceholder="Buscar por placa" targetFilterPlaceholder="Buscar por placa" filterBy="name">
               <ng-template let-car pTemplate="item">
                   <div>
@@ -52,7 +52,45 @@
                       <div style="font-size:12px;float:right;margin:5px 2px 0 0">{{car.name}}</div>
                   </div>
               </ng-template>
-          </p-pickList>
+          </p-pickList> -->
+          <div class="col-5">
+            <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'max-height':'250px'}" [style]="{'width':'15rem'}">>
+              <ng-template let-car pTemplate="item">
+                  <div class="car-item">
+                    <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
+                    <label>{{car.name}}</label>
+                  </div>
+              </ng-template>
+            </p-listbox>
+<!-- <p-listbox [options]="list1" [(ngModel)]="selectedList1" optionLabel="name"></p-listbox> -->
+          </div>
+          <div class="col-2">
+            <div class="">
+              <button (click)="upList2()" type="button" class="btn btn-success" name="button">
+                <span>
+                  <i class="fa fa-angle-right"></i>
+                </span>
+              </button>
+            </div>
+            <br>
+            <div class="">
+              <button (click)="upList1()" type="button" class="btn btn-success" name="button">
+                <span>
+                  <i class="fa fa-angle-left"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="col-5">
+            <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'max-height':'250px'}" [style]="{'width':'15rem'}">>
+              <ng-template let-car pTemplate="item">
+                  <div class="car-item">
+                    <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
+                    <label>{{car.name}}</label>
+                  </div>
+              </ng-template>
+            </p-listbox>
+          </div>
 
         </div>
       </div>

@@ -38,7 +38,9 @@ export class VehicleGroupComponent implements OnInit {
   loading : boolean = false;
   formDisplay : string = "block";
   list1: any=[];
+  selectedList1: any=[];
   list2: any=[];
+  selectedList2: any=[];
 
   constructor(
     private vehicleService: VehicleService,
@@ -64,6 +66,78 @@ export class VehicleGroupComponent implements OnInit {
   onHide(){
     console.log('on hide...');
     this.onHideEvent.emit(false);
+  }
+  upList1(){
+    // this.list1=this.selectedList2;
+    // this.selectedList2=[];
+    let aux: any=[];
+
+    //recupero valores upList2
+    for (const key in this.list1) {
+      aux.push(this.list1[key]);
+    }
+    // inserto valores nuevos
+    console.log('subir a lista 2');
+    for (const key in this.selectedList2) {
+      // let index = aux.indexOf(this.selectedList2[key]);
+      // console.log("index====",index);
+      aux.push(this.selectedList2[key]);
+      console.log(this.selectedList2[key]);
+    }
+    //inserto valores en list1
+    this.list1 = aux;
+    //vacio valores de list 2
+    let aux2: any = [];
+    let aux_status = false;
+    for (const key in this.list2) {
+      let aux_status=false;
+      for (const key2 in this.selectedList2) {
+        if (this.list2[key]==this.selectedList2[key2]) {
+          aux_status=true;
+        }
+      }
+      if(!aux_status){
+        aux2.push(this.list2[key]);
+      }
+    }
+    this.list2 = aux2;
+    this.selectedList2=[];
+  }
+  upList2(){
+    // this.list2=this.selectedList1;
+    // this.selectedList1=[];
+    let aux: any=[];
+
+    //recupero valores upList2
+    for (const key in this.list2) {
+      aux.push(this.list2[key]);
+    }
+    // inserto valores nuevos
+    console.log('subir a lista 2');
+    for (const key in this.selectedList1) {
+      // let index = aux.indexOf(this.selectedList1[key]);
+      // console.log("index====",index);
+      aux.push(this.selectedList1[key]);
+      console.log(this.selectedList1[key]);
+    }
+    //inserto valores en list2
+    this.list2 = aux;
+    //vacio valores de list 1
+    let aux2: any = [];
+    let aux_status = false;
+    for (const key in this.list1) {
+      let aux_status=false;
+      for (const key2 in this.selectedList1) {
+        if (this.list1[key]==this.selectedList1[key2]) {
+          aux_status=true;
+        }
+      }
+      if(!aux_status){
+        aux2.push(this.list1[key]);
+      }
+    }
+    this.list1 = aux2;
+    this.selectedList1=[];
   }
   onSubmit(){
     //this.name, this.description
@@ -115,6 +189,7 @@ export class VehicleGroupComponent implements OnInit {
         // this.eventUpdate.emit(this.vehicle);
         // this.eventDisplay.emit(false);
         this.loading=false;
+        this.list2=[];
         this.formDisplay = "block";
       }else{
         //mensaje de error

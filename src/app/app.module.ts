@@ -18,6 +18,7 @@ import {ConfirmationService} from 'primeng-lts/api';
 import {SelectButtonModule} from 'primeng-lts/selectbutton';
 import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {PickListModule} from 'primeng-lts/picklist';
+import {ListboxModule} from 'primeng-lts/listbox';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -128,6 +129,7 @@ import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehic
     SelectButtonModule,
     RadioButtonModule,
     PickListModule,
+    ListboxModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
