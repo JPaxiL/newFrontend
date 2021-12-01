@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { TreeNode } from 'primeng-lts/api';
 
 import {DialogModule} from 'primeng-lts/dialog';
@@ -12,6 +12,8 @@ import { VehicleConfigService } from '../../services/vehicle-config.service';
   styleUrls: ['./tree-table.component.scss']
 })
 export class TreeTableComponent implements OnInit {
+
+  @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
   sortOrder: number=1;
   display: boolean = false;
@@ -39,8 +41,11 @@ export class TreeTableComponent implements OnInit {
     });
 
     this.vehicleService.reloadTableTree.subscribe(res=>{
+
       if(this.vehicleService.treeTableStatus){
+        // console.log('desde tree table ...');
         this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
+        this.vehicles = this.vehicleService.vehiclesTree;
       }
 
     });
@@ -94,8 +99,7 @@ export class TreeTableComponent implements OnInit {
       //reload talbe
       if(this.vehicleService.listTable==0){
         this.vehicleService.reloadTable.emit();
-      }else{
-        // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+      }else{        
         this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
       }
     }
@@ -109,6 +113,11 @@ export class TreeTableComponent implements OnInit {
   }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;
+  }
+  onClickGroup(){
+    // this.displayGroup=true;
+    this.eventDisplayGroup.emit(true);
+    console.log('displaygroup true');
   }
   onClickSetting(e: string):void{
     // console.log("clikc setting",e);

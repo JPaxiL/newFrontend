@@ -1,0 +1,69 @@
+<p-dialog [(visible)]="display" (onHide)="onHide()" (onShow)="onShow()" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+    <ng-template class="p-dialog-title" pTemplate="header">
+      <strong>CREAR NUEVO GRUPO/CONVOY</strong>
+    </ng-template>
+
+    <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+      <div class="" *ngIf="loading">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      </div>
+
+      <div class="" [ngStyle]="{'display':formDisplay}">
+        <div class="row">
+          <div class="col-6">
+            <h5>Seleccione una opcion</h5>
+
+            <div class="p-field-radiobutton">
+            	<p-radioButton name="city" value="Chicago" [(ngModel)]="city" inputId="city1"></p-radioButton>
+            	<label for="city1">Grupo</label>
+            </div>
+            <div class="p-field-radiobutton">
+            	<p-radioButton name="city" value="Los Angeles" [(ngModel)]="city" inputId="city2"></p-radioButton>
+            	<label for="city2">Convoy</label>
+            </div>
+
+              <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="value1" optionLabel="label" optionValue="value"></p-selectButton> -->
+              <!-- <h5>Multiple Selection</h5>
+<p-selectButton [options]="paymentOptions" [(ngModel)]="value2" optionLabel="name"
+	optionValue="value"></p-selectButton> -->
+
+          </div>
+          <div class="col-6">
+            <h5>Ingrese nombre y descripcion</h5>
+              <span class="p-label">
+                <label for="float-input">Nombre :</label>
+                <input #name id="float-input" type="text" pInputText>
+              </span>
+              <span class="p-label">
+                <label for="float-input">Descripcion :</label>
+                <input #description id="float-input" type="text" pInputText>
+              </span>
+
+
+          </div>
+        </div>
+        <div class="row">
+          <h5>Seleccione vehiculos</h5>
+          <p-pickList [source]="list1" [target]="list2" [responsive]="true" [sourceStyle]="{'height':'200px'}" [targetStyle]="{'height':'200px'}"
+            sourceFilterPlaceholder="Buscar por placa" targetFilterPlaceholder="Buscar por placa" filterBy="name">
+              <ng-template let-car pTemplate="item">
+                  <div>
+                      <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
+                      <div style="font-size:12px;float:right;margin:5px 2px 0 0">{{car.name}}</div>
+                  </div>
+              </ng-template>
+          </p-pickList>
+
+        </div>
+      </div>
+  </div>
+    <p-footer>
+      <div class="" *ngIf="loading==false">
+        <button (click)="onHide()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm">Cancelar</button>
+        <button (click)="onConfirmGroup()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm">Guardar</button>
+      </div>
+      <div class="" *ngIf="loading">
+
+      </div>
+    </p-footer>
+</p-dialog>

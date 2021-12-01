@@ -26,5 +26,11 @@ export class VehicleConfigService {
   putConfig(vehicle: any): Observable<any>{
     return this.http.put(this.api_url+"/api/tracker/"+vehicle.IMEI,vehicle);
   }
+  postGroup(req: any): Observable<any>{
+    return this.http.post(this.api_url+"/api/group",req);
+  }
+  putGroupDelete(req: any): Observable<any>{
+    return this.http.put(this.api_url+"/api/group_delete/"+req,req);
+  }
 
 }

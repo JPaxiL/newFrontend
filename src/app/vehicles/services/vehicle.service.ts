@@ -17,7 +17,7 @@ export class VehicleService {
 
   private URL_LIST = environment.apiUrl+'/api/tracker';
 
-  private demo:boolean = true;
+  private demo:boolean = false;
   public treeTableStatus: boolean = false;
   public TableStatus: boolean = false;
   public vehicles: any = [];

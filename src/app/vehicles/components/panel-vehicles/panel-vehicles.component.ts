@@ -8,6 +8,7 @@ import { VehicleService } from '../../services/vehicle.service';
 })
 export class PanelVehiclesComponent implements OnInit {
   listTable: number = 0;
+  displayGroup: boolean = false;
 
   constructor(private vehicleService: VehicleService) {
     this.listTable = this.vehicleService.listTable;
@@ -19,6 +20,14 @@ export class PanelVehiclesComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+  onHideDisplayGroup(event : boolean){
+    console.log('hide group panel...',event);
+    this.displayGroup = event;
+  }
+  eventDisplayGroup(event : boolean){
+    console.log('desde panel',event);
+    this.displayGroup = event;
   }
 
 }

@@ -1,3 +1,4 @@
 
+<app-vehicle-group (onHideEvent)="onHideDisplayGroup($event)" [display]="displayGroup"></app-vehicle-group>
 <app-vehicles *ngIf="listTable==0"></app-vehicles>
-<app-tree-table *ngIf="listTable==1"></app-tree-table>
+<app-tree-table (eventDisplayGroup)="eventDisplayGroup($event)" *ngIf="listTable==1"></app-tree-table>

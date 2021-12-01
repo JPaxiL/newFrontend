@@ -15,6 +15,9 @@ import { DropdownModule } from 'primeng-lts/dropdown';
 import { InputTextModule } from 'primeng-lts/inputtext';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api';
+import {SelectButtonModule} from 'primeng-lts/selectbutton';
+import {RadioButtonModule} from 'primeng-lts/radiobutton';
+import {PickListModule} from 'primeng-lts/picklist';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -60,6 +63,7 @@ import { CommonModule } from '@angular/common';
 import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-alerts.component';
 import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.component';
 import { VehicleConfigComponent } from './vehicles/components/vehicle-config/vehicle-config.component';
+import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehicle-group.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +100,8 @@ import { VehicleConfigComponent } from './vehicles/components/vehicle-config/veh
     PanelHistorialGraficoComponent,
     PanelAlertsComponent,
     TreeTableComponent,
-    VehicleConfigComponent
+    VehicleConfigComponent,
+    VehicleGroupComponent
   ],
   imports: [
     CommonModule,
@@ -114,6 +119,9 @@ import { VehicleConfigComponent } from './vehicles/components/vehicle-config/veh
     DialogModule,
     InputTextModule,
     ConfirmDialogModule,
+    SelectButtonModule,
+    RadioButtonModule,
+    PickListModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
