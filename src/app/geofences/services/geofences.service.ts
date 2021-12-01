@@ -7,9 +7,16 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GeofencesService {
+
   public geofences:any = [];
+  public nombreComponente:string = "LISTAR";
 
   constructor(private http: HttpClient) {
+    //this.getAll();
+  }
+
+  //Se llama desde /app/map/components/map-view/map-view.component.ts
+  public initialize() {
     this.getAll();
   }
 

@@ -63,6 +63,9 @@ import { CommonModule } from '@angular/common';
 import { PanelAlertsComponent } from './alerts/components/panel-alerts/panel-alerts.component';
 import { TreeTableComponent } from './vehicles/components/tree-table/tree-table.component';
 import { VehicleConfigComponent } from './vehicles/components/vehicle-config/vehicle-config.component';
+import { GeocercaAddComponent } from './geofences/components/geocerca-add/geocerca-add.component';
+import { GeocercaListsComponent } from './geofences/components/geocerca-lists/geocerca-lists.component';
+import { GeocercaMainComponent } from './geofences/components/geocerca-main/geocerca-main.component';
 import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehicle-group.component';
 
 @NgModule({
@@ -101,6 +104,9 @@ import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehic
     PanelAlertsComponent,
     TreeTableComponent,
     VehicleConfigComponent,
+    GeocercaAddComponent,
+    GeocercaListsComponent,
+    GeocercaMainComponent,
     VehicleGroupComponent
   ],
   imports: [

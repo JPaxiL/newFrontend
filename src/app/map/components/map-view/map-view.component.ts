@@ -3,6 +3,7 @@ import * as L from 'leaflet';
 
 import { MapService } from '../../../vehicles/services/map.service';
 import { MapServicesService } from '../../services/map-services.service';
+import { GeofencesService } from '../../../geofences/services/geofences.service';
 
 declare var $: any;
 
@@ -17,10 +18,18 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
   //private map!: L.Map;
 
-  constructor(private mapService: MapService, public mapServicesService: MapServicesService) { }
+  constructor(
+    private mapService: MapService,
+    public mapServicesService: MapServicesService,
+    public geofencesService: GeofencesService
+
+    ) { }
   // constructor() { }
 
   ngOnInit(): void {
+
+    this.geofencesService.initialize();
+
   }
 
   ngAfterViewInit(): void {
