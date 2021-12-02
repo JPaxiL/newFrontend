@@ -1,9 +1,13 @@
-<div style="height: calc(100vh - 470px); overflow-y: auto;">
-  <table id="tbl_fechas" class="table table-hover">
+<div style="height: calc(100vh - 100px); overflow-y: auto;">
+  <table id="tbl_geos" class="table table-hover">
     <colgroup>
-      <col width="20%" />
-      <col width="50%" />
-      <col width="30%" />
+      <col width="7%" />
+      <col width="7%" />
+      <col width="46%" />
+      <col width="15%" />
+      <col width="10%" />
+      <col width="5%" />
+
     </colgroup>
     <thead>
         <tr>
@@ -16,22 +20,41 @@
     </thead>
     <tbody style="height: 300px;">
 
-
-
         <tr *ngFor="let geo of tblDataGeo;let indice=index"  (click)="clickLocate(geo)"  >
 
-            <!-- <td class="text-center" style="padding: 1px !important;" >
-              <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
-                <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
-              </div>
-            </td> -->
-            <td>{{geo.trama.zone_visible}}</td>
-            <td>{{geo.trama.zone_color}}</td>
+            <!-- <td>{{geo.trama.zone_visible}}</td> -->
+            <td width="7%">
+              <button class="btn btn-xs btn-link p-n" >
+                <i class="fa fa-lg" [ngClass]="{'far fa-eye': geo.trama.zone_visible === 'true', 'far fa-eye-slash' : geo.trama.zone_visible === 'false'}" style="font-size: 14px;" ></i>
+              </button>
+            </td>
+
+            <!-- <td>{{geo.trama.zone_color}}</td> -->
+            <td class="text-center" width="7%">
+              <button class="btn btn-xs btn-link p-n" >
+                <div [ngStyle]="{'background-color': geo.trama.zone_color}" style="width: 15px;height: 15px;" class="geofence-color" ></div>
+              </button>
+            </td>
 
             <td>{{geo.trama.zone_name}}</td>
 
-            <td>{{geo.trama.zone_name_visible}}</td>
-            <td>{{geo.trama.vel_max}}</td>
+            <!-- <td>{{geo.trama.zone_name_visible}}</td> -->
+
+            <td>
+
+              <input class="" type="checkbox"  [(ngModel)]="geo.trama.zone_name_visible_bol">
+            </td>
+
+            <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td>
+
+
+            <td width="5%" >
+              <div class="btn-group" >
+                <button class="btn btn-xs btn-link dropdown-toggle">
+                  <i class="fa fa-wrench fa-lg" style="font-size: 14px;"></i>
+                </button>
+              </div>
+            </td>
 
 
 

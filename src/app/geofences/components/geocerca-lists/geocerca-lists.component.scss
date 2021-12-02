@@ -1,0 +1,29 @@
+#tbl_geos tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+#tbl_geos tr:nth-child(even) {
+background-color: #ffffff !important;
+}
+#tbl_geos thead th {
+  background-color: #EFF0F4;
+  color: #1f1d1d;
+}
+#tbl_geos tbody td { /* 4 tables */
+  border: 1px solid #EFF0F4;
+  border-left: none;
+  border-right: none;
+  padding: 3px;
+}
+#tbl_geos tbody tr:hover { /* 4 tables */
+  background-color: #EFF0F4 !important;
+}
+#tbl_geos tbody {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+#tbl_geos {
+  font-size: 11px;
+  text-align: center;
+  vertical-align: middle;
+}

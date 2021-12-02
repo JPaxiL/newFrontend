@@ -28,13 +28,14 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.geofencesService.initialize();
 
   }
 
   ngAfterViewInit(): void {
     this.createMap();
     //$("#panelMonitoreo").hide( "slow" )
+    this.geofencesService.initialize();
+
   }
 
 

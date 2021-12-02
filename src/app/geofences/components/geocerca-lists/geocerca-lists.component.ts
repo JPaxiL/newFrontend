@@ -30,6 +30,7 @@ export class GeocercaListsComponent implements OnInit {
       this.tblDataGeo = [];
 
       for (let i = 0; i < geos.length; i++) {
+        geos[i].zone_name_visible_bol = (geos[i].zone_name_visible === 'true');
         this.tblDataGeo.push({trama:geos[i]});
       }
       // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
