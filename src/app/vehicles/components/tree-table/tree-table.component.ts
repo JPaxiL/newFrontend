@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, OnDestroy, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { TreeNode } from 'primeng-lts/api';
+import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import {DialogModule} from 'primeng-lts/dialog';
 
@@ -12,6 +13,8 @@ import { VehicleConfigService } from '../../services/vehicle-config.service';
   styleUrls: ['./tree-table.component.scss']
 })
 export class TreeTableComponent implements OnInit {
+
+  @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
   sortOrder: number=1;
   display: boolean = false;
@@ -28,19 +31,40 @@ export class TreeTableComponent implements OnInit {
     60:"red",
     100:"green"
   }
+  public column: number = 9;
+  public setting: any = {
+    eye: true,
+    imei: false,
+    vehicle: true,
+    tag: true,
+    follow: true,
+    limit: true,
+    gps: true,
+    gsm: true,
+    trans: true,
+    config: true,
+    sort: 'asc'
+  }
 
   @ViewChild('tt') tt!:any;
 
-  constructor( private vehicleService:VehicleService) {
-
+  constructor(
+    private vehicleService:VehicleService,
+    private configDropdown: NgbDropdownConfig
+  ) {
+    configDropdown.placement = 'right-top';
+    configDropdown.autoClose = false;
     this.vehicleService.dataTreeCompleted.subscribe(vehicles=>{
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
     });
 
     this.vehicleService.reloadTableTree.subscribe(res=>{
+
       if(this.vehicleService.treeTableStatus){
+        // console.log('desde tree table ...');
         this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
+        this.vehicles = this.vehicleService.vehiclesTree;
       }
 
     });
@@ -95,7 +119,6 @@ export class TreeTableComponent implements OnInit {
       if(this.vehicleService.listTable==0){
         this.vehicleService.reloadTable.emit();
       }else{
-        // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
         this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
       }
     }
@@ -105,13 +128,26 @@ export class TreeTableComponent implements OnInit {
     // console.log("config...vehicle ",data);
     this.config = data;
     this.display = !this.display;
+
     // console.log("display-->",this.display);
   }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;
   }
+  onClickGroup(){
+    // this.displayGroup=true;
+    this.eventDisplayGroup.emit(true);
+    console.log('displaygroup true');
+  }
   onClickSetting(e: string):void{
-    // console.log("clikc setting",e);
+    console.log("clikc setting",e);
+    this.setting[e] = !this.setting[e];
+    if(this.setting[e]){
+      this.column++;
+    }else{
+      this.column--;
+    }
+    console.log("colmun = ",this.column);
   }
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);

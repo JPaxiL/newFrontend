@@ -5,7 +5,7 @@
       <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Buscar..." class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false" style="">
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left: 0px; padding-right: 0px;">
-      <button type="button" class="btn btn-primary">
+      <button (click)="onClickGroup()" type="button" class="btn btn-primary">
         <i class="fa fa-plus"></i>
       </button>
     </div>
@@ -54,7 +54,7 @@
               <label for="">GSM</label>
             </div>
             <div class="">
-              <input (click)="onClickSetting('transmission')" type="checkbox" name="" value="" checked>
+              <input (click)="onClickSetting('trans')" type="checkbox" name="" value="" checked>
               <label for="">Transmisión</label>
             </div>
             <div class="">
@@ -87,29 +87,31 @@
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
         <!-- <col *ngFor="let col of columns" style="width:100px"> -->
-        <col style="width:7px">
-        <col style="width:17px">
-        <col style="width:4px">
-        <col style="width:4px">
-        <col style="width:4px">
-        <col style="width:4px">
-        <col style="width:4px">
-        <col style="width:4px">
-        <col style="width:4px">
+        <col style="width:7px" *ngIf="setting['eye']">
+        <col style="width:18px" *ngIf="setting['vehicle']">
+        <col style="width:18px" *ngIf="setting['imei']">
+        <col style="width:5px" *ngIf="setting['tag']">
+        <col style="width:5px" *ngIf="setting['follow']">
+        <col style="width:5px" *ngIf="setting['limit']">
+        <col style="width:5px" *ngIf="setting['gps']">
+        <col style="width:5px" *ngIf="setting['gsm']">
+        <col style="width:5px" *ngIf="setting['trans']">
+        <col style="width:5px" *ngIf="setting['config']">
       </colgroup>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
 
       <tr>
-        <th><app-eye-header></app-eye-header></th>
-        <th><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th>
-        <th><app-tag-header></app-tag-header></th>
-        <th><app-follow-header></app-follow-header></th>
-        <th><app-limit-header></app-limit-header></th>
-        <th><app-gps-header></app-gps-header></th>
-        <th><app-gsm-header></app-gsm-header></th>
-        <th><app-transmission-header></app-transmission-header></th>
-        <th><app-setting-header></app-setting-header></th>
+        <th *ngIf="setting['eye']"><app-eye-header></app-eye-header></th>
+        <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th>
+        <th *ngIf="setting['imei']" >IMEI</th>
+        <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
+        <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
+        <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
+        <th *ngIf="setting['gps']" ><app-gps-header></app-gps-header></th>
+        <th *ngIf="setting['gsm']" ><app-gsm-header></app-gsm-header></th>
+        <th *ngIf="setting['trans']"><app-transmission-header></app-transmission-header></th>
+        <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th>
 
       </tr>
       <!-- <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
@@ -127,13 +129,13 @@
         </td>
       </tr> -->
       <tr *ngIf="rowData['col']==3">
-        <td colspan="8" style="padding: 0rem 0rem; font-weight: bold; color: #1F67A6;">
+        <td [attr.colspan]="column" style="padding: 0rem 0rem; font-weight: bold; color: #1F67A6;">
           <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
           {{rowData["name"]}}
         </td>
       </tr>
       <tr *ngIf="rowData['col']!=3">
-        <td style="padding: 0rem 0rem;">
+        <td *ngIf="setting['eye']" style="padding: 0rem 0rem;">
           <!-- <span class="btn-label"><i class="fa fa-eye-slash" style="color:#444444;"></i></span> -->
           <!-- <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler> -->
           <div *ngIf="rowData['eye'] == true" class="" style="font-size: 14px; text-align: center;">
@@ -144,7 +146,7 @@
           </div>
           <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
         </td>
-        <td style="padding: 0rem 0rem;">
+        <td *ngIf="setting['vehicle']" style="padding: 0rem 0rem;">
           <div class="row">
             <div class="col-3">
               <img class="izquierda" (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
@@ -159,30 +161,33 @@
             </div>
           </div>
         </td>
-        <td style="padding: 0rem 0rem;">
+        <td *ngIf="setting['imei']" style="padding: 0rem 0rem;">
+          {{rowData['IMEI']}}
+        </td>
+        <td *ngIf="setting['tag']" style="padding: 0rem 0rem;">
           <input type="checkbox" name="" value="" checked>
         </td>
-        <td style="padding: 0rem 0rem;">
+        <td *ngIf="setting['follow']" style="padding: 0rem 0rem;">
           <span  class="btn-label" title="Seguir vehículo">
             <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i>
           </span>
         </td>
-        <td style="padding: 0rem 0rem;">
+        <td *ngIf="setting['limit']" style="padding: 0rem 0rem;">
           {{rowData['speed']}}
         </td>
-        <td style="padding: 0rem 0rem;">
-          <span class="btn-label" title="Configurar"><i class="fa fa-wifi"></i></span>
+        <td *ngIf="setting['gps']" style="padding: 0rem 0rem;">
+          <span class="btn-label"><i class="fa fa-wifi"></i></span>
         </td>
-        <td style="padding: 0rem 0rem;">
-          <span class="btn-label" title="Configurar"><i class="fa fa-wifi"></i></span>
+        <td *ngIf="setting['gsm']" style="padding: 0rem 0rem;">
+          <span class="btn-label"><i class="fa fa-wifi"></i></span>
         </td>
-        <td style="padding: 0rem 0rem;">
+        <td *ngIf="setting['trans']" style="padding: 0rem 0rem;">
           <span class="btn-label">
             <i class="fa fa-circle" style="color:{{color[rowData['point_color']]}}"></i>
             <!-- <i class="fa fa-circle" style="color:black"></i> -->
           </span>
         </td>
-        <td style="padding: 0rem 0rem;">
+        <td *ngIf="setting['config']" style="padding: 0rem 0rem;">
           <i (click)="onClickConfig(rowData)" class="fa fa-wrench" style="color:#444444"></i>
         </td>
       </tr>

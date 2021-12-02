@@ -15,6 +15,10 @@ import { DropdownModule } from 'primeng-lts/dropdown';
 import { InputTextModule } from 'primeng-lts/inputtext';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api';
+import {SelectButtonModule} from 'primeng-lts/selectbutton';
+import {RadioButtonModule} from 'primeng-lts/radiobutton';
+import {PickListModule} from 'primeng-lts/picklist';
+import {ListboxModule} from 'primeng-lts/listbox';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -63,6 +67,7 @@ import { VehicleConfigComponent } from './vehicles/components/vehicle-config/veh
 import { GeocercaAddComponent } from './geofences/components/geocerca-add/geocerca-add.component';
 import { GeocercaListsComponent } from './geofences/components/geocerca-lists/geocerca-lists.component';
 import { GeocercaMainComponent } from './geofences/components/geocerca-main/geocerca-main.component';
+import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehicle-group.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +107,8 @@ import { GeocercaMainComponent } from './geofences/components/geocerca-main/geoc
     VehicleConfigComponent,
     GeocercaAddComponent,
     GeocercaListsComponent,
-    GeocercaMainComponent
+    GeocercaMainComponent,
+    VehicleGroupComponent
   ],
   imports: [
     CommonModule,
@@ -120,6 +126,10 @@ import { GeocercaMainComponent } from './geofences/components/geocerca-main/geoc
     DialogModule,
     InputTextModule,
     ConfirmDialogModule,
+    SelectButtonModule,
+    RadioButtonModule,
+    PickListModule,
+    ListboxModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),
