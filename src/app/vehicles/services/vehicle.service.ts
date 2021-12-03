@@ -463,12 +463,14 @@ export class VehicleService {
         groups.push(data[index]['grupo']);
         status_group= true;
       }
-      if(convoys.includes(data[index]['convoy'])){
+      if(convoys.includes(data[index]['grupo']+'_'+data[index]['convoy'])){
       }else{
-        convoys.push(data[index]['convoy']);
+        convoys.push(data[index]['grupo']+'_'+data[index]['convoy']);
         status_convoy= true;
       }
 
+      console.log("posibilidad "+status_group+" - "+status_convoy);
+      console.log()
       // posibilidades
       // 1 1
       // 0 1
@@ -478,11 +480,11 @@ export class VehicleService {
         prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
         map.push(
           {
-            data:{name: data[index]['grupo'], col:3},
+            data:{name: data[index]['grupo'], col:3, type:'grupo', id:data[index]['idgrupo']},
             expanded: true,
             children:[
               {
-                data:{name:data[index]['convoy'], col:3},
+                data:{name:data[index]['convoy'], col:3, type:'convoy', id:data[index]['idconvoy']},
                 expanded: true,
                 children: [
                   {
@@ -502,7 +504,7 @@ export class VehicleService {
         // let index_convoy = map[index_group]['children']['data']
         map[index_group]['children'].push(
           {
-            data : {name: data[index]['convoy'], col: 3},
+            data : {name: data[index]['convoy'], col: 3, type:'convoy', id:data[index]['idgrupo']},
             expanded: true,
             children: [
               {
@@ -518,11 +520,11 @@ export class VehicleService {
         // console.log("data[index]['convoy']",data[index]['convoy']);
         map.push(
           {
-            data:{name: data[index]['grupo'], col: 3},
+            data:{name: data[index]['grupo'], col: 3, type:'grupo', id:data[index]['idgrupo']},
             expanded: true,
             children:[
               {
-                data:{name: data[index]['convoy'], col: 3},
+                data:{name: data[index]['convoy'], col: 3, type:'convoy', id:data[index]['idconvoy']},
                 expanded: true,
                 children: [
                   {

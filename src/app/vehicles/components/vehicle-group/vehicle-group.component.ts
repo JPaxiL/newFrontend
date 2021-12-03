@@ -25,7 +25,7 @@ export class VehicleGroupComponent implements OnInit {
   multiple: boolean = true;
   value2: number = 1;
 
-  city: string="";
+  option: string="nada";
 
   selectedCategory: any = null;
 
@@ -41,6 +41,10 @@ export class VehicleGroupComponent implements OnInit {
   selectedList1: any=[];
   list2: any=[];
   selectedList2: any=[];
+  groups: any=[];
+  selectedGroup: any={};
+  nameTarget: string = "";
+  descriptionTarget: string = "";
 
   constructor(
     private vehicleService: VehicleService,
@@ -66,6 +70,59 @@ export class VehicleGroupComponent implements OnInit {
   onHide(){
     console.log('on hide...');
     this.onHideEvent.emit(false);
+  }
+  onOption(e : string){
+    console.log('option...',e);
+    console.log('vehicles',this.vehicleService.vehicles);
+    console.log('vehiclestree',this.vehicleService.vehiclesTree);
+
+    if(e=='grupo'){
+      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
+
+    }else{
+      //getGroup
+      let aux = [];
+      let vehicles = this.vehicleService.vehicles;
+      for (const key in vehicles) {
+        let status = true;
+        console.log(vehicles[key]['grupo']);
+        if(aux.length>0){
+          for (const j in aux) {
+            if(aux[j]['grupo']==vehicles[key]['grupo']||vehicles[key]['grupo']=='Unidades Sin Grupo'){
+              status=false;
+            }
+          }
+        }
+        if(status){
+          aux.push(vehicles[key]);
+        }
+      }
+      console.log('resultado',aux);
+      this.groups = aux;
+     //  this.groups = [
+     //   { name: "Grupo", id: 0 },
+     //   { name: "Convoy", id: 1 }
+     // ];
+      this.list1 = [];
+    }
+  }
+  onChangeGroup(){
+    console.log('cambio de grupo',this.selectedGroup);
+    // enviar todas las unidades del grupo seleccionado
+    let vehicles = this.vehicleService.vehicles;
+    let aux = [];
+    for (const key in vehicles) {
+      if (vehicles[key]['idgrupo']==this.selectedGroup&&vehicles[key]['convoy']=='Unidades Sin Convoy') {
+        aux.push(vehicles[key]);
+      }
+    }
+    this.list1 = aux;
+  }
+  onName(data: any){
+    this.nameTarget = data.target.value;
+  }
+  onDescription(data: any){
+    this.descriptionTarget = data.target.value;
   }
   upList1(){
     // this.list1=this.selectedList2;
@@ -151,27 +208,51 @@ export class VehicleGroupComponent implements OnInit {
 
       }
     */
-    const req = {
-      vehicles : this.list2,
-      name : this.name.nativeElement.value,
-      description : this.description.nativeElement.value
-      // }
-    };
+    let req = {};
+
+    if(this.option=='grupo'){
+      req = {
+        vehicles : this.list2,
+        name : this.nameTarget,
+        description : this.descriptionTarget
+        // }
+      };
+    }else if(this.option=='convoy'){
+      req = {
+        vehicles : this.list2,
+        name : this.nameTarget,
+        description : this.descriptionTarget,
+        grupo_convoy_id : this.selectedGroup
+      };
+    }
+    // const req = {
+    //   vehicles : this.list2,
+    //   name : this.name.nativeElement.value,
+    //   description : this.description.nativeElement.value
+    //   // }
+    // };
 
     // console.log("submit",req);
+    console.log("dat enviada",req);
+
     this.loading=true;
     this.formDisplay = "none";
-
-
     this.configService.postGroup(req).subscribe((info:any) => {
-      // console.log("result submit",info);
+      console.log("result submit",info);
       if(info.res){
             const vehicles = this.vehicleService.vehicles;
             for (const key in this.list2) {
               const index = vehicles.indexOf(this.list2[key])
               // console.log('index',index);
-              vehicles[index].idgrupo=info.data['id'];
-              vehicles[index].grupo=info.data['nombre'];
+              if(this.option=='convoy'){
+                vehicles[index].idconvoy=info.data['id'];
+                vehicles[index].convoy=info.data['nombre'];
+
+              }else{
+                vehicles[index].idgrupo=info.data['id'];
+                vehicles[index].grupo=info.data['nombre'];
+
+              }
               // console.log('vehicles index',vehicles[index])
             }
             this.vehicleService.vehicles = vehicles;
@@ -180,7 +261,6 @@ export class VehicleGroupComponent implements OnInit {
             if(this.vehicleService.listTable==0){
               this.vehicleService.reloadTable.emit();
             }else{
-              // console.log('emit tabletreee');
               this.vehicleService.reloadTableTree.emit();
             }
             this.onHideEvent.emit(false);
@@ -192,6 +272,8 @@ export class VehicleGroupComponent implements OnInit {
         this.list2=[];
         this.formDisplay = "block";
       }else{
+        this.loading=false;
+        this.formDisplay = "block";
         //mensaje de error
       }
     });
@@ -199,7 +281,7 @@ export class VehicleGroupComponent implements OnInit {
 
   onShow(){
     console.log("on show");
-    this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
+    // this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
 
   }
   onConfirmGroup(){

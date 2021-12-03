@@ -14,11 +14,11 @@
             <h5>Seleccione una opcion</h5>
 
             <div class="p-field-radiobutton">
-            	<p-radioButton name="city" value="Chicago" [(ngModel)]="city" inputId="city1"></p-radioButton>
+            	<p-radioButton (click)="onOption('grupo')" value="grupo" [(ngModel)]="option" inputId="city1"></p-radioButton>
             	<label for="city1">Grupo</label>
             </div>
             <div class="p-field-radiobutton">
-            	<p-radioButton name="city" value="Los Angeles" [(ngModel)]="city" inputId="city2"></p-radioButton>
+            	<p-radioButton (click)="onOption('convoy')" value="convoy" [(ngModel)]="option" inputId="city2"></p-radioButton>
             	<label for="city2">Convoy</label>
             </div>
 
@@ -28,21 +28,25 @@
 	optionValue="value"></p-selectButton> -->
 
           </div>
-          <div class="col-6">
+          <div class="col-6" *ngIf="option!='nada'">
             <h5>Ingrese nombre y descripcion</h5>
+              <span *ngIf="option=='convoy'"  class="p-label">
+                <label for="float-input">Seleccione Grupo :</label>
+                <p-dropdown (onChange)="onChangeGroup()" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="grupo" optionValue="idgrupo" [showClear]="true" placeholder="Seleccione grupo"></p-dropdown>
+              </span>
               <span class="p-label">
                 <label for="float-input">Nombre :</label>
-                <input #name id="float-input" type="text" pInputText>
+                <input (keyup)="onName($event)" #name id="float-input" type="text" pInputText>
               </span>
               <span class="p-label">
                 <label for="float-input">Descripcion :</label>
-                <input #description id="float-input" type="text" pInputText>
+                <input (keyup)="onDescription($event)" #description id="float-input" type="text" pInputText>
               </span>
 
 
           </div>
         </div>
-        <div class="row">
+        <div *ngIf="option!='nada'" class="row">
           <h5>Seleccione vehiculos</h5>
           <!-- <p-pickList [source]="list1" [target]="list2" [responsive]="true" [sourceStyle]="{'height':'200px'}" [targetStyle]="{'height':'200px'}"
             sourceFilterPlaceholder="Buscar por placa" targetFilterPlaceholder="Buscar por placa" filterBy="name">
