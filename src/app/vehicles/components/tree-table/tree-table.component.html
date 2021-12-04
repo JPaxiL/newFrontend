@@ -1,4 +1,16 @@
 <app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
+<p-dialog header="Descomponer" icon="pi pi-info-circle" [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayDelete">
+    Esta seguro de descomponer {{textDelete}}?
+      <div class="" *ngIf="loadingDelete">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      </div>
+    <ng-template *ngIf="loadingDelete==false" pTemplate="footer">
+      <div [ngStyle]="{'display':buttonDisplay}" class="">
+        <p-button icon="pi pi-check" (click)="onDelete()" label="Yes" class="p-button-text"></p-button>
+        <p-button icon="pi pi-times" (click)="displayDelete=false" label="No"></p-button>
+      </div>
+        </ng-template>
+</p-dialog>
 <div class="col">
   <div class="row" style="margin-right: 0px; margin-left: 15px;">
     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="padding-left: 0px; padding-right: 0px;">
@@ -130,8 +142,28 @@
       </tr> -->
       <tr *ngIf="rowData['col']==3">
         <td [attr.colspan]="column" style="padding: 0rem 0rem; font-weight: bold; color: #1F67A6;">
-          <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
-          {{rowData["name"]}}
+          <div class="row">
+            <div class="col-9">
+              <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
+              {{rowData["name"]}}
+
+            </div>
+            <div class="col-1">
+              <span (click)="showDelete(rowData)" class="btn-label" title="Descomponer {{rowData['type']}}" data-bs-toggle="tooltip" data-bs-placement="top">
+                <i class="fa fa-times" style="color:red"></i>
+              </span>
+
+            </div>
+            <div class="col-1">
+              <span class="btn-label" title="Editar {{rowData['type']}}" data-bs-toggle="tooltip" data-bs-placement="top">
+                <i class="fa fa-edit" style="color:#1F67A6"></i>
+              </span>
+
+            </div>
+            <div class="col-1">
+
+            </div>
+          </div>
         </td>
       </tr>
       <tr *ngIf="rowData['col']!=3">

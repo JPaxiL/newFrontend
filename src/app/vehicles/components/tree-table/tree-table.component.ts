@@ -18,10 +18,16 @@ export class TreeTableComponent implements OnInit {
 
   sortOrder: number=1;
   display: boolean = false;
+  displayDelete: boolean = false;
+  textDelete: string = "";
+  loadingDelete: boolean = false;
+  idDelete!: number;
+  typeDelete!: string;
   config: any=[];
   vehicles: TreeNode[]=[];
   cols: any[]=[];
   loading: boolean=true;
+  buttonDisplay: string="block";
   color: any = {
     10:"green",
     20:"blue",
@@ -50,7 +56,8 @@ export class TreeTableComponent implements OnInit {
 
   constructor(
     private vehicleService:VehicleService,
-    private configDropdown: NgbDropdownConfig
+    private configDropdown: NgbDropdownConfig,
+    private vehicleConfigService : VehicleConfigService
   ) {
     configDropdown.placement = 'right-top';
     configDropdown.autoClose = false;
@@ -93,6 +100,59 @@ export class TreeTableComponent implements OnInit {
 
   onChangeDisplay(res : boolean){
     this.display = res;
+  }
+  showDelete(data: any){
+    console.log("data",data);
+    this.textDelete = data['type'];
+    this.displayDelete = true;
+    if(data['id']==null){
+      console.log('no hay id');
+    }else{
+      console.log('en proceso de borrado');
+      this.idDelete = data['id'];
+      this.typeDelete = data['type'];
+    }
+  }
+  onDelete(){
+    this.loadingDelete = true;
+
+    const req = {
+      id : this.idDelete,
+      vehicles : null
+    };
+    console.log('borrando ...');
+    this.buttonDisplay="none";
+    this.vehicleConfigService.putGroupDelete(req).subscribe((info: any)=>{
+      console.log('res = ',info);
+      this.loadingDelete = false;
+      this.buttonDisplay="block";
+      if(info.res){
+        let aux_vehicles = info.vehicles;
+        let aux_vehicles_tree = this.vehicleService.vehicles;
+        for (const key in aux_vehicles) {
+          for (const j in aux_vehicles_tree) {
+            if (aux_vehicles[key]['id']==aux_vehicles_tree[j]['id']) {
+              if(this.typeDelete=='grupo'){
+                aux_vehicles_tree[j]['idgrupo']=null;
+                aux_vehicles_tree[j]['grupo']='Unidades Sin Grupo';
+              }else{
+                aux_vehicles_tree[j]['idconvoy']=null;
+                aux_vehicles_tree[j]['convoy']='Unidades Sin Convoy';
+              }
+
+            }
+          }
+        }
+        this.vehicleService.vehicles = aux_vehicles_tree;
+        this.vehicleService.reloadTableTree.emit();
+        this.textDelete = info.message;
+        this.displayDelete = false;
+        this.idDelete=-1;
+        this.typeDelete='';
+      }else{
+
+      }
+    });
   }
   onUpdate(res :any){
     const vehicles = this.vehicleService.vehicles;
