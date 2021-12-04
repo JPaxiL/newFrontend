@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { GeofencesService } from '../../services/geofences.service';
 
+import { MapServicesService } from '../../../map/services/map-services.service';
+
+
 @Component({
   selector: 'app-geocerca-lists',
   templateUrl: './geocerca-lists.component.html',
@@ -40,6 +43,25 @@ export class GeocercaListsComponent implements OnInit {
   clickLocate(geo:any){
     console.log("localizar una geocerca");
     console.log(geo);
+  }
+
+  clickConfigurarGeocerca(id:number) {
+    console.log('clickConfigurarGeocerca');
+    this.geofencesService.nombreComponente = "AGREGAR";
+    console.log(id);
+    this.geofencesService.action         = "edit";
+    this.geofencesService.idGeocercaEdit = id;
+
+
+
+  }
+
+  clickEliminarGeocerca(id:number) {
+    console.log('clickEliminarGeocerca');
+    console.log(id);
+    this.geofencesService.action = "delete";
+
+
   }
 
 }
