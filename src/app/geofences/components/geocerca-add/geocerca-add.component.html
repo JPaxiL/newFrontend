@@ -2,6 +2,8 @@
     <h5>Geocerca poligonal&nbsp;<span class="fs-6 fw-light" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar' : 'Nuevo' " ></span></h5>
 
 
+    <!-- <button type="submit" (click)="fin_editar()" class="btn btn-success btn-sm" >fin editar</button> -->
+
     <div class="row p-1">
         <div class="form-group">
           <label for="geofence-name" class="control-label fw-bold">Nombre</label>
@@ -149,10 +151,10 @@
       <div class="col-sm-3">
       </div>
       <div class="col-sm-3">
-        <button type="button" (click)="clickCancelar()" class="btn btn-secondary btn-sm" >Cancelar</button>
+        <button type="button" (click)="clickCancelar(form.id)" class="btn btn-secondary btn-sm" >Cancelar</button>
       </div>
       <div class="col-sm-3">
-        <button type="submit" (click)="clickGuardar()" class="btn btn-success btn-sm" >Guardar</button>
+        <button type="submit" (click)="clickGuardar(form.id)" class="btn btn-success btn-sm" >Guardar</button>
       </div>
       <div class="col-sm-3">
       </div>

@@ -1,5 +1,12 @@
 <div style="height: calc(100vh - 150px); overflow-y: auto;">
 
+  <div class="row">
+    <div class="col-sm-9">
+      <button type="button" class="btn btn-primary" (click)="clickAgregarGeocerca()">Agregar</button>
+    </div>
+  </div>
+
+
   <table id="tbl_geos" class="table table-hover">
     <colgroup>
       <col width="7%" />
@@ -56,7 +63,7 @@
                 </button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                   <button ngbDropdownItem><a (click)="clickConfigurarGeocerca(geo.trama.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</a></button>
-                  <button ngbDropdownItem><a (click)="clickEliminarGeocerca(geo.trama.id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</a></button>
+                  <button ngbDropdownItem><a (click)="clickEliminarGeocerca($event, geo.trama.id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</a></button>
                 </div>
               </div>
             </td>

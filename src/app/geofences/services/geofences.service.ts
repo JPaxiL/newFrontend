@@ -76,6 +76,14 @@ export class GeofencesService {
     return response.data;
   }
 
+  public async store(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/zone`,zone).toPromise();
+    return response.data;
+  }
 
+  public async delete(id: any){
+    const response:ResponseInterface = await this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/zone/${id}`).toPromise();
+    return response.data;
+  }
 
 }
