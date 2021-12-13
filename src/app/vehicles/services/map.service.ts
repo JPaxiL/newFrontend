@@ -120,6 +120,7 @@ export class MapService {
       }
       */
       const vehicles = this.vehicleService.vehicles;
+      const vehiclestree = this.vehicleService.vehiclesTree;
       // console.log("vehicles socket",vehicles);
 
       const resultado = vehicles.find( (vehi: any) => vehi.IMEI == data.IMEI.toString() );
@@ -146,11 +147,60 @@ export class MapService {
 
         // vehicles[index].
         this.vehicleService.vehicles = vehicles;
+        // console.log('listable =====',this.vehicleService.listTable);
         if(this.vehicleService.listTable==0){
           this.vehicleService.reloadTable.emit();
-        }else{
-          // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
-          this.vehicleService.reloadTableTree.emit(this.vehicleService.vehiclesTree);
+        }else if(this.vehicleService.listTable==1){
+          //add register to treetable;
+          const tree = this.vehicleService.vehiclesTree;
+          // console.log('groups',this.vehicleService.groups);
+          let index_group = -1;//this.vehicleService.groups.indexOf(vehicles[index]["grupo"]);
+          for (const key in tree) {
+            if (tree[key]['data']['name']==vehicles[index]["grupo"]) {
+              index_group = parseInt(key);
+            }
+          }
+
+
+          let e = tree[index_group]['children'];
+          let index_convoy: number = -1;
+          //buscando index convoy;
+          for(const i in e){
+
+            if(e[parseInt(i)]['data']['name']==vehicles[index]['convoy']){
+              index_convoy = parseInt(i);
+            }
+          }
+          // buscando index registro tree
+          let aux_vehicles = tree[index_group]['children']![index_convoy]["children"];
+          let index_vehicle = -1;
+          for (const i in aux_vehicles) {
+            if(aux_vehicles[parseInt(i)]['data']['id']==vehicles[index]['id']){
+                index_vehicle = parseInt(i);
+            }
+          }
+          // console.log('index grupo = ',index_group);
+          // console.log('index convoy = ',index_convoy);
+          // console.log('index vehicle = ',index_vehicle);
+          // console.log('placa ->'+vehicles[index]['name']+'grupo'+vehicles[index]['grupo']+'convoy'+vehicles[index]['convoy']);
+          // console.log('aux_vehicles',aux_vehicles);
+          // console.log('tree',tree); //ok
+
+          if(index_group>=0&&index_convoy>=0&&index_vehicle>=0){
+            // console.log('registro entrante ',vehicles[index]);
+            // console.log('registro a actualizar',tree[index_group]['children']![index_convoy]["children"]![index_vehicle]['data']);
+
+            tree[index_group]['children']![index_convoy]["children"]![index_vehicle]['data'] = vehicles[index];
+            this.vehicleService.vehiclesTree = tree;
+          }
+
+          // if(tree[index_group]['children'][index_convoy]["children"]){
+          //
+          //   let aux_reg = tree[index_group]['children'][index_convoy]["children"];
+          //   console.log('aux reg == ',aux_reg);
+          // }
+          // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles); -->obsoleto
+          this.vehicleService.reloadTableTree.emit();
         }
         this.map.removeLayer(this.marker[data.IMEI]);
         if(vehicles[index].eye){
@@ -162,6 +212,7 @@ export class MapService {
 
     }
   }
+
   changeStatusEye(id: number): void {
     this.changeEye.emit(id);
   }

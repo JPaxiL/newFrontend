@@ -32,5 +32,8 @@ export class VehicleConfigService {
   putGroupDelete(req: any): Observable<any>{
     return this.http.put(this.api_url+"/api/group_delete",req);
   }
+  putGroupUpdate(req: any): Observable<any>{
+    return this.http.put(this.api_url+"/api/group_update",req);
+  }
 
 }

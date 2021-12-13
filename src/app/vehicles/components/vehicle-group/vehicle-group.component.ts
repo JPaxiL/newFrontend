@@ -237,48 +237,97 @@ export class VehicleGroupComponent implements OnInit {
 
     this.loading=true;
     this.formDisplay = "none";
-    this.configService.postGroup(req).subscribe((info:any) => {
-      console.log("result submit",info);
-      if(info.res){
-            const vehicles = this.vehicleService.vehicles;
-            for (const key in this.list2) {
-              const index = vehicles.indexOf(this.list2[key])
-              // console.log('index',index);
-              if(this.option=='convoy'){
-                vehicles[index].idconvoy=info.data['id'];
-                vehicles[index].convoy=info.data['nombre'];
+    if(this.vehicleService.demo){
+      console.log('demoo');
+      const info = {
+        data:{
+          id:this.vehicleService.demo_id,
+          nombre:this.nameTarget
 
-              }else{
-                vehicles[index].idgrupo=info.data['id'];
-                vehicles[index].grupo=info.data['nombre'];
-
-              }
-              // console.log('vehicles index',vehicles[index])
-            }
-            this.vehicleService.vehicles = vehicles;
-            // console.log('new vehicles',vehicles);
-            //reload talbe
-            if(this.vehicleService.listTable==0){
-              this.vehicleService.reloadTable.emit();
-            }else{
-              this.vehicleService.reloadTableTree.emit();
-            }
-            this.onHideEvent.emit(false);
-        //update data local
-        //mensaje de exito
-        // this.eventUpdate.emit(this.vehicle);
-        // this.eventDisplay.emit(false);
-        this.loading=false;
-        this.list2=[];
-        this.formDisplay = "block";
-      }else{
-        this.loading=false;
-        this.formDisplay = "block";
-        //mensaje de error
+        }
       }
-    });
-  }
+      this.addGroup(info);
+      this.vehicleService.demo_id++;
+    }else{
+      this.configService.postGroup(req).subscribe((info:any) => {
+        console.log("result submit",info);
+        if(info.res){
+          this.addGroup(info);
+          // const vehicles = this.vehicleService.vehicles;
+          // for (const key in this.list2) {
+          //   const index = vehicles.indexOf(this.list2[key])
+          //   // console.log('index',index);
+          //   if(this.option=='convoy'){
+          //     vehicles[index].idconvoy=info.data['id'];
+          //     vehicles[index].convoy=info.data['nombre'];
+          //
+          //   }else{
+          //     vehicles[index].idgrupo=info.data['id'];
+          //     vehicles[index].grupo=info.data['nombre'];
+          //
+          //   }
+          //   // console.log('vehicles index',vehicles[index])
+          // }
+          // this.vehicleService.vehicles = vehicles;
+          // // console.log('new vehicles',vehicles);
+          // //reload talbe
+          // if(this.vehicleService.listTable==0){
+          //   this.vehicleService.reloadTable.emit();
+          // }else{
+          //   this.vehicleService.reloadTableTree.emit();
+          // }
+          // this.onHideEvent.emit(false);
+          // //update data local
+          // //mensaje de exito
+          // // this.eventUpdate.emit(this.vehicle);
+          // // this.eventDisplay.emit(false);
+          // this.loading=false;
+          // this.list2=[];
+          // this.formDisplay = "block";
+        }else{
+          this.loading=false;
+          this.formDisplay = "block";
+          //mensaje de error
+        }
+      });
 
+    }
+  }
+  addGroup(info: any){
+    console.log('addgroup info =',info);
+    const vehicles = this.vehicleService.vehicles;
+    for (const key in this.list2) {
+      const index = vehicles.indexOf(this.list2[key])
+      // console.log('index',index);
+      if(this.option=='convoy'){
+        vehicles[index].idconvoy=info.data['id'];
+        vehicles[index].convoy=info.data['nombre'];
+
+      }else{
+        vehicles[index].idgrupo=info.data['id'];
+        vehicles[index].grupo=info.data['nombre'];
+
+      }
+      console.log('vehicles index',vehicles[index])
+    }
+    this.vehicleService.vehicles = vehicles;
+    console.log('new vehicles',vehicles);
+    //reload talbe
+    if(this.vehicleService.listTable==0){
+      this.vehicleService.reloadTable.emit();
+    }else{
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+      this.vehicleService.reloadTableTree.emit();
+    }
+    this.onHideEvent.emit(false);
+    //update data local
+    //mensaje de exito
+    // this.eventUpdate.emit(this.vehicle);
+    // this.eventDisplay.emit(false);
+    this.loading=false;
+    this.list2=[];
+    this.formDisplay = "block";
+  }
   onShow(){
     console.log("on show");
     // this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");

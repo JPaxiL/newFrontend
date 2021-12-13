@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { VehicleService } from '../../services/vehicle.service';
 
 @Component({
@@ -11,9 +11,11 @@ export class PanelVehiclesComponent implements OnInit {
   displayGroup: boolean = false;
 
   constructor(private vehicleService: VehicleService) {
+    this.vehicleService.listTable = 1;
     this.listTable = this.vehicleService.listTable;
+
     this.vehicleService.clickListTable.subscribe(res=>{
-      console.log("cambio de tabla panel", res);
+      // console.log("cambio de tabla panel", res);
       this.listTable = this.vehicleService.listTable;
     } );
   }
@@ -21,12 +23,16 @@ export class PanelVehiclesComponent implements OnInit {
   ngOnInit(): void {
 
   }
+  ngOnDestroy() : void {
+    // console.log('OnDestroy .......');
+    this.vehicleService.listTable = -1;
+  }
   onHideDisplayGroup(event : boolean){
-    console.log('hide group panel...',event);
+    // console.log('hide group panel...',event);
     this.displayGroup = event;
   }
   eventDisplayGroup(event : boolean){
-    console.log('desde panel',event);
+    // console.log('desde panel',event);
     this.displayGroup = event;
   }
 

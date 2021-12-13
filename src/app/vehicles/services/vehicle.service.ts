@@ -17,16 +17,21 @@ export class VehicleService {
 
   private URL_LIST = environment.apiUrl+'/api/tracker';
 
-  private demo:boolean = false;
+  public demo:boolean = false;
+  public demo_id : number = 0;
+  // private url_demo = 'assets/trackers.json';
+  private url_demo = 'assets/trackers3.json';
   public treeTableStatus: boolean = false;
   public TableStatus: boolean = false;
   public vehicles: any = [];
   public vehiclesTree: TreeNode[]=[];
+  public groups: any = [];
+  public convoys: any = [];
   private timeDemo: number = 1000;
   public statusDataVehicle: boolean = false;
   public statusDataVehicleTree: boolean = false;
 
-  public listTable = 1; // 0 general, 1 = group
+  public listTable = -1; // 0 general, 1 = group
 
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() dataTreeCompleted = new EventEmitter<any>();
@@ -45,12 +50,12 @@ export class VehicleService {
         cargar data,
         emitir evento de carga a demas componentes
     */
-
+    // console.log('vehicle service constructor ...');
     //tiempo critico
     if(this.demo){
       setTimeout(()=>{
         // console.log("carga de data");
-        this.http.get<any>('assets/trackers.json')
+        this.http.get<any>(this.url_demo)
                     .toPromise()
                     .then(res => {
                       // console
@@ -309,8 +314,8 @@ export class VehicleService {
     }
     const v_gps = vehicle.speed;
     vehicle.v_sat = Number(vehicle.parametrosGet["sat"]);
-    const v_di4 = vehicle.parametrosGet["di4"];
     const v_di1 = vehicle.parametrosGet["di1"];
+    const v_di4 = vehicle.parametrosGet["di4"];
     const v_acv = vehicle.parametrosGet["acv"];
     const v_accv = vehicle.parametrosGet["accv"];
     // const v_status = item.parametrosGet["GPRS Status"];
@@ -451,26 +456,26 @@ export class VehicleService {
 
     //identificando grupos
     let map: any=[];
-    let groups: any = [];
-    let convoys: any = [];
+    this.groups = [];
+    this.convoys = [];
     let status_group = false;
     let status_convoy = false;
     let prueba = [];
 
     for(const index in data){
-      if(groups.includes(data[index]['grupo'])){
+      if(this.groups.includes(data[index]['grupo'])){
       }else{
-        groups.push(data[index]['grupo']);
+        this.groups.push(data[index]['grupo']);
         status_group= true;
       }
-      if(convoys.includes(data[index]['grupo']+'_'+data[index]['convoy'])){
+      if(this.convoys.includes(data[index]['grupo']+'_'+data[index]['convoy'])){
       }else{
-        convoys.push(data[index]['grupo']+'_'+data[index]['convoy']);
+        this.convoys.push(data[index]['grupo']+'_'+data[index]['convoy']);
         status_convoy= true;
       }
 
-      console.log("posibilidad "+status_group+" - "+status_convoy);
-      console.log()
+      // console.log("posibilidad "+status_group+" - "+status_convoy);
+      // console.log()
       // posibilidades
       // 1 1
       // 0 1
@@ -499,12 +504,12 @@ export class VehicleService {
       }else if(!status_group&&status_convoy){
         prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
         //recuperar el id del grupo
-        let index_group = groups.indexOf(data[index]["grupo"]);
+        let index_group = this.groups.indexOf(data[index]["grupo"]);
         //reucperar id del convoy
         // let index_convoy = map[index_group]['children']['data']
         map[index_group]['children'].push(
           {
-            data : {name: data[index]['convoy'], col: 3, type:'convoy', id:data[index]['idgrupo']},
+            data : {name: data[index]['convoy'], col: 3, type:'convoy', id:data[index]['idconvoy']},
             expanded: true,
             children: [
               {
@@ -516,7 +521,7 @@ export class VehicleService {
         // console.log("index_group",index_group)
         // map[data]
       }else if(status_group&&!status_convoy){//igual que el caso 1 1
-        prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
+        // prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
         // console.log("data[index]['convoy']",data[index]['convoy']);
         map.push(
           {
@@ -536,9 +541,9 @@ export class VehicleService {
           }
         );
       }else if(!status_group&&!status_convoy){
-        prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
+        // prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
         //recuperar el id del grupo
-        let index_group = groups.indexOf(data[index]["grupo"]);
+        let index_group = this.groups.indexOf(data[index]["grupo"]);
         //recuperar el id del convoy dentro del grupo
         // let index_convoy = map[index_group]['children']['data']
 
@@ -564,8 +569,8 @@ export class VehicleService {
       status_convoy=false;
 
     }
-    // console.log("groups",groups);
-    // console.log("convoys",convoys);
+    // console.log("groups",this.groups);
+    // console.log("convoys",this.convoys);
     // console.log("map",map);
     // console.log("prueba",prueba);
 
