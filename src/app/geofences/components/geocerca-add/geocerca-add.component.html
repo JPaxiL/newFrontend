@@ -1,1 +1,164 @@
-<p>geocerca-add works! PARA AGREGAR</p>
+<div class="card-body panel-geocerca">
+    <h5>Geocerca poligonal&nbsp;<span class="fs-6 fw-light" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar' : 'Nuevo' " ></span></h5>
+
+
+    <!-- <button type="submit" (click)="fin_editar()" class="btn btn-success btn-sm" >fin editar</button> -->
+
+    <div class="row p-1">
+        <div class="form-group">
+          <label for="geofence-name" class="control-label fw-bold">Nombre</label>
+          <input type="text" class="form-control claseinputs" id="geofence-name" name="nombre" [(ngModel)]="form.nombre" required>
+        </div>
+    </div>
+
+    <div class="row p-1">
+      <div class="form-group">
+        <label for="geocerca-descripcion" class="control-label fw-bold">Descripción</label>
+        <textarea id="geocerca-descripcion" class="form-control fsize11" rows="3" name="descripcion" [(ngModel)]="form.descripcion"></textarea>
+      </div>
+  </div>
+
+
+
+    <div class="row p-1" >
+
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="geocerca-perimetro" class="fw-bold">Perímetro</label>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control claseinputs text-end" [(ngModel)]="form.perimetro" readonly>
+            <span class="input-group-text claseinputs">km</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="geocerca-area" class="fw-bold">Área</label>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control claseinputs text-end" [(ngModel)]="form.area"  readonly>
+            <span class="input-group-text claseinputs">km<sup>2</sup></span>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <div class="row p-1">
+      <label for="geoColor" class="col-sm-4 fw-bold">Color: </label>
+      <div class="col-sm-3">
+        <input type="color" class="form-control form-control-color form-control-color-gl" id="geoColor" [(ngModel)]="form.color"  title="Elige un color">
+      </div>
+
+    </div>
+
+
+
+    <div class="row p-1">
+          <label for="geofence-categoria" class="control-label fw-bold">Categoría</label>
+          <div class="col-sm-12">
+            <select class="form-control claseinputs" id="opcionGraficoConsola" [(ngModel)]="form.categoria" title="Tipo de Gráfico"  data-bs-toggle="tooltip" data-bs-placement="top">
+              <option [value]="item.id" *ngFor="let item of availableOptionsCategoria">{{item.name}}</option>
+            </select>
+          </div>
+
+
+    </div>
+
+    <div class="row p-1">
+        <div class="col-sm-4 text-end">
+          <label class="fw-bold ">Velocidad:</label>
+        </div>
+
+        <div class="col-sm-2">
+          <input class="" type="checkbox" id="chckActivarVelocidad" [(ngModel)]="form.checkVelocidad" >
+        </div>
+    </div>
+
+
+
+    <div class="row p-1">
+
+        <div class="col-sm-4 text-end">
+          <label class="fw-bold ">Límite de Velocidad:</label>
+        </div>
+
+
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input min="10" type="number" class="form-control claseinputs text-center" [(ngModel)]="form.limite_velocidad" [disabled]="!form.checkVelocidad">
+                <span class="input-group-text claseinputs">km/h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row p-1">
+
+      <div class="col-sm-4 text-end">
+        <label class="fw-bold ">Tolerable:</label>
+      </div>
+
+
+      <div class="col-sm-8">
+          <div class="input-group">
+              <input type="number" [min]="form.limite_velocidad + 1" class="form-control claseinputs text-center" [(ngModel)]="form.limite_tolerable" [disabled]="!form.checkVelocidad">
+              <span class="input-group-text claseinputs">km/h</span>
+          </div>
+      </div>
+    </div>
+
+
+    <div class="row p-1">
+
+      <div class="col-sm-4 text-end">
+        <label class="fw-bold ">Grave:</label>
+      </div>
+
+
+      <div class="col-sm-8">
+          <div class="input-group">
+              <input type="number" [min]="form.limite_tolerable + 1" class="form-control claseinputs text-center" [(ngModel)]="form.limite_grave" [disabled]="!form.checkVelocidad">
+              <span class="input-group-text claseinputs">km/h</span>
+          </div>
+      </div>
+    </div>
+
+
+    <div class="row p-1">
+
+      <div class="col-sm-4 text-end">
+        <label class="fw-bold ">Muy Grave:</label>
+      </div>
+
+      <div class="col-sm-8">
+          <div class="input-group">
+              <input type="number" [min]="form.limite_grave + 1" class="form-control  claseinputs text-center" [(ngModel)]="form.limite_muy_grave" [disabled]="!form.checkVelocidad">
+              <span class="input-group-text claseinputs">km/h</span>
+          </div>
+      </div>
+    </div>
+
+
+    <div class="row p-3">
+
+      <div class="col-sm-3">
+      </div>
+      <div class="col-sm-3">
+        <button type="button" (click)="clickCancelar(form.id)" class="btn btn-secondary btn-sm" >Cancelar</button>
+      </div>
+      <div class="col-sm-3">
+        <button type="submit" (click)="clickGuardar(form.id)" class="btn btn-success btn-sm" >Guardar</button>
+      </div>
+      <div class="col-sm-3">
+      </div>
+
+    </div>
+
+</div>
