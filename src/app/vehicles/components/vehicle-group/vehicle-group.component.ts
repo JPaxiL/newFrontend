@@ -327,6 +327,7 @@ export class VehicleGroupComponent implements OnInit {
     // this.eventDisplay.emit(false);
     this.loading=false;
     this.list2=[];
+    this.option = "nada";
     this.formDisplay = "block";
     this.formDisplayCreate = "none";
     this.name.nativeElement.value = "";
