@@ -341,7 +341,7 @@ export class TreeTableComponent implements OnInit {
     // console.log('borrando ...');
     this.buttonDisplay="none";
     this.vehicleConfigService.putGroupDelete(req).subscribe((info: any)=>{
-      // console.log('res = ',info);
+      console.log('descomponer res = ',info);
       this.loadingDelete = false;
       this.buttonDisplay="block";
       if(info.res){
@@ -362,6 +362,7 @@ export class TreeTableComponent implements OnInit {
           }
         }
         this.vehicleService.vehicles = aux_vehicles_tree;
+        this.vehicleService.vehiclesTree = this.vehicleService.createNode(aux_vehicles_tree);
         this.vehicleService.reloadTableTree.emit();
         this.textDelete = info.message;
         this.displayDelete = false;

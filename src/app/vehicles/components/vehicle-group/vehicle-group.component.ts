@@ -26,6 +26,7 @@ export class VehicleGroupComponent implements OnInit {
   value2: number = 1;
 
   option: string="nada";
+  formDisplayCreate : string = "none";
 
   selectedCategory: any = null;
 
@@ -68,14 +69,14 @@ export class VehicleGroupComponent implements OnInit {
   }
 
   onHide(){
-    console.log('on hide...');
+    // console.log('on hide...');
     this.onHideEvent.emit(false);
   }
   onOption(e : string){
-    console.log('option...',e);
-    console.log('vehicles',this.vehicleService.vehicles);
-    console.log('vehiclestree',this.vehicleService.vehiclesTree);
-
+    // console.log('option...',e);
+    // console.log('vehicles',this.vehicleService.vehicles);
+    // console.log('vehiclestree',this.vehicleService.vehiclesTree);
+    this.formDisplayCreate = "block";
     if(e=='grupo'){
       this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
 
@@ -85,7 +86,7 @@ export class VehicleGroupComponent implements OnInit {
       let vehicles = this.vehicleService.vehicles;
       for (const key in vehicles) {
         let status = true;
-        console.log(vehicles[key]['grupo']);
+        // console.log(vehicles[key]['grupo']);
         if(aux.length>0){
           for (const j in aux) {
             if(aux[j]['grupo']==vehicles[key]['grupo']||vehicles[key]['grupo']=='Unidades Sin Grupo'){
@@ -97,7 +98,7 @@ export class VehicleGroupComponent implements OnInit {
           aux.push(vehicles[key]);
         }
       }
-      console.log('resultado',aux);
+      // console.log('resultado',aux);
       this.groups = aux;
      //  this.groups = [
      //   { name: "Grupo", id: 0 },
@@ -107,7 +108,7 @@ export class VehicleGroupComponent implements OnInit {
     }
   }
   onChangeGroup(){
-    console.log('cambio de grupo',this.selectedGroup);
+    // console.log('cambio de grupo',this.selectedGroup);
     // enviar todas las unidades del grupo seleccionado
     let vehicles = this.vehicleService.vehicles;
     let aux = [];
@@ -134,7 +135,7 @@ export class VehicleGroupComponent implements OnInit {
       aux.push(this.list1[key]);
     }
     // inserto valores nuevos
-    console.log('subir a lista 2');
+    // console.log('subir a lista 2');
     for (const key in this.selectedList2) {
       // let index = aux.indexOf(this.selectedList2[key]);
       // console.log("index====",index);
@@ -170,7 +171,7 @@ export class VehicleGroupComponent implements OnInit {
       aux.push(this.list2[key]);
     }
     // inserto valores nuevos
-    console.log('subir a lista 2');
+    // console.log('subir a lista 2');
     for (const key in this.selectedList1) {
       // let index = aux.indexOf(this.selectedList1[key]);
       // console.log("index====",index);
@@ -233,7 +234,7 @@ export class VehicleGroupComponent implements OnInit {
     // };
 
     // console.log("submit",req);
-    console.log("dat enviada",req);
+    // console.log("dat enviada",req);
 
     this.loading=true;
     this.formDisplay = "none";
@@ -250,7 +251,7 @@ export class VehicleGroupComponent implements OnInit {
       this.vehicleService.demo_id++;
     }else{
       this.configService.postGroup(req).subscribe((info:any) => {
-        console.log("result submit",info);
+        console.log("post group res =",info);
         if(info.res){
           this.addGroup(info);
           // const vehicles = this.vehicleService.vehicles;
@@ -294,7 +295,7 @@ export class VehicleGroupComponent implements OnInit {
     }
   }
   addGroup(info: any){
-    console.log('addgroup info =',info);
+    // console.log('addgroup info =',info);
     const vehicles = this.vehicleService.vehicles;
     for (const key in this.list2) {
       const index = vehicles.indexOf(this.list2[key])
@@ -308,10 +309,10 @@ export class VehicleGroupComponent implements OnInit {
         vehicles[index].grupo=info.data['nombre'];
 
       }
-      console.log('vehicles index',vehicles[index])
+      // console.log('vehicles index',vehicles[index])
     }
     this.vehicleService.vehicles = vehicles;
-    console.log('new vehicles',vehicles);
+    // console.log('new vehicles',vehicles);
     //reload talbe
     if(this.vehicleService.listTable==0){
       this.vehicleService.reloadTable.emit();
@@ -327,9 +328,13 @@ export class VehicleGroupComponent implements OnInit {
     this.loading=false;
     this.list2=[];
     this.formDisplay = "block";
+    this.formDisplayCreate = "none";
+    this.name.nativeElement.value = "";
+    this.description.nativeElement.value = "";
+
   }
   onShow(){
-    console.log("on show");
+    // console.log("on show");
     // this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
 
   }
