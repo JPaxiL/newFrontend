@@ -11,7 +11,9 @@ export class EyeComponent implements OnInit {
 
   params: any;
 
-  constructor(private vehicleService:VehicleService) { }
+  constructor(
+    private vehicleService : VehicleService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -24,15 +26,16 @@ export class EyeComponent implements OnInit {
 
     this.params.value = !this.params.value;
 
-    const data = this.vehicleService.vehicles;
+    // const data = this.vehicleService.vehicles;
+    //
+    // for (let x of data){
+    //   if(this.params.data.IMEI == x.IMEI){
+    //     x.eye = !x.eye;
+    //   }
+    // }
+    // this.vehicleService.vehicles = data;
+    this.vehicleService.clickEye.emit(this.params.data.IMEI);
 
-    for (let x of data){
-      if(this.params.data.IMEI == x.IMEI){
-        x.eye = !x.eye;
-      }
-    }
-    this.vehicleService.vehicles = data;
-    this.vehicleService.drawIconMap.emit(data);
     // this.vehicleService.updateVehiclesData(data);
   }
 

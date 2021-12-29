@@ -23,14 +23,16 @@ export class EyeHeaderComponent implements IHeaderAngularComp {
   }
 
   onClickEye(){
+    console.log('all eye');
     this.value = !this.value;
 
-    const data = this.vehicleService.getVehiclesDemo();
-
-    for (let x of data){
-      x.eye=this.value;
-    }
-    this.vehicleService.updateVehiclesData(data);
+    // const data = this.vehicleService.vehicles;
+    //
+    // for (let x of data){
+    //   x.eye=this.value;
+    // }
+    this.vehicleService.clickEyeAll.emit()
+    // this.vehicleService.updateVehiclesData(data);
   }
 
 }

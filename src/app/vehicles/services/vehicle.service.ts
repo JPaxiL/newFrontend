@@ -17,10 +17,10 @@ export class VehicleService {
 
   private URL_LIST = environment.apiUrl+'/api/tracker';
 
-  public demo:boolean = false;
+  public demo:boolean = true;
   public demo_id : number = 0;
-  // private url_demo = 'assets/trackers.json';
-  private url_demo = 'assets/trackers3.json';
+  private url_demo = 'assets/trackers.json';
+  // private url_demo = 'assets/trackers3.json';
   public treeTableStatus: boolean = false;
   public TableStatus: boolean = false;
   public vehicles: any = [];
@@ -42,6 +42,7 @@ export class VehicleService {
   @Output() sortLimit = new EventEmitter<any>();
   @Output() clickIcon = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
+  @Output() clickEyeAll = new EventEmitter<any>();
   @Output() clickListTable = new EventEmitter<any>();
 
   constructor(private http: HttpClient) {
