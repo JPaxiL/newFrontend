@@ -12,6 +12,7 @@ import { VehicleService } from '../../services/vehicle.service';
 export class EyeHeaderComponent implements IHeaderAngularComp {
 
   public value: boolean = true;
+  params: any;
 
 
   agInit(headerParams: IHeaderParams): void {}
@@ -25,14 +26,15 @@ export class EyeHeaderComponent implements IHeaderAngularComp {
   onClickEye(){
     console.log('all eye');
     this.value = !this.value;
+    console.log('params',this.params);
 
-    // const data = this.vehicleService.vehicles;
-    //
-    // for (let x of data){
-    //   x.eye=this.value;
-    // }
-    this.vehicleService.clickEyeAll.emit()
-    // this.vehicleService.updateVehiclesData(data);
+    const data = this.vehicleService.vehicles;
+
+    for (let x of data){
+      x.eye=this.value;
+    }
+    // this.vehicleService.clickEyeAll.emit()
+    this.vehicleService.updateVehiclesData(data);
   }
 
 }

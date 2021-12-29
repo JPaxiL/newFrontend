@@ -41,7 +41,7 @@ export class MapService {
       this.onDrawIcon(this.map);
     });
     this.socketWebService.callback.subscribe(res =>{
-      // this.monitor(res);
+      this.monitor(res);
     });
     this.followService.callback.subscribe(res =>{
       // console.log("desde map service");
@@ -90,6 +90,7 @@ export class MapService {
         this.markerClusterGroup.removeLayer(this.marker[vehicles[i].IMEI]);
       }
     }
+    this.vehicleService.vehicles = vehicles;
   }
   followClickIcon(map: any, IMEI: string){
     const vehicles = this.vehicleService.vehicles;
@@ -235,7 +236,9 @@ export class MapService {
           // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles); -->obsoleto
           this.vehicleService.reloadTableTree.emit();
         }
-        this.map.removeLayer(this.marker[data.IMEI]);
+
+        // this.map.removeLayer(this.marker[data.IMEI]);
+        this.markerClusterGroup.removeLayer(this.marker[data.IMEI]);
         if(vehicles[index].eye){
           this.drawIcon(vehicles[index], this.map);
         }
@@ -270,7 +273,8 @@ export class MapService {
     const e = this.vehicleService.vehicles;
     let aux_cont = 0;
     for (const layer in this.marker){
-      this.map.removeLayer(this.marker[layer]);
+      // this.map.removeLayer(this.marker[layer]);
+      this.markerClusterGroup.removeLayer(this.marker[layer]);
       aux_cont++;
     }
     console.log('contador marker = ',aux_cont);
