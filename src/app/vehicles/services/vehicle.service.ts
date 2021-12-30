@@ -17,7 +17,7 @@ export class VehicleService {
 
   private URL_LIST = environment.apiUrl+'/api/tracker';
 
-  public demo:boolean = true;
+  public demo:boolean = false;
   public demo_id : number = 0;
   private url_demo = 'assets/trackers.json';
   // private url_demo = 'assets/trackers3.json';

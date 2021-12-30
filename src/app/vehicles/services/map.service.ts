@@ -240,7 +240,10 @@ export class MapService {
         // this.map.removeLayer(this.marker[data.IMEI]);
         this.markerClusterGroup.removeLayer(this.marker[data.IMEI]);
         if(vehicles[index].eye){
-          this.drawIcon(vehicles[index], this.map);
+          console.log('socket IMEI',data.IMEI);
+          // console.log('markerClusterGroup',this.markerClusterGroup);
+          // this.drawIconUpdate(vehicles[index], this.map);
+          // this.drawIcon(vehicles[index], this.map);
         }
 
       }
@@ -359,6 +362,37 @@ export class MapService {
     return group;
   }
 
+  private drawIconUpdate(data : any, map : any){
+    let iconUrl = './assets/images/objects/nuevo/'+data.icon;
+    if(data.speed>0){
+      iconUrl = './assets/images/accbrusca.png';
+    }
+    const iconMarker = L.icon({
+      iconUrl: iconUrl,
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+      popupAnchor:  [-3, -40]
+    });
+
+    const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      '<aside class="">'+
+        '<small>CONVOY: '+data.convoy+'</small><br>'+
+        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small>REFERENCIA: '+'NN'+'</small><br>'+
+        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+        '<small>TIEMPO DE PARADA: </small>'+
+      '</aside>';
+
+    // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
+    const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
+    // tempMarker.bindLabel("My Label");
+    // tempMarker.bindTooltip("text here", { permanent: true, offset: [0, 12] });
+    // // this
+
+    this.markerClusterGroup.addLayer(tempMarker);
+    // this.markerClusterGroup.addTo(this.map);
+    this.marker[data.IMEI]=tempMarker;
+  }
   private drawIcon(data:any, map: any): void{
     // assets/images/objects/nuevo/{{ rowData['icon']
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
