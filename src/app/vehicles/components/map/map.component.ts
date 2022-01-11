@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // import {latLng, MapOptions, tileLayer, Map, Marker, icon} from 'leaflet';
 import * as L from 'leaflet';
+import { VehicleService } from '../../services/vehicle.service';
 
 @Component({
   selector: 'app-map',
@@ -11,40 +12,81 @@ export class MapComponent implements OnInit {
 
   mapOptions!: L.MapOptions;
   map!: L.Map;
-  markerClusterGroup!: L.MarkerClusterGroup;
+  // markerClusterGroup!: L.MarkerClusterGroup;
   markerClusterData! : any;
+  private centroid: L.LatLngExpression = [-11.107323, -75.523437];
   generateLat() { return Math.random() * 360 - 180; }
 	generateLon() { return Math.random() * 180 - 90; }
 
-  constructor() { }
+  constructor(private vehicleService:VehicleService) {
+    this.vehicleService.dataCompleted.subscribe(vehicles=>{
+      this.dataLoading();
+    });
+  }
 
   ngOnInit(): void {
      this.initializeMapOptions();
-     this.markerClusterGroup = L.markerClusterGroup({removeOutsideVisibleBounds: true});
+     // this.markerClusterGroup = L.markerClusterGroup({removeOutsideVisibleBounds: true});
+
+
+     // this.map = map;
+     // this.addSampleMarker();
+  }
+  dataLoading(){
+
+    // this.markerClusterData = this.generateData(1000);
+    this.markerClusterData = this.addVehiclesMarker(this.vehicleService.vehicles);
+    let vehicles = this.vehicleService.vehicles;
+    console.log('vehicles',vehicles);
+
+    console.log('markerClusterData',this.markerClusterData[0]);
+    console.log('markerClusterData',this.markerClusterData[0]['_latlng']['lat']);
+    console.log('markerClusterData',this.markerClusterData[0]['_latlng']['lng']);
+
   }
 
+  addVehiclesMarker(vehicles : any) : L.Marker[]{
+    const data: L.Marker[] = [];
+
+    for (let i = 0; i < vehicles.length; i++) {
+
+      const icon = L.icon({
+        iconSize: [ 25, 41 ],
+        iconAnchor: [ 13, 41 ],
+        iconUrl: '2b3e1faf89f94a4835397e7a43b4f77d.png',
+        iconRetinaUrl: '680f69f3c2e6b90c1812a813edf67fd7.png',
+        shadowUrl: 'a0c6cc1401c107b501efee6477816891.png'
+      });
+
+      data.push(L.marker([ vehicles[i].longitud, vehicles[i].latitud ], { icon }));
+    }
+
+    return data;
+  }
   onMapReady(map: L.Map) {
     this.map = map;
-    this.addSampleMarker();
-    this.markerClusterData = this.generateData(1000);
+    console.log('this.map',this.map);
+    // this.addSampleMarker();
+    // this.markerClusterData = this.generateData(1000);
+
 
   }
   //
-  private addSampleMarker() {
-    for(let i=0;i<10;i++){
-
-      let marker = new L.Marker([51.51+(i*10), 0+(i*10)])
-      .setIcon(
-        L.icon({
-          iconSize: [25, 41],
-          iconAnchor: [13, 41],
-          iconUrl: 'assets/marker_icon.png'
-        }));
-        this.markerClusterGroup.addLayer(marker);
-        // marker.addTo(this.map)
-    }
-    this.markerClusterGroup.addTo(this.map);
-  }
+  // private addSampleMarker() {
+  //   for(let i=0;i<10;i++){
+  //
+  //     let marker = new L.Marker([51.51+(i*10), 0+(i*10)])
+  //     .setIcon(
+  //       L.icon({
+  //         iconSize: [25, 41],
+  //         iconAnchor: [13, 41],
+  //         iconUrl: 'assets/marker_icon.png'
+  //       }));
+  //       this.markerClusterGroup.addLayer(marker);
+  //       // marker.addTo(this.map)
+  //   }
+  //   this.markerClusterGroup.addTo(this.map);
+  // }
   //
   private initializeMapOptions() {
     this.mapOptions = {

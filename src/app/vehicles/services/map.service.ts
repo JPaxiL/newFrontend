@@ -15,7 +15,8 @@ import { FollowService } from './follow.service';
 export class MapService {
 
   public map!: L.Map;
-  public markerClusterGroup!: L.MarkerClusterGroup;
+  // public markerClusterGroup!: L.MarkerClusterGroup;
+  public markerClusterGroup!: any;
   public markerClusterData!: any;
 
   public leafletEvent!: L.LeafletEvent;
@@ -32,7 +33,10 @@ export class MapService {
     private socketWebService: SocketWebService
   ) {
 
-    this.markerClusterGroup = L.markerClusterGroup({removeOutsideVisibleBounds: true});
+    this.markerClusterGroup = L.markerClusterGroup({
+      removeOutsideVisibleBounds: true,
+      zoomToBoundsOnClick: false
+    });
 
     this.vehicleService.drawIconMap.subscribe(e=>{
       this.onDrawIcon(this.map);
@@ -68,6 +72,9 @@ export class MapService {
       }
     }
     this.vehicleService.vehicles = vehicles;
+
+    //
+    console.log(this.marker[IMEI]);
     if(vehicle.eye==true){
       // this.map.addLayer(this.marker[IMEI]);
       this.markerClusterGroup.addLayer(this.marker[IMEI]);
@@ -100,6 +107,7 @@ export class MapService {
       if(vehicles[i].IMEI==IMEI){
         const aux2: [string, string] = [vehicles[i].latitud, vehicles[i].longitud];
         this.dataFitBounds.push(aux2);
+        console.log('coordenadas',aux2);
       }
     }
     //
@@ -181,7 +189,7 @@ export class MapService {
 
         // vehicles[index].
         this.vehicleService.vehicles = vehicles;
-        // console.log('listable =====',this.vehicleService.listTable);
+                // console.log('listable =====',this.vehicleService.listTable);
         if(this.vehicleService.listTable==0){
           this.vehicleService.reloadTable.emit();
         }else if(this.vehicleService.listTable==1){
@@ -238,15 +246,60 @@ export class MapService {
         }
 
         // this.map.removeLayer(this.marker[data.IMEI]);
-        this.markerClusterGroup.removeLayer(this.marker[data.IMEI]);
+        // this.markerClusterGroup.removeLayer(this.marker[data.IMEI]);
         if(vehicles[index].eye){
-          console.log('socket IMEI',data.IMEI);
+          console.log('data.longitud', data);
+          console.log('socket vehicles[index].name',vehicles[index].name);
+          // console.log()
+          //buscando layer
+          let cont = 0;
+          let object = this.markerClusterGroup.getLayers();
+          for (const key in object) {
+            if (object[key]['_tooltip']['_content']==vehicles[index].name) {
+              cont++;
+              console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+vehicles[index].name);
+              console.log(' antes content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+              console.log('clusterGroup = ',this.markerClusterGroup.getLayers()[key]);
+              console.log('key = ',key);
+              console.log('layers',this.markerClusterGroup.getLayers());
+              // console.log(this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+
+              // this.markerClusterGroup.getLayers()[this.marker[data.IMEI]]['_latlng']['lat']=vehicles[index].latitud;
+              // this.markerClusterGroup.getLayers()[this.marker[data.IMEI]]['_latlng']['lng']=vehicles[index].longitud;
+              // this.markerClusterGroup.getLayers()[key]['_latlng']['lat']=vehicles[index].latitud;
+              // this.markerClusterGroup.getLayers()[key]['_latlng']['lng']=vehicles[index].longitud;
+              let coord = {
+                lat : vehicles[index].latitud,
+                lng : vehicles[index].longitud
+              };
+              // console.log('coord',coord);
+              // console.log('aux = ', aux['_latlng']);
+              //_popup
+              this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
+                '<aside class="">'+
+                  '<small>CONVOY: '+vehicles[index].convoy+'</small><br>'+
+                  '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                  '<small>REFERENCIA: '+'NN'+'</small><br>'+
+                  '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
+                  '<small>TIEMPO DE PARADA: </small>'+
+                '</aside>';
+              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
+              this.markerClusterGroup.getLayers()[key].setLatLng(coord);
+              let aux = this.markerClusterGroup.getLayers()[key];
+              console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+            }
+          }
+          console.log('se econtraron '+cont+' resultados');
+          // console.log('aux = ', aux.getLatLng());
+
+// iconUrl = './assets/images/accbrusca.png';
+
           // console.log('markerClusterGroup',this.markerClusterGroup);
           // this.drawIconUpdate(vehicles[index], this.map);
           // this.drawIcon(vehicles[index], this.map);
         }
 
-      }
+      } //end if index vehicle
 
 
     }
@@ -275,11 +328,13 @@ export class MapService {
     let group : any[]= [];
     const e = this.vehicleService.vehicles;
     let aux_cont = 0;
-    for (const layer in this.marker){
-      // this.map.removeLayer(this.marker[layer]);
-      this.markerClusterGroup.removeLayer(this.marker[layer]);
-      aux_cont++;
-    }
+
+    this.markerClusterGroup.clearLayers();
+    // for (const layer in this.marker){
+    //   // this.map.removeLayer(this.marker[layer]);
+    //   this.markerClusterGroup.removeLayer(this.marker[layer]);
+    //   aux_cont++;
+    // }
     console.log('contador marker = ',aux_cont);
     console.log('marker',this.marker);
     // this.map.on("zoom", (e: any) => {
@@ -299,7 +354,7 @@ export class MapService {
           this.drawIcon(e[property], map);
         }
     }
-    // this.
+
     // this.markerClusterData = this.marker;
     // this.markerClusterGroup.addTo(this.map);
     // console.log('maker',this.marker);
@@ -310,8 +365,37 @@ export class MapService {
     }
     this.statusMap=true;
     this.dataFitBounds = [];
+    //EVENTO cluster lista
+    this.markerClusterGroup.on('clusterclick',function(a : any){
+      // console.log('click cluster...........');
+      var coords = a.layer.getLatLng();
+                      console.log(a.layer.getAllChildMarkers());
+                      var lista = '<table class="infovehiculos"><tbody>';
+                      var array = a.layer.getAllChildMarkers();
+                      console.log('array'+array);
+                      for (const i in array) {
+                        var aaa = array[i]['_tooltip']['_content'];
+                        console.log(aaa);
+                        lista = lista + '<tr style="margin:10px;"><td><div style="border-radius: 50%; width: 10px; height: 10px; "></div></td><td style="font-size: 14px;">' + aaa + '</td></tr>';
+                      }
+                      // for (var i=0; i<array.length; i++){
+                      //     var aaa = array[i].label._content.split(' <');
+                      //     // console.log(aaa[0]);
+                      //     var bbb = array[i].label._content.split('color:');
+                      //     var ccc = bbb[1].split(';');
+                      //     console.log(aaa[0]+" - color css : "+ccc[0]);
+                      //     lista = lista + '<tr style="margin:10px;"><td><div style="border-radius: 50%; width: 10px; height: 10px; background-color:' + ccc[0] + ';"></div></td><td style="font-size: 14px;">' + aaa[0] + '</td></tr>';
+                      // }
 
+                      lista = lista + '</tbody></table>';
+
+                      var popupMarker = L.popup({maxHeight: 400, closeButton: false, closeOnClick: true, autoClose: true, className: 'popupList'})
+                          .setLatLng([coords.lat, coords.lng])
+                          .setContent(lista)
+                          .openOn(map);
+    });
   }
+  // private
   private groupAllv2(distance : number): any{
     const e = this.vehicleService.vehicles;
     let group: any[] = [];
@@ -405,7 +489,7 @@ export class MapService {
       iconAnchor: [15, 30],
       popupAnchor:  [-3, -40]
     });
-
+    console.log('data.name',data.name);
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside class="">'+
         '<small>CONVOY: '+data.convoy+'</small><br>'+
@@ -418,13 +502,35 @@ export class MapService {
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.bindLabel("My Label");
-    // tempMarker.bindTooltip("text here", { permanent: true, offset: [0, 12] });
+    tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
     // // this
+    this.marker[data.IMEI]=tempMarker;
 
     this.markerClusterGroup.addLayer(tempMarker);
+    // console.log('this.markerClusterGroup',this.markerClusterGroup);
+    let object = this.markerClusterGroup.getLayers();
+    let cont = 0;
+    for (const key in object) {
+      if (object[key]['_tooltip']['_content']==data.name) {
+        console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+data.name);
+        console.log('key = ',key);
+        console.log('content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+        cont++;
+      }
+    }
+    console.log('registros encontrados ---> '+cont);
     this.markerClusterGroup.addTo(this.map);
-    this.marker[data.IMEI]=tempMarker;
-    // this.marker[data.IMEI]=this.markerClusterGroup;
+    console.log('marker placa '+data.name+' IMEI = ',this.marker[data.IMEI]);
+    // console.log('length = ',this.markerClusterGroup.getLayers().length-1);
+
+    // console.log('getlayer '+(this.markerClusterGroup.getLayers().length-1)+' -->',this.markerClusterGroup.getLayers()[this.markerClusterGroup.getLayers().length-1]);//ok
+    // let layer = this.markerClusterGroup.hasLayer(tempMarker);
+    // console.log('haslayer',layer); true si existe el layer
+    console.log('this.markerClusterGroup',this.markerClusterGroup);
+    let layers = this.markerClusterGroup.getLayers();
+    console.log('layers',layers);
+
+
     // console.log('maker',this.marker);
     // var markers = L.markerClusterGroup({
     // 	iconCreateFunction: function(cluster) {
