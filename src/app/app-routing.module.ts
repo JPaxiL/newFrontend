@@ -6,6 +6,7 @@ import { VehiclesComponent } from './vehicles/components/vehicles/vehicles.compo
 import { SessionComponent } from './vehicles/components/session/session.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { MapComponent } from './vehicles/components/map/map.component';
+import { ReportComponent } from './reports/components/report/report.component';
 
 // import { AuthGuard } from './vehicles/services/auth.guard';
 
@@ -21,6 +22,10 @@ const routes: Routes = [
     path: 'vehicles',
     // canActivate: [ AuthGuard ],
     component: MapComponent
+  },
+  {
+    path: 'reports',
+    component: ReportComponent
   },
   {
     path: 'session',

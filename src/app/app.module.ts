@@ -19,6 +19,10 @@ import {SelectButtonModule} from 'primeng-lts/selectbutton';
 import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {PickListModule} from 'primeng-lts/picklist';
 import {ListboxModule} from 'primeng-lts/listbox';
+import {CardModule} from 'primeng-lts/card';
+import {CheckboxModule} from 'primeng-lts/checkbox';
+import {MultiSelectModule} from 'primeng-lts/multiselect';
+
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -73,6 +77,9 @@ import { GeocercaAddComponent } from './geofences/components/geocerca-add/geocer
 import { GeocercaListsComponent } from './geofences/components/geocerca-lists/geocerca-lists.component';
 import { GeocercaMainComponent } from './geofences/components/geocerca-main/geocerca-main.component';
 import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehicle-group.component';
+import { ReportComponent } from './reports/components/report/report.component';
+import { FormComponent } from './reports/components/form/form.component';
+import { ResultComponent } from './reports/components/result/result.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +120,10 @@ import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehic
     GeocercaAddComponent,
     GeocercaListsComponent,
     GeocercaMainComponent,
-    VehicleGroupComponent
+    VehicleGroupComponent,
+    ReportComponent,
+    FormComponent,
+    ResultComponent
   ],
   imports: [
     CommonModule,
@@ -135,6 +145,9 @@ import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehic
     RadioButtonModule,
     PickListModule,
     ListboxModule,
+    CardModule,
+    CheckboxModule,
+    MultiSelectModule,
     LeafletModule,
     LeafletMarkerClusterModule,
     NgxsStoragePluginModule.forRoot({

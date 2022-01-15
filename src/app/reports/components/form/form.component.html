@@ -1,0 +1,45 @@
+
+<p-card>
+    <ng-template pTemplate="header">
+      <h2>Reportes GL Tracker</h2>
+    </ng-template>
+      <div class="p-fluid">
+        <div class="row">
+          <div class="p-field">
+            <label>Tipo de reporte :</label>
+            <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte"></p-dropdown>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="p-field">
+              <label>Vehiculos:</label>
+              <!-- <p-dropdown [options]="vehicles" [(ngModel)]="selectedVehicle" optionLabel="name" optionValue="id" [showClear]="false" placeholder="Seleccione vehiculos"></p-dropdown> -->
+              <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name"></p-multiSelect>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>Convoy:</label>
+              <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione convoy/grupo"></p-dropdown>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <p-checkbox name="groupname" value="val1" [(ngModel)]="selectedValues">Fecha/Hora</p-checkbox>
+              <label>Grupo</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues">Fecha/Hora</p-checkbox>
+            <label>Fecha/Hora</label>
+          </div>
+        </div>
+      </div>
+    <ng-template pTemplate="footer">
+      <button pButton type="button" label="Generar Reporte"></button>
+
+    </ng-template>
+</p-card>
