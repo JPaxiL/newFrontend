@@ -46,11 +46,13 @@ export class GeofencesService {
           weight: 3,
           fill: true,
           color: this.geofences[i].zone_color //'#000000'
-        }).addTo(this.mapService.map);
+        });
 
+        if (this.geofences[i].zone_visible == "true") {
+          this.geofences[i].geo_elemento.addTo(this.mapService.map);
+        }
 
         // this.geofences.geo_elemento.setLabel("NOMBRE");
-
       }
 
     });

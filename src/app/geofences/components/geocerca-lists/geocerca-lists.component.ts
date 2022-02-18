@@ -49,9 +49,33 @@ export class GeocercaListsComponent implements OnInit {
 
   }
 
-  clickLocate(geo:any){
+  clickLocate(id:number){
     console.log("localizar una geocerca");
+    var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
     console.log(geo);
+
+    this.mapService.map.fitBounds(geo.geo_elemento.getBounds(), {
+      padding: [50, 50]
+    });
+  }
+
+
+  clickShow(id:number){
+    console.log("localizar una geocerca");
+    var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
+
+    console.log(geo);
+
+    if (geo.zone_visible == "true") {
+
+      geo.zone_visible  = "false";
+      this.mapService.map.removeLayer(geo.geo_elemento);
+    } else {
+
+      geo.zone_visible  = "true";
+      geo.geo_elemento.addTo(this.mapService.map);
+    }
+
   }
 
   clickConfigurarGeocerca(id:number) {
@@ -86,6 +110,8 @@ export class GeocercaListsComponent implements OnInit {
           // this.deleteAlert.emit();
           // this.clickShowPanel(this.nameComponent);
 
+          this.mapService.map.removeLayer(geo.geo_elemento);
+
           for (var i = 0; i < this.geofencesService.geofences.length; i++) {
             if (this.geofencesService.geofences[i].id === id) {
               this.geofencesService.geofences.splice(i, 1);
@@ -112,19 +138,8 @@ export class GeocercaListsComponent implements OnInit {
     this.geofencesService.nombreComponente = "AGREGAR";
     this.geofencesService.action         = "add";
 
-    // var editableLayers = L.featureGroup().addTo(this.mapService.map);
-    // var drawControl = new L.Control.Draw({
-    //   edit: {
-    //     featureGroup: editableLayers
-    //   }
-    // });
-
-
-      // var polylineDrawer = new L.Draw.Polyline(this.mapService.map); // <-- throws error
-      // polylineDrawer.enable();
-
-
-
   }
+
+
 
 }

@@ -28,18 +28,18 @@
     </thead>
     <tbody style="height: 300px;">
 
-        <tr *ngFor="let geo of tblDataGeo;let indice=index"  (click)="clickLocate(geo)"  >
+        <tr *ngFor="let geo of tblDataGeo;let indice=index" >
 
             <!-- <td>{{geo.trama.zone_visible}}</td> -->
             <td width="7%">
-              <button class="btn btn-xs btn-link p-n" >
+              <button class="btn btn-xs btn-link p-n" (click)="clickShow(geo.trama.id)">
                 <i class="fa fa-lg" [ngClass]="{'far fa-eye': geo.trama.zone_visible === 'true', 'far fa-eye-slash' : geo.trama.zone_visible === 'false'}" style="font-size: 14px;" ></i>
               </button>
             </td>
 
             <!-- <td>{{geo.trama.zone_color}}</td> -->
             <td class="text-center" width="7%">
-              <button class="btn btn-xs btn-link p-n" >
+              <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.id)" >
                 <div [ngStyle]="{'background-color': geo.trama.zone_color}" style="width: 15px;height: 15px;" class="geofence-color" ></div>
               </button>
             </td>

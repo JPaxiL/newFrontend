@@ -54,7 +54,7 @@
     <div class="row p-1">
       <label for="geoColor" class="col-sm-4 fw-bold">Color: </label>
       <div class="col-sm-3">
-        <input type="color" class="form-control form-control-color form-control-color-gl" id="geoColor" [(ngModel)]="form.color"  title="Elige un color">
+        <input type="color" class="form-control form-control-color form-control-color-gl" id="geoColor" (change)="changeGeoColor(form.id)" [(ngModel)]="form.color"  title="Elige un color">
       </div>
 
     </div>
@@ -156,6 +156,10 @@
       <div class="col-sm-3">
         <button type="submit" (click)="clickGuardar(form.id)" class="btn btn-success btn-sm" >Guardar</button>
       </div>
+      <!-- <div class="col-sm-3">
+        <button id="boton1" class="btn btn-success btn-sm" >botn</button>
+      </div> -->
+
       <div class="col-sm-3">
       </div>
 
