@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { TreeNode } from 'primeng-lts/api';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import {DialogModule} from 'primeng-lts/dialog';
+import {ConfirmationService} from 'primeng-lts/api';
 
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
@@ -19,7 +20,9 @@ export class TreeTableComponent implements OnInit {
   sortOrder: number=1;
   display: boolean = false;
   displayDelete: boolean = false;
+  displayEditGroup: boolean = false;
   textDelete: string = "";
+  textHeaderEdit: string = "";
   loadingDelete: boolean = false;
   idDelete!: number;
   typeDelete!: string;
@@ -28,6 +31,18 @@ export class TreeTableComponent implements OnInit {
   cols: any[]=[];
   loading: boolean=true;
   buttonDisplay: string="block";
+  list1: any = [];
+  list2: any = [];
+  formDisplay : string = 'block'
+  selectedList1: any = [];
+  selectedList2: any = [];
+  private dataEdit : any = {
+    id : -1,
+    name : "",
+    type : ""
+  };
+
+  @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   color: any = {
     10:"green",
     20:"blue",
@@ -57,8 +72,10 @@ export class TreeTableComponent implements OnInit {
   constructor(
     private vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
-    private vehicleConfigService : VehicleConfigService
+    private vehicleConfigService : VehicleConfigService,
+    private confirmationService: ConfirmationService
   ) {
+    // this.vehicleService.listTable=1;
     configDropdown.placement = 'right-top';
     configDropdown.autoClose = false;
     this.vehicleService.dataTreeCompleted.subscribe(vehicles=>{
@@ -70,7 +87,7 @@ export class TreeTableComponent implements OnInit {
 
       if(this.vehicleService.treeTableStatus){
         // console.log('desde tree table ...');
-        this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
+        // this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
         this.vehicles = this.vehicleService.vehiclesTree;
       }
 
@@ -81,7 +98,7 @@ export class TreeTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.vehicleService.treeTableStatus = true;
-    console.log("tree on init");
+    // console.log("tree on init");
     if(this.vehicleService.statusDataVehicleTree){
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
@@ -101,17 +118,218 @@ export class TreeTableComponent implements OnInit {
   onChangeDisplay(res : boolean){
     this.display = res;
   }
+  onConfirmationEdit(){
+    this.confirmationService.confirm({
+             message: 'Se aplicarán los cambios',
+            accept: () => {
+                //Actual logic to perform a confirmation
+                // console.log("aceptadoo ....");
+                this.onSubmitEdit();
+            }
+        });
+  }
+  onSubmitEdit(){
+    // console.log('eviando data para edicion');
+    this.loading=true;
+    this.formDisplay = 'none';
+    if(this.vehicleService.demo){
+      console.log('modo demo, no se enviara info a la DB');
+      this.updateGroup();
+
+      this.vehicleService.reloadTableTree.emit();
+      this.displayEditGroup = false;
+      this.loading=false;
+      this.formDisplay = 'block';
+    }else{
+      const req = {
+        type : this.dataEdit.type,
+        id : this.dataEdit.id,
+        list1 : this.list1,
+        list2 : this.list2,
+        name : this.nameEdit.nativeElement.value
+      };
+      this.vehicleConfigService.putGroupUpdate(req).subscribe((info : any)=>{
+        // console.log('result submit',info);
+        if(info.res){
+          this.updateGroup();
+          this.vehicleService.reloadTableTree.emit();
+          this.displayEditGroup = false;
+          this.loading=false;
+          this.formDisplay = 'block';
+        }else{
+
+        }
+      });
+
+    }
+  }
+  updateGroup(){
+    const vehicles = this.vehicleService.vehicles;
+    if(this.dataEdit.type=='grupo'){
+      for (const key in this.list1) {
+        let index = vehicles.indexOf(this.list1[key]);
+        vehicles[index].idgrupo = null;
+        vehicles[index].grupo = "Unidades Sin Grupo";
+
+      }
+
+      for (const key in this.list2){
+        let index = vehicles.indexOf(this.list2[key]);
+        vehicles[index].idgrupo = this.dataEdit.id;
+        vehicles[index].grupo = this.nameEdit.nativeElement.value;
+      }
+      for(const key in vehicles){
+        if(vehicles[key].idgrupo==this.dataEdit.id){
+          vehicles[key].grupo=this.nameEdit.nativeElement.value
+        }
+      }
+    }else{
+      for (const key in this.list1) {
+        let index = vehicles.indexOf(this.list1[key]);
+        vehicles[index].idconvoy = null;
+        vehicles[index].convoy = "Unidades Sin Convoy";
+
+      }
+
+      for (const key in this.list2){
+        let index = vehicles.indexOf(this.list2[key]);
+        vehicles[index].idconvoy = this.dataEdit.id;
+        vehicles[index].convoy = this.nameEdit.nativeElement.value;
+      }
+      for(const key in vehicles){
+        if(vehicles[key].idconvoy==this.dataEdit.id){
+          vehicles[key].convoy=this.nameEdit.nativeElement.value;
+        }
+      }
+    }
+    this.vehicleService.vehicles = vehicles;
+    this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+  }
+  showEditGroup(data: any){
+    this.dataEdit = data;
+    // console.log('show edit data',data);
+    this.displayEditGroup = true;
+    this.textHeaderEdit = data.type+" "+data.name;
+    this.nameEdit.nativeElement.value = data.name;
+
+    //list 1
+    const vehicles = this.vehicleService.vehicles;
+    let aux1=[];
+    let aux2=[];
+    let aux_idgrupo=-1;
+    for (const key in vehicles) {
+      // console.log('id==idconvoy------->'+data.id+'=='+vehicles[key]['idconvoy'])
+      if (data.type=='grupo') {
+        if(data.id==vehicles[key]['idgrupo']&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
+          aux2.push(vehicles[key]);
+        }
+        aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
+      }
+      if (data.type=='convoy') {
+        if(data.id==vehicles[key]['idconvoy']){
+          aux2.push(vehicles[key]);
+          aux_idgrupo = vehicles[key]['idgrupo'];
+        }
+      }
+    }
+    if(data.type=='convoy'){
+      for (const key in vehicles){
+        if(vehicles[key]['idgrupo']==aux_idgrupo&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
+          // console.log('unidades sin convoy??',vehicles[key]);
+          aux1.push(vehicles[key]);
+        }
+
+      }
+    }
+
+    this.list2 = aux2;
+    this.list1 = aux1;
+
+
+  }
   showDelete(data: any){
-    console.log("data",data);
+    // console.log("data",data);
     this.textDelete = data['type'];
     this.displayDelete = true;
     if(data['id']==null){
       console.log('no hay id');
     }else{
-      console.log('en proceso de borrado');
+      // console.log('en proceso de borrado');
       this.idDelete = data['id'];
       this.typeDelete = data['type'];
     }
+  }
+  upList1(){
+    // this.list1=this.selectedList2;
+    // this.selectedList2=[];
+    let aux: any=[];
+
+    //recupero valores upList2
+    for (const key in this.list1) {
+      aux.push(this.list1[key]);
+    }
+    // inserto valores nuevos
+    // console.log('subir a lista 2');
+    for (const key in this.selectedList2) {
+      // let index = aux.indexOf(this.selectedList2[key]);
+      // console.log("index====",index);
+      aux.push(this.selectedList2[key]);
+      console.log(this.selectedList2[key]);
+    }
+    //inserto valores en list1
+    this.list1 = aux;
+    //vacio valores de list 2
+    let aux2: any = [];
+    let aux_status = false;
+    for (const key in this.list2) {
+      let aux_status=false;
+      for (const key2 in this.selectedList2) {
+        if (this.list2[key]==this.selectedList2[key2]) {
+          aux_status=true;
+        }
+      }
+      if(!aux_status){
+        aux2.push(this.list2[key]);
+      }
+    }
+    this.list2 = aux2;
+    this.selectedList2=[];
+  }
+  upList2(){
+    // this.list2=this.selectedList1;
+    // this.selectedList1=[];
+    let aux: any=[];
+
+    //recupero valores upList2
+    for (const key in this.list2) {
+      aux.push(this.list2[key]);
+    }
+    // inserto valores nuevos
+    // console.log('subir a lista 2');
+    for (const key in this.selectedList1) {
+      // let index = aux.indexOf(this.selectedList1[key]);
+      // console.log("index====",index);
+      aux.push(this.selectedList1[key]);
+      // console.log(this.selectedList1[key]);
+    }
+    //inserto valores en list2
+    this.list2 = aux;
+    //vacio valores de list 1
+    let aux2: any = [];
+    let aux_status = false;
+    for (const key in this.list1) {
+      let aux_status=false;
+      for (const key2 in this.selectedList1) {
+        if (this.list1[key]==this.selectedList1[key2]) {
+          aux_status=true;
+        }
+      }
+      if(!aux_status){
+        aux2.push(this.list1[key]);
+      }
+    }
+    this.list1 = aux2;
+    this.selectedList1=[];
   }
   onDelete(){
     this.loadingDelete = true;
@@ -120,10 +338,10 @@ export class TreeTableComponent implements OnInit {
       id : this.idDelete,
       vehicles : null
     };
-    console.log('borrando ...');
+    // console.log('borrando ...');
     this.buttonDisplay="none";
     this.vehicleConfigService.putGroupDelete(req).subscribe((info: any)=>{
-      console.log('res = ',info);
+      console.log('descomponer res = ',info);
       this.loadingDelete = false;
       this.buttonDisplay="block";
       if(info.res){
@@ -144,6 +362,7 @@ export class TreeTableComponent implements OnInit {
           }
         }
         this.vehicleService.vehicles = aux_vehicles_tree;
+        this.vehicleService.vehiclesTree = this.vehicleService.createNode(aux_vehicles_tree);
         this.vehicleService.reloadTableTree.emit();
         this.textDelete = info.message;
         this.displayDelete = false;
@@ -207,7 +426,7 @@ export class TreeTableComponent implements OnInit {
     }else{
       this.column--;
     }
-    console.log("colmun = ",this.column);
+    // console.log("colmun = ",this.column);
   }
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
