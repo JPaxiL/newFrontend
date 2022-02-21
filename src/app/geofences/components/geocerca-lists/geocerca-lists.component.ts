@@ -21,6 +21,7 @@ export class GeocercaListsComponent implements OnInit {
 
   tblDataGeo = new Array();
   datosCargados = false;
+  NomBusqueda = "";
 
   constructor(
     public geofencesService: GeofencesService,
@@ -138,6 +139,26 @@ export class GeocercaListsComponent implements OnInit {
     this.geofencesService.nombreComponente = "AGREGAR";
     this.geofencesService.action         = "add";
 
+  }
+
+  onBusqueda(gaaa:any) {
+    console.log(gaaa);
+    console.log(this.NomBusqueda);
+
+    let geos = this.geofencesService.getData();
+    console.log(geos);
+
+    this.tblDataGeo = [];
+
+    for (let i = 0; i < geos.length; i++) {
+
+        if ( geos[i].orden.toUpperCase().includes(this.NomBusqueda.toUpperCase()) ) {
+            geos[i].zone_name_visible_bol = (geos[i].zone_name_visible === 'true');
+            this.tblDataGeo.push({trama:geos[i]});
+        }
+
+    }
+    // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
   }
 
 

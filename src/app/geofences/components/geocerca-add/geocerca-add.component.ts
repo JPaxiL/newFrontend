@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 
 import { GeofencesService } from '../../services/geofences.service';
-import { MeasureDrawService } from '../../services/measure-draw.service';
+// import { MeasureDrawService } from '../../services/measure-draw.service';
 
 
 import { MapServicesService } from '../../../map/services/map-services.service';
@@ -53,7 +53,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   form :any = {};
   constructor(
     public geofencesService: GeofencesService,
-    public MeasureDrawService: MeasureDrawService,
+    // public MeasureDrawService: MeasureDrawService,
     public mapService: MapServicesService,
 
   ) { }
@@ -204,8 +204,12 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
 
   ngOnDestroy(){
-    console.log('SALDRE DE LA GEOCERCA GAAAAA');
-    this.mapService.map.removeLayer(this.poligonAdd);
+
+    console.log('SALDRE DE LA EDICION DE GEOCERCA');
+    if ( this.geofencesService.action == "edit" ) {
+    } else {
+      this.mapService.map.removeLayer(this.poligonAdd);
+    }
 
   }
 
