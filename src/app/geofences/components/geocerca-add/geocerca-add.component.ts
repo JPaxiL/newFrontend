@@ -75,6 +75,16 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     if ( this.geofencesService.action == "edit" ) {
       this.llenar_formulario();
+      var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
+      console.log(geo);
+
+      if (geo.zone_visible == "true") {
+        // geo.geo_elemento.geo_elemento.addTo(this.mapService.map);
+      } else {
+        geo.geo_elemento.addTo(this.mapService.map);
+        // this.mapService.map.removeLayer(geo.geo_elemento);
+      }
+
     } else {
       this.nuevo_formulario();
 
@@ -415,7 +425,12 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           weight: 3,
           fill: true,
           color: geo.zone_color //'#000000'
-        }).addTo(this.mapService.map);
+        });//.addTo(this.mapService.map);
+
+        if (geo.zone_visible == "true") {
+          geo.geo_elemento.addTo(this.mapService.map);
+        }
+
 
     } else {
       console.log("CREACION DE GEOCERCA");
@@ -469,7 +484,40 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           weight: 3,
           fill: true,
           color: geo.zone_color //'#000000'
-        }).addTo(this.mapService.map);
+        });//.addTo(this.mapService.map);
+
+
+        if (geo.zone_visible == "true") {
+          geo.geo_elemento.addTo(this.mapService.map);
+        }
+
+        //================= nombre de la geocerca
+        var centerPoligon = geo.geo_elemento.getBounds().getCenter();
+
+        geo.marker_name = L.circleMarker(centerPoligon, {
+          // pane: 'markers1',
+          "radius": 0,
+          "fillColor": "#000",//color,
+          "fillOpacity": 1,
+          "color": "#000",//color,
+          "weight": 1,
+          "opacity": 1
+
+        }).bindTooltip(
+            // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+            '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.zone_color+';">'+geo.zone_name+'</b>',
+            { permanent: true,
+              // offset: [-100, 0],
+              direction: 'center',
+              className: 'leaflet-tooltip-own',
+            });
+
+
+        if (geo.zone_name_visible == "true") {
+          geo.marker_name.addTo(this.mapService.map);
+        }
+
+
 
         // geo.geo_elemento.setLatLngs( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ));
         // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"

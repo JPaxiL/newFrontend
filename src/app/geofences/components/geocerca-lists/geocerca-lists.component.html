@@ -29,7 +29,7 @@
 
     </colgroup>
     <thead>
-        <tr>
+        <tr class="bg-light">
             <td></td>
             <td></td>
             <td>Geocerca</td>
@@ -63,7 +63,7 @@
 
             <td>
 
-              <input class="" type="checkbox"  [(ngModel)]="geo.trama.zone_name_visible_bol">
+              <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.id)"  [(ngModel)]="geo.trama.zone_name_visible_bol">
             </td>
 
             <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td>

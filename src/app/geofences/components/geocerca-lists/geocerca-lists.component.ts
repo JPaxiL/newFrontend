@@ -79,6 +79,30 @@ export class GeocercaListsComponent implements OnInit {
 
   }
 
+  clickShowNameGeocerca(id:number){
+    console.log("Mostrar/Ocultar nombre");
+    var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
+
+    console.log(geo);
+
+    if (geo.zone_name_visible == "true") {
+
+      geo.zone_name_visible  = "false";
+      geo.zone_name_visible_bol = false;
+
+      this.mapService.map.removeLayer(geo.marker_name);
+    } else {
+
+      geo.zone_name_visible  = "true";
+      geo.zone_name_visible_bol = true;
+
+      geo.marker_name.addTo(this.mapService.map);
+    }
+
+
+
+  }
+
   clickConfigurarGeocerca(id:number) {
     console.log('clickConfigurarGeocerca');
     this.geofencesService.nombreComponente = "AGREGAR";

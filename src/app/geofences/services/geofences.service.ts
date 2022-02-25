@@ -52,6 +52,42 @@ export class GeofencesService {
           this.geofences[i].geo_elemento.addTo(this.mapService.map);
         }
 
+        var centerPoligon = this.geofences[i].geo_elemento.getBounds().getCenter();
+        console.log("centro de = "+this.geofences[i].zone_name);
+
+        console.log(centerPoligon);
+
+        //this.geofences[i].marker_name = L.marker(centerPoligon).addTo(this.mapService.map);
+        this.geofences[i].marker_name = L.circleMarker(centerPoligon, {
+          // pane: 'markers1',
+          "radius": 0,
+          "fillColor": "#000",//color,
+          "fillOpacity": 1,
+          "color": "#000",//color,
+          "weight": 1,
+          "opacity": 1
+
+        }).bindTooltip(
+            // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+            '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
+            { permanent: true,
+              // offset: [-100, 0],
+              direction: 'center',
+              className: 'leaflet-tooltip-own',
+            });
+
+        if (this.geofences[i].zone_name_visible == "true") {
+          this.geofences[i].marker_name.addTo(this.mapService.map);
+        }
+
+
+
+        // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
+        // // tempMarker.bindLabel("My Label");
+        // tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
+
+
+
         // this.geofences.geo_elemento.setLabel("NOMBRE");
       }
 
