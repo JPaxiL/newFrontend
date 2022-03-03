@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import {NgbCarouselConfig} from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngxs/store';
 import { SignIn } from 'src/app/core/store/auth.actions';
 
@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
   ];
 
   loginForm!: FormGroup;
+  validCredentials = 0; //-1 es credenciales fallidas, 0 es estado inicial, 1 es login exitoso
+  isLoggingIn = false;
 
   constructor(
     private store: Store,
@@ -34,6 +36,9 @@ export class LoginComponent implements OnInit {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
     config.showNavigationIndicators = true;
+
+    config.interval = 1000;
+    config.wrap = true;
   }
 
   ngOnInit(): void {
@@ -49,10 +54,20 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const params = this.loginForm.value;
       // params['registrador_id'] = params['registrador']['id'];
+      this.isLoggingIn = true;
       console.log(params);
       this.store.dispatch(new SignIn( params.name, params.password)).subscribe((data) => {
+        // Animación de carga de Iniciando sesión...
+        // this.validCredentials = 1;
+        console.log('Inicio de sesión exitoso');
         this.router.navigate(['/panel']);
-     });
+      },
+      error => {
+        if(error.status == 400){
+          this.isLoggingIn = false;
+          this.validCredentials = -1;
+        }
+      });
 
       // let categoria = <Categoria>params;
       // this.confirmSave(categoria);
