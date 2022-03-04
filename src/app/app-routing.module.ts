@@ -16,16 +16,19 @@ const routes: Routes = [
 
   {
     path: 'panel',
-    component: PanelConfComponent
+    component: PanelConfComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'vehicles',
     // canActivate: [ AuthGuard ],
-    component: MapComponent
+    component: MapComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'reports',
-    component: ReportComponent
+    component: ReportComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'session',

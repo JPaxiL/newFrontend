@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   validCredentials = 0; //-1 es credenciales fallidas, 0 es estado inicial, 1 es login exitoso
   isLoggingIn = false;
+  errMsg = '';
 
   constructor(
     private store: Store,
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit {
     config.showNavigationArrows = true;
     config.showNavigationIndicators = true;
 
-    config.interval = 1000;
+    config.interval = 5000;
     config.wrap = true;
   }
 
@@ -63,10 +64,16 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/panel']);
       },
       error => {
-        if(error.status == 400){
-          this.isLoggingIn = false;
-          this.validCredentials = -1;
+        // if(error.status == 400){
+        switch(error.error.error){
+          case 'invalid_grant': this.errMsg = 'Nombre de Usuario o Contraseña inválidos'; break;
+          case 'inactive_user': this.errMsg = 'Tu cuenta aún no ha sido activada'; break;
+          case 'user_not_found': this.errMsg = 'El usuario no existe'; break;
+          default: this.errMsg = 'Hubo un error. Inténtalo nuevamente'; break;
         }
+        this.isLoggingIn = false;
+        console.log(error.error.error);
+        this.validCredentials = -1;
       });
 
       // let categoria = <Categoria>params;
