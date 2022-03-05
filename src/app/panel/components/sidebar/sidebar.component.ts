@@ -24,6 +24,7 @@ export class SidebarComponent implements OnInit {
     { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Accesorios"},
     { id:'GEOFENCES', name:"Geocercas"},
+    { id: 'EVENT-USER', name: 'Eventos'}
 
 
   );
