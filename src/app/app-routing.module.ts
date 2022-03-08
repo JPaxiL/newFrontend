@@ -5,6 +5,7 @@ import { PanelConfComponent } from './panel/components/panel-conf/panel-conf.com
 import { VehiclesComponent } from './vehicles/components/vehicles/vehicles.component';
 import { SessionComponent } from './vehicles/components/session/session.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { IsLoggedGuard } from './core/guards/islogged.guard';
 import { MapComponent } from './vehicles/components/map/map.component';
 import { ReportComponent } from './reports/components/report/report.component';
 
@@ -13,7 +14,8 @@ import { ReportComponent } from './reports/components/report/report.component';
 const routes: Routes = [
   { 
     path: '', 
-    loadChildren: () => import('./login/login.module').then(m => m.LoginModule) 
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+    canActivate: [IsLoggedGuard], 
   },
   { 
     path: 'dashboard', 
