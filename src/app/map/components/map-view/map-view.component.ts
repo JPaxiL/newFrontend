@@ -5,6 +5,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { MapService } from '../../../vehicles/services/map.service';
 import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
+import { EventService } from './../../../events/services/event.service';
 
 declare var $: any;
 
@@ -23,7 +24,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   constructor(
     private mapService: MapService,
     public mapServicesService: MapServicesService,
-    public geofencesService: GeofencesService
+    public geofencesService: GeofencesService,
+    public eventService: EventService
 
     ) { }
   // constructor() { }
@@ -37,6 +39,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.createMap();
     //$("#panelMonitoreo").hide( "slow" )
     this.geofencesService.initialize();
+    this.eventService.initialize();
 
     //=============Agregar Buscador de direccion.====================
     // const searchControl = GeoSearchControl({

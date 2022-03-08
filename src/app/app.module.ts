@@ -80,6 +80,8 @@ import { VehicleGroupComponent } from './vehicles/components/vehicle-group/vehic
 import { ReportComponent } from './reports/components/report/report.component';
 import { FormComponent } from './reports/components/form/form.component';
 import { ResultComponent } from './reports/components/result/result.component';
+import { EventBoardComponent } from './events/components/event-board/event-board.component';
+import { EventListComponent } from './events/components/event-list/event-list.component';
 
 @NgModule({
   declarations: [
@@ -123,7 +125,9 @@ import { ResultComponent } from './reports/components/result/result.component';
     VehicleGroupComponent,
     ReportComponent,
     FormComponent,
-    ResultComponent
+    ResultComponent,
+    EventBoardComponent,
+    EventListComponent
   ],
   imports: [
     CommonModule,
