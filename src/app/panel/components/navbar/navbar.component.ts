@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -12,8 +13,11 @@ export class NavbarComponent implements OnInit {
 
   logo:string = "assets/images/navbar/logo-gltracker.svg";
   sidevarIZ:boolean=true;
+  logOutModalIsOpen = false;
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
   }
@@ -36,4 +40,14 @@ export class NavbarComponent implements OnInit {
 
 
   }
+
+  closeLogOutModal(): void{
+    this.logOutModalIsOpen = false;
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    /* this.router.navigate(['']); */
+    window.location.reload();
+  };
 }

@@ -50,7 +50,7 @@
 
         <div class="p-2 bd-highlight"><a href="#" class="link-secondary"><i class="fa fas fa-user"></i></a></div>
         <div class="p-2 bd-highlight">
-            <a href="#" class="link-secondary" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom">
+            <a (click)="logOutModalIsOpen = true;" class="link-secondary" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom" style="cursor: pointer;">
                 <i class="fa fas fa-sign-out"></i>
             </a>
         </div>
@@ -58,3 +58,21 @@
       </div>
     </div>
   </nav>
+
+
+<div *ngIf="logOutModalIsOpen" class="logout-modal" role="alert">Alerta
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>¡Alerta!</h4>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea salir?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="logOut();">Sí</button>
+        <button type="button" class="btn btn-danger" (click)="logOutModalIsOpen = false;">No</button>
+      </div>
+    </div>
+  </div>
+</div>

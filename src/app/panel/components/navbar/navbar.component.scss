@@ -2,3 +2,58 @@
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
+.logout-modal{
+    display: flex !important;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-dialog{
+    width: auto;
+}
+
+.modal-content{
+    min-width: 250px;
+}
+
+.modal-header{
+    align-items: center;
+    justify-content: center;
+    border-bottom: none;
+    border-top-left-radius: none;
+    border-top-right-radius: none;
+}
+
+.modal-body{
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.modal-body > p{
+    text-align: center;
+}
+
+.modal-footer{
+    align-items: center;
+    justify-content: center;
+    border-top: none;
+    border-bottom-right-radius: none;
+    border-bottom-left-radius: none;
+}
+
+.modal-footer > button{
+    min-width: 60px;
+}

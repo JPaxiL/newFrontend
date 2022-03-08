@@ -11,9 +11,15 @@ import { ReportComponent } from './reports/components/report/report.component';
 // import { AuthGuard } from './vehicles/services/auth.guard';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
-  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) , canActivate: [AuthGuard]},
-
+  { 
+    path: '', 
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule) 
+  },
+  { 
+    path: 'dashboard', 
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule), 
+    canActivate: [AuthGuard]
+  },
   {
     path: 'panel',
     component: PanelConfComponent,
@@ -33,6 +39,11 @@ const routes: Routes = [
   {
     path: 'session',
     component: SessionComponent
+  },
+  {
+    path: '**',
+    component: PanelConfComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵsetCurrentInjector } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
@@ -29,11 +29,13 @@ export class LoginComponent implements OnInit {
   validCredentials = 0; //-1 es credenciales fallidas, 0 es estado inicial, 1 es login exitoso
   isLoggingIn = false;
   errMsg = '';
+  backgroundImage = '';
 
   constructor(
     private store: Store,
     private router: Router,
-    config: NgbCarouselConfig, private fb: FormBuilder) {
+    config: NgbCarouselConfig, 
+    private fb: FormBuilder) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
     config.showNavigationIndicators = true;
@@ -48,7 +50,14 @@ export class LoginComponent implements OnInit {
       name: ['', Validators.required  ],
       password: ['', Validators.required ]
     });
+    //Muestra un background distinto dependiendo de la hora del día
+    //fondo1 es tarde. fondo2 es mañana
+    this.backgroundImage = this.images[(new Date().getHours() < 17)? 1:0];
 
+  }
+
+  resetLoginAlert(): void {
+    this.validCredentials = 0;
   }
 
   save(): void{
@@ -61,6 +70,7 @@ export class LoginComponent implements OnInit {
         // Animación de carga de Iniciando sesión...
         // this.validCredentials = 1;
         console.log('Inicio de sesión exitoso');
+        console.log(data);
         this.router.navigate(['/panel']);
       },
       error => {
