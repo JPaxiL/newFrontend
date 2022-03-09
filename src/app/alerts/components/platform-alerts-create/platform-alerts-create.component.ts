@@ -97,7 +97,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   setDataGeofences() {
     let geocercas = this.geofencesService.getData();
     this.geocercas = geocercas.map( (geocerca:any) => {
-      console.log("geocerca =======> ",geocerca);
+
       return {
         value: { id: geocerca.id, name: geocerca.zone_name },
         label: geocerca.zone_name,

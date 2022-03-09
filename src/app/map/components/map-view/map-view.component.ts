@@ -6,6 +6,7 @@ import { MapService } from '../../../vehicles/services/map.service';
 import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
 import { EventService } from './../../../events/services/event.service';
+import { EventSocketService } from './../../../events/services/event-socket.service';
 
 declare var $: any;
 
@@ -25,13 +26,14 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     private mapService: MapService,
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
-    public eventService: EventService
+    public eventService: EventService,
+    public eventSocketService :EventSocketService
 
     ) { }
   // constructor() { }
 
   ngOnInit(): void {
-
+    this.eventSocketService.listen();
 
   }
 
@@ -40,6 +42,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     //$("#panelMonitoreo").hide( "slow" )
     this.geofencesService.initialize();
     this.eventService.initialize();
+
+
 
     //=============Agregar Buscador de direccion.====================
     // const searchControl = GeoSearchControl({
