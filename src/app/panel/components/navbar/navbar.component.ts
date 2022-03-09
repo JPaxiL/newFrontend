@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { EventSocketService } from './../../../events/services/event-socket.service';
+
 
 declare var $: any;
 
@@ -16,7 +18,8 @@ export class NavbarComponent implements OnInit {
   logOutModalIsOpen = false;
 
   constructor(
-    private router: Router
+    private router: Router,
+    public eventSocketService : EventSocketService
   ) { }
 
   ngOnInit(): void {
