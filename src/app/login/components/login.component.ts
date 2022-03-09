@@ -68,10 +68,15 @@ export class LoginComponent implements OnInit {
       console.log(params);
       this.store.dispatch(new SignIn( params.name, params.password)).subscribe((data) => {
         // Animación de carga de Iniciando sesión...
-        // this.validCredentials = 1;
+        this.validCredentials = 1;
         console.log('Inicio de sesión exitoso');
         console.log(data);
-        this.router.navigate(['/panel']);
+        this.router.navigate(['/panel'], {
+          state: {
+            //flag para mostrar toast de bienvenida
+            recentLogIn: true,
+          }
+        });
       },
       error => {
         // if(error.status == 400){

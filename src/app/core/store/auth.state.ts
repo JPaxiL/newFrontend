@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { State, Selector, StateContext, Action } from '@ngxs/store';
 import { AuthService } from '../services/auth.service';
-import { SignIn, UpdateUser } from './auth.actions';
+import { LogOut, SignIn, UpdateUser } from './auth.actions';
 
 import { tap } from 'rxjs/operators';
 import { User } from '../interfaces/User';
@@ -85,4 +85,9 @@ export class AuthState {
   ): void {
     patchState({ user });
   }
+
+  @Action(LogOut)
+  LogOut(
+    { patchState }: StateContext<AuthStateModel>,
+  ): void {}
 }

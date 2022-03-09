@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
 
 import {AuthInterceptor} from './vehicles/services/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
@@ -130,6 +131,14 @@ import { EventListComponent } from './events/components/event-list/event-list.co
     EventListComponent
   ],
   imports: [
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      progressBar: true,
+      progressAnimation: 'increasing',
+      positionClass: 'toast-bottom-right',
+      maxOpened: 4,
+      autoDismiss: true,
+    }),
     CommonModule,
     BrowserModule,
     NgxsModule.forRoot([AuthState]),
