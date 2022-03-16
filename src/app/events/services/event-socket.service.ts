@@ -20,7 +20,7 @@ export class EventSocketService extends Socket {
 
   constructor(public eventService : EventService) {
     super({
-      url: '127.0.0.1:5000',
+      url: 'http://23.29.124.173:5000/',
       // options: {
       //   transports: ["websocket"]
       // }
@@ -60,7 +60,7 @@ export class EventSocketService extends Socket {
     });
     event.layer = L.marker([event.latitud, event.longitud], {
       icon: icon,
-    }).bindPopup(event.evento);
+    });
     event.layer._myType = 'evento';
     event.layer._myId = event.id;
     return event;
