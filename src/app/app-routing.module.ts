@@ -8,6 +8,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { IsLoggedGuard } from './core/guards/islogged.guard';
 import { MapComponent } from './vehicles/components/map/map.component';
 import { ReportComponent } from './reports/components/report/report.component';
+import { ProfileConfigComponent } from './profile-config/profile-config.component';
 
 // import { AuthGuard } from './vehicles/services/auth.guard';
 
@@ -41,6 +42,11 @@ const routes: Routes = [
   {
     path: 'session',
     component: SessionComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileConfigComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

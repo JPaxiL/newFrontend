@@ -3,6 +3,10 @@
     padding-bottom: 3px;
 }
 
+a {
+    text-decoration: none;
+}
+
 .logout-modal{
     display: flex !important;
     background-color: rgba($color: #000000, $alpha: 0.5);
@@ -57,3 +61,19 @@
 .modal-footer > button{
     min-width: 60px;
 }
+
+#userDropdown{
+    padding-top: 0 !important; 
+    padding-left: 0; 
+    padding-right: 0;    
+}
+
+#userDropdown:focus{
+    outline: none;
+    box-shadow: none;
+}
+
+.dropdown-menu-end {
+    right: 0;
+    left: auto;
+  }

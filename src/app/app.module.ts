@@ -83,6 +83,7 @@ import { FormComponent } from './reports/components/form/form.component';
 import { ResultComponent } from './reports/components/result/result.component';
 import { EventBoardComponent } from './events/components/event-board/event-board.component';
 import { EventListComponent } from './events/components/event-list/event-list.component';
+import { ProfileConfigComponent } from './profile-config/profile-config.component';
 
 @NgModule({
   declarations: [
@@ -128,7 +129,8 @@ import { EventListComponent } from './events/components/event-list/event-list.co
     FormComponent,
     ResultComponent,
     EventBoardComponent,
-    EventListComponent
+    EventListComponent,
+    ProfileConfigComponent
   ],
   imports: [
     ToastrModule.forRoot({
