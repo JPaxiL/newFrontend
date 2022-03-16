@@ -20,7 +20,7 @@ export class EventSocketService extends Socket {
 
   constructor(public eventService : EventService) {
     super({
-      url: 'http://23.29.124.173:5000/',
+      url: 'https://23.29.124.173:5000/',
       // options: {
       //   transports: ["websocket"]
       // }
