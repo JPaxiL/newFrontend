@@ -26,12 +26,17 @@ export class PanelConfComponent implements OnInit {
         $("body").tooltip({ selector: '[data-bs-toggle=tooltip]' });
     });
     if(history.state.recentLogIn){
+      history.state.recentLogIn = false;
       this.showLogInToastr();
     }
 
   }
 
   showLogInToastr(){
-    this.toastr.success('Has iniciado sesión satisfactoriamente')
+    this.toastr.success('Has iniciado sesión satisfactoriamente.')
+  }
+
+  showPassUpdateToastr(){
+    this.toastr.success('Has actualizado tu contraseña exitosamente.')
   }
 }

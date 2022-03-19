@@ -45,11 +45,30 @@
           </a>
         </div>
 
-        <span class="p-2 bd-highlight">
-          user
-        </span>
+        
 
-        <div class="p-2 bd-highlight"><a href="#" class="link-secondary"><i class="fa fas fa-user"></i></a></div>
+        <div class="p-2 bd-highlight col">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn" id="userDropdown" ngbDropdownToggle>
+              <i class="fa fas fa-user"></i>
+              <span class="p-2 bd-highlight">
+                user
+              </span>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
+              <button ngbDropdownItem routerLink="/profile">Configuración de Perfil</button>
+              <!-- <button ngbDropdownItem>Opción 2</button>
+              <button ngbDropdownItem>Opción 3</button> -->
+            </div>
+          </div>
+        </div>
+        <!-- <div class="p-2 bd-highlight">
+          <a routerLink="/profile" class="link-secondary">
+            <i class="fa fas fa-user"></i>
+            <span class="p-2 bd-highlight">
+              user
+            </span></a>
+        </div> -->
         <div class="p-2 bd-highlight">
             <a (click)="logOutModalIsOpen = true;" class="link-secondary" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom" style="cursor: pointer;">
                 <i class="fa fas fa-sign-out"></i>

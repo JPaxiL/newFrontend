@@ -1,0 +1,86 @@
+
+<div class="background-prof-conf">
+    <img [src]="backgroundImage" class="mh-100" style="width: 100%; height: 100vh">
+</div>
+
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="navbar-brand">
+            <img [src]="logo" width="100px"/>
+        </div>
+        <div>
+            <i class="fa fas fa-user"></i>
+            <span class="p-2">user</span>
+        </div>
+        <div>
+            <a href="#">
+                <button type="button" class="btn btn-default" aria-label="Left Align" (click)="goToPanel();">
+                    <i class="pi pi-fw pi-chevron-right" aria-hidden="true"></i> Regresar al Panel
+                </button>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>Configuración de Perfil</h2>
+    <form [formGroup]="profileConfigForm" (ngSubmit)="updateProfile();" style="display: grid; gap: 30px;">
+        <div style="display: grid; gap: 10px;">
+            <div class="row w-100">
+                <label for="actual_pass" class="col-5">Contraseña actual:</label>
+                <div class="col-7">
+                    <input 
+                        id="actual_pass"
+                        [class.is-invalid]="profileConfigForm.get('actual_pass')?.touched && profileConfigForm.get('actual_pass')?.invalid"
+                        type="password" 
+                        class="form-control" 
+                        formControlName="actual_pass"
+                        maxlength="25">
+                    <div class="invalid-feedback">
+                        Este campo no puede quedar vacío
+                    </div>
+                </div>
+            </div>
+            <div class="row w-100">
+                <label for="new_pass_1" class="col-5">Nueva contraseña:</label>
+                <div class="col-7">
+                    <input 
+                        id="new_pass_1"
+                        [class.is-invalid]="profileConfigForm.get('new_pass_1')?.touched && profileConfigForm.get('new_pass_1')?.invalid"
+                        type="password" 
+                        class="form-control" 
+                        formControlName="new_pass_1"
+                        maxlength="25">
+                    <div class="invalid-feedback">
+                        Este campo no puede quedar vacío
+                    </div>
+                </div>
+            </div>
+            <div class="row w-100">
+                <label for="new_pass_2" class="col">Repetir nueva contraseña:</label>
+                <div class="col-7">
+                    <input 
+                        id="new_pass_2"
+                        [class.is-invalid]="profileConfigForm.get('new_pass_2')?.touched && (profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value)"
+                        type="password" 
+                        class="form-control" 
+                        formControlName="new_pass_2"
+                        maxlength="25">
+                    <div 
+                        *ngIf="!(profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value) &&profileConfigForm.get('new_pass_2')?.touched && profileConfigForm.get('new_pass_2')?.invalid"            
+                        class="invalid-feedback">
+                        Este campo no puede quedar vacío
+                    </div>
+                    <div 
+                        *ngIf="profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value" 
+                        class="invalid-feedback">
+                        La nueva contraseña debe coincidir
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button 
+            class="btn btn-success btn-lg" 
+            [disabled]="profileConfigForm.get('actual_pass')?.invalid || profileConfigForm.get('new_pass_1')?.invalid || profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value">Actualizar contraseña</button>
+    </form>
+</div>
