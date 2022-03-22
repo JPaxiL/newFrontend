@@ -1,4 +1,4 @@
-<div class="ag-theme-alpine" >
+<!-- <div class="ag-theme-alpine" >
     <ag-grid-angular
     #agGrid
     style="width: 100%; height: 450px; font-size: 12px;"
@@ -12,4 +12,70 @@
     (gridReady)="onGridReady($event)"
     >
     </ag-grid-angular>
-  </div>
+  </div> -->
+
+<div
+  class="table-responsive"
+  style="width: 100%; height: 450px; font-size: 12px"
+>
+  <table
+    id="tbl_alerts_gps"
+    datatable
+    [dtOptions]="dtOptions"
+    [dtTrigger]="dtTrigger"
+    class="table table-custom table-hover"
+  >
+    <thead>
+      <tr>
+        <th width="8%" class="text-center">Nº</th>
+        <th width="30%" class="text-center">NOMBRE</th>
+        <th width="30%" class="text-center">TIPO</th>
+        <th width="8%" class="text-center">ACTIVOS</th>
+        <th width="8%" class="text-center">SISTEMA</th>
+        <th width="8%" class="text-center">
+          <i class="fa fas fa-at fa-lg"></i>
+        </th>
+        <th width="8%" class="text-center">
+          <i class="fa fa-wrench fa-lg"></i>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let alert of alerts">
+        <td title="'Nº'" class="text-center">
+          {{ alert.nr }}
+        </td>
+        <td title="'NOMBRE'" class="text-center">
+          {{ alert.nombre }}
+        </td>
+        <td title="'TIPO'" class="text-center">
+          {{ alert.tipo }}
+        </td>
+        <td title="'ACTIVOS'" class="text-center">
+          <div data-imei="alert.imei" class="text-center">
+            <app-active-alert [alert]="alert"></app-active-alert>
+          </div>
+        </td>
+        <td title="'SISTEMA'" class="text-center">
+          <div data-imei="alert.imei" class="text-center">
+            <app-system-alert [alert]="alert"></app-system-alert>
+          </div>
+        </td>
+        <td title="'E-MAIL'" class="text-center">
+          <div data-imei="alert.imei" class="text-center">
+            <app-email-alert [alert]="alert"></app-email-alert>
+          </div>
+        </td>
+        <td class="text-center">
+          <app-actions-alert
+            [alert]="alert"
+            [nameComponent]="'ALERTS-PLATFORM'"
+            (editAlert)="edit($event)"
+            (deleteAlert)="loadData()"
+          ></app-actions-alert>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -10,7 +10,7 @@ export class FollowService {
   constructor() { }
 
   add(e:any){
-    // console.log("e",e);
+    // //console.log("e",e);
     // this.
     this.callback.emit(e)
   }

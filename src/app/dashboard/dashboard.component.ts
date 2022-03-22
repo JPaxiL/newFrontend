@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
     this.loadAllUsers();
     // this.userService.getUsers('nuevoo').pipe(
     //   tap( nuevo => {
-    //     console.log(nuevo);
+    //     //console.log(nuevo);
     //   }),
     //   catchError((error: HttpErrorResponse) => throwError(error))
     //   )
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
   private loadAllUsers(): void {
     this.userService.getAll().pipe(first()).subscribe(users => {
         // this.users = users;
-        console.log(users);
+        //console.log(users);
     });
   }
 

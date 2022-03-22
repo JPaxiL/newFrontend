@@ -31,14 +31,14 @@ export class GeocercaListsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("DATOS DE GEOCERCAS");
-    // console.log(geocercas);
+    //console.log("DATOS DE GEOCERCAS");
+    // //console.log(geocercas);
     this.mostrar_tabla();
   }
 
   mostrar_tabla() {
       let geos = this.geofencesService.getData();
-      console.log(geos);
+      //console.log(geos);
 
       this.tblDataGeo = [];
 
@@ -51,9 +51,9 @@ export class GeocercaListsComponent implements OnInit {
   }
 
   clickLocate(id:number){
-    console.log("localizar una geocerca");
+    //console.log("localizar una geocerca");
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
-    console.log(geo);
+    //console.log(geo);
 
     this.mapService.map.fitBounds(geo.geo_elemento.getBounds(), {
       padding: [50, 50]
@@ -62,10 +62,10 @@ export class GeocercaListsComponent implements OnInit {
 
 
   clickShow(id:number){
-    console.log("localizar una geocerca");
+    //console.log("localizar una geocerca");
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
 
-    console.log(geo);
+    //console.log(geo);
 
     if (geo.zone_visible == "true") {
 
@@ -80,10 +80,10 @@ export class GeocercaListsComponent implements OnInit {
   }
 
   clickShowNameGeocerca(id:number){
-    console.log("Mostrar/Ocultar nombre");
+    //console.log("Mostrar/Ocultar nombre");
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
 
-    console.log(geo);
+    //console.log(geo);
 
     if (geo.zone_name_visible == "true") {
 
@@ -104,9 +104,9 @@ export class GeocercaListsComponent implements OnInit {
   }
 
   clickConfigurarGeocerca(id:number) {
-    console.log('clickConfigurarGeocerca');
+    //console.log('clickConfigurarGeocerca');
     this.geofencesService.nombreComponente = "AGREGAR";
-    console.log(id);
+    //console.log(id);
     this.geofencesService.action         = "edit";
     this.geofencesService.idGeocercaEdit = id;
 
@@ -115,8 +115,8 @@ export class GeocercaListsComponent implements OnInit {
   }
 
   clickEliminarGeocerca(event:any, id:number) {
-    console.log('clickEliminarGeocerca');
-    console.log(id);
+    //console.log('clickEliminarGeocerca');
+    //console.log(id);
     this.geofencesService.action = "delete";
 
     event.preventDefault();
@@ -166,11 +166,11 @@ export class GeocercaListsComponent implements OnInit {
   }
 
   onBusqueda(gaaa:any) {
-    console.log(gaaa);
-    console.log(this.NomBusqueda);
+    //console.log(gaaa);
+    //console.log(this.NomBusqueda);
 
     let geos = this.geofencesService.getData();
-    console.log(geos);
+    //console.log(geos);
 
     this.tblDataGeo = [];
 

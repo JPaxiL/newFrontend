@@ -152,7 +152,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     // });
 
     this.historialService.currentMessage.subscribe( () => {
-      // console.log('llamada = '+ this.llamadas);
+      // //console.log('llamada = '+ this.llamadas);
 
       if (this.llamadas != 0) {
         this.cargarGrafico();
@@ -166,8 +166,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // console.log("pane grafico historial");
-    // console.log(this.historialService.conHistorial);
+    // //console.log("pane grafico historial");
+    // //console.log(this.historialService.conHistorial);
 
     // this.historialService.currentMessage.subscribe(message => this.message = message)
 
@@ -185,7 +185,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
   }
 
   newMessage1(): void {
-    console.log(" com 2 newMessage1");
+    //console.log(" com 2 newMessage1");
   }
 
 
@@ -251,15 +251,15 @@ export class PanelHistorialGraficoComponent implements OnInit {
       }
       this.cl.altitudConsola.push([a, dH[i].altitude])
     }
-    console.log(dH[0].params2 );
+    //console.log(dH[0].params2 );
 
 
-    // console.log("=======================>");
+    // //console.log("=======================>");
 
-    // console.log(this.idUnico);
+    // //console.log(this.idUnico);
 
-    // console.log("--------");
-    // console.log(this.cl);
+    // //console.log("--------");
+    // //console.log(this.cl);
 
 
   //   this.plot_historial = $.plot("#placeholder", [{
@@ -311,10 +311,10 @@ export class PanelHistorialGraficoComponent implements OnInit {
           var m = n.dataIndex;
           var a = n.series.yaxis.ticks[0].label;
 
-          // console.log(o);
-          // console.log(p);
-          // console.log(n);
-          // console.log(a);
+          // //console.log(o);
+          // //console.log(p);
+          // //console.log(n);
+          // //console.log(a);
           var b = Math.floor(m / 2);
           var c = Math.ceil(m / 2);
           var d = n.datapoint[1];
@@ -353,8 +353,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
                 break;
 
             case '3':
-                console.log( dH[m]);
-                console.log(d);
+                //console.log( dH[m]);
+                //console.log(d);
                 //var k = '<span>' + motorcos[c].dt_tracker.replace(/\//g, "-") + '</span>';
                 var k = '<span>' + dH[m].dt_tracker.replace(/\//g, "-") + '</span>';
                 if (d == 5 || d == '5' || d == 1 || d == '1') {
@@ -370,9 +370,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
             case '4':
 
                 k = '<span>' + moment( new Date(this.cl.datasets.velocidad.data[m][0]) ).format("YYYY-MM-DD HH:mm:ss") + '</span>';
-                //console.log(vm.cl.datasets.velocidad.data);
+                ////console.log(vm.cl.datasets.velocidad.data);
                 //var k = '<span>' + vm.cl.datasets.velocidad.data[m][0] + '</span>';
-                //console.log(k);
+                ////console.log(k);
                 var s = '<span>Velocidad&#160;&#160;&#160;&#160;:&#160;' + this.cl.datasets.velocidad.data[m][1] + '&#160;km/h&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Fecha&#160;&#160;&#160;&#160;:&#160;' + k + '</span>';
                 var e = '<span>Combustible Consumido&#160;:&#160;' + (this.cl.datasets.CConsumido.data[m][1] * 0.264172051 ).toFixed(2) + ' gal. || ' + (this.cl.datasets.CConsumido.data[m][1] )
                     .toFixed(2) + ' l.</span>';
@@ -544,8 +544,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
   }
 
   moveIconG(item:any) {
-      console.log("=======Move beybey");
-      console.log(this.icoGclick);
+      //console.log("=======Move beybey");
+      //console.log(this.icoGclick);
 
       this.icoGclick.setLatLng([item.lat, item.lng]).addTo(this.mapService.map);
       // this.icoGclick.bindPopup( this.getContentHis(item, 'Nombre de Unidad'), { offset: new L.Point(0, -16) } );
@@ -619,7 +619,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
           break;
       case '3':
 
-          console.log("-----CASO 3 DEL GRAFICO");
+          //console.log("-----CASO 3 DEL GRAFICO");
 
           this.cl.motor.length = 0;
 
@@ -637,9 +637,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
               }
           }
 
-          console.log("******* MOTOR *******");
-          console.log(this.cl.motor);
-          console.log("*********************");
+          //console.log("******* MOTOR *******");
+          //console.log(this.cl.motor);
+          //console.log("*********************");
 
           this.plot_historial = $.plot($("#placeholder"), [{
               data: this.cl.motor
@@ -661,7 +661,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
           break;
       case '4':
 
-          console.log("dijugar la opcion 4");
+          //console.log("dijugar la opcion 4");
 
           this.cl.m.length = 0;//-CRestante
           this.cl.h.length = 0;//-Velocidad
@@ -745,15 +745,15 @@ export class PanelHistorialGraficoComponent implements OnInit {
               //*****************************************************
           };
 
-          console.log("*****************************************************vm.cl.m");
-          console.log(this.cl.m);//-CRestante
-          console.log(this.cl.h);//-Velocidad
-          console.log(this.cl.datasdatos);//i
-          console.log(this.cl.l);//-C.Consumido
-          console.log(this.cl.n);//-Odómetro
-          console.log(this.cl.o);//-Rev.x Min.
-          console.log(this.cl.p);//-On/Off
-          console.log("*****************************************************vm.cl.m");
+          //console.log("*****************************************************vm.cl.m");
+          //console.log(this.cl.m);//-CRestante
+          //console.log(this.cl.h);//-Velocidad
+          //console.log(this.cl.datasdatos);//i
+          //console.log(this.cl.l);//-C.Consumido
+          //console.log(this.cl.n);//-Odómetro
+          //console.log(this.cl.o);//-Rev.x Min.
+          //console.log(this.cl.p);//-On/Off
+          //console.log("*****************************************************vm.cl.m");
 
           this.cl.datasets = {
               "velocidad": {
@@ -802,9 +802,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
           E.empty();
           if (this.cl.h.length > 2 && this.cl.l.length > 2 && this.cl.n.length > 2) {
               $.each(this.cl.datasets, function (a:any, b:any) {
-                  // console.log('xxxxxxxxxxx');
-                  // console.log(a);
-                  // console.log(b);
+                  // //console.log('xxxxxxxxxxx');
+                  // //console.log(a);
+                  // //console.log(b);
                   E.append("<span><label style='height:11px; width:11px; margin-bottom:-5px; background: " + b.colorx + "; color: " + b.colorx + ";border-style: dotted;'>-</label>" + "<input type='checkbox' name='" + a + "' checked='checked' id='id" + a + "'></input>" + "<label style='margin-bottom:-5px;' for='id" + a + "' id='mostrar" + a + "'>" + b.label + "</label></span><br>")
               })
           } else {
@@ -841,10 +841,10 @@ export class PanelHistorialGraficoComponent implements OnInit {
     var x = 200;
     $("#datoslegend").find("input:checked").each((id:any,chbox:any) => {
             // var a = $(this).attr("name");
-            // console.log("-------------");
-            // console.log(id);
-            // console.log(chbox);
-            // console.log(chbox.getAttribute("name"));
+            // //console.log("-------------");
+            // //console.log(id);
+            // //console.log(chbox);
+            // //console.log(chbox.getAttribute("name"));
 
             var a = chbox.getAttribute("name");
 
@@ -853,11 +853,11 @@ export class PanelHistorialGraficoComponent implements OnInit {
             }
         });
 
-    // console.log("==============================");
-    // console.log(b);
+    // //console.log("==============================");
+    // //console.log(b);
 
     if (this.cl.h.length > 2 && this.cl.l.length > 2 && this.cl.n.length > 2) {
-        console.log("solo mas de 2 elementos en velocidad __");
+        //console.log("solo mas de 2 elementos en velocidad __");
         this.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, this.options_grafico, {
             xaxis: {
                 mode: "time",
@@ -984,13 +984,13 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
 
   changeOpcionVelocidadGraficoConsola() {
-    console.log('changeOpcionVelocidadGraficoConsola');
+    //console.log('changeOpcionVelocidadGraficoConsola');
 
   }
 
   changeOpcionTamanoConsola() {
 
-    console.log('changeOpcionTamanoConsola');
+    //console.log('changeOpcionTamanoConsola');
 
     switch (this.opcionTamanoConsola) {
 
@@ -1038,7 +1038,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     if ( this.opcionGraficoConsola == '4') {
         $("#placeholder").css('height', '100%').css('height', '-=123px'); //-=150px
     } else {
-      console.log("gaaaaaaaa");
+      //console.log("gaaaaaaaa");
 
         $("#placeholder").css("height", "100%").css("height", "-=35px");
     }
@@ -1052,9 +1052,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
   consolahistorialPlay() {
       // temporizadorConsola
       // vm.plot_historial.pan({  left: -100  });
-      console.log("-----ini0");
+      //console.log("-----ini0");
 
-      console.log(this.historialService);
+      //console.log(this.historialService);
 
       var dH =  this.historialService.tramasHistorial; // Data Historial
 
@@ -1068,8 +1068,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
         var pos = this.cl.position;
 
         this.consolaSetCrosshair(c);
-        console.log("position : "+this.cl.position);
-        //console.log("--1");
+        //console.log("position : "+this.cl.position);
+        ////console.log("--1");
 
         // var a = $("#opcionGraficoConsola").val();
 
@@ -1130,7 +1130,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
             // historialDataFactory.getMap().getData().then( mapData => {
             //   var overlay = mapData.layers.overlays[historisOverlay];
-            //   //console.log(vm.icoGplay);
+            //   ////console.log(vm.icoGplay);
             //   //vm.icoG.addTo(overlay);
             //   vm.icoGplay.setLatLng([vm.tramas[pos].lat, vm.tramas[pos].lng]).addTo(overlay);
             //   vm.icoGplay._popup.setContent( historialHelper.getContentSimu(vm.tramas[pos], vm.tramas[0].nombre) );
@@ -1183,10 +1183,10 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
 
         } else {
-          console.log("Opcion 4 de combustible");
+          //console.log("Opcion 4 de combustible");
         }
       } else {
-          console.log("-----FINAL-----");
+          //console.log("-----FINAL-----");
           // $timeout.cancel(vm.cl.temporizadorConsola);
           clearTimeout(this.cl.temporizadorConsola);
           this.cl.position = 0;
@@ -1195,7 +1195,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
   };
 
   consolaSetCrosshair(b:any) {
-    //console.log("consolaSetCrosshair : "+b);
+    ////console.log("consolaSetCrosshair : "+b);
     var c = parseInt(this.plot_historial.pointOffset({ x: b, y: 0 }).left, 10) - this.plot_historial.getPlotOffset().left;
     let a = this.plot_historial.width();
     //var d = parseInt(a / 2, 10);
@@ -1339,12 +1339,12 @@ clickOcultarTablaRecorrido() {
   //         break;
   //     case '3':
 
-  //         console.log("-----CASO 3 DEL GRAFICO");
-  //         //console.log(vm.tramas[1]);
+  //         //console.log("-----CASO 3 DEL GRAFICO");
+  //         ////console.log(vm.tramas[1]);
   //         //================================================================
   //         // vm.tramas[0].paramObj["di4"]
   //         //================================================================
-  //         //console.log(vm.tramas[1].paramObj["gfbdfghfdhbg"]);
+  //         ////console.log(vm.tramas[1].paramObj["gfbdfghfdhbg"]);
   //         vm.cl.motor.length = 0;
   //         for (var i = 0; i < vm.tramas.length; i++) {
   //             if (!(typeof vm.tramas[i].paramObj["di4"] === "undefined")) {
@@ -1354,11 +1354,11 @@ clickOcultarTablaRecorrido() {
   //             }
   //         }
 
-  //         console.log("******* MOTOR *******");
-  //         console.log(vm.cl.motor);
-  //         console.log("*********************");
-
+  //         //console.log("******* MOTOR *******");
   //         //console.log(vm.cl.motor);
+  //         //console.log("*********************");
+
+  //         ////console.log(vm.cl.motor);
 
   //         // if (vm.tramas[0].params.indexOf("acc=") > -1) {
   //         //     var f = 0;
@@ -1505,15 +1505,15 @@ clickOcultarTablaRecorrido() {
   //             //*****************************************************
   //         };
 
-  //         console.log("*****************************************************vm.cl.m");
-  //         console.log(vm.cl.m);//-CRestante
-  //         console.log(vm.cl.h);//-Velocidad
-  //         console.log(vm.cl.datasdatos);//i
-  //         console.log(vm.cl.l);//-C.Consumido
-  //         console.log(vm.cl.n);//-Odómetro
-  //         console.log(vm.cl.o);//-Rev.x Min.
-  //         console.log(vm.cl.p);//-On/Off
-  //         console.log("*****************************************************vm.cl.m");
+  //         //console.log("*****************************************************vm.cl.m");
+  //         //console.log(vm.cl.m);//-CRestante
+  //         //console.log(vm.cl.h);//-Velocidad
+  //         //console.log(vm.cl.datasdatos);//i
+  //         //console.log(vm.cl.l);//-C.Consumido
+  //         //console.log(vm.cl.n);//-Odómetro
+  //         //console.log(vm.cl.o);//-Rev.x Min.
+  //         //console.log(vm.cl.p);//-On/Off
+  //         //console.log("*****************************************************vm.cl.m");
 
   //         vm.cl.datasets = {
   //             "velocidad": {
@@ -1584,7 +1584,7 @@ clickOcultarTablaRecorrido() {
 
 
   //             if (vm.cl.h.length > 2 && vm.cl.l.length > 2 && vm.cl.n.length > 2) {
-  //                 console.log("solo mas de 2 elementos en velocidad __");
+  //                 //console.log("solo mas de 2 elementos en velocidad __");
   //                 vm.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, vm.options_grafico, {
   //                     xaxis: {
   //                         mode: "time",

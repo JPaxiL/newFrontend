@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private store: Store,
     private router: Router,
-    config: NgbCarouselConfig, 
+    config: NgbCarouselConfig,
     private fb: FormBuilder) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
@@ -65,12 +65,12 @@ export class LoginComponent implements OnInit {
       const params = this.loginForm.value;
       // params['registrador_id'] = params['registrador']['id'];
       this.isLoggingIn = true;
-      console.log(params);
+      //console.log(params);
       this.store.dispatch(new SignIn( params.name, params.password)).subscribe((data) => {
         // Animación de carga de Iniciando sesión...
         this.validCredentials = 1;
-        console.log('Inicio de sesión exitoso');
-        console.log(data);
+        //console.log('Inicio de sesión exitoso');
+        //console.log(data);
         this.router.navigate(['/panel'], {
           state: {
             //flag para mostrar toast de bienvenida
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
           default: this.errMsg = 'Hubo un error. Inténtalo nuevamente'; break;
         }
         this.isLoggingIn = false;
-        console.log(error.error.error);
+        //console.log(error.error.error);
         this.validCredentials = -1;
       });
 

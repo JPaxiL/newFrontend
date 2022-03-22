@@ -21,7 +21,7 @@ export class UsersService {
   }
 
   public getUsers(currentPage: string): Observable<User> {
-    console.log(environment.apiUrl , currentPage);
+    //console.log(environment.apiUrl , currentPage);
     return this.http.get<User>(environment.apiUrl + 'clientes?page=' + currentPage);
       // .map(res => res.json());
   }

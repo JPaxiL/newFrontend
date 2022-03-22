@@ -20,16 +20,16 @@ export class SettingComponent implements OnInit {
     this.params = params;
   }
   onClickConfig(e: any):void{
-    console.log("config...vehicle ");
+    //console.log("config...vehicle ");
     this.vehicleConfigService.displayOn.emit(e.data);
     // this.config = e.data;
     // this.display = true;
-    // console.log("display-->",this.display);
+    // //console.log("display-->",this.display);
 
   }
   // onChangeDisplay(res : boolean){
   //   this.display = res;
-  //   console.log('sssss',res);
+  //   //console.log('sssss',res);
   // }
   // onUpdate(res :any){
   //
