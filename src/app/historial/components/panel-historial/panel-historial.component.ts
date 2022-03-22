@@ -209,7 +209,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     ) {
 
     // this.historialService.currentMessage.subscribe(message => this.message = message);
-    // this.historialService.currentMessage.subscribe( () => {console.log('com 1 -> gaaaaaaaaa');
+    // this.historialService.currentMessage.subscribe( () => {//console.log('com 1 -> gaaaaaaaaa');
     // });
 
   }
@@ -253,7 +253,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   //     { nombre: 'DRF-345',imei:'444444444' },
   // ];
 
-    // console.log(vehicles);
+    // //console.log(vehicles);
 
     if(this.historialService.inicio){
       this.historialService.initialize();
@@ -262,9 +262,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-    // console.log("se inicia xXX");
-    // console.log(this.historialService);
-    console.log('Con historial : '+this.historialService.conHistorial);
+    // //console.log("se inicia xXX");
+    // //console.log(this.historialService);
+    //console.log('Con historial : '+this.historialService.conHistorial);
 
 
     // $( "#fechaInicial" ).datepicker({
@@ -287,14 +287,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // });
 
     // const tempMarker = L.marker([0, 0], {icon: iconMarker}).addTo(this.mapService.map);
-    // console.log(this.mapService.nombreMap);
-    // console.log("XXXXXXX--------");
+    // //console.log(this.mapService.nombreMap);
+    // //console.log("XXXXXXX--------");
 
-    // console.log(this.historialService.tramasHistorial);
+    // //console.log(this.historialService.tramasHistorial);
 
     // setTimeout(() => {
     //   const tempMarker = L.marker([0, 0], {icon: iconMarker}).addTo(this.mapService.map);
-    //   console.log(this.mapService.nombreMap);
+    //   //console.log(this.mapService.nombreMap);
 
     // }, 5000)
     let dH =  this.historialService.tramasHistorial; // Data Historial
@@ -302,13 +302,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     this.conHistorial = this.historialService.conHistorial;
     this.form = this.historialService.dataFormulario;
 
-    // console.log(this.form.selectedCarC );
+    // //console.log(this.form.selectedCarC );
 
     if (!(this.form.selectedCarC == null)) {
       this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
-      console.log("unidad diferente de null");
+      //console.log("unidad diferente de null");
     } else {
-      console.log("unidad es igual a null");
+      //console.log("unidad es igual a null");
     }
 
     if (this.conHistorial) {
@@ -333,7 +333,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    //console.log('me destruire gaaa');
+    ////console.log('me destruire gaaa');
 
     this.historialService.conHistorial = this.conHistorial;
 
@@ -345,28 +345,28 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
   // function changeColorHistorial() {
-  //   console.log("********  ACTUALIZANDO VALORES  *******");
+  //   //console.log("********  ACTUALIZANDO VALORES  *******");
 
   //   //Actualizar parametros iniciales
   //   historialDataFactory.editForm(vm.form);
 
   //   //Si esta mostrando una ruta, q la cambie de color
   //   if (vm.lineaHis) {
-  //       // console.log("********  CON HISTORIAL  *******");
-  //       // console.log(vm.lineaHis);
+  //       // //console.log("********  CON HISTORIAL  *******");
+  //       // //console.log(vm.lineaHis);
   //       vm.lineaHis.setStyle({opacity: 1, color: vm.form.colorHistorial});
   //   }
 
 
-  //   console.log("changeColorHistorial --- cambio color : "+ vm.form.colorHistorial);
+  //   //console.log("changeColorHistorial --- cambio color : "+ vm.form.colorHistorial);
 
   //   var data = {color:vm.form.colorHistorial};
 
   //   //**************************************************************************
   //   historialServices['editColorHistorial'](data).then(response => {
-  //     console.log('funcion editar color historial en la base de datos');
+  //     //console.log('funcion editar color historial en la base de datos');
   //   }).catch(err => {
-  //     console.log('ERROR',err);
+  //     //console.log('ERROR',err);
   //   });
 
   // }
@@ -480,7 +480,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 // colorHistorial:vm.form.colorHistorial, colorSubHistorial:vm.form.colorSubHistorial,
                 // icono : values[0].icon
               };
-    console.log(param);
+    //console.log(param);
 
     this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
 
@@ -490,14 +490,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       //let dH = res[0];
       var dH =  this.historialService.tramasHistorial; // Data Historial
 
-      console.log('HISTORIALLLLLL');
-      console.log(res);
-      // console.log(res[0]);
+      //console.log('HISTORIALLLLLL');
+      //console.log(res);
+      // //console.log(res[0]);
 
-      console.log('-----clickCargarHistorial');
-      console.log(this.form);
-      console.log(dH.length);
-      console.log(dH);
+      //console.log('-----clickCargarHistorial');
+      //console.log(this.form);
+      //console.log(dH.length);
+      //console.log(dH);
 
 
 
@@ -810,17 +810,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             var count = 1;
             index_historial2.forEach((item, i) => {
-              // console.log("--------xD");
-              // console.log(item);
-              // console.log(dH[item]);
-              // console.log(i);
+              // //console.log("--------xD");
+              // //console.log(item);
+              // //console.log(dH[item]);
+              // //console.log(i);
               //Es parada y tiene el check de mostrar paradas
               if ( dH[item].marker == "PARADA") {
 
                   if (i != index_historial2.length-1) {
                     dH[item].paradaFin = dH[index_historial2[i+1]].dt_tracker;
                   } else {
-                    //console.log("--------xD-- ULTIMO");
+                    ////console.log("--------xD-- ULTIMO");
                     dH[item].paradaFin = dH[dH.length-1].dt_tracker;
                   }
                   //var icon = { iconUrl: 'images/stop.png', iconAnchor: [7, 26] };
@@ -863,9 +863,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
               }
             });
-            // console.log('------>>>>> '+index_historial2);
+            // //console.log('------>>>>> '+index_historial2);
 
-            // console.log(index_historial2);
+            // //console.log(index_historial2);
 
 
             dH[0].index_historial = index_historial2;
@@ -916,12 +916,12 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             // // h1.push([dH[0].lat, dH[0].lng]);
             // // h1.push([dH[dH.length-1].lat, dH[dH.length-1].lng]);
-            // // console.log("---- FF ------- 1");
-            // // console.log(overlay);
-            // // console.log("---- FF ------- 2");
-            // // console.log("------");
-            // // console.log(overlay);
-            // // console.log("------");
+            // // //console.log("---- FF ------- 1");
+            // // //console.log(overlay);
+            // // //console.log("---- FF ------- 2");
+            // // //console.log("------");
+            // // //console.log(overlay);
+            // // //console.log("------");
             // // mapData.map.fitBounds(overlay.getBounds());
             // //mapData.map.fitBounds(bounds);
 
@@ -932,9 +932,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             // var submap = new map.Movimiento([],{color: param.colorSubHistorial});//.addTo(overlay);
             // var poly = [allmap, submap];
-            // // console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
-            // // //console.log(lili);
-            // // console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
+            // // //console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
+            // // ////console.log(lili);
+            // // //console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
             // //------------------------ MOVIMEINTO DEL GRAFICO ------------------------------
             // var iconc = { iconUrl: 'images/mm_20_red.png', iconAnchor: [6, 20] };
             // var icoG1 = new map.Parada([0, 0], { icon: new L.Icon(iconc), showTrace: true })
@@ -946,11 +946,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-            //   // console.log(this.getParams(this.historialService.tramasHistorial[0].params));
+            //   // //console.log(this.getParams(this.historialService.tramasHistorial[0].params));
 
 
 
-        console.log(dH[0].paramsGet);
+        //console.log(dH[0].paramsGet);
 
 
         //this.panelService.nombreComponente = nomComponent;
@@ -958,10 +958,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         // const item1 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0].value;
         // const item2 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0];
 
-        // console.log("===================================");
+        // //console.log("===================================");
 
-        // console.log(item1);
-        // console.log(item2);
+        // //console.log(item1);
+        // //console.log(item2);
 
 
         // this.panelService.nombreCabecera =   item[0].name;
@@ -970,15 +970,15 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
       } else {
-        console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
+        //console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
       }
 
 
     });
 
     // var dH22  = await this.historialService.get_tramas_recorrido(param);
-    // console.log('================== DDD ');
-    // console.log(dH22);
+    // //console.log('================== DDD ');
+    // //console.log(dH22);
 
 
 
@@ -1072,26 +1072,26 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     var dH =  this.historialService.tramasHistorial; // Data Historial
 
     let trama = row.trama;
-      console.log("click en el tr");
-      console.log(trama);
+      //console.log("click en el tr");
+      //console.log(trama);
 
     if (row.icono == "assets/images/start.png") {
-      console.log("--primero ----");
+      //console.log("--primero ----");
       trama.layer0.fireEvent('click');
       this.mapService.map.setView([trama.lat, trama.lng], 15);
 
     } else if(row.icono == "assets/images/end.png") {
-      console.log("--ultimo ----");
+      //console.log("--ultimo ----");
       trama.layerN.fireEvent('click');
       this.mapService.map.setView([trama.lat, trama.lng], 15);
 
     } else if(row.icono == "assets/images/stop.png") {
-      console.log("-----parada ----");
+      //console.log("-----parada ----");
       trama.layer.fireEvent('click');
       this.mapService.map.setView([trama.lat, trama.lng], 15);
 
     } else if (row.icono == "assets/images/drive.png") {
-      console.log("-----movimiento ----");
+      //console.log("-----movimiento ----");
 
       let t1 = trama.cc[0];
       let t2 = trama.cc[1];
@@ -1172,7 +1172,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   //creacion del icono
   marker_x(feature:string, latlng:L.LatLngTuple, anchor:L.PointTuple) {
-      // console.log(latlng);
+      // //console.log(latlng);
 
       var marker = L.marker(latlng, { icon: L.icon({
                 iconUrl: feature,
@@ -1211,7 +1211,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             var temp = arrayParam[j].split("=");
             const v1 = temp[0].trim();
             const v2 = temp[1].trim();
-            //console.log(v1,v2);
+            ////console.log(v1,v2);
             if ( isNaN( parseFloat( v2 ) ) ) {
                 paramsObj.push({id:v1,value:v2})
             } else {
@@ -1224,19 +1224,19 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             var temp = arrayParam[j].split(":");
             const v1 = temp[0].trim();
             const v2 = temp[1].trim();
-            //console.log(v1,v2);
+            ////console.log(v1,v2);
             if ( isNaN( parseFloat( v2 ) ) ) {
                 paramsObj.push({id:v1,value:v2})
             } else {
                 paramsObj.push({id:v1,value:parseFloat(v2)})
             }
         };
-        //console.log(paramsObj);
+        ////console.log(paramsObj);
 
     };
 
-    // console.log("**** parametros ****");
-    // console.log(paramsObj);
+    // //console.log("**** parametros ****");
+    // //console.log(paramsObj);
     return paramsObj;
 
   }
@@ -1268,7 +1268,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             let m_server = moment( new Date(trama.dt_server) );    //new Date(trama.dt_server);
             let m_tracker = moment( new Date(trama.dt_tracker) );  //new Date(trama.dt_tracker)
             let timeo = m_server.diff( m_tracker, 'seconds');
-            //console.log(timeo)
+            ////console.log(timeo)
             if( timeo >= 180 ) { color = "#FF0"; } else {   color = "#00E";}
             //conParam = false;
 

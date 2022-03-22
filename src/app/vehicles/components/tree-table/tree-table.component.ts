@@ -86,7 +86,7 @@ export class TreeTableComponent implements OnInit {
     this.vehicleService.reloadTableTree.subscribe(res=>{
 
       if(this.vehicleService.treeTableStatus){
-        // console.log('desde tree table ...');
+        // //console.log('desde tree table ...');
         // this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
         this.vehicles = this.vehicleService.vehiclesTree;
       }
@@ -98,7 +98,7 @@ export class TreeTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.vehicleService.treeTableStatus = true;
-    // console.log("tree on init");
+    // //console.log("tree on init");
     if(this.vehicleService.statusDataVehicleTree){
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
@@ -123,17 +123,17 @@ export class TreeTableComponent implements OnInit {
              message: 'Se aplicarán los cambios',
             accept: () => {
                 //Actual logic to perform a confirmation
-                // console.log("aceptadoo ....");
+                // //console.log("aceptadoo ....");
                 this.onSubmitEdit();
             }
         });
   }
   onSubmitEdit(){
-    // console.log('eviando data para edicion');
+    // //console.log('eviando data para edicion');
     this.loading=true;
     this.formDisplay = 'none';
     if(this.vehicleService.demo){
-      console.log('modo demo, no se enviara info a la DB');
+      //console.log('modo demo, no se enviara info a la DB');
       this.updateGroup();
 
       this.vehicleService.reloadTableTree.emit();
@@ -149,7 +149,7 @@ export class TreeTableComponent implements OnInit {
         name : this.nameEdit.nativeElement.value
       };
       this.vehicleConfigService.putGroupUpdate(req).subscribe((info : any)=>{
-        // console.log('result submit',info);
+        // //console.log('result submit',info);
         if(info.res){
           this.updateGroup();
           this.vehicleService.reloadTableTree.emit();
@@ -207,7 +207,7 @@ export class TreeTableComponent implements OnInit {
   }
   showEditGroup(data: any){
     this.dataEdit = data;
-    // console.log('show edit data',data);
+    // //console.log('show edit data',data);
     this.displayEditGroup = true;
     this.textHeaderEdit = data.type+" "+data.name;
     this.nameEdit.nativeElement.value = data.name;
@@ -218,7 +218,7 @@ export class TreeTableComponent implements OnInit {
     let aux2=[];
     let aux_idgrupo=-1;
     for (const key in vehicles) {
-      // console.log('id==idconvoy------->'+data.id+'=='+vehicles[key]['idconvoy'])
+      // //console.log('id==idconvoy------->'+data.id+'=='+vehicles[key]['idconvoy'])
       if (data.type=='grupo') {
         if(data.id==vehicles[key]['idgrupo']&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
           aux2.push(vehicles[key]);
@@ -235,7 +235,7 @@ export class TreeTableComponent implements OnInit {
     if(data.type=='convoy'){
       for (const key in vehicles){
         if(vehicles[key]['idgrupo']==aux_idgrupo&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
-          // console.log('unidades sin convoy??',vehicles[key]);
+          // //console.log('unidades sin convoy??',vehicles[key]);
           aux1.push(vehicles[key]);
         }
 
@@ -248,13 +248,13 @@ export class TreeTableComponent implements OnInit {
 
   }
   showDelete(data: any){
-    // console.log("data",data);
+    // //console.log("data",data);
     this.textDelete = data['type'];
     this.displayDelete = true;
     if(data['id']==null){
-      console.log('no hay id');
+      //console.log('no hay id');
     }else{
-      // console.log('en proceso de borrado');
+      // //console.log('en proceso de borrado');
       this.idDelete = data['id'];
       this.typeDelete = data['type'];
     }
@@ -269,12 +269,12 @@ export class TreeTableComponent implements OnInit {
       aux.push(this.list1[key]);
     }
     // inserto valores nuevos
-    // console.log('subir a lista 2');
+    // //console.log('subir a lista 2');
     for (const key in this.selectedList2) {
       // let index = aux.indexOf(this.selectedList2[key]);
-      // console.log("index====",index);
+      // //console.log("index====",index);
       aux.push(this.selectedList2[key]);
-      console.log(this.selectedList2[key]);
+      //console.log(this.selectedList2[key]);
     }
     //inserto valores en list1
     this.list1 = aux;
@@ -305,12 +305,12 @@ export class TreeTableComponent implements OnInit {
       aux.push(this.list2[key]);
     }
     // inserto valores nuevos
-    // console.log('subir a lista 2');
+    // //console.log('subir a lista 2');
     for (const key in this.selectedList1) {
       // let index = aux.indexOf(this.selectedList1[key]);
-      // console.log("index====",index);
+      // //console.log("index====",index);
       aux.push(this.selectedList1[key]);
-      // console.log(this.selectedList1[key]);
+      // //console.log(this.selectedList1[key]);
     }
     //inserto valores en list2
     this.list2 = aux;
@@ -338,10 +338,10 @@ export class TreeTableComponent implements OnInit {
       id : this.idDelete,
       vehicles : null
     };
-    // console.log('borrando ...');
+    // //console.log('borrando ...');
     this.buttonDisplay="none";
     this.vehicleConfigService.putGroupDelete(req).subscribe((info: any)=>{
-      console.log('descomponer res = ',info);
+      //console.log('descomponer res = ',info);
       this.loadingDelete = false;
       this.buttonDisplay="block";
       if(info.res){
@@ -375,7 +375,7 @@ export class TreeTableComponent implements OnInit {
   }
   onUpdate(res :any){
     const vehicles = this.vehicleService.vehicles;
-    // console.log("vehicles socket",vehicles);
+    // //console.log("vehicles socket",vehicles);
 
     const resultado = vehicles.find( (vehi: any) => vehi.IMEI == res.IMEI.toString() );
     if(resultado){
@@ -404,11 +404,11 @@ export class TreeTableComponent implements OnInit {
     // this.vehicleService.
   }
   onClickConfig(data: any):void{
-    // console.log("config...vehicle ",data);
+    // //console.log("config...vehicle ",data);
     this.config = data;
     this.display = !this.display;
 
-    // console.log("display-->",this.display);
+    // //console.log("display-->",this.display);
   }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;
@@ -416,17 +416,17 @@ export class TreeTableComponent implements OnInit {
   onClickGroup(){
     // this.displayGroup=true;
     this.eventDisplayGroup.emit(true);
-    console.log('displaygroup true');
+    //console.log('displaygroup true');
   }
   onClickSetting(e: string):void{
-    console.log("clikc setting",e);
+    //console.log("clikc setting",e);
     this.setting[e] = !this.setting[e];
     if(this.setting[e]){
       this.column++;
     }else{
       this.column--;
     }
-    // console.log("colmun = ",this.column);
+    // //console.log("colmun = ",this.column);
   }
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
@@ -435,12 +435,12 @@ export class TreeTableComponent implements OnInit {
     this.vehicleService.onClickIcon(IMEI);
   }
   onSort(data: any){
-    // console.log("sort desde tree", data);
+    // //console.log("sort desde tree", data);
     this.sortOrder=data;
   }
 
   public onQuickFilterChanged(data: any) {
-    // console.log("tt",this.tt);
+    // //console.log("tt",this.tt);
     this.tt.filterGlobal(data.target.value, 'contains')
     this.tt.defaultSortOrder=-1;
   }

@@ -37,11 +37,11 @@ export class MapComponent implements OnInit {
     // this.markerClusterData = this.generateData(1000);
     this.markerClusterData = this.addVehiclesMarker(this.vehicleService.vehicles);
     let vehicles = this.vehicleService.vehicles;
-    console.log('vehicles',vehicles);
+    //console.log('vehicles',vehicles);
 
-    console.log('markerClusterData',this.markerClusterData[0]);
-    console.log('markerClusterData',this.markerClusterData[0]['_latlng']['lat']);
-    console.log('markerClusterData',this.markerClusterData[0]['_latlng']['lng']);
+    //console.log('markerClusterData',this.markerClusterData[0]);
+    //console.log('markerClusterData',this.markerClusterData[0]['_latlng']['lat']);
+    //console.log('markerClusterData',this.markerClusterData[0]['_latlng']['lng']);
 
   }
 
@@ -65,7 +65,7 @@ export class MapComponent implements OnInit {
   }
   onMapReady(map: L.Map) {
     this.map = map;
-    console.log('this.map',this.map);
+    //console.log('this.map',this.map);
     // this.addSampleMarker();
     // this.markerClusterData = this.generateData(1000);
 
@@ -193,8 +193,8 @@ export class MapComponent implements OnInit {
 //       this.map.doubleClickZoom.disable();
 //
 //       // this.map.on('dblclick',(e)=>{
-//       //   console.log(Object.values(e)[3].lat);
-//       //   console.log(Object.values(e)[3].lng);
+//       //   //console.log(Object.values(e)[3].lat);
+//       //   //console.log(Object.values(e)[3].lng);
 //       //   L.marker([Object.values(e)[3].lat,Object.values(e)[3].lng],{icon:iconMarker}).addTo(this.map);
 //       //
 //       // });

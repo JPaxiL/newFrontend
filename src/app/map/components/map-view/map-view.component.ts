@@ -33,8 +33,6 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   // constructor() { }
 
   ngOnInit(): void {
-    this.eventSocketService.listen();
-
   }
 
   ngAfterViewInit(): void {
@@ -42,6 +40,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     //$("#panelMonitoreo").hide( "slow" )
     this.geofencesService.initialize();
     this.eventService.initialize();
+    this.eventSocketService.listen();
 
 
 

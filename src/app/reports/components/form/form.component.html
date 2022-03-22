@@ -1,7 +1,17 @@
-
+<!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog> -->
+<p-confirmDialog #cd [style]="{width: '50vw'}">
+    <ng-template pTemplate="header">
+        <h3>Confirmacion</h3>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+    </ng-template>
+</p-confirmDialog>
 <p-card>
     <ng-template pTemplate="header">
-      <h2>Reportes GL Tracker</h2>
+      <!-- <h2>Reportes GL Tracker</h2> -->
+      <span class="d-block p-2 bg-primary text-white">REPORTES GL TRACKER</span>
     </ng-template>
       <div class="p-fluid">
         <div class="row">
@@ -11,35 +21,110 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-6">
             <div class="p-field">
               <label>Vehiculos:</label>
               <!-- <p-dropdown [options]="vehicles" [(ngModel)]="selectedVehicle" optionLabel="name" optionValue="id" [showClear]="false" placeholder="Seleccione vehiculos"></p-dropdown> -->
               <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name"></p-multiSelect>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-6" *ngIf="!checkboxGroup">
             <div class="p-field">
               <label>Convoy:</label>
               <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione convoy/grupo"></p-dropdown>
             </div>
           </div>
+          <div class="col-6" *ngIf="checkboxGroup">
+            <div class="p-field">
+              <label>Grupo:</label>
+              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione grupo"></p-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues">Fecha/Hora</p-checkbox>
+            <label>Fecha/Hora</label>
+          </div>
           <div class="col-6">
             <div class="p-field">
-              <p-checkbox name="groupname" value="val1" [(ngModel)]="selectedValues">Fecha/Hora</p-checkbox>
-              <label>Grupo</label>
+              <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" ></p-checkbox>
+              <label for="binary">Grupo</label>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="selectedReport==0">
+          <div class="col-6">
+            <div class="p-field">
+              <p-checkbox [(ngModel)]="checkboxParada" [binary]="true" inputId="binary" ></p-checkbox>
+              <label for="binary">Paradas</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <p-checkbox [(ngModel)]="checkboxMovimiento" [binary]="true" inputId="binary" ></p-checkbox>
+              <label for="binary">Movimientos</label>
+            </div>
+          </div>
+
+        </div>
+        <div class="" *ngIf="selectedReport==1">
+          <div class="col-6">
+            <div class="row">
+              <div class="p-field">
+                <p-checkbox [(ngModel)]="checkboxDuracion" [binary]="true" inputId="binary" ></p-checkbox>
+                <label for="binary">Duracion</label>
+              </div>
+
+            </div>
+            <div class="row" *ngIf="checkboxDuracion">
+              opciones 6, 15, etc ve durcion
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <p-checkbox [(ngModel)]="checkboxLimitVelocidad" [binary]="true" inputId="binary" ></p-checkbox>
+              <label for="binary">Limite de velocidad</label>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues">Fecha/Hora</p-checkbox>
-            <label>Fecha/Hora</label>
+            <span>Limite de tiempo:</span>
+            <!-- <span class="d-block p-2 bg-primary text-white">Limite de tiempo:</span> -->
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="p-field">
+                <label for="binary">Fecha inicio:</label>
+                <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy"></p-calendar>
+              </div>
+            </div>
+            <div class="row">
+              <div class="p-field">
+                <label for="binary">Hora inicio:</label>
+                <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true"></p-calendar>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="p-field">
+                <label for="binary">Fecha inicio:</label>
+                <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy"></p-calendar>
+              </div>
+            </div>
+            <div class="row">
+              <div class="p-field">
+                <label for="binary">Hora final:</label>
+                <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true"></p-calendar>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     <ng-template pTemplate="footer">
-      <button pButton type="button" label="Generar Reporte"></button>
+      <button (click)="confirm()" pButton type="button" label="Generar Reporte"></button>
 
     </ng-template>
 </p-card>

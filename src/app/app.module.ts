@@ -23,6 +23,7 @@ import {ListboxModule} from 'primeng-lts/listbox';
 import {CardModule} from 'primeng-lts/card';
 import {CheckboxModule} from 'primeng-lts/checkbox';
 import {MultiSelectModule} from 'primeng-lts/multiselect';
+import {CalendarModule} from 'primeng-lts/calendar';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -163,6 +164,7 @@ import { ProfileConfigComponent } from './profile-config/profile-config.componen
     CardModule,
     CheckboxModule,
     MultiSelectModule,
+    CalendarModule,
     LeafletModule,
     LeafletMarkerClusterModule,
     NgxsStoragePluginModule.forRoot({

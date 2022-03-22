@@ -26,6 +26,7 @@ import { AccessoriesAlertsListComponent } from './components/accessories-alerts-
 import { AlertAccessoriesCreateComponent } from './components/alert-accessories-create/alert-accessories-create.component';
 import { AlertAccessoriesEditComponent } from './components/alert-accessories-edit/alert-accessories-edit.component';
 import { AlertGpsEditComponent } from './components/alert-gps-edit/alert-gps-edit.component';
+import { PlatformAlertsEditComponent } from './components/platform-alerts-edit/platform-alerts-edit.component';
 
 
 
@@ -46,7 +47,8 @@ import { AlertGpsEditComponent } from './components/alert-gps-edit/alert-gps-edi
     AccessoriesAlertsListComponent,
     AlertAccessoriesCreateComponent,
     AlertAccessoriesEditComponent,
-    AlertGpsEditComponent
+    AlertGpsEditComponent,
+    PlatformAlertsEditComponent
   ],
   imports: [
     CommonModule,
@@ -72,7 +74,8 @@ import { AlertGpsEditComponent } from './components/alert-gps-edit/alert-gps-edi
     PanelAlertsAccessoriesComponent,
     AlertAccessoriesCreateComponent,
     AlertAccessoriesEditComponent,
-    AlertGpsEditComponent
+    AlertGpsEditComponent,
+    PlatformAlertsEditComponent
   ]
 })
 export class AlertModule {

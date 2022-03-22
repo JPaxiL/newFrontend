@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
 
+import * as moment from 'moment';
+import {ConfirmationService} from 'primeng-lts/api';
 
 @Component({
   selector: 'app-form',
@@ -16,11 +18,20 @@ export class FormComponent implements OnInit {
   convoys: any=[];
   selectedConvoy: any={};
   groups: any=[];
-  selectedgroup: any={};
+  selectedGroup: any={};
+  checkboxGroup: boolean = false;
+  checkboxParada: boolean = true;
+  checkboxMovimiento: boolean = true;
+  checkboxDuracion: boolean = false;
+  checkboxLimitVelocidad: boolean = false;
+  dateInit!: Date;
+  dateEnd!: Date;
+  timeInit!: Date;
+  timeEnd!: Date;
 
    selectedValues: string[] = [];
 
-  constructor(private vehicleService: VehicleService) {
+  constructor(private vehicleService: VehicleService, private confirmationService: ConfirmationService) {
     // this.vehicles=this.vehicleService.vehicles;
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
       this.vehicles = vehicles;
@@ -50,6 +61,26 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const hoy = Date.now();
+    this.dateInit = new Date(moment(hoy).format("MM/DD/YYYY"));
+    // this.dateEnd = new Date(moment(hoy).format("MM/DD/YYYY"));
+    this.dateEnd = this.dateInit;
+    console.log('time',new Date('12/03/2018'));
+    this.timeInit = new Date('12/03/2018 00:00');
+    this.timeEnd = new Date('12/03/2018 23:59');
+    // this.timeInit = '00:00';
   }
+  confirm() {
+          this.confirmationService.confirm({
+              message: 'Desea generar el reporte en una nueva ventana?',
+              reject: () => {
+                console.log("Reporte en la misma hoja");
+              },
+              accept: () => {
+                  //Actual logic to perform a confirmation
+                  console.log("Se acepta una nueva hoja");
+              }
+          });
+    }
 
 }

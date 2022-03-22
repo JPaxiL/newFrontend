@@ -46,8 +46,8 @@ export class HistorialService {
 
   constructor(private http: HttpClient) {
     //this.tramasHistorial = RefDataHistorial.data;
-    // console.log("XXXXXXX");
-    // console.log(this.tramasHistorial);
+    // //console.log("XXXXXXX");
+    // //console.log(this.tramasHistorial);
   }
 
   public getHistorial (){
@@ -57,9 +57,9 @@ export class HistorialService {
     this.tramasHistorial = RefDataHistorial.data4;
 
     // var tramas = this.get_tramas_recorrido();
-    // console.log('================== DDD ');
+    // //console.log('================== DDD ');
 
-    // console.log( tramas );
+    // //console.log( tramas );
 
   }
 
@@ -67,7 +67,7 @@ export class HistorialService {
   public initialize (){
 
 
-    console.log('INICIALIZAR SERVICIO DEL HISTORIAL');
+    //console.log('INICIALIZAR SERVICIO DEL HISTORIAL');
     let dateCurrent = {
       "year": moment().year(),
       "month": moment().month()  + 1,
@@ -153,24 +153,24 @@ export class HistorialService {
   public async get_tramas_recorrido(param:any) {
 
 
-    // console.log('----1');
+    // //console.log('----1');
 
     // this.http.get<any>('assets/trackers.json')
     // .toPromise()
     // .then(res => {
     //   // console
-    //   console.log("data json",res.data);
+    //   //console.log("data json",res.data);
 
     // });
-    // console.log('----2');
+    // //console.log('----2');
     // const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
     // const response2 = new Array();
     // response2.push(  await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise() );
     this.tramasHistorial = await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise();
     //const response2 = await this.http.get(`${environment.apiUrl}/api/historial2`).toPromise();
-    //(console.log(response2);
+    //(//console.log(response2);
 
-    // console.log('----2');
+    // //console.log('----2');
 
     // const response2 = await this.http.get(`${environment.apiUrl}/historial2`);
 

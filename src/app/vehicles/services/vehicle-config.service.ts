@@ -18,7 +18,7 @@ export class VehicleConfigService {
   private api_url = environment.apiUrl;
 
   public getTest(){
-    // console.log("apiurl = ",this.api_url);
+    // //console.log("apiurl = ",this.api_url);
     return this.http.get(this.api_url+"/api/test");
 
   }
