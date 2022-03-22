@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
   showNavigationArrows = false;
   showNavigationIndicators = false;
   images = [
-    `./assets/images/login/fondo1.jpg`,
-    `./assets/images/login/fondo2.jpg`
+    `./assets/images/login/background_cc.png`,
+    `./assets/images/login/background_city.png`
   ];
 
   loginForm!: FormGroup;
