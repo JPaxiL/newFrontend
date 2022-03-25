@@ -5,6 +5,8 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { MapService } from '../../../vehicles/services/map.service';
 import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
+import { GeopointsService } from '../../../geopoints/services/geopoints.service';
+
 import { EventService } from './../../../events/services/event.service';
 import { EventSocketService } from './../../../events/services/event-socket.service';
 
@@ -26,6 +28,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     private mapService: MapService,
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
+    public geopointsService: GeopointsService,
     public eventService: EventService,
     public eventSocketService :EventSocketService
 
@@ -41,6 +44,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.createMap();
     //$("#panelMonitoreo").hide( "slow" )
     this.geofencesService.initialize();
+    this.geopointsService.initialize();
     this.eventService.initialize();
 
 

@@ -1,1 +1,8 @@
-<p>panel-geopoints works!</p>
+
+<div *ngIf="(geopointsService.nombreComponente == 'LISTAR')">
+  <app-list-geopoints></app-list-geopoints>
+</div>
+
+<div *ngIf="(geopointsService.nombreComponente == 'AGREGAR')">
+  <app-add-geopoints></app-add-geopoints>
+</div>

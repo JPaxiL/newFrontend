@@ -53,9 +53,9 @@ export class GeofencesService {
         }
 
         var centerPoligon = this.geofences[i].geo_elemento.getBounds().getCenter();
-        console.log("centro de = "+this.geofences[i].zone_name);
+        // console.log("centro de = "+this.geofences[i].zone_name);
 
-        console.log(centerPoligon);
+        // console.log(centerPoligon);
 
         //this.geofences[i].marker_name = L.marker(centerPoligon).addTo(this.mapService.map);
         this.geofences[i].marker_name = L.circleMarker(centerPoligon, {
