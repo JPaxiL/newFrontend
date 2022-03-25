@@ -89,7 +89,7 @@ export class VehiclesComponent implements OnInit {
     configDropdown.autoClose = false;
 
     this.vehicleConfigService.displayOn.subscribe(e=>{
-      // console.log("desde vehicles..");
+      // //console.log("desde vehicles..");
       this.config=e;
       this.display = true;
     });
@@ -106,7 +106,7 @@ export class VehiclesComponent implements OnInit {
     this.vehicleService.reloadTable.subscribe(res=>{
       const vehicles = this.vehicleService.vehicles;
       if(this.vehicleService.listTable==0&&this.statusTable){
-        // console.log("this api asing reloading ...");
+        // //console.log("this api asing reloading ...");
         this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
       }
     });
@@ -115,7 +115,7 @@ export class VehiclesComponent implements OnInit {
       // this.api = params.api;
       // this.columnApi = params.columnApi;
       // sort: 'asc'
-      console.log("desde vehicles coponent");
+      //console.log("desde vehicles coponent");
       this.columnApi.applyColumnState({
           state: [
               {
@@ -128,15 +128,15 @@ export class VehiclesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    console.log("ngAfterViewInit table ag GRIDstatus table = ",this.statusTable);
+    //console.log("ngAfterViewInit table ag GRIDstatus table = ",this.statusTable);
 
   }
   ngOnInit(): void {
-    console.log("ngOnInit table ag GRID status table = ",this.statusTable);
+    //console.log("ngOnInit table ag GRID status table = ",this.statusTable);
 
   }
   ngOnDestroy(): void {
-    console.log("destroy component table...");
+    //console.log("destroy component table...");
     this.statusTable=false;
      // this.vehicleService.reloadTable.unsubscribe();
   }
@@ -145,7 +145,7 @@ export class VehiclesComponent implements OnInit {
   }
   onUpdate(res :any){
     const vehicles = this.vehicleService.vehicles;
-    // console.log("vehicles socket",vehicles);
+    // //console.log("vehicles socket",vehicles);
 
     const resultado = vehicles.find( (vehi: any) => vehi.IMEI == res.IMEI.toString() );
     if(resultado){
@@ -183,20 +183,20 @@ export class VehiclesComponent implements OnInit {
     // this.vehicleService.reloadTable.subscribe(res=>{
     //   const vehicles = this.vehicleService.vehicles;
     //   if(this.vehicleService.listTable==0&&this.statusTable){
-    //     // console.log("this api asing reloading ...this.vehicleService.listTable / status table ",this.vehicleService.listTable+" / "+this.statusTable);
+    //     // //console.log("this api asing reloading ...this.vehicleService.listTable / status table ",this.vehicleService.listTable+" / "+this.statusTable);
     //     this.api.applyTransactionAsync({ update: vehicles }, this.resultCallback);
     //   }
     // });
   }
 
   public resultCallback () {
-      // console.log('transactionApplied() - ');
+      // //console.log('transactionApplied() - ');
   }
   public onGridReady(params: GridReadyEvent) {
       this.api = params.api;
       this.columnApi = params.columnApi;
       this.api.sizeColumnsToFit();
-      console.log("onGridReady ....");
+      //console.log("onGridReady ....");
       this.statusTable=true;
       this.dataLoading();
   }
@@ -206,9 +206,9 @@ export class VehiclesComponent implements OnInit {
   }
 
   public onClickSetting(e: any){
-    console.log("setting",this.setting);
+    //console.log("setting",this.setting);
     this.setting[e] = !this.setting[e];
-    console.log(this.setting[e]);
+    //console.log(this.setting[e]);
 
     this.columnApi.applyColumnState({
       state: [

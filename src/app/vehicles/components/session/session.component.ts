@@ -34,7 +34,7 @@ export class SessionComponent implements OnInit {
   }
   onSubmit(): void {
 
-    // console.log(this.loginForm);
+    //console.log(this.loginForm);
     // this.isLoadingResults = true;
     this.isSubmitted = true;
     this.authService.login(this.loginForm.value)
@@ -42,7 +42,7 @@ export class SessionComponent implements OnInit {
         this.isLoadingResults = false;
         this.router.navigate(['/vehicles']).then(_ => console.log('Estas en modulo vehiculos!'));
       }, (err: any) => {
-        console.log(err);
+        //console.log(err);
         this.isLoadingResults = false;
         this.isSubmitted = false;
       });

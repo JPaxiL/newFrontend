@@ -14,7 +14,27 @@
 @import "primeng-lts/resources/primeng.min.css";
 @import "primeng-lts/resources/themes/saga-blue/theme.css";
 
-
+@font-face {
+  font-family: Titillium-Semibold;
+  src: url('./assets/fonts/Titillium-Semibold.woff') format('woff'), verdana;
+}
+@font-face {
+  font-family: Titillium-Regular;
+  src: url('./assets/fonts/Titillium-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: Titillium-Light;
+  src: url('./assets/fonts/Titillium-Light.woff') format('woff');
+}
+@font-face {
+  font-family: Cocogoose;
+  src: url('./assets/fonts/cocogoose.woff') format('woff');
+}
+@font-face {
+  font-family: Verdana-Bold;
+  src: local('Verdana') format('woff');
+  font-weight: bolder;
+}
 
 
 html, body { height: 100%; }

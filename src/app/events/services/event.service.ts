@@ -5,6 +5,7 @@ import * as L from 'leaflet';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
 import { MapServicesService } from '../../map/services/map-services.service';
+import { getContentPopup } from '../helpers/event-helper';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +44,6 @@ export class EventService {
           });
           event.layer._myType = 'evento';
           event.layer._myId = event.id;
-          event.layer.bindPopup(this.getPopupContent(event));
           // event.layer.addTo(this.eventsLayers);
 
           return event;
@@ -57,49 +57,6 @@ export class EventService {
 
   public addNewEvent(event:any){
     this.events.unshift(event);
-  }
-
-  public getPopupContent(event:any){
-    return `<table class="dl-horizontal" style="border-collapse: separate; border-spacing: 2px;">
-            <tr>
-              <td rowspan="3" style="font-size: 13px; width: 16% !important;">
-                <img src="assets/images/events-icons/entrada_zona.png" style="max-width: 35px !Important; max-height: 40px;"/>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-size: 13px;" >
-                <b>EVENTO:</b>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-size: 13px; text-transform: uppercase;"><b>${event.tipo}</b></td>
-            </tr>
-            <tr><td colspan="2" style="font-size: 13px;" ></td></tr>
-            <tr>
-              <td style="font-size: 10px; width: 20%;" ><b>UNIDAD:</b></td>
-              <td style="font-size: 10px; width: 80%;" >${event.nombre_objeto}</td>
-            </tr>
-            <tr>
-              <td style="font-size: 10px; width: 20%;" ><b>UBICACIÓN:</b></td>
-              <td style="font-size: 10px; width: 80%;" ><a href="http://maps.google.com/maps?q=${event.latitud},${event.longitud}&amp;t=m" target="_blank" style="color: black">${event.latitud} °,  ${event.longitud} °</a></td>
-            </tr>
-            <tr>
-              <td style="font-size: 10px; width: 20%;" ><b>ZONA:</b></td>
-              <td style="font-size: 10px; width: 80%;" >${event.nombre_zona}</td>
-            </tr>
-            <tr>
-              <td style="font-size: 10px; width: 20%;" ><b>VELOCIDAD:</b></td>
-              <td style="font-size: 10px; width: 80%;" >${event.velocidad} km/h</td>
-            </tr>
-            <tr>
-              <td style="font-size: 10px; width: 20%;" ><b>REFERENCIA:</b></td>
-              <td style="font-size: 10px; width: 80%;" ></td>
-            </tr>
-            <tr>
-              <td style="font-size: 10px; width: 20%;" ><b>FECHA - HORA:</b></td>
-              <td style="font-size: 10px; width: 80%;" >${event.fecha_tracker}</td>
-            </tr>
-          </table>`
   }
 
 }

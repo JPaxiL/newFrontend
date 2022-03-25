@@ -119,7 +119,7 @@ export class VehicleConfigComponent implements OnInit {
              message: 'Se aplicarán los cambios',
             accept: () => {
                 //Actual logic to perform a confirmation
-                // console.log("aceptadoo ....");
+                // //console.log("aceptadoo ....");
                 this.onSubmit();
             }
         });
@@ -148,15 +148,15 @@ export class VehicleConfigComponent implements OnInit {
     };
 
 
-    // console.log("vehicle config = ",this.config);
-    // console.log("vehicle edit = ",this.vehicle);
+    // //console.log("vehicle config = ",this.config);
+    // //console.log("vehicle edit = ",this.vehicle);
     //procesando info
     this.loading=true;
     this.formDisplay = "none";
 
     //end procesando info
     this.configService.putConfig(this.vehicle).subscribe((info:any) => {
-      // console.log(info);
+      // //console.log(info);
       if(info.res){
         //update data local
         //mensaje de exito

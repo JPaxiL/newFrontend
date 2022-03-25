@@ -15,7 +15,7 @@ export class PanelVehiclesComponent implements OnInit {
     this.listTable = this.vehicleService.listTable;
 
     this.vehicleService.clickListTable.subscribe(res=>{
-      // console.log("cambio de tabla panel", res);
+      // //console.log("cambio de tabla panel", res);
       this.listTable = this.vehicleService.listTable;
     } );
   }
@@ -24,15 +24,15 @@ export class PanelVehiclesComponent implements OnInit {
 
   }
   ngOnDestroy() : void {
-    // console.log('OnDestroy .......');
+    // //console.log('OnDestroy .......');
     this.vehicleService.listTable = -1;
   }
   onHideDisplayGroup(event : boolean){
-    // console.log('hide group panel...',event);
+    // //console.log('hide group panel...',event);
     this.displayGroup = event;
   }
   eventDisplayGroup(event : boolean){
-    // console.log('desde panel',event);
+    // //console.log('desde panel',event);
     this.displayGroup = event;
   }
 

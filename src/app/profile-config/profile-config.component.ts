@@ -11,7 +11,7 @@ export class ProfileConfigComponent implements OnInit {
 
   constructor(
     private router: Router
-    
+
   ) { }
 
   backgroundImage = '';
@@ -32,7 +32,7 @@ export class ProfileConfigComponent implements OnInit {
   }
 
   updateProfile(): void {
-    console.log(this.profileConfigForm.value);
+    //console.log(this.profileConfigForm.value);
   }
 
   goToPanel(): void {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
+import { getContentPopup } from '../../helpers/event-helper';
 @Component({
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
@@ -21,10 +22,12 @@ export class EventListComponent implements OnInit {
 
   public showEvent(event:any){
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
+    event.layer.bindPopup(getContentPopup(event));
     event.layer.addTo(this.mapService.map).openPopup();
   }
 
   public hideEvent(event:any){
+    // this.mapService.map.fitBounds([[-11.107323, -75.523437]], {maxZoom: 5});
     this.mapService.map.removeLayer(event.layer)
   }
 

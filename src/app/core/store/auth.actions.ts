@@ -15,7 +15,7 @@ export class LogOut  {
   static readonly type = '[Auth] Update User';
 
   constructor() {
-    console.log('LOGOUT');
+    //console.log('LOGOUT');
   }
 }
 

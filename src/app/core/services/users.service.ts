@@ -13,7 +13,7 @@ import { OAuthResource } from '../interfaces/User';
 @Injectable()
 export class UserService {
 
-    urlApi : 'localhost' | undefined;    
+    urlApi : 'localhost' | undefined;
     isAdmin: boolean = false;
     // auth;
     users: any;
@@ -36,7 +36,7 @@ export class UserService {
         // .map(res => res.json());
     }
     updateUser(user: any){
-      //console.log(user);
+      ////console.log(user);
       return this.http.put(this.urlApi+'users/'+user.id,user);
         // .map(res => res.json());
     }
@@ -59,7 +59,7 @@ export class UserService {
 //    search(currentPage,busquedaNombre,busquedaApellido,busquedaEmpresa,busquedaEmail,busquedaEstadoUsuario,sortby,sortbydesc){
 //      if (sortby!='false') {
 //        return this.http.get(this.urlApi + 'users?page='+ currentPage+'&nombre='+busquedaNombre+'&apellido='+busquedaApellido+'&nombre_empresa='+busquedaEmpresa+'&correo='+busquedaEmail+'&habilitado='+busquedaEstadoUsuario+'&sort_by='+sortby).map((response: Response) => response.json());
-   
+
 //      }else if (sortbydesc!='false' ){
 //       return this.http.get(this.urlApi + 'users?page='+ currentPage+'&nombre='+busquedaNombre+'&apellido='+busquedaApellido+'&nombre_empresa='+busquedaEmpresa+'&correo='+busquedaEmail+'&habilitado='+busquedaEstadoUsuario+'&sort_by_desc='+sortbydesc).map((response: Response) => response.json());
 //      }else{
@@ -74,7 +74,7 @@ export class UserService {
 //               this.isAdmin = true;
 //               //Variable LOGIN, si está logueado entonces !userService.isAdmin
 //             }else{
-//               //console.log("No tiene permisos");
+//               ////console.log("No tiene permisos");
 //             }
 //             return body || {};
 //         }

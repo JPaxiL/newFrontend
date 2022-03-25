@@ -20,7 +20,7 @@ export class VehicleHeaderComponent implements IHeaderAngularComp {
   agInit(headerParams: IHeaderParams): void {}
 
   constructor(private vehicleService: VehicleService, private renderer: Renderer2) {
-    console.log("this.spanGroup", this.spanGroup);
+    //console.log("this.spanGroup", this.spanGroup);
   }
 
   ngOnDestroy(): void {
@@ -48,7 +48,7 @@ export class VehicleHeaderComponent implements IHeaderAngularComp {
   }
   onVehicleSort(status: number){
     if(this.vehicleService.listTable==1){
-      console.log("status==",status);
+      //console.log("status==",status);
       this.sortStatus=status;
       this.sort.emit(status);
     }

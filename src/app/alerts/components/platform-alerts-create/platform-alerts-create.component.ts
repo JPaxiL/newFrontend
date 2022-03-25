@@ -20,7 +20,7 @@ declare var $: any;
 export class PlatformAlertsCreateComponent implements OnInit {
 
   options = new Array(
-    { id:'ALERTS-GPS', name:"Alertas Gps"},
+    { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
   );
 
   public alertForm!: FormGroup;
@@ -48,14 +48,14 @@ export class PlatformAlertsCreateComponent implements OnInit {
   ngOnInit(): void {
     let dateCurrent = {
       "year": moment().year(),
-      "month": moment().month()  + 1,
+      "month": moment().month() + 1,
       "day": moment().date()
     };
 
     this.alertForm = this.formBuilder.group({
       vehicles: ['', [Validators.required]],
       geocercas: [[]],
-      geocircles: [[]],
+      geocercascirculares: [[]],
       tipoAlerta: ['',[Validators.required]],
       chkEventoActivado: [true],
       chkSonido: [true],
@@ -66,7 +66,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       fecha_desde: [dateCurrent],
       fecha_hasta: [dateCurrent],
       email: [{value: '', disabled:this.disabledEmail},[Validators.required, Validators.email]],
-      eventType: ['gps'],
+      eventType: ['platform'],
       chkCaducidad:[false],
       duracion_parada: [0],
       duracion_formato_parada:['']
@@ -135,31 +135,33 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   onSubmit(event: any){
 
-    console.log("this.alertForm.value =============> ", moment(this.alertForm.value).format('YYYY MM DD'));
-
     event.preventDefault();
 
     this.alertForm.value.vehiculos = JSON.stringify(this.alertForm.value.vehicles);
-    // this.alertForm.value.geocercas = JSON.stringify(this.alertForm.value.geocercas);
-    // this.alertForm.value.geocercascirculares = JSON.stringify(this.alertForm.value.geocercascirculares);
+    this.alertForm.value.vehicles = null;
+    this.alertForm.value.geocercas = JSON.stringify(this.alertForm.value.geocercas);
+    this.alertForm.value.geocercascirculares = JSON.stringify(this.alertForm.value.geocercascirculares);
+    this.alertForm.value.fecha_desde = this.setDate(this.alertForm.value.fecha_desde);
+    this.alertForm.value.fecha_hasta = this.setDate(this.alertForm.value.fecha_hasta);
 
-
-    if (this.alertForm.value.vehicles.length != 0) {
+    if (this.alertForm.value.vehiculos.length != 0) {
 
       Swal.fire({
-            title: 'Actualizando',
+            title: 'Desea guardar los cambios?',
             text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
-            preConfirm:() => {
-              this.AlertService.create(this.alertForm.value).then(res => {
-                this.clickShowPanel( 'ALERTS-GPS' );
-              });
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
+            preConfirm:async () => {
+              await this.AlertService.create(this.alertForm.value);
+              this.clickShowPanel( 'ALERTS-PLATFORMS' );
             }
         }).then(function() {
           Swal.fire(
-                'Actualizado',
-                'Los datos se actualizaron correctamente!!',
+                'Datos guardados',
+                'Los datos se guardaron correctamente!!',
                 'success'
             );
         });
@@ -208,5 +210,13 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   changeDisabledExpirationDate($event:any){
     this.expirationDate = !this.expirationDate;
+  }
+
+  setDate(date:any){
+    return moment({
+      year:date.year,
+      month:date.month - 1,
+      day:date.day
+    }).format('YYYY-MM-DD').toString();
   }
 }

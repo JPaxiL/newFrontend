@@ -42,6 +42,10 @@
       <app-platform-alerts-create></app-platform-alerts-create>
     </div>
 
+    <div *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-EDIT')">
+      <app-platform-alerts-edit></app-platform-alerts-edit>
+    </div>
+
     <div *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIES')">
       <app-panel-alerts-accessories></app-panel-alerts-accessories>
     </div>

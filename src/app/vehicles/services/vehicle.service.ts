@@ -51,16 +51,16 @@ export class VehicleService {
         cargar data,
         emitir evento de carga a demas componentes
     */
-    // console.log('vehicle service constructor ...');
+    // //console.log('vehicle service constructor ...');
     //tiempo critico
     if(this.demo){
       setTimeout(()=>{
-        // console.log("carga de data");
+        // //console.log("carga de data");
         this.http.get<any>(this.url_demo)
                     .toPromise()
                     .then(res => {
                       // console
-                      // console.log("data json",<TreeNode[]>res.data);
+                      // //console.log("data json",<TreeNode[]>res.data);
                       this.vehicles = this.dataFormatVehicle(<TreeNode[]>res.data);
                       this.vehiclesTree = this.createNode(this.vehicles);
                       this.dataCompleted.emit(this.vehicles);
@@ -75,7 +75,7 @@ export class VehicleService {
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
-        // console.log("vehicles",vehicles);
+        // //console.log("vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.vehiclesTree = this.createNode(this.vehicles);
         this.dataCompleted.emit(this.vehicles);
@@ -199,7 +199,7 @@ export class VehicleService {
             vehicle.m2h = 0;
         }
         vehicle.m2h = setTimeout(() => {
-            // console.log("MAS DE 2 HORAS SIN TRANSMISION : " + vehicle.name);
+            // //console.log("MAS DE 2 HORAS SIN TRANSMISION : " + vehicle.name);
             vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
             if( vehicle.c_02 >= 7200 ) {
                 // if (userConfig.icono == "arrow2") {
@@ -256,7 +256,7 @@ export class VehicleService {
                         vehicle.m5 = 0;
                     }
                     vehicle.m5 = setTimeout(() => {
-                        // console.log("MAS DE 5 MINUTOS SIN TRANSMISION, EN MOVIMIENTO , ZONA DE NO COBERTURA: " + item.name);
+                        // //console.log("MAS DE 5 MINUTOS SIN TRANSMISION, EN MOVIMIENTO , ZONA DE NO COBERTURA: " + item.name);
                         vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
                         if ((vehicle.v_vel > 3) && (vehicle.v_on == 1) && (vehicle.c_02 >= 300)) {
                                 //mayor a 5 minutos //==>5
@@ -286,7 +286,7 @@ export class VehicleService {
             vehicle.m2h = 0;
         }
         vehicle.m2h = setTimeout(() => {
-            // console.log("MAS DE 2 HORAS SIN TRANSMISION : " + item.name);
+            // //console.log("MAS DE 2 HORAS SIN TRANSMISION : " + item.name);
             vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
             if( vehicle.c_02 >= 7200 && vehicle.v_on == 0 ) {
                 // if (userConfig.icono == "arrow2") {
@@ -452,7 +452,7 @@ export class VehicleService {
     return vehicle;
   }
   createNode(data: any): any{
-    console.log("create node");
+    //console.log("create node");
     //variables de inicio
 
     //identificando grupos
@@ -475,8 +475,8 @@ export class VehicleService {
         status_convoy= true;
       }
 
-      // console.log("posibilidad "+status_group+" - "+status_convoy);
-      // console.log()
+      // //console.log("posibilidad "+status_group+" - "+status_convoy);
+      // //console.log()
       // posibilidades
       // 1 1
       // 0 1
@@ -519,11 +519,11 @@ export class VehicleService {
             ]
           }
         );
-        // console.log("index_group",index_group)
+        // //console.log("index_group",index_group)
         // map[data]
       }else if(status_group&&!status_convoy){//igual que el caso 1 1
         // prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
-        // console.log("data[index]['convoy']",data[index]['convoy']);
+        // //console.log("data[index]['convoy']",data[index]['convoy']);
         map.push(
           {
             data:{name: data[index]['grupo'], col: 3, type:'grupo', id:data[index]['idgrupo']},
@@ -548,20 +548,20 @@ export class VehicleService {
         //recuperar el id del convoy dentro del grupo
         // let index_convoy = map[index_group]['children']['data']
 
-        // console.log("mar de opciones", map[index_group]['children'].indexOf({data:{name:"GRUPO LINARES"}}));
-        // console.log("mar de opciones", map[index_group]['children']);
+        // //console.log("mar de opciones", map[index_group]['children'].indexOf({data:{name:"GRUPO LINARES"}}));
+        // //console.log("mar de opciones", map[index_group]['children']);
         let e = map[index_group]['children'];
         let b = {data:{name:data[index]['convoy']}};
-        // console.log("index-->",e.indexOf(b));
+        // //console.log("index-->",e.indexOf(b));
         let aux_index: string = "0";
         for(const i in e){
-          // console.log("convoy",e[i]['data']['name'])
+          // //console.log("convoy",e[i]['data']['name'])
           if(e[i]['data']['name']==data[index]['convoy']){
-            // console.log("exito en "+data[index]["grupo"]+"/"+data[index]['convoy']+" -->",i);
+            // //console.log("exito en "+data[index]["grupo"]+"/"+data[index]['convoy']+" -->",i);
             aux_index = i;
           }
         }
-        // console.log("aux_index",aux_index);
+        // //console.log("aux_index",aux_index);
         map[index_group]['children'][aux_index]["children"].push({
           data:data[index]
         });
@@ -570,10 +570,10 @@ export class VehicleService {
       status_convoy=false;
 
     }
-    // console.log("groups",this.groups);
-    // console.log("convoys",this.convoys);
-    // console.log("map",map);
-    // console.log("prueba",prueba);
+    // //console.log("groups",this.groups);
+    // //console.log("convoys",this.convoys);
+    // //console.log("map",map);
+    // //console.log("prueba",prueba);
 
 
     return map;
