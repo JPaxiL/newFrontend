@@ -173,8 +173,8 @@ export class ListGeopointsComponent implements OnInit {
   }
 
   clickAgregarGeocerca() {
-    // this.geopointsService.nombreComponente = "AGREGAR";
-    // this.geopointsService.action         = "add";
+    this.geopointsService.nombreComponente = "AGREGAR";
+    this.geopointsService.action         = "add";
 
   }
 

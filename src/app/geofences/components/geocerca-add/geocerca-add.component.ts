@@ -217,6 +217,26 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     //console.log('SALDRE DE LA EDICION DE GEOCERCA');
     if ( this.geofencesService.action == "edit" ) {
+
+      //var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
+      var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
+
+      if ( this.geofencesService.action == "edit" ) {
+
+          this.mapService.map.removeLayer(geo.geo_elemento);
+          geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ), {
+            weight: 3,
+            fill: true,
+            color: geo.zone_color //'#000000'
+          });//.addTo(this.mapService.map);
+
+          if (geo.zone_visible == "true") {
+            geo.geo_elemento.addTo(this.mapService.map);
+          }
+
+
+      }
+
     } else {
       this.mapService.map.removeLayer(this.poligonAdd);
     }

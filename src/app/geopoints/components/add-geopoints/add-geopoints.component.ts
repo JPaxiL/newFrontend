@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { GeopointsService } from '../../services/geopoints.service';
 import { MapServicesService } from '../../../map/services/map-services.service';
@@ -11,7 +11,7 @@ import { Logger } from 'ag-grid-community';
   templateUrl: './add-geopoints.component.html',
   styleUrls: ['./add-geopoints.component.scss']
 })
-export class AddGeopointsComponent implements OnInit {
+export class AddGeopointsComponent implements OnInit, OnDestroy {
 
   form :any = {};
 
@@ -82,11 +82,53 @@ export class AddGeopointsComponent implements OnInit {
 
       // this.poligonAdd.editing.enable();
 
-    }
 
+      const svgIcon = L.divIcon({
+        html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="#F00" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+        className: "",
+        iconSize: [24, 29],
+        iconAnchor: [12, 29],
+      });
+
+      this.pointAdd = L.marker([this.mapService.map.getCenter().lat , this.mapService.map.getCenter().lng],
+      { icon: svgIcon
+      }).addTo(this.mapService.map);
+
+      this.pointAdd.dragging.enable();
+
+    }
 
   }
 
+  ngOnDestroy(){
+
+    //console.log('SALDRE DE LA EDICION DE GEOCERCA');
+    if ( this.geopointsService.action == "edit" ) {
+
+        var geo = this.geopointsService.geopoints.filter((item:any)=> item.geopunto_id == this.geopointsService.idGeopointEdit)[0];
+        this.mapService.map.removeLayer(geo.geo_elemento);
+
+        var latlng = geo.geopunto_vertices.split(",")
+        const svgIcon = L.divIcon({
+            html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            className: "",
+            iconSize: [24, 29],
+            iconAnchor: [12, 29],
+          });
+
+        geo.geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
+            { icon: svgIcon
+            });
+
+        if (geo.geopunto_visible == "true") {
+            geo.geo_elemento.addTo(this.mapService.map);
+        }
+
+    } else {
+        this.mapService.map.removeLayer(this.pointAdd);
+    }
+
+  }
 
   llenar_formulario(){
     var geo = this.geopointsService.geopoints.filter((item:any)=> item.geopunto_id == this.geopointsService.idGeopointEdit)[0];
@@ -135,6 +177,8 @@ export class AddGeopointsComponent implements OnInit {
 
     this.form.geopunto_visible         = "true";
     this.form.geopunto_nombre_visible  = "true";
+    this.form.geopunto_visible_bol           = true;
+    this.form.geopunto_nombre_visible_bol    = true;
 
     this.form.geopunto_vertices        = "";
 
@@ -273,58 +317,152 @@ export class AddGeopointsComponent implements OnInit {
 
       // this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
 
-      // this.geofencesService.store(this.form).then( (res1) => {
-      //   console.log("---clickGuardar NUEVO----");
-      //   console.log(res1);
+      this.form.geopunto_nombre_visible = (this.form.geopunto_nombre_visible_bol) ? "true"  : "false";
+      this.form.geopunto_visible    = (this.form.geopunto_visible_bol) ? "true"  : "false";
 
-      //   this.geofencesService.nombreComponente =  "LISTAR";
+      this.form.geopunto_vertices = this.layerToPoints(this.pointAdd,'POINT');
 
-      //   let gNew = res1[2];
-      //   let gNew2 = res1[3][0];
-      //   // var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
+      this.geopointsService.store(this.form).then( (res1) => {
+        console.log("---clickGuardar NUEVO----");
+        console.log(res1);
 
-      //   // geo.merge(res1[2]);
-      //   // geo = Object.assign(geo, res1[2]);
-      //   var geo:any = {};
-      //   geo.id = gNew.id;
+        this.geopointsService.nombreComponente =  "LISTAR";
 
-      //   geo.descripcion = gNew.descripcion;
-      //   geo.orden = gNew.nombre_zona;
-      //   geo.vel2_zona = gNew.vel2_zona;
-      //   geo.vel3_zona = gNew.vel3_zona;
-      //   geo.vel_act_zona = gNew.vel_act_zona;
-      //   geo.vel_max = gNew.vel_max;
-      //   geo.vel_zona = gNew.vel_zona;
-      //   geo.zone_cat = gNew.categoria_zona;
-      //   geo.zone_color = gNew.color_zona;
-      //   geo.zone_name = gNew.nombre_zona;
-      //   geo.zone_name_visible = gNew.nombre_visible_zona;
-      //   geo.zone_name_visible_bol = (geo.zone_name_visible === 'true');
-      //   // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
-      //   geo.zone_visible = gNew.visible_zona;
+        let gNew = res1[2];
+        // let gNew2 = res1[3][0];
+        // var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
 
-      //   geo.geo_coordenadas = gNew2.geo_coordenadas;
 
-      //   console.log(geo);
 
-      //   this.mapService.map.removeLayer(this.poligonAdd);
-      //   geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(gNew2.geo_coordenadas).coordinates[0] ), {
-      //     weight: 3,
-      //     fill: true,
-      //     color: geo.zone_color //'#000000'
-      //   }).addTo(this.mapService.map);
+        var geo:any = {};
+        geo.geopunto_id       = gNew.id;
+        geo.geopunto_color    = gNew.color_punto;
+        geo.geopunto_name     = gNew.nombre_punto;
+        geo.geopunto_nombre_visible = gNew.nombre_visible_punto;
+        geo.geopunto_nombre_visible_bol = (geo.geopunto_nombre_visible === 'true');
 
-      //   this.geofencesService.geofences.push(geo);
+        geo.geopunto_visible  = gNew.visible_punto;
+        geo.geopunto_visible_bol = (geo.geopunto_visible === 'true');
 
-      // });
+        geo.geopunto_vertices = gNew.coordenadas_punto;
+        geo.user_id           = gNew.usuario_id;
+
+        this.mapService.map.removeLayer(this.pointAdd);
+
+
+          // ==============2
+
+          var latlng = geo.geopunto_vertices.split(",")
+
+          const svgIcon = L.divIcon({
+            html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            className: "",
+            iconSize: [24, 29],
+            iconAnchor: [12, 29],
+          });
+
+          geo.geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
+            { icon: svgIcon
+            });
+
+          if (geo.geopunto_visible == "true") {
+            geo.geo_elemento.addTo(this.mapService.map);
+          }
+
+          geo.marker_name = L.circleMarker([parseFloat(latlng[0]), parseFloat(latlng[1])], {
+            // pane: 'markers1',
+            "radius": 0,
+            "fillColor": "#000",//color,
+            "fillOpacity": 1,
+            "color": "#000",//color,
+            "weight": 1,
+            "opacity": 1
+
+          }).bindTooltip(
+              // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+              '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.geopunto_color+';">'+geo.geopunto_name+'</b>',
+              { permanent: true,
+                offset: [20, 20],
+                direction: 'center',
+                className: 'leaflet-tooltip-own',
+              });
+
+        if (geo.geopunto_nombre_visible == "true") {
+          geo.marker_name.addTo(this.mapService.map);
+        }
+
+          // ===== 2
+
+        this.geopointsService.geopoints.push(geo);
+
+        // geopunto_color: "#000000"
+        // geopunto_id: 8556
+        // geopunto_name: "Ilo"
+        // geopunto_nombre_visible: "true"
+        // geopunto_nombre_visible_bol: true
+        // geopunto_vertices: "-17.649256706812025,-71.34899139404297"
+        // geopunto_visible: "true"
+        // geopunto_visible_bol: true
+
+
+        // color_punto: "#04ff00"
+        // coordenadas_punto: "-16.230255203755007,-73.69171656668186"
+        // id: 14278
+        // nombre_punto: "prueba 2"
+        // nombre_visible_punto: "true"
+        // usuario_id: 117
+        // visible_punto: "true"
+
+
+        // geo.descripcion = gNew.descripcion;
+        // geo.orden = gNew.nombre_zona;
+        // geo.vel2_zona = gNew.vel2_zona;
+        // geo.vel3_zona = gNew.vel3_zona;
+        // geo.vel_act_zona = gNew.vel_act_zona;
+        // geo.vel_max = gNew.vel_max;
+        // geo.vel_zona = gNew.vel_zona;
+        // geo.zone_cat = gNew.categoria_zona;
+        // geo.zone_color = gNew.color_zona;
+        // geo.zone_name = gNew.nombre_zona;
+        // geo.zone_name_visible = gNew.nombre_visible_zona;
+        // geo.zone_name_visible_bol = (geo.zone_name_visible === 'true');
+        // // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
+        // geo.zone_visible = gNew.visible_zona;
+
+        // geo.geo_coordenadas = gNew2.geo_coordenadas;
+
+        // console.log(geo);
+
+        // this.mapService.map.removeLayer(this.poligonAdd);
+        // geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(gNew2.geo_coordenadas).coordinates[0] ), {
+        //   weight: 3,
+        //   fill: true,
+        //   color: geo.zone_color //'#000000'
+        // }).addTo(this.mapService.map);
+
+        // this.geofencesService.geofences.push(geo);
+
+      });
     }
 
-    //Despues de agregar o editar, ordena el array de geocercas por el atributo orden(nombre de la geocerca en mayuscula)
-    // this.geofencesService.geofences.sort(function (a:any, b:any){
-    //   return a.orden.localeCompare(b.orden, 'en', { numeric: true })
+    //Despues de agregar o editar, ordena el array de geocercas por el atributo geopunto_name(nombre de la geocerca en mayuscula)
+    // this.geopointsService.geopoints.sort(function (a:any, b:any){
+    //   return a.geopunto_name.localeCompare(b.geopunto_name, 'en', { numeric: true })
     // });
+    // console.log("111");
+
+    // console.log(this.geopointsService.geopoints);
+
+    // this.geopointsService.geopoints = this.geopointsService.geopoints.sort(this.SortArray);
+    // console.log("2222");
+
+    // console.log(this.geopointsService.geopoints);
 
   }
+
+  // SortArray(x:any, y:any){
+  //   return x.geopunto_name.localeCompare(y.geopunto_name, 'en', {sensitivity: 'base'});
+  // }
 
 
   layerToPoints(figure:any, type:string) {
@@ -377,6 +515,15 @@ export class AddGeopointsComponent implements OnInit {
     } else {
         // console.log("CREACION DE GEOCERCA");
         //this.poligonAdd.setStyle({opacity: 1, color: newColor });
+        const svgIcon = L.divIcon({
+          html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+newColor+`" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+          className: "",
+          iconSize: [24, 29],
+          iconAnchor: [12, 29],
+        });
+
+        this.pointAdd.setIcon(svgIcon);
+
     }
 
   }
