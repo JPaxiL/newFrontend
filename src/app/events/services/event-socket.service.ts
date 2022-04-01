@@ -34,8 +34,6 @@ export class EventSocketService extends Socket {
 
     this.ioSocket.on('events', (event: any) => {
       let even = JSON.parse(event);
-      console.log("this.user_id =====> ",this.user_id);
-      console.log("event.usuario_id =====> ",even.usuario_id);
       if(this.user_id == even.usuario_id){
         this.count = this.count + 1;
 
