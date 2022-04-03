@@ -39,9 +39,9 @@ export class EventSocketService extends Socket {
 
         even.evento = even.descripcion_evento;
         even.tipo = even.descripcion_evento;
-        even.fecha_tracker = moment(even.fecha_tracker).format("YYYY/MM/DD HH:mm:ss");
-        even.fecha_minuto = moment(even.fecha_minuto).format("YYYY/MM/DD HH:mm:ss");
-        even.fecha_servidor = moment(even.fecha_servidor).format("YYYY/MM/DD HH:mm:ss");
+        even.fecha_tracker = moment(even.fecha_tracker).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+        even.fecha_minuto = moment(even.fecha_minuto).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+        even.fecha_servidor = moment(even.fecha_servidor).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
         even.imei = even.tracker_imei;
 
         let newEvent = this.setLayer(even);
