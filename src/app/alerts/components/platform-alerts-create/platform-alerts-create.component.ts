@@ -269,6 +269,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
         this.showInfraccion = false;
         break;
       case 'Infracción':
+      case 'Infraccion':
         this.showTiempoLimite = false;
         this.showFechaCaducidad = false;
         this.showGeocercas = false;
