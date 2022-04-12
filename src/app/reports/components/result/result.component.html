@@ -9,15 +9,17 @@
         </tr>
         <tr *ngFor="let row of report_table; let i = index;">
             <td>{{i+1}}</td>
-            <td>{{row.codigo}}</td>
+            <!-- <td *ngFor="let header of table_headers">{{row[header]}}</td>
+            <td>{{row.placa}}</td> -->
+            <td>{{row['codigo']}}</td>
             <td>{{row.placa}}</td>
-            <td>{{row.fecha}}</td>
-            <td>{{row.hora}}</td>
-            <td>{{row.estado}}</td>
+            <td>{{row.fecha.split(' ')[0]}}</td>
+            <td>{{row.fecha.split(' ')[1]}}</td>
+            <td>{{row['estado']}}</td>
             <td>{{row.velocidad}}</td>
             <td>{{row.velocidad_can}}</td>
             <td>{{row.odometro}}</td>
-            <td>{{row.ubicacion}}</td>
+            <td>{{row.latitud + ', ' + row.longitud}}</td>
             <td>{{row.zonaCercana}}</td>
         </tr>
     </table>

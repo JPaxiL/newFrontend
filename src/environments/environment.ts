@@ -4,12 +4,19 @@
 
 export const environment = {
   production: false,
+  apiUrl: 'http://localhost:8001',
+  idClient: '84',
+  secretClient: 'LUTj1k8Tley9SvQ1Jwmrha1HPHJs87ShfiQVB18S',
+  socketUrl: 'http://escucha.glmonitoreo.com/'
+};
+/* export const environment = {
+  production: false,
   apiUrl: 'https://apiprueba.glmonitoreo.com',
   idClient: '84',
   secretClient: 'LUTj1k8Tley9SvQ1Jwmrha1HPHJs87ShfiQVB18S',
   socketUrl: 'http://escucha.glmonitoreo.com/'
 };
-
+ */
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
