@@ -1,1 +1,25 @@
 <p>En construccion ...</p>
+<div *ngIf="num_rep == 7">REPORTE DE POSICIÓN</div>
+
+<div *ngIf="num_rep == 7">
+    <table>
+        <tr>
+            <th>Ítem</th>
+            <th *ngFor="let header of table_headers">{{header[1]}}</th>
+        </tr>
+        <tr *ngFor="let row of report_table; let i = index;">
+            <td>{{i+1}}</td>
+            <td>{{row.codigo}}</td>
+            <td>{{row.placa}}</td>
+            <td>{{row.fecha}}</td>
+            <td>{{row.hora}}</td>
+            <td>{{row.estado}}</td>
+            <td>{{row.velocidad}}</td>
+            <td>{{row.velocidad_can}}</td>
+            <td>{{row.odometro}}</td>
+            <td>{{row.ubicacion}}</td>
+            <td>{{row.zonaCercana}}</td>
+        </tr>
+    </table>
+    
+</div>
