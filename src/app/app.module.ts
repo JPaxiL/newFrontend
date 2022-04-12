@@ -85,6 +85,8 @@ import { ResultComponent } from './reports/components/result/result.component';
 import { EventBoardComponent } from './events/components/event-board/event-board.component';
 import { EventListComponent } from './events/components/event-list/event-list.component';
 import { ProfileConfigComponent } from './profile-config/profile-config.component';
+import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-geopoints.component';
+import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 @NgModule({
   declarations: [
@@ -131,7 +133,9 @@ import { ProfileConfigComponent } from './profile-config/profile-config.componen
     ResultComponent,
     EventBoardComponent,
     EventListComponent,
-    ProfileConfigComponent
+    ProfileConfigComponent,
+    AddGeopointsComponent,
+    ListGeopointsComponent
   ],
   imports: [
     ToastrModule.forRoot({

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { GeopointsService } from '../../services/geopoints.service';
+
 @Component({
   selector: 'app-panel-geopoints',
   templateUrl: './panel-geopoints.component.html',
@@ -7,9 +9,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PanelGeopointsComponent implements OnInit {
 
-  constructor() { }
+  //alerts:Alert[] = [];
+  options = new Array(
+
+    { id:'LISTAR' , name:"Listar"},
+    { id:'AGREGAR' , name:"Agregar"},
+    { id:'EDITAR' , name:"Editar"},
+
+  );
+
+
+  constructor(
+    // public mapService: MapServicesService,
+    public geopointsService: GeopointsService
+
+    ) {};
+
 
   ngOnInit(): void {
+
+    this.geopointsService.nombreComponente =  "LISTAR";
+
   }
+
 
 }

@@ -9,7 +9,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="form.group">
                         <div class="col-12">
-                            <select class="form-select" aria-label="Alerta"  formControlName="tipoAlerta">
+                            <select (change)="chageAlertType()" class="form-select" aria-label="Alerta"  formControlName="tipoAlerta">
                                 <option value=""></option>
                                 <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
                             </select>
@@ -40,16 +40,16 @@
 
             <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
                 <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <select2  [overlay]="overlay" [data]="vehicles" [multiple]="true"  id="selec2-vehicles" [placeholder]="'VEHÍCULOS'" formControlName="vehicles"> </select2>
+                    <select2 [data]="vehicles" [multiple]="true" [placeholder]="'VEHÍCULOS'" formControlName="vehicles"> </select2>
                 </div>
             </div>
 
 
             <div class="row mb-3" style="margin-right: 0px; margin-left: 0px"></div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+            <div *ngIf="showGeocercas" class="row mb-3" style="margin-right: 0px; margin-left: 0px">
                 <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <select2 [overlay]="overlayGeo" [data]="geocercas" [multiple]="true" id="selec2-geocercas" [placeholder]="'GEOCERCAS'" formControlName="geocercas"> </select2>
+                    <select2 [data]="geocercas" [multiple]="true" [placeholder]="'GEOCERCAS'" formControlName="geocercas"> </select2>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
 
             <!-- <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
                 <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <select2 [data]="geocircles" [multiple]="true" id="selec2-geocircular" [placeholder]="'GEOCERCAS CIRCULARES'" formControlName="geocircles"> </select2>
+                    <select2 [data]="geocircles" [multiple]="true" [placeholder]="'GEOCERCAS CIRCULARES'" formControlName="geocercascirculares"> </select2>
                 </div>
             </div> -->
 
@@ -67,9 +67,9 @@
             <div class="form-group row" style="margin-right: 0px; margin-left: 0px"><br /></div>
 
 
-            <div class="row">
+            <div class="row" *ngIf="showFechaCaducidad">
 
-                <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+                <div  class="row mb-3" style="margin-right: 0px; margin-left: 0px">
                     <label class="col-lg-8 col-md-8 col-sm-8 col-xs-8 form-check-label">Fecha de caducidad de Alerta:</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <div class="form-check">
@@ -150,7 +150,7 @@
             </div>
 
             <div class="row mb-3" style="margin-right: 0px; margin-left: 0px;"></div>
-            <div class="row" *ngIf='alertForm.value.tipoAlerta == "Tiempo de estadia en zona" || alertForm.value.tipoAlerta == "Parada en zona no autorizada" ' style="background-color: #FFF">
+            <div class="row" *ngIf='showTiempoLimite' style="background-color: #FFF">
                 <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
                     <label class="col-lg-7 col-md-7 col-sm-7 col-xs-7 control-label">Tiempo Límite:</label>
                 </div>
@@ -175,28 +175,23 @@
             <!--INFRACCION -->
             <div class="form-group row" style="margin-right: 0px; margin-left: 0px"><br /></div>
 
-            <div *ngIf="alertForm.value.howInfraccion" class="row" style="background-color: #FFF">
+            <div *ngIf="showInfraccion" class="row" style="background-color: #FFF">
 
                 <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
                     <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label">Infraccion:</label>
-                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                        <!-- <div>
-                            <input ng-model="$ctrl.formAlert.chkDuracionParada" type="checkbox" name="" />
-                        </div> -->
-                    </div>
                 </div>
 
                 <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
                     <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label align-middle">Fijar Tiempo:</label>
                     <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                         <div>
-                            <input ng-disabled="$ctrl.formAlert.chkFijarLimiteVelocidad" ng-model="$ctrl.formAlert.chkFijarTiempo" type="checkbox" name="" />
+                            <input (change)="changechkFijarTiempo($event)" formControlName="chkFijarTiempo" type="checkbox" name="" />
                         </div>
                     </div>
                 </div>
                 <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
                     <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                        <select ng-disabled="!$ctrl.formAlert.chkFijarTiempo" class="form-control" ng-model="$ctrl.formAlert.tiempo_limite_infraccion" >
+                        <select class="form-select" formControlName="tiempo_limite_infraccion" >
                             <option value="10">10 Seg.</option>
                             <option value="30">30 Seg.</option>
                             <option value="60">1 Min.</option>
@@ -209,13 +204,13 @@
                     <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label align-middle">Fijar Limite de Velocidad:</label>
                     <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                         <div>
-                            <input ng-disabled="$ctrl.formAlert.chkFijarTiempo" ng-model="$ctrl.formAlert.chkFijarLimiteVelocidad" type="checkbox" name="" />
+                            <input (change)="changechkFijarLimiteVelocidad($event)" formControlName="chkFijarLimiteVelocidad" type="checkbox" name="" />
                         </div>
                     </div>
                 </div>
                 <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
                     <div class="col-lg-7 col-lg-offset-0 col-md-7 col-md-offset-0 col-sm-7 col-sm-offset-0 col-xs-7 col-xs-offset-0">
-                        <input ng-disabled="!$ctrl.formAlert.chkFijarLimiteVelocidad" class="form-control" placeholder="limite de velocidad" ng-model="$ctrl.formAlert.velocidad_limite_infraccion" min="0" max="100000" type="number" />
+                        <input class="form-control" placeholder="limite de velocidad" formControlName="velocidad_limite_infraccion" min="0" max="100000" type="number" />
                     </div>
                     <div>Km/h</div>
                 </div>
@@ -271,4 +266,3 @@
         </form>
     </div>
 </div>
-

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngxs/store';
 import { SignIn } from 'src/app/core/store/auth.actions';
-
+import { UsersService } from 'src/app/dashboard/service/users.service';
 
 export interface User {
   name: string;
@@ -35,7 +35,8 @@ export class LoginComponent implements OnInit {
     private store: Store,
     private router: Router,
     config: NgbCarouselConfig,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    public userService: UsersService) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
     config.showNavigationIndicators = true;
@@ -66,11 +67,13 @@ export class LoginComponent implements OnInit {
       // params['registrador_id'] = params['registrador']['id'];
       this.isLoggingIn = true;
       //console.log(params);
-      this.store.dispatch(new SignIn( params.name, params.password)).subscribe((data) => {
+      this.store.dispatch(new SignIn( params.name, params.password)).subscribe( (data) => {
         // Animación de carga de Iniciando sesión...
         this.validCredentials = 1;
         //console.log('Inicio de sesión exitoso');
         //console.log(data);
+        this.userService.setUserInLocalStorage();
+
         this.router.navigate(['/panel'], {
           state: {
             //flag para mostrar toast de bienvenida
