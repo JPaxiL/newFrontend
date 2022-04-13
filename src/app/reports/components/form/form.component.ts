@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import * as _ from 'lodash';
 import { ReportService } from '../../services/report.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-form',
@@ -105,7 +106,8 @@ export class FormComponent implements OnInit {
     private reportService: ReportService,
     private vehicleService: VehicleService, 
     private confirmationService: ConfirmationService,
-    private http: HttpClient,) {
+    private http: HttpClient,
+    private titleService: Title) {
     // this.vehicles=this.vehicleService.vehicles;
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
       this.vehicles = vehicles;
@@ -137,6 +139,7 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle('Reportes');
     const hoy = Date.now();
     this.dateInit = new Date(moment(hoy).format("MM/DD/YYYY"));
     // this.dateEnd = new Date(moment(hoy).format("MM/DD/YYYY"));
@@ -147,7 +150,6 @@ export class FormComponent implements OnInit {
     // this.timeInit = '00:00';
 
     var report = new BehaviorSubject(1);
-
 
     console.log('funcion on init');
 		console.log(this.reportType);
@@ -352,6 +354,7 @@ export class FormComponent implements OnInit {
   }
 
   changedReport(){
+    this.titleService.setTitle(this.reports[this.selectedReport].value);
     this.showSubLimitTime = true;
 
 		this.showCard = false; //Div que contiene [ showLimitSpeed - showMovStop - showZones - showCheckboxs ]
@@ -444,15 +447,17 @@ export class FormComponent implements OnInit {
 
 
   onSelectedVehiclesChange(){
-    console.log(this.selectedConvoy);
-    console.log(this.selectedGroup);
-    console.log(this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup);
-    console.log(this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy);
-    if(this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy){
-      this.selectedConvoy.value = null;
-    }
-    if(this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup){
-      this.selectedGroup = '';
-    }
+    this.selectedConvoy = {};
+    this.selectedGroup = {};
+  }
+  
+  onSelectedConvoyChange(){
+    this.selectedVehicles = {};
+    this.selectedGroup = {};
+  }
+  
+  onSelectedGroupChange(){
+    this.selectedVehicles = {};
+    this.selectedConvoy = {};
   }
 }

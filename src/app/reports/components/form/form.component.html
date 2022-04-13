@@ -17,7 +17,7 @@
         <div class="row">
           <div class="p-field">
             <label>Tipo de reporte :</label>
-            <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte" (click)="changedReport();"></p-dropdown>
+            <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte" (onChange)="changedReport();"></p-dropdown>
           </div>
         </div>
         <div class="row">
@@ -31,14 +31,14 @@
           <div class="col-6" *ngIf="!checkboxGroup">
             <div class="p-field">
               <label>Convoy:</label>
-              <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" placeholder="Seleccione convoy/grupo"></p-dropdown>
+              <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" placeholder="Seleccione convoy/grupo" (onChange)="onSelectedConvoyChange();"></p-dropdown>
               <!-- <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione convoy/grupo"></p-dropdown> -->
             </div>
           </div>
           <div class="col-6" *ngIf="checkboxGroup">
             <div class="p-field">
               <label>Grupo:</label>
-              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" placeholder="Seleccione grupo"></p-dropdown>
+              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" placeholder="Seleccione grupo" (onChange)="onSelectedGroupChange();"></p-dropdown>
               <!-- <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione grupo"></p-dropdown> -->
             </div>
           </div>

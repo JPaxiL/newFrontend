@@ -88,6 +88,8 @@ import { ProfileConfigComponent } from './profile-config/profile-config.componen
 import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-geopoints.component';
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
+import { DataTablesModule } from 'angular-datatables'; 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -146,6 +148,8 @@ import { ListGeopointsComponent } from './geopoints/components/list-geopoints/li
       maxOpened: 4,
       autoDismiss: true,
     }),
+    BrowserModule,
+    DataTablesModule,
     CommonModule,
     BrowserModule,
     NgxsModule.forRoot([AuthState]),

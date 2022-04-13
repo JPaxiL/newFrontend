@@ -1,27 +1,25 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild , OnInit } from '@angular/core';
+import { NgModule, Component, ViewChild , OnInit, OnDestroy } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ReportService } from '../../services/report.service';
+import { Subject } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.scss']
 })
-export class ResultComponent  {
+export class ResultComponent implements OnDestroy, OnInit {
 
-  /* constructor() { }
-
-  ngOnInit(): void {
-  } */
-
-  readonly ROOT_URL = 'http://localhost/api';
-  report_table: any=[];
+  dtOptions: any = {};
+  dtTrigger = new Subject<any>();
+  data: any;
+  table_hide = 'd-none';
   num_rep: any;
   table_headers: any;
   table_data: any;
-
-
 
   constructor(
     private http:HttpClient,
@@ -31,55 +29,31 @@ export class ResultComponent  {
   }
 
   ngOnInit(){
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 5,
+      processing: true,
+      language:{
+        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+      },
+      destroy: true,
+      dom: 'Bfrtip',
+      lengthMenu: [[5, 10, 15, 20, -1], [5, 10, 15, 20, "All"]],
+      buttons: ['excel']
+    };
+
     this.reportService.showReport.subscribe(data => {
       console.log('Recibiendo data en result', data);
-      console.log(typeof data);
-      console.log(typeof this.report_table);
-      this.report_table = data.data;
-      this.num_rep = data.numRep;
-      console.log(this.report_table);
-      console.log(this.num_rep);
-      console.log(typeof this.report_table);
-      console.log(typeof this.num_rep);
 
-      if(this.num_rep == 7){
-        this.table_headers = [
-          ['codigo', 'Código'],
-          ['placa', 'Placa'],
-          ['fecha', 'Fecha'],
-          ['hora', 'Hora'],
-          ['estado', 'Status'],
-          ['velocidad', 'Velocidad GPS'],
-          ['velocidad_can', 'Velocidad CAN'],
-          ['odometro', 'Odometro'],
-          ['ubicacion', 'Ubicación'],
-          ['zonaCercana', 'Referencia'],
-        ];
-        console.log(this.table_headers);
-      }
+      this.data = data.data;
+      this.dtTrigger.next();
+      this.table_hide = '';
+
     })
   }
 
-
-  getPosts(){
-    var param = {
-      "vehiculos": "",
-      "client_id": "84",
-      "client_secret": "LUTj1k8Tley9SvQ1Jwmrha1HPHJs87ShfiQVB18S"
-    };
-
-    this.table_data = this.http.get(environment.apiUrl + '/api/tracker');
-    /* this.posts = this.posts.sort((a: { convoy: any; }, b: { convoy: any; }) => a.convoy.localeCompare(b.convoy)); */
-    return this.table_data;
-
-/* 
-    return this.posts = (JSON.stringify(this.http.get(environment.apiUrl + '/api/tracker'))); */
-    /* return this.posts = this.http.get(this.ROOT_URL + '/informes/informes_general'); */
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
   }
-
-}
-
-export class AppComponent {
-  
 
 }
