@@ -17,7 +17,7 @@
         <div class="row">
           <div class="p-field">
             <label>Tipo de reporte :</label>
-            <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte" (onChange)="changedReport();"></p-dropdown>
+            <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte" (onChange)="changedReport(); validateForm();"></p-dropdown>
           </div>
         </div>
         <div class="row">
@@ -25,20 +25,20 @@
             <div class="p-field">
               <label>Vehículos:</label>
               <!-- <p-dropdown [options]="vehicles" [(ngModel)]="selectedVehicle" optionLabel="name" optionValue="id" [showClear]="false" placeholder="Seleccione vehiculos"></p-dropdown> -->
-              <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" (onChange)="onSelectedVehiclesChange();"></p-multiSelect>
+              <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
             </div>
           </div>
           <div class="col-6" *ngIf="!checkboxGroup">
             <div class="p-field">
               <label>Convoy:</label>
-              <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" placeholder="Seleccione convoy/grupo" (onChange)="onSelectedConvoyChange();"></p-dropdown>
+              <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" placeholder="Seleccione convoy/grupo" (onChange)="onSelectedConvoyChange(); validateForm();"></p-dropdown>
               <!-- <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione convoy/grupo"></p-dropdown> -->
             </div>
           </div>
           <div class="col-6" *ngIf="checkboxGroup">
             <div class="p-field">
               <label>Grupo:</label>
-              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" placeholder="Seleccione grupo" (onChange)="onSelectedGroupChange();"></p-dropdown>
+              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" placeholder="Seleccione grupo" (onChange)="onSelectedGroupChange(); validateForm();"></p-dropdown>
               <!-- <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione grupo"></p-dropdown> -->
             </div>
           </div>
@@ -99,13 +99,13 @@
             <div class="row">
               <div class="p-field">
                 <label for="binary">Fecha inicio:</label>
-                <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy"></p-calendar>
+                <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" (onChange)="validateForm();"></p-calendar>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label for="binary">Hora inicio:</label>
-                <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true"></p-calendar>
+                <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" (onChange)="validateForm();"></p-calendar>
               </div>
             </div>
           </div>
@@ -113,20 +113,20 @@
             <div class="row">
               <div class="p-field">
                 <label for="binary">Fecha inicio:</label>
-                <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy"></p-calendar>
+                <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" (onChange)="validateForm();"></p-calendar>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label for="binary">Hora final:</label>
-                <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true"></p-calendar>
+                <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" (onChange)="validateForm();"></p-calendar>
               </div>
             </div>
           </div>
         </div>
       </div>
     <ng-template pTemplate="footer">
-      <button (click)="confirm()" pButton type="button" label="Generar Reporte"></button>
+      <button [disabled]="!isFormFilled" (click)="confirm()" pButton type="button" label="Generar Reporte"></button>
 
     </ng-template>
 </p-card>

@@ -95,7 +95,7 @@ export class FormComponent implements OnInit {
 
   newWindow = false;
 
-
+  isFormFilled = false;
 
   chkDateHour = false;
 	arrayUsers = [ 472, 204, 483, 467, 360, 394, 364, 445, 489, 491, 503, 504, 515, 522, 537, 554, 552, 555, 573, 587, 529, 590, 591, 595, 613, 620, 621, 734];
@@ -111,8 +111,15 @@ export class FormComponent implements OnInit {
     // this.vehicles=this.vehicleService.vehicles;
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
       this.vehicles = vehicles;
-      console.log(vehicles);
-      console.log("");
+      console.log('Vehicles: ',vehicles);
+      this.convoys = _.uniqBy(this.vehicles, 'convoy');
+      this.groups = _.uniqBy(this.vehicles, 'grupo');
+      this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
+      this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
+      this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
+      console.log('Convoys: ',this.convoys);
+      console.log('Groups: ',this.groups);
+
     });
 
     this.reports = [
@@ -140,6 +147,11 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Reportes');
+    console.log(this.selectedReport);
+    console.log(JSON.stringify(this.selectedReport) == '{}');
+    // console.log(this.selectedReport.keys().length);
+    // console.log(this.selectedReport.keys().length === 0);
+    console.log(typeof this.selectedReport);
     const hoy = Date.now();
     this.dateInit = new Date(moment(hoy).format("MM/DD/YYYY"));
     // this.dateEnd = new Date(moment(hoy).format("MM/DD/YYYY"));
@@ -149,80 +161,29 @@ export class FormComponent implements OnInit {
     this.timeEnd = new Date('12/03/2018 23:59');
     // this.timeInit = '00:00';
 
-    var report = new BehaviorSubject(1);
-
     console.log('funcion on init');
 		console.log(this.reportType);
 		this.spinnerOptions = true;
 
     forkJoin([
-      this.http.get(environment.apiUrl + '/api/tracker'),
+      // this.http.get(environment.apiUrl + '/api/tracker'),
       this.http.get(environment.apiUrl + '/api/zone'),
       this.http.get(environment.apiUrl + '/api/userId')
     ]).subscribe(results => {
-      this.vehicles = results[0];
-      this.zones = results[1];
-      this.userId = parseInt(JSON.stringify(results[2]));
+      // this.vehicles = results[0];
+      this.zones = results[0];
+      this.userId = parseInt(JSON.stringify(results[1]));
 
-      console.log("vehicles", this.vehicles);
-      console.log("vehicles", this.zones);
-      console.log("vehicles", this.userId);
-
-      this.vehicles = this.vehicles.sort((a: { convoy: any; }, b: { convoy: any; }) => a.convoy.localeCompare(b.convoy));
-      this.vehiclesArrayOrderByConvoy = _.uniqBy(this.vehicles, function(p: { convoy: any; }){ return p.convoy;});
-
-      for(var i=0; i<this.vehiclesArrayOrderByConvoy.length; i++){
-        if(this.vehiclesArrayOrderByConvoy[i].convoy == "Unidades Sin Convoy") {
-          //Se eliminan / limpian unidades sin convoy
-          this.vehiclesArrayOrderByConvoy.splice(i,1);
-        }
-      }
-
-      var vehiclesArrayGroup = this.vehicles.sort((a: { grupo: any; }, b: { grupo: any; }) => a.grupo.localeCompare(b.grupo));
-
-      this.vehiclesArrayOrderByGroup = _.uniqBy(vehiclesArrayGroup, function(p: { grupo: any; }){ return p.grupo; });
-
-      for(var i=0; i<this.vehiclesArrayOrderByGroup.length; i++){
-        this.vehiclesArrayOrderByGroup.splice(i,1);
-      }
+      // console.log("vehicles", this.vehicles);
+      console.log("zonas", this.zones);
+      console.log("user ID", this.userId);
 
       this.spinnerOptions = false;
 
-      for(var i=0; i<this.vehicles.length; i++){
-        console.log(`Convoy${i}: `,this.vehicles[i].convoy);
-        console.log(`Grupo${i}: `,this.vehicles[i].grupo);
-      }
-
-      console.log(typeof this.vehicles);
-      this.convoys = _.uniqBy(this.vehicles, 'convoy');
-      this.groups = _.uniqBy(this.vehicles, 'grupo');
-      for(var i=0; i<this.convoys.length; i++){
-        console.log(`Convoy${i}: `,this.convoys[i].convoy);
-      }
-      for(var i=0; i<this.groups.length; i++){
-        console.log(`Groups${i}: `,this.groups[i].grupo);
-      }
-
-      console.log("Mapeo Convoys", this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy}));
-      console.log("Mapeo Grupos", this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo}));
-      
-      this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
-      this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
-
-      console.log("Vehicles uniqBy Convoy", _.uniqBy(this.vehicles, 'convoy'));
-      
-      console.log("Convoy",this.vehiclesArrayOrderByConvoy);
-      console.log("Grupo",this.vehiclesArrayOrderByGroup);
-      console.log("Vehicles", this.vehicles);
-
     })
 
-
-
-
-
-
   }
+
   confirm() {
           this.confirmationService.confirm({
               message: '¿Desea generar el reporte en una nueva ventana?',
@@ -231,14 +192,19 @@ export class FormComponent implements OnInit {
                 this.reportar();
               },
               accept: () => {
-                  //Actual logic to perform a confirmation
                   console.log("Se acepta una nueva hoja");
-                  
+                  console.log('Cargando...');
+                  //undefined o true reportan en la misma pestaña. false reporta en nueva pestaña
+                  this.reportar(false);
               }
           });
     }
   
-  reportar(){
+  reportar(new_tab?: any){
+    console.log(new_tab !== undefined);
+
+
+    var nameRep = '';
 
     var f1 = moment(new Date(this.dateInit));
 		var f2 = moment(new Date(this.dateEnd));
@@ -248,15 +214,16 @@ export class FormComponent implements OnInit {
     // ------ SI SE SELECCIONA UN CONVOY, SE PROCEDERA A PASAR CREAR EL ARRAY DE LOS VEHICULOS PERTENECIENTES A DICHO CONVOY.
     if(!this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy){
       cv = true;
-      var convoyName = this.selectedConvoy;
+      nameRep = 'CONVOY: ' + this.selectedConvoy;
       var convoyArr = this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy);
-      console.log(convoyName, convoyArr);
+      console.log(nameRep, convoyArr);
     } else if (this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup) {
       cv = true;
-      var groupName = this.selectedGroup;
+      nameRep = 'GRUPO: ' + this.selectedGroup;
       var groupArr = this.vehicles.filter((vehicle: { grupo: any; }) => vehicle.grupo == this.selectedGroup);
-      console.log(groupName, groupArr);
+      console.log(nameRep, groupArr);
     } else {
+      nameRep = 'VEHÍCULOS';
       cv = false;
       console.log(this.selectedVehicles);
     }
@@ -334,14 +301,29 @@ export class FormComponent implements OnInit {
     }
 
     //console.log(param);
+
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
+        console.log(this.selectedConvoy.length);
+        console.log(this.selectedGroup.length);
+        console.log(this.selectedVehicles.length);
         console.log(typeof data);
         console.log(data);
-        this.reportService.showReport.emit({
+        var report_data = {
           data: data,
           numRep: this.reports[this.selectedReport].id,
-        })
+          nameRep: nameRep,
+        }
+        if(new_tab === undefined || new_tab == true){
+          //Report in the same tab
+          this.reportService.showReport.emit(report_data);
+        } else {
+          //Report in new tab
+          console.log('Se abrió una nueva pestaña');
+          localStorage.setItem("report_data", JSON.stringify(report_data));
+          var testing = window.open('/reports/result');
+        }
+
 
       }
 
@@ -354,6 +336,9 @@ export class FormComponent implements OnInit {
   }
 
   changedReport(){
+    console.log(this.selectedReport);
+    console.log(typeof this.selectedReport);
+
     this.titleService.setTitle(this.reports[this.selectedReport].value);
     this.showSubLimitTime = true;
 
@@ -459,5 +444,13 @@ export class FormComponent implements OnInit {
   onSelectedGroupChange(){
     this.selectedVehicles = {};
     this.selectedConvoy = {};
+  }
+
+  validateForm(){
+    this.isFormFilled = 
+      (JSON.stringify(this.selectedReport) != '{}') && 
+      (
+          (this.selectedReport == 7 && (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}'))
+      );
   }
 }
