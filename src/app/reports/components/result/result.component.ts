@@ -85,8 +85,12 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.num_rep = report_data.numRep;
       this.name_rep = report_data.nameRep;
 
-      this.dtTrigger.next();
+      //this.dtTrigger.next();
+      setTimeout(() => {
+        this.dtTrigger.next();    
+      });
       this.table_hide = '';
+
     }
 
    
@@ -94,6 +98,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
+    localStorage.removeItem('report_data');
   }
 
 }
