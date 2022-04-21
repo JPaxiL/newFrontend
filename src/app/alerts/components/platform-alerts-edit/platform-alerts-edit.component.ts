@@ -55,8 +55,6 @@ export class PlatformAlertsEditComponent implements OnInit {
   ngOnInit(): void {
     let alert = this.AlertService.getAlertEditData();
 
-    console.log('typeof alert =======> ', typeof alert.bol_fijar_tiempo);
-
     this.vehiclesSelected = alert.imei.split(',');
     this.geoSelected = alert.valor_verificado.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
@@ -87,7 +85,7 @@ export class PlatformAlertsEditComponent implements OnInit {
 
     this.alertForm = this.formBuilder.group({
       vehicles: [this.vehiclesSelected, [Validators.required]],
-      geocercas: [['30037']],
+      geocercas: [this.geoSelected],
       geocircles: [[]],
       tipoAlerta: [alert.tipo, [Validators.required]],
       chkEventoActivado: [alert.activo],
@@ -149,8 +147,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.vehicles = vehicles.map((vehicle: any) => {
       return {
         value: vehicle.IMEI,
-        label: vehicle.name,
-        data: { color: 'white', name: vehicle.name },
+        label: vehicle.name
       };
     });
   }
@@ -160,8 +157,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.geocercas = geocercas.map((geocerca: any) => {
       return {
         value: String(geocerca.id),
-        label: geocerca.zone_name,
-        data: { color: 'white', name: geocerca.zone_name },
+        label: geocerca.zone_name
       };
     });
   }

@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Select2Module } from 'ng-select2-component';
 import { DataTablesModule } from "angular-datatables";
-
+import {MultiSelectModule} from 'primeng-lts/multiselect';
+import {CardModule} from 'primeng-lts/card';
 
 import { AlertRoutingModule } from './alert-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -60,7 +61,9 @@ import { PlatformAlertsEditComponent } from './components/platform-alerts-edit/p
     AgGridModule,
     Select2Module,
     NgbModule,
-    DataTablesModule
+    DataTablesModule,
+    MultiSelectModule,
+    CardModule
   ],
   exports:[
     AlertListComponent,

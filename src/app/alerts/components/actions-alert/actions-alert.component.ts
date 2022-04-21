@@ -20,7 +20,7 @@ export class ActionsAlertComponent implements OnInit {
   options = new Array(
     { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
     { id:'ALERTS-GPS', name:"Alertas Gps"},
-    { id:'ALERTS-PLATFORM', name:"Alertas Plataforma"},
+    { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
 
   );
 
