@@ -102,9 +102,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
     this.vehicles = vehicles.map((vehicle: any) => {
       return {
-        value: { IMEI: vehicle.IMEI, name: vehicle.name },
+        value:vehicle.IMEI,
         label: vehicle.name,
-        data: { color: 'white', name: vehicle.name },
       };
     });
   }
@@ -113,9 +112,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
     let geocercas = this.geofencesService.getData();
     this.geocercas = geocercas.map((geocerca: any) => {
       return {
-        value: { id: geocerca.id, name: geocerca.zone_name },
+        value: geocerca.id,
         label: geocerca.zone_name,
-        data: { color: 'white', name: geocerca.zone_name },
       };
     });
   }
@@ -177,6 +175,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
 
     if (this.alertForm.value.vehiculos.length != 0) {
+
       Swal.fire({
         title: 'Desea guardar los cambios?',
         text: 'Espere un momento...',

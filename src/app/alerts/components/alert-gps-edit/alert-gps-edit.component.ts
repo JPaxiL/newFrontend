@@ -77,8 +77,7 @@ export class AlertGpsEditComponent implements OnInit {
     this.vehicles = vehicles.map( (vehicle:any) => {
       return {
         value: vehicle.IMEI,
-        label: vehicle.name,
-        data: { color: 'white', name: vehicle.name },
+        label: vehicle.name
       }
     });
   }
@@ -137,6 +136,10 @@ export class AlertGpsEditComponent implements OnInit {
     event.preventDefault();
     this.alertForm.value.vehiculos = JSON.stringify(this.alertForm.value.vehicles);
 
+    if(typeof this.alertForm.value.sonido == "undefined"){
+      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
+    }
+
     if (this.alertForm.value.vehicles.length != 0) {
 
       Swal.fire({
@@ -171,11 +174,11 @@ export class AlertGpsEditComponent implements OnInit {
 
   clickShowPanel( nomComponent:string ): void {
 
-    $("#panelMonitoreo").show( "slow" );
+    $('#panelMonitoreo').show('slow');
     this.panelService.nombreComponente = nomComponent;
 
-    const item = this.options.filter((item)=> item.id == nomComponent);
-    this.panelService.nombreCabecera =   item[0].name;
+    const item = this.options.filter((item) => item.id == nomComponent);
+    this.panelService.nombreCabecera = item[0].name;
 
   }
 
