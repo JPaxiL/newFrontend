@@ -97,7 +97,7 @@ export class FormComponent implements OnInit {
 
   isFormFilled = false;
 
-  chkDateHour = false;
+  chkDateHour = false; //False muestra fecha y h juntas. true separadas
 	arrayUsers = [ 472, 204, 483, 467, 360, 394, 364, 445, 489, 491, 503, 504, 515, 522, 537, 554, 552, 555, 573, 587, 529, 590, 591, 595, 613, 620, 621, 734];
   fog = "1";
 	userId = 0;
@@ -205,6 +205,7 @@ export class FormComponent implements OnInit {
 
 
     var nameRep = '';
+    var chkDateHour = this.chkDateHour;
 
     var f1 = moment(new Date(this.dateInit));
 		var f2 = moment(new Date(this.dateEnd));
@@ -215,13 +216,13 @@ export class FormComponent implements OnInit {
     if(!this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy){
       cv = true;
       nameRep = 'CONVOY: ' + this.selectedConvoy;
-      var convoyArr = this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy);
-      console.log(nameRep, convoyArr);
+      var convoyOrGroupArr = this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy);
+      console.log(nameRep, convoyOrGroupArr);
     } else if (this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup) {
       cv = true;
       nameRep = 'GRUPO: ' + this.selectedGroup;
-      var groupArr = this.vehicles.filter((vehicle: { grupo: any; }) => vehicle.grupo == this.selectedGroup);
-      console.log(nameRep, groupArr);
+      var convoyOrGroupArr = this.vehicles.filter((vehicle: { grupo: any; }) => vehicle.grupo == this.selectedGroup);
+      console.log(nameRep, convoyOrGroupArr);
     } else {
       nameRep = 'VEHÍCULOS';
       cv = false;
@@ -258,7 +259,7 @@ export class FormComponent implements OnInit {
       var param = {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 				fecha_desde:M1, fecha_hasta:M2, // --N
-				vehiculos: JSON.stringify(convoyArr), 
+				vehiculos: JSON.stringify(convoyOrGroupArr), 
         grupo:this.selectedConvoy, 
         zonas:JSON.stringify(zonesArr),
 				url: this.reports[this.selectedReport].url, 
@@ -311,8 +312,9 @@ export class FormComponent implements OnInit {
         console.log(data);
         var report_data = {
           data: data,
-          numRep: this.reports[this.selectedReport].id,
+          numRep: param.numRep,
           nameRep: nameRep,
+          chkDateHour: chkDateHour,
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
@@ -437,13 +439,17 @@ export class FormComponent implements OnInit {
   }
   
   onSelectedConvoyChange(){
-    this.selectedVehicles = {};
+    this.selectedVehicles = [];
     this.selectedGroup = {};
   }
   
   onSelectedGroupChange(){
-    this.selectedVehicles = {};
+    this.selectedVehicles = [];
     this.selectedConvoy = {};
+  }
+
+  onChkDateHourChange(){
+    console.log(this.chkDateHour);
   }
 
   validateForm(){
