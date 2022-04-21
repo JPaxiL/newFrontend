@@ -55,8 +55,6 @@ export class PlatformAlertsEditComponent implements OnInit {
   ngOnInit(): void {
     let alert = this.AlertService.getAlertEditData();
 
-    console.log('typeof alert =======> ', typeof alert.bol_fijar_tiempo);
-
     this.vehiclesSelected = alert.imei.split(',');
     this.geoSelected = alert.valor_verificado.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
