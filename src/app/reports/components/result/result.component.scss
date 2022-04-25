@@ -1,5 +1,6 @@
 *{
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 0.8rem;
 }
 
 th {
@@ -24,7 +25,63 @@ table {
     width: 100%;
 }
 
-.table-title{
+.table-title, .table-subtitle{
     text-align: center;
     width: 100%;
+}
+
+.table-title{
+    font-size: 2rem !important; 
+    background-color: #6a99cb; 
+    color: #ffffff; 
+    padding: 0.5rem; 
+}
+
+.table-subtitle{
+    font-size: 1.5rem !important; 
+    background-color: #000000; 
+    color: #ffffff;
+    padding: 0.5rem; 
+}
+
+.subtable-title{
+    font-size: 1.5rem !important;
+    background-color: #000000; 
+    padding: 0.5rem; 
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+}
+
+.subtable-title > div {
+    font-size: 1rem !important;
+    flex: 1 1 100%;
+    max-width: 40%;
+    max-height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+.subtable-title > div:nth-child(1){
+    max-width: 40%;
+}
+
+.subtable-title > div:nth-child(2){
+    max-width: 60%;
+}
+
+a:link { text-decoration: none; }
+
+.container{
+    max-width: none !important;
+}
+
+.container.grand-container{
+    padding: 0 !important;
+}
+
+p{
+    margin-bottom: 0px !important;
 }

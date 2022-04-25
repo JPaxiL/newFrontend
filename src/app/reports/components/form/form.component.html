@@ -45,27 +45,31 @@
         </div>
         <div class="row">
           <div class="col-6">
-            <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange();">Fecha/Hora</p-checkbox>
-            <label>Fecha/Hora</label>
+            <label>
+              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange();">Fecha/Hora</p-checkbox>
+            Fecha/Hora</label>
           </div>
           <div class="col-6">
             <div class="p-field">
-              <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" ></p-checkbox>
-              <label for="binary">Grupo</label>
+              <label>
+                <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" ></p-checkbox>
+              Grupo</label>
             </div>
           </div>
         </div>
         <div class="row" *ngIf="selectedReport==0">
           <div class="col-6">
             <div class="p-field">
-              <p-checkbox [(ngModel)]="checkboxParada" [binary]="true" inputId="binary" ></p-checkbox>
-              <label for="binary">Paradas</label>
+              <label>
+                <p-checkbox [(ngModel)]="chkStops" [binary]="true" inputId="binary" ></p-checkbox>
+              Paradas</label>
             </div>
           </div>
           <div class="col-6">
             <div class="p-field">
-              <p-checkbox [(ngModel)]="checkboxMovimiento" [binary]="true" inputId="binary" ></p-checkbox>
-              <label for="binary">Movimientos</label>
+              <label>
+                <p-checkbox [(ngModel)]="chkMovements" [binary]="true" inputId="binary" ></p-checkbox>
+              Movimientos</label>
             </div>
           </div>
 
@@ -74,8 +78,9 @@
           <div class="col-6">
             <div class="row">
               <div class="p-field">
-                <p-checkbox [(ngModel)]="checkboxDuracion" [binary]="true" inputId="binary" ></p-checkbox>
-                <label for="binary">Duración</label>
+                <label>
+                  <p-checkbox [(ngModel)]="checkboxDuracion" [binary]="true" inputId="binary" ></p-checkbox>
+                Duración</label>
               </div>
 
             </div>
@@ -99,27 +104,27 @@
             <div class="row">
               <div class="p-field">
                 <label for="binary">Fecha inicio:</label>
-                <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" (onChange)="validateForm();"></p-calendar>
+                <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label for="binary">Hora inicio:</label>
-                <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" (onChange)="validateForm();"></p-calendar>
+                <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
               </div>
             </div>
           </div>
           <div class="col-6">
             <div class="row">
               <div class="p-field">
-                <label for="binary">Fecha inicio:</label>
-                <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" (onChange)="validateForm();"></p-calendar>
+                <label for="binary">Fecha final:</label>
+                <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label for="binary">Hora final:</label>
-                <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" (onChange)="validateForm();"></p-calendar>
+                <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
               </div>
             </div>
           </div>

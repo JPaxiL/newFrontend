@@ -7,6 +7,8 @@ export class ReportService {
 
   @Output() showReport: EventEmitter<any> = new EventEmitter();
 
-
   constructor() { }
+
+
+
 }

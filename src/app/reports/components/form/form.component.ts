@@ -26,8 +26,8 @@ export class FormComponent implements OnInit {
   groups: any=[];
   selectedGroup: any={};
   checkboxGroup: boolean = false;
-  checkboxParada: boolean = true;
-  checkboxMovimiento: boolean = true;
+  /* checkboxParada: boolean = true; //Renamed to chkStops
+  checkboxMovimiento: boolean = true; */ //Renamed to chkMovements
   checkboxDuracion: boolean = false;
   checkboxLimitVelocidad: boolean = false;
   dateInit!: Date;
@@ -83,8 +83,10 @@ export class FormComponent implements OnInit {
 	finishedMinute = "59";
 	limitSpeed = 200;
 	reportType = "0";
-	chkStops = true;
-	chkMovements = true;
+
+	chkStops: boolean = true; //Reporte 0 - Paradas y
+	chkMovements: boolean = true; //Reporte 0 - Paradas y Movi
+
 	chkTrans1min = false;
 	chkFatigaSomnolencia = true;
 	chkFatigaDistraccion = true;
@@ -123,7 +125,7 @@ export class FormComponent implements OnInit {
     });
 
     this.reports = [
-      {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS'},
+      {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
       {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD: (Considerar que este reporte debe respetar las geocercas)'},
       {id : 2, value : 'REPORTE DE EXCESOS EN ZONA'},
       {id : 3, value : 'REPORTE DE ENTRADA Y SALIDA'},
@@ -204,35 +206,40 @@ export class FormComponent implements OnInit {
     console.log(new_tab !== undefined);
 
 
-    var nameRep = '';
+    var repSubtitle = '';
     var chkDateHour = this.chkDateHour;
 
     var f1 = moment(new Date(this.dateInit));
 		var f2 = moment(new Date(this.dateEnd));
+		var h1 = moment(new Date(this.timeInit));
+		var h2 = moment(new Date(this.timeEnd));
 
-    var cv;
+    var cv:boolean;
 
     // ------ SI SE SELECCIONA UN CONVOY, SE PROCEDERA A PASAR CREAR EL ARRAY DE LOS VEHICULOS PERTENECIENTES A DICHO CONVOY.
     if(!this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy){
       cv = true;
-      nameRep = 'CONVOY: ' + this.selectedConvoy;
+      repSubtitle = 'CONVOY: ' + this.selectedConvoy;
       var convoyOrGroupArr = this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy);
-      console.log(nameRep, convoyOrGroupArr);
+      console.log(repSubtitle, convoyOrGroupArr);
     } else if (this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup) {
       cv = true;
-      nameRep = 'GRUPO: ' + this.selectedGroup;
+      repSubtitle = 'GRUPO: ' + this.selectedGroup;
       var convoyOrGroupArr = this.vehicles.filter((vehicle: { grupo: any; }) => vehicle.grupo == this.selectedGroup);
-      console.log(nameRep, convoyOrGroupArr);
+      console.log(repSubtitle, convoyOrGroupArr);
     } else {
-      nameRep = 'VEHÍCULOS';
+      repSubtitle = 'VEHÍCULOS';
       cv = false;
       console.log(this.selectedVehicles);
     }
 
-    var M1 = f1.format("YYYY-MM-DD") + 'T' + this.timeInit + ':00-05:00';
-		var M2 = f2.format("YYYY-MM-DD") + 'T' + this.timeEnd + ':00-05:00';
-		var M1_t = f1.format("YYYY-MM-DD") + ' ' + this.timeInit + ':00';
-		var M2_t = f2.format("YYYY-MM-DD") + ' ' + this.timeEnd + ':00';
+    var M1 = f1.format("YYYY-MM-DD") + ' ' + h1.format("HH:mm:ss");
+		var M2 = f2.format("YYYY-MM-DD") + ' ' + h2.format("HH:mm:ss");
+    /* var M1 = f1.format("YYYY-MM-DD") + 'T' + this.timeInit + ':00-05:00';
+		var M2 = f2.format("YYYY-MM-DD") + 'T' + this.timeEnd + ':00-05:00'; */
+/* 		var M1_t = f1.format("YYYY-MM-DD") + ' ' + this.timeInit + ':00';
+		var M2_t = f2.format("YYYY-MM-DD") + ' ' + this.timeEnd + ':00'; */
+    
 		var diffTime = moment( new Date( M2 ) ).diff( new Date( M1 ) );
 		var duration = moment.duration(diffTime);
 		var years = duration.years(),
@@ -258,7 +265,8 @@ export class FormComponent implements OnInit {
       //Convoy o grupo seleccionado
       var param = {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-				fecha_desde:M1, fecha_hasta:M2, // --N
+				fecha_desde:M1, 
+        fecha_hasta:M2, // --N
 				vehiculos: JSON.stringify(convoyOrGroupArr), 
         grupo:this.selectedConvoy, 
         zonas:JSON.stringify(zonesArr),
@@ -279,7 +287,8 @@ export class FormComponent implements OnInit {
     } else {
       var param = {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        fecha_desde:M1, fecha_hasta:M2, // --N
+        fecha_desde:M1, 
+        fecha_hasta:M2, // --N
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
         vehiculos: JSON.stringify(this.selectedVehicles), 
         grupo: this.selectedConvoy, 
@@ -302,7 +311,7 @@ export class FormComponent implements OnInit {
     }
 
     //console.log(param);
-
+    console.log('Proceso iniciado a las: ', moment(new Date()).format("YYYY-MM-DD HH:mm:ss"));
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
         console.log(this.selectedConvoy.length);
@@ -313,11 +322,15 @@ export class FormComponent implements OnInit {
         var report_data = {
           data: data,
           numRep: param.numRep,
-          nameRep: nameRep,
+          repSubtitle: repSubtitle,
           chkDateHour: chkDateHour,
+          repTitle: this.reports[param.numRep].value,
+          period: M1 + ' - ' + M2,
+          isVehicleReport: !cv,
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
+          
           this.reportService.showReport.emit(report_data);
         } else {
           //Report in new tab
@@ -450,13 +463,24 @@ export class FormComponent implements OnInit {
 
   onChkDateHourChange(){
     console.log(this.chkDateHour);
+    this.onTimeChange();
+  }
+  onTimeChange(){
+    console.log('date init', this.dateInit);
+    console.log('date end', this.dateEnd);
+    console.log('time init', moment(new Date(this.timeInit)).format("HH:mm"));
+    console.log('time end', this.timeEnd);
   }
 
   validateForm(){
+    var is_vehicle_selected = (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}');
+
     this.isFormFilled = 
       (JSON.stringify(this.selectedReport) != '{}') && 
       (
-          (this.selectedReport == 7 && (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}'))
+        (this.selectedReport == 7 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 0 && is_vehicle_selected)
       );
   }
 }
