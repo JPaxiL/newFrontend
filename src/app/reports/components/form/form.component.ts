@@ -188,6 +188,7 @@ export class FormComponent implements OnInit {
 
   confirm() {
           this.confirmationService.confirm({
+              key: 'newTabConfirmation',
               message: '¿Desea generar el reporte en una nueva ventana?',
               reject: () => {
                 console.log("Reporte en la misma hoja");
