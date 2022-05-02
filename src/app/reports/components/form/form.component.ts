@@ -28,7 +28,7 @@ export class FormComponent implements OnInit {
   checkboxGroup: boolean = false;
   /* checkboxParada: boolean = true; //Renamed to chkStops
   checkboxMovimiento: boolean = true; */ //Renamed to chkMovements
-  checkboxDuracion: boolean = false;
+  // checkboxDuracion: boolean = false; //Renamed to chkDuracion
   checkboxLimitVelocidad: boolean = false;
   dateInit!: Date;
   dateEnd!: Date;
@@ -59,7 +59,7 @@ export class FormComponent implements OnInit {
 	//selectedConvoy: any=[];
 	//selectedGroup: any=[];
 	selectedZone: any=[];
-	showLimitSpeed = false;
+	//showLimitSpeed = false; //Replaced by showExcVelOpt
 	showLimitTime = false;
 	showZones = false;
 	showCheckboxs = false;
@@ -81,11 +81,16 @@ export class FormComponent implements OnInit {
 	initialMinute = "00";
 	finishedHour = "23";
 	finishedMinute = "59";
-	limitSpeed = 200;
+	
 	reportType = "0";
 
 	chkStops: boolean = true; //Reporte 0 - Paradas y
 	chkMovements: boolean = true; //Reporte 0 - Paradas y Movi
+
+  showExcVelOpt: boolean = false; //Reporte 1 - Exceso de Vel
+  excesoVelocidad: string = 'limVel'; //Reporte 1 - Exceso de Vel
+  minimDur = 15; //Reporte 1 - Exceso de Vel
+  limitSpeed = 90;; //Reporte 1 - Exceso de Vel
 
 	chkTrans1min = false;
 	chkFatigaSomnolencia = true;
@@ -126,7 +131,7 @@ export class FormComponent implements OnInit {
 
     this.reports = [
       {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
-      {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD: (Considerar que este reporte debe respetar las geocercas)'},
+      {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},
       {id : 2, value : 'REPORTE DE EXCESOS EN ZONA'},
       {id : 3, value : 'REPORTE DE ENTRADA Y SALIDA'},
       {id : 4, value : 'REPORTE DE COMBUSTIBLE'},
@@ -186,6 +191,12 @@ export class FormComponent implements OnInit {
 
   }
 
+  showExcVel(){
+    console.log(this.excesoVelocidad);
+    console.log(this.excesoVelocidad == 'limVel');
+    console.log(this.excesoVelocidad == 'durExc');
+  }
+
   confirm() {
           this.confirmationService.confirm({
               key: 'newTabConfirmation',
@@ -209,6 +220,7 @@ export class FormComponent implements OnInit {
 
     var repSubtitle = '';
     var chkDateHour = this.chkDateHour;
+    var chkDuracion = this.excesoVelocidad == 'durExc';
 
     var f1 = moment(new Date(this.dateInit));
 		var f2 = moment(new Date(this.dateEnd));
@@ -272,7 +284,8 @@ export class FormComponent implements OnInit {
         grupo:this.selectedConvoy, 
         zonas:JSON.stringify(zonesArr),
 				url: this.reports[this.selectedReport].url, 
-        limitVel: this.limitSpeed,
+        limitVel: !chkDuracion? this.limitSpeed: false,
+        minimDur: chkDuracion? this.minimDur: false,
 				og: JSON.stringify([oG]),
 				ev: JSON.stringify([eV]),
 				chkStops: this.chkStops,
@@ -295,7 +308,8 @@ export class FormComponent implements OnInit {
         grupo: this.selectedConvoy, 
         zonas: JSON.stringify(zonesArr),
         url: this.reports[this.selectedReport].url, 
-        limitVel: this.limitSpeed,
+        limitVel: !chkDuracion? this.limitSpeed: false,
+        minimDur: chkDuracion? this.minimDur: false,
         og: JSON.stringify([oG]),
         ev: JSON.stringify([eV]),
         chkStops: this.chkStops,
@@ -325,6 +339,7 @@ export class FormComponent implements OnInit {
           numRep: param.numRep,
           repSubtitle: repSubtitle,
           chkDateHour: chkDateHour,
+          chkDuracion: chkDuracion,
           repTitle: this.reports[param.numRep].value,
           period: M1 + ' - ' + M2,
           isVehicleReport: !cv,
@@ -358,13 +373,13 @@ export class FormComponent implements OnInit {
     this.titleService.setTitle(this.reports[this.selectedReport].value);
     this.showSubLimitTime = true;
 
-		this.showCard = false; //Div que contiene [ showLimitSpeed - showMovStop - showZones - showCheckboxs ]
-		this.showLimitSpeed = false; //Limite de velocidad
+		this.showCard = false; //Div que contiene [ showExcVelOpt - showMovStop - showZones - showCheckboxs ]
+		this.showExcVelOpt = false; //Limite de velocidad
 		this.showZones = false; // Seleccionador de geocercas
 		this.showCheckboxs = false;// Opciones reporte general
 		this.showMovStop = false; //Ver Paradas y Movimiento
 		this.showDivHorizontal = false; // Nombre de cabecera del reporte
-		this.showLimitTime = true; //Configuracion de rango de tiempo -- true la mayoria
+		this.showLimitTime = false; //Configuracion de rango de tiempo -- true la mayoria
 		this.showEvents = false; //Configuracion de rango de tiempo
 		this.showTrans1min = false; //Configuracion de duracion de parada >1min
 		this.showFatigaOp = false; //Configuracion de opcion de fatiga 2
@@ -373,9 +388,15 @@ export class FormComponent implements OnInit {
 		this.showTimePeriodoDia = false; */
 
     switch(this.selectedReport){
+      case 0:
+        this.showMovStop = true;
+        this.showLimitTime = true;
+        break;
+      case 1:
+        this.showExcVelOpt = true;
+        this.showLimitTime = true;
+        break;
       case 7:
-        console.log(this.reports[this.selectedReport]);
-        
         this.showLimitTime = false;
 				break;
       default: break;
@@ -479,9 +500,11 @@ export class FormComponent implements OnInit {
     this.isFormFilled = 
       (JSON.stringify(this.selectedReport) != '{}') && 
       (
-        (this.selectedReport == 7 && is_vehicle_selected)
-        ||
         (this.selectedReport == 0 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 1 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 7 && is_vehicle_selected)
       );
   }
 }
