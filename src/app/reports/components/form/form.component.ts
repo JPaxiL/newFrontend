@@ -106,7 +106,7 @@ export class FormComponent implements OnInit {
 
   constructor(
     private reportService: ReportService,
-    private vehicleService: VehicleService, 
+    private vehicleService: VehicleService,
     private confirmationService: ConfirmationService,
     private http: HttpClient,
     private titleService: Title) {
@@ -139,7 +139,7 @@ export class FormComponent implements OnInit {
       {id : 11, value : 'REPORTE DE DISTRACIÓN'},
       {id : 12, value : 'REPORTE DE POSIBLE FATIGA'},
       {id : 13, value : 'REPORTE DE FATIGA EXTREMA'},
-      {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL'},
+      {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL', url: '/api/reports/anticolision_frontal'},
       {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES'},
       {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA'},
       {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA'},
@@ -201,7 +201,7 @@ export class FormComponent implements OnInit {
               }
           });
     }
-  
+
   reportar(new_tab?: any){
     console.log(new_tab !== undefined);
 
@@ -239,7 +239,7 @@ export class FormComponent implements OnInit {
 		var M2 = f2.format("YYYY-MM-DD") + 'T' + this.timeEnd + ':00-05:00'; */
 /* 		var M1_t = f1.format("YYYY-MM-DD") + ' ' + this.timeInit + ':00';
 		var M2_t = f2.format("YYYY-MM-DD") + ' ' + this.timeEnd + ':00'; */
-    
+
 		var diffTime = moment( new Date( M2 ) ).diff( new Date( M1 ) );
 		var duration = moment.duration(diffTime);
 		var years = duration.years(),
@@ -265,12 +265,12 @@ export class FormComponent implements OnInit {
       //Convoy o grupo seleccionado
       var param = {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-				fecha_desde:M1, 
+				fecha_desde:M1,
         fecha_hasta:M2, // --N
-				vehiculos: JSON.stringify(convoyOrGroupArr), 
-        grupo:this.selectedConvoy, 
+				vehiculos: JSON.stringify(convoyOrGroupArr),
+        grupo:this.selectedConvoy,
         zonas:JSON.stringify(zonesArr),
-				url: this.reports[this.selectedReport].url, 
+				url: this.reports[this.selectedReport].url,
         limitVel: this.limitSpeed,
 				og: JSON.stringify([oG]),
 				ev: JSON.stringify([eV]),
@@ -287,13 +287,13 @@ export class FormComponent implements OnInit {
     } else {
       var param = {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        fecha_desde:M1, 
+        fecha_desde:M1,
         fecha_hasta:M2, // --N
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
-        vehiculos: JSON.stringify(this.selectedVehicles), 
-        grupo: this.selectedConvoy, 
+        vehiculos: JSON.stringify(this.selectedVehicles),
+        grupo: this.selectedConvoy,
         zonas: JSON.stringify(zonesArr),
-        url: this.reports[this.selectedReport].url, 
+        url: this.reports[this.selectedReport].url,
         limitVel: this.limitSpeed,
         og: JSON.stringify([oG]),
         ev: JSON.stringify([eV]),
@@ -330,7 +330,7 @@ export class FormComponent implements OnInit {
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
-          
+
           this.reportService.showReport.emit(report_data);
         } else {
           //Report in new tab
@@ -346,8 +346,8 @@ export class FormComponent implements OnInit {
 
 
 
-    
-    
+
+
   }
 
   changedReport(){
@@ -374,7 +374,7 @@ export class FormComponent implements OnInit {
     switch(this.selectedReport){
       case 7:
         console.log(this.reports[this.selectedReport]);
-        
+
         this.showLimitTime = false;
 				break;
       default: break;
@@ -439,7 +439,7 @@ export class FormComponent implements OnInit {
 
 		    	this.spinnerOptions = false;
 		    }); */
-		
+
 
   /* optionUser = function(){
     return  parseInt(reportServices.getuserD());
@@ -450,12 +450,12 @@ export class FormComponent implements OnInit {
     this.selectedConvoy = {};
     this.selectedGroup = {};
   }
-  
+
   onSelectedConvoyChange(){
     this.selectedVehicles = [];
     this.selectedGroup = {};
   }
-  
+
   onSelectedGroupChange(){
     this.selectedVehicles = [];
     this.selectedConvoy = {};
@@ -475,12 +475,14 @@ export class FormComponent implements OnInit {
   validateForm(){
     var is_vehicle_selected = (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}');
 
-    this.isFormFilled = 
-      (JSON.stringify(this.selectedReport) != '{}') && 
+    this.isFormFilled =
+      (JSON.stringify(this.selectedReport) != '{}') &&
       (
         (this.selectedReport == 7 && is_vehicle_selected)
         ||
         (this.selectedReport == 0 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 14 && is_vehicle_selected)
       );
   }
 }
