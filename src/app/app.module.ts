@@ -14,6 +14,7 @@ import { TreeTableModule } from 'primeng-lts/treetable';
 import { DialogModule } from 'primeng-lts/dialog';
 import { DropdownModule } from 'primeng-lts/dropdown';
 import { InputTextModule } from 'primeng-lts/inputtext';
+import { InputNumberModule } from 'primeng-lts/inputnumber';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api';
 import {SelectButtonModule} from 'primeng-lts/selectbutton';
@@ -164,6 +165,7 @@ import { DataTablesModule } from 'angular-datatables';
     DropdownModule,
     DialogModule,
     InputTextModule,
+    InputNumberModule,
     ConfirmDialogModule,
     SelectButtonModule,
     RadioButtonModule,
