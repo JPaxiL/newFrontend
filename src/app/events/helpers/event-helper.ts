@@ -1056,7 +1056,53 @@ export const getContentPopup = (event: any, d: any = '...') => {
       <td style="font-size: 10px; width: 80%;" >${event.fecha_tracker}</td>
     </tr>
     </table>`;
+  } else if (event.tipo == 'Posible Fatiga') {
+    return `<table class="dl-horizontal" style="border-collapse: separate; border-spacing: 2px;">
+    <tr>
+      <td rowspan="3" style="font-size: 13px; width: 16% !important;" >
+        <img src="assets/images/events-icons/pasible_fatiga.svg" style="max-width: 35px !Important; max-height: 40px;"/>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size: 13px;">
+        <b>EVENTO:</b>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size: 13px; text-transform: uppercase;"><b>${event.tipo}</b></td>
+    </tr>
+    <tr><td colspan="2" style="font-size: 13px;" ></td></tr>
+    <tr>
+      <td style="font-size: 10px; width: 20%;"><b>DESCRIPCION:</b></td>
+      <td style="font-size: 10px; width: 80%;">${event.mensaje_alerta}</td>
+    </tr>
+    <tr>
+      <td style="font-size: 10px; width: 20%;"><b>UNIDAD:</b></td>
+      <td style="font-size: 10px; width: 80%;">${event.nombre_objeto}</td>
+    </tr>
+    <tr>
+      <td style="font-size: 10px; width: 20%;" ><b>UBICACIÓN:</b></td>
+      <td style="font-size: 10px; width: 80%;" ><a href="http://maps.google.com/maps?q=${event.latitud},${event.longitud}&amp;t=m" target="_blank" style="color: white">${event.latitud} °,  ${event.longitud} °</a></td>
+    </tr>
+    <tr>
+      <td style="font-size: 10px; width: 20%;" ><b>ZONA:</b></td>
+      <td style="font-size: 10px; width: 80%;" >${event.nombre_zona}</td>
+    </tr>
+    <tr>
+      <td style="font-size: 10px; width: 20%;" ><b>VELOCIDAD:</b></td>
+      <td style="font-size: 10px; width: 80%;" >${event.velocidad} km/h</td>
+    </tr>
+    <tr>
+      <td style="font-size: 10px; width: 20%;" ><b>REFERENCIA:</b></td>
+      <td style="font-size: 10px; width: 80%;" >${d}</td>
+    </tr>
+    <tr>
+      <td style="font-size: 10px; width: 20%;" ><b>FECHA - HORA: </b></td>
+      <td style="font-size: 10px; width: 80%;" >${event.fecha_tracker}</td>
+    </tr>
+    </table>`;
   }
+
 
   return '';
 };
