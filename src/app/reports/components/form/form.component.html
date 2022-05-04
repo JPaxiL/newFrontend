@@ -161,7 +161,14 @@
             </div>
           </div>
         </div>
+        <div class="row" *ngIf="showZones">
+          <div class="p-field">
+            <label>Geocercas :</label>
+            <p-multiSelect [options]="zones.data" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();"></p-multiSelect>
+          </div>
+        </div>
       </div>
+      
     <ng-template pTemplate="footer">
       <button [disabled]="!isFormFilled" (click)="confirm()" pButton type="button" label="Generar Reporte"></button>
 

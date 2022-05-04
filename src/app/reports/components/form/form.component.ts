@@ -58,10 +58,10 @@ export class FormComponent implements OnInit {
 	//selectedVehicle: any=[];
 	//selectedConvoy: any=[];
 	//selectedGroup: any=[];
-	selectedZone: any=[];
+	//selectedZone: any=[]; //Replaced by selectedZones
 	//showLimitSpeed = false; //Replaced by showExcVelOpt
 	showLimitTime = false;
-	showZones = false;
+	//showZones = false;
 	showCheckboxs = false;
 	showMovStop = false;
 	showCard = false;
@@ -84,13 +84,16 @@ export class FormComponent implements OnInit {
 	
 	reportType = "0";
 
-	chkStops: boolean = true; //Reporte 0 - Paradas y
+	chkStops: boolean = true; //Reporte 0 - Paradas y Movi
 	chkMovements: boolean = true; //Reporte 0 - Paradas y Movi
 
   showExcVelOpt: boolean = false; //Reporte 1 - Exceso de Vel
   excesoVelocidad: string = 'limVel'; //Reporte 1 - Exceso de Vel
   minimDur = 15; //Reporte 1 - Exceso de Vel
   limitSpeed = 90;; //Reporte 1 - Exceso de Vel
+
+  showZones: boolean = false; //Reporte 2 - Entrada y salida
+  selectedZones: any =[ ] //Reporte 2 - Entrada y Salida
 
 	chkTrans1min = false;
 	chkFatigaSomnolencia = true;
@@ -115,45 +118,45 @@ export class FormComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private http: HttpClient,
     private titleService: Title) {
-    // this.vehicles=this.vehicleService.vehicles;
-    this.vehicleService.dataCompleted.subscribe(vehicles=>{
-      this.vehicles = vehicles;
-      console.log('Vehicles: ',vehicles);
-      this.convoys = _.uniqBy(this.vehicles, 'convoy');
-      this.groups = _.uniqBy(this.vehicles, 'grupo');
-      this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
-      this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
-      this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
-      console.log('Convoys: ',this.convoys);
-      console.log('Groups: ',this.groups);
+      this.titleService.setTitle('Reportes');
+      // this.vehicles=this.vehicleService.vehicles;
+      this.vehicleService.dataCompleted.subscribe(vehicles=>{
+        this.vehicles = vehicles;
+        console.log('Vehicles: ',vehicles);
+        this.convoys = _.uniqBy(this.vehicles, 'convoy');
+        this.groups = _.uniqBy(this.vehicles, 'grupo');
+        this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
+        this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
+        this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
+        console.log('Convoys: ',this.convoys);
+        console.log('Groups: ',this.groups);
+      });
 
-    });
-
-    this.reports = [
-      {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
-      {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},
-      {id : 2, value : 'REPORTE DE EXCESOS EN ZONA'},
-      {id : 3, value : 'REPORTE DE ENTRADA Y SALIDA'},
-      {id : 4, value : 'REPORTE DE COMBUSTIBLE'},
-      {id : 5, value : 'REPORTE GENERAL'},
-      {id : 6, value : 'REPORTE DE EVENTOS'},
-      {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
-      {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
-      {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
-      {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)'},
-      {id : 11, value : 'REPORTE DE DISTRACIÓN'},
-      {id : 12, value : 'REPORTE DE POSIBLE FATIGA'},
-      {id : 13, value : 'REPORTE DE FATIGA EXTREMA'},
-      {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL'},
-      {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES'},
-      {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA'},
-      {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA'},
-      {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE'}
-    ];
-  }
+      this.reports = [
+        {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
+        {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},
+        {id : 2, value : 'REPORTE DE ENTRADA Y SALIDA', url: '/api/reports/entrada_salida'},
+        {id : 3, value : 'REPORTE DE COMBUSTIBLE', url: '/api/reports/combustible'},
+        {id : 4, value : 'REPORTE DE EXCESOS EN ZONA'},
+        {id : 5, value : 'REPORTE GENERAL'},
+        {id : 6, value : 'REPORTE DE EVENTOS'},
+        {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
+        {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
+        {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
+        {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)'},
+        {id : 11, value : 'REPORTE DE DISTRACIÓN'},
+        {id : 12, value : 'REPORTE DE POSIBLE FATIGA'},
+        {id : 13, value : 'REPORTE DE FATIGA EXTREMA'},
+        {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL'},
+        {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES'},
+        {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA'},
+        {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA'},
+        {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE'}
+      ];
+    }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Reportes');
+    
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
     // console.log(this.selectedReport.keys().length);
@@ -272,7 +275,7 @@ export class FormComponent implements OnInit {
 
     //selectedZone[i].id
 
-    var zonesArr: any=[];
+    //var zonesArr: any=[];
 
     if(cv){
       //Convoy o grupo seleccionado
@@ -282,7 +285,7 @@ export class FormComponent implements OnInit {
         fecha_hasta:M2, // --N
 				vehiculos: JSON.stringify(convoyOrGroupArr), 
         grupo:this.selectedConvoy, 
-        zonas:JSON.stringify(zonesArr),
+        zonas:JSON.stringify(this.selectedZones),
 				url: this.reports[this.selectedReport].url, 
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
@@ -306,7 +309,7 @@ export class FormComponent implements OnInit {
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
         vehiculos: JSON.stringify(this.selectedVehicles), 
         grupo: this.selectedConvoy, 
-        zonas: JSON.stringify(zonesArr),
+        zonas: JSON.stringify(this.selectedZones),
         url: this.reports[this.selectedReport].url, 
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
@@ -327,6 +330,7 @@ export class FormComponent implements OnInit {
 
     //console.log(param);
     console.log('Proceso iniciado a las: ', moment(new Date()).format("YYYY-MM-DD HH:mm:ss"));
+    console.log(param);
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
         console.log(this.selectedConvoy.length);
@@ -370,7 +374,7 @@ export class FormComponent implements OnInit {
     console.log(this.selectedReport);
     console.log(typeof this.selectedReport);
 
-    this.titleService.setTitle(this.reports[this.selectedReport].value);
+    //this.titleService.setTitle(this.reports[this.selectedReport].value);
     this.showSubLimitTime = true;
 
 		this.showCard = false; //Div que contiene [ showExcVelOpt - showMovStop - showZones - showCheckboxs ]
@@ -394,6 +398,13 @@ export class FormComponent implements OnInit {
         break;
       case 1:
         this.showExcVelOpt = true;
+        this.showLimitTime = true;
+        break;
+      case 2:
+        this.showZones = true;
+        this.showLimitTime = true;
+        break;
+      case 3:
         this.showLimitTime = true;
         break;
       case 7:
@@ -496,6 +507,7 @@ export class FormComponent implements OnInit {
 
   validateForm(){
     var is_vehicle_selected = (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}');
+    var is_zone_selected = this.selectedZones.length != 0;
 
     this.isFormFilled = 
       (JSON.stringify(this.selectedReport) != '{}') && 
@@ -503,6 +515,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 0 && is_vehicle_selected)
         ||
         (this.selectedReport == 1 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 2 && is_vehicle_selected && is_zone_selected)
         ||
         (this.selectedReport == 7 && is_vehicle_selected)
       );

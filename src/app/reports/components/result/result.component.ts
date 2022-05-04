@@ -192,6 +192,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.period = report_data.period;
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
       document.querySelector('body')!.style.padding = '0.8rem';
+      this.titleService.setTitle(this.rep_title);
       //this.dtTrigger.next();
       setTimeout(() => {
         this.dtTrigger.next();    
@@ -414,8 +415,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         if ( table_data[2].Paradas == true && table_data[2].Movimientos == true ) {
 
-          table_data[1].forEach((item: { latitud: string; longitud: string; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; esInt: number; pCercano: any; referencia: any; recorrido: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
-                var ubicacion = item.latitud + "," + item.longitud + "";
+          table_data[1].forEach((item: { latitud: number; longitud: number; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; esInt: number; pCercano: any; referencia: any; recorrido: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
+                var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                 var cellsCuerpo = [];
                 p_cercano_width = Math.max(p_cercano_width, item.pCercano.length * this.char_to_px);
                 referencia_width = Math.max(referencia_width, item.referencia.length * this.char_to_px);
@@ -466,9 +467,9 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         if ( table_data[2].Paradas == true && table_data[2].Movimientos == false ) {
 
-          table_data[1].forEach((item: { esInt: number; latitud: string; longitud: string; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; pCercano: any; referencia: any; }, index: number) => {
+          table_data[1].forEach((item: { esInt: number; latitud: number; longitud: number; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; pCercano: any; referencia: any; }, index: number) => {
                 if (item.esInt==0) {
-                    var ubicacion = item.latitud + "," + item.longitud + "";
+                    var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                     var cellsCuerpo = [];
                     p_cercano_width = Math.max(p_cercano_width, item.pCercano.length * this.char_to_px);
                     referencia_width = Math.max(referencia_width, item.referencia.length * this.char_to_px);
@@ -508,7 +509,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         if (  table_data[2].Paradas == false && table_data[2].Movimientos == true ) {
 
-          table_data[1].forEach((item: { esInt: number; latitud: string; longitud: string; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; recorrido: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
+          table_data[1].forEach((item: { esInt: number; latitud: number; longitud: number; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; recorrido: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
 
                 if (item.esInt == 1) {
                     var cellsCuerpo = [];
@@ -899,12 +900,12 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         if(this.chkDuracion){
 
-          table_data[1].forEach((item: { latitud: string; longitud: string; nombre: any; fecha_inicial: any; fecha_final: any; PC: any; ZC: any; vel_min: any; vel_max: any; vel_min_can: any; vel_max_can: any; cant_tramas: string; string_tramas: any; duracion: string; }, index: number) => {
-            var ubicacion = item.latitud + "," + item.longitud + "";
+          table_data[1].forEach((item: { latitud: number; longitud: number; nombre: any; fecha_inicial: any; fecha_final: any; PC: any; ZC: any; vel_min: any; vel_max: any; vel_min_can: any; vel_max_can: any; cant_tramas: string; string_tramas: any; duracion: string; }, index: number) => {
+            var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
             var cellsCuerpo = [];
   
             p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
-            z_cercana_width = Math.max(p_cercano_width, item.ZC.length * this.char_to_px);
+            z_cercana_width = Math.max(z_cercana_width, item.ZC.length * this.char_to_px);
   
             cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
   
@@ -933,8 +934,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         } else {
 
-          table_data[1].forEach((item: { latitud: string; longitud: string; nombre: any; fecha: any; PC: any; referencia: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
-            var ubicacion = item.latitud + "," + item.longitud + "";
+          table_data[1].forEach((item: { latitud: number; longitud: number; nombre: any; fecha: any; PC: any; referencia: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
+            var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
             var cellsCuerpo = [];
   
             p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
@@ -999,8 +1000,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               { width: 600 },
               { width: 120 },
               { width: 120 },
-              { width: p_cercano_width },
-              { width: z_cercana_width },
+              { width: Math.floor(p_cercano_width / 1.28) },
+              { width: Math.floor(z_cercana_width / 1.28) },
               { width: this.w_lat_long },
             )
 
@@ -1021,7 +1022,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               )
             }
             column_config.push(
-              { width: 215 },
+              { width: 160 },
               { width: this.w_lat_long },
               { width: Math.floor( p_cercano_width / 1.28 ) },
             )
@@ -1073,11 +1074,11 @@ export class ResultComponent implements OnDestroy, OnInit {
         column_config.push(
           { width: 120 },
           { width: 120 },
-          { width: 600 },
+          { width: 400 },
           { width: 120 },
           { width: 120 },
-          { width: p_cercano_max_width },
-          { width: z_cercana_max_width },
+          { width: Math.floor(p_cercano_max_width / 1.28) },
+          { width: Math.floor(z_cercana_max_width / 1.28) },
           { width: this.w_lat_long },
         )
 
@@ -1098,7 +1099,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           )
         }
         column_config.push(
-          { width: 215 },
+          { width: 160 },
           { width: this.w_lat_long },
           { width: Math.floor( p_cercano_max_width / 1.28 ) },
         )
@@ -1120,6 +1121,258 @@ export class ResultComponent implements OnDestroy, OnInit {
     console.log(exportFileEx);
 
     var nom_inf_xls = "ReporteExcesosVelocidad.xlsx";
+    /* if (vm.optionUser() == 445 ) {
+      var nom_inf_xls = "ReporteLuminarias.xlsx";
+    } */
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: nom_inf_xls
+      });
+
+    } else {
+      this.toastr.error("No se han encontrado datos para exportar");
+      /* alert('No se han encontrado datos para exportar'); */
+    }
+  }
+
+  exportExcelEntradaSalida(vrs: number) {
+    /* vm.dateHour() y datee; //Obtiene el chkDateHour para separar las columnas de fecha y hora*/
+
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+    var column_config:Columns[] = [];
+    var p_cercano_max_width = 155;
+    var z_nombre_max_width = 165;
+
+    var nom_inf = "REPORTE DE ENTRADA Y SALIDA";
+
+    var allRows: AllRows[] = [
+        {}, 
+        {
+          cells: [
+            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
+          ],
+          height: 30,
+        }
+    ];
+
+    var cc = 0;
+
+    var table_width;
+
+    if(this.chkDuracion){
+
+    } else {
+
+    }
+
+    this.data.forEach((table_data: any) => {
+      if(table_data[1].length > 0){
+        column_config = [];
+        var p_cercano_width = 155;
+        var z_nombre_width = 165;
+
+        bol_datos_ex = true;
+
+        var nom_vehi = table_data[0][1];
+        /* if (vm.optionR() == 28) {
+            vm.period = data[3][10];
+            ruta  = "RUTA : " + data[3][11];
+
+            if (vrs == 1) {
+                cc = cc + 1;
+                nom_vehi = nom_vehi + " - " +cc;
+            }
+        } */
+
+        table_width = 1 + (this.chkDateHour? 4:2) + 4;
+        var vehiculo_width = (this.chkDateHour? 4:3);
+
+
+        /* Table Header */
+
+        var rows: AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+            ],
+            height: 36,
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + table_data[0][1], bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: vehiculo_width },
+              { value: "PERIODO : " + this.period,  bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width - vehiculo_width },
+            ]
+          },
+          {}
+        ];
+
+        /* Table Body */
+
+        var cellsCampos = [];
+
+        //----------- CABECERA ------------
+        cellsCampos.push({ value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+
+        if (this.chkDateHour) {
+          cellsCampos.push({ value: "Fecha de Entrada", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Hora de Entrada", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Fecha de Salida", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Hora de Salida", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        } else {
+          cellsCampos.push({ value: "Fecha de Entrada", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Fecha de Salida", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        }
+
+        cellsCampos.push({ value: "Duración", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Nombre de Zona", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Posición de Zona", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+      
+      rows.push({
+        cells: cellsCampos,
+      });
+
+      //----------- CONTENIDO / FILAS ------------
+      table_data[1].forEach((item: { latitud: number; longitud: number; nombre_zona: any; fecha: any; fecha_out: any; PC: any; duracion: string; }, index: number) => {
+
+        var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+        var cellsCuerpo = [];
+
+        p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
+        z_nombre_width = Math.max(z_nombre_width, item.nombre_zona.length * this.char_to_px);
+
+        cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+
+        if (this.chkDateHour) {
+          cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: this.isChe(item.fecha_out), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: this.isChs(item.fecha_out), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+        } else {
+          cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: this.isChe(item.fecha_out), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+        }
+        cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+        cellsCuerpo.push({ value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+        cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+        cellsCuerpo.push({ value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+
+        rows.push({
+          cells:cellsCuerpo
+        });
+      });
+
+
+        
+
+        // //********************************************* excel version 2 *********************************
+        if ( vrs == 2 ) {
+          p_cercano_max_width = Math.max(p_cercano_max_width, p_cercano_width);
+          z_nombre_max_width = Math.max(z_nombre_max_width, z_nombre_width);
+          rows.splice(1, 1);
+          allRows = allRows.concat(rows);
+        }
+        // //********************************************* excel version 2 *********************************
+
+        // //********************************************* excel version 1 *********************************
+
+        /* Ancho de Columnas */
+
+        if( vrs == 1 ){
+          column_config = [
+            { width: this.w_item },
+          ];
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date_hour },
+              { width: this.w_date_hour },
+              { width: this.w_date_hour },
+              { width: this.w_date_hour },
+            )
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+              { width: this.w_date_and_hour },
+            )
+          }
+          column_config.push(
+            { width: 120 },
+            { width: Math.floor(z_nombre_width / 1.28) },
+            { width: this.w_lat_long },
+            { width: Math.floor(p_cercano_width / 1.28) },
+          );
+          
+          /* Fin Ancho de Columnas */
+
+          exportFileEx.push({
+            freezePane: {
+                rowSplit: 6
+              },
+            columns: column_config,
+            title: nom_vehi,
+            rows: rows
+          });
+        }
+        // //********************************************* excel version 1 *********************************
+
+        
+
+      } // if si hay datos del vehiculo
+    });
+
+    //NOTA: width * 1.28 (aprox) = Ancho de columna en excel
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      allRows[1].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date_hour },
+          { width: this.w_date_hour },
+          { width: this.w_date_hour },
+          { width: this.w_date_hour },
+        )
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+          { width: this.w_date_and_hour },
+        )
+      }
+      column_config.push(
+        { width: 120 },
+        { width: Math.floor(z_nombre_max_width / 1.28) },
+        { width: this.w_lat_long },
+        { width: Math.floor(p_cercano_max_width / 1.28) },
+      );
+
+      exportFileEx.push({
+        freezePane: {
+            rowSplit: 2
+          },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    var nom_inf_xls = "ReporteEntradaSalida.xlsx";
     /* if (vm.optionUser() == 445 ) {
       var nom_inf_xls = "ReporteLuminarias.xlsx";
     } */
@@ -1214,9 +1467,9 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             ]
           });
-          this.data.forEach((item: { latitud: string; longitud: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
+          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
             //var fh = item.fecha_final.split(" ");
-            var ubicacion = item.latitud + "," + item.longitud;
+            var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
             status_cell_width = Math.max(status_cell_width, item.estado.length * 11);
             referencia_cell_width = Math.max(referencia_cell_width, item.zonaCercana.length * 11);
@@ -1268,7 +1521,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             ]
           });
 
-          this.data.forEach((item: { latitud: string; longitud: string; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
+          this.data.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
             var ubicacion = item.latitud + "," + item.longitud;
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
@@ -1322,7 +1575,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         column_config.push({ width: this.w_velocidad_gps_can});
         column_config.push({ width: this.w_odometro});
         column_config.push({ width: this.w_lat_long});
-        column_config.push({ width: referencia_cell_width});
+        column_config.push({ width: Math.floor(referencia_cell_width / 1.28)});
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
