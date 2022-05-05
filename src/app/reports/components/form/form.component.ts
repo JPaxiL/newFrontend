@@ -148,15 +148,15 @@ export class FormComponent implements OnInit {
         {id : 12, value : 'REPORTE DE POSIBLE FATIGA'},
         {id : 13, value : 'REPORTE DE FATIGA EXTREMA'},
         {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL', url: '/api/reports/anticolision_frontal'},
-        {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES'},
-        {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA'},
-        {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA'},
-        {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE'}
+        {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES', url: '/api/reports/colision_peatones'},
+        {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA', url: '/api/reports/desvio_carril_izquierda'},
+        {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA', url: '/api/reports/desvio_carril_derecha'},
+        {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'}
       ];
     }
 
   ngOnInit(): void {
-    
+
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
     // console.log(this.selectedReport.keys().length);
@@ -283,10 +283,10 @@ export class FormComponent implements OnInit {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 				fecha_desde:M1,
         fecha_hasta:M2, // --N
-				vehiculos: JSON.stringify(convoyOrGroupArr), 
-        grupo:this.selectedConvoy, 
+				vehiculos: JSON.stringify(convoyOrGroupArr),
+        grupo:this.selectedConvoy,
         zonas:JSON.stringify(this.selectedZones),
-				url: this.reports[this.selectedReport].url, 
+				url: this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
 				og: JSON.stringify([oG]),
@@ -307,10 +307,10 @@ export class FormComponent implements OnInit {
         fecha_desde:M1,
         fecha_hasta:M2, // --N
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
-        vehiculos: JSON.stringify(this.selectedVehicles), 
-        grupo: this.selectedConvoy, 
+        vehiculos: JSON.stringify(this.selectedVehicles),
+        grupo: this.selectedConvoy,
         zonas: JSON.stringify(this.selectedZones),
-        url: this.reports[this.selectedReport].url, 
+        url: this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         og: JSON.stringify([oG]),
@@ -411,6 +411,10 @@ export class FormComponent implements OnInit {
         this.showLimitTime = false;
         break;
       case 14:
+      case 15:
+      case 16:
+      case 17:
+      case 18:
           this.showLimitTime = true;
 				break;
       default: break;
@@ -524,6 +528,14 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 7 && is_vehicle_selected)
         ||
         (this.selectedReport == 14 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 15 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 16 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 17 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 18 && is_vehicle_selected)
       );
   }
 }
