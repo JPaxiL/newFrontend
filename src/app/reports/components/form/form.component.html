@@ -46,63 +46,77 @@
         
         <div class="row">
           <ng-container>
-            <div class="row">
-              <div class="col-6">
-                <label>
-                  <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange();">Fecha/Hora</p-checkbox>
+            <div class="col-6">
+              <label>
+                <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange();">Fecha/Hora</p-checkbox>
                 Fecha/Hora</label>
-              </div>
-              <div class="col-6">
-                <div class="p-field">
-                  <label>
-                    <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" ></p-checkbox>
-                  Grupo</label>
-                </div>
-              </div>
             </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" ></p-checkbox>
+                  Grupo</label>
+              </div>
+            </div>     
           </ng-container>
           <ng-container *ngIf="showMovStop">
-            <div class="row">
-              <div class="col-6">
-                <div class="p-field">
-                  <label>
-                    <p-checkbox [(ngModel)]="chkStops" [binary]="true" inputId="binary" ></p-checkbox>
-                  Paradas</label>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="p-field">
-                  <label>
-                    <p-checkbox [(ngModel)]="chkMovements" [binary]="true" inputId="binary" ></p-checkbox>
-                  Movimientos</label>
-                </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="chkStops" [binary]="true" inputId="binary" ></p-checkbox>
+                Paradas</label>
               </div>
             </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="chkMovements" [binary]="true" inputId="binary" ></p-checkbox>
+                Movimientos</label>
+              </div>
+            </div>            
           </ng-container>
           
         </div>
 
         <ng-container *ngIf="showExcVelOpt">
           <div class="row">
-            <div class="row">
-              <div class="col-6">
-                <div class="p-field">
-                  <!-- <label>
-                    <p-checkbox [(ngModel)]="chkSpeedLimit" [binary]="true" inputId="binary" ></p-checkbox>
-                  Límite de Velocidad</label> -->
-                  <p-radioButton name="exVe" value="limVel" label="Límite de Velocidad" [(ngModel)]="excesoVelocidad" (onClick)="showExcVel();"></p-radioButton>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="p-field">
-                  <!-- <label>
-                    <p-checkbox [(ngModel)]="chkDuracion" [binary]="true" inputId="binary" ></p-checkbox>
-                  Duración</label> -->
-                  <p-radioButton name="exVe" value="durExc" label="Duración" [(ngModel)]="excesoVelocidad" (onClick)="showExcVel();"></p-radioButton>
-                </div>
+            <div class="col-6">
+              <div class="p-field">
+                <!-- <label>
+                  <p-checkbox [(ngModel)]="chkSpeedLimit" [binary]="true" inputId="binary" ></p-checkbox>
+                Límite de Velocidad</label> -->
+                <p-radioButton name="exVe" value="limVel" label="Límite de Velocidad" [(ngModel)]="excesoVelocidad" (onClick)="showExcVel();"></p-radioButton>
               </div>
             </div>
-          </div>    
+            <div class="col-6">
+              <div class="p-field">
+                <!-- <label>
+                  <p-checkbox [(ngModel)]="chkDuracion" [binary]="true" inputId="binary" ></p-checkbox>
+                Duración</label> -->
+                <p-radioButton name="exVe" value="durExc" label="Duración" [(ngModel)]="excesoVelocidad" (onClick)="showExcVel();"></p-radioButton>
+              </div>
+            </div>
+          </div>   
+        </ng-container>
+        <ng-container *ngIf="showOdomOpt">
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <!-- <label>
+                  <p-checkbox [(ngModel)]="chkSpeedLimit" [binary]="true" inputId="binary" ></p-checkbox>
+                Límite de Velocidad</label> -->
+                <p-radioButton name="odomV" value="0" label="Odómetro" [(ngModel)]="odometroVirtual"></p-radioButton>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <!-- <label>
+                  <p-checkbox [(ngModel)]="chkDuracion" [binary]="true" inputId="binary" ></p-checkbox>
+                Duración</label> -->
+                <p-radioButton name="odomV" value="1" label="Odómetro Virtual" [(ngModel)]="odometroVirtual"></p-radioButton>
+              </div>
+            </div>
+          </div>  
         </ng-container>
         
         <div *ngIf="showExcVelOpt">
@@ -132,14 +146,14 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha inicio:
-                  <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" [maxDate]="dateEnd" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
                 </label>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label>Hora inicio:
-                  <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" [maxDate]="timeEnd" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
                 </label>
               </div>
             </div>
@@ -148,14 +162,14 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha final:
-                  <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" [minDate]="dateInit" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
                 </label>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label>Hora final:
-                  <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" [minDate]="timeInit" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
                 </label>
               </div>
             </div>
