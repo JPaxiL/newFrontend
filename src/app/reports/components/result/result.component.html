@@ -277,7 +277,7 @@
     </div>
 
     <!-- 3. REPORTE DE COMBUSTIBLE -->
-    
+
     <div class="container grand-container multitable-container" *ngIf="num_rep == 3">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
@@ -752,6 +752,15 @@
       <button *ngIf="num_rep == 2" class="btn btn-success" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 3" class="btn btn-success" (click)="showSelectExcel('exportExcelCombustible');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
+
+      <button *ngIf="num_rep == 14" class="btn btn-success" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 15" class="btn btn-success" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 16" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilIzquierda');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 17" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 18" class="btn btn-success" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR EXCEL</button>
+
+
+
       <!-- <div style="display: flex; flex-direction: row; justify-content: center; gap: 4rem; margin: 0; padding: 0;">
         <button class="btn btn-success" (click)="exportExcelParadasMovimientos(1)">EXPORTAR EXCEL SEPARADO</button>
         <button class="btn btn-success" (click)="exportExcelParadasMovimientos(2)">EXPORTAR EXCEL JUNTO</button>

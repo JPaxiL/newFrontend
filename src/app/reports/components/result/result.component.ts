@@ -62,7 +62,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   is_new_tab: boolean = false;
   dt_completed = 0;
 
-  
+
   dtRendered = localStorage.getItem("report_data") !== null;
 
   /* EXPORTAR */
@@ -100,7 +100,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 	isIOSChrome = this.winNav.userAgent.match("CriOS");
 	isChrome = false;
 
-  
+
 
 
   constructor(
@@ -110,7 +110,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     private toastr:ToastrService,
     private confirmationService:ConfirmationService,
   ){
-    
+
   }
 
   ngOnInit(){
@@ -132,7 +132,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       }],
       initComplete: () => {
         this.dt_completed++;
-        console.log('Terminado de cargar y popular tabla ' + this.dt_completed); 
+        console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
         if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
           this.wrapElements(document.querySelectorAll('table[datatable]'));
           this.table_hide = '';
@@ -146,7 +146,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         console.log('Recibiendo data en result', data);
 
         this.dt_completed = 0;
-  
+
         this.data = data.data;
         this.num_rep = data.numRep;
         this.rep_title = data.repTitle;
@@ -155,7 +155,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.chkDuracion = data.chkDuracion;
         this.chkOdomV = data.chkOdomV;
         this.period = data.period;
-  
+
         //Check if this is the first time loading
         if(this.dtElement !== undefined && "dtInstance" in this.dtElement){
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -167,15 +167,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           console.log('saliendo del then');
         }
         setTimeout(() => {
-          this.dtRendered = true;    
+          this.dtRendered = true;
         });
         console.log('dtRendered es ', this.dtRendered);
 
         console.log('antes de next');
         setTimeout(() => {
-          this.dtTrigger.next();    
+          this.dtTrigger.next();
         });
-        
+
         console.log('despues de next');
         //this.table_hide = '';
 
@@ -199,7 +199,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.titleService.setTitle(this.rep_title);
       //this.dtTrigger.next();
       setTimeout(() => {
-        this.dtTrigger.next();    
+        this.dtTrigger.next();
       });
 
       //this.table_hide = '';
@@ -207,7 +207,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       console.log('Proceso terminado a las: ', new Date());
     }
 
-    
+
 
     if (this.isIOSChrome) {
       // is Google Chrome on IOS
@@ -284,7 +284,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         return new Date(date);
       }
   }
-  
+
 
   showSelectExcel(fn_name: string){
     this.confirmationService.confirm({
@@ -318,7 +318,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     } */
 
     var allRows: AllRows[] = [
-        {}, 
+        {},
         {
           cells: [
             { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
@@ -680,7 +680,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
 
-        
+
 
       } // if si hay datos del vehiculo
     });
@@ -792,7 +792,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nom_inf = "REPORTE DE EXCESOS DE VELOCIDAD";
 
     var allRows: AllRows[] = [
-        {}, 
+        {},
         {
           cells: [
             { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
@@ -890,7 +890,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
 
         }
-        
+
         rows.push({
           cells: cellsCampos,
           height: 50,
@@ -903,12 +903,12 @@ export class ResultComponent implements OnDestroy, OnInit {
           table_data[1].forEach((item: { latitud: number; longitud: number; nombre: any; fecha_inicial: any; fecha_final: any; PC: any; ZC: any; vel_min: any; vel_max: any; vel_min_can: any; vel_max_can: any; cant_tramas: string; string_tramas: any; duracion: string; }, index: number) => {
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
             var cellsCuerpo = [];
-  
+
             p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
             z_cercana_width = Math.max(z_cercana_width, item.ZC.length * this.char_to_px);
-  
+
             cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-  
+
             if (this.chkDateHour) {
               cellsCuerpo.push({ value: this.isChe(item.fecha_inicial), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
               cellsCuerpo.push({ value: this.isChs(item.fecha_inicial), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
@@ -926,7 +926,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             cellsCuerpo.push({ value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
             cellsCuerpo.push({ value: item.ZC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
             cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-  
+
             rows.push({
               cells:cellsCuerpo
             });
@@ -937,12 +937,12 @@ export class ResultComponent implements OnDestroy, OnInit {
           table_data[1].forEach((item: { latitud: number; longitud: number; nombre: any; fecha: any; PC: any; referencia: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
             var cellsCuerpo = [];
-  
+
             p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
-  
+
             cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
             cellsCuerpo.push({ value: item.nombre, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-  
+
             if (this.chkDateHour) {
               cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
               cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
@@ -952,7 +952,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             cellsCuerpo.push({ value: item.maxima_velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 });
             cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
             cellsCuerpo.push({ value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-  
+
             rows.push({
               cells:cellsCuerpo
             });
@@ -960,7 +960,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         }
 
-        
+
 
         // //********************************************* excel version 2 *********************************
         if ( vrs == 2 ) {
@@ -1026,9 +1026,9 @@ export class ResultComponent implements OnDestroy, OnInit {
               { width: this.w_lat_long },
               { width: Math.floor( p_cercano_width / 1.28 ) },
             )
-            
+
           }
-          
+
           /* Fin Ancho de Columnas */
 
           exportFileEx.push({
@@ -1042,7 +1042,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         }
         // //********************************************* excel version 1 *********************************
 
-        
+
 
       } // if si hay datos del vehiculo
     });
@@ -1103,7 +1103,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           { width: this.w_lat_long },
           { width: Math.floor( p_cercano_max_width / 1.28 ) },
         )
-        
+
       }
 
       exportFileEx.push({
@@ -1151,7 +1151,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nom_inf = "REPORTE DE ENTRADA Y SALIDA";
 
     var allRows: AllRows[] = [
-        {}, 
+        {},
         {
           cells: [
             { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
@@ -1217,7 +1217,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         cellsCampos.push({ value: "Nombre de Zona", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
         cellsCampos.push({ value: "Posición de Zona", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
         cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-      
+
         rows.push({
           cells: cellsCampos,
         });
@@ -1287,7 +1287,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             { width: this.w_lat_long },
             { width: Math.floor(p_cercano_width / 1.28) },
           );
-          
+
           /* Fin Ancho de Columnas */
 
           exportFileEx.push({
@@ -1366,7 +1366,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       /* alert('No se han encontrado datos para exportar'); */
     }
   }
-  
+
   exportExcelCombustible(vrs: number) {
     var exportFileEx = [];
     var bol_datos_ex = false;
@@ -1375,7 +1375,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nom_inf = "REPORTE DE COMBUSTIBLE";
 
     var allRows: AllRows[] = [
-        {}, 
+        {},
         {
           cells: [
             { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
@@ -1450,7 +1450,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         cellsCampos.push({ value: "Combustible Alerta (galones)", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true});
         cellsCampos.push({ value: "can_rpm", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3});
         cellsCampos.push({ value: "Altitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3});
-      
+
         rows.push({
           cells: cellsCampos,
         });
@@ -1552,7 +1552,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             { width: 80 },
             { width: 80 },
           );
-          
+
           /* Fin Ancho de Columnas */
 
           exportFileEx.push({
@@ -1651,7 +1651,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     } */
 
     var allRows: AllRows[] = [
-        {}, 
+        {},
         {
           cells: [
             { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
@@ -1840,7 +1840,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         }
         // //********************************************* excel version 2 *********************************
 
-      
+
     };
 
     //********************************************* excel version 2 *********************************
@@ -1877,6 +1877,1062 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.toastr.error("No se han encontrado datos para exportar");
     }
   }
+
+
+  exportExcelAnticolisionFrontal(vrs: number) {
+    // dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+
+        {}, {
+          cells: [
+            { value: "REPORTE ANTICOLISION FRONTAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+
+    //this.data.forEach((table_data: any) => {
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        // var rows = [
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE ANTICOLISION FRONTAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+
+        if(this.chkDateHour) {
+
+
+          rows.push({
+            cells: [
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+          // data[1].forEach(function(item:any, index:any){
+
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+
+
+        } else {
+
+          rows.push({
+            cells: [
+
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+          // data[1].forEach(function(item:any, index:any){
+            data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+
+              cells: [
+
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+
+            });
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+        if (vrs == 1) {
+            exportFileEx.push({
+              freezePane: {
+                  rowSplit: 6
+                },
+              columns: [
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+              ],
+              title: data[0][1],
+              rows: rows
+            });
+        }
+        // //********************************************* excel version 1 *********************************
+
+        // //********************************************* excel version 2 *********************************
+        if (vrs == 2) {
+           rows.splice(1, 1);
+           allRows = allRows.concat(rows);
+        }
+        // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+        exportFileEx.push({
+          freezePane: {
+              rowSplit: 2
+            },
+          columns: [
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+          ],
+          title: "Resultado",//data[0][1],
+          rows: allRows
+        });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "exportExcelAnticolisionFrontal.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+  //Reporte 66
+  exportExcelColisionConPeatones(vrs: number) {
+    // this.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var allRows: AllRows[] = [
+        {}, {
+          cells: [
+            { value: "REPORTE DE COLISION CON PEATONES", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+    this.data.forEach((data: any,idx:any) => {
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE DE COLISION CON PEATONES", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+        if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+          //data[1].forEach(function(item, index){
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+
+            rows.push({
+              cells: [
+
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+
+
+        } else {
+
+          rows.push({
+            cells: [
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+            // if (item.di4x > 0) {
+            // 	var acc = "Activado (" + item.di4x + ")";
+            // } else {
+            // 	var acc = "Desactivado (" + item.di4x + ")";
+            // }
+            rows.push({
+
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+
+            });
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+        if (vrs == 1) {
+            exportFileEx.push({
+              freezePane: {
+                  rowSplit: 6
+                },
+              columns: [
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+              ],
+              title: data[0][1],
+              rows: rows
+            });
+        }
+        // //********************************************* excel version 1 *********************************
+
+        // //********************************************* excel version 2 *********************************
+        if (vrs == 2) {
+            rows.splice(1, 1);
+            allRows = allRows.concat(rows);
+        }
+        // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+        exportFileEx.push({
+          freezePane: {
+              rowSplit: 2
+            },
+          columns: [
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+          ],
+          title: "Resultado",//data[0][1],
+          rows: allRows
+        });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "exportExcelColisionConPeatones.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+  exportExcelDesvioCarrilIzquierda(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+        {}, {
+          cells: [
+            { value: "REPORTE DE DESVIO DE CARRIL HACIA LA IZQUIERDA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE DE DESVIO DE CARRIL HACIA LA IZQUIERDA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+        if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+
+            ]
+          });
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+              cells: [
+
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        } else {
+
+          rows.push({
+            cells: [
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+            // if (item.di4x > 0) {
+            // 	var acc = "Activado (" + item.di4x + ")";
+            // } else {
+            // 	var acc = "Desactivado (" + item.di4x + ")";
+            // }
+            rows.push({
+
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: 6
+        },
+      columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+      ],
+      title: data[0][1],
+      rows: rows
+      });
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(1, 1);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: 2
+        },
+        columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+        ],
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "exportExcelDesvioCarrilIzquierda.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+
+
+  exportExcelDesvioCarrilDerecha(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var allRows: AllRows[] = [
+        {}, {
+          cells: [
+            { value: "REPORTE DE DESVIO DE CARRIL HACIA LA DERECHA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+    this.data.forEach((data: any,idx:any) => {
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE DE DESVIO DE CARRIL HACIA LA DERECHA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+        if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+              cells: [
+
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        } else {
+
+          rows.push({
+            cells: [
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+            ]
+          });
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: 6
+        },
+      columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+      ],
+      title: data[0][1],
+      rows: rows
+      });
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(1, 1);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: 2
+        },
+        columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+        ],
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "exportExcelDesvioCarrilDerecha.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+
+  exportExcelBloqueoVisionMobileye(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var allRows: AllRows[] = [
+        {}, {
+          cells: [
+            { value: "REPORTE DE BLOQUEO DE VISION DEL MOBILEYE", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE DE BLOQUEO DE VISION DEL MOBILEYE", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+        if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+              cells: [
+
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        } else {
+
+          rows.push({
+            cells: [
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: 6
+        },
+      columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+      ],
+      title: data[0][1],
+      rows: rows
+      });
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(1, 1);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: 2
+        },
+        columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+        ],
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "exportExcelBloqueoVisionMobileye.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
 
 
 }
