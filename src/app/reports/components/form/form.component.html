@@ -1,4 +1,3 @@
-<!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog> -->
 <p-confirmDialog #cd [style]="{width: '50vw'}" key="newTabConfirmation">
   <ng-template pTemplate="header">
       <h3>Confirmación</h3>
@@ -10,36 +9,36 @@
 </p-confirmDialog>
 <p-card>
   <ng-template pTemplate="header">
-    <!-- <h2>Reportes GL Tracker</h2> -->
-    <span class="d-block p-2 bg-primary text-white">REPORTES GL TRACKER</span>
+    <span class="d-block p-2 text-white">
+      <i class="fas fa-chart-bar" style="margin-right: 0.5rem;"></i>Panel de Reportes</span>
   </ng-template>
-    <div class="p-fluid y-form-container">
+    <div class="p-fluid y-form-container" style="font-size: 0.9rem;">
       <div class="row">
         <div class="p-field">
-          <label>Tipo de reporte :</label>
-          <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte" (onChange)="changedReport(); validateForm();"></p-dropdown>
+          <label class="bg-subtitle">Reporte :</label>
+          <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte..." (onChange)="changedReport(); validateForm();"></p-dropdown>
         </div>
       </div>
       <div class="row">
         <div class="col-6">
           <div class="p-field">
-            <label>Vehículos:</label>
-            <!-- <p-dropdown [options]="vehicles" [(ngModel)]="selectedVehicle" optionLabel="name" optionValue="id" [showClear]="false" placeholder="Seleccione vehiculos"></p-dropdown> -->
-            <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
+            <label class="bg-subtitle" id="vehicle_label">Vehículos:</label>
+            <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" [showToggleAll]="false"f placeholder="Seleccione..." (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
+            <div style="padding: 0px 0.3rem; margin: 0px; text-align: right;">
+              <label>
+                <p-checkbox [(ngModel)]="chkAllVehicles" [binary]="true" inputId="binary" (onChange)="selectAllVehicles(); validateForm();"></p-checkbox>
+                Todos
+              </label>
+            </div>
+            
           </div>
         </div>
-        <div class="col-6" *ngIf="!checkboxGroup">
+        <div class="col-6">
           <div class="p-field">
-            <label>Convoy:</label>
-            <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" placeholder="Seleccione convoy/grupo" (onChange)="onSelectedConvoyChange(); validateForm();"></p-dropdown>
-            <!-- <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione convoy/grupo"></p-dropdown> -->
-          </div>
-        </div>
-        <div class="col-6" *ngIf="checkboxGroup">
-          <div class="p-field">
-            <label>Grupo:</label>
-            <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" placeholder="Seleccione grupo" (onChange)="onSelectedGroupChange(); validateForm();"></p-dropdown>
-            <!-- <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione grupo"></p-dropdown> -->
+            <button class="bg-subtitle btn-toggle-option btn-toggle-left" [ngClass]="!checkboxGroup? '': 'disabled'" (click)="checkboxGroup = false; onSelectedConvoyChange(); validateForm();">Convoy</button>
+            <button class="bg-subtitle btn-toggle-option btn-toggle-right" [ngClass]="checkboxGroup? '': 'disabled'" (click)="checkboxGroup = true; onSelectedGroupChange(); validateForm();">Grupo</button>
+            <p-dropdown *ngIf="!checkboxGroup" [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" placeholder="Seleccione convoy..." (onChange)="onSelectedConvoyChange(); validateForm();"></p-dropdown>
+            <p-dropdown *ngIf="checkboxGroup" [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" placeholder="Seleccione grupo..." (onChange)="onSelectedGroupChange(); validateForm();"></p-dropdown>
           </div>
         </div>
       </div>
@@ -52,11 +51,11 @@
               Fecha/Hora</label>
           </div>
           <div class="col-6">
-            <div class="p-field">
+            <!-- <div class="p-field">
               <label>
                 <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" (onChange)="validateForm();"></p-checkbox>
                 Grupo</label>
-            </div>
+            </div> -->
           </div>     
         </ng-container>
         <ng-container *ngIf="showMovStop">
@@ -98,17 +97,11 @@
         <div class="row">
           <div class="col-6">
             <div class="p-field">
-              <!-- <label>
-                <p-checkbox [(ngModel)]="chkSpeedLimit" [binary]="true" inputId="binary" ></p-checkbox>
-              Límite de Velocidad</label> -->
               <p-radioButton name="exVe" value="limVel" label="Límite de Velocidad" [(ngModel)]="excesoVelocidad" (onClick)="showExcVel();"></p-radioButton>
             </div>
           </div>
           <div class="col-6">
             <div class="p-field">
-              <!-- <label>
-                <p-checkbox [(ngModel)]="chkDuracion" [binary]="true" inputId="binary" ></p-checkbox>
-              Duración</label> -->
               <p-radioButton name="exVe" value="durExc" label="Duración" [(ngModel)]="excesoVelocidad" (onClick)="showExcVel();"></p-radioButton>
             </div>
           </div>
@@ -118,17 +111,11 @@
         <div class="row">
           <div class="col-6">
             <div class="p-field">
-              <!-- <label>
-                <p-checkbox [(ngModel)]="chkSpeedLimit" [binary]="true" inputId="binary" ></p-checkbox>
-              Límite de Velocidad</label> -->
               <p-radioButton name="odomV" value="0" label="Odómetro" [(ngModel)]="odometroVirtual"></p-radioButton>
             </div>
           </div>
           <div class="col-6">
             <div class="p-field">
-              <!-- <label>
-                <p-checkbox [(ngModel)]="chkDuracion" [binary]="true" inputId="binary" ></p-checkbox>
-              Duración</label> -->
               <p-radioButton name="odomV" value="1" label="Odómetro Virtual" [(ngModel)]="odometroVirtual"></p-radioButton>
             </div>
           </div>
@@ -139,24 +126,21 @@
         <div class="row">
           <div class="col-6">
             <div class="p-field" *ngIf="excesoVelocidad == 'limVel'">
-              <label>Límite de velocidad
-                <p-inputNumber [(ngModel)]="limitSpeed" [showButtons]="true" [min]="0" [max]="300" ></p-inputNumber>
-              </label>
+              <label class="bg-subtitle" for="limiteVelocidad">Límite de velocidad</label>
+              <p-inputNumber [(ngModel)]="limitSpeed" [showButtons]="true" [min]="0" [max]="300" inputId="limiteVelocidad"></p-inputNumber>
             </div>
           </div>
           <div class="col-6">
             <div class="p-field" *ngIf="excesoVelocidad == 'durExc'">
-              <label>Duración
-                <p-inputNumber [(ngModel)]="minimDur" [showButtons]="true" [min]="0" suffix=" seg" ></p-inputNumber>
-              </label>
+              <label class="bg-subtitle" for="minimaDuracion">Duración</label>
+              <p-inputNumber [(ngModel)]="minimDur" [showButtons]="true" [min]="0" suffix=" seg" inputId="minimaDuracion"></p-inputNumber>
             </div>
           </div>
         </div>
       </div>
       <div class="row" *ngIf="showLimitTime">
         <div class="col-12">
-          <span>Límite de tiempo:</span>
-          <!-- <span class="d-block p-2 bg-primary text-white">Limite de tiempo:</span> -->
+          <label class="bg-subtitle">Límite de tiempo:</label>
         </div>
         <div class="col-6">
           <div class="row">

@@ -4,6 +4,53 @@
     row-gap: 0.8rem;
 }
 
-:host ::ng-deep .p-card-content{
-    padding: 0;
+*:not(i){
+    font-family: Titillium-Regular, Verdana, sans-serif;
+}
+
+.btn-toggle-option{
+    width: 50%;
+    text-align: center;
+    border: 3px solid var(--gl-gray);
+    padding: calc(0.2rem - 4px) 0px;
+    cursor: auto;
+}
+
+.btn-toggle-option.disabled{
+    background-color: #ffffff;
+    color: var(--gl-gray);
+    cursor: pointer;
+}
+
+.btn-toggle-option.disabled:hover{
+    color: var(--gl-gray-hover);
+}
+
+.btn-toggle-left{
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    border-right: 1.5px solid var(--gl-gray);
+}
+.btn-toggle-right{
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    border-left: 1.5px solid var(--gl-gray);
+}
+
+:host ::ng-deep {
+    *:not(i, .p-dropdown-trigger-icon, .p-multiselect-trigger-icon){
+        font-family: Titillium-Regular, Verdana, sans-serif;
+    }
+    .p-card-content{
+        padding: 0;
+    }
+
+    .p-card-footer{
+        display: flex;
+        justify-content: center;
+    }
+
+    #vehicle_label + p-multiselect > .p-multiselect.p-component{
+        margin-bottom: 0px;
+    }
 }

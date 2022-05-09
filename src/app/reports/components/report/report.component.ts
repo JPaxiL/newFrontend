@@ -10,7 +10,7 @@ export class ReportComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
+    document.querySelector('body')!.style.backgroundColor = 'rgb(237,232,232)';
   }
 
 }

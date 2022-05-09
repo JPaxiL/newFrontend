@@ -9,6 +9,9 @@
 </p-confirmDialog>
 
 <div style="display: flex; flex-direction: column; padding: 0; height: 100%; max-height: 100%; margin: 0; font-size: 0.8rem;">
+  <div *ngIf="!dtRendered" class="pristine-report">
+    <img src="./assets/images/fondo-svg-reporte.svg" alt="fondo-reporte-logo">
+  </div>
   <div [ngClass]="table_hide" class="container grand-container">
     <div *ngIf="num_rep >= 0 && num_rep <= 18 " class="table-title" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
     <div class="table-subtitle" style="margin-bottom: 0.25rem;">{{ rep_subtitle }}</div>

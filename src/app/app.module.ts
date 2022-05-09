@@ -25,6 +25,7 @@ import {CardModule} from 'primeng-lts/card';
 import {CheckboxModule} from 'primeng-lts/checkbox';
 import {MultiSelectModule} from 'primeng-lts/multiselect';
 import {CalendarModule} from 'primeng-lts/calendar';
+import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -165,6 +166,7 @@ import { DataTablesModule } from 'angular-datatables';
     DropdownModule,
     DialogModule,
     InputTextModule,
+    ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,
     SelectButtonModule,

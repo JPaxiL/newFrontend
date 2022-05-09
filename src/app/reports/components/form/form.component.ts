@@ -83,6 +83,9 @@ export class FormComponent implements OnInit {
 	finishedMinute = "59";
 
 	reportType = "0";
+  toggleConvoy = true;
+  toggleGrupo = false;
+  chkAllVehicles = false;
 
   showLimitTime = false;
 
@@ -213,6 +216,11 @@ export class FormComponent implements OnInit {
     console.log(this.excesoVelocidad);
     console.log(this.excesoVelocidad == 'limVel');
     console.log(this.excesoVelocidad == 'durExc');
+  }
+
+  selectAllVehicles(){
+    this.selectedVehicles = this.chkAllVehicles? this.vehicles: [];
+    this.onSelectedVehiclesChange();
   }
 
   confirm() {
@@ -506,22 +514,26 @@ export class FormComponent implements OnInit {
   onSelectedVehiclesChange(){
     this.selectedConvoy = {};
     this.selectedGroup = {};
+    this.chkAllVehicles = this.selectedVehicles.length == this.vehicles.length;
   }
 
   onSelectedConvoyChange(){
     this.selectedVehicles = [];
     this.selectedGroup = {};
+    this.chkAllVehicles = false;
   }
 
   onSelectedGroupChange(){
     this.selectedVehicles = [];
     this.selectedConvoy = {};
+    this.chkAllVehicles = false;
   }
 
   onChkDateHourChange(){
     console.log(this.chkDateHour);
     this.onTimeChange();
   }
+  
   onTimeChange(){
     console.log('date init', this.dateInit);
     console.log('date end', this.dateEnd);
