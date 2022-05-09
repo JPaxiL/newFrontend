@@ -60,17 +60,17 @@ export class FormComponent implements OnInit {
 	//selectedGroup: any=[];
 	//selectedZone: any=[]; //Replaced by selectedZones
 	//showLimitSpeed = false; //Replaced by showExcVelOpt
-	showLimitTime = false;
+	
 	//showZones = false;
 	showCheckboxs = false;
-	showMovStop = false;
+	
 	showCard = false;
 	showDivHorizontal = false;
 	showEvents = false;
 	showSubLimitTime = false;
 	showTrans1min = false;
 	showFatigaOp = false;
-	showFrenadaAceleracionOp = false;
+	//showFrenadaAceleracionOp = false; //Renamed to showBrakeAccel
 	disableVehicle = false;
 	disableConvoy = false;
 	disableGroup = false;
@@ -84,27 +84,38 @@ export class FormComponent implements OnInit {
 
 	reportType = "0";
 
-	chkStops: boolean = true; //Reporte 0 - Paradas y Movi
-	chkMovements: boolean = true; //Reporte 0 - Paradas y Movi
+  showLimitTime = false;
 
-  showExcVelOpt: boolean = false; //Reporte 1 - Exceso de Vel
-  excesoVelocidad: string = 'limVel'; //Reporte 1 - Exceso de Vel
-  minimDur = 15; //Reporte 1 - Exceso de Vel
-  limitSpeed = 90;; //Reporte 1 - Exceso de Vel
+  //Reporte 0 - Paradas y Movi
+	chkStops: boolean = true;
+	chkMovements: boolean = true;
+  showMovStop = false;
 
-  showZones: boolean = false; //Reporte 2 - Entrada y salida
-  selectedZones: any =[ ] //Reporte 2 - Entrada y Salida
+  //Reporte 1 - Exceso de Vel
+  showExcVelOpt: boolean = false;
+  excesoVelocidad: string = 'limVel';
+  minimDur = 15;
+  limitSpeed = 90;
 
-  showOdomOpt: boolean = false //Reporte 3 - Combustible
-  odometroVirtual: number= 0;//Reporte 3 - Combustible
+  //Reporte 2 - Entrada y Salida
+  showZones: boolean = false;
+  selectedZones: any =[];
+
+//Reporte 3 - Combustible
+  showOdomOpt: boolean = false;
+  odometroVirtual: number= 0;
+
+  //Reporte 4 - Frenada y Aceleracion Brusca
+  showBrakeAccel: boolean = false; 
+  chkFrenada = true;
+	chkAceleracion = true;
 
 
 	chkTrans1min = false;
 	chkFatigaSomnolencia = true;
 	chkFatigaDistraccion = true;
 	chkForGroup = false;
-	chkFrenada = true;
-	chkAceleracion = true;
+	
 	spinnerOptions = false;
 
   newWindow = false;
@@ -147,7 +158,7 @@ export class FormComponent implements OnInit {
         {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
         {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
         {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
-        {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)'},
+        {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)', url: '/api/reports/frenada_aceleracion_brusca'},
         {id : 11, value : 'REPORTE DE DISTRACIÓN'},
         {id : 12, value : 'REPORTE DE POSIBLE FATIGA'},
         {id : 13, value : 'REPORTE DE FATIGA EXTREMA'},
@@ -389,7 +400,7 @@ export class FormComponent implements OnInit {
 		this.showEvents = false; //Configuracion de rango de tiempo
 		this.showTrans1min = false; //Configuracion de duracion de parada >1min
 		this.showFatigaOp = false; //Configuracion de opcion de fatiga 2
-		this.showFrenadaAceleracionOp = false; //Configuración Aceleracion y frenada
+		this.showBrakeAccel = false; //Configuración Aceleracion y frenada
 		/* this.showTimeLlegada = false;
 		this.showTimePeriodoDia = false; */
 
@@ -411,7 +422,10 @@ export class FormComponent implements OnInit {
         this.showOdomOpt = true;
         break;
       case 7:
-        this.showLimitTime = false;
+        break;
+      case 10:
+        this.showLimitTime = true;
+        this.showBrakeAccel = true;
         break;
       case 14:
       case 15:
@@ -522,7 +536,7 @@ export class FormComponent implements OnInit {
     this.isFormFilled =
       (JSON.stringify(this.selectedReport) != '{}') &&
       (
-        (this.selectedReport == 0 && is_vehicle_selected)
+        (this.selectedReport == 0 && is_vehicle_selected && (this.chkStops || this.chkMovements))
         ||
         (this.selectedReport == 1 && is_vehicle_selected)
         ||
@@ -531,6 +545,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 3 && is_vehicle_selected)
         ||
         (this.selectedReport == 7 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 10 && is_vehicle_selected && (this.chkFrenada || this.chkAceleracion))
         ||
         (this.selectedReport == 14 && is_vehicle_selected)
         ||
