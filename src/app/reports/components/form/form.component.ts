@@ -60,10 +60,10 @@ export class FormComponent implements OnInit {
 	//selectedGroup: any=[];
 	//selectedZone: any=[]; //Replaced by selectedZones
 	//showLimitSpeed = false; //Replaced by showExcVelOpt
-	
+
 	//showZones = false;
 	showCheckboxs = false;
-	
+
 	showCard = false;
 	showDivHorizontal = false;
 	showEvents = false;
@@ -109,16 +109,20 @@ export class FormComponent implements OnInit {
   odometroVirtual: number= 0;
 
   //Reporte 4 - Frenada y Aceleracion Brusca
-  showBrakeAccel: boolean = false; 
+  showBrakeAccel: boolean = false;
   chkFrenada = true;
 	chkAceleracion = true;
 
 
-	chkTrans1min = false;
+  //Reporte 10 - Distraccion y Posible Fatiga
+  showFatigaDistraccion: boolean = false;
 	chkFatigaSomnolencia = true;
 	chkFatigaDistraccion = true;
+
+
+	chkTrans1min = false;
 	chkForGroup = false;
-	
+
 	spinnerOptions = false;
 
   newWindow = false;
@@ -162,9 +166,9 @@ export class FormComponent implements OnInit {
         {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
         {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
         {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)', url: '/api/reports/frenada_aceleracion_brusca'},
-        {id : 11, value : 'REPORTE DE DISTRACIÓN'},
-        {id : 12, value : 'REPORTE DE POSIBLE FATIGA'},
-        {id : 13, value : 'REPORTE DE FATIGA EXTREMA'},
+        {id : 11, value : 'REPORTE DE DISTRACIÓN Y POSIBLE FATIGA', url: '/api/reports/distraccion_posible_fatiga'},
+        // {id : 12, value : 'REPORTE DE POSIBLE FATIGA'},
+        {id : 13, value : 'REPORTE DE FATIGA EXTREMA', url: '/api/reports/fatiga_extrema'},
         {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL', url: '/api/reports/anticolision_frontal'},
         {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES', url: '/api/reports/colision_peatones'},
         {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA', url: '/api/reports/desvio_carril_izquierda'},
@@ -174,7 +178,7 @@ export class FormComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    
+
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
     // console.log(this.selectedReport.keys().length);
@@ -308,10 +312,10 @@ export class FormComponent implements OnInit {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 				fecha_desde:M1,
         fecha_hasta:M2, // --N
-				vehiculos: JSON.stringify(convoyOrGroupArr), 
-        grupo:this.selectedConvoy, 
+				vehiculos: JSON.stringify(convoyOrGroupArr),
+        grupo:this.selectedConvoy,
         zonas:JSON.stringify(this.selectedZones),
-				url: this.reports[this.selectedReport].url, 
+				url: this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
@@ -333,10 +337,10 @@ export class FormComponent implements OnInit {
         fecha_desde:M1,
         fecha_hasta:M2, // --N
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
-        vehiculos: JSON.stringify(this.selectedVehicles), 
-        grupo: this.selectedConvoy, 
+        vehiculos: JSON.stringify(this.selectedVehicles),
+        grupo: this.selectedConvoy,
         zonas: JSON.stringify(this.selectedZones),
-        url: this.reports[this.selectedReport].url, 
+        url: this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
@@ -409,6 +413,7 @@ export class FormComponent implements OnInit {
 		this.showTrans1min = false; //Configuracion de duracion de parada >1min
 		this.showFatigaOp = false; //Configuracion de opcion de fatiga 2
 		this.showBrakeAccel = false; //Configuración Aceleracion y frenada
+    this.showFatigaDistraccion = false; //Configuracion Distraccion y posible fatiga
 		/* this.showTimeLlegada = false;
 		this.showTimePeriodoDia = false; */
 
@@ -435,6 +440,14 @@ export class FormComponent implements OnInit {
         this.showLimitTime = true;
         this.showBrakeAccel = true;
         break;
+      case 11:
+        this.showLimitTime = true;
+        this.showFatigaDistraccion = true;
+        break;
+      case 13:
+        this.showLimitTime = true;
+        break;
+
       case 14:
       case 15:
       case 16:
@@ -533,7 +546,7 @@ export class FormComponent implements OnInit {
     console.log(this.chkDateHour);
     this.onTimeChange();
   }
-  
+
   onTimeChange(){
     console.log('date init', this.dateInit);
     console.log('date end', this.dateEnd);
@@ -559,6 +572,10 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 7 && is_vehicle_selected)
         ||
         (this.selectedReport == 10 && is_vehicle_selected && (this.chkFrenada || this.chkAceleracion))
+        ||
+        (this.selectedReport == 11 && is_vehicle_selected && (this.chkFatigaDistraccion || this.chkFatigaSomnolencia))
+        ||
+        (this.selectedReport == 13 && is_vehicle_selected)
         ||
         (this.selectedReport == 14 && is_vehicle_selected)
         ||
