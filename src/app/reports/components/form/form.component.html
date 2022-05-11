@@ -16,47 +16,50 @@
       <div class="row">
         <div class="p-field">
           <label class="bg-subtitle">Reporte :</label>
-          <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [showClear]="false" placeholder="Seleccione el reporte..." (onChange)="changedReport(); validateForm();"></p-dropdown>
+          <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [appendTo]="'body'" [showClear]="false" placeholder="Seleccione el reporte..." (onChange)="changedReport(); validateForm();"></p-dropdown>
         </div>
       </div>
       <div class="row">
         <div class="col-6">
           <div class="p-field">
             <label class="bg-subtitle" id="vehicle_label">Vehículos:</label>
-            <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" [showToggleAll]="false"f placeholder="Seleccione..." (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
+            <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione..." (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
             <div style="padding: 0px 0.3rem; margin: 0px; text-align: right;">
               <label>
-                <p-checkbox [(ngModel)]="chkAllVehicles" [binary]="true" inputId="binary" (onChange)="selectAllVehicles(); validateForm();"></p-checkbox>
+                <p-checkbox [(ngModel)]="chkAllVehicles" [binary]="true" inputId="binary" (onChange)="selectAllVehicles(); validateForm();" [disabled]="!dataLoaded"></p-checkbox>
                 Todos
               </label>
             </div>
-
+            
           </div>
         </div>
         <div class="col-6">
           <div class="p-field">
             <button class="bg-subtitle btn-toggle-option btn-toggle-left" [ngClass]="!checkboxGroup? '': 'disabled'" (click)="checkboxGroup = false; onSelectedConvoyChange(); validateForm();">Convoy</button>
             <button class="bg-subtitle btn-toggle-option btn-toggle-right" [ngClass]="checkboxGroup? '': 'disabled'" (click)="checkboxGroup = true; onSelectedGroupChange(); validateForm();">Grupo</button>
-            <p-dropdown *ngIf="!checkboxGroup" [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" placeholder="Seleccione convoy..." (onChange)="onSelectedConvoyChange(); validateForm();"></p-dropdown>
-            <p-dropdown *ngIf="checkboxGroup" [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" placeholder="Seleccione grupo..." (onChange)="onSelectedGroupChange(); validateForm();"></p-dropdown>
+            <p-dropdown *ngIf="!checkboxGroup" [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione convoy..." (onChange)="onSelectedConvoyChange(); validateForm();"></p-dropdown>
+            <p-dropdown *ngIf="checkboxGroup" [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione grupo..." (onChange)="onSelectedGroupChange(); validateForm();"></p-dropdown>
           </div>
         </div>
       </div>
-
-      <div class="row">
+      
+      <div class="row" style="padding: 0px 0.3rem">
         <ng-container>
           <div class="col-6">
             <label>
-              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange();">Fecha/Hora</p-checkbox>
+              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange(); validateForm();"></p-checkbox>
               Fecha/Hora</label>
           </div>
           <div class="col-6">
+            <label *ngIf="showOdomOpt"> 
+              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkOdomVirtual" (onChange)="validateForm();"></p-checkbox>
+              Odómetro Virtual</label>
             <!-- <div class="p-field">
               <label>
                 <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" (onChange)="validateForm();"></p-checkbox>
                 Grupo</label>
             </div> -->
-          </div>
+          </div>     
         </ng-container>
         <ng-container *ngIf="showMovStop">
           <div class="col-6">
@@ -72,7 +75,7 @@
                 <p-checkbox [(ngModel)]="chkMovements" [binary]="true" inputId="binary" (onChange)="validateForm();"></p-checkbox>
               Movimientos</label>
             </div>
-          </div>
+          </div>            
         </ng-container>
         <ng-container *ngIf="showBrakeAccel">
           <div class="col-6">
@@ -86,9 +89,9 @@
             <div class="p-field">
               <label>
                 <p-checkbox [(ngModel)]="chkAceleracion" [binary]="true" inputId="binary" (onChange)="validateForm();"></p-checkbox>
-              Aceleracion</label>
+              Aceleración</label>
             </div>
-          </div>
+          </div>            
         </ng-container>
 
         <ng-container *ngIf="showFatigaDistraccion">
@@ -107,10 +110,10 @@
             </div>
           </div>
         </ng-container>
-
+        
       </div>
 
-      <ng-container *ngIf="showExcVelOpt">
+      <!-- <ng-container *ngIf="showExcVelOpt">
         <div class="row">
           <div class="col-6">
             <div class="p-field">
@@ -122,9 +125,9 @@
               <p-radioButton name="exVe" value="durExc" label="Duración" [(ngModel)]="excesoVelocidad" (onClick)="showExcVel();"></p-radioButton>
             </div>
           </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="showOdomOpt">
+        </div>   
+      </ng-container> -->
+      <!-- <ng-container *ngIf="showOdomOpt">
         <div class="row">
           <div class="col-6">
             <div class="p-field">
@@ -136,12 +139,20 @@
               <p-radioButton name="odomV" value="1" label="Odómetro Virtual" [(ngModel)]="odometroVirtual"></p-radioButton>
             </div>
           </div>
-        </div>
-      </ng-container>
-
+        </div>  
+      </ng-container> -->
+      
       <div *ngIf="showExcVelOpt">
         <div class="row">
-          <div class="col-6">
+          <div class="p-field">
+            <div style="display: flex;">
+              <button class="bg-subtitle btn-toggle-option btn-toggle-left" [ngClass]="!checkboxDuration? '': 'disabled'" (click)="checkboxDuration = false; onSelectedConvoyChange(); validateForm();">Límite de Velocidad</button>
+              <button class="bg-subtitle btn-toggle-option btn-toggle-right" [ngClass]="checkboxDuration? '': 'disabled'" (click)="checkboxDuration = true; onSelectedGroupChange(); validateForm();">Duración</button>
+            </div>
+            <p-inputNumber *ngIf="!checkboxDuration" [(ngModel)]="limitSpeed" [showButtons]="true" [min]="0" [max]="300" suffix=" km/h" inputId="limiteVelocidad"></p-inputNumber>
+            <p-inputNumber *ngIf="checkboxDuration" [(ngModel)]="minimDur" [showButtons]="true" [min]="0" suffix=" seg" inputId="minimaDuracion"></p-inputNumber>
+          </div>
+          <!-- <div class="col-6">
             <div class="p-field" *ngIf="excesoVelocidad == 'limVel'">
               <label class="bg-subtitle" for="limiteVelocidad">Límite de velocidad</label>
               <p-inputNumber [(ngModel)]="limitSpeed" [showButtons]="true" [min]="0" [max]="300" inputId="limiteVelocidad"></p-inputNumber>
@@ -152,54 +163,57 @@
               <label class="bg-subtitle" for="minimaDuracion">Duración</label>
               <p-inputNumber [(ngModel)]="minimDur" [showButtons]="true" [min]="0" suffix=" seg" inputId="minimaDuracion"></p-inputNumber>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="row" *ngIf="showLimitTime">
         <div class="col-12">
           <label class="bg-subtitle">Límite de tiempo:</label>
         </div>
-        <div class="col-6">
-          <div class="row">
-            <div class="p-field">
-              <label>Fecha inicio:
-                <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" [maxDate]="dateEnd" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
-              </label>
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="row">
+              <div class="p-field">
+                <label>Fecha inicio:
+                  <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" [maxDate]="dateEnd" [appendTo]="'body'" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="p-field">
+                <label>Hora inicio:
+                  <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [maxDate]="timeEnd" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                </label>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="p-field">
-              <label>Hora inicio:
-                <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" [maxDate]="timeEnd" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
-              </label>
+          <div class="col-6">
+            <div class="row">
+              <div class="p-field">
+                <label>Fecha final:
+                  <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" [minDate]="dateInit" [appendTo]="'body'" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="p-field">
+                <label>Hora final:
+                  <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [minDate]="timeInit" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                </label>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-6">
-          <div class="row">
-            <div class="p-field">
-              <label>Fecha final:
-                <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" [minDate]="dateInit" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
-              </label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="p-field">
-              <label>Hora final:
-                <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" [minDate]="timeInit" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
-              </label>
-            </div>
-          </div>
+
         </div>
       </div>
       <div class="row" *ngIf="showZones">
         <div class="p-field">
-          <label>Geocercas :</label>
-          <p-multiSelect [options]="zones.data" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();"></p-multiSelect>
+          <label class="bg-subtitle">Geocercas :</label>
+          <p-multiSelect [options]="zones.data" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();"></p-multiSelect>
         </div>
       </div>
     </div>
-
+    
   <ng-template pTemplate="footer">
     <button [disabled]="!isFormFilled" (click)="confirm()" pButton type="button" label="Generar Reporte"></button>
 

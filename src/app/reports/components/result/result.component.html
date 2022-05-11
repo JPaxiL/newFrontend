@@ -9,7 +9,7 @@
 </p-confirmDialog>
 
 <div style="display: flex; flex-direction: column; padding: 0; height: 100%; max-height: 100%; margin: 0; font-size: 0.8rem;">
-  <div *ngIf="!dtRendered" class="pristine-report">
+  <div *ngIf="dt_completed == 0" class="pristine-report">
     <img src="./assets/images/fondo-svg-reporte.svg" alt="fondo-reporte-logo">
   </div>
   <div [ngClass]="table_hide" class="container grand-container">
