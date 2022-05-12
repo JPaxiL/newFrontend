@@ -60,10 +60,10 @@ export class FormComponent implements OnInit {
 	//selectedGroup: any=[];
 	//selectedZone: any=[]; //Replaced by selectedZones
 	//showLimitSpeed = false; //Replaced by showExcVelOpt
-
+	
 	//showZones = false;
 	showCheckboxs = false;
-
+	
 	showCard = false;
 	showDivHorizontal = false;
 	showEvents = false;
@@ -88,6 +88,7 @@ export class FormComponent implements OnInit {
   chkAllVehicles = false;
 
   showLimitTime = false;
+  dataLoaded = false;
 
   //Reporte 0 - Paradas y Movi
 	chkStops: boolean = true;
@@ -96,6 +97,7 @@ export class FormComponent implements OnInit {
 
   //Reporte 1 - Exceso de Vel
   showExcVelOpt: boolean = false;
+  checkboxDuration: boolean = false;
   excesoVelocidad: string = 'limVel';
   minimDur = 15;
   limitSpeed = 90;
@@ -106,23 +108,23 @@ export class FormComponent implements OnInit {
 
 //Reporte 3 - Combustible
   showOdomOpt: boolean = false;
+  chkOdomVirtual: boolean = false;
   odometroVirtual: number= 0;
 
   //Reporte 4 - Frenada y Aceleracion Brusca
-  showBrakeAccel: boolean = false;
+  showBrakeAccel: boolean = false; 
   chkFrenada = true;
 	chkAceleracion = true;
 
-
   //Reporte 10 - Distraccion y Posible Fatiga
   showFatigaDistraccion: boolean = false;
+
 	chkFatigaSomnolencia = true;
 	chkFatigaDistraccion = true;
-
-
-	chkTrans1min = false;
+	
+  chkTrans1min = false;
 	chkForGroup = false;
-
+	
 	spinnerOptions = false;
 
   newWindow = false;
@@ -152,6 +154,7 @@ export class FormComponent implements OnInit {
         this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
         console.log('Convoys: ',this.convoys);
         console.log('Groups: ',this.groups);
+        this.dataLoaded = true;
       });
 
       this.reports = [
@@ -178,7 +181,7 @@ export class FormComponent implements OnInit {
     }
 
   ngOnInit(): void {
-
+    
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
     // console.log(this.selectedReport.keys().length);
@@ -250,8 +253,8 @@ export class FormComponent implements OnInit {
 
     var repSubtitle = '';
     var chkDateHour = this.chkDateHour;
-    var chkDuracion = this.excesoVelocidad == 'durExc';
-    var chkOdomV = this.odometroVirtual == 1;
+    var chkDuracion = this.checkboxDuration;
+    var chkOdomV = this.chkOdomVirtual;
 
     var f1 = moment(new Date(this.dateInit));
 		var f2 = moment(new Date(this.dateEnd));
@@ -312,10 +315,10 @@ export class FormComponent implements OnInit {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 				fecha_desde:M1,
         fecha_hasta:M2, // --N
-				vehiculos: JSON.stringify(convoyOrGroupArr),
-        grupo:this.selectedConvoy,
+				vehiculos: JSON.stringify(convoyOrGroupArr), 
+        grupo:this.selectedConvoy, 
         zonas:JSON.stringify(this.selectedZones),
-				url: this.reports[this.selectedReport].url,
+				url: this.reports[this.selectedReport].url, 
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
@@ -337,10 +340,10 @@ export class FormComponent implements OnInit {
         fecha_desde:M1,
         fecha_hasta:M2, // --N
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
-        vehiculos: JSON.stringify(this.selectedVehicles),
-        grupo: this.selectedConvoy,
+        vehiculos: JSON.stringify(this.selectedVehicles), 
+        grupo: this.selectedConvoy, 
         zonas: JSON.stringify(this.selectedZones),
-        url: this.reports[this.selectedReport].url,
+        url: this.reports[this.selectedReport].url, 
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
@@ -447,7 +450,6 @@ export class FormComponent implements OnInit {
       case 13:
         this.showLimitTime = true;
         break;
-
       case 14:
       case 15:
       case 16:
