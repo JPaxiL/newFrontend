@@ -50,11 +50,27 @@
         justify-content: center;
     }
 
-    #vehicle_label + p-multiselect > .p-multiselect.p-component{
+    #vehicle_label + p-multiselect > .p-multiselect.p-component,
+    #zone_label + p-multiselect > .p-multiselect.p-component{
         margin-bottom: 0px;
     }
 
     .p-inputnumber-input{
         border: none;
     }
+
+    .p-component-overlay.p-dialog-top-left > .p-dialog.p-component > .p-dialog-header,
+    .p-component-overlay.p-dialog-top > .p-dialog.p-component > .p-dialog-header{
+        flex-direction: row-reverse;
+    }
+
 }
+
+.blocked-tab-popup{
+    position: absolute;
+    top: 20px;
+    width: 362px;
+    height: 125px;
+    left: 50px;
+}
+

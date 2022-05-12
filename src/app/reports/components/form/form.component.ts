@@ -9,6 +9,9 @@ import { HttpClient } from '@angular/common/http';
 import * as _ from 'lodash';
 import { ReportService } from '../../services/report.service';
 import { Title } from '@angular/platform-browser';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { BrowserDetectorService } from '../../services/browser-detector.service';
 
 @Component({
   selector: 'app-form',
@@ -35,7 +38,7 @@ export class FormComponent implements OnInit {
   timeInit!: Date;
   timeEnd!: Date;
 
-   selectedValues: string[] = [];
+  selectedValues: string[] = [];
 
   //vehiclesArray = [];
 	vehiclesArrayOrderByConvoy: any=[];
@@ -81,14 +84,31 @@ export class FormComponent implements OnInit {
 	initialMinute = "00";
 	finishedHour = "23";
 	finishedMinute = "59";
+  formSpinnerMsg: string = 'Cargando';
+  fullScreenSpinnerMsg: string = '';
+
+  //Popup
+  popupIconSrc='./assets/images/popup-icon-chrome.svg';
+  popupDialogPosition: string = 'top-right';
+  popupDialogInlineStyle: any = {};
+  isChrome: boolean = false;
+  isFirefox: boolean = false;
+  isSafari: boolean = false;
+  isOpera: boolean = false;
+  isEdge: boolean = false;
+  isIEEdge: boolean = false;
+  unknownBrowser: boolean = false;
 
 	reportType = "0";
   toggleConvoy = true;
   toggleGrupo = false;
   chkAllVehicles = false;
+  chkAllZones = false;
+  showBlockedTabDialog = false;
 
   showLimitTime = false;
-  dataLoaded = false;
+  areVehiclesLoaded = false;
+  areZonesLoaded = false;
 
   //Reporte 0 - Paradas y Movi
 	chkStops: boolean = true;
@@ -137,11 +157,16 @@ export class FormComponent implements OnInit {
 	userId = 0;
 
   constructor(
+    private browserDetectorService: BrowserDetectorService,
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService,
     private reportService: ReportService,
     private vehicleService: VehicleService,
     private confirmationService: ConfirmationService,
     private http: HttpClient,
     private titleService: Title) {
+      //this.fullScreenSpinnerMsg = 'Iniciando Módulo de Reportes';
+      spinner.show("fullScreenSpinner");
       this.titleService.setTitle('Reportes');
       // this.vehicles=this.vehicleService.vehicles;
       this.vehicleService.dataCompleted.subscribe(vehicles=>{
@@ -154,7 +179,7 @@ export class FormComponent implements OnInit {
         this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
         console.log('Convoys: ',this.convoys);
         console.log('Groups: ',this.groups);
-        this.dataLoaded = true;
+        this.areVehiclesLoaded = true;
       });
 
       this.reports = [
@@ -178,6 +203,8 @@ export class FormComponent implements OnInit {
         {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA', url: '/api/reports/desvio_carril_derecha'},
         {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'}
       ];
+
+      
     }
 
   ngOnInit(): void {
@@ -204,18 +231,53 @@ export class FormComponent implements OnInit {
       // this.http.get(environment.apiUrl + '/api/tracker'),
       this.http.get(environment.apiUrl + '/api/zone'),
       this.http.get(environment.apiUrl + '/api/userId')
-    ]).subscribe(results => {
+    ]).subscribe((results: {data?: any}[]) => {
       // this.vehicles = results[0];
-      this.zones = results[0];
+      this.zones = results[0].data;
       this.userId = parseInt(JSON.stringify(results[1]));
 
       // console.log("vehicles", this.vehicles);
       console.log("zonas", this.zones);
       console.log("user ID", this.userId);
 
-      this.spinnerOptions = false;
+      /* this.spinnerOptions = false; */
 
+      this.areZonesLoaded = true;
+      this.spinner.hide("fullScreenSpinner");
+      this.fullScreenSpinnerMsg = '';
     })
+
+    if(this.browserDetectorService.isChromium()){
+      if(this.browserDetectorService.isOpera()){
+        this.isOpera = true;
+      } else if (this.browserDetectorService.isChEdge()) {
+        this.isEdge = true;
+      } else {
+        this.isChrome = true;
+      }
+      this.popupDialogPosition = 'top-right';
+      this.popupDialogInlineStyle = {'width': '20vw', 'min-width': '275px', 'max-width': '325px'};
+    } else if (this.browserDetectorService.isFirefox()){
+      this.isFirefox = true;
+      this.popupDialogPosition = 'top-left';
+      this.popupDialogInlineStyle = {'width': '45vw', 'min-width': '275px', 'max-width': '550px'};
+    } else if (this.browserDetectorService.isSafari()){
+      console.log('arrives here');
+      this.isSafari = true;
+      this.popupDialogPosition = 'top';
+      this.popupDialogInlineStyle = {'width': '40vw', 'min-width': '225px'};
+    } else {
+      this.unknownBrowser = true;
+      this.popupDialogPosition = 'center';
+      this.popupDialogInlineStyle = {'width': '50vw', 'min-width': '275px', 'max-width': '550px'};
+    }
+
+    console.log("Es chrome ? " + this.isChrome);
+    console.log("Es opera ? " + this.isOpera);
+    console.log("Es IE edge ? " + this.isIEEdge);
+    console.log("Es Ch Edge ? " + this.isEdge);
+    console.log("Es firefox ? " + this.isFirefox);
+    console.log("Es safari ? " + this.isSafari);
 
   }
 
@@ -230,22 +292,33 @@ export class FormComponent implements OnInit {
     this.onSelectedVehiclesChange();
   }
 
+  selectAllZones(){
+    this.selectedZones = this.chkAllZones? this.zones.map((zone: { id: any; }) => { return zone.id}): [];
+  }
+
   confirm() {
-          this.confirmationService.confirm({
-              key: 'newTabConfirmation',
-              message: '¿Desea generar el reporte en una nueva ventana?',
-              reject: () => {
-                console.log("Reporte en la misma hoja");
-                this.reportar();
-              },
-              accept: () => {
-                  console.log("Se acepta una nueva hoja");
-                  console.log('Cargando...');
-                  //undefined o true reportan en la misma pestaña. false reporta en nueva pestaña
-                  this.reportar(false);
-              }
-          });
-    }
+    this.isFormFilled = false;
+    this.confirmationService.confirm({
+        key: 'newTabConfirmation',
+        /* header: 'Confirmación',
+        acceptLabel: 'Sí',
+        rejectLabel: 'No', */
+        message: '¿Desea generar el reporte en una nueva ventana?',
+        reject: () => {
+          this.spinner.show("reportSpinner");
+          console.log("Reporte en la misma hoja");
+          this.reportar();
+        },
+        accept: () => {
+          this.fullScreenSpinnerMsg = 'Generando Reporte...'
+          this.spinner.show("fullScreenSpinner");
+            console.log("Se acepta una nueva hoja");
+            console.log('Cargando...');
+            //undefined o true reportan en la misma pestaña. false reporta en nueva pestaña
+            this.reportar(false);
+        }
+    });
+  }
 
   reportar(new_tab?: any){
     console.log(new_tab !== undefined);
@@ -385,13 +458,25 @@ export class FormComponent implements OnInit {
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
-
           this.reportService.showReport.emit(report_data);
+          this.isFormFilled = true;
         } else {
           //Report in new tab
+          this.spinner.hide("fullScreenSpinner");
+          this.isFormFilled = true;
           console.log('Se abrió una nueva pestaña');
           localStorage.setItem("report_data", JSON.stringify(report_data));
-          var testing = window.open('/reports/result');
+          var report_tab = window.open('/reports/result');
+          if(report_tab == null){
+            this.showBlockedTabDialog = true;
+            /* this.toastr.error('', 'No se pudo reportar en nueva pestaña', {
+              timeOut: 5000,
+            }); */
+          } else {
+            this.toastr.success('', 'Reporte en nueva pestaña exitoso', {
+              timeOut: 5000,
+            });
+          }
         }
       }
     });
@@ -468,63 +553,16 @@ export class FormComponent implements OnInit {
     console.log("Grupo", this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup);
     console.log("Convoy", !this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy);
     console.log("Vehiculos en el Convoy", this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy));
-
     console.log("Selected Vehicles", this.selectedVehicles);
-
-
-
 
   }
 
-
-		/* 	$q.all([
-		    	api.get('reportsTracker'),
-		    	api.get('zone'),
-					api.get('userId')
-		    ]).then((values: any[]) => {
-					console.log("values -- S");
-					this.userId = parseInt(values[2]);
-		    	console.log(values);
-		    	this.vehiclesArray = values[0];
-		    	this.zonesArray = values[1];
-					reportServices.setuserD(values[2]);
-		    	console.log(this.vehiclesArray);
-		    	console.log(this.zonesArray);
-		    	this.vehiclesArray = this.vehiclesArray.sort((a: { convoy: string; }, b: { convoy: any; }) => a.convoy.localeCompare(b.convoy));
-
-		    	this.vehiclesArrayOrderByConvoy = _.uniq(this.vehiclesArray, function(p: { convoy: any; }){ return p.convoy; });
-		    	// console.log(this.vehiclesArrayOrderByConvoy);
-		    	for(var i=0; i<this.vehiclesArrayOrderByConvoy.length; i++){
-		    		if (this.vehiclesArrayOrderByConvoy[i].convoy == "Unidades Sin Convoy") {
-		    			// console.log('entro eliminar unidades sin convoy');
-		    			// console.log(i);
-		    			this.vehiclesArrayOrderByConvoy.splice(i,1);
-		    		}
-		    	}
-
-					this.vehiclesArrayGroup = this.vehiclesArray.sort((a: { grupo: string; }, b: { grupo: any; }) => a.grupo.localeCompare(b.grupo));
-
-					this.vehiclesArrayOrderByGroup = _.uniq(this.vehiclesArrayGroup, function(p: { grupo: any; }){ return p.grupo; });
-		    	// console.log(this.vehiclesArrayOrderByConvoy);
-		    	for(var i=0; i<this.vehiclesArrayOrderByGroup.length; i++){
-		    		if (this.vehiclesArrayOrderByGroup[i].grupo == "Unidades Sin Grupo") {
-		    			// console.log('entro eliminar unidades sin convoy');
-		    			// console.log(i);
-		    			this.vehiclesArrayOrderByGroup.splice(i,1);
-		    		}
-		    	}
-
-		    	console.log(this.vehiclesArrayOrderByConvoy);
-					console.log(this.vehiclesArrayOrderByGroup);
-
-		    	this.spinnerOptions = false;
-		    }); */
-
-
-  /* optionUser = function(){
-    return  parseInt(reportServices.getuserD());
-  } */
-
+  dismissBlockedTabDialog(){
+    this.showBlockedTabDialog = false;
+    this.toastr.error('', 'No se pudo reportar en nueva pestaña', {
+      timeOut: 5000,
+    });
+  }
 
   onSelectedVehiclesChange(){
     this.selectedConvoy = {};

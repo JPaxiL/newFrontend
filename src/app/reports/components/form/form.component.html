@@ -1,4 +1,43 @@
-<p-confirmDialog #cd [style]="{width: '50vw'}" key="newTabConfirmation">
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="formSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > {{ formSpinnerMsg }} </p></ngx-spinner>
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="fullScreenSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true">
+  <p *ngIf="!areVehiclesLoaded && !areZonesLoaded" style="color: #ffffff" > Cargando vehículos y zonas... </p>
+  <p *ngIf="!areVehiclesLoaded && areZonesLoaded" style="color: #ffffff" > Cargando vehículos... </p>
+  <p *ngIf="areVehiclesLoaded && !areZonesLoaded" style="color: #ffffff" > Cargando zonas... </p>
+  <p *ngIf="areVehiclesLoaded && areZonesLoaded" style="color: #ffffff" > {{ fullScreenSpinnerMsg }} </p>
+</ngx-spinner>
+
+<p-dialog [position]="popupDialogPosition" [(visible)]="showBlockedTabDialog" key="blockedTabDialog" [style]="popupDialogInlineStyle" [closable]="false" [draggable]="false" [modal]="true" id="dialogTest">
+  <ng-template pTemplate="header" *ngIf="popupDialogPosition != 'center' || unknownBrowser">
+    <div style="height: 2rem; display: flex; flex-direction: row; flex-wrap: wrap; padding: 0px; margin: 0px; overflow: hidden;">
+      <i class="pi pi-angle-double-up" style="font-size: 2rem;"></i>
+      <i class="pi pi-angle-double-up" style="font-size: 2rem;"></i>
+      <i class="pi pi-angle-double-up" style="font-size: 2rem;"></i>
+      <i class="pi pi-angle-double-up" style="font-size: 2rem;"></i>
+      <i class="pi pi-angle-double-up" style="font-size: 2rem;"></i>
+    </div>
+  </ng-template>
+  
+  <h4 *ngIf="isChrome">Haz clic en 
+  <img src="./assets/images/popup-icon-chrome.jpg" style="pointer-events: none; display: inline-block; height: 1.8rem; width: auto;">
+  para habilitar las ventanas emergentes</h4> 
+  <h4 *ngIf="isOpera">Haz clic en 
+  <img src="./assets/images/popup-icon-opera.jpg" style="pointer-events: none; display: inline-block; height: 1.8rem; width: auto;">
+  para habilitar las ventanas emergentes</h4> 
+  <h4 *ngIf="isFirefox">Haz clic en el botón "Opciones" para habilitar las ventanas emergentes</h4>
+  <h4 *ngIf="isSafari">Haz clic en 
+  <img src="./assets/images/popup-icon-safari.jpg" style="pointer-events: none; display: inline-block; height: 1.8rem; width: auto;">
+  para habilitar las ventanas emergentes</h4> 
+  <h4 *ngIf="unknownBrowser">Bloqueo de ventanas emergentes / pop-ups</h4>
+  El navegador ha bloqueado el reporte en una nueva pestaña. Por favor, habilita/permite las ventanas emergentes.
+    <!-- <svg viewBox="0 2 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: inline-block; height: 1.8rem;"><g>
+      <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></g>
+    </svg> -->
+  <p-footer>
+    <button type="button" pButton label="Entendido" (click)="dismissBlockedTabDialog();"></button>
+  </p-footer>
+</p-dialog>
+
+<p-confirmDialog #cd [style]="{width: '50vw'}" key="newTabConfirmation" [closable]="false">
   <ng-template pTemplate="header">
       <h3>Confirmación</h3>
   </ng-template>
@@ -26,7 +65,7 @@
             <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione..." (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
             <div style="padding: 0px 0.3rem; margin: 0px; text-align: right;">
               <label>
-                <p-checkbox [(ngModel)]="chkAllVehicles" [binary]="true" inputId="binary" (onChange)="selectAllVehicles(); validateForm();" [disabled]="!dataLoaded"></p-checkbox>
+                <p-checkbox [(ngModel)]="chkAllVehicles" [binary]="true" inputId="binary" (onChange)="selectAllVehicles(); validateForm();" [disabled]="!areVehiclesLoaded"></p-checkbox>
                 Todos
               </label>
             </div>
@@ -208,8 +247,14 @@
       </div>
       <div class="row" *ngIf="showZones">
         <div class="p-field">
-          <label class="bg-subtitle">Geocercas :</label>
-          <p-multiSelect [options]="zones.data" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();"></p-multiSelect>
+          <label class="bg-subtitle" id="zone_label">Geocercas :</label>
+          <p-multiSelect [options]="zones" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();"></p-multiSelect>
+          <div style="padding: 0px 0.3rem; margin: 0px; text-align: right;">
+            <label>
+              <p-checkbox [(ngModel)]="chkAllZones" [binary]="true" inputId="binary" (onChange)="selectAllZones(); validateForm();" [disabled]="!areZonesLoaded"></p-checkbox>
+              Todos
+            </label>
+          </div>
         </div>
       </div>
     </div>

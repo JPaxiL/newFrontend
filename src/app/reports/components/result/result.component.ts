@@ -7,6 +7,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService } from 'primeng-lts/api';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 declare var kendo: any
@@ -100,8 +101,12 @@ export class ResultComponent implements OnDestroy, OnInit {
 	isIEedge = this.winNav.userAgent.indexOf("Edge") > -1;
 	isIOSChrome = this.winNav.userAgent.match("CriOS");
 	isChrome = false;
+  isFirefox = false;
+  isSafari = false;
+  isEdge = false;
 
   constructor(
+    private spinner: NgxSpinnerService,
     private http:HttpClient,
     private reportService:ReportService,
     private titleService:Title,
@@ -112,6 +117,13 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(){
+    const isIndependentWindow = document.getElementById('vehicle_label') === null;
+    if(isIndependentWindow){
+      //Verificar si reporte es una ventana o componente
+      var report_data = JSON.parse(localStorage.getItem('report_data')!);
+    }
+    localStorage.removeItem('report_data');
+
     console.log('Iniciando result component');
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -134,12 +146,15 @@ export class ResultComponent implements OnDestroy, OnInit {
         if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
           this.wrapElements(document.querySelectorAll('table[datatable]'));
           this.table_hide = '';
+          if(!isIndependentWindow){
+            this.spinner.hide("reportSpinner");
+          }
         }
       },
       destroy: true
     };
 
-    if(localStorage.getItem('report_data') == null){
+    if(!isIndependentWindow){
       this.reportService.showReport.subscribe(data => {
         console.log('Recibiendo data en result', data);
 
@@ -182,7 +197,6 @@ export class ResultComponent implements OnDestroy, OnInit {
       })
     } else {
       console.log('Se abrirá una nueva pestaña')
-      var report_data = JSON.parse(localStorage.getItem('report_data')!);
       localStorage.removeItem('report_data');
       this.data = report_data.data;
       this.num_rep = report_data.numRep;
@@ -205,8 +219,6 @@ export class ResultComponent implements OnDestroy, OnInit {
       console.log('Proceso terminado a las: ', new Date());
     }
 
-
-
     if (this.isIOSChrome) {
       // is Google Chrome on IOS
       this.isChrome = true;
@@ -223,7 +235,6 @@ export class ResultComponent implements OnDestroy, OnInit {
         // not Google Chrome
         this.isChrome = false;
     }
-    console.log("Es chrome ? " + this.isChrome);
 
   }
 
@@ -1887,7 +1898,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nom_inf = "REPORTE DE FRENADA Y ACELERACIÓN BRUSCA";
 
     var allRows: AllRows[] = [
-        {},
+        {}, 
         {
           cells: [
             { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
@@ -1958,7 +1969,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         cellsCampos.push({ value: "Tramo", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
         cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
         cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-
+      
         rows.push({
           cells: cellsCampos,
         });
@@ -2032,7 +2043,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             { width: Math.floor(p_cercano_width / 1.28) },
             { width: this.w_lat_long },
           );
-
+          
           /* Fin Ancho de Columnas */
 
           exportFileEx.push({
@@ -2113,8 +2124,6 @@ export class ResultComponent implements OnDestroy, OnInit {
       /* alert('No se han encontrado datos para exportar'); */
     }
   }
-
-
 
   exportExcelDistraccionPosibleFatiga(vrs: number) {
     // dateHour();
@@ -2592,9 +2601,6 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
   }
 
-
-
-
   exportExcelAnticolisionFrontal(vrs: number) {
     // dateHour();
     var exportFileEx = [];
@@ -2813,8 +2819,6 @@ export class ResultComponent implements OnDestroy, OnInit {
       alert('No se han encontrado datos para exportar');
     }
   }
-
-
 
   exportExcelColisionConPeatones(vrs: number) {
     // this.dateHour();

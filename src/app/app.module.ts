@@ -35,6 +35,7 @@ import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster'
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AuthState } from './core/store/auth.state';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
@@ -154,6 +155,7 @@ import { DataTablesModule } from 'angular-datatables';
     DataTablesModule,
     CommonModule,
     BrowserModule,
+    NgxSpinnerModule,
     NgxsModule.forRoot([AuthState]),
     AlertModule,
     AppRoutingModule,
