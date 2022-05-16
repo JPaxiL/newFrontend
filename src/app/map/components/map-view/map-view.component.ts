@@ -12,16 +12,12 @@ import { EventSocketService } from './../../../events/services/event-socket.serv
 
 declare var $: any;
 
-
-
 @Component({
   selector: 'app-map-view',
   templateUrl: './map-view.component.html',
-  styleUrls: ['./map-view.component.scss']
+  styleUrls: ['./map-view.component.scss'],
 })
-
 export class MapViewComponent implements OnInit, AfterViewInit {
-
   //private map!: L.Map;
 
   constructor(
@@ -30,13 +26,11 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService,
     public eventService: EventService,
-    public eventSocketService :EventSocketService
-
-    ) { }
+    public eventSocketService: EventSocketService
+  ) {}
   // constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.createMap();
@@ -45,8 +39,6 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.geopointsService.initialize();
     this.eventService.initialize();
     this.eventSocketService.listen();
-
-
 
     //=============Agregar Buscador de direccion.====================
     // const searchControl = GeoSearchControl({
@@ -76,41 +68,25 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
     // this.mapServicesService.map.addControl(searchControl);
     //=============Agregar Buscador de direccion.====================
-
   }
 
-
   createMap() {
-
     const parcThabor = {
       lat: -11.107323,
-      lng: -75.523437
+      lng: -75.523437,
     };
 
     const zoomLevel = 7;
 
     this.mapServicesService.map = L.map('map', {
       center: [parcThabor.lat, parcThabor.lng],
-      zoom: zoomLevel
+      zoom: zoomLevel,
     });
 
-    // this.map = L.map('map', {
-    //   center: [parcThabor.lat, parcThabor.lng],
-    //   zoom: zoomLevel
-    // });
-
-    const mainLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      minZoom: 4,
-      maxZoom: 18,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    mainLayer.addTo(this.mapServicesService.map);
+    this.mapServicesService.setLayers();
 
     // if(mainLayer.addTo(this.map)){
-      this.mapService.loadMap(this.mapServicesService.map);
+    this.mapService.loadMap(this.mapServicesService.map);
     // }
-
   }
-
 }
