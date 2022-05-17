@@ -63,10 +63,10 @@ export class FormComponent implements OnInit {
 	//selectedGroup: any=[];
 	//selectedZone: any=[]; //Replaced by selectedZones
 	//showLimitSpeed = false; //Replaced by showExcVelOpt
-	
+
 	//showZones = false;
 	showCheckboxs = false;
-	
+
 	showCard = false;
 	showDivHorizontal = false;
 	showEvents = false;
@@ -132,19 +132,61 @@ export class FormComponent implements OnInit {
   odometroVirtual: number= 0;
 
   //Reporte 4 - Frenada y Aceleracion Brusca
-  showBrakeAccel: boolean = false; 
+  showBrakeAccel: boolean = false;
   chkFrenada = true;
 	chkAceleracion = true;
+
+
+  //Reporte 6 - Reporte de Eventos
+  eV = {
+      GPSbateriaBaja:false,
+      GPSbateriaDesconectada:false,
+      GPSaceleracionBrusca:false,
+      GPSfrenadaBrusca:false,
+      GPSbloqueoTransmision:false,
+      GPSsos:false,
+      GPSremolque:false,
+      GPSparada: false, // --- NEW
+      GPSmotorEncendido: false, // --- NEW
+      GPSmotorApagado: false, // --- NEW
+
+      evEntrada:false,
+      evSalida:false,
+      evEstadia:false,   // --- NEW
+      evParada:false,
+      evMovSinProgramacion:false,  //  NEW
+      evInfraccion:false,
+      evAnticolisionFrontal:false,
+      evColisionConPeatones:false,
+
+      evNoRostro:false,
+      evFatigaExtrema:false,
+      evDesvioCarrilIzquierda:false,
+      evDesvioCarrilDerecha:false,
+      evBloqueoVisionMobileye:false,
+
+
+      AccFatiga:false, // DESACTIVADO
+      AccAlcoholemia:false,
+      AccIButton: false,  // --- DESACTIVADO
+      AccSomnolencia: false,
+      AccDistraccion: false,
+
+      OtroTodos:false,
+      OtroExVelocidad:false,
+    };
+
+
 
   //Reporte 10 - Distraccion y Posible Fatiga
   showFatigaDistraccion: boolean = false;
 
 	chkFatigaSomnolencia = true;
 	chkFatigaDistraccion = true;
-	
+
   chkTrans1min = false;
 	chkForGroup = false;
-	
+
 	spinnerOptions = false;
 
   newWindow = false;
@@ -189,7 +231,7 @@ export class FormComponent implements OnInit {
         {id : 3, value : 'REPORTE DE COMBUSTIBLE', url: '/api/reports/combustible'},
         {id : 4, value : 'REPORTE DE EXCESOS EN ZONA'},
         {id : 5, value : 'REPORTE GENERAL'},
-        {id : 6, value : 'REPORTE DE EVENTOS'},
+        {id : 6, value : 'REPORTE DE EVENTOS', url: '/api/reports/eventos'},
         {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
         {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
         {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
@@ -204,11 +246,11 @@ export class FormComponent implements OnInit {
         {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'}
       ];
 
-      
+
     }
 
   ngOnInit(): void {
-    
+
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
     // console.log(this.selectedReport.keys().length);
@@ -376,7 +418,7 @@ export class FormComponent implements OnInit {
 
     //eventos a incluir en el reporte
     //eV checkboxes
-    var eV: any=[];
+    //var eV: any=[];
 
     //selectedZone[i].id
 
@@ -388,15 +430,15 @@ export class FormComponent implements OnInit {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 				fecha_desde:M1,
         fecha_hasta:M2, // --N
-				vehiculos: JSON.stringify(convoyOrGroupArr), 
-        grupo:this.selectedConvoy, 
+				vehiculos: JSON.stringify(convoyOrGroupArr),
+        grupo:this.selectedConvoy,
         zonas:JSON.stringify(this.selectedZones),
-				url: this.reports[this.selectedReport].url, 
+				url: this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
 				og: JSON.stringify([oG]),
-				ev: JSON.stringify([eV]),
+				ev: JSON.stringify([this.eV]),
 				chkStops: this.chkStops,
 				chkMovements: this.chkMovements,
 				chkTrans1min: this.chkTrans1min,
@@ -413,15 +455,15 @@ export class FormComponent implements OnInit {
         fecha_desde:M1,
         fecha_hasta:M2, // --N
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
-        vehiculos: JSON.stringify(this.selectedVehicles), 
-        grupo: this.selectedConvoy, 
+        vehiculos: JSON.stringify(this.selectedVehicles),
+        grupo: this.selectedConvoy,
         zonas: JSON.stringify(this.selectedZones),
-        url: this.reports[this.selectedReport].url, 
+        url: this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
         og: JSON.stringify([oG]),
-        ev: JSON.stringify([eV]),
+        ev: JSON.stringify([this.eV]),
         chkStops: this.chkStops,
         chkMovements: this.chkMovements,
         chkTrans1min: this.chkTrans1min,
@@ -522,6 +564,10 @@ export class FormComponent implements OnInit {
         this.showLimitTime = true;
         this.showOdomOpt = true;
         break;
+      case 6:
+        this.showLimitTime = true;
+        this.showEvents = true;
+        break;
       case 7:
         break;
       case 10:
@@ -608,6 +654,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 2 && is_vehicle_selected && is_zone_selected)
         ||
         (this.selectedReport == 3 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 6 && is_vehicle_selected)
         ||
         (this.selectedReport == 7 && is_vehicle_selected)
         ||
