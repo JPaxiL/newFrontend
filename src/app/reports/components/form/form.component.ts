@@ -237,7 +237,7 @@ export class FormComponent implements OnInit {
         {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
         {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)', url: '/api/reports/frenada_aceleracion_brusca'},
         {id : 11, value : 'REPORTE DE DISTRACIÓN Y POSIBLE FATIGA', url: '/api/reports/distraccion_posible_fatiga'},
-        {id : 12, value : '-'},
+        {id : 12, value : 'REPORTE DE CALIFICACION DE MANEJO', url: '/api/reports/calificacion_manejo'},
         {id : 13, value : 'REPORTE DE FATIGA EXTREMA', url: '/api/reports/fatiga_extrema'},
         {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL', url: '/api/reports/anticolision_frontal'},
         {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES', url: '/api/reports/colision_peatones'},
@@ -578,6 +578,9 @@ export class FormComponent implements OnInit {
         this.showLimitTime = true;
         this.showFatigaDistraccion = true;
         break;
+      case 12:
+        this.showLimitTime = true;
+        break;
       case 13:
         this.showLimitTime = true;
         break;
@@ -662,6 +665,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 10 && is_vehicle_selected && (this.chkFrenada || this.chkAceleracion))
         ||
         (this.selectedReport == 11 && is_vehicle_selected && (this.chkFatigaDistraccion || this.chkFatigaSomnolencia))
+        ||
+        (this.selectedReport == 12 && is_vehicle_selected)
         ||
         (this.selectedReport == 13 && is_vehicle_selected)
         ||

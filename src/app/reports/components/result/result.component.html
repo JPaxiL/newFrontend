@@ -591,6 +591,151 @@
       </div>
     </div>
 
+
+    <!-- 12. REPORTE DE CALIFICACION DE MANEJO-->
+    <div class="container grand-container" *ngIf="num_rep == 12">
+      <div *ngFor="let v_table of data;  let ii = index;" class="p-card" style="padding: 1rem;">
+
+        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+          <div>VEHÍCULO: {{v_table[0][1]}}</div>
+          <div>PERIODO: {{period}}</div>
+        </div>
+
+        <ng-container *ngIf="dtRendered">
+          <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+            <thead>
+              <tr>
+                  <th>Item</th>
+                  <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                  <th *ngIf="chkDateHour">Fecha</th>
+                  <th *ngIf="chkDateHour">Hora</th>
+
+                  <th *ngIf="!chkDateHour">Fecha/Hora Fin</th>
+                  <th *ngIf="chkDateHour">Fecha Fin</th>
+                  <th *ngIf="chkDateHour">Hora Fin</th>
+
+                  <th>Codigo</th>
+                  <th>Placa</th>
+                  <th>Tipo de Unidad</th>
+
+                  <th>C01</th>
+                  <th>C02</th>
+                  <th>C03</th>
+                  <th>C04</th>
+                  <th>C05</th>
+                  <th>C06</th>
+                  <th>C07</th>
+                  <th>C08</th>
+                  <th>C09</th>
+                  <th>C10</th>
+                  <th>C11</th>
+                  <!-- <th>C12</th> -->
+                  <th>Calificación</th>
+
+              </tr>
+            </thead>
+
+
+
+            <tbody>
+              <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+
+                  <td *ngIf="!chkDateHour">{{row.fecha_fin}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_fin.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_fin.split(' ')[1]}}</td>
+
+                  <td>{{row.codigo}}</td>
+                  <td>{{row.placa}}</td>
+                  <td>{{row.tipo_unidad}}</td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C01" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;">
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C02" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C03" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C04" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C05" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C06" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C07" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C08" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C09" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C10" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>
+                    <input *ngIf="true" [(ngModel)]="row.C11" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                  </td>
+
+                  <td>{{row.puntuacion}}</td>
+
+              </tr>
+            </tbody>
+
+          </table>
+        </ng-container>
+
+        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+          <p>Ningún dato encontrado en su consulta.</p>
+        </div>
+
+
+      </div>
+
+
+      <div class="p-card" style="padding: 1rem;">
+
+        <h6>RESUMEN</h6>
+        <!-- <p><span>C01 = cantidad de frenadas extremadamente bruscas.</span></p> -->
+        <p><span>C01 = cantidad de frenadas bruscas.</span></p>
+        <p><span>C02 = cantidad de aceleraciones bruscas.</span></p>
+        <p><span>C03 = cantidad de RPM altas. (mayores a 2,000 para sprintes y buses mayores a 2,300).</span></p>
+        <p><span>C04 = cantidad de posible fatiga.</span></p>
+        <p><span>C05 = cantidad de fatiga extrema.</span></p>
+        <p><span>C06 = cantidad de distracciones.</span></p>
+        <p><span>C07 = cantidad de colisión frontal.</span></p>
+        <p><span>C08 = cantidad de colisión con peatones.</span></p>
+        <p><span>C09 = cantidad de desvio de carril a la izquierda.</span></p>
+        <p><span>C10 = cantidad de desvio de carril a la derecha.</span></p>
+        <p><span>C11 = cantidad de exceso de velocidad muy grave.</span></p>
+
+      </div>
+
+    </div>
+
+
+
+
     <!-- 13. REPORTE DE FATIGA EXTREMA-->
     <div class="container grand-container" *ngIf="num_rep == 13">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
@@ -1014,7 +1159,7 @@
       <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 10" class="btn btn-success" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 11" class="btn btn-success" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
-
+      <button *ngIf="num_rep == 12" class="btn btn-success" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 13" class="btn btn-success" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 14" class="btn btn-success" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 15" class="btn btn-success" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR EXCEL</button>

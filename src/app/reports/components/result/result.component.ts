@@ -310,6 +310,32 @@ export class ResultComponent implements OnDestroy, OnInit {
     });
   }
 
+  puntuacion(idx:number){
+    // console.log("puntuacion---------------");
+
+    // console.log(idx);
+    // console.log(vm.datos[idx][1]);
+    // console.log(vm.datos[idx][1][0]);
+    // console.log(vm.datos[idx][1][0].C12);
+
+    var item = this.data[idx][1][0];
+    //console.log("retornar :: ");
+
+
+    // console.log(item);
+    // console.log(this.data);
+    //console.log("100 - ( ("+item.C01+"*(50/100)) +("+item.C02+"*(40/100)) + ("+item.C03+"*(50/100)) + ("+item.C04+"*(30/100))+ ("+item.C05+"*(2000/100)) + ("+item.C06+"*(2500/100)) + ("+item.C07+"*(100/100)) + ("+item.C08+"*(50/100)) + ("+item.C09+"*(500/100)) + ("+item.C10+"*(50/100)) + ("+item.C11+"*(50/100)) + ("+item.C12+"*(2000/100)) )");
+
+    //console.log(100 - ( (item.C01*(50/100)) + (item.C02*(40/100)) + (item.C03*(50/100)) + (item.C04*(30/100))+ (item.C05*(2000/100)) + (item.C06*(2500/100)) + (item.C07*(100/100)) + (item.C08*(50/100)) + (item.C09*(500/100)) + (item.C10*(50/100)) + (item.C11*(50/100)) + (item.C12*(2000/100)) ) );
+
+    this.data[idx][1][0].puntuacion =(100 - ( (item.C01*(40/100)) + (item.C02*(50/100)) + (item.C03*(30/100))+ (item.C04*(2000/100)) + (item.C05*(2500/100)) + (item.C06*(100/100)) + (item.C07*(50/100)) + (item.C08*(500/100)) + (item.C09*(50/100)) + (item.C10*(50/100)) + (item.C11*(2000/100)) ) );
+
+    // console.log(this.data[idx][1][0].puntuacion);
+
+  };
+
+
+
 
   /* EXPORTAR */
   exportExcelParadasMovimientos(vrs: number) {
@@ -2567,6 +2593,249 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
   }
 
+  exportExcelCalificacionManejo(vrs: number) {
+    // dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+
+        {}, {
+          cells: [
+            { value: "REPORTE DE CALIFICACION DE MANEJO", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+
+    //this.data.forEach((table_data: any) => {
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        // var rows = [
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE DE CALIFICACION DE MANEJO", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+
+        if(this.chkDateHour) {
+
+
+          rows.push({
+            cells: [
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha Fin", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora Fin", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "C01", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C02", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C03", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C04", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C05", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C06", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C07", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C08", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C09", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C10", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C11", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Calificación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+          // data[1].forEach(function(item:any, index:any){
+
+          data[1].forEach((item: { fecha: number;  fecha_fin: number; codigo: any; placa: any; tipo_unidad: any; C01: any; C02: any; C03: any; C04: any; C05: any; C06: any; C07: any; C08: any;C09: any; C10: any; C11: any; puntuacion: any;}, index: number) => {
+
+            rows.push({
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha_fin), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha_fin), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.C01, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C02, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C03, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C04, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C05, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.C06, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C07, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C08, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C09, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C10, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C11, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.puntuacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+
+
+        } else {
+
+          rows.push({
+            cells: [
+
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha Fin", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "C01", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C02", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C03", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C04", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C05", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C06", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C07", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C08", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C09", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C10", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C11", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Calificación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+          // data[1].forEach(function(item:any, index:any){
+          data[1].forEach((item: { fecha: number;  fecha_fin: number; codigo: any; placa: any; tipo_unidad: any; C01: any; C02: any; C03: any; C04: any; C05: any; C06: any; C07: any; C08: any;C09: any; C10: any; C11: any; puntuacion: any;}, index: number) => {
+
+            rows.push({
+
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha_fin), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.C01, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C02, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C03, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C04, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C05, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.C06, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C07, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C08, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C09, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C10, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C11, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.puntuacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+
+            });
+          });
+
+        }
+
+
+        // //********************************************* excel version 1 *********************************
+        if (vrs == 1) {
+            exportFileEx.push({
+              freezePane: {
+                  rowSplit: 6
+                },
+              columns: [
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+              ],
+              title: data[0][1],
+              rows: rows
+            });
+        }
+        // //********************************************* excel version 1 *********************************
+
+        // //********************************************* excel version 2 *********************************
+        if (vrs == 2) {
+           rows.splice(1, 1);
+           allRows = allRows.concat(rows);
+        }
+        // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+        exportFileEx.push({
+          freezePane: {
+              rowSplit: 2
+            },
+          columns: [
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+          ],
+          title: "Resultado",//data[0][1],
+          rows: allRows
+        });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "exportExcelCalificacionManejo.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
 
 
   exportExcelFatigaExtrema(vrs: number) {
