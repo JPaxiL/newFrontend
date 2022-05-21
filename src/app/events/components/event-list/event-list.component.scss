@@ -1,0 +1,9 @@
+input.form-control {
+    height: 2.7rem;
+}
+
+:host ::ng-deep {
+    p-dropdown > div:first-child {
+        height: 2.7rem;
+    }
+}

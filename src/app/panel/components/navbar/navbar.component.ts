@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PanelService } from '../../services/panel.service';
 import { EventSocketService } from './../../../events/services/event-socket.service';
 
 
 declare var $: any;
-
 
 @Component({
   selector: 'app-navbar',
@@ -13,19 +13,19 @@ declare var $: any;
 })
 export class NavbarComponent implements OnInit {
 
-  logo:string = "assets/images/navbar/logo-gltracker.svg";
+  logo:string = "assets/images/logo-gl-tracker.svg";
   sidevarIZ:boolean=true;
   logOutModalIsOpen = false;
+  windowAccess = window;
 
   constructor(
     private router: Router,
-    public eventSocketService : EventSocketService
+    public eventSocketService : EventSocketService,
+    public panelService: PanelService
   ) { }
 
   ngOnInit(): void {
   }
-
-
 
   showHideSideBar(): void {
 
@@ -40,8 +40,6 @@ export class NavbarComponent implements OnInit {
       this.sidevarIZ = true;
     }
 
-
-
   }
 
   closeLogOutModal(): void{
@@ -53,4 +51,5 @@ export class NavbarComponent implements OnInit {
     /* this.router.navigate(['']); */
     window.location.reload();
   };
+
 }

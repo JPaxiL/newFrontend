@@ -16,7 +16,7 @@ export class SidebarComponent implements OnInit {
     { id:'GEOPOINTS' , name:"Geopunto"},
     { id:'HISTORIAL' , name:"Historial"},
     { id:'VEHICLES' , name:"Vehículos"},
-    { id:'ALERTS', name:"Alertas"},
+    { id:'ALERTS', name:"Todas las Alertas"},
     { id:'ALERTS-GPS', name:"Alertas Gps"},
     { id:'ALERTS-GPS-CREATE', name:"Alertas Gps"},
     { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},

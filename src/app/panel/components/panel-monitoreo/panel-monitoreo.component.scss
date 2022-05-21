@@ -5,7 +5,7 @@
   background: #fff;
   height: -webkit-fill-available;
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   /*
   float: left;
   clear: both; */
@@ -18,12 +18,56 @@
   border-radius: 4px;
   top: auto;
   bottom: auto;
-  left: 65px;
+  /* left: 65px; */
 }
 
 .header-panel-monitoreo {
   margin-bottom: 0px;
-  background-color: #6D99CB;
-  color: #fff;
-  text-align: right;
+  /* background-color: #6D99CB; */
+  background-color: var(--gl-light-gray);
+  /* color: #fff; */
+  color: #000;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  white-space: nowrap;
+  min-height: 2.5rem;
+}
+
+#panelMonitoreo[style*='display: block']{
+    display: flex !important;
+}
+
+.header-panel-monitoreo + div > *{
+  font-size: 0.75rem;
+}
+
+
+:host ::ng-deep {
+  .btn-primary:not(.dropdown-toggle){
+    background-color: var(--gl-blue-dark);
+  }
+
+  #panelMonitoreo > .card > div:not(:first-child) {
+    flex-grow: 1;
+  }
+
+  #rowBusqueda{
+    padding: 1rem;
+  }
+
+  /* Estilos de tablas en panel lateral */
+  .table-responsive > table {
+
+    > thead > tr {
+      background-color: var(--gl-blue-dark);
+      color: #fff;
+    }
+
+    > tbody > tr:nth-child(even) {
+      background: var(--gl-light-gray);
+    } 
+  }
+
 }

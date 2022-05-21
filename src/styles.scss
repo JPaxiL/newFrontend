@@ -37,9 +37,13 @@
 }
 
 :root{
-  --blue-dark: #1c3e65;
+  --gl-blue-dark: #1c3e65;
+  --gl-light-blue: #00aadc;
+  --gl-light-gray: #f2f2f2;
+  --gl-light-gray-hover: #dedede;
   --gl-gray: #c4c4c9;
   --gl-gray-hover: #646464;
+  --gl-dark-gray: #727176;
 }
 
 html, body { height: 100%; }
@@ -117,7 +121,7 @@ div.leaflet-tooltip-own {
 
 .p-card-header{
   padding-left: 1rem;
-  background-color: var(--blue-dark);
+  background-color: var(--gl-blue-dark);
   height: 3rem;
   display: flex;
   flex-direction: column;
@@ -133,19 +137,43 @@ div.leaflet-tooltip-own {
   color: #000000;
 }
 
-p-inputnumber{
-  /* Experimental to handle x-margin 0.3rem*/
-  display: flex;
-}
 
-.p-dropdown.p-component, .p-multiselect.p-component, .p-inputnumber.p-component{
-  border: none;
-  border-bottom: 1px solid #000000;
-  border-radius: 0px;
-  margin: 1rem 0.3rem;
-}
 
 .p-dropdown:not(.p-disabled).p-focus, .p-inputtext:enabled:focus{
   outline: none;
   box-shadow: none;
+}
+
+.btn-info.active,
+.show > .btn-info.dropdown-toggle{
+  background-color: var(--gl-light-blue) !important;
+  border-color: var(--gl-light-blue) !important;
+  color: #ffffff !important;
+}
+
+.btn-info{
+  background-color: transparent;
+  border: none;
+}
+.btn-info:focus{
+  outline: none !important;
+  box-shadow: none !important;
+}
+.btn-info:focus:not(.btn-info.active, .show > .btn-info.dropdown-toggle){
+  background: none;
+}
+
+
+.btn-info:hover:not(.btn-info.active, .show > .btn-info.dropdown-toggle.active){
+  background-color: var(--gl-light-gray-hover);
+  /* background-color: rgba(0,170,220,0.4); */
+  border: none;
+  color: #000000;
+}
+
+thead.visible-on-scroll > tr {
+  position: sticky;
+  top: 0;
+  background-color: var(--gl-blue-dark) !important;
+  color: white !important;
 }

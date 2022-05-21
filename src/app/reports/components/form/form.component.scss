@@ -64,6 +64,21 @@
         flex-direction: row-reverse;
     }
 
+    /* FORM INPUTS STYLES */
+    p-inputnumber{
+        /* Experimental to handle x-margin 0.3rem*/
+        display: flex;
+    }
+      
+    .p-dropdown.p-component, .p-multiselect.p-component, .p-inputnumber.p-component{
+        border: none;
+        border-bottom: 1px solid #000000;
+        border-radius: 0px;
+        margin: 1rem 0.3rem;
+    }
+    /* END OF FORM INPUTS STYLES */
+
+
 }
 
 .blocked-tab-popup{

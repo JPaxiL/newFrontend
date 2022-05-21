@@ -1,10 +1,102 @@
-
-
-
-
-
   #map {
     height: 100%;
-
   }
 
+  :host ::ng-deep {
+
+    .zona-entrada,
+    .zona-salida,
+    .tiempo-estadia-zona,
+    .parada-zona-no-autorizada,
+    .mantenimiento-correctivo,
+    .mantenimiento-preventivo,
+    .infraccion,
+    .sos-event,
+    .exceso-velocidad,
+    .tiempo-estadia-zona{
+
+      .leaflet-popup-content-wrapper,
+      a.leaflet-popup-close-button{
+        color: #fff;
+      }
+      
+    }
+
+    .zona-entrada{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #F58634;
+      }
+    }
+
+    .zona-salida{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #DFC136;
+      }
+    }
+
+    .tiempo-estadia-zona{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #72BF88;
+      }
+    }
+
+    .parada-zona-no-autorizada{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #00A3E4;
+      }
+    }
+
+    .mantenimiento-correctivo{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #7C7BBB;
+      }
+    }
+
+    .mantenimiento-preventivo{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #264E86;
+      }
+    }
+
+    .infraccion{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #373435;
+      }
+    }
+
+    .sos-event{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #A9BF45;
+      }
+    }
+
+    .exceso-velocidad{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #EE3142;
+      }
+    }
+
+    .tiempo-estadia-zona{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #72BF88;
+      }
+    }
+
+    .default-event{
+      .leaflet-popup-content-wrapper,
+      a.leaflet-popup-close-button{
+        color: #000;
+      }
+    }
+
+  }

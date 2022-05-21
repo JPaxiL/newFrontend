@@ -1,10 +1,53 @@
 .navbar {
-    padding-top: 3px;
+    /* padding-top: 3px; */
+    padding-top: 0px;
     padding-bottom: 3px;
+}
+
+#navbarSupportedContent,
+#navbarSupportedContent_collapsed{
+    /* margin-top: -4px;  */
+    padding: 0px 0.25rem;
+}
+
+.nav-item > button {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#span_user{
+    padding-top: 1.2rem !important;
+    display: inline-block;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
 }
 
 a {
     text-decoration: none;
+}
+
+.no-x-padding{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+/* Navbar */
+.container-fluid.no-x-padding > div:first-child{
+    padding: 0px 1rem;
+    margin: 0px;
+    background-color: var(--gl-blue-dark);;
+    display: flex;
+}
+
+li.nav-item > button{
+    height: 2.4rem;
+    margin: 0px 0.125rem;
+}
+
+i.fa + span {
+    margin-left: 0.25rem;
 }
 
 .logout-modal{
@@ -76,4 +119,38 @@ a {
 .dropdown-menu-end {
     right: 0;
     left: auto;
-  }
+}
+
+
+
+@media (min-width: 1491px) {
+    #navbarSupportedContent_collapsed{
+        display: none !important;
+    }
+}
+
+@media (max-width: 1770px) {
+    #span_notif,
+    #span_config {
+        display: none !important;
+    }
+    #span_user{
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 1490px) {
+    #navbarSupportedContent {
+        display: none !important;
+    }
+
+    #navbarSupportedContent_collapsed{
+        display: flex !important;
+    }
+}
+
+@media (max-width: 850px) {
+    #span_user{
+        max-width: 125px;
+    }
+}

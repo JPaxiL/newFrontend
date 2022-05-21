@@ -1,10 +1,6 @@
 <div style="height: calc(100vh - 150px); overflow-y: auto;">
 
-  <div class="card-body">
-    <h5>GEOPUNTOS</h5>
-  </div>
-
-  <div class="card-body" id="rowBusqueda">
+  <div class="card-body p-fluid" id="rowBusqueda">
       <div class="row">
           <div class="col-sm-9">
               <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">

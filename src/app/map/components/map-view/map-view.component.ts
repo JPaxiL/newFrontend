@@ -81,6 +81,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.mapServicesService.map = L.map('map', {
       center: [parcThabor.lat, parcThabor.lng],
       zoom: zoomLevel,
+      // Quitamos los controles de zoom por defecto. Luego se añade uno personalizado en top right, en map-services
+      zoomControl: false
     });
 
     this.mapServicesService.setLayers();

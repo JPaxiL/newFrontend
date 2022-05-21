@@ -16,6 +16,7 @@ export class PanelMonitoreoComponent implements OnInit {
 
   clickHidePanel(): void {
     $("#panelMonitoreo").hide( "slow" );
+    this.panelService.nombreComponente = '';
   }
 
 }
