@@ -4,8 +4,9 @@
   display: none;
   background: #fff;
   height: -webkit-fill-available;
-  width: 100%;
-  max-width: 450px;
+  /* width: 100%;
+  max-width: 450px; */
+  width: 30vw;
   /*
   float: left;
   clear: both; */
@@ -43,6 +44,18 @@
   font-size: 0.75rem;
 }
 
+#dragbar{
+  background-color: var(--gl-light-gray);
+  height: 100%;
+  float: right;
+  width: 0.25rem;
+  cursor: col-resize;
+}
+
+#dragbar.dragging{
+  background-color: var(--gl-blue-dark);
+}
+
 
 :host ::ng-deep {
   .btn-primary:not(.dropdown-toggle){
@@ -58,6 +71,30 @@
   }
 
   /* Estilos de tablas en panel lateral */
+  div.panel-izq-table-container{
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+
+    table {
+      > thead > tr{
+        background-color: var(--gl-blue-dark) !important;
+        color: #fff !important;
+      }
+      > tbody {
+        > tr:nth-child(even) {
+          background: var(--gl-light-gray);
+        }
+        > tr:hover { /* 4 tables */
+          background-color: #EFF0F4 !important;
+          > * {
+            --bs-table-accent-bg: var(--bs-table-hover-bg);
+          }
+        }
+      } 
+    }
+
+  }
+
   .table-responsive > table {
 
     > thead > tr {

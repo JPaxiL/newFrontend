@@ -8,3 +8,69 @@ p {
 .p-treetable tr td {
     padding: 0rem 0rem;
 }
+
+
+
+
+:host ::ng-deep {
+    *:not(i){
+        font-family: Titillium-Regular, Verdana, sans-serif;
+    }
+
+    .p-treetable-scrollable-header {
+        background-color: var(--gl-blue-dark);
+    }
+
+    .p-treetable-thead {
+        border-bottom: solid 1.1px var(--gl-blue-dark);
+
+        tr > th {
+            background-color: var(--gl-blue-dark);
+
+            * > div > span > i,
+            * > span > i {
+                color: white !important;
+            }
+        }
+    }
+
+    .p-treetable-scrollable-body { 
+        overflow: auto !important;
+    }
+
+    .p-treetable-tbody > tr > td {
+        padding: 0 !important;
+
+        > div.row > div.col-9:first-child > p-treetabletoggler {
+            > button.p-treetable-toggler.p-link.p-ripple[style*="visibility: visible; margin-left: 16px;"]  {
+                margin-left: 0px !important; 
+            }
+            > button.p-treetable-toggler.p-link.p-ripple:enabled:hover{
+                border-color: inherit;
+                background: inherit;
+            }
+            > button {
+                outline: none;
+                box-shadow: none;
+            }
+    }
+    
+    
+    }
+
+    tr.row-header-grupo {
+        background-color: var(--gl-light-blue) !important;
+        color: #fff !important;
+
+        > td > div.row > div.col-9:first-child > p-treetabletoggler > button.p-treetable-toggler.p-link.p-ripple {
+            color: #fff;
+        }
+    }
+    tr.row-header-convoy {
+        background-color: var(--gl-gray-subtitle) !important;
+    }
+
+    /* i.pi{
+        color: #fff;
+    } */
+}
