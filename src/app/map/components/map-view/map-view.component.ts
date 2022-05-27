@@ -84,8 +84,6 @@ export class MapViewComponent implements OnInit, AfterViewInit {
       zoom: zoomLevel,
     });
 
-
-
     // if(mainLayer.addTo(this.map)){
     this.mapService.loadMap(this.mapServicesService.map);
     // }
