@@ -28,8 +28,8 @@ export class GeofencesService {
   }
 
   //Se llama desde /app/map/components/map-view/map-view.component.ts
-  public initialize() {
-    this.getAll();
+  public async initialize() {
+    await this.getAll();
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){

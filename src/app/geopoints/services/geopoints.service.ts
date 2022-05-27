@@ -27,8 +27,8 @@ export class GeopointsService {
   ) { }
 
 
-  public initialize() {
-    this.getAll();
+  public async initialize() {
+    await this.getAll();
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){

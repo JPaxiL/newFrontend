@@ -10,8 +10,7 @@ export class MapServicesService {
 
   constructor() {}
 
-  setLayers() {
-
+  setLayers(geofences:any, points:any) {
     const mainLayer = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
@@ -66,7 +65,17 @@ export class MapServicesService {
       'Google Satellite': googleSat,
     };
 
-    L.control.layers(baseLayers).addTo(this.map);
+    var geos = L.layerGroup(geofences.map( (geo:any) => { return geo.geo_elemento}));
+
+    var geoPoints =  L.layerGroup(points.map( (point:any) => { return point.geo_elemento}));
+
+    const overlays = {
+      "Geocercas poligonales": geos,
+      "Geopuntos": geoPoints,
+      // " Geocercas circulares":
+    }
+
+    L.control.layers(baseLayers,overlays).addTo(this.map);
     L.control.zoom({ position: 'topright' }).addTo(this.map);
   }
 }
