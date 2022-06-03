@@ -27,7 +27,8 @@ export class MapServicesService {
     const googleTerrain = L.tileLayer(
       'http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
       {
-        maxZoom: 20,
+        minZoom: 4,
+        maxZoom: 18,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       }
     );
@@ -35,7 +36,8 @@ export class MapServicesService {
     const googleHybrid = L.tileLayer(
       'http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
       {
-        maxZoom: 20,
+        minZoom: 4,
+        maxZoom: 18,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       }
     );
@@ -43,7 +45,8 @@ export class MapServicesService {
     const googleStreets = L.tileLayer(
       'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
       {
-        maxZoom: 20,
+        minZoom: 4,
+        maxZoom: 18,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       }
     );
@@ -52,7 +55,8 @@ export class MapServicesService {
     const googleSat = L.tileLayer(
       'http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
       {
-        maxZoom: 20,
+        minZoom: 4,
+        maxZoom: 18,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       }
     );

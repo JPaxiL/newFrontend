@@ -82,6 +82,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.mapServicesService.map = L.map('map', {
       center: [parcThabor.lat, parcThabor.lng],
       zoom: zoomLevel,
+      maxZoom: 18,
     });
 
     // if(mainLayer.addTo(this.map)){
