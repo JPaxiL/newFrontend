@@ -48,13 +48,18 @@
   background-color: var(--gl-light-gray);
   height: 100%;
   float: right;
-  width: 0.25rem;
+  width: 0.375rem;
   cursor: col-resize;
 }
 
 #dragbar.dragging{
   background-color: var(--gl-blue-dark) !important;
+  
+  svg{
+    fill: #fff;
+  }
 }
+
 
 #dragbar:hover{
   background-color: var(--gl-light-gray-hover);
@@ -188,5 +193,23 @@
 
   input{
     border: 1px solid var(--gl-gray);
+  }
+}
+
+@media (max-width: 960px) {
+  #dragbar {
+    width: 0.5rem;
+  }
+}
+
+@media (max-width: 720px) {
+  #dragbar {
+    width: 0.75rem;
+  }
+}
+
+@media (max-width: 540px) {
+  #dragbar {
+    width: 1rem;
   }
 }

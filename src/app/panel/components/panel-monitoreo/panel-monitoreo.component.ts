@@ -24,16 +24,20 @@ export class PanelMonitoreoComponent implements OnInit {
     }, true);
 
     /* Redimiensionar en drag */
-    $('#dragbar').mousedown(function(e:any){
+    $('#dragbar').on('mousedown touchstart gesturestart', function(e:any){
       $('#dragbar').addClass('dragging');
-      e.preventDefault();
-      $(document).mousemove(function(e:any){
-        $('#panelMonitoreo').css("width",(e.pageX<0.275 * window.innerWidth? 0.275 * window.innerWidth + 2: (e.pageX> 0.725 * window.innerWidth? 0.725 * window.innerWidth + 2: e.pageX + 2)));
+      e.preventDefault();  
+      $(document).on('mousemove touchmove gesturechange', function(e:any){
+        if(e.originalEvent.touches){
+          $('#panelMonitoreo').css("width",(e.targetTouches[0].pageX<0.275 * window.innerWidth? 0.275 * window.innerWidth + 2: (e.targetTouches[0].pageX> 0.725 * window.innerWidth? 0.725 * window.innerWidth + 2: e.targetTouches[0].pageX + 2)));
+        } else {
+          $('#panelMonitoreo').css("width",(e.pageX<0.275 * window.innerWidth? 0.275 * window.innerWidth + 2: (e.pageX> 0.725 * window.innerWidth? 0.725 * window.innerWidth + 2: e.pageX + 2)));
+        }
      });
     });
-    $(document).mouseup(function(e:any){
+    $(document).on('mouseup touchend gestureend', function(e:any){
       $('#dragbar').removeClass('dragging');
-      $(document).unbind('mousemove');
+      $(document).unbind('mousemove touchmove gesturechange');
     });
 
   }

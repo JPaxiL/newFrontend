@@ -464,12 +464,12 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
           ${(typeof event_content.int_mant_horas_restantes !== 'undefined')? `<tr><td>HORAS RESTANTES:</td><td>${event_content.int_mant_horas_restantes} h</td></tr>`:''}
           ${(typeof event_content.int_mant_odometro !== 'undefined')? `<tr><td>ODÓMETRO ACTUAL:</td><td>${event_content.int_mant_odometro} h</td></tr>`:''}
           ${(typeof event_content.ultimo_mantenimiento !== 'undefined')? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.ultimo_mantenimiento} h</td></tr>`:''}
-          ${(typeof event_content.voltaje !== 'undefined')? `<tr><td>VOLTAJE:</td><td>${event_content.voltaje} km/h</td></tr>`:''}
-          ${(typeof event_content.nombre_zona !== 'undefined')? `<tr><td>ZONA:</td><td>${event_content.nombre_zona} km/h</td></tr>`:''}
+          ${(typeof event_content.voltaje !== 'undefined')? `<tr><td>VOLTAJE:</td><td>${event_content.voltaje}</td></tr>`:''}
+          ${(typeof event_content.nombre_zona !== 'undefined')? `<tr><td>ZONA:</td><td>${event_content.nombre_zona}</td></tr>`:''}
           ${(typeof event_content.velocidad !== 'undefined')? `<tr><td>VELOCIDAD:</td><td>${event_content.velocidad} km/h</td></tr>`:''}
           ${(typeof event_content.velocidad_unidad !== 'undefined')? `<tr><td>VELOCIDAD:</td><td>${event_content.velocidad_unidad} km/h</td></tr>`:''}
           ${(typeof event_content.velocidad_limite !== 'undefined')? `<tr><td>LÍMITE DE VELOCIDAD:</td><td>${event_content.velocidad_limite} km/h</td></tr>`:''}
-          ${(typeof event_content.tiempo_limite_infraccion !== 'undefined')? `<tr><td>LÍMITE DE TIEMPO:</td><td>${event_content.tiempo_limite_infraccion} km/h</td></tr>`:''}
+          ${(typeof event_content.tiempo_limite_infraccion !== 'undefined')? `<tr><td>LÍMITE DE TIEMPO:</td><td>${event_content.tiempo_limite_infraccion} h</td></tr>`:''}
           ${(typeof event_content.tiempo_tolerancia !== 'undefined')? `<tr><td>TIEMPO DE TOLERANCIA:</td><td>${event_content.tiempo_tolerancia}</td></tr>`:''}
           ${(typeof event_content.tiempo_estadia !== 'undefined')? `<tr><td>TIEMPO DE ESTADÍA:</td><td>${event_content.tiempo_estadia}</td></tr>`:''}
           ${(typeof event_content.referencia !== 'undefined')? `<tr><td>REFERENCIA:</td><td>${event_content.referencia}</td></tr>`:''}
