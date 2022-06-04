@@ -1,19 +1,17 @@
-<div style="height: calc(100vh - 150px); overflow-y: auto;">
+<div style="height: calc(100vh - 150px);">
 
   <div class="card-body p-fluid" id="rowBusqueda">
-      <div class="row">
-          <div class="col-sm-9">
-              <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">
-
-
-          </div>
-          <div class="col-sm-3">
-              <button type="button" class="btn btn-primary" (click)="clickAgregarGeocerca()" title="Crear geocerca"><i class="fa fa-plus"></i></button>
-          </div>
+    <div class="row">
+      <div class="col">
+        <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">
       </div>
+      <div class="col-2">
+        <button type="button" class="btn btn-primary" (click)="clickAgregarGeocerca()" title="Crear geocerca"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
   </div>
 
-  <div class="panel-izq-table-container">
+  <div class="panel-izq-table-container" style="height: calc(100vh - 9.875rem); max-height: calc(100vh - 9.875rem);">
     <table id="tbl_geos" class="table table-hover">
       <colgroup>
         <col width="7%" />
@@ -24,7 +22,7 @@
         <col width="5%" />
   
       </colgroup>
-      <thead>
+      <thead class="visible-on-scroll" style="border-style: solid 1.1px var(--gl-blue-dark);">
           <tr class="bg-light">
               <td><span class="fa fa-eye fa-lg"></span></td>
               <td></td>
@@ -35,7 +33,7 @@
   
           </tr>
       </thead>
-      <tbody style="height: 300px;">
+      <tbody style="border-top: inherit;">
   
           <tr *ngFor="let geo of tblDataGeo;let indice=index" >
   

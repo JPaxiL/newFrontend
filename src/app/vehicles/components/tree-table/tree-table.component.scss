@@ -13,9 +13,6 @@ p {
 
 
 :host ::ng-deep {
-    *:not(i){
-        font-family: Titillium-Regular, Verdana, sans-serif;
-    }
 
     .p-treetable-scrollable-header {
         background-color: var(--gl-blue-dark);

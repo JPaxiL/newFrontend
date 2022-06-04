@@ -13,39 +13,63 @@
   >
   </ag-grid-angular>
 </div> -->
+<div style="height: calc(100vh - 150px)">
+  <div class="card-body p-fluid" id="rowBusqueda">
+    <div class="row">
+      <div class="col-sm-6">
+        <input
+          type="text"
+          
+          class="form-control"
+          placeholder="Buscar por placa"
+        />
+      </div>
+      <div class="col-sm-6">
+        <input
+          type="text"
+  
+          class="form-control"
+          placeholder="Tipo de Alerta"
+        />
+        <!-- <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="false" placeholder="Tipo de Evento"></p-dropdown> -->
+      </div>
+    </div>
+  </div>
 
-
-<div class="table-responsive panel-izq-table-container" style="height: calc(100vh - 5.375rem);">
-<!-- <div class="table-responsive" style="width: 100%; height: 450px; font-size: 12px;"> -->
-  <table class="table">
-    <thead class="visible-on-scroll">
-      <tr>
-        <th scope="col">Nº</th>
-        <th scope="col">NOMBRE</th>
-        <th scope="col">TIPO</th>
-        <th scope="col">ACTIVOS</th>
-        <th scope="col">SISTEMA</th>
-        <th scope="col">E-MAIL</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let alert of alerts; let i = index ">
-        <td>{{ i }}</td>
-        <td>{{ alert?.nombre }}</td>
-        <td>{{ alert?.tipo }}</td>
-        <td>
-          <div  class="text-center">
-            <input type="checkbox" [(ngModel)]="alert.activo_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
-          </div>
-        </td>
-        <td>
-          <input type="checkbox" [(ngModel)]="alert.sonido_sistema_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
-        </td>
-        <td>
-          <input type="checkbox" [(ngModel)]="alert.notificacion_email_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
-        </td>
-      </tr>
-
-    </tbody>
-  </table>
+  <div class="table-responsive panel-izq-table-container" style="height: calc(100vh - 9.875rem); max-height: calc(100vh - 9.875rem);">
+    <!-- <div class="table-responsive" style="width: 100%; height: 450px; font-size: 12px;"> -->
+    <table class="table">
+      <thead class="visible-on-scroll">
+        <tr>
+          <th scope="col">Nº</th>
+          <th scope="col">NOMBRE</th>
+          <th scope="col">TIPO</th>
+          <th scope="col">ACTIVOS</th>
+          <th scope="col">SISTEMA</th>
+          <th scope="col">E-MAIL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let alert of alerts; let i = index ">
+          <td>{{ i }}</td>
+          <td>{{ alert?.nombre }}</td>
+          <td>{{ alert?.tipo }}</td>
+          <td>
+            <div  class="text-center">
+              <input type="checkbox" [(ngModel)]="alert.activo_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
+            </div>
+          </td>
+          <td>
+            <input type="checkbox" [(ngModel)]="alert.sonido_sistema_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
+          </td>
+          <td>
+            <input type="checkbox" [(ngModel)]="alert.notificacion_email_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
+          </td>
+        </tr>
+      </tbody>
+    </table>  
+  </div>
 </div>
+
+
+

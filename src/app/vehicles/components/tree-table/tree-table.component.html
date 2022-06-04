@@ -15,40 +15,33 @@
 
 <p-dialog header="" icon="pi pi-info-circle" [style]="{width: '50vw'}" [(visible)]="displayEditGroup">
   <ng-template class="p-dialog-title" pTemplate="header">
-    <strong>EDITAR {{textHeaderEdit}}</strong>
+    <strong>Editar {{textHeaderEdit}}</strong>
   </ng-template>
-  <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
-    <div class="" *ngIf="loading">
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-    </div>
-
-    <div class="" [ngStyle]="{'display':formDisplay}">
-        <div class="row">
-          <div class="col-6" >
-            <h5>Ingrese nombre</h5>
-              <span class="p-label">
-                <label for="float-input">Nombre :</label>
-                <input #nameEdit id="float-input" type="text" pInputText>
-              </span>
-              <!-- <span class="p-label">
-                <label for="float-input">Descripcion :</label>
-                <input #description id="float-input" type="text" pInputText>
-              </span> -->
+  <div class="dialog-body-container">
+    <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+      <div class="" *ngIf="loading">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      </div>
+      <div class="dialog-form-container" [ngStyle]="{'display':formDisplay}">
+        <div class="row d-flex justify-content-center">
+          <div class="col-sm-12 col-md-10 align-self-center p-field">
+            <div class="row">
+              <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                <label>Nombre:</label>
+              </div>
+              <div class="col-8">
+                <input  #nameEdit id="float-input" type="text" pInputText class="p-inputtext-sm" placeholder="">
+              </div>
+            </div>
           </div>
         </div>
+
+        <div style="background-color: var(--gl-gray); height: 0.125rem; width: 100%; margin: 1rem 0px;"></div>
+
         <div class="row">
-          <h5>Seleccione vehiculos</h5>
-          <!-- <p-pickList [source]="list1" [target]="list2" [responsive]="true" [sourceStyle]="{'height':'200px'}" [targetStyle]="{'height':'200px'}"
-            sourceFilterPlaceholder="Buscar por placa" targetFilterPlaceholder="Buscar por placa" filterBy="name">
-              <ng-template let-car pTemplate="item">
-                  <div>
-                      <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                      <div style="font-size:12px;float:right;margin:5px 2px 0 0">{{car.name}}</div>
-                  </div>
-              </ng-template>
-          </p-pickList> -->
-          <div class="col-5">
-            <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'max-height':'250px'}" [style]="{'width':'15rem'}">>
+          <div class="col">
+            <label style="font-size: 1rem; margin-bottom: 0.5rem;">Lista de Vehículos</label>
+            <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
               <ng-template let-car pTemplate="item">
                   <div class="car-item">
                     <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
@@ -56,27 +49,30 @@
                   </div>
               </ng-template>
             </p-listbox>
-  <!-- <p-listbox [options]="list1" [(ngModel)]="selectedList1" optionLabel="name"></p-listbox> -->
           </div>
-          <div class="col-2">
+
+          <div class="col-1 d-flex flex-column justify-content-center">
+            <div style="height: 1.5rem;"></div>
             <div class="">
-              <button (click)="upList2()" type="button" class="btn btn-success" name="button">
+              <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
                 <span>
-                  <i class="fa fa-angle-right"></i>
+                  <i class="fa fa-arrow-right"></i>
                 </span>
               </button>
             </div>
             <br>
             <div class="">
-              <button (click)="upList1()" type="button" class="btn btn-success" name="button">
+              <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
                 <span>
-                  <i class="fa fa-angle-left"></i>
+                  <i class="fa fa-arrow-left"></i>
                 </span>
               </button>
             </div>
           </div>
-          <div class="col-5">
-            <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'max-height':'250px'}" [style]="{'width':'15rem'}">>
+
+          <div class="col">
+            <label style="font-size: 1rem; margin-bottom: 0.5rem;">Lista de Vehículos</label>
+            <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
               <ng-template let-car pTemplate="item">
                   <div class="car-item">
                     <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
@@ -85,17 +81,23 @@
               </ng-template>
             </p-listbox>
           </div>
-
         </div>
       </div>
+    </div>
   </div>
-    <ng-template pTemplate="footer">
-      <div class="">
-        <p-button icon="pi pi-times" (click)="displayEditGroup=false" label="Cancelar"></p-button>
-        <p-button icon="pi pi-check" (click)="onConfirmationEdit()" label="Guardar" class="p-button-text"></p-button>
+  <p-footer>
+    <div class="row d-flex justify-content-center">
+      <div class="col-4">
+        <button (click)="displayEditGroup=false" type="button" class="btn btn-success btn-sm w-100">Cancelar</button>
       </div>
-        </ng-template>
+      <div class="col-4">
+        <button (click)="onConfirmationEdit()" type="button" class="btn btn-success btn-sm w-100">Guardar</button>
+      </div>
+    </div>
+  </p-footer>
+
 </p-dialog>
+
 
 <div class="col" id="rowBusqueda">
   <div class="row" style="margin-right: 0px; margin-left: 15px;">

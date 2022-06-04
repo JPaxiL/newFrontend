@@ -4,6 +4,26 @@
 
   :host ::ng-deep {
 
+    /* PROPUESTAS */
+    .fatiga,
+    .somnolencia,
+    .desvio-carril-izq,
+    .desvio-carril-der,
+    .bloqueo-vision-mobileye,
+    .colision-peatones,
+    .colision-delantera,
+    .posible-fatiga,
+    .fatiga-extrema,
+    .frenada-brusca,
+    .aceleracion-brusca,
+    .vehiculo-sin-programacion,
+    .mantenimiento-correctivo-realizado,
+    .mantenimiento-preventivo-realizado,
+    .bateria-desconectada,
+    .motor-encendido,
+    .motor-apagado,
+
+    /* DEFINIDOS */
     .zona-entrada,
     .zona-salida,
     .tiempo-estadia-zona,
@@ -20,6 +40,125 @@
         color: #fff;
       }
       
+    }
+
+    .fatiga{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #546e7a;
+      }
+    }
+
+    .somnolencia{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #757575;
+      }
+    }
+
+    .desvio-carril-izq{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #006978;
+      }
+    }
+
+    .desvio-carril-der{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #387002;
+      }
+    }
+
+    .bloqueo-vision-mobileye{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #424242;
+      }
+    }
+
+    .colision-peatones{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #ba000d;
+      }
+    }
+
+    .colision-delantera{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #ba000d;
+      }
+    }
+
+    .posible-fatiga{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #8d6e63;
+      }
+    }
+
+    .fatiga-extrema{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #c53d13;
+      }
+    }
+
+    .frenada-brusca{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #9e00c5;
+      }
+    }
+
+    .aceleracion-brusca{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #7c4dff;
+      }
+    }
+
+    .vehiculo-sin-programacion{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #b4004e;
+      }
+    }
+
+    .mantenimiento-correctivo-realizado{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #7e57c2;
+      }
+    }
+
+    .mantenimiento-preventivo-realizado{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #5c6bc0;
+      }
+    }
+
+    .bateria-desconectada{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #f44336;
+      }
+    }
+
+    .motor-encendido{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #039be5;
+      }
+    }
+
+    .motor-apagado{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #757575;
+      }
     }
 
     .zona-entrada{

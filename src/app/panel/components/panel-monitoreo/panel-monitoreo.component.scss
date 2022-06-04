@@ -6,7 +6,7 @@
   height: -webkit-fill-available;
   /* width: 100%;
   max-width: 450px; */
-  width: 30vw;
+  width: 33vw;
   /*
   float: left;
   clear: both; */
@@ -37,10 +37,10 @@
 }
 
 #panelMonitoreo[style*='display: block']{
-    display: flex !important;
+  display: flex !important;
 }
 
-.header-panel-monitoreo + div > *{
+.header-panel-monitoreo + p-treetable > *{
   font-size: 0.75rem;
 }
 
@@ -53,11 +53,19 @@
 }
 
 #dragbar.dragging{
-  background-color: var(--gl-blue-dark);
+  background-color: var(--gl-blue-dark) !important;
+}
+
+#dragbar:hover{
+  background-color: var(--gl-light-gray-hover);
 }
 
 
 :host ::ng-deep {
+  *:not(i, .fa){
+    font-family: Titillium-Regular, Verdana, sans-serif;
+  }
+
   .btn-primary:not(.dropdown-toggle){
     background-color: var(--gl-blue-dark);
   }
@@ -70,10 +78,31 @@
     padding: 1rem;
   }
 
+  .panel-izq-container{
+    font-size: 0.9rem;
+    overflow: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    
+    > form {
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.5rem;
+
+      > .row {
+        align-items: center;
+
+        > label:first-child{
+          padding-left: 1.5rem;
+        }
+      }
+    }
+  }
+
   /* Estilos de tablas en panel lateral */
   div.panel-izq-table-container{
-    overflow-y: auto !important;
-    overflow-x: auto !important;
+    overflow: auto !important;
+    font-size: 0.75rem;
 
     table {
       > thead > tr{
@@ -107,4 +136,57 @@
     } 
   }
 
+  .p-dialog-content {
+    > .dialog-body-container {
+      padding: 1.5rem 0rem 0rem;
+
+      > div > .dialog-form-container {
+        flex-direction:column;
+        row-gap:0.75rem;
+      }
+    }
+  }
+
+  p-dialog > div > div div.p-dialog-header {
+    background-color: var(--gl-blue-dark);
+    color: white;
+    height: 2rem;
+
+    > .p-dialog-header-icons {
+      > button > span {
+        color: #fff;
+      }
+      > button:focus {
+        outline: none;
+        box-shadow: none;
+      }
+      > button:enabled:hover {
+        background: inherit;
+        > span {
+          color: var(--gl-light-gray-hover);
+        }
+      }
+    } 
+      
+  }
+
+  .modal-footer > div > div:first-child,
+  .p-dialog-footer > p-footer > div > div:first-child {
+    > button {
+      color: #000;
+      background-color: #fff;
+    }
+    > button:first-child:hover{
+      background-color: #d1e7dd;
+    }
+  }
+
+  input[disabled]{
+    color: #000;
+    background-color: var(--gl-gray-subtitle);
+  }
+
+  input{
+    border: 1px solid var(--gl-gray);
+  }
 }

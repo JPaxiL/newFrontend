@@ -24,7 +24,8 @@ export class VehicleConfigComponent implements OnInit {
   @ViewChild('empresa',{ static:true}) empresa!: ElementRef;
 
   loading : boolean = false;
-  formDisplay : string = "block";
+  formDisplay : string = "flex";
+  /* formDisplay : string = "block"; */
 
 
 
@@ -163,7 +164,8 @@ export class VehicleConfigComponent implements OnInit {
         this.eventUpdate.emit(this.vehicle);
         this.eventDisplay.emit(false);
         this.loading=false;
-        this.formDisplay = "block";
+        this.formDisplay = "flex";
+        /* this.formDisplay = "block"; */
       }else{
         //mensaje de error
       }

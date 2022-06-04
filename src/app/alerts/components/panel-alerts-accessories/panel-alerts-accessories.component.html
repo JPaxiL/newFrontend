@@ -1,20 +1,26 @@
-<br>
-<div class="row" style="padding-top: 0px">
-    <div class="col-md-9">
-      <h4 class="m-t-none" style="margin-left: 15px;">ALERTAS ACCESORIOS</h4>
+<div class="card-body p-fluid" id="rowBusqueda">
+  <div class="row">
+    <div class="col">
+      <input
+        type="text"
+
+        class="form-control"
+        placeholder="Buscar..."
+      />
     </div>
-    <div class="col-md-3">
+    <div class="col-2">
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group">
-            <button type="button" class="btn btn-warning" (click)="clickShowPanel('ALERTS-ACCESSORIE-CREATE')" >
+            <button type="button" class="btn btn-primary" (click)="clickShowPanel('ALERTS-ACCESSORIE-CREATE')" >
               <span class="fa fa-plus"></span>
             </button>
           </div>
         </div>
     </div>
+  </div>
 </div>
-<br>
-<div class="row">
+
+<div class="panel-izq-table-container" style="height: calc(100vh - 9.875rem); max-height: calc(100vh - 9.875rem);">
     <app-accessories-alerts-list></app-accessories-alerts-list>
 </div>
 
