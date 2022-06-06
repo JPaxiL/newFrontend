@@ -44,25 +44,29 @@
   font-size: 0.75rem;
 }
 
-#dragbar{
+#dragbar {
   background-color: var(--gl-light-gray);
   height: 100%;
   float: right;
-  width: 0.375rem;
-  cursor: col-resize;
+  width: 0.25rem;
 }
 
-#dragbar.dragging{
+#dragbar.dragging, #dragbar.dragging > div{
   background-color: var(--gl-blue-dark) !important;
-  
+
   svg{
     fill: #fff;
   }
 }
 
-
-#dragbar:hover{
+#dragbar > div:hover{
   background-color: var(--gl-light-gray-hover);
+}
+
+#dragbar > div { 
+  background-color: var(--gl-light-gray);
+  box-shadow: 0 0px 10px rgb(0 0 0 / 90%);
+  cursor: col-resize;
 }
 
 
@@ -115,6 +119,12 @@
         color: #fff !important;
       }
       > tbody {
+        > tr {
+          border: none !important;
+          > td {
+            border: none !important;
+          }
+        }
         > tr:nth-child(even) {
           background: var(--gl-light-gray);
         }
@@ -124,9 +134,18 @@
             --bs-table-accent-bg: var(--bs-table-hover-bg);
           }
         }
+        > tr.tr-selected {
+          background-color: var(--gl-gray) !important;
+        }
       } 
     }
 
+  }
+
+  tbody.p-treetable-tbody {
+    > tr:hover {
+      background-color: var(--gl-light-gray);
+    }
   }
 
   .table-responsive > table {
