@@ -32,23 +32,26 @@
           <td>Nombre</td>
           <td>Placa</td>
           <td>Fecha</td>
-          <td><span class="fas fa-eye"></span></td>
-          <td><span class="fa fa-eye-slash"></span></td>
+          <!-- <td><span class="fas fa-eye"></span></td> -->
+          <!-- <td><span class="fa fa-eye-slash"></span></td> -->
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let event of events">
-          <td>{{ event.evento }}</td>
-          <td>{{ event.nombre }}</td>
-          <td>{{ event.nombre_objeto }}</td>
-          <td>{{ event.fecha_tracker }}</td>
-          <td width="10%" (click)="showEvent(event)">
-            <a href="" (click)="$event.preventDefault()">Ver</a>
-          </td>
-          <td width="10%"(click)="hideEvent(event)" >
-            <a href="" (click)="$event.preventDefault()">Ocultar</a>
-          </td>
-        </tr>
+        <ng-container *ngFor="let event of events">
+          <tr #currRow (click)="switchEventOnMap(event, currRow)">
+            <td>{{ event.evento }}</td>
+            <td>{{ event.nombre }}</td>
+            <td>{{ event.nombre_objeto }}</td>
+            <td>{{ event.fecha_tracker }}</td>
+            <!-- <td width="10%" (click)="showEvent(event)">
+              <a href="" (click)="$event.preventDefault()">Ver</a>
+            </td> -->
+            <!-- <td width="10%"(click)="hideEvent(event)" >
+              <a href="" (click)="$event.preventDefault()">Ocultar</a>
+            </td> -->
+          </tr>
+        </ng-container>
+        
       </tbody>
     </table>
   </div>

@@ -3,6 +3,7 @@ import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
 import { getContentPopup } from '../../helpers/event-helper';
+import { forEachChild } from 'typescript';
 @Component({
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
@@ -14,6 +15,7 @@ export class EventListComponent implements OnInit {
   tipoEvento: any = [];
   selectedEvent: any = {};
   eventPopupClass: any ={};
+  activeEventLayer: any = false;
 
   public events:any[] = [];
   public placa:string = '';
@@ -98,8 +100,11 @@ export class EventListComponent implements OnInit {
   }
 
   public showEvent(event:any){
+    if(this.activeEventLayer) {
+      this.hideEvent(this.activeEventLayer);
+    }
     var eventClass:any = this.eventPopupClass.filter((eventClass:any) => eventClass.tipo == event.tipo);
-    eventClass = eventClass.length > 0? eventClass[0].clase: 'default-event';
+    eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
     event.layer.bindPopup(getContentPopup(event), {
@@ -107,12 +112,30 @@ export class EventListComponent implements OnInit {
       minWidth: 250,
       maxWidth: 350,
     } );
+    this.activeEventLayer = event;
     event.layer.addTo(this.mapService.map).openPopup();
   }
 
   public hideEvent(event:any){
-    // this.mapService.map.fitBounds([[-11.107323, -75.523437]], {maxZoom: 5});
-    this.mapService.map.removeLayer(event.layer)
+    this.mapService.map.removeLayer(event.layer);
+    this.activeEventLayer = false;
+  }
+
+  public switchEventOnMap(event: any, currentRow: HTMLElement){
+    if(currentRow.classList.contains('tr-selected')){
+      currentRow.classList.remove('tr-selected');
+      this.hideEvent(event);
+    } else {
+      for(let i = 0; i < document.querySelectorAll('tr.tr-selected').length; i++){
+        document.querySelectorAll('tr.tr-selected')[i].classList.remove('tr-selected');
+      }
+      currentRow.classList.add('tr-selected');
+      this.showEvent(event); 
+    }
+  }
+
+  public checkPopupExist(){
+    return document.querySelectorAll('.leaflet-popup').length > 0;
   }
 
 }
