@@ -9,6 +9,7 @@
           [(ngModel)]="placa"
           class="form-control"
           placeholder="Buscar por placa"
+          (keyup)="searchByPlate()"
         />
       </div>
       <div class="col-sm-6">
@@ -19,7 +20,7 @@
           class="form-control"
           placeholder="Tipo de Evento"
         /> -->
-        <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="false" placeholder="Tipo de Evento"></p-dropdown>
+        <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="false" placeholder="Tipo de Evento" (ngModelChange)="changeTypeEvent()"></p-dropdown>
       </div>
     </div>
   </div>

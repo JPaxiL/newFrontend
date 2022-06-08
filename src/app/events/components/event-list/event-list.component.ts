@@ -11,7 +11,7 @@ import { forEachChild } from 'typescript';
 })
 
 export class EventListComponent implements OnInit {
-  
+
   tipoEvento: any = [];
   selectedEvent: any = {};
   eventPopupClass: any ={};
@@ -25,40 +25,40 @@ export class EventListComponent implements OnInit {
     public mapService: MapServicesService,
     public ess:EventSocketService
     ) {
-      this.tipoEvento = [
-        { id: 0, option: 'Todos los Eventos', tipo: '' },
-        { id: 1, option: 'Alcoholemia', tipo: '' },
-        { id: 2, option: 'Somnolencia', tipo: 'Somnolencia', clase: 'somnolencia' },
-        { id: 3, option: 'Distracción', tipo: 'Distraccion', clase: 'distraccion' },
-        { id: 4, option: 'Batería Desconectada', tipo: 'Bateria desconectada', clase: 'bateria-desconectada' },
-        { id: 5, option: 'Aceleración Brusca', tipo: 'Aceleracion brusca', clase: 'aceleracion-brusca' },
-        { id: 6, option: 'Frenada Brusca', tipo: 'Frenada brusca', clase: 'frenada-brusca' },
-        { id: 7, option: 'S.O.S.', tipo: 'SOS', clase: 'sos-event' },
-        { id: 8, option: 'Zona de Entrada', tipo: 'Zona de entrada', clase: 'zona-entrada' },
-        { id: 9, option: 'Zona de Salida', tipo: 'Zona de salida', clase: 'zona-salida' },
-        { id: 10, option: 'Tiempo de estadía en zona', tipo: 'Tiempo de estadia en zona', clase: 'tiempo-estadia-zona' },
-        { id: 11, option: 'Parada en zona no autorizada', tipo: 'Parada en zona no autorizada', clase: 'parada-zona-no-autorizada' },
-        { id: 12, option: 'Exceso de velocidad', tipo: 'Exceso de Velocidad', clase: 'exceso-velocidad' },
-        { id: 13, option: 'Transgresión', tipo: '' },
-        { id: 14, option: 'Infracción', tipo: 'Infraccion', clase: 'infraccion' },
-        { id: 15, option: 'Vehículo sin programación', tipo: 'Vehiculo sin programacion', clase: 'vehiculo-sin-programacion' },
-        { id: 16, option: 'Mantenimiento preventivo', tipo: 'Mantenimiento preventivo', clase: 'mantenimiento-preventivo' },
-        { id: 16, option: 'Mantenimiento preventivo realizado', tipo: 'Mantenimiento preventivo realizado', clase: 'mantenimiento-preventivo-realizado' },
-        { id: 17, option: 'Mantenimiento correctivo', tipo: 'Mantenimiento correctivo', clase: 'mantenimiento-correctivo' },
-        { id: 18, option: 'Mantenimiento correctivo realizado', tipo: 'Mantenimiento correctivo realizado', clase: 'mantenimiento-correctivo-realizado' },
-        { id: 19, option: 'Motor apagado', tipo: 'Motor apagado', clase: 'motor-apagado' },
-        { id: 20, option: 'Motor encendido', tipo: 'Motor encendido', clase: 'motor-encendido' },
+      // this.tipoEvento = [
+      //   { id: 0, option: 'Todos los Eventos', tipo: '' },
+      //   { id: 1, option: 'Alcoholemia', tipo: '' },
+      //   { id: 2, option: 'Somnolencia', tipo: 'Somnolencia', clase: 'somnolencia' },
+      //   { id: 3, option: 'Distracción', tipo: 'Distraccion', clase: 'distraccion' },
+      //   { id: 4, option: 'Batería Desconectada', tipo: 'Bateria desconectada', clase: 'bateria-desconectada' },
+      //   { id: 5, option: 'Aceleración Brusca', tipo: 'Aceleracion brusca', clase: 'aceleracion-brusca' },
+      //   { id: 6, option: 'Frenada Brusca', tipo: 'Frenada brusca', clase: 'frenada-brusca' },
+      //   { id: 7, option: 'S.O.S.', tipo: 'SOS', clase: 'sos-event' },
+      //   { id: 8, option: 'Zona de Entrada', tipo: 'Zona de entrada', clase: 'zona-entrada' },
+      //   { id: 9, option: 'Zona de Salida', tipo: 'Zona de salida', clase: 'zona-salida' },
+      //   { id: 10, option: 'Tiempo de estadía en zona', tipo: 'Tiempo de estadia en zona', clase: 'tiempo-estadia-zona' },
+      //   { id: 11, option: 'Parada en zona no autorizada', tipo: 'Parada en zona no autorizada', clase: 'parada-zona-no-autorizada' },
+      //   { id: 12, option: 'Exceso de velocidad', tipo: 'Exceso de Velocidad', clase: 'exceso-velocidad' },
+      //   { id: 13, option: 'Transgresión', tipo: '' },
+      //   { id: 14, option: 'Infracción', tipo: 'Infraccion', clase: 'infraccion' },
+      //   { id: 15, option: 'Vehículo sin programación', tipo: 'Vehiculo sin programacion', clase: 'vehiculo-sin-programacion' },
+      //   { id: 16, option: 'Mantenimiento preventivo', tipo: 'Mantenimiento preventivo', clase: 'mantenimiento-preventivo' },
+      //   { id: 16, option: 'Mantenimiento preventivo realizado', tipo: 'Mantenimiento preventivo realizado', clase: 'mantenimiento-preventivo-realizado' },
+      //   { id: 17, option: 'Mantenimiento correctivo', tipo: 'Mantenimiento correctivo', clase: 'mantenimiento-correctivo' },
+      //   { id: 18, option: 'Mantenimiento correctivo realizado', tipo: 'Mantenimiento correctivo realizado', clase: 'mantenimiento-correctivo-realizado' },
+      //   { id: 19, option: 'Motor apagado', tipo: 'Motor apagado', clase: 'motor-apagado' },
+      //   { id: 20, option: 'Motor encendido', tipo: 'Motor encendido', clase: 'motor-encendido' },
 
-        { id: 21, option: 'Fatiga', tipo: 'Fatiga', clase: 'fatiga' },
-        { id: 22, option: 'Posible Fatiga', tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
-        { id: 23, option: 'Fatiga Extrema', tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
-        { id: 24, option: 'Desvío de carril hacia la izquierda', tipo: 'Desvío de carril hacia la izquierda', clase: 'desvio-carril-izq' },
-        { id: 25, option: 'Desvío de carril hacia la derecha', tipo: 'Desvío de carril hacia la derecha', clase: 'desvio-carril-der' },
-        { id: 26, option: 'Bloqueo de visión del Mobileye', tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
-        { id: 27, option: 'Colisión con peatones', tipo: 'Colisión con peatones', clase: 'colision-peatones' },
-        { id: 28, option: 'Colisión con delantera', tipo: 'Colisión delantera', clase: 'colision-delantera' },
-        { id: 29, option: 'Bloqueo de visión del mobileye', tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
-      ];
+      //   { id: 21, option: 'Fatiga', tipo: 'Fatiga', clase: 'fatiga' },
+      //   { id: 22, option: 'Posible Fatiga', tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
+      //   { id: 23, option: 'Fatiga Extrema', tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
+      //   { id: 24, option: 'Desvío de carril hacia la izquierda', tipo: 'Desvío de carril hacia la izquierda', clase: 'desvio-carril-izq' },
+      //   { id: 25, option: 'Desvío de carril hacia la derecha', tipo: 'Desvío de carril hacia la derecha', clase: 'desvio-carril-der' },
+      //   { id: 26, option: 'Bloqueo de visión del Mobileye', tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
+      //   { id: 27, option: 'Colisión con peatones', tipo: 'Colisión con peatones', clase: 'colision-peatones' },
+      //   { id: 28, option: 'Colisión con delantera', tipo: 'Colisión delantera', clase: 'colision-delantera' },
+      //   { id: 29, option: 'Bloqueo de visión del mobileye', tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
+      // ];
 
       this.eventPopupClass = [
         { tipo: 'Zona de entrada', clase: 'zona-entrada' },
@@ -92,11 +92,17 @@ export class EventListComponent implements OnInit {
       ];
 
       this.selectedEvent = 0;
-    
+
     }
 
   ngOnInit(): void {
     this.events = this.eventService.getData();
+    this.loadData()
+  }
+
+  async loadData(){
+    this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
+    this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' });
   }
 
   public showEvent(event:any){
@@ -138,4 +144,24 @@ export class EventListComponent implements OnInit {
     return document.querySelectorAll('.leaflet-popup').length > 0;
   }
 
+  public changeTypeEvent(){
+
+    if(this.selectedEvent == ''){
+      this.events = this.eventService.getData();
+    }else{
+      this.events = this.eventService.getData().filter( (event:any)  => {
+        return event.tipo == this.selectedEvent
+      });
+    }
+  }
+
+  public searchByPlate(){
+    if(this.placa == ''){
+      this.events = this.eventService.getData();
+    }else {
+      this.events =  this.eventService.getData().filter( (event:any)  => {
+        return event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase())
+      });
+    }
+  }
 }
