@@ -110,7 +110,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
         var latlng = geo.geopunto_vertices.split(",")
         const svgIcon = L.divIcon({
-            html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
             iconSize: [24, 29],
             iconAnchor: [12, 29],
@@ -196,7 +197,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
         var latlng = geo.geopunto_vertices.split(",")
         const svgIcon = L.divIcon({
-            html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
             iconSize: [24, 29],
             iconAnchor: [12, 29],
@@ -274,7 +276,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
         var latlng = geo.geopunto_vertices.split(",")
 
         const svgIcon = L.divIcon({
-            html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
             iconSize: [24, 29],
             iconAnchor: [12, 29],
@@ -355,7 +358,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
           var latlng = geo.geopunto_vertices.split(",")
 
           const svgIcon = L.divIcon({
-            html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
+            html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
             iconSize: [24, 29],
             iconAnchor: [12, 29],
@@ -380,7 +384,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
           }).bindTooltip(
               // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-              '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.geopunto_color+';">'+geo.geopunto_name+'</b>',
+              // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.geopunto_color+';">'+geo.geopunto_name+'</b>',
+              '<b class="" style="border: 0.2rem solid #000; background-color: '+ this.mapService.hexToRGBA(geo.geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(geo.geopunto_color) +';">'+geo.geopunto_name+'</b>',
               { permanent: true,
                 offset: [20, 20],
                 direction: 'center',

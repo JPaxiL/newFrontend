@@ -238,4 +238,43 @@
       }
     }
 
+    /* Nombres de vehículos */
+    .leaflet-tooltip.leaflet-tooltip-right:not(.leaflet-tooltip-own),
+    .leaflet-tooltip.leaflet-tooltip-left:not(.leaflet-tooltip-own){
+      border: none;
+      color: #fff;
+      /* border: 2px solid #000; */
+      border-radius: 8px;
+      background-color: var(--gl-light-blue);;
+      /* background-color: rgba(255,255,255,0.625); */
+      font-weight: bold;
+      /* -webkit-text-stroke: 0.75px black; */
+    }
+
+    .leaflet-tooltip-right:before {
+      /* border-right-color: #000; */
+      border-right-color: var(--gl-light-blue);
+      left: 1px;
+    }
+    .leaflet-tooltip-left:before {
+      border-left-color: var(--gl-light-blue);
+      right: 1px;
+    }
+
+    /* Nombres de geocercas */
+    /* Nombres de geopuntos */
+    .leaflet-tooltip.leaflet-tooltip-own.leaflet-zoom-animated.leaflet-tooltip-center {
+      background: none;
+      border: none;
+      box-shadow: none;
+      > b {
+        padding: 0.2rem 0.4rem; 
+        border-radius: 1rem; 
+      }
+    }
+
+    
+
+    
+
   }
