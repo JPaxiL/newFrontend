@@ -321,7 +321,6 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/desvio_izquierda.svg',
     );
-    /* Falta icono */
 
   } else if (event.tipo == 'Desvío de carril hacia la derecha') {
     return render_leaflet_tootlip(
@@ -336,7 +335,6 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/desvio_derecha.svg',
     );
-    /* Falta icono */
 
   } else if (event.tipo == 'Bloqueo de visión del mobileye') {
     return render_leaflet_tootlip(
@@ -351,7 +349,6 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/bloqueo_mobileye.svg',
     );
-    /* Falta icono */
 
   } else if (event.tipo == 'Colisión con peatones') {
     return render_leaflet_tootlip(
@@ -379,9 +376,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: d,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/colision_peaton.svg',
+      'assets/images/events-icons/colision_delantera.svg',
     );
-    /* Falta icono */
 
   } else if (event.tipo == 'Posible Fatiga') {
     return render_leaflet_tootlip(
@@ -394,9 +390,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: d,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/posible_fatiga.svg',
+      'assets/images/events-icons/fatiga.svg',
     );
-    /* Falta icono */
 
   } else if (event.tipo == 'Fatiga Extrema') {
     return render_leaflet_tootlip(
@@ -409,9 +404,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: d,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/fatiga_extrema.svg',
+      'assets/images/events-icons/fatiga.svg',
     );
-    /* Falta icono */
   }
 
   return '';

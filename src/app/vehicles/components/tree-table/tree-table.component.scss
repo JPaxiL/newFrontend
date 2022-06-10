@@ -37,8 +37,8 @@ p {
     }
 
     .p-treetable-tbody > {
-        tr:not(.row-header-convoy, .row-header-grupo){
-            
+        tr:not(.row-header-convoy, .row-header-grupo) > td{
+            text-align: center;
         }
 
         tr > td {
