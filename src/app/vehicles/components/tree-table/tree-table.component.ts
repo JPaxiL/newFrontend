@@ -60,8 +60,8 @@ export class TreeTableComponent implements OnInit {
     tag: true,
     follow: true,
     limit: true,
-    gps: true,
-    gsm: true,
+    gps: false,
+    gsm: false,
     trans: true,
     config: true,
     sort: 'asc'
@@ -108,8 +108,8 @@ export class TreeTableComponent implements OnInit {
           { field: 'name', header: 'Vehículo' },
           { field: 'activo', header: 'TAG' },
           { field: 'follow', header: 'speed' },
-          { field: 'gps', header: 'speed' },
-          { field: 'gsm', header: 'speed' },
+          /* { field: 'gps', header: 'speed' },
+          { field: 'gsm', header: 'speed' }, */
           { field: 'point_color', header: 'speed' },
           { field: 'activo', header: 'speed' }
       ];

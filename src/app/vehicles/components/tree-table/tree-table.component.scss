@@ -20,13 +20,14 @@ p {
 
     .p-treetable-thead {
         border-bottom: solid 1.1px var(--gl-blue-dark);
-
+        
         tr > th {
             background-color: var(--gl-blue-dark);
+            color: #fff;
 
             * > div > span > i,
             * > span > i {
-                color: white !important;
+                color: #fff !important;
             }
         }
     }
@@ -35,21 +36,28 @@ p {
         overflow: auto !important;
     }
 
-    .p-treetable-tbody > tr > td {
-        padding: 0 !important;
+    .p-treetable-tbody > {
+        tr:not(.row-header-convoy, .row-header-grupo){
+            
+        }
 
-        > div.row > div.col-9:first-child > p-treetabletoggler {
-            > button.p-treetable-toggler.p-link.p-ripple[style*="visibility: visible; margin-left: 16px;"]  {
-                margin-left: 0px !important; 
-            }
-            > button.p-treetable-toggler.p-link.p-ripple:enabled:hover{
-                border-color: inherit;
-                background: inherit;
-            }
-            > button {
-                outline: none;
-                box-shadow: none;
-            }
+        tr > td {
+            padding: 0 !important;
+    
+            > div.row > div.col-9:first-child > p-treetabletoggler {
+                > button.p-treetable-toggler.p-link.p-ripple[style*="visibility: visible; margin-left: 16px;"]  {
+                    margin-left: 0px !important; 
+                }
+                > button.p-treetable-toggler.p-link.p-ripple:enabled:hover{
+                    border-color: inherit;
+                    background: inherit;
+                }
+                > button {
+                    outline: none;
+                    box-shadow: none;
+                }
+        }
+        
     }
     
     
@@ -65,6 +73,10 @@ p {
     }
     tr.row-header-convoy {
         background-color: var(--gl-gray-subtitle) !important;
+    }
+
+    .icon-float-right > img {
+        float: right;
     }
 
     /* i.pi{

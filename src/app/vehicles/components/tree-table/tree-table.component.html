@@ -146,11 +146,11 @@
               <label for="">Limite de velocidad</label>
             </div>
             <div class="">
-              <input (click)="onClickSetting('gps')" type="checkbox" name="" value="" checked>
+              <input (click)="onClickSetting('gps')" type="checkbox" name="" value="" >
               <label for="">GPS</label>
             </div>
             <div class="">
-              <input (click)="onClickSetting('gsm')" type="checkbox" name="" value="" checked>
+              <input (click)="onClickSetting('gsm')" type="checkbox" name="" value="" >
               <label for="">GSM</label>
             </div>
             <div class="">
@@ -187,7 +187,17 @@
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
         <!-- <col *ngFor="let col of columns" style="width:100px"> -->
-        <col style="width:7px" *ngIf="setting['eye']">
+        <col style="width: 32px;" *ngIf="setting['eye']">
+        <col style="width: 100%;" *ngIf="setting['vehicle']">
+        <col style="width: 50%;" *ngIf="setting['imei']">
+        <col style="width: 32px;" *ngIf="setting['tag']">
+        <col style="width: 32px;" *ngIf="setting['follow']">
+        <col style="width: 32px;" *ngIf="setting['limit']">
+        <col style="width: 32px;" *ngIf="setting['gps']">
+        <col style="width: 32px;" *ngIf="setting['gsm']">
+        <col style="width: 32px;" *ngIf="setting['trans']">
+        <col style="width: 32px;" *ngIf="setting['config']">
+        <!-- <col style="width:7px" *ngIf="setting['eye']">
         <col style="width:18px" *ngIf="setting['vehicle']">
         <col style="width:18px" *ngIf="setting['imei']">
         <col style="width:5px" *ngIf="setting['tag']">
@@ -196,7 +206,7 @@
         <col style="width:5px" *ngIf="setting['gps']">
         <col style="width:5px" *ngIf="setting['gsm']">
         <col style="width:5px" *ngIf="setting['trans']">
-        <col style="width:5px" *ngIf="setting['config']">
+        <col style="width:5px" *ngIf="setting['config']"> -->
       </colgroup>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
@@ -204,7 +214,7 @@
       <tr>
         <th *ngIf="setting['eye']"><app-eye-header></app-eye-header></th>
         <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th>
-        <th *ngIf="setting['imei']" >IMEI</th>
+        <th *ngIf="setting['imei']" style="text-align: center;">IMEI</th>
         <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
         <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
         <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
@@ -268,8 +278,8 @@
         </td>
         <td *ngIf="setting['vehicle']">
           <div class="row">
-            <div class="col-3">
-              <img class="izquierda" (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
+            <div class="col-3 icon-float-right p-0">
+              <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
             </div>
             <div class="col-9">
               <aside class="">
