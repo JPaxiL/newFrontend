@@ -7,6 +7,8 @@ import * as moment from 'moment';
 import * as L from 'leaflet';
 
 declare var $: any;
+declare var $j: any;
+
 
 @Component({
   selector: 'app-panel-historial-grafico',
@@ -192,6 +194,20 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
   cargarGrafico(): void {
 
+
+    jQuery.fn.jquery
+    jQuery().jquery
+    console.log(jQuery.fn.jquery);
+    console.log(jQuery().jquery);
+    console.log($().jquery);
+
+
+
+    console.log($().jquery); // This prints v1.4.2
+    console.log($j().jquery); // This prints v1.9.1
+
+
+
     var dH =  this.historialService.tramasHistorial; // Data Historial
 
     this.cl = {
@@ -266,7 +282,15 @@ export class PanelHistorialGraficoComponent implements OnInit {
   //     data: this.cl.sin
   // }], this.options_grafico);
 
-    this.plot_historial = $.plot($("#placeholder"), [{
+
+    console.log(jQuery.fn.jquery);
+    console.log(jQuery().jquery);
+    console.log($().jquery); // This prints v1.4.2
+    console.log($j().jquery); // This prints v1.9.1
+
+
+
+    this.plot_historial = $j.plot($("#placeholder"), [{
         data: this.cl.sin
     }], this.options_grafico);
 
@@ -435,7 +459,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
       switch (this.opcionGraficoConsola) {
         case '1':
-            this.plot_historial = $.plot($("#placeholder"), [{
+            this.plot_historial = $j.plot($("#placeholder"), [{
                 data: this.cl.sin
             }], $.extend(true, {}, this.options_grafico, {
                 xaxis: {
@@ -453,7 +477,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
                 }
             };
             if (g == 0) {
-                this.plot_historial = $.plot($("#placeholder"), [{
+                this.plot_historial = $j.plot($("#placeholder"), [{
                     data: this.cl.altitudConsola
                 }], $.extend(true, {}, this.options_grafico, {
                     xaxis: {
@@ -472,7 +496,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
                     }
                 }))
             } else {
-                this.plot_historial = $.plot($("#placeholder"), [{
+                this.plot_historial = $j.plot($("#placeholder"), [{
                     data: this.cl.altitudConsola
                 }], $.extend(true, {}, this.options_grafico, {
                     xaxis: {
@@ -492,7 +516,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
             }
             break;
         case '3':
-            this.plot_historial = $.plot($("#placeholder"), [{
+            this.plot_historial = $j.plot($("#placeholder"), [{
                 data: this.cl.motor
             }], $.extend(true, {}, this.options_grafico, {
                 xaxis: {
@@ -566,7 +590,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     $("#choices").empty();
     $("#datoslegend").empty();
 
-    this.plot_historial = $.plot("#placeholder", [{
+    this.plot_historial = $j.plot("#placeholder", [{
         data: []
     }], this.options_grafico);
 
@@ -574,7 +598,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
     switch (this.opcionGraficoConsola) {
       case '1':
-          this.plot_historial = $.plot("#placeholder", [{
+          this.plot_historial = $j.plot("#placeholder", [{
               data: this.cl.sin
           }], this.options_grafico);
           break;
@@ -587,7 +611,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
               }
           };
           if (d == 0) {
-              this.plot_historial = $.plot($("#placeholder"), [{
+              this.plot_historial = $j.plot($("#placeholder"), [{
                   data: this.cl.altitudConsola
               }], $.extend(true, {}, this.options_grafico, {
                   yaxis: {
@@ -602,7 +626,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
                   }
               }))
           } else {
-              this.plot_historial = $.plot($("#placeholder"), [{
+              this.plot_historial = $j.plot($("#placeholder"), [{
                   data: this.cl.altitudConsola
               }], $.extend(true, {}, this.options_grafico, {
                   yaxis: {
@@ -641,7 +665,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
           //console.log(this.cl.motor);
           //console.log("*********************");
 
-          this.plot_historial = $.plot($("#placeholder"), [{
+          this.plot_historial = $j.plot($("#placeholder"), [{
               data: this.cl.motor
           }], $.extend(true, {}, this.options_grafico, {
               yaxis: {
@@ -858,7 +882,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
     if (this.cl.h.length > 2 && this.cl.l.length > 2 && this.cl.n.length > 2) {
         //console.log("solo mas de 2 elementos en velocidad __");
-        this.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, this.options_grafico, {
+        this.plot_historial = $j.plot("#placeholder", b, $.extend(true, {}, this.options_grafico, {
             xaxis: {
                 mode: "time",
                 timezone: "browser",
@@ -911,7 +935,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
     } else {
         // notificationService.success('NO CUENTA CON PARAMETROS DE COMBUSTIBLE PARA SU EVALUACIÓN.');
-        this.plot_historial = $.plot("#placeholder", [{  data: [] }], this.options_grafico);
+        this.plot_historial = $j.plot("#placeholder", [{  data: [] }], this.options_grafico);
         $("#placeholder").css("height", "100%").css("height", "-=35px");
 
     }
@@ -930,7 +954,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
         });
 
     if (b.length > 0) {
-        this.plot_historial = $.plot("#placeholder", b, $.extend(true, {}, this.options_grafico, {
+        this.plot_historial = $j.plot("#placeholder", b, $.extend(true, {}, this.options_grafico, {
             xaxis: {
                 min: d.xaxis.from,
                 max: d.xaxis.to

@@ -4,8 +4,8 @@
 
 .pristine-report{
     overflow: hidden;
-    height: 100%; 
-    width: 100%; 
+    height: 100%;
+    width: 100%;
     background-color: rgb(250,250,250);
     box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
     border-radius: 3px;
@@ -47,24 +47,24 @@ table {
 }
 
 .table-title{
-    font-size: 2rem !important; 
-    background-color: var(--gl-blue-dark); 
+    font-size: 2rem !important;
+    background-color: var(--gl-blue-dark);
     /* background-color: #6a99cb;  */
-    color: #ffffff; 
-    padding: 0.5rem; 
+    color: #ffffff;
+    padding: 0.5rem;
 }
 
 .table-subtitle{
-    font-size: 1.5rem !important; 
-    background-color: #000000; 
+    font-size: 1.5rem !important;
+    background-color: #000000;
     color: #ffffff;
-    padding: 0.5rem; 
+    padding: 0.5rem;
 }
 
 .subtable-title{
     font-size: 1.5rem !important;
-    background-color: #000000; 
-    padding: 0.5rem; 
+    background-color: #000000;
+    padding: 0.5rem;
     color: #ffffff;
     display: flex;
     flex-direction: row;
@@ -116,17 +116,53 @@ p{
 }
 
 .grand-container.multitable-container{
-    display: flex; 
-    flex-direction: column; 
-    gap: 0.8rem; 
-    margin-top: 0.4rem; 
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 0.4rem;
     height: auto;
     overflow-y: auto;
 }
 
 .singletable-container{
-    padding: 0.8rem; 
-    height: auto; 
-    overflow-y: auto; 
+    padding: 0.8rem;
+    height: auto;
+    overflow-y: auto;
     margin-top: 0.25rem;
+}
+
+
+.demo-container {
+	box-sizing: border-box;
+	width: 850px;
+	height: 450px;
+	padding: 20px 15px 15px 15px;
+	margin: 15px auto 30px auto;
+	border: 1px solid #ddd;
+	background: #fff;
+	background: linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+	box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+	-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+
+.demo-placeholder {
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
 }
