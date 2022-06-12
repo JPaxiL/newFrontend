@@ -45,11 +45,11 @@
               <label for="">Limite de velocidad</label>
             </div>
             <div class="">
-              <input (click)="onClickSetting('gps')" type="checkbox" name="" value="" checked>
+              <input (click)="onClickSetting('gps')" type="checkbox" name="" value="">
               <label for="">GPS</label>
             </div>
             <div class="">
-              <input (click)="onClickSetting('gsm')" type="checkbox" name="" value="" checked>
+              <input (click)="onClickSetting('gsm')" type="checkbox" name="" value="">
               <label for="">GSM</label>
             </div>
             <div class="">
@@ -76,7 +76,7 @@
   </div>
 </div>
 <app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
-<div class="ag-theme-alpine" >
+<div class="ag-theme-alpine" style="width: 100%;">
     <ag-grid-angular
     #agGrid
     style="width: 100%; height: calc(100vh - 9.875rem); font-size: 14px; overflow: auto;"
@@ -87,6 +87,7 @@
     [defaultColDef]="defaultColDef"
     [rowHeight]="rowHeight"
     (gridReady)="onGridReady($event)"
+    [embedFullWidthRows]="true"
     >
     </ag-grid-angular>
 </div>

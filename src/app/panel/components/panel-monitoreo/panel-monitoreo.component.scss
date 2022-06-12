@@ -6,7 +6,8 @@
   height: -webkit-fill-available;
   /* width: 100%;
   max-width: 450px; */
-  width: 33vw;
+  width: 425px;
+  /* width: 33vw; */
   /*
   float: left;
   clear: both; */
@@ -51,7 +52,7 @@
   width: 0.25rem;
 }
 
-#dragbar.dragging, #dragbar.dragging > div{
+#dragbar.dragging:not(.trigger-dragging), #dragbar.dragging:not(.trigger-dragging) > div{
   background-color: var(--gl-blue-dark) !important;
 
   svg{
@@ -146,7 +147,7 @@
 
   tbody.p-treetable-tbody {
     > tr:hover {
-      background-color: var(--gl-light-gray);
+      background-color: var(--gl-light-blue-alpha);
     }
   }
 

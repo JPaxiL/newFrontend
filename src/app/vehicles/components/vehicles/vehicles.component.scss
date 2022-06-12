@@ -1,0 +1,26 @@
+:host ::ng-deep{
+    .ag-header-viewport {
+        background-color: var(--gl-blue-dark);
+    }
+
+    .ag-header-container > div > .ag-header-cell[role="columnheader"] {
+        justify-content: center;
+    }
+
+    .ag-grid-header-icon{
+        color: #fff;
+    }
+
+    [ref="eMenu"], [ref="eLabel"], [ref="eText"], [ref="eFilter"], [ref="eSortorder"], [ref="eSortAsc"], [ref="eSortDesc"] {
+        color: #fff;
+    }
+
+    .icon-float-right > img {
+        float: right;
+    }
+
+    .ag-body-viewport[ref="eBodyViewport"] {
+        text-align: center;
+    }
+    
+}

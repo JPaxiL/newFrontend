@@ -9,9 +9,6 @@ p {
     padding: 0rem 0rem;
 }
 
-
-
-
 :host ::ng-deep {
 
     .p-treetable-scrollable-header {
@@ -22,6 +19,7 @@ p {
         border-bottom: solid 1.1px var(--gl-blue-dark);
         
         tr > th {
+            text-align: center;
             background-color: var(--gl-blue-dark);
             color: #fff;
 

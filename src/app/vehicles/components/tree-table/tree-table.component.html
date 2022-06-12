@@ -187,16 +187,16 @@
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
         <!-- <col *ngFor="let col of columns" style="width:100px"> -->
-        <col style="width: 32px;" *ngIf="setting['eye']">
+        <col style="width: 45px;" *ngIf="setting['eye']">
         <col style="width: 100%;" *ngIf="setting['vehicle']">
         <col style="width: 50%;" *ngIf="setting['imei']">
-        <col style="width: 32px;" *ngIf="setting['tag']">
-        <col style="width: 32px;" *ngIf="setting['follow']">
-        <col style="width: 32px;" *ngIf="setting['limit']">
-        <col style="width: 32px;" *ngIf="setting['gps']">
-        <col style="width: 32px;" *ngIf="setting['gsm']">
-        <col style="width: 32px;" *ngIf="setting['trans']">
-        <col style="width: 32px;" *ngIf="setting['config']">
+        <col style="width: 45px;" *ngIf="setting['tag']">
+        <col style="width: 45px;" *ngIf="setting['follow']">
+        <col style="width: 45px;" *ngIf="setting['limit']">
+        <col style="width: 45px;" *ngIf="setting['gps']">
+        <col style="width: 45px;" *ngIf="setting['gsm']">
+        <col style="width: 45px;" *ngIf="setting['trans']">
+        <col style="width: 45px;" *ngIf="setting['config']">
         <!-- <col style="width:7px" *ngIf="setting['eye']">
         <col style="width:18px" *ngIf="setting['vehicle']">
         <col style="width:18px" *ngIf="setting['imei']">
@@ -276,7 +276,7 @@
           </div>
           <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
         </td>
-        <td *ngIf="setting['vehicle']">
+        <td *ngIf="setting['vehicle']" style="min-width: 215px;">
           <div class="row">
             <div class="col-3 icon-float-right p-0">
               <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
