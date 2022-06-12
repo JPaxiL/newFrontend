@@ -502,7 +502,7 @@ export class MapService {
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.bindLabel("My Label");
-    tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
+    tempMarker.bindTooltip('<span>'+data.name+'</span>', { permanent: true, offset: [0, 12] });
     // // this
     this.marker[data.IMEI]=tempMarker;
 

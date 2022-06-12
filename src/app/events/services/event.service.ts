@@ -59,4 +59,14 @@ export class EventService {
     this.events.unshift(event);
   }
 
+  public async getAllEventsForTheFilter() {
+    const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
+    let events = response.data;
+    return events.map( (event:any) => ({
+      id:event.id,
+      option:event.name,
+      tipo:event.name
+    }));
+  }
+
 }

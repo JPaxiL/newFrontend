@@ -9,6 +9,7 @@
           [(ngModel)]="placa"
           class="form-control"
           placeholder="Buscar por placa"
+          (keyup)="searchByPlate()"
         />
       </div>
       <div class="col-sm-6">
@@ -19,12 +20,12 @@
           class="form-control"
           placeholder="Tipo de Evento"
         /> -->
-        <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="false" placeholder="Tipo de Evento"></p-dropdown>
+        <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="false" placeholder="Tipo de Evento" (ngModelChange)="changeTypeEvent()"></p-dropdown>
       </div>
     </div>
   </div>
 
-  <div style="height: calc(100vh - 10.125rem); max-height: calc(100vh - 10rem); overflow-y: auto;">
+  <div class="panel-izq-table-container" style="height: calc(100vh - 10.125rem); max-height: calc(100vh - 10rem);">
     <table id="tbl_events" class="table table-hover">
       <thead class="visible-on-scroll">
         <tr class="bg-light">
@@ -32,23 +33,26 @@
           <td>Nombre</td>
           <td>Placa</td>
           <td>Fecha</td>
-          <td><span class="fas fa-eye"></span></td>
-          <td><span class="fa fa-eye-slash"></span></td>
+          <!-- <td><span class="fas fa-eye"></span></td> -->
+          <!-- <td><span class="fa fa-eye-slash"></span></td> -->
         </tr>
       </thead>
-      <tbody style="height: 300px">
-        <tr *ngFor="let event of events">
-          <td>{{ event.evento }}</td>
-          <td>{{ event.nombre }}</td>
-          <td>{{ event.nombre_objeto }}</td>
-          <td>{{ event.fecha_tracker }}</td>
-          <td width="10%" (click)="showEvent(event)">
-            <a href="" (click)="$event.preventDefault()">Ver</a>
-          </td>
-          <td width="10%"(click)="hideEvent(event)" >
-            <a href="" (click)="$event.preventDefault()">Ocultar</a>
-          </td>
-        </tr>
+      <tbody>
+        <ng-container *ngFor="let event of events">
+          <tr #currRow (click)="switchEventOnMap(event, currRow)">
+            <td>{{ event.evento }}</td>
+            <td>{{ event.nombre }}</td>
+            <td>{{ event.nombre_objeto }}</td>
+            <td>{{ event.fecha_tracker }}</td>
+            <!-- <td width="10%" (click)="showEvent(event)">
+              <a href="" (click)="$event.preventDefault()">Ver</a>
+            </td> -->
+            <!-- <td width="10%"(click)="hideEvent(event)" >
+              <a href="" (click)="$event.preventDefault()">Ocultar</a>
+            </td> -->
+          </tr>
+        </ng-container>
+        
       </tbody>
     </table>
   </div>

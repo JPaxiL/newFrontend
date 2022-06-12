@@ -5,15 +5,22 @@
 :host ::ng-deep {
 
     .marker-cluster-small {
+        position: absolute;
         background-color: transparent;
         box-shadow: inset 0 0 0 2px rgba(110, 204, 57, 0.8);
+        &::after{
+            content: "";
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            top: -4px;
+            left: -4px;
+            display: flex;
+            background-color: none;
+            box-shadow: inset 0 0 0 2px rgba(110, 204, 57, 0.8);
+            border-radius: 50%;
+        }
     }
-
-    /* .marker-cluster-small:before {
-        z-index: -1;
-        background-color: transparent;
-        box-shadow: inset 0 0 0 2px rgba(110, 204, 57, 0.8);
-    } */
 
     .marker-cluster-small div {
 	    background-color: rgba(110, 204, 57, 0.8);
@@ -22,6 +29,18 @@
     .marker-cluster-medium {
         background-color: transparent;
         box-shadow: inset 0 0 0 2px rgba(240, 194, 12, 0.8);
+        &::after{
+            content: "";
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            top: -4px;
+            left: -4px;
+            display: flex;
+            background-color: none;
+            box-shadow: inset 0 0 0 2px rgba(240, 194, 12, 0.8);
+            border-radius: 50%;
+        }
     }
     .marker-cluster-medium div {
         background-color: rgba(240, 194, 12, 0.8);
@@ -30,9 +49,32 @@
     .marker-cluster-large {
         background-color: transparent;
         box-shadow: inset 0 0 0 2px rgba(241, 128, 23, 0.8);
+        &::after{
+            content: "";
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            top: -4px;
+            left: -4px;
+            display: flex;
+            background-color: none;
+            box-shadow: inset 0 0 0 2px rgba(241, 128, 23, 0.8);
+            border-radius: 50%;
+        }
     }
     .marker-cluster-large div {
         background-color: rgba(241, 128, 23, 0.8);
+    }
+
+    .marker-cluster div {
+        width: 31px;
+        height: 31px;
+        margin-left: 4.5px;
+        margin-top: 4.5px;
+    }
+
+    .marker-cluster span {
+        font-weight: bold;
     }
     
         /* IE 6-8 fallback colors */
@@ -56,4 +98,5 @@
     .leaflet-oldie .marker-cluster-large div {
         background-color: rgb(241, 128, 23);
     } */
+
 }

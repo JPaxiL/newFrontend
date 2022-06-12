@@ -15,7 +15,7 @@ viewBox="0 0 7 7"
   <style type="text/css">
    <![CDATA[
     @font-face { font-family:"Wingdings 2";src:url("#FontID0") format(svg)}
-    .fil0 {fill:#00A3E4}
+    .fil0 {fill:#fff}
     .fnt0 {font-weight:normal;font-size:9.2216px;font-family:'Wingdings 2'}
    ]]>
   </style>

@@ -1,65 +1,64 @@
-<div class="loading-gral" *ngIf="loading"></div>
+<div class="loading-gral" *ngIf="loading" style="height: calc(100vh - 150px);"></div>
 <div>
-    <div class="modal-header">
-        <h4>Editar Alerta Plataforma</h4>
+    <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;">
+        Editar Alerta Plataforma
     </div>
-    <div class="modal-body">
+
+    <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
+
+    <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
         <form [formGroup]="alertForm" (submit)="onSubmit($event)">
-            <div class="row mb-3">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="form.group">
-                        <div class="col-12">
-                            <select (change)="chageAlertType()" class="form-select" aria-label="Alerta"  formControlName="tipoAlerta">
-                                <option value=""></option>
-                                <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
-                            </select>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="p-field">
+                    <select (change)="chageAlertType()" class="form-select" aria-label="Alerta"  formControlName="tipoAlerta">
+                        <option value=""></option>
+                        <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Evento activado :</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <div class="form-check">
-                        <input class="form-check-input" formControlName="chkEventoActivado" type="checkbox" />
-                    </div>
-                </div>
-            </div>
+            
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-label">Nombre:</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+            <div class="row">
+                <label class="col-4">Nombre:</label>
+                <div class="col-8">
                     <div class="text">
                         <input class="form-control" placeholder="nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
                     </div>
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px"></div>
+            <div class="row"></div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <!-- <select2 [data]="vehicles" [multiple]="true" [placeholder]="'VEHÍCULOS'" formControlName="vehicles"> </select2> -->
-                    <p-multiSelect
+            <div class="row">
+                <div class="col-12">
+                    <div class="p-field">
+                        <label _ngcontent-tqk-c229="" class="bg-subtitle text-end dropdown-toggle"></label>
+                        <label class="bg-subtitle bg-subtitle-on-top text-center" >Vehículos</label>
+                        <p-multiSelect
                         [options]="vehicles"
                         optionLabel="label"
                         optionValue="value"
                         formControlName="vehicles"
                         defaultLabel="VEHÍCULOS"
+                        [appendTo]="'body'"
                         [maxSelectedLabels]="3"
                         [selectedItemsLabel]="'{0} vehiculos seleccionados'"
-                    ></p-multiSelect>
+                        ></p-multiSelect>
+                    </div>
+                    <!-- <select2 [data]="vehicles" [multiple]="true" [placeholder]="'VEHÍCULOS'" formControlName="vehicles"> </select2> -->
+                    
                 </div>
             </div>
 
+            <div class="row"></div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px"></div>
-
-            <div *ngIf="showGeocercas" class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <!-- <select2 [data]="geocercas" [multiple]="true" [placeholder]="'GEOCERCAS'" formControlName="geocercas"> </select2> -->
-                    <p-multiSelect
+            <div *ngIf="showGeocercas" class="row">
+                <div class="col-12">
+                    <div class="p-field">
+                        <label _ngcontent-tqk-c229="" class="bg-subtitle text-end dropdown-toggle"></label>
+                        <label class="bg-subtitle bg-subtitle-on-top text-center" >Geocercas</label>
+                        <p-multiSelect
                         [options]="geocercas"
                         optionLabel="label"
                         optionValue="value"
@@ -68,12 +67,14 @@
                         [maxSelectedLabels]="3"
                         [selectedItemsLabel]="'{0} geocercas seleccionadas'"
                     ></p-multiSelect>
+                    </div>
+                    <!-- <select2 [data]="geocercas" [multiple]="true" [placeholder]="'GEOCERCAS'" formControlName="geocercas"> </select2> -->                   
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px"></div>
+            <div class="row"></div>
 
-            <!-- <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+            <!-- <div class="row">
                 <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
                     <select2 [data]="geocircles" [multiple]="true" [placeholder]="'GEOCERCAS CIRCULARES'" formControlName="geocercascirculares"> </select2>
                 </div>
@@ -82,12 +83,12 @@
 
 
 
-            <div class="form-group row" style="margin-right: 0px; margin-left: 0px"><br /></div>
+            <!-- <div class="form-group row"><br /></div> -->
 
 
-            <div class="row" *ngIf="showFechaCaducidad">
+            <!-- <div class="row" *ngIf="showFechaCaducidad">
 
-                <div  class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+                <div  class="row">
                     <label class="col-lg-8 col-md-8 col-sm-8 col-xs-8 form-check-label">Fecha de caducidad de Alerta:</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <div class="form-check">
@@ -96,7 +97,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
+                <div class="form-group row">
                     <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-check-label  ms-3">Desde:</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                         <div class="input-group">
@@ -118,7 +119,7 @@
                       </div>
                 </div>
 
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
+                <div class="form-group row">
                     <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-check-label  ms-3">Al:</label>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                         <div class="input-group">
@@ -139,19 +140,38 @@
                         </div>
                       </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px;"></div>
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Alerta del Sistema:</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <div class="form-check">
-                        <input class="form-check-input"  type="checkbox" formControlName="chkSonido" (change)="changeDisabled($event)"/>
+            <!-- <div class="row"></div> -->
+
+            <div class="row d-flex justify-content-center">
+                <div class="col-5">
+                    <div class="row">
+                        <label class="col-9 form-check-label">Evento activado :</label>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="chkEventoActivado" type="checkbox" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="row">
+                        <label class="col-9 form-check-label">Alerta del Sistema:</label>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input"  type="checkbox" formControlName="chkSonido" (change)="changeDisabled($event)"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
+            <div class="row">
+                
+            </div>
+
+            <div class="row">
                 <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
                     <select  class="form-select" (change)="playAudio" formControlName="sonido">
                         <option value="sonidos/alarm8.mp3">Sonido 1</option>
@@ -167,20 +187,20 @@
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px;"></div>
-            <div class="row" *ngIf='showTiempoLimite' style="background-color: #FFF">
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                    <label class="col-lg-7 col-md-7 col-sm-7 col-xs-7 control-label">Tiempo Límite:</label>
+            <div class="row"></div>
+            <div class="row d-flex justify-content-center" *ngIf='showTiempoLimite' style="background-color: #FFF">
+                <div class="form-group row" style="margin: 0;">
+                    <label class="col-12 control-label">Tiempo Límite:</label>
                 </div>
 
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="form-group row" style="margin: 0;">
+                    <div class="col-6">
                         <div class="text">
                             <input class="form-control" placeholder="Segundos ,minutos, horas" formControlName="duracion_parada" min="0" max="1000" type="number" />
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-6 col-xs-offset-0">
+                    <div class="col-6">
                         <select class="form-select" formControlName="duracion_formato_parada" >
                             <option value="S">Segundos</option>
                             <option value="M">Minutos</option>
@@ -191,75 +211,94 @@
             </div>
 
             <!--INFRACCION -->
-            <div class="form-group row" style="margin-right: 0px; margin-left: 0px"><br /></div>
+            <!-- <div class="form-group row"><br /></div> -->
 
             <div *ngIf="showInfraccion" class="row" style="background-color: #FFF">
 
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                    <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label">Infraccion:</label>
+                <div class="form-group col-12">
+                    <label class="control-label">Infracción:</label>
                 </div>
 
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                    <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label align-middle">Fijar Tiempo:</label>
-                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                        <div>
-                            <input (change)="changechkFijarTiempo($event)" formControlName="chkFijarTiempo" type="checkbox" name="" />
+                <div class="form-group col-6">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <label class="col-9 control-label align-middle">Fijar Tiempo:</label>
+                                <div class="col-2">
+                                    <div class="form-check">
+                                        <input (change)="changechkFijarTiempo($event)" formControlName="chkFijarTiempo" type="checkbox" name="" class="form-check-input"/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                    <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                        <select class="form-select" formControlName="tiempo_limite_infraccion" >
-                            <option value="10">10 Seg.</option>
-                            <option value="30">30 Seg.</option>
-                            <option value="60">1 Min.</option>
-                            <option value="120">2 Min.</option>
-                        </select>
-                    </div>
+                        <div>
+                            <select class="col-12 form-select" formControlName="tiempo_limite_infraccion" >
+                                <option value="10">10 Seg.</option>
+                                <option value="30">30 Seg.</option>
+                                <option value="60">1 Min.</option>
+                                <option value="120">2 Min.</option>
+                            </select>
+                        </div>
+                    </div>     
                 </div>
 
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                    <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 control-label align-middle">Fijar Limite de Velocidad:</label>
-                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                        <div>
-                            <input (change)="changechkFijarLimiteVelocidad($event)" formControlName="chkFijarLimiteVelocidad" type="checkbox" name="" />
+                <div class="form-group col-6">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <label class="col-9 control-label align-middle">Fijar Límite de Velocidad</label>
+                                <div class="col-2">
+                                    <div class="form-check">
+                                        <input (change)="changechkFijarLimiteVelocidad($event)" formControlName="chkFijarLimiteVelocidad" type="checkbox" name="" class="form-check-input" 
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                    <div class="col-lg-7 col-lg-offset-0 col-md-7 col-md-offset-0 col-sm-7 col-sm-offset-0 col-xs-7 col-xs-offset-0">
-                        <input class="form-control" placeholder="limite de velocidad" formControlName="velocidad_limite_infraccion" min="0" max="100000" type="number" />
-                    </div>
-                    <div>Km/h</div>
+                        <div class="col-12">
+                            <!-- <p-inputNumber [(ngModel)]="limitSpeed" [showButtons]="true" [min]="0" [max]="300" suffix=" km/h" ></p-inputNumber> -->
+                            <div class="row" style="align-items: center;">
+                                <div class="col-8">
+                                    <input class="form-control" placeholder="limite de velocidad" formControlName="velocidad_limite_infraccion" min="0" max="100000" type="number" />
+                                </div>
+                                <div class="col-4">Km/h</div>
+                            </div>
+                        </div>
+                    </div>  
                 </div>
 
             </div>
             <!--INFRACCION -->
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px;"></div>
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Agregar Correo:</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" />
+            <div class="row"></div>
+            <div class="row row d-flex justify-content-center">
+                <div class="col-5">
+                    <div class="row">
+                        <label class="col-9 form-check-label">Agregar Correo:</label>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" />
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="col-5"></div>               
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px;"></div>
-            <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
+            <div class="row"></div>
+            <div class="form-group row">
 
-                <div class="col-lg-10 col-lg-offset-0 col-md-10 col-md-offset-0 col-sm-10 col-sm-offset-0 col-xs-10 col-xs-offset-0">
+                <div class="col-10">
                     <div class="text">
                         <input  class="form-control" placeholder="example@mail.com" formControlName="email" type="text" />
                     </div>
                 </div>
-                <i class="col-lg-2 col-md-2 col-sm-2 col-xs-2 fa fa-plus-circle fa-2x" (click)="addEmail()" data-placement="bottom" aria-hidden="true"></i>
+                <i class="col-2 fa fa-plus-circle fa-2x" (click)="addEmail()" data-placement="bottom" aria-hidden="true" style="color: var(--gl-blue-dark);"></i>
 
             </div>
 
-            <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+            <div class="form-group row">
+                <div class="col-9">
                     <div class="text">
                         <ul>
                           <li *ngFor="let email of alertForm.value.lista_emails; let i = index"  ng-bind-html-unsafe="opt" >
@@ -273,11 +312,12 @@
             </div>
 
             <div class="modal-footer">
-                <div class="row" style="margin-right: 0px; margin-left: 0px">
-                    <div class="d-grid gap-2 d-md-block">
-                        <button type="button" class="btn btn-light float-left" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-PLATFORMS')">Cancelar</button>
-
-                        <button type="submit"  class="btn btn-success">Guardar</button>
+                <div class="row w-100 justify-content-around">
+                    <div class="col-4">
+                        <button type="button" class="btn btn-success w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-PLATFORMS')">Cancelar</button>
+                    </div>
+                    <div class="col-4">
+                        <button type="submit"  class="btn btn-success w-100">Guardar</button>
                     </div>
                 </div>
             </div>

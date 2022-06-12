@@ -525,7 +525,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
         }).bindTooltip(
             // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-            '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.zone_color+';">'+geo.zone_name+'</b>',
+            // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.zone_color+';">'+geo.zone_name+'</b>',
+            '<b class="" style="border: 0.2rem dashed var(--gl-blue-dark); background-color: '+ this.mapService.hexToRGBA(geo.zone_color) +'; color : '+ this.mapService.getContrastYIQ(geo.zone_color) +';">'+geo.zone_name+'</b>',
             { permanent: true,
               // offset: [-100, 0],
               direction: 'center',

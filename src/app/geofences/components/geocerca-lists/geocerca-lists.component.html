@@ -1,84 +1,83 @@
-<div style="height: calc(100vh - 150px); overflow-y: auto;">
+<div style="height: calc(100vh - 150px);">
 
   <div class="card-body p-fluid" id="rowBusqueda">
-      <div class="row">
-          <div class="col-sm-9">
-              <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">
-
-
-          </div>
-          <div class="col-sm-3">
-              <button type="button" class="btn btn-info" (click)="clickAgregarGeocerca()" title="Crear geocerca"><i class="fa fa-plus"></i></button>
-          </div>
+    <div class="row">
+      <div class="col">
+        <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">
       </div>
+      <div class="col-2">
+        <button type="button" class="btn btn-primary" (click)="clickAgregarGeocerca()" title="Crear geocerca"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
   </div>
 
-
-  <table id="tbl_geos" class="table table-hover">
-    <colgroup>
-      <col width="7%" />
-      <col width="7%" />
-      <col width="46%" />
-      <col width="15%" />
-      <col width="10%" />
-      <col width="5%" />
-
-    </colgroup>
-    <thead>
-        <tr class="bg-light">
-            <td><span class="fa fa-eye fa-lg"></span></td>
-            <td></td>
-            <td>Geocerca</td>
-            <td><span class="fa fa-tag fa-lg"></span></td>
-            <td><span class="fa fa-car fa-lg"></span></td>
-            <td><span class="fa fa-wrench fa-lg"></span></td>
-
-        </tr>
-    </thead>
-    <tbody style="height: 300px;">
-
-        <tr *ngFor="let geo of tblDataGeo;let indice=index" >
-
-            <!-- <td>{{geo.trama.zone_visible}}</td> -->
-            <td width="7%">
-              <button class="btn btn-xs btn-link p-n" (click)="clickShow(geo.trama.id)">
-                <i class="fa fa-lg" [ngClass]="{'far fa-eye': geo.trama.zone_visible === 'true', 'far fa-eye-slash' : geo.trama.zone_visible === 'false'}" style="font-size: 14px;" ></i>
-              </button>
-            </td>
-
-            <!-- <td>{{geo.trama.zone_color}}</td> -->
-            <td class="text-center" width="7%">
-              <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.id)" >
-                <div [ngStyle]="{'background-color': geo.trama.zone_color}" style="width: 15px;height: 15px;" class="geofence-color" ></div>
-              </button>
-            </td>
-
-            <td><span class="d-flex justify-content-start">{{geo.trama.zone_name}}</span></td>
-
-            <!-- <td>{{geo.trama.zone_name_visible}}</td> -->
-
-            <td>
-
-              <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.id)"  [(ngModel)]="geo.trama.zone_name_visible_bol">
-            </td>
-
-            <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td>
-
-
-            <td width="5%" >
-              <div ngbDropdown container="body" class="d-inline-block">
-                <button class="btn btn-xs btn-link" id="dropdownBasic1" ngbDropdownToggle>
-                  <i class="fa fa-wrench fa-lg" style="font-size: 14px;"></i>
+  <div class="panel-izq-table-container" style="height: calc(100vh - 9.875rem); max-height: calc(100vh - 9.875rem);">
+    <table id="tbl_geos" class="table table-hover">
+      <colgroup>
+        <col width="7%" />
+        <col width="7%" />
+        <col width="46%" />
+        <col width="15%" />
+        <col width="10%" />
+        <col width="5%" />
+  
+      </colgroup>
+      <thead class="visible-on-scroll" style="border-style: solid 1.1px var(--gl-blue-dark);">
+          <tr class="bg-light">
+              <td><span class="fa fa-eye fa-lg"></span></td>
+              <td></td>
+              <td>Geocerca</td>
+              <td><span class="fa fa-tag fa-lg"></span></td>
+              <td><span class="fa fa-car fa-lg"></span></td>
+              <td><span class="fa fa-wrench fa-lg"></span></td>
+  
+          </tr>
+      </thead>
+      <tbody style="border-top: inherit;">
+  
+          <tr *ngFor="let geo of tblDataGeo;let indice=index" >
+  
+              <!-- <td>{{geo.trama.zone_visible}}</td> -->
+              <td width="7%">
+                <button class="btn btn-xs btn-link p-n" (click)="clickShow(geo.trama.id)">
+                  <i class="fa fa-lg" [ngClass]="{'far fa-eye': geo.trama.zone_visible === 'true', 'far fa-eye-slash' : geo.trama.zone_visible === 'false'}" style="font-size: 14px;" ></i>
                 </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button ngbDropdownItem><a (click)="clickConfigurarGeocerca(geo.trama.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</a></button>
-                  <button ngbDropdownItem><a (click)="clickEliminarGeocerca($event, geo.trama.id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</a></button>
+              </td>
+  
+              <!-- <td>{{geo.trama.zone_color}}</td> -->
+              <td class="text-center" width="7%">
+                <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.id)" >
+                  <div [ngStyle]="{'background-color': geo.trama.zone_color}" style="width: 15px;height: 15px;" class="geofence-color" ></div>
+                </button>
+              </td>
+  
+              <td><span class="d-flex justify-content-start">{{geo.trama.zone_name}}</span></td>
+  
+              <!-- <td>{{geo.trama.zone_name_visible}}</td> -->
+  
+              <td>
+  
+                <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.id)"  [(ngModel)]="geo.trama.zone_name_visible_bol">
+              </td>
+  
+              <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td>
+  
+  
+              <td width="5%" >
+                <div ngbDropdown container="body" class="d-inline-block">
+                  <button class="btn btn-xs btn-link" id="dropdownBasic1" ngbDropdownToggle>
+                    <i class="fa fa-wrench fa-lg" style="font-size: 14px;"></i>
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button ngbDropdownItem><a (click)="clickConfigurarGeocerca(geo.trama.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</a></button>
+                    <button ngbDropdownItem><a (click)="clickEliminarGeocerca($event, geo.trama.id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</a></button>
+                  </div>
                 </div>
-              </div>
-            </td>
-
-
-        </tr>
-    </tbody>
-  </table>
+              </td>
+  
+  
+          </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

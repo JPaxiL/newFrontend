@@ -209,13 +209,13 @@ export class PlatformAlertsEditComponent implements OnInit {
     }
 
     if (typeof this.alertForm.value.tiempo_limite_infraccion == 'undefined') {
-      this.alertForm.value.tiempo_limite_infraccion = 10;
+      this.alertForm.value.tiempo_limite_infraccion = null;
     }
 
     if (
       typeof this.alertForm.value.velocidad_limite_infraccion == 'undefined'
     ) {
-      this.alertForm.value.velocidad_limite_infraccion = 0;
+      this.alertForm.value.velocidad_limite_infraccion = null;
     }
 
     if (this.alertForm.value.vehiculos.length != 0) {
@@ -324,9 +324,11 @@ export class PlatformAlertsEditComponent implements OnInit {
     if ($event.target.checked) {
       this.alertForm.controls['tiempo_limite_infraccion'].enable();
       this.alertForm.controls['chkFijarLimiteVelocidad'].disable();
+      this.alertForm.value.velocidad_limite_infraccion = null;
     } else {
       this.alertForm.controls['tiempo_limite_infraccion'].disable();
       this.alertForm.controls['chkFijarLimiteVelocidad'].enable();
+      this.alertForm.value.velocidad_limite_infraccion = null;
     }
   }
 
@@ -334,9 +336,11 @@ export class PlatformAlertsEditComponent implements OnInit {
     if ($event.target.checked) {
       this.alertForm.controls['velocidad_limite_infraccion'].enable();
       this.alertForm.controls['chkFijarTiempo'].disable();
+      this.alertForm.value.tiempo_limite_infraccion = null;
     } else {
       this.alertForm.controls['velocidad_limite_infraccion'].disable();
       this.alertForm.controls['chkFijarTiempo'].enable();
+      this.alertForm.value.tiempo_limite_infraccion = null;
     }
   }
 }

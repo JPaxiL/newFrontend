@@ -7,122 +7,192 @@
         <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
     </ng-template>
 </p-confirmDialog>
-<p-dialog [(visible)]="display" (onShow)="onShow()" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+<p-dialog [(visible)]="display" (onShow)="onShow()" [breakpoints]="{'1200px': '65vw', '960px': '75vw', '640px': '100vw'}" [style]="{width: '55vw'}">
     <ng-template class="p-dialog-title" pTemplate="header">
-      <strong>CONFIGURACIÓN DE VEHÍCULOS</strong>
+      <strong>Configuración de Unidad</strong>
     </ng-template>
 
-    <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
-      <div class="" *ngIf="loading">
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      </div>
-      <div class="" [ngStyle]="{'display':formDisplay}">
-        <div class="row">
-          <div class="col-12 p-field p-col-12 p-md-6">
-            <label for="firstname">Nombre / Codigo Interno :</label>
-            <input #name id="firstname" type="text" value="{{config.name}}"  pInputText class="p-inputtext-sm" placeholder="">
-          </div>
+    <div class="dialog-body-container">
+
+      <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+        <div class="" *ngIf="loading">
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         </div>
-        <div class="row">
-          <div class="col-6 p-field p-col-12 p-md-6">
-            <label for="lastname">IMEI :</label>
-            <input id="lastname" type="text" value="{{config.IMEI}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+        <div class="dialog-form-container" [ngStyle]="{'display':formDisplay}">
+          <div class="row">
+            <div class="col-sm-12 col-md-6 p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="firstname">Nombre / Cod. Interno:</label>
+                </div>
+                <div class="col">
+                  <input #name id="firstname" type="text" value="{{config.name}}"  pInputText class="p-inputtext-sm" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6 p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="lastname">IMEI:</label>
+                </div>
+                <div class="col-9">
+                  <input id="lastname" type="text" value="{{config.IMEI}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            
+  
+            <div class="col-sm-12 col-md-6 p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="sim">Número SIM:</label>
+                </div>
+                <div class="col-9">
+                  <input #sim id="sim" type="text" value="{{config.sim_number}}" pInputText class="p-inputtext-sm" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6 p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="placa">Placa:</label>
+                </div>
+                <div class="col-9">
+                  <input #placa type="text" value="{{config.plate_number}}" pInputText class="p-inputtext-sm" placeholder="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+           
+            <div class="col-sm-12 col-md-6 p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="tolva">Cisterna / Tolva:</label>
+                </div>
+                <div class="col-9">
+                  <input #tolva type="text" value="{{config.tolva}}" pInputText class="p-inputtext-sm" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6 p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="conductor">Conductor:</label>
+                </div>
+                <div class="col-9">
+                  <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="col-6 p-field p-col-12 p-md-6">
-            <label for="lastname">Número Sim :</label>
-            <input #sim id="lastname" type="text" value="{{config.sim_number}}" pInputText class="p-inputtext-sm" placeholder="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 p-field p-col-6 p-md-6">
-            <label for="lastname">Placa :</label>
-            <input #placa type="text" value="{{config.plate_number}}" pInputText class="p-inputtext-sm" placeholder="">
-          </div>
-          <div class="col-6 p-field p-col-6 p-md-6">
-            <label for="lastname">Cisterna / Tolva :</label>
-            <input #tolva type="text" value="{{config.tolva}}" pInputText class="p-inputtext-sm" placeholder="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 p-field p-col-6 p-md-6">
-            <label for="lastname">Conductor :</label>
-            <input id="lastname" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-          </div>
-          <div class="col-6 p-field p-col-6 p-md-6">
-            <label for="lastname">Empresa :</label>
-            <input #empresa id="lastname" type="text" value="{{config.empresa}}" pInputText class="p-inputtext-sm" placeholder="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 p-field p-col-12 p-md-3">
-            <label for="state">Icono :</label>
-            <p-dropdown inputId="state" [options]="icons" [(ngModel)]="selectedIcon" placeholder="Select" optionLabel="name" filterBy="name">
-              <ng-template pTemplate="selectedItem">
-                <div class="icon-item icon-item-value"  *ngIf="selectedIcon">
-                  <label for="">
-                    {{selectedIcon.code}} .-
-                  </label>
-                  <img src="assets/images/objects/nuevo/{{selectedIcon.name}}" [class]="'flag flag-' + selectedIcon.code.toLowerCase()" />
+          <div style="background-color: var(--gl-gray); height: 0.125rem; width: 100%; margin: 1rem 0px;"></div>
+
+          <div class="row d-flex justify-content-center">
+            <div class="col-sm-12 col-md-10 align-self-center p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="empresa">Empresa:</label>
                 </div>
-              </ng-template>
-              <ng-template let-icon pTemplate="item">
-                <div class="icon-item">
-                  <label for="">
-                    {{icon.code}}
-                  </label> .-
-                  <img src="assets/images/objects/nuevo/{{icon.name}}"  [class]="'flag flag-' + icon.code.toLowerCase()" />
+                <div class="col-8">
+                  <input #empresa id="empresa" type="text" value="{{config.empresa}}" pInputText class="p-inputtext-sm" placeholder="">
                 </div>
-              </ng-template>
-            </p-dropdown>
+              </div>
+            </div>
           </div>
-          <div class="col-6 p-field p-col-12 p-md-3">
-            <label for="state">Grupo :</label>
-            <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-            <!-- <p-dropdown inputId="state" [options]="groups"  [(ngModel)]="selectedGroup" placeholder="Select" optionLabel="name">
-              <ng-template pTemplate="selectedItem">
-                <div class="group-item group-item-value"  *ngIf="selectedGroup">
-                  <div>{{selectedGroup.name}}</div>
+          <div class="row d-flex justify-content-center">
+            <div class="col-sm-12 col-md-10 align-self-center p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="state">Icono:</label>
                 </div>
-              </ng-template>
-              <ng-template let-group pTemplate="item">
-                <div class="group-item">
-                  <div>{{group.name}}</div>
+                <div class="col-8">
+                  <p-dropdown inputId="state" [options]="icons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name">
+                    <ng-template pTemplate="selectedItem">
+                      <div class="icon-item icon-item-value"  *ngIf="selectedIcon">
+                        <label for="">
+                          {{selectedIcon.code}} .-
+                        </label>
+                        <img src="assets/images/objects/nuevo/{{selectedIcon.name}}" [class]="'flag flag-' + selectedIcon.code.toLowerCase()" />
+                      </div>
+                    </ng-template>
+                    <ng-template let-icon pTemplate="item">
+                      <div class="icon-item">
+                        <label for="">
+                          {{icon.code}}
+                        </label> .-
+                        <img src="assets/images/objects/nuevo/{{icon.name}}"  [class]="'flag flag-' + icon.code.toLowerCase()" />
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
                 </div>
-              </ng-template>
-            </p-dropdown> -->
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-6 p-field p-col-12 p-md-3">
-            <label for="state">Tipo de Unidad :</label>
-            <p-dropdown inputId="state" [options]="types"  [(ngModel)]="selectedType"  placeholder="Select" optionLabel="name">
-              <ng-template pTemplate="selectedItem">
-                <div class="type-item type-item-value"  *ngIf="selectedType">
-                  <div>{{selectedType.name}}</div>
+          <div class="row d-flex justify-content-center">
+            <div class="col-sm-12 col-md-10 align-self-center p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label>Grupo:</label>
                 </div>
-              </ng-template>
-              <ng-template let-type pTemplate="item">
-                <div class="type-item">
-                  <div>{{type.name}}</div>
+                <div class="col-8">
+                  <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                 </div>
-              </ng-template>
-            </p-dropdown>
+              </div>
+            </div>
           </div>
-          <div class="col-6 p-field p-col-12 p-md-6">
-            <label for="firstname">Capacidad del Tanque :</label>
-            <input id="firstname" type="text" value="{{config.capacidad_tanque_text}}"  pInputText class="p-inputtext-sm" placeholder="" disabled>
+          <div class="row d-flex justify-content-center">
+            <div class="col-sm-12 col-md-10 align-self-center p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label for="tipo-unidad">Tipo de Unidad :</label>
+                </div>
+                <div class="col-8">
+                  <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'">
+                    <ng-template pTemplate="selectedItem">
+                      <div class="type-item type-item-value"  *ngIf="selectedType">
+                        <div>{{selectedType.name}}</div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-type pTemplate="item">
+                      <div class="type-item">
+                        <div>{{type.name}}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row d-flex justify-content-center">
+            <div class="col-sm-12 col-md-10 align-self-center p-field">
+              <div class="row">
+                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+                  <label>Capacidad del Tanque:</label>
+                </div>
+                <div class="col-8">
+                  <input id="cap-tanque" type="text" value="{{config.capacidad_tanque_text}}"  pInputText class="p-inputtext-sm" placeholder="" disabled>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-  </div>
+    </div>
 
 
     <p-footer>
-      <div class="" *ngIf="loading==false">
-        <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm">Cancelar</button>
-        <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm">Guardar</button>
+      <div class="row d-flex justify-content-center" *ngIf="loading==false">
+        <div class="col-4">
+          <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm w-100">Cancelar</button>
+        </div>
+        <div class="col-4">
+          <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm w-100">Guardar</button>
+        </div>
       </div>
       <div class="" *ngIf="loading">
 

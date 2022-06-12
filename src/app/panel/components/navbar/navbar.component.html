@@ -232,8 +232,8 @@
             user
           </span></a>
       </div> -->
-      <div class="p-2 bd-highlight" style="background-color: var(--gl-dark-gray); padding: 0.65rem 0.65rem 0.65rem 1rem !important">
-          <a (click)="logOutModalIsOpen = true;" class="link-secondary" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom" style="cursor: pointer;">
+      <div class="p-2 bd-highlight" style="background-color: var(--gl-dark-gray); padding: 0.65rem 0.65rem 0.65rem 1rem !important; cursor: pointer;" (click)="logOutModalIsOpen = true;" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom">
+          <a (click)="logOutModalIsOpen = true;" class="link-secondary">
               <i class="fa fas fa-sign-out" style="color: #fff;"></i>
           </a>
       </div>
