@@ -77,7 +77,7 @@ export class TreeTableComponent implements OnInit {
   ) {
     // this.vehicleService.listTable=1;
     configDropdown.placement = 'right-top';
-    configDropdown.autoClose = false;
+    configDropdown.autoClose = 'outside';
     this.vehicleService.dataTreeCompleted.subscribe(vehicles=>{
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;

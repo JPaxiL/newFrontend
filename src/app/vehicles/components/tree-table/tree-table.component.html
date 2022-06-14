@@ -186,7 +186,6 @@
     </ng-template> -->
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
-        <!-- <col *ngFor="let col of columns" style="width:100px"> -->
         <col style="width: 45px;" *ngIf="setting['eye']">
         <col style="width: 100%;" *ngIf="setting['vehicle']">
         <col style="width: 50%;" *ngIf="setting['imei']">
@@ -197,16 +196,6 @@
         <col style="width: 45px;" *ngIf="setting['gsm']">
         <col style="width: 45px;" *ngIf="setting['trans']">
         <col style="width: 45px;" *ngIf="setting['config']">
-        <!-- <col style="width:7px" *ngIf="setting['eye']">
-        <col style="width:18px" *ngIf="setting['vehicle']">
-        <col style="width:18px" *ngIf="setting['imei']">
-        <col style="width:5px" *ngIf="setting['tag']">
-        <col style="width:5px" *ngIf="setting['follow']">
-        <col style="width:5px" *ngIf="setting['limit']">
-        <col style="width:5px" *ngIf="setting['gps']">
-        <col style="width:5px" *ngIf="setting['gsm']">
-        <col style="width:5px" *ngIf="setting['trans']">
-        <col style="width:5px" *ngIf="setting['config']"> -->
       </colgroup>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
@@ -230,37 +219,42 @@
       </th> -->
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-      <!-- <tr>
-        <td *ngFor="let col of columns; let i = index" [attr.colspan]="columns.length">
-          <div class="">
-            <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-            {{rowData[col.field]}}->{{columns.length}}
-          </div>
-        </td>
-      </tr> -->
+
       <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'grupo', 'row-header-convoy': rowData['type'] === 'convoy'}">
         <td [attr.colspan]="column">
           <div class="row">
             <div class="col-9">
               <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
               {{rowData['type'] === 'grupo' && rowData['name']!='Unidades Sin Grupo'? 'Grupo: ': rowData['type'] === 'convoy' && rowData['name']!='Unidades Sin Convoy'? 'Convoy: ': ''}}{{rowData["name"]}}
-
             </div>
-            <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-1">
-              <span (click)="showDelete(rowData)" class="btn-label" title="Descomponer {{rowData['type']}}" data-bs-toggle="tooltip" data-bs-placement="top">
-                <i class="fa fa-times" style="color:red"></i>
-              </span>
 
+            <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
+              <div class="d-flex justify-content-end">
+                <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true">
+                  <span ngbDropdownToggle class="btn-label burger-options" title="Opciones" data-bs-toggle="tooltip" data-bs-placement="top">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="stroke-width:1.5;" viewBox="0 0 16 16" class="dropdown-toggle bi bi-list" aria-expanded="false"><path _ngcontent-atd-c211="" fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
+                  </span>
+                  <div ngbDropdownMenu>
+                    <div class="container">
+                      <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="p-0" (click)="showDelete(rowData)" ngbDropdownItem>
+                        <span class="btn-label">
+                          <i class="fa fa-times" style="color:red; width: 18px;"></i>
+                          Descomponer {{rowData['type']}}
+                        </span>
+                      </div>
+                      <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="p-0" (click)="showEditGroup(rowData)" ngbDropdownItem>
+                        <span class="btn-label">
+                          <i class="fa fa-edit" style="color:#1F67A6; width: 18px;"></i>
+                          Editar {{rowData['type']}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="width: 48px;"></div>
+              </div>
             </div>
-            <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-1">
-              <span (click)="showEditGroup(rowData)" class="btn-label" title="Editar {{rowData['type']}}" data-bs-toggle="tooltip" data-bs-placement="top">
-                <i class="fa fa-edit" style="color:#1F67A6"></i>
-              </span>
 
-            </div>
-            <div class="col-1">
-
-            </div>
           </div>
         </td>
       </tr>

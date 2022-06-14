@@ -9,6 +9,21 @@ p {
     padding: 0rem 0rem;
 }
 
+.dropdown-menu.show {
+    .btn-label {
+        text-align: center;
+        cursor: pointer;
+    }
+
+    input + label {
+        padding-left: 4px;
+    }
+}
+
+.dropdown-item:active > span.btn-label > i {
+    color: var(--gl-gray-subtitle) !important;
+}
+
 :host ::ng-deep {
 
     .p-treetable-scrollable-header {
@@ -68,9 +83,19 @@ p {
         > td > div.row > div.col-9:first-child > p-treetabletoggler > button.p-treetable-toggler.p-link.p-ripple {
             color: #fff;
         }
+
+        .burger-options > svg {
+            fill: #fff;
+            stroke: #fff;
+        }
     }
     tr.row-header-convoy {
         background-color: var(--gl-gray-subtitle) !important;
+
+        .burger-options > svg {
+            fill: #495057;
+            stroke: #495057;
+        }
     }
 
     .icon-float-right > img {
@@ -80,4 +105,12 @@ p {
     /* i.pi{
         color: #fff;
     } */
+
+    
+    .dropdown-toggle {
+        cursor: pointer;
+    }
+    .dropdown-toggle::after {
+        display:none;
+    }
 }
