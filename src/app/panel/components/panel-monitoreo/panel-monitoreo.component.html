@@ -3,7 +3,12 @@
   <div class="card w-100">
     <div class="card-header header-panel-monitoreo">
     <!-- <div class="card-header header-panel-monitoreo" (click)="clickHidePanel()" > -->
-      {{panelService.nombreCabecera}}
+      <div>
+        <div class="circled-fa"  (click)="clickHidePanel()">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </div>
+        {{panelService.nombreCabecera}}
+      </div>
       <!-- <i class="fa fas fa-caret-left"></i> -->
       <div ngbDropdown class="bi" *ngIf="panelService.nombreComponente.includes('ALERTS')"  role="button" container="body" placement="right-top" onclick="this.blur();">
         <svg ngbDropdownToggle xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">

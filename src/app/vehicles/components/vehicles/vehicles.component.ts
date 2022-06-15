@@ -52,8 +52,8 @@ export class VehiclesComponent implements OnInit {
     tag: false,
     follow: false,
     limit: false,
-    gps: false,
-    gsm: false,
+    gps: true,
+    gsm: true,
     transmission: false,
     config: false,
     sort: 'asc'
@@ -61,17 +61,17 @@ export class VehiclesComponent implements OnInit {
 
 
    columnDefs: ColDef[] = [
-       { headerName: '', colId:"eye", field: 'eye', cellRendererFramework: EyeComponent, resizable: true, width: 35, minWidth: 30, maxWidth: 50, headerComponentFramework: EyeHeaderComponent},
-       { headerName: 'IMEI',  colId: "imei", field: 'IMEI', sortable: true, filter: true, resizable: true, width: 130, minWidth: 80, maxWidth: 140, cellStyle: { 'font-size': '10px'}, hide: true},
+       { headerName: '', colId:"eye", field: 'eye', cellRendererFramework: EyeComponent, resizable: true, width: 50, minWidth: 50, maxWidth: 50, headerComponentFramework: EyeHeaderComponent},
+       { headerName: 'IMEI',  colId: "imei", field: 'IMEI', sortable: true, filter: true, resizable: true, width: 130, minWidth: 100, maxWidth: 140, cellStyle: { 'font-size': '10px', 'text-align': 'left'}, hide: true},
        { headerName: 'VehículoHide', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
-       { headerName: 'Vehículo', colId: "vehicle" , field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent, headerComponentFramework: VehicleHeaderComponent },
-       { headerName: 'Monstrar Nombre', colId:"tag", field: 'activo', sortable: false, filter: true, resizable: true, width: 35, minWidth: 30, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },
-       { headerName: 'Seguir', colId:"follow", field: 'follow', sortable: true, filter: true, resizable: true, width: 35, minWidth: 30, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
-       { headerName: 'Limite de velocidad', colId:"limit", sort: 'desc', field: 'speed', sortable: true, filter: true, resizable: true, width: 35, minWidth: 30, maxWidth: 90, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
-       { headerName: 'GPS', colId:"gps", field: 'activo', sortable: true, filter: false, resizable: true, width: 35, minWidth: 30, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GpsComponent, headerComponentFramework: GpsHeaderComponent },
-       { headerName: 'GSM', colId:"gsm", field: 'activo', sortable: true, filter: false, resizable: true, width: 35, minWidth: 30, maxWidth: 90, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GsmComponent, headerComponentFramework: GsmHeaderComponent },
-       { headerName: 'Estado de transmision', colId:"transmission", field: 'point_color', sortable: true, filter: true, resizable: true, width: 35, minWidth: 30, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TransmissionComponent, headerComponentFramework: TransmissionHeaderComponent },
-       { headerName: 'Configurar', colId:"config", field: 'activo', sortable: true, filter: true, resizable: true, width: 35, minWidth: 30, maxWidth: 90, cellStyle: { 'font-size': '10px'}, cellRendererFramework: SettingComponent, headerComponentFramework: SettingHeaderComponent }
+       { headerName: 'Vehículo', colId: "vehicle" , field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 140, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent, headerComponentFramework: VehicleHeaderComponent },
+       { headerName: 'Monstrar Nombre', colId:"tag", field: 'activo', sortable: false, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },
+       { headerName: 'Seguir', colId:"follow", field: 'follow', sortable: true, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
+       { headerName: 'Limite de velocidad', colId:"limit", sort: 'desc', field: 'speed', sortable: true, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
+       { headerName: 'GPS', colId:"gps", field: 'activo', sortable: true, filter: false, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GpsComponent, headerComponentFramework: GpsHeaderComponent, hide: true },
+       { headerName: 'GSM', colId:"gsm", field: 'activo', sortable: true, filter: false, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GsmComponent, headerComponentFramework: GsmHeaderComponent, hide: true },
+       { headerName: 'Estado de transmision', colId:"transmission", field: 'point_color', sortable: true, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TransmissionComponent, headerComponentFramework: TransmissionHeaderComponent },
+       { headerName: 'Configurar', colId:"config", field: 'activo', sortable: true, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, cellRendererFramework: SettingComponent, headerComponentFramework: SettingHeaderComponent }
     ];
 
    // public rowData: any = RefData.data;
@@ -86,7 +86,7 @@ export class VehiclesComponent implements OnInit {
   ) {
 
     configDropdown.placement = 'right-top';
-    configDropdown.autoClose = false;
+    configDropdown.autoClose = 'outside';
 
     this.vehicleConfigService.displayOn.subscribe(e=>{
       // //console.log("desde vehicles..");
@@ -133,8 +133,20 @@ export class VehiclesComponent implements OnInit {
   }
   ngOnInit(): void {
     //console.log("ngOnInit table ag GRID status table = ",this.statusTable);
-
+    var observerTarget = document.querySelector('#dragbar')!;
+    var mutationObserver = new MutationObserver( mutationList => {
+        mutationList.forEach( mutation => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            if(!document.querySelector('#dragbar')?.classList.contains('dragging')){
+              this.api.sizeColumnsToFit();
+            }
+          }
+        });
+      });
+    var config = { attributes: true };
+    mutationObserver.observe(observerTarget, config);
   }
+
   ngOnDestroy(): void {
     //console.log("destroy component table...");
     this.statusTable=false;
@@ -218,6 +230,6 @@ export class VehiclesComponent implements OnInit {
         }
       ],
     });
-
+    this.api.sizeColumnsToFit();
   }
 }

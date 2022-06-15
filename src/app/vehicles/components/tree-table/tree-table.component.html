@@ -121,45 +121,65 @@
               Personalizar Panel
             </label>
             <div class="dropdown-divider"></div>
-            <div class="">
-              <input (click)="onClickSetting('eye')" style="padding: 5px" type="checkbox" name="" value="" checked>
-              <label for="">Ver</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('eye')" style="padding: 5px" type="checkbox" checked>
+                Ver
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('imei')" style="padding: 5px" type="checkbox" name="" value="">
-              <label for="">IMEI</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('imei')" style="padding: 5px" type="checkbox">
+                IMEI
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('vehicle')" type="checkbox" name="" value="" checked>
-              <label for="">Vehículos</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('vehicle')" type="checkbox" checked>
+                Vehículos
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('tag')" type="checkbox" name="" value="" checked>
-              <label for="">Mostrar nombre</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('tag')" type="checkbox" checked>
+                Mostrar nombre
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('follow')" type="checkbox" name="" value="" checked>
-              <label for="">Seguir Vehículo</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('follow')" type="checkbox" checked>
+                Seguir Vehículo
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('limit')" type="checkbox" name="" value="" checked>
-              <label for="">Limite de velocidad</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('limit')" type="checkbox" checked>
+                Limite de velocidad
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('gps')" type="checkbox" name="" value="" >
-              <label for="">GPS</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('gps')" type="checkbox" >
+                GPS
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('gsm')" type="checkbox" name="" value="" >
-              <label for="">GSM</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('gsm')" type="checkbox" >
+                GSM
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('trans')" type="checkbox" name="" value="" checked>
-              <label for="">Transmisión</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('trans')" type="checkbox" checked>
+                Transmisión
+              </label>
             </div>
-            <div class="">
-              <input (click)="onClickSetting('config')" type="checkbox" name="" value="" checked>
-              <label for="">Configurar</label>
+            <div>
+              <label>
+                <input (click)="onClickSetting('config')" type="checkbox" checked>
+                Configurar
+              </label>
             </div>
             <!-- <div class="">
               <input type="checkbox" name="" value="">
@@ -177,7 +197,7 @@
   </div>
 </div>
 <div class="">
-  <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="calc(100vh - 12.125rem)" styleClass="p-treetable-sm" sortField="name" [sortOrder]="sortOrder">
+  <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="calc(100vh - 12.125rem)" styleClass="p-treetable-sm" sortField="name" [sortOrder]="sortOrder" [virtualScroll]="true" [virtualRowHeight]="30">
     <!-- <ng-template pTemplate="caption">
       <div style="text-align: right">
         <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -186,27 +206,16 @@
     </ng-template> -->
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
-        <!-- <col *ngFor="let col of columns" style="width:100px"> -->
-        <col style="width: 32px;" *ngIf="setting['eye']">
+        <col style="width: 45px;" *ngIf="setting['eye']">
         <col style="width: 100%;" *ngIf="setting['vehicle']">
         <col style="width: 50%;" *ngIf="setting['imei']">
-        <col style="width: 32px;" *ngIf="setting['tag']">
-        <col style="width: 32px;" *ngIf="setting['follow']">
-        <col style="width: 32px;" *ngIf="setting['limit']">
-        <col style="width: 32px;" *ngIf="setting['gps']">
-        <col style="width: 32px;" *ngIf="setting['gsm']">
-        <col style="width: 32px;" *ngIf="setting['trans']">
-        <col style="width: 32px;" *ngIf="setting['config']">
-        <!-- <col style="width:7px" *ngIf="setting['eye']">
-        <col style="width:18px" *ngIf="setting['vehicle']">
-        <col style="width:18px" *ngIf="setting['imei']">
-        <col style="width:5px" *ngIf="setting['tag']">
-        <col style="width:5px" *ngIf="setting['follow']">
-        <col style="width:5px" *ngIf="setting['limit']">
-        <col style="width:5px" *ngIf="setting['gps']">
-        <col style="width:5px" *ngIf="setting['gsm']">
-        <col style="width:5px" *ngIf="setting['trans']">
-        <col style="width:5px" *ngIf="setting['config']"> -->
+        <col style="width: 45px;" *ngIf="setting['tag']">
+        <col style="width: 45px;" *ngIf="setting['follow']">
+        <col style="width: 45px;" *ngIf="setting['limit']">
+        <col style="width: 45px;" *ngIf="setting['gps']">
+        <col style="width: 45px;" *ngIf="setting['gsm']">
+        <col style="width: 45px;" *ngIf="setting['trans']">
+        <col style="width: 45px;" *ngIf="setting['config']">
       </colgroup>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
@@ -214,7 +223,7 @@
       <tr>
         <th *ngIf="setting['eye']"><app-eye-header></app-eye-header></th>
         <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th>
-        <th *ngIf="setting['imei']" style="text-align: center;">IMEI</th>
+        <th *ngIf="setting['imei']" style="text-align: center; white-space: nowrap;">IMEI</th>
         <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
         <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
         <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
@@ -230,37 +239,40 @@
       </th> -->
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-      <!-- <tr>
-        <td *ngFor="let col of columns; let i = index" [attr.colspan]="columns.length">
-          <div class="">
-            <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-            {{rowData[col.field]}}->{{columns.length}}
-          </div>
-        </td>
-      </tr> -->
+
       <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'grupo', 'row-header-convoy': rowData['type'] === 'convoy'}">
         <td [attr.colspan]="column">
           <div class="row">
             <div class="col-9">
               <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
               {{rowData['type'] === 'grupo' && rowData['name']!='Unidades Sin Grupo'? 'Grupo: ': rowData['type'] === 'convoy' && rowData['name']!='Unidades Sin Convoy'? 'Convoy: ': ''}}{{rowData["name"]}}
-
             </div>
-            <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-1">
-              <span (click)="showDelete(rowData)" class="btn-label" title="Descomponer {{rowData['type']}}" data-bs-toggle="tooltip" data-bs-placement="top">
-                <i class="fa fa-times" style="color:red"></i>
-              </span>
 
+            <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
+              <div class="d-flex justify-content-end">
+                <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true">
+                  <span ngbDropdownToggle class="btn-label burger-options" title="Opciones" data-bs-toggle="tooltip" data-bs-placement="top">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="stroke-width:1.5;" viewBox="0 0 16 16" class="dropdown-toggle bi bi-list" aria-expanded="false"><path _ngcontent-atd-c211="" fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
+                  </span>
+                  <ul ngbDropdownMenu>
+                      <li *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" (click)="showDelete(rowData)" ngbDropdownItem>
+                        <span class="btn-label">
+                          <i class="fa fa-times" style="color:red; width: 18px;"></i>
+                          Descomponer {{rowData['type']}}
+                        </span>
+                      </li>
+                      <li *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" (click)="showEditGroup(rowData)" ngbDropdownItem>
+                        <span class="btn-label">
+                          <i class="fa fa-edit" style="color:#1F67A6; width: 18px;"></i>
+                          Editar {{rowData['type']}}
+                        </span>
+                      </li>
+                    </ul>
+                </div>
+                <div style="width: 48px;"></div>
+              </div>
             </div>
-            <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-1">
-              <span (click)="showEditGroup(rowData)" class="btn-label" title="Editar {{rowData['type']}}" data-bs-toggle="tooltip" data-bs-placement="top">
-                <i class="fa fa-edit" style="color:#1F67A6"></i>
-              </span>
 
-            </div>
-            <div class="col-1">
-
-            </div>
           </div>
         </td>
       </tr>
@@ -276,7 +288,7 @@
           </div>
           <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
         </td>
-        <td *ngIf="setting['vehicle']">
+        <td *ngIf="setting['vehicle']" style="min-width: 215px;">
           <div class="row">
             <div class="col-3 icon-float-right p-0">
               <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
