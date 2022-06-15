@@ -4928,4 +4928,208 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
 
+
+  exportExcelExcesosVelocidadFormatoExtendido(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var allRows: AllRows[] = [
+        {}, {
+          cells: [
+            { value: "REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              // { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 6 },
+            ]
+          },
+          {}
+        ];
+
+        if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Límite de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Exceso de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+
+          data[1].forEach((item: { fecha_inicio: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; nombre_zona: any; v0: any; velocidad: any;}, index: number) => {
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+              cells: [
+
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha_inicio), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChs(item.fecha_inicio), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.v0+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.velocidad+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        } else {
+
+          rows.push({
+            cells: [
+              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Límite de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Exceso de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+
+            ]
+          });
+
+
+          data[1].forEach((item: { fecha_inicio: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; nombre_zona: any; v0: any; velocidad: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            rows.push({
+
+              cells: [
+                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha_inicio), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+                { value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.v0+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.velocidad+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+
+              ]
+            });
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: 6
+        },
+      columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+      ],
+      title: "Resultado",//data[0][1],
+      rows: rows
+      });
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(1, 1);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: 2
+        },
+        columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+        ],
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "exportExcelExcesosVelocidadFormatoExtendido.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+
 }

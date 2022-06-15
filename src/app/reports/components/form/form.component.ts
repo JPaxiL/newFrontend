@@ -244,7 +244,9 @@ export class FormComponent implements OnInit {
         {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA', url: '/api/reports/desvio_carril_izquierda'},
         {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA', url: '/api/reports/desvio_carril_derecha'},
         {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'},
-        {id : 19, value : 'REPORTE GERENCIAL (Cuenta cruzdelsur)', url: '/api/reports/gerencial_grafico_distraccion_fatiga'}
+        {id : 19, value : 'REPORTE GERENCIAL (Cuenta cruzdelsur)', url: '/api/reports/gerencial_grafico_distraccion_fatiga'},
+        {id : 20, value : 'REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)', url: '/api/reports/exceso_velocidad_zona_formato_extendido'}
+
       ];
 
 
@@ -591,6 +593,7 @@ export class FormComponent implements OnInit {
       case 17:
       case 18:
       case 19:
+      case 20:
           this.showLimitTime = true;
 				break;
       default: break;
@@ -683,6 +686,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 18 && is_vehicle_selected)
         ||
         (this.selectedReport == 19 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 20 && is_vehicle_selected)
       );
   }
 }
