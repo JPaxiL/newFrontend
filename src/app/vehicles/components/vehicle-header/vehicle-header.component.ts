@@ -32,8 +32,8 @@ export class VehicleHeaderComponent implements IHeaderAngularComp {
     if(this.element1){
       this.renderer.removeClass(this.element1, 'show');
     }
-
   }
+  
   onGroup(){
     this.vehicleService.listTable=1;
     this.vehicleService.clickListTable.emit(1);
@@ -47,6 +47,7 @@ export class VehicleHeaderComponent implements IHeaderAngularComp {
         return true;
   }
   onVehicleSort(status: number){
+    $('body > [role="tooltip"]').remove();
     if(this.vehicleService.listTable==1){
       //console.log("status==",status);
       this.sortStatus=status;

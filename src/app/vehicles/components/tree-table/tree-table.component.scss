@@ -9,22 +9,29 @@ p {
     padding: 0rem 0rem;
 }
 
-.dropdown-item {
-    cursor: pointer;
-}
-
 .dropdown-menu.show {
     .btn-label {
         text-align: center;
     }
 
-    input + label {
+    input + label, i + span {
         padding-left: 4px;
     }
 }
 
 .dropdown-item:active > span.btn-label > i {
     color: var(--gl-gray-subtitle) !important;
+}
+
+.dropdown-item {
+    cursor: pointer;
+
+    &.active-view {
+        color: #000;
+        cursor: default;
+        text-decoration: none;
+        background-color: var(--gl-gray);
+    }
 }
 
 :host ::ng-deep {

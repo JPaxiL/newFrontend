@@ -439,6 +439,16 @@ export class TreeTableComponent implements OnInit {
     this.sortOrder=data;
   }
 
+  onTableGroup(){
+    this.vehicleService.listTable=1;
+    this.vehicleService.clickListTable.emit(1);
+  }
+
+  onTableGeneral(){
+    this.vehicleService.listTable=0;
+    this.vehicleService.clickListTable.emit(0);
+  }
+
   public onQuickFilterChanged(data: any) {
     // //console.log("tt",this.tt);
     this.tt.filterGlobal(data.target.value, 'contains')

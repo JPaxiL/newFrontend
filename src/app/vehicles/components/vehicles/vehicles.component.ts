@@ -232,4 +232,15 @@ export class VehiclesComponent implements OnInit {
     });
     this.api.sizeColumnsToFit();
   }
+
+  // Cambio de vista
+  onTableGroup(){
+    this.vehicleService.listTable=1;
+    this.vehicleService.clickListTable.emit(1);
+  }
+
+  onTableGeneral(){
+    this.vehicleService.listTable=0;
+    this.vehicleService.clickListTable.emit(0);
+  }
 }
