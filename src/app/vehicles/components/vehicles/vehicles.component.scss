@@ -1,3 +1,13 @@
+.dropdown-menu.show {
+    .btn-label {
+        text-align: center;
+    }
+
+    input + label {
+        padding-left: 4px;
+    }
+}
+
 :host ::ng-deep{
     .ag-header-viewport {
         background-color: var(--gl-blue-dark);

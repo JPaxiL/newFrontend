@@ -9,10 +9,13 @@ p {
     padding: 0rem 0rem;
 }
 
+.dropdown-item {
+    cursor: pointer;
+}
+
 .dropdown-menu.show {
     .btn-label {
         text-align: center;
-        cursor: pointer;
     }
 
     input + label {
