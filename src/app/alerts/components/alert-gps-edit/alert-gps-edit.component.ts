@@ -103,7 +103,7 @@ export class AlertGpsEditComponent implements OnInit {
       } else {
         Swal.fire(
           'Error',
-          'debe ingresar un email valido.',
+          'Debe ingresar un email válido.',
           'warning'
         );
       }

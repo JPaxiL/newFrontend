@@ -260,7 +260,7 @@ export class PlatformAlertsEditComponent implements OnInit {
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
         }
       } else {
-        Swal.fire('Error', 'debe ingresar un email valido.', 'warning');
+        Swal.fire('Error', 'Debe ingresar un email válido.', 'warning');
       }
     }
   }

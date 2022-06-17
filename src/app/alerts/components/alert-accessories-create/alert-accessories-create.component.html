@@ -1,43 +1,39 @@
 <div class="loading-gral" *ngIf="loading"></div>
 <div>
-    <div class="modal-header">
-        <h4>Crear Alerta Accesorio</h4>
+    <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;">
+        Crear Alerta Accesorio
     </div>
-    <div class="modal-body">
+
+    <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
+
+    <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
         <form [formGroup]="alertForm" (submit)="onSubmit($event)">
-            <div class="row mb-3">
-                <div class="col-12">
-                    <select class="form-select" aria-label="Alerta"  formControlName="tipoAlerta">
-                        <option value=""></option>
+            <div class="row">
+                <div class="p-field">
+                    <select class="form-select" aria-label="Alerta" formControlName="tipoAlerta">
+                        <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
                         <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
                     </select>
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Evento activado :</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <div class="form-check">
-                        <input class="form-check-input" formControlName="chkEventoActivado" type="checkbox" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-label">Nombre:</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+            <div class="row">
+                <label class="col-4 form-label">Nombre:</label>
+                <div class="col-8">
                     <div class="text">
-                        <input class="form-control" placeholder="nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
+                        <input class="form-control" placeholder="Nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
                     </div>
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px"></div>
+            <div class="row"></div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <!-- <select2 [data]="vehicles" [multiple]="true" [placeholder]="'VEHÍCULOS'" formControlName="vehicles"> </select2> -->
-                    <p-multiSelect
+            <div class="row">
+                <div class="col-12">
+                    <div class="p-field">
+                        <label class="bg-subtitle text-end dropdown-toggle"></label>
+                        <label class="bg-subtitle bg-subtitle-on-top text-center">Vehículos</label>
+                        <p-multiSelect
                         [options]="vehicles"
                         optionLabel="label"
                         optionValue="value"
@@ -45,49 +41,71 @@
                         defaultLabel="VEHÍCULOS"
                         [maxSelectedLabels]="3"
                         [selectedItemsLabel]="'{0} vehiculos seleccionados'"
-                    ></p-multiSelect>
-                </div>
-            </div>
-
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px;"></div>
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Alerta del Sistema:</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <div class="form-check">
-                        <input class="form-check-input"  type="checkbox" formControlName="chkSonido" (change)="changeDisabled($event)"/>
+                        ></p-multiSelect>
                     </div>
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
-                    <select  class="form-control" (change)="playAudio" formControlName="sonido">
-                        <option value="sonidos/alarm8.mp3">Sonido 1</option>
-                        <option value="sonidos/alarm2.mp3">Sonido 2</option>
-                        <option value="sonidos/CartoonBullets3.mp3">Sonido 3</option>
-                        <option value="sonidos/DjStop4.mp3">Sonido 4</option>
-                        <option value="sonidos/messenger5.mp3">Sonido 5</option>
-                        <option value="sonidos/Ping6.mp3">Sonido 6</option>
-                        <option value="sonidos/Twitter7.mp3">Sonido 7</option>
-                        <option value="sonidos/Whatsap8.mp3">Sonido 8</option>
-                        <option value="sonidos/WhatsappSound9.mp3">Sonido 9</option>
-                    </select>
+            <div class="row d-flex justify-content-center">
+                <div class="col-5">
+                    <label class="row">
+                        <span class="col-9 form-check-label">Evento activado:</span>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="chkEventoActivado" type="checkbox" />
+                            </div>
+                        </div>
+                    </label>
+                </div>
+                <div class="col-5">
+                    <label class="row">
+                        <span class="col-9 form-check-label">Alerta del Sistema:</span>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input"  type="checkbox" formControlName="chkSonido" (change)="changeDisabled($event)"/>
+                            </div>
+                        </div>
+                    </label>
                 </div>
             </div>
 
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px;"></div>
-            <div class="row mb-3" style="margin-right: 0px; margin-left: 0px">
-                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-check-label">Agregar Correo:</label>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" />
-                    </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="p-field">
+                        <select  class="form-select" (change)="playAudio" formControlName="sonido">
+                            <option value="sonidos/alarm8.mp3">Sonido 1</option>
+                            <option value="sonidos/alarm2.mp3">Sonido 2</option>
+                            <option value="sonidos/CartoonBullets3.mp3">Sonido 3</option>
+                            <option value="sonidos/DjStop4.mp3">Sonido 4</option>
+                            <option value="sonidos/messenger5.mp3">Sonido 5</option>
+                            <option value="sonidos/Ping6.mp3">Sonido 6</option>
+                            <option value="sonidos/Twitter7.mp3">Sonido 7</option>
+                            <option value="sonidos/Whatsap8.mp3">Sonido 8</option>
+                            <option value="sonidos/WhatsappSound9.mp3">Sonido 9</option>
+                        </select>
+                    </div>                    
                 </div>
             </div>
 
-            <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
+            <div class="row"></div>
 
-                <div class="col-lg-10 col-lg-offset-0 col-md-10 col-md-offset-0 col-sm-10 col-sm-offset-0 col-xs-10 col-xs-offset-0">
+            <div class="row d-flex justify-content-center">
+                <div class="col-5">
+                    <label class="row">
+                        <span class="col-9 form-check-label">Agregar Correo:</span>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" />
+                            </div>
+                        </div>
+                    </label>
+                </div>
+                <div class="col-5"></div>
+            </div>
+
+            <div class="form-group row">
+
+                <div class="col-10">
                     <div class="text">
                         <input  class="form-control" placeholder="example@mail.com" formControlName="email" type="text" />
                     </div>
@@ -96,8 +114,8 @@
 
             </div>
 
-            <div class="form-group row" style="margin-right: 0px; margin-left: 0px">
-                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+            <div class="form-group row">
+                <div class="col-9">
                     <div class="text">
                         <ul>
                           <li *ngFor="let email of alertForm.value.lista_emails; let i = index"  ng-bind-html-unsafe="opt" >
@@ -111,11 +129,12 @@
             </div>
 
             <div class="modal-footer">
-                <div class="row" style="margin-right: 0px; margin-left: 0px">
-                    <div class="d-grid gap-2 d-md-block">
-                        <button type="button" class="btn btn-light float-left" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-ACCESSORIES')">Cancelar</button>
-
-                        <button type="submit"  class="btn btn-success">Guardar</button>
+                <div class="row w-100 justify-content-around">
+                    <div class="col-5">
+                        <button type="button" class="btn btn-success w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-ACCESSORIES')">Cancelar</button>
+                    </div>
+                    <div class="col-5">
+                        <button type="submit"  class="btn btn-success w-100">Guardar</button>
                     </div>
                 </div>
             </div>
