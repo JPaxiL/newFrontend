@@ -3,6 +3,7 @@ import { Alert } from '../../models/alert.interface';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { PanelService } from 'src/app/panel/services/panel.service';
 import { Subject } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-platform-alerts-list',
@@ -14,7 +15,11 @@ export class PlatformAlertsListComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private AlertService: AlertService,private panelService: PanelService) { }
+  constructor(
+    private AlertService: AlertService,
+    private panelService: PanelService,
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -22,6 +27,7 @@ export class PlatformAlertsListComponent implements OnInit {
 
   public async loadData(){
     this.alerts = await this.AlertService.getAlertsByType('platform');
+    this.spinner.hide('loadingPlatformAlertsSpinner');
   }
 
   edit(id:string){
@@ -30,7 +36,7 @@ export class PlatformAlertsListComponent implements OnInit {
 
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = "ALERTS-PLATFORM-EDIT";
-    this.panelService.nombreCabecera =   "Alerta Plataforma";
+    this.panelService.nombreCabecera = "Alertas Plataforma";
   }
 
 }

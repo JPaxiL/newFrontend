@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { PanelService } from 'src/app/panel/services/panel.service';
 
 declare var $: any;
@@ -11,13 +12,17 @@ declare var $: any;
 export class PanelAlertsGpsComponent implements OnInit {
   options = new Array(
     { id:'ALERTS', name:"Alertas"},
-    { id:'ALERTS-GPS', name:"Alertas Gps"},
-    { id:'ALERTS-GPS-CREATE', name:"Alertas Gps"},
+    { id:'ALERTS-GPS', name:"Alertas GPS"},
+    { id:'ALERTS-GPS-CREATE', name:"Alertas GPS"},
   );
 
-  constructor(public panelService: PanelService) { }
+  constructor(
+    public panelService: PanelService,
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit(): void {
+    this.spinner.show('loadingGPSAlertsSpinner');
   }
 
   clickShowPanel( nomComponent:string ): void {

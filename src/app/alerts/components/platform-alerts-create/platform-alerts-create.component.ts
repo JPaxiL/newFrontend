@@ -37,6 +37,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   public showFechaCaducidad = true;
   public showGeocercas = true;
   public disabledTimeLimit = true;
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private AlertService: AlertService,
@@ -93,6 +94,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   public async loadData() {
     this.events = await this.AlertService.getEventsByType('platform');
+    this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();
   }

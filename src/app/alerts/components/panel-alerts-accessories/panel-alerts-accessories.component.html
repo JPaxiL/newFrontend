@@ -1,26 +1,33 @@
-<div class="card-body p-fluid" id="rowBusqueda">
-  <div class="row">
-    <div class="col">
-      <input
-        type="text"
+<div style="height: 100%; position: relative;">
 
-        class="form-control"
-        placeholder="Buscar..."
-      />
-    </div>
-    <div class="col-2">
-        <div class="btn-toolbar" role="toolbar">
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary" (click)="clickShowPanel('ALERTS-ACCESSORIE-CREATE')" >
-              <span class="fa fa-plus"></span>
-            </button>
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAccesoriesAlertsSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Cargando Alertas GPS... </p></ngx-spinner>
+
+  <div class="card-body p-fluid" id="rowBusqueda">
+    <div class="row">
+      <div class="col">
+        <input
+          type="text"
+  
+          class="form-control"
+          placeholder="Buscar..."
+        />
+      </div>
+      <div class="col-2">
+          <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" (click)="clickShowPanel('ALERTS-ACCESSORIE-CREATE')" >
+                <span class="fa fa-plus"></span>
+              </button>
+            </div>
           </div>
-        </div>
+      </div>
     </div>
   </div>
-</div>
+  
+  <div class="panel-izq-table-container" style="height: calc(100vh - 9.875rem); max-height: calc(100vh - 9.875rem);">
+      <app-accessories-alerts-list></app-accessories-alerts-list>
+  </div>
+  
 
-<div class="panel-izq-table-container" style="height: calc(100vh - 9.875rem); max-height: calc(100vh - 9.875rem);">
-    <app-accessories-alerts-list></app-accessories-alerts-list>
 </div>
 

@@ -32,6 +32,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
   public disabledEmail = true;
   public vehiclesSelected: string[] = [];
   overlay = false;
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private alertService: AlertService,
@@ -85,6 +86,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
   public async loadData() {
     this.setDataVehicles();
     this.events = await this.alertService.getEventsByType('accessories');
+    this.loadingEventSelectInput = false;
   }
 
   setDataVehicles() {

@@ -14,7 +14,7 @@ import { PanelService } from 'src/app/panel/services/panel.service';
 export class AlertGpsEditComponent implements OnInit {
 
   options = new Array(
-    { id:'ALERTS-GPS', name:"Alertas Gps"},
+    { id:'ALERTS-GPS', name:"Alertas GPS"},
   );
 
   public alertForm!: FormGroup;
@@ -25,6 +25,7 @@ export class AlertGpsEditComponent implements OnInit {
   public disabledEmail = true;
   public vehiclesSelected:string[] = [];
   overlay = false;
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private alertService: AlertService,
@@ -69,6 +70,7 @@ export class AlertGpsEditComponent implements OnInit {
   public async loadData(){
     this.setDataVehicles();
     this.events = await this.alertService.getEventsByType('gps');
+    this.loadingEventSelectInput = false;
   }
 
   setDataVehicles(){

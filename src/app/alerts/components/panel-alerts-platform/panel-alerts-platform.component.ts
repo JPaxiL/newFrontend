@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { PanelService } from 'src/app/panel/services/panel.service';
 
 declare var $: any;
@@ -10,12 +11,16 @@ declare var $: any;
 })
 export class PanelAlertsPlatformComponent implements OnInit {
   options = new Array(
-    { id:'ALERTS-PLATFORM-CREATE', name:"Alertas"},
+    { id:'ALERTS-PLATFORM-CREATE', name:"Alertas Plataforma"},
   );
 
-  constructor(private panelService: PanelService) { }
+  constructor(
+    private panelService: PanelService,
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit(): void {
+    this.spinner.show('loadingPlatformAlertsSpinner');
   }
 
   clickShowPanel( nomComponent:string ): void {

@@ -10,6 +10,8 @@ import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 })
 export class AlertService {
 
+  isLoadingData:boolean = true;
+
   public alerts:Alert[] = [];
   public alertEdit:any;
 

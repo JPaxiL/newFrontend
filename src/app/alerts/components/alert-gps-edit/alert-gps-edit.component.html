@@ -1,7 +1,7 @@
 <div class="loading-gral" *ngIf="loading"></div>
 <div>
     <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;">
-        Editar Alerta Accesorio
+        Editar Alerta GPS
     </div>
 
     <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
@@ -9,11 +9,19 @@
     <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
         <form [formGroup]="alertForm" (submit)="onSubmit($event)">
             <div class="row">
-                <div class="p-field">
-                    <select class="form-select" aria-label="Alerta"  formControlName="tipoAlerta">
-                        <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
-                        <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
-                    </select>
+                <div class="col-1 text-end" *ngIf="loadingEventSelectInput">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </div>
+                <div class="col">
+                    <div class="p-field">
+                        <select class="form-select" aria-label="Alerta" disabled *ngIf="loadingEventSelectInput">
+                            <option value="" disabled selected hidden>Cargando...</option>
+                        </select>
+                        <select class="form-select" aria-label="Alerta"  formControlName="tipoAlerta" [disabled]="loadingEventSelectInput" *ngIf="!loadingEventSelectInput">
+                            <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
+                            <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -136,7 +144,7 @@
                         <button type="button" class="btn btn-success w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-GPS')">Cancelar</button>
                     </div>
                     <div class="col-5">
-                        <button type="submit" class="btn btn-success w-100">Guardar</button>
+                        <button type="submit" class="btn btn-success w-100" [disabled]="loadingEventSelectInput">Guardar</button>
                     </div>
                 </div>
             </div>

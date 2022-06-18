@@ -19,7 +19,7 @@ export class ActionsAlertComponent implements OnInit {
 
   options = new Array(
     { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
-    { id:'ALERTS-GPS', name:"Alertas Gps"},
+    { id:'ALERTS-GPS', name:"Alertas GPS"},
     { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
 
   );
@@ -60,7 +60,7 @@ export class ActionsAlertComponent implements OnInit {
       if(data.isConfirmed){
         Swal.fire(
           'Eliminado',
-          'Los datos se eliminaron correctamente!!',
+          '¡Los datos se eliminaron correctamente!',
           'success'
         );
       }

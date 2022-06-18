@@ -41,6 +41,7 @@ export class PlatformAlertsEditComponent implements OnInit {
   public geoSelected: string[] = [];
   overlay = false;
   overlayGeo = false;
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private AlertService: AlertService,
@@ -139,6 +140,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.setDataVehicles();
 
     this.events = await this.AlertService.getEventsByType('platform');
+    this.loadingEventSelectInput = false;
   }
 
   async setDataVehicles() {

@@ -24,6 +24,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
   public vehicles: Select2Data = [];
   public disabledEventSoundActive = true;
   public disabledEmail = true;
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private AlertService: AlertService,
@@ -64,6 +65,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
   public async loadData() {
     this.setDataVehicles();
     this.events = await this.AlertService.getEventsByType('accessories');
+    this.loadingEventSelectInput = false;
   }
 
   setDataVehicles() {

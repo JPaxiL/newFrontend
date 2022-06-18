@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { Alert } from '../../models/alert.interface';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { PanelService } from 'src/app/panel/services/panel.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-gps-alerts-list',
@@ -19,7 +20,8 @@ export class GpsAlertsListComponent implements OnInit {
 
   constructor(
     private AlertService: AlertService,
-    private panelService: PanelService
+    private panelService: PanelService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +30,7 @@ export class GpsAlertsListComponent implements OnInit {
 
   public async loadData(){
     this.alerts = await this.AlertService.getAlertsByType('gps');
+    this.spinner.hide('loadingGPSAlertsSpinner');
   }
 
   edit(id:string){
@@ -36,7 +39,7 @@ export class GpsAlertsListComponent implements OnInit {
 
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = "ALERTS-GPS-EDIT";
-    this.panelService.nombreCabecera =   "Alerta Gps";
+    this.panelService.nombreCabecera = "Alertas GPS";
   }
 
 }
