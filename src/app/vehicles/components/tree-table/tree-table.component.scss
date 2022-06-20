@@ -123,4 +123,8 @@ p {
     .dropdown-toggle::after {
         display:none;
     }
+
+    .p-treetable-loading > .p-treetable-loading-overlay { 
+        display: none;
+    }
 }

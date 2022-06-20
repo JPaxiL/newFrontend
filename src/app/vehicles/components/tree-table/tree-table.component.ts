@@ -7,6 +7,7 @@ import {ConfirmationService} from 'primeng-lts/api';
 
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-tree-table',
@@ -41,6 +42,7 @@ export class TreeTableComponent implements OnInit {
     name : "",
     type : ""
   };
+  alreadyLoaded: boolean = false;
 
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   color: any = {
@@ -73,14 +75,22 @@ export class TreeTableComponent implements OnInit {
     private vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private spinner: NgxSpinnerService
   ) {
     // this.vehicleService.listTable=1;
+    if(this.loading) {
+      this.spinner.show('loadingTreeTable');
+    } else {
+      this.alreadyLoaded = true;
+      console.log(this.alreadyLoaded);
+    }
     configDropdown.placement = 'right-top';
     configDropdown.autoClose = 'outside';
     this.vehicleService.dataTreeCompleted.subscribe(vehicles=>{
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
+      this.spinner.hide('loadingTreeTable');
     });
 
     this.vehicleService.reloadTableTree.subscribe(res=>{
@@ -102,6 +112,7 @@ export class TreeTableComponent implements OnInit {
     if(this.vehicleService.statusDataVehicleTree){
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
+      this.alreadyLoaded = true;
     }
     this.cols = [
           { field: 'eye', header: 'eye' },
