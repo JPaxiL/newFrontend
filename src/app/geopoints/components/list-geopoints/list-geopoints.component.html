@@ -38,19 +38,19 @@
   
           <tr *ngFor="let geo of tblDataGeo;let indice=index" >
   
-              <td width="7%">
+              <td>
                 <button class="btn btn-xs btn-link p-n" (click)="clickShow(geo.trama.geopunto_id)">
                   <i class="fa fa-lg" [ngClass]="{'far fa-eye': geo.trama.geopunto_visible === 'true', 'far fa-eye-slash' : geo.trama.geopunto_visible === 'false'}" style="font-size: 14px;" ></i>
                 </button>
               </td>
   
-              <td class="text-center" width="7%">
+              <td class="text-center">
                 <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.geopunto_id)" >
                   <div [ngStyle]="{'background-color': geo.trama.geopunto_color}" style="width: 15px;height: 15px;" class="geofence-color" ></div>
                 </button>
               </td>
   
-              <td ><span class="d-flex justify-content-start">{{geo.trama.geopunto_name}}</span></td>
+              <td><span class="d-flex justify-content-start">{{geo.trama.geopunto_name}}</span></td>
   
               <td>
                 <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.geopunto_id)"  [(ngModel)]="geo.trama.geopunto_nombre_visible_bol">
@@ -58,7 +58,7 @@
   
               <!-- <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td> -->
   
-              <td width="5%" >
+              <td>
                 <div ngbDropdown container="body" class="d-inline-block">
                   <button class="btn btn-xs btn-link" id="dropdownBasic1" ngbDropdownToggle>
                     <i class="fa fa-wrench fa-lg" style="font-size: 14px;"></i>
