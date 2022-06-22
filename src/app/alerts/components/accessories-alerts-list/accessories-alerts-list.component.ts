@@ -3,6 +3,7 @@ import { Alert } from '../../models/alert.interface';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { Subject } from 'rxjs';
 import { PanelService } from 'src/app/panel/services/panel.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var $: any;
 
@@ -21,7 +22,8 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
   constructor(
     private AlertService: AlertService,
-    private panelService: PanelService
+    private panelService: PanelService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
   public async loadData(){
     this.alerts = await this.AlertService.getAlertsByType('accessories');
+    this.spinner.hide('loadingAccesoriesAlertsSpinner');
     // this.dtTrigger.next();
   }
 

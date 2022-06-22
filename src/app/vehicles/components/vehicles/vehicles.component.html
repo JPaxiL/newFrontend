@@ -1,7 +1,7 @@
 <div id="rowBusqueda" class="col">
   <div class="row" style="margin-right: 0px; margin-left: 15px;">
     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="padding-left: 0px; padding-right: 0px;">
-      <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Buscar..." class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false" style="">
+      <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Buscar..." class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left: 0px; padding-right: 0px;">
       <button type="button" class="btn btn-primary">
@@ -80,14 +80,16 @@
                 Configurar
               </label>
             </div>
-            <!-- <div class="">
-              <input type="checkbox" name="" value="">
-              <label for="">Recorrido</label>
-            </div>
-            <div class="">
-              <input type="checkbox" name="" value="">
-              <label for="">Localización</label>
-            </div> -->
+            <div class="dropdown-divider"></div>
+          </div>
+
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <i  class="fas fa-sitemap ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <span (click)="onTableGroup()">Vista por Grupo</span>
+          </div>
+          <div class="dropdown-item active-view" style="padding: 0.125rem 0.75rem;">
+            <i class="fas fa-list ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <span (click)="onTableGeneral()">Vista General</span>
           </div>
 
         </div>

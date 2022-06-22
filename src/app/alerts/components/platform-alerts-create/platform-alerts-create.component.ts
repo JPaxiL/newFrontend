@@ -37,6 +37,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   public showFechaCaducidad = true;
   public showGeocercas = true;
   public disabledTimeLimit = true;
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private AlertService: AlertService,
@@ -93,6 +94,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   public async loadData() {
     this.events = await this.AlertService.getEventsByType('platform');
+    this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();
   }
@@ -220,7 +222,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
         }
       } else {
-        Swal.fire('Error', 'debe ingresar un email valido.', 'warning');
+        Swal.fire('Error', 'Debe ingresar un email válido.', 'warning');
       }
     }
   }

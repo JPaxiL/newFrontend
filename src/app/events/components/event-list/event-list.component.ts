@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
 import { getContentPopup } from '../../helpers/event-helper';
 import { forEachChild } from 'typescript';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
@@ -16,6 +17,7 @@ export class EventListComponent implements OnInit {
   selectedEvent: any = {};
   eventPopupClass: any ={};
   activeEventLayer: any = false;
+  loadingEvents: boolean = true;
 
   public events:any[] = [];
   public placa:string = '';
@@ -23,7 +25,8 @@ export class EventListComponent implements OnInit {
   constructor(
     private eventService: EventService,
     public mapService: MapServicesService,
-    public ess:EventSocketService
+    public ess:EventSocketService,
+    private spinner: NgxSpinnerService
     ) {
       // this.tipoEvento = [
       //   { id: 0, option: 'Todos los Eventos', tipo: '' },
@@ -96,13 +99,23 @@ export class EventListComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    if(this.loadingEvents) {
+      this.spinner.show('loadingEventList');
+    }
     this.events = this.eventService.getData();
     this.loadData()
+  }
+  
+  ngOnDestroy(){
+    console.log('destruccion');
+    this.spinner.hide('loadingEventList');
+    this.loadingEvents = false;
   }
 
   async loadData(){
     this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
     this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' });
+    this.spinner.hide('loadingEventList');
   }
 
   public showEvent(event:any){

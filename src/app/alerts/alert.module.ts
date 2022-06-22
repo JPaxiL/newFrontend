@@ -29,6 +29,9 @@ import { AlertAccessoriesEditComponent } from './components/alert-accessories-ed
 import { AlertGpsEditComponent } from './components/alert-gps-edit/alert-gps-edit.component';
 import { PlatformAlertsEditComponent } from './components/platform-alerts-edit/platform-alerts-edit.component';
 
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 
 
 @NgModule({
@@ -63,7 +66,9 @@ import { PlatformAlertsEditComponent } from './components/platform-alerts-edit/p
     NgbModule,
     DataTablesModule,
     MultiSelectModule,
-    CardModule
+    CardModule,
+    BrowserAnimationsModule,
+    NgxSpinnerModule,
   ],
   exports:[
     AlertListComponent,

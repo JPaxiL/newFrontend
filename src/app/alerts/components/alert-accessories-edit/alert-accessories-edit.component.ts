@@ -32,6 +32,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
   public disabledEmail = true;
   public vehiclesSelected: string[] = [];
   overlay = false;
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private alertService: AlertService,
@@ -85,6 +86,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
   public async loadData() {
     this.setDataVehicles();
     this.events = await this.alertService.getEventsByType('accessories');
+    this.loadingEventSelectInput = false;
   }
 
   setDataVehicles() {
@@ -120,7 +122,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
         }
       } else {
-        Swal.fire('Error', 'debe ingresar un email valido.', 'warning');
+        Swal.fire('Error', 'Debe ingresar un email válido.', 'warning');
       }
     }
   }

@@ -3,8 +3,19 @@
         text-align: center;
     }
 
-    input + label {
+    input + label, i + span {
         padding-left: 4px;
+    }
+}
+
+.dropdown-item {
+    cursor: pointer;
+
+    &.active-view {
+        color: #000;
+        cursor: default;
+        text-decoration: none;
+        background-color: var(--gl-gray);
     }
 }
 
@@ -19,6 +30,10 @@
 
     .ag-grid-header-icon{
         color: #fff;
+    }
+
+    .ag-header-cell-sortable {
+        cursor: default;
     }
 
     [ref="eMenu"], [ref="eLabel"], [ref="eText"], [ref="eFilter"], [ref="eSortorder"], [ref="eSortAsc"], [ref="eSortDesc"] {

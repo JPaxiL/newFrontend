@@ -16,7 +16,7 @@ declare var $: any;
   styleUrls: ['./gps-alerts-create.component.scss'],
 })
 export class GpsAlertsCreateComponent implements OnInit {
-  options = new Array({ id: 'ALERTS-GPS', name: 'Alertas Gps' });
+  options = new Array({ id: 'ALERTS-GPS', name: 'Alertas GPS' });
 
   public alertForm!: FormGroup;
   public events: any = [];
@@ -28,6 +28,8 @@ export class GpsAlertsCreateComponent implements OnInit {
   public disabledEventSoundActive = true;
 
   public disabledEmail = true;
+
+  loadingEventSelectInput: boolean = true;
 
   constructor(
     private AlertService: AlertService,
@@ -66,6 +68,7 @@ export class GpsAlertsCreateComponent implements OnInit {
   public async loadData() {
     this.setDataVehicles();
     this.events = await this.AlertService.getEventsByType('gps');
+    this.loadingEventSelectInput = false;
   }
 
   setDataVehicles() {
@@ -101,7 +104,7 @@ export class GpsAlertsCreateComponent implements OnInit {
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
         }
       } else {
-        Swal.fire('Error', 'debe ingresar un email valido.', 'warning');
+        Swal.fire('Error', 'Debe ingresar un email válido.', 'warning');
       }
     }
   }
@@ -141,7 +144,7 @@ export class GpsAlertsCreateComponent implements OnInit {
 
     if (this.alertForm.value.vehicles.length != 0) {
       Swal.fire({
-        title: 'Desea guardar los cambios?',
+        title: '¿Desea guardar los cambios?',
         text: 'Espere un momento...',
         icon: 'warning',
         showLoaderOnConfirm: true,

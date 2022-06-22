@@ -6,6 +6,7 @@ import { ColDef, GridApi, GridReadyEvent,  ColumnApi } from 'ag-grid-community';
 import { ActiveAlertComponent } from '../active-alert/active-alert.component';
 import { SystemAlertComponent } from '../system-alert/system-alert.component';
 import { EmailAlertComponent } from '../email-alert/email-alert.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -30,15 +31,17 @@ export class AlertListComponent implements OnInit {
     { headerName: 'E-Mail', field: 'notificacion_email_bol', resizable: true, wrapText: true,width: 150, valueGetter: params=>{return params.data}, cellRendererFramework: EmailAlertComponent},
   ];
 
-  constructor(private AlertService: AlertService) { }
+  constructor(private AlertService: AlertService, private spinner: NgxSpinnerService) { }
 
 
   ngOnInit(): void {
     this.loadData();
+    
   }
 
   public async loadData(){
     this.alerts = await this.AlertService.getAll();
+    this.spinner.hide('loadingAlertsSpinner');
   }
 
   public onGridReady(params: GridReadyEvent) {

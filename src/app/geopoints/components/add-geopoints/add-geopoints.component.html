@@ -1,67 +1,67 @@
-<div class="card-body panel-geocerca">
-  <h5>Geopunto&nbsp;<span class="fs-6 fw-light" [innerHTML]="this.geopointsService.action == 'edit' ? 'Configurar' : 'Nuevo' " ></span></h5>
+<div>
 
+  <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;" [innerHTML]="this.geopointsService.action == 'edit' ? 'Configurar Geopunto' : 'Nuevo Geopunto'">
+  </div>
+
+  <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
 
   <!-- <button type="submit" (click)="fin_editar()" class="btn btn-success btn-sm" >fin editar</button> -->
 
-  <div class="row p-1">
-      <div class="form-group">
-        <label for="geofence-name" class="control-label fw-bold">Nombre</label>
-        <input type="text" class="form-control claseinputs" id="geofence-name" name="nombre" [(ngModel)]="form.geopunto_name" required>
-      </div>
-  </div>
+  <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
+    <div class="panel-izq-form">
+      <label class="row">
+        <span class="col-4">Nombre:</span>
+        <div class="col-8">
+          <input type="text" class="form-control" id="geofence-name" name="nombre" [(ngModel)]="form.geopunto_name" required>
+        </div>
+      </label>
 
+      <div class="row"></div>
 
-
-  <br>
-  <div class="row p-1" >
-
-    <div class="col-sm-6">
-        <label class="control-label fw-bold">
-          <input type="checkbox"
-            name="" icheck
-            [(ngModel)]="form.geopunto_visible_bol"> Mostrar geopunto
-        </label>
-    </div>
-
-
-    <div class="col-sm-6">
-          <label class="control-label fw-bold">
-            <input type="checkbox"
-              name="" icheck
-              [(ngModel)]="form.geopunto_nombre_visible_bol"> Mostrar nombre
+      <div class="row d-flex justify-content-center">
+        <div class="col-5 d-flex flex-column justify-content-center">
+          <label class="row">
+            <span class="col-9 form-check-label">Mostrar geopunto</span>
+            <div class="col-2 d-flex flex-column justify-content-center">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="" icheck [(ngModel)]="form.geopunto_visible_bol">
+              </div>
+            </div>
           </label>
+        </div>
+        <div class="col-5 d-flex flex-column justify-content-center">
+          <label class="row">
+            <span class="col-9 form-check-label">Mostrar nombre</span>
+            <div class="col-2 d-flex flex-column justify-content-center">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="" icheck [(ngModel)]="form.geopunto_nombre_visible_bol">
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="row"></div>
+
+      <div class="row">
+        <span class="col-4">Color:</span>
+        <div class="col-8">
+          <input type="color" class="form-control form-control-color form-control-color-gl" id="geoColor" (change)="changeGeoColor(form.geopunto_id)" [(ngModel)]="form.geopunto_color"  title="Elige un color">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="row w-100 justify-content-around">
+          <div class="col-5">
+            <button type="button" (click)="clickCancelar(form.geopunto_id)" class="btn btn-success w-100" >Cancelar</button>
+          </div>
+          <div class="col-5">
+            <button type="submit" (click)="clickGuardar(form.geopunto_id)" class="btn btn-success w-100" >Guardar</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-  </div>
-  <br>
-
-  <div class="row p-1">
-    <label for="geoColor" class="col-sm-4 fw-bold">Color: </label>
-    <div class="col-sm-3">
-      <input type="color" class="form-control form-control-color form-control-color-gl" id="geoColor" (change)="changeGeoColor(form.geopunto_id)" [(ngModel)]="form.geopunto_color"  title="Elige un color">
-    </div>
-
-  </div>
-
-
-  <div class="row p-3">
-
-    <div class="col-sm-3">
-    </div>
-    <div class="col-sm-3">
-      <button type="button" (click)="clickCancelar(form.geopunto_id)" class="btn btn-secondary btn-sm" >Cancelar</button>
-    </div>
-    <div class="col-sm-3">
-      <button type="submit" (click)="clickGuardar(form.geopunto_id)" class="btn btn-success btn-sm" >Guardar</button>
-    </div>
-    <!-- <div class="col-sm-3">
-      <button id="boton1" class="btn btn-success btn-sm" >botn</button>
-    </div> -->
-
-    <div class="col-sm-3">
-    </div>
-
   </div>
 
 </div>
