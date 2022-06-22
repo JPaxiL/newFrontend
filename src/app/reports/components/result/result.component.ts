@@ -8,8 +8,10 @@ import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationService } from 'primeng-lts/api';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {DialogModule} from 'primeng-lts/dialog';
 
 import * as moment from 'moment';
+// import { AnyARecord } from 'dns';
 // declare var $: any;
 declare var $j: any;
 
@@ -344,6 +346,131 @@ export class ResultComponent implements OnDestroy, OnInit {
     // console.log(this.data[idx][1][0].puntuacion);
 
   };
+
+  display: boolean = false;
+
+  showDialog() {
+    this.display = true;
+  }
+
+  verTodos(periodo:any, imei:any, dateHour:any, vehiculo:any) {
+    console.log("===========================================");
+    console.log(periodo);
+    console.log(imei);
+    console.log(dateHour);
+    console.log(vehiculo);
+
+
+    this.spinner.show("reportSpinner");
+
+    var dataParam = this.reportService.getParams();
+    console.log(dataParam);
+    dataParam['limit'] = false;
+    dataParam['findImei'] = imei;
+    console.log(dataParam);
+
+    // setTimeout(() => {
+    //   /** spinner ends after 5 seconds */
+    //   this.spinner.hide("reportSpinner");
+    // }, 5000);
+
+    this.http.post(environment.apiUrl + dataParam.url, dataParam).subscribe({
+      next: data => {
+        // console.log(this.selectedConvoy.length);
+        // console.log(this.selectedGroup.length);
+        // console.log(this.selectedVehicles.length);
+        console.log(typeof data);
+        console.log(data);
+
+        this.reportService.objGeneral.data = data;
+        this.reportService.objGeneral.periodo = periodo;//this.period;
+        this.reportService.objGeneral.vehiculo = vehiculo;//this.period;
+        this.reportService.objGeneral.dateHour = dateHour;//this.period;
+
+        this.spinner.hide("reportSpinner");
+
+        console.log("MODAL ACTIVATE");
+
+        this.reportService.modalActive = true;
+
+        // var report_data = {
+        //   data: data,
+        //   numRep: param.numRep,
+        //   repSubtitle: repSubtitle,
+        //   chkDateHour: chkDateHour,
+        //   chkDuracion: chkDuracion,
+        //   chkOdomV: chkOdomV,
+        //   repTitle: this.reports[param.numRep].value,
+        //   period: M1 + ' - ' + M2_t,
+        //   isVehicleReport: !cv,
+        // }
+        // if(new_tab === undefined || new_tab == true){
+        //   //Report in the same tab
+        //   this.reportService.showReport.emit(report_data);
+        //   this.isFormFilled = true;
+        // } else {
+        //   //Report in new tab
+        //   this.spinner.hide("fullScreenSpinner");
+        //   this.isFormFilled = true;
+        //   console.log('Se abrió una nueva pestaña');
+        //   localStorage.setItem("report_data", JSON.stringify(report_data));
+        //   var report_tab = window.open('/reports/result');
+        //   if(report_tab == null){
+        //     this.showBlockedTabDialog = true;
+        //     /* this.toastr.error('', 'No se pudo reportar en nueva pestaña', {
+        //       timeOut: 5000,
+        //     }); */
+        //   } else {
+        //     this.toastr.success('', 'Reporte en nueva pestaña exitoso', {
+        //       timeOut: 5000,
+        //     });
+        //   }
+        // }
+      }
+    });
+
+
+
+
+    // reportServices.setSpinnerValue(true);
+    // dataParam =  reportServices.getParam();
+    // dataParam['limit'] = false;
+    // dataParam['findImei'] = imei;
+
+
+
+
+
+
+    // reportServices.setSpinnerValue(true);
+    // dataParam =  reportServices.getParam();
+    // dataParam['limit'] = false;
+    // dataParam['findImei'] = imei;
+
+    // $q.all([
+    //     api.post('informes/informes_general_uni',dataParam),
+    //   ]).then(values => {
+
+
+
+    //     var modalInstance = $uibModal.open({
+    //       backdrop: false,
+    //       component: 'reporteModalAll',
+    //       resolve: {
+    //       'datos'    : function() { return values[0]; },
+    //       'periodo'  : function() { return periodo;},
+    //       'vehiculo' : function() { return values[0][0][0][1];},
+    //       'dateHour' : function() { return dateHour;},
+    //       'lang'     : function() { return lang;}
+
+    //     },
+    //       size: 'lg'
+    //     });
+    //     reportServices.setSpinnerValue(false);
+    //   });
+
+  }
+
 
 
 
@@ -1680,6 +1807,275 @@ export class ResultComponent implements OnDestroy, OnInit {
     } else {
       this.toastr.error("No se han encontrado datos para exportar");
       /* alert('No se han encontrado datos para exportar'); */
+    }
+  }
+
+  exportExcelGeneral(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var allRows: AllRows[] = [
+        {}, {
+          cells: [
+            { value: "REPORTE GENERAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE GENERAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+
+        //=================CABECERA =================
+        var cellsCampos :any = [];
+
+        cellsCampos.push({ value: "Item", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        if(this.chkDateHour) {
+            cellsCampos.push({ value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        } else {
+            cellsCampos.push({ value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        }
+
+        if (data[2].fServidor) {
+                if(this.chkDateHour) {
+                    cellsCampos.push({ value: "Fecha servidor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+                    cellsCampos.push({ value: "Hora servidor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+                } else {
+                    cellsCampos.push({ value: "Fecha servidor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+                }
+
+        };
+        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+
+        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].RPMAlta) { cellsCampos.push({ value: "RPM Alta", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+
+        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].cNivel) { cellsCampos.push({ value: "Nivel de Combustible", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].cRestante) { cellsCampos.push({ value: "C.Restante", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].cMotor) { cellsCampos.push({ value: "C.Motor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].odometro) { cellsCampos.push({ value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].recFacial) { cellsCampos.push({ value: "Reconocimiento Facial", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].referencia) { cellsCampos.push({ value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+
+        rows.push({
+            cells: cellsCampos
+        });
+
+        //================= FIN CABECERA =================
+
+        //====================  CUERPO =============================
+        data[1].forEach((item: { fecha: number;  lat: number; lng: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any;
+          vel_gps_speed: any; vel_can: any; tramo: string; PC: any;
+        referencia:any; fServidor:any; velGPS:any; velECO:any; velGPS_speed:any; altitud:any; angulo:any; fatiga:any; fExBrusca:any; fBrusca:any; aBrusca:any; RPMAlta:any;
+        alcohol_nombre:any; parametros:any; cNivel:any; cRestante:any; cMotor:any; odometro:any; onOff:any; RxM:any; recFacial:any; velCAN:any; pCercano:any; DUOT2state:any;
+        }, index: number) => {
+
+
+            var ubicacion = item.lat + "," + item.lng + "";
+            var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+            var cellsCuerpo = [];
+            cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            if(this.chkDateHour) {
+                cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            } else {
+                cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            }
+
+
+            if (data[2].fServidor) {
+              if(this.chkDateHour) {
+                  //var fh2 = item.fServidor.split(" ");
+                  cellsCuerpo.push({ value: this.isChe(item.fServidor), type: 'date', format: "yyyy/MM/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                  cellsCuerpo.push({ value: this.isChs(item.fServidor), type: 'date', format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              } else {
+                  cellsCuerpo.push({ value: this.isChe(item.fServidor), type: 'date', format: "yyyy/MM/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              }
+            };
+
+            if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+
+
+            if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].fatiga) { cellsCuerpo.push({ value: item.fatiga, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].fExBrusca) { cellsCuerpo.push({ value: item.fExBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].fBrusca) { cellsCuerpo.push({ value: item.fBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].aBrusca) { cellsCuerpo.push({ value: item.aBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].RPMAlta) { cellsCuerpo.push({ value: item.RPMAlta, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+
+            if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].parametros) { cellsCuerpo.push({ value: item.parametros, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].cNivel) { cellsCuerpo.push({ value: item.cNivel, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].cRestante) { cellsCuerpo.push({ value: item.cRestante, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].cMotor) { cellsCuerpo.push({ value: item.cMotor, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].odometro) { cellsCuerpo.push({ value: item.odometro, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].onOff) { cellsCuerpo.push({ value: item.onOff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].RxM) { cellsCuerpo.push({ value: item.RxM, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].recFacial) { cellsCuerpo.push({ value: item.recFacial, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].velCAN) { cellsCuerpo.push({ value: item.velCAN, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].pCercano) { cellsCuerpo.push({ value: item.pCercano, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].referencia) { cellsCuerpo.push({ value: rreeff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+
+            if (data[2].DUOT2state) { cellsCuerpo.push({ value: item.DUOT2state, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+
+            rows.push({
+                cells:cellsCuerpo
+            });
+
+        });
+        //==================== FIN CUERPO =============================
+
+        //==================== RESUMEN =============================
+        rows.push({});
+
+        rows.push({cells:[
+          { value: "TOTAL de Excesos de Velocidad(GPS) : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+          { value: data[3][0], vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
+
+        rows.push({cells: [
+                { value: "TOTAL de Excesos de Velocidad(ECO) : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                { value: data[3][1], vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
+
+        rows.push({cells: [
+                { value: "TOTAL de Excesos de Velocidad(CAN) : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                { value: data[3][2], vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
+
+        if (data[2].fatiga) {
+                rows.push({cells: [
+                        { value: "TOTAL de Fatigas : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                        { value: data[3][3], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+        }
+        if (data[2].fExBrusca) {
+                rows.push({cells: [
+                        { value: "TOTAL de Frenada Extremadamente Brusca : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                        { value: data[3][4], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+        }
+        if (data[2].fBrusca) {
+                rows.push({cells: [
+                        { value: "TOTAL de Frenada Brusca : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                        { value: data[3][5], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+        }
+        if (data[2].RPMAlta) {
+                rows.push({cells: [
+                        { value: "TOTAL RPM Alta : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                        { value: data[3][6], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+        }
+        if (data[2].alcoholemia) {
+                rows.push({cells: [
+                        { value: "TOTAL de alerta de alcohol en la sangre : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                        { value: data[3][7], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+        }
+
+        rows.push({cells: [
+                { value: " ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
+                { value: " ", vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
+
+        //======================= FIN RESUMEN =======================================================
+
+
+        // //********************************************* excel version 1 *********************************
+        if (vrs == 1) {
+          exportFileEx.push({
+          freezePane: {
+            rowSplit: 6
+            },
+          columns: [
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+          ],
+          title: data[0][1],
+          rows: rows
+          });
+        }
+        // //********************************************* excel version 1 *********************************
+
+        // //********************************************* excel version 2 *********************************
+        if (vrs == 2) {
+          rows.splice(1, 1);
+          allRows = allRows.concat(rows);
+        }
+        // //********************************************* excel version 2 *********************************
+      }
+
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: 2
+        },
+        columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+        ],
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteGeneral.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
     }
   }
 

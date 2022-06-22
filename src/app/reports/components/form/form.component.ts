@@ -136,6 +136,35 @@ export class FormComponent implements OnInit {
   chkFrenada = true;
 	chkAceleracion = true;
 
+  //Reporte 5 - Reporte General
+  oG = {
+    DUOT2state:false, // --- NEW2
+    RPMAlta:false,
+    RxM:false,
+    aBrusca:false,
+    alcoholemia:false,
+    altitud:false,
+    angulo:false,
+    cMotor:false,
+    cRestante: false, // --- NEW
+    fBrusca:false,
+    fExBrusca:false,
+    fServidor:false,   // --- NEW
+    fatiga:false,
+    cNivel:false,  //  NEW
+    odometro:false,
+    onOff:false,
+    pCercano:false,
+    parametros: false,  // --- NEW
+    recFacial:false,
+    referencia:false,
+    ubicacion:false,
+    velCAN:false,
+    velECO:false,
+    velGPS:false,
+    velGPS_speed:false,
+  };
+
 
   //Reporte 6 - Reporte de Eventos
   eV = {
@@ -230,7 +259,7 @@ export class FormComponent implements OnInit {
         {id : 2, value : 'REPORTE DE ENTRADA Y SALIDA', url: '/api/reports/entrada_salida'},
         {id : 3, value : 'REPORTE DE COMBUSTIBLE', url: '/api/reports/combustible'},
         {id : 4, value : 'REPORTE DE EXCESOS EN ZONA'},
-        {id : 5, value : 'REPORTE GENERAL'},
+        {id : 5, value : 'REPORTE GENERAL', url: '/api/reports/general'},
         {id : 6, value : 'REPORTE DE EVENTOS', url: '/api/reports/eventos'},
         {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
         {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
@@ -246,7 +275,6 @@ export class FormComponent implements OnInit {
         {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'},
         {id : 19, value : 'REPORTE GERENCIAL (Cuenta cruzdelsur)', url: '/api/reports/gerencial_grafico_distraccion_fatiga'},
         {id : 20, value : 'REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)', url: '/api/reports/exceso_velocidad_zona_formato_extendido'}
-
       ];
 
 
@@ -440,7 +468,7 @@ export class FormComponent implements OnInit {
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
-				og: JSON.stringify([oG]),
+				og: JSON.stringify([this.oG]),
 				ev: JSON.stringify([this.eV]),
 				chkStops: this.chkStops,
 				chkMovements: this.chkMovements,
@@ -465,7 +493,7 @@ export class FormComponent implements OnInit {
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
-        og: JSON.stringify([oG]),
+        og: JSON.stringify([this.oG]),
         ev: JSON.stringify([this.eV]),
         chkStops: this.chkStops,
         chkMovements: this.chkMovements,
@@ -490,6 +518,9 @@ export class FormComponent implements OnInit {
         console.log(this.selectedVehicles.length);
         console.log(typeof data);
         console.log(data);
+        this.reportService.setParams(param);
+        // console.log("MODAL ACTIVATE");
+        // this.reportService.modalActive = true;
         var report_data = {
           data: data,
           numRep: param.numRep,
@@ -566,6 +597,10 @@ export class FormComponent implements OnInit {
       case 3:
         this.showLimitTime = true;
         this.showOdomOpt = true;
+        break;
+      case 5:
+        this.showLimitTime = true;
+        this.showCheckboxs = true;
         break;
       case 6:
         this.showLimitTime = true;
@@ -662,6 +697,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 2 && is_vehicle_selected && is_zone_selected)
         ||
         (this.selectedReport == 3 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 5 && is_vehicle_selected)
         ||
         (this.selectedReport == 6 && is_vehicle_selected)
         ||

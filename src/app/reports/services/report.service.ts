@@ -9,6 +9,18 @@ export class ReportService {
 
   constructor() { }
 
+  params:any;
+  modalActive:boolean = false;
+  objGeneral :any = {};
 
+  setParams(values:any) {
+    console.log("se ejecuta setParams");
+    this.params = values;
+  }
+
+  getParams(){
+    console.log("se obtiene setParams");
+    return this.params;
+  }
 
 }

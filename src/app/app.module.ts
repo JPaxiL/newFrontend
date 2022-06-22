@@ -91,7 +91,8 @@ import { ProfileConfigComponent } from './profile-config/profile-config.componen
 import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-geopoints.component';
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
-import { DataTablesModule } from 'angular-datatables'; 
+import { DataTablesModule } from 'angular-datatables';
+import { ModalComponent } from './reports/components/modal/modal.component'; 
 
 @NgModule({
   declarations: [
@@ -140,7 +141,8 @@ import { DataTablesModule } from 'angular-datatables';
     EventListComponent,
     ProfileConfigComponent,
     AddGeopointsComponent,
-    ListGeopointsComponent
+    ListGeopointsComponent,
+    ModalComponent
   ],
   imports: [
     ToastrModule.forRoot({

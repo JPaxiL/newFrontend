@@ -1,0 +1,43 @@
+*{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+
+th {
+  text-align: center;
+  position: sticky;
+}
+
+td {
+  text-align: left;
+}
+
+th, td{
+  padding: 0.25rem;
+  vertical-align: middle;
+}
+
+table td, table th {
+  border: 1px solid #9e9e9e;
+}
+
+table {
+  width: 100%;
+  font-size: 0.8rem;
+}
+
+
+
+.p-dialog .p-dialog-header {
+    background: #1c3e65;
+}
+
+.p-dialog .p-dialog-content {
+  padding: 0 0rem 0rem 0rem;
+}
+
+#scrolly {
+  overflow-y: scroll;
+}
+
+

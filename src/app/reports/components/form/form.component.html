@@ -259,7 +259,219 @@
       </div>
 
 
+      <div class="row" *ngIf="showCheckboxs">
 
+        <div class="col-12">
+          <label class="bg-subtitle">Seleccione las opciones a incluir en el reporte:</label>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.fServidor" [binary]="true" inputId="binary"></p-checkbox>
+              Fecha Servidor</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.alcoholemia" [binary]="true" inputId="binary"></p-checkbox>
+              Alcoholemia</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.ubicacion" [binary]="true" inputId="binary"></p-checkbox>
+                Ubicación</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.parametros" [binary]="true" inputId="binary"></p-checkbox>
+              Parámetros</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.velGPS" [binary]="true" inputId="binary"></p-checkbox>
+                Velocidad GPS</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.cNivel" [binary]="true" inputId="binary"></p-checkbox>
+                Nivel de Combustible</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.velECO" [binary]="true" inputId="binary"></p-checkbox>
+                Velocidad ECO</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.cRestante" [binary]="true" inputId="binary"></p-checkbox>
+                C.Restante</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.velGPS_speed" [binary]="true" inputId="binary"></p-checkbox>
+                Velocidad GPS_speed</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.cMotor" [binary]="true" inputId="binary"></p-checkbox>
+                Consumo de Motor</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.altitud" [binary]="true" inputId="binary"></p-checkbox>
+                Altitud</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.odometro" [binary]="true" inputId="binary"></p-checkbox>
+                Odómetro</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.angulo" [binary]="true" inputId="binary"></p-checkbox>
+                Angulo</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.onOff" [binary]="true" inputId="binary"></p-checkbox>
+                On / Off</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.RPMAlta" [binary]="true" inputId="binary"></p-checkbox>
+                RPM Alta</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.RxM" [binary]="true" inputId="binary"></p-checkbox>
+                Rev. X Min.</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                Referencia</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.recFacial" [binary]="true" inputId="binary"></p-checkbox>
+                Reconocimiento Facial</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <!-- <label>
+                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                Referencia</label> -->
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary"></p-checkbox>
+                Velocidad CAN</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <!-- <label>
+                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                Referencia</label>-->
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.pCercano" [binary]="true" inputId="binary"></p-checkbox>
+                Punto Cercano</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+          <div class="col-6">
+            <div class="p-field">
+              <!-- <label>
+                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                Referencia</label>-->
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-field">
+              <label>
+                <p-checkbox [(ngModel)]="oG.DUOT2state" [binary]="true" inputId="binary"></p-checkbox>
+                DUOT2 state</label>
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
 
       <div class="row" *ngIf="showEvents">
         <div class="col-12">

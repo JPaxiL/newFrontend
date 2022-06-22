@@ -1,0 +1,190 @@
+<p-dialog [(visible)]="reportService.modalActive" >
+    <ng-template pTemplate="header" class="p-dialog-title" style="width: 60vw;">
+
+        <ng-container style="width: 60vw;">
+
+          <div class="row">
+            <div class="col">
+                <div class="col-md-auto">
+                    VEHÍCULO: {{vehiculo}}
+                </div>
+
+            </div>
+            <div class="col">
+              <div class="col-md-auto">
+                  PERIODO: {{periodo}}
+              </div>
+            </div>
+          </div>
+
+        </ng-container>
+
+    </ng-template>
+
+    <!-- 5. REPORTE GENERAL-->
+    <div id="scrolly" style="width: 60vw;">
+    <!-- <div class="container grand-container"> -->
+      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+
+        <!-- <div class="subtable-title" style="margin-bottom: 0.25rem;">
+          <div>VEHÍCULO: {{vehiculo}}</div>
+          <div>PERIODO: {{periodo}}</div>
+        </div> -->
+
+        <ng-container >
+          <table datatable [dtOptions]="dtOptions" class="table table-striped table-border row-border hover">
+            <thead>
+              <tr>
+                  <th>Nº</th>
+                  <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                  <th *ngIf="chkDateHour">Fecha</th>
+                  <th *ngIf="chkDateHour">Hora</th>
+
+                  <th *ngIf="v_table[2].fServidor && !chkDateHour">Fecha/Hora Servidor</th>
+                  <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
+                  <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
+
+                  <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
+                  <th *ngIf="v_table[2].velGPS" >Velocidad GPS</th>
+                  <th *ngIf="v_table[2].velECO" >Velocidad ECO</th>
+                  <th *ngIf="v_table[2].velGPS_speed" >Velocidad GPS speed</th>
+
+                  <th *ngIf="v_table[2].altitud" >Altitud</th>
+                  <th *ngIf="v_table[2].angulo" >Angulo</th>
+                  <th *ngIf="v_table[2].fatiga" >Fatiga</th>
+                  <!-- <th *ngIf="v_table[2].fExBrusca" >Frenada Extrema Brusca</th> -->
+                  <th *ngIf="v_table[2].fBrusca" >Frenada Brusca</th>
+                  <th *ngIf="v_table[2].aBrusca" >Aceleración Brusca</th>
+                  <th *ngIf="v_table[2].RPMAlta" >RPM Alta</th>
+
+                  <th *ngIf="v_table[2].alcoholemia" >Alcoholemia</th>
+                  <th *ngIf="v_table[2].parametros" >Parámetros</th>
+                  <th *ngIf="v_table[2].cNivel" >Nivel de Combustible</th>
+                  <th *ngIf="v_table[2].cRestante" >C.Restante</th>
+                  <th *ngIf="v_table[2].cMotor" >C.Motor</th>
+                  <th *ngIf="v_table[2].odometro" >Odómetro</th>
+                  <th *ngIf="v_table[2].onOff" >On/Off</th>
+                  <th *ngIf="v_table[2].RxM" >Rev.X Min.</th>
+                  <th *ngIf="v_table[2].recFacial" >Reconocimiento Facial</th>
+                  <th *ngIf="v_table[2].velCAN" >Velocidad CAN</th>
+                  <th *ngIf="v_table[2].pCercano" >Punto Cercano</th>
+                  <th *ngIf="v_table[2].referencia" >Referencia</th>
+
+                  <th *ngIf="v_table[2].DUOT2state" >DUOT2 state</th>
+
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+
+                  <td *ngIf="v_table[2].fServidor && !chkDateHour">{{row.fServidor}}</td>
+                  <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
+                  <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
+
+
+                  <td *ngIf="v_table[2].ubicacion">
+                    <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
+                  </td>
+                  <td *ngIf="v_table[2].velGPS" [ngStyle]="{'background-color': row.velGPS > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
+                  <td *ngIf="v_table[2].velECO" [ngStyle]="{'background-color': row.velECO > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
+                  <td *ngIf="v_table[2].velGPS_speed" >{{row.velGPS_speed}}</td>
+
+                  <td *ngIf="v_table[2].altitud" >{{row.altitud}}</td>
+                  <td *ngIf="v_table[2].angulo" >{{row.angulo}}</td>
+                  <td *ngIf="v_table[2].fatiga" [ngStyle]="{'background-color': row.fatiga == 'si' ? 'rgb(28, 243, 9)' : {} }">{{row.fatiga}}</td>
+                  <!-- <td ng-if="dato[2].fExBrusca" >{{dat.fExBrusca}}</td> -->
+                  <td *ngIf="v_table[2].fBrusca" >{{row.fBrusca}}</td>
+                  <td *ngIf="v_table[2].aBrusca" >{{row.aBrusca}}</td>
+                  <td *ngIf="v_table[2].RPMAlta" >{{row.RPMAlta}}</td>
+
+                  <td *ngIf="v_table[2].alcoholemia && row.alcohol_state == 4" [ngStyle]="{'background-color': 'rgb(28, 243, 9)'}">{{row.alcohol_nombre}}</td>
+                  <td *ngIf="v_table[2].alcoholemia && row.alcohol_state == 5" [ngStyle]="{'background-color': 'rgb(255,  0, 0)'}">{{row.alcohol_nombre}}</td>
+                  <td *ngIf="v_table[2].alcoholemia && row.alcohol_state != 4 && row.alcohol_state != 5" >{{row.alcohol_nombre}}</td>
+
+                  <td *ngIf="v_table[2].parametros" >{{row.parametros}}</td>
+                  <td *ngIf="v_table[2].cNivel" >{{row.cNivel}}</td>
+                  <td *ngIf="v_table[2].cRestante" >{{row.cRestante}}</td>
+                  <td *ngIf="v_table[2].cMotor" >{{row.cMotor}}</td>
+                  <td *ngIf="v_table[2].odometro" >{{row.odometro}}</td>
+                  <td *ngIf="v_table[2].onOff" >{{row.onOff}}</td>
+                  <td *ngIf="v_table[2].RxM" >{{row.RxM}}</td>
+                  <td *ngIf="v_table[2].recFacial" >{{row.recFacial}}</td>
+                  <td *ngIf="v_table[2].velCAN" [ngStyle]="{'background-color': row.velCAN > v_table[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
+                  <td *ngIf="v_table[2].pCercano" >{{row.pCercano}}</td>
+                  <td *ngIf="v_table[2].referencia" >{{row.referencia}}</td>
+
+                  <td *ngIf="v_table[2].DUOT2state" >{{row.DUOT2state}}</td>
+
+
+
+              </tr>
+            </tbody>
+
+          </table>
+
+          <ng-container *ngIf="v_table[1].length > 0" >
+
+              <h6>RESUMEN DE TOTALES</h6>
+              <p>TOTAL de Excesos de Velocidad(GPS) : <span>{{v_table[3][0]}}</span></p>
+              <p>TOTAL de Excesos de Velocidad(ECO) : <span>{{v_table[3][1]}}</span></p>
+              <p>TOTAL de Excesos de Velocidad(CAN) : <span>{{v_table[3][2]}}</span></p>
+
+              <p *ngIf="v_table[2].fatiga" >TOTAL de Fatigas : <span>{{v_table[3][3]}}</span></p>
+              <!-- <p ng-if="dato[2].fExBrusca" >TOTAL de Frenada Extremadamente Brusca : <span>{{dato[3][4]}}</span></p> -->
+              <p *ngIf="v_table[2].fBrusca" >TOTAL de Frenada Brusca : <span>{{v_table[3][5]}}</span></p>
+              <p *ngIf="v_table[2].RPMAlta" >TOTAL RPM Alta : <span>{{v_table[3][6]}}</span></p>
+              <p *ngIf="v_table[2].alcoholemia" >TOTAL de alerta de alcohol en la sangre : <span>{{v_table[3][7]}}</span></p>
+
+          </ng-container>
+
+        </ng-container>
+
+        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+          <p>Ningún dato encontrado en su consulta.</p>
+        </div>
+
+
+      </div>
+    </div>
+    <!-- </div> -->
+
+    <ng-template pTemplate="footer" style="width: 60vw;">
+
+
+        <ng-container>
+
+          <div class="row">
+            <div class="col">
+
+            </div>
+            <div class="col">
+
+            </div>
+            <div class="col">
+              <div class="col-md-auto">
+                <button class="btn btn-success" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
+              </div>
+            </div>
+            <div class="col">
+              <div class="col-md-auto">
+                <p-button (click)="reportService.modalActive=false" label="Cerrar"></p-button>
+              </div>
+            </div>
+          </div>
+
+        </ng-container>
+
+
+    </ng-template>
+
+
+
+
+
+</p-dialog>
