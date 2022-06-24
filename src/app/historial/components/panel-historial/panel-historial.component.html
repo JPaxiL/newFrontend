@@ -1,17 +1,38 @@
+<p-dialog [(visible)]="dialogDisplay" [modal]="true" [style]="{width: '40vw'}" class="error-dialog" [baseZIndex]="10000" [draggable]="false" [resizable]="false" icon="pi pi-exclamation-triangle">
+  <ng-template class="p-dialog-title" pTemplate="header">
+    <strong>Error</strong>
+  </ng-template>
+  <div class="dialog-body-container">
+    <p class="p-m-0">No hay suficientes datos.</p>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="dialogDisplay=false" label="Ok" styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
+
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorial" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Cargando Historial... </p></ngx-spinner>
 
   <div id="panel_historial">
 
-   <div class="card-body">
-
-      <div *ngIf="!conHistorial">
-
-          <legend>Datos Vehículo</legend>
-
-          <div class=" row">
-            <label for="selectVehiculo" class="col-sm-4 col-form-label label-form-gl">Vehículo:</label>
-            <div class="col-sm-6">
-
-              <ng-select class="custom" id="selectVehiculo"
+    <div class="modal-body panel-izq-container p-fluid">
+      <div class="panel-izq-form">
+        
+        <div class="row">
+          <legend class="col-12">Datos Vehículo</legend>
+          <div class="col-12">
+            <label class="row d-flex align-items-center">
+              <div class="col-4 text-end">Vehículo</div>
+              <div class="col-8">
+                <!-- <p-dropdown 
+                  [filter]="true"
+                  [options]="cars" 
+                  optionLabel="nombre" 
+                  optionValue="imei"
+                  [(ngModel)]="form.selectedCar" 
+                  [showClear]="false" 
+                  [appendTo]="'body'" 
+                  placeholder="Seleccione el vehículo..."></p-dropdown> -->
+                <ng-select class="custom" id="selectVehiculo"
                   [items]="cars"
                   bindLabel="nombre"
                   bindValue="imei"
@@ -19,138 +40,233 @@
                   [(ngModel)]="form.selectedCar"
                   [searchFn]="customSearch"
                   >
-              </ng-select>
+                </ng-select>
+              </div>
+            </label>
+          </div>
+        </div>
 
+        <div class="row"></div>
+
+        <div class="row">
+          <legend class="col-12">Fecha</legend>
+          <div class="col-12 mb-2">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Filtrar por:</div>
+              <div class="col-8">
+                <p-dropdown 
+                  [options]="availableOptionsDay" 
+                  optionLabel="name" 
+                  optionValue="id"
+                  [(ngModel)]="form.selectedRango" 
+                  [showClear]="false" 
+                  [appendTo]="'body'" 
+                  (onChange)="changeRangoFechas()"
+                  placeholder="Seleccione el vehículo..."></p-dropdown>
+                <!-- <select class="claseinputs" (change)="changeRangoFechas()" name="miselect" [(ngModel)]="form.selectedRango">
+                  <option [value]="item.id" *ngFor="let item of availableOptionsDay">{{item.name}}</option>
+                </select> -->
+              </div>
             </div>
           </div>
-
-          <!-- <p>
-            {{selectedCar | json}}
-          </p> -->
-
-
-          <legend>Fecha</legend>
-
-
-
-          <div class="row">
-            <label for="selectFiltrarPor" class="col-sm-4 col-form-label label-form-gl">Filtrar por:</label>
-            <div class="col-sm-5">
-
-              <select class="claseinputs" (change)="changeRangoFechas()" name="miselect" [(ngModel)]="form.selectedRango">
-                <option [value]="item.id" *ngFor="let item of availableOptionsDay">{{item.name}}</option>
-              </select>
-
+          <div class="col-12 mb-2">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Fecha inicial:</div>
+              <div class="col-8">
+                <p-calendar 
+                  [(ngModel)]="fecha_ini" 
+                  dateFormat="yy-mm-dd" 
+                  [appendTo]="'body'"
+                  [monthNavigator]="true" 
+                  [yearNavigator]="true" 
+                  yearRange="2000:2040"
+                  [showIcon]="true"
+                  ></p-calendar>
+                <!-- <div class="input-group">
+                  <input
+                    #dpFromDateH
+                    class="form-control claseinputs2"
+                    placeholder="yyyy-mm-dd"
+                    name="dpFromDateH"
+                    [(ngModel)]="form.fecha_desde"
+                    ngbDatepicker
+                    #h1="ngbDatepicker"
+                    (click)="h1.toggle()"
+                    [disabled]="expirationDate"
+                  >
+                  <div class="input-group-text claseinputs2">
+                    <i class="fa fa-lg fa-calendar"></i>
+                  </div>
+                </div> -->
+              </div>
             </div>
           </div>
-          <!-- <p>
-            {{selectedRango | json}}
-          </p> -->
+          <div class="col-12 mb-2">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Hora inicial:</div>
+              <div class="col-8">
+                <div class="row">
+                  <p-calendar [(ngModel)]="hora_ini" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [maxDate]="hora_fin"></p-calendar>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-5">
+                    <select class="claseinputs" [(ngModel)]="form.hora_desde">
+                      <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
+                    </select>
+                  </div>
+                  <div class="col-1">
+                    :
+                  </div>
+                  <div class="col-5">
+                    <select class="claseinputs" name="miselect" [(ngModel)]="form.min_desde">
+                      <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mb-2">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Fecha final:</div>
+              <div class="col-8">
+                <p-calendar 
+                  [(ngModel)]="fecha_fin" 
+                  dateFormat="yy-mm-dd" 
+                  [appendTo]="'body'"
+                  [monthNavigator]="true" 
+                  [yearNavigator]="true" 
+                  yearRange="2000:2040"
+                  [showIcon]="true"
+                  ></p-calendar>
+                <!-- <div class="input-group">
+                  <input
+                    #dpToDateH
+                    class="form-control claseinputs2"
+                    placeholder="yyyy-mm-dd"
+                    name="dpToDateH"
+                    [(ngModel)]="form.fecha_hasta"
+                    ngbDatepicker
+                    #h2="ngbDatepicker"
+                    (click)="h2.toggle()"
+                    [disabled]="expirationDate"
+                  >
+                  <div class="input-group-text claseinputs2">
+                    <i class="fa fa-lg fa-calendar"></i>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Hora final:</div>
+              <div class="col-8">
+                <div class="row">
+                  <p-calendar [(ngModel)]="hora_fin" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [minDate]="hora_ini"></p-calendar>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-5">
+                    <select class="claseinputs" [(ngModel)]="form.hora_hasta">
+                      <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
+                    </select>
+                  </div>
+                  <div class="col-1">
+                    :
+                  </div>
+                  <div class="col-5">
+                    <select class="claseinputs" [(ngModel)]="form.min_hasta">
+                      <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <div class="row"></div>
 
-
-
-          <div class="row">
-            <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Inicial:</label>
-            <div class="col-sm-6">
-              <div class="input-group">
-                <input
-                  #dpFromDateH
-                  class="form-control claseinputs2"
-                  placeholder="yyyy-mm-dd"
-                  name="dpFromDateH"
-                  [(ngModel)]="form.fecha_desde"
-                  ngbDatepicker
-                  #h1="ngbDatepicker"
-                  (click)="h1.toggle()"
-                  [disabled]="expirationDate"
-               >
-                <div class="input-group-text claseinputs2">
-                  <i class="fa fa-lg fa-calendar"></i>
+        <div class="row">
+          <legend>Opciones</legend>
+          <div class="col-12 mb-2">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Paradas:</div>
+              <div class="col-1">
+                <div class="form-check">
+                  <input class="form-check-input"  (change)="changeShowingParadasHistorial()" type="checkbox" id="chckParada" [(ngModel)]="form.chckParada">
                 </div>
               </div>
-
+              <div class="col-7">
+                <p-dropdown 
+                  [options]="availableOptionsTempoParada" 
+                  optionLabel="name" 
+                  optionValue="id"
+                  [(ngModel)]="form.duracionParada" 
+                  [showClear]="false" 
+                  [appendTo]="'body'" [disabled]="!form.chckParada"></p-dropdown>
+                <!-- <select class="claseinputs"  [(ngModel)]="form.duracionParada">
+                  <option [value]="item.id" *ngFor="let item of availableOptionsTempoParada">{{item.name}}</option>
+                </select> -->
+              </div>
             </div>
           </div>
-
-          <!-- <div class="row">
-            <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Inicial:</label>
-            <div class="col-sm-4">
-              <input class="claseinputs"  type="text" id="fechaInicial" [(ngModel)]="form.fecha_desde">
-            </div>
-          </div> -->
-
-          <div class="row">
-            <label for="horaInicial" class="col-sm-4 col-form-label label-form-gl">Hora Inicial:</label>
-            <div class="col-sm-3">
-              <select class="claseinputs" [(ngModel)]="form.hora_desde">
-                <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
-              </select>
-            </div>
-            <div class="col-sm-1">
-              :
-            </div>
-            <div class="col-sm-3">
-              <select class="claseinputs" name="miselect" [(ngModel)]="form.min_desde">
-                <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
-              </select>
-            </div>
-          </div>
-
-
-
-          <div class="row">
-            <label for="fechaInicial" class="col-sm-4 col-form-label label-form-gl">Fecha Final:</label>
-            <div class="col-sm-6">
-              <div class="input-group">
-                <input
-                  #dpToDateH
-                  class="form-control claseinputs2"
-                  placeholder="yyyy-mm-dd"
-                  name="dpToDateH"
-                  [(ngModel)]="form.fecha_hasta"
-                  ngbDatepicker
-                  #h2="ngbDatepicker"
-                  (click)="h2.toggle()"
-                  [disabled]="expirationDate"
-               >
-                <div class="input-group-text claseinputs2">
-                  <i class="fa fa-lg fa-calendar"></i>
+          <div class="col-12 mb-2">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Tramas:</div>
+              <div class="col-1">
+                <div class="form-check">
+                  <input class="form-check-input"  (change)="changeShowingTramas()" type="checkbox" id="chckTrama" [(ngModel)]="form.chckTrama">
                 </div>
               </div>
-
+              <div class="col-7"></div>
             </div>
           </div>
-
-          <!-- <div class="row">
-            <label for="fechaFinal" class="col-sm-4 col-form-label label-form-gl">Fecha Final:</label>
-            <div class="col-sm-4">
-              <input class="claseinputs"  type="text" id="fechaFinal" [(ngModel)]="form.fecha_hasta">
-            </div>
-            -<i class="fa fas fa-calendar"></i>
-          </div> -->
-
-
-          <div class="row">
-            <label for="horaFinal" class="col-sm-4 col-form-label label-form-gl">Hora Final:</label>
-            <div class="col-sm-3">
-              <select class="claseinputs" [(ngModel)]="form.hora_hasta">
-                <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
-              </select>
-            </div>
-            <div class="col-sm-1">
-              :
-            </div>
-            <div class="col-sm-3">
-              <select class="claseinputs" [(ngModel)]="form.min_hasta">
-                <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
-              </select>
+          <div class="col-12 mb-2">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Gráfico:</div>
+              <div class="col-1">
+                <div class="form-check">
+                  <input class="form-check-input" (change)="changeShowingGrafico()" type="checkbox" id="chckGrafico" [(ngModel)]="form.chckGrafico">
+                </div>
+              </div>
+              <div class="col-7">
+                <input type="color" class="form-control form-control-color" id="chckGrafico" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color" [disabled]="!form.chckGrafico">
+              </div>
             </div>
           </div>
-
-
+          <div class="col-12 mb-3">
+            <div class="row d-flex align-items-center">
+              <div class="col-4 text-end">Eventos:</div>
+              <div class="col-1">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento">
+                </div>
+              </div>
+              <div class="col-7">
+                <button type="button" class="btn btn-outline-secondary btn-xs-gl" [disabled]="!form.chckEvento">Elegir</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
+
+      <div class="modal-footer">
+        <div class="row w-100 justify-content-around">
+          <div class="col-5">
+            <button type="button" (click)="clickCargarHistorial()" id="btnMostrarHistorial" class="btn btn-success not-cancel w-100" [disabled]="form.selectedCar == null">Mostrar</button>
+          </div>
+          <div class="col-5">
+            <button type="button" (click)="clickEliminarHistorial()" class="btn btn-success w-100" [disabled]="form.selectedCar == null">Ocultar</button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="card-body">
 
       <div *ngIf="conHistorial">
 
@@ -172,7 +288,7 @@
 
 
 
-      <legend>Opciones</legend>
+      <!-- <legend>Opciones</legend>
 
       <div class="row">
         <label for="chckParada" class="col-sm-4 col-form-label label-form-gl">Paradas:</label>
@@ -219,7 +335,9 @@
 
 
 
-      </div>
+      </div> -->
+
+      <!-- <div class="row"></div>
 
       <legend></legend>
 
@@ -232,11 +350,11 @@
           <button type="button" (click)="clickEliminarHistorial()"  class="btn btn-success btn-sm">Ocultar</button>
         </div>
         <div class="col-sm-3"></div>
-      </div>
+      </div> -->
 
     </div>
 
-    <legend></legend>
+    <!-- <legend></legend> -->
 
     <div style="overflow-y: auto;">
     <!-- <div style="height: calc(100vh - 470px); overflow-y: auto;"> -->
@@ -253,7 +371,7 @@
                 <td>Amount</td>
             </tr>
         </thead> -->
-        <tbody style="height: 300px;">
+        <tbody style="">
 
 
 

@@ -207,36 +207,43 @@
     }
   }
 
-  p-dialog > div > div div.p-dialog-header {
-    background-color: var(--gl-blue-dark);
-    color: white;
-    height: 2rem;
-
-    > .p-dialog-header-icons {
-      > button > span {
-        color: #fff;
-      }
-      > button:focus {
-        outline: none;
-        box-shadow: none;
-      }
-      > button:enabled:hover {
-        background: inherit;
-        > span {
-          color: var(--gl-light-gray-hover);
+  p-dialog {
+    > div > div div.p-dialog-header {
+      background-color: var(--gl-blue-dark);
+      color: white;
+      height: 2rem;
+  
+      > .p-dialog-header-icons {
+        > button > span {
+          color: #fff;
+        }
+        > button:focus {
+          outline: none;
+          box-shadow: none;
+        }
+        > button:enabled:hover {
+          background: inherit;
+          > span {
+            color: var(--gl-light-gray-hover);
+          }
         }
       }
-    } 
+    }
+    &.error-dialog{
+      > div > div div.p-dialog-header {
+        background-color: black;
+      }
+    }
       
   }
 
   .modal-footer > div > div:first-child,
   .p-dialog-footer > p-footer > div > div:first-child {
-    > button {
+    > button.btn.btn-success:not(.not-cancel) {
       color: #000;
       background-color: #fff;
     }
-    > button:first-child:hover{
+    > button.btn.btn-success:first-child:hover:not(.not-cancel){
       background-color: #d1e7dd;
     }
   }
