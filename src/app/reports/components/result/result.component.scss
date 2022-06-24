@@ -111,9 +111,9 @@ p{
     align-items: center;
 }
 
-:host ::ng-deep .p-dialog-content{
-    display: none !important;
-}
+// :host ::ng-deep .p-dialog-content{
+//     display: none !important;
+// }
 
 .grand-container.multitable-container{
     display: flex;

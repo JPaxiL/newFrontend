@@ -258,7 +258,7 @@ export class FormComponent implements OnInit {
         {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},
         {id : 2, value : 'REPORTE DE ENTRADA Y SALIDA', url: '/api/reports/entrada_salida'},
         {id : 3, value : 'REPORTE DE COMBUSTIBLE', url: '/api/reports/combustible'},
-        {id : 4, value : 'REPORTE DE EXCESOS EN ZONA'},
+        {id : 4, value : 'REPORTE DE EXCESOS EN ZONA', url: '/api/reports/exceso_en_zona'},
         {id : 5, value : 'REPORTE GENERAL', url: '/api/reports/general'},
         {id : 6, value : 'REPORTE DE EVENTOS', url: '/api/reports/eventos'},
         {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
@@ -598,6 +598,9 @@ export class FormComponent implements OnInit {
         this.showLimitTime = true;
         this.showOdomOpt = true;
         break;
+      case 4:
+        this.showLimitTime = true;
+        break;
       case 5:
         this.showLimitTime = true;
         this.showCheckboxs = true;
@@ -697,6 +700,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 2 && is_vehicle_selected && is_zone_selected)
         ||
         (this.selectedReport == 3 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 4 && is_vehicle_selected)
         ||
         (this.selectedReport == 5 && is_vehicle_selected)
         ||

@@ -112,6 +112,10 @@ export class ResultComponent implements OnDestroy, OnInit {
   isSafari = false;
   isEdge = false;
 
+  modalDetalleRepExcesosEnZona = false;
+  detalleExcesosEnZona : any = "";
+  tablaString = "";
+
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
@@ -1809,6 +1813,210 @@ export class ResultComponent implements OnDestroy, OnInit {
       /* alert('No se han encontrado datos para exportar'); */
     }
   }
+
+
+
+  exportExcelExcesosEnZona(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var allRows: AllRows[] = [
+        {}, {
+          cells: [
+            { value: "REPORTE DE EXCESOS EN ZONA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+          ]
+        }
+    ];
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {},
+          {
+            cells: [
+              { value: "REPORTE DE EXCESOS EN ZONA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            ]
+          },
+          {},
+          {
+            cells: [
+              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
+            ]
+          },
+          {}
+        ];
+
+
+
+          //=================CABECERA =================
+          var cellsCampos :any = [];
+
+          cellsCampos.push({ value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Convoy", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+
+          cellsCampos.push({ value: "Vel. Límite", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Exceso vel maxima", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+
+          if(this.chkDateHour) {
+              cellsCampos.push({ value: "Fecha de Inicio", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+              cellsCampos.push({ value: "Hora de Inicio", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          } else {
+              cellsCampos.push({ value: "Fecha/Hora Inicio", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          }
+
+          if(this.chkDateHour) {
+            cellsCampos.push({ value: "Fecha Final", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Hora Final", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          } else {
+              cellsCampos.push({ value: "Fecha/Hora Final", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          }
+
+          cellsCampos.push({ value: "Duración", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Geocerca", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Referencia", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+
+          rows.push({
+              cells: cellsCampos
+          });
+
+          //====================  CUERPO =============================
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;
+            convoy:any; tracto:any; v0:any; velocidad:any; fecha_inicio:any; fecha_final:any; duracion:any; nombre_zona:any; referencia:any}, index: number) => {
+
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            //=================CABECERA =================
+            var cellsCuerpo :any = [];
+
+
+            cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.convoy, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.tracto, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+
+            cellsCuerpo.push({ value: item.v0, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+
+
+            if(this.chkDateHour) {
+              cellsCuerpo.push({ value: this.isChe(item.fecha_inicio), type: 'date', format: "yyyy/MM/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              cellsCuerpo.push({ value: this.isChs(item.fecha_inicio), type: 'date', format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            } else {
+              cellsCuerpo.push({ value: this.isChe(item.fecha_inicio), type: 'date', format: "yyyy/MM/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            }
+
+            if(this.chkDateHour) {
+                //var fh2 = item.fServidor.split(" ");
+                cellsCuerpo.push({ value: this.isChe(item.fecha_final), type: 'date', format: "yyyy/MM/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                cellsCuerpo.push({ value: this.isChs(item.fecha_final), type: 'date', format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            } else {
+                cellsCuerpo.push({ value: this.isChe(item.fecha_final), type: 'date', format: "yyyy/MM/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            }
+
+            cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.referencia, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+
+            rows.push({
+              cells: cellsCuerpo
+            });
+
+
+          });
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: 6
+        },
+      columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+      ],
+      title: data[0][1],
+      rows: rows
+      });
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(1, 1);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: 2
+        },
+        columns: [
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+        ],
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteExcesosEnZona.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+  showModalExcesosEnZona(row:any) {
+    // console.log(row);
+    // console.log(row.detalle);
+
+    this.modalDetalleRepExcesosEnZona = true;
+    this.detalleExcesosEnZona = row;
+
+    // console.log(this.detalleExcesosEnZona);
+
+  }
+
+
+
+
+
 
   exportExcelGeneral(vrs: number) {
     //vm.dateHour();

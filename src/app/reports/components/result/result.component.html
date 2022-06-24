@@ -9,6 +9,49 @@
   </ng-template>
 </p-confirmDialog>
 
+
+
+<p-dialog header="Detalle del Exceso" [(visible)]="modalDetalleRepExcesosEnZona"  [style]="{width: '50vw'}" >
+  <ng-container >
+    <table  class="table table-striped table-border row-border hover" [style]="{'font-size': '11px'}">
+      <thead>
+        <tr>
+            <th>Nº</th>
+            <th>Fecha</th>
+            <th>Velocidad</th>
+            <th>Coordenada</th>
+            <th>V.Límite</th>
+            <th>V.Tolerable</th>
+            <th>V.Grave</th>
+            <th>V.Muy Grave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of detalleExcesosEnZona.detalle;  let i = index;">
+            <td>{{i + 1}}</td>
+            <td>{{row[0]}}</td>
+            <td>{{row[3]}}</td>
+            <td>
+              <a href="http://maps.google.com/maps?q={{row[1]}},{{row[2]}}&amp;t=m" target="_blank">{{row[1]}},{{row[2]}}</a>
+            </td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta == 'false'">{{detalleExcesosEnZona.v0}}</td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta == 'false'">{{detalleExcesosEnZona.v1}}</td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta == 'false'">{{detalleExcesosEnZona.v2}}</td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta == 'false'">{{detalleExcesosEnZona.v3}}</td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta != 'false'">{{detalleExcesosEnZona.v0_camioneta}}</td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta != 'false'">{{detalleExcesosEnZona.v1_camioneta}}</td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta != 'false'">{{detalleExcesosEnZona.v2_camioneta}}</td>
+            <td *ngIf="detalleExcesosEnZona.isCamioneta != 'false'">{{detalleExcesosEnZona.v3_camioneta}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="modalDetalleRepExcesosEnZona=false" label="Aceptar" styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
+
+
 <div style="display: flex; flex-direction: column; padding: 0; height: 100%; max-height: 100%; margin: 0; font-size: 0.8rem;">
   <div *ngIf="dt_completed == 0" class="pristine-report">
     <img src="./assets/images/fondo-svg-reporte.svg" alt="fondo-reporte-logo">
@@ -357,6 +400,89 @@
 
       </div>
     </div>
+
+
+    <!-- 4. REPORTE DE EXCESOS EN ZONA-->
+    <div class="container grand-container" *ngIf="num_rep == 4">
+      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+
+        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+          <div>VEHÍCULO: {{v_table[0][1]}}</div>
+          <div>PERIODO: {{period}}</div>
+        </div>
+
+        <ng-container *ngIf="dtRendered">
+          <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+            <thead>
+              <tr>
+                  <th>Item</th>
+                  <th>Convoy</th>
+                  <th>Código</th>
+                  <th>Placa</th>
+
+                  <th>Vel. Límite</th>
+                  <th>Exceso vel maxima</th>
+
+                  <th *ngIf="!chkDateHour">Fecha/Hora Inicio</th>
+                  <th *ngIf="chkDateHour">Fecha de Inicio</th>
+                  <th *ngIf="chkDateHour">Hora de Inicio</th>
+
+                  <th *ngIf="!chkDateHour">Fecha/Hora Final</th>
+                  <th *ngIf="chkDateHour">Fecha Final</th>
+                  <th *ngIf="chkDateHour">Hora Final</th>
+
+                  <th>Duración</th>
+                  <th>Geocerca</th>
+                  <th>Referencia</th>
+                  <th>Ubicación</th>
+                  <th>Detalle</th>
+
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td>{{row.convoy}}</td>
+                  <td>{{row.codigo}}</td>
+                  <td>{{row.tracto}}</td>
+
+                  <td>{{row.v0}}</td>
+                  <td>{{row.velocidad}}</td>
+
+                  <td *ngIf="!chkDateHour">{{row.fecha_inicio}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_inicio.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_inicio.split(' ')[1]}}</td>
+
+                  <td *ngIf="!chkDateHour">{{row.fecha_final}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_final.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_final.split(' ')[1]}}</td>
+
+                  <td>{{row.duracion}}</td>
+                  <td>{{row.nombre_zona}}</td>
+                  <td>{{row.referencia}}</td>
+
+                  <td>
+                    <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                  </td>
+                  <td>
+                    <button class="btn btn-success" (click)="showModalExcesosEnZona(row);">Detalle</button>
+                  </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </ng-container>
+
+        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+          <p>Ningún dato encontrado en su consulta.</p>
+        </div>
+
+
+      </div>
+    </div>
+
 
 
     <!-- 5. REPORTE GENERAL-->
@@ -1590,6 +1716,7 @@
       <button *ngIf="num_rep == 1" class="btn btn-success" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 2" class="btn btn-success" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 3" class="btn btn-success" (click)="showSelectExcel('exportExcelCombustible');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 4" class="btn btn-success" (click)="showSelectExcel('exportExcelExcesosEnZona');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 5" class="btn btn-success" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
