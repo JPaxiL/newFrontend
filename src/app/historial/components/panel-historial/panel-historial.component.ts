@@ -1,5 +1,5 @@
 import { Component, OnInit ,OnDestroy} from '@angular/core';
-
+import { DialogModule } from 'primeng-lts/dialog';
 import { ItemHistorial } from 'src/app/historial/models/vehicle';
 
 import * as moment from 'moment';
@@ -12,6 +12,7 @@ import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { MapServicesService } from '../../../map/services/map-services.service';
 
 import { HistorialService } from '../../services/historial.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -200,12 +201,20 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   public expirationDate = false;
 
+  fecha_ini!: Date;
+  hora_ini!: Date;
+  fecha_fin!: Date;
+  hora_fin!: Date;
+
+  dialogDisplay: boolean = false;
+  loadingHistorial: boolean = false;
 
 
   constructor(
     public mapService: MapServicesService,
     public historialService: HistorialService,
     private VehicleService : VehicleService,
+    private spinner: NgxSpinnerService
     ) {
 
     // this.historialService.currentMessage.subscribe(message => this.message = message);
@@ -232,6 +241,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
+    const hoy = Date.now();
+    this.fecha_ini = new Date(moment(hoy).format('YYYY-MM-DD HH:mm'));
+    this.fecha_fin = this.fecha_ini;
+    this.hora_ini = new Date('12/03/2018 00:00');
+    this.hora_fin = new Date('12/03/2018 23:59');
+    this.form.selectedRango = '0';
+    //this.form.duracionParada = '60';
     // $( "#datepicker" ).datepicker();
     // $('#datepicker').datetimepicker({
     //   language: 'pt-es'
@@ -426,7 +442,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
               break;
       }
 
-      this.form.fecha_desde = {
+      /* this.form.fecha_desde = {
         year: parseInt(fecha_desde.format("YYYY")),
         month: parseInt(fecha_desde.format("MM")),
         day: parseInt(fecha_desde.format("DD")),
@@ -436,13 +452,21 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         year: parseInt(fecha_hasta.format("YYYY")),
         month: parseInt(fecha_hasta.format("MM")),
         day: parseInt(fecha_hasta.format("DD")),
-      };
+      }; */
 
-      this.form.hora_desde  = '00';//{id: '00', name: '00'};
+      this.fecha_ini = fecha_desde.toDate();
+      this.fecha_fin = fecha_hasta.toDate();
+
+      console.log(this.fecha_ini);
+      console.log(this.fecha_fin);
+
+      /* this.form.hora_desde  = '00';//{id: '00', name: '00'};
       this.form.min_desde   = '00';//{id: '00', name: '00'};
       this.form.hora_hasta  = '00';//{id: '00', name: '00'};
-      this.form.min_hasta   = '00';//{id: '00', name: '00'};
+      this.form.min_hasta   = '00';//{id: '00', name: '00'}; */
 
+      this.hora_ini = new Date('12/03/2018 00:00');
+      this.hora_fin = new Date('12/03/2018 23:59');
   };
 
 
@@ -455,21 +479,33 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
   async clickCargarHistorial() {
-
+    this.spinner.show('loadingHistorial');
     this.clickEliminarHistorial();
 
     this.historialService.getHistorial();
     // var dH =  this.historialService.tramasHistorial; // Data Historial
 
 
-    let MDstr = "" + this.form.fecha_desde.month;
+    /* let MDstr = "" + this.form.fecha_desde.month;
     let DDstr = "" + this.form.fecha_desde.day;
+    console.log('Form', MDstr);
+    console.log('Form', DDstr); */
+    let MDstr = "" + moment(this.fecha_ini).format("M");
+    let DDstr = "" + moment(this.fecha_ini).format("D");
+    let HMDstr = "" + moment(this.hora_ini).format("hh:mm:00");
+    /* console.log('Date', MDstr);
+    console.log('Date', DDstr); */
 
-    let MHstr = "" + this.form.fecha_hasta.month;
-    let DHstr = "" + this.form.fecha_hasta.day;
+    /* let MHstr = "" + this.form.fecha_hasta.month;
+    let DHstr = "" + this.form.fecha_hasta.day; */
+    let MHstr = "" + moment(this.fecha_fin).format("M");
+    let DHstr = "" + moment(this.fecha_fin).format("D");
+    let HMHstr = "" + moment(this.hora_fin).format("hh:mm:59");
 
-    var M1 = this.form.fecha_desde.year+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.form.hora_desde + ':' + this.form.min_desde + ':00-05:00';
-    var M2 = this.form.fecha_hasta.year+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.form.hora_hasta + ':' + this.form.min_hasta + ':00-05:00';
+    /* var M1 = this.form.fecha_desde.year+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.form.hora_desde + ':' + this.form.min_desde + ':00-05:00';
+    var M2 = this.form.fecha_hasta.year+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.form.hora_hasta + ':' + this.form.min_hasta + ':00-05:00'; */
+    var M1 = moment(this.fecha_ini).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + HMDstr + '-05:00';
+    var M2 = moment(this.fecha_fin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + HMHstr + '-05:00';
 
     var param = {
                 fecha_desde:M1, fecha_hasta:M2,
@@ -876,6 +912,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             this.changeShowingTramas();
             this.changeShowingGrafico();
 
+            console.log('Mostrar tabla', dH);
 
             this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
 
@@ -968,9 +1005,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-
+        this.spinner.hide('loadingHistorial');
       } else {
-        //console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
+        this.spinner.hide('loadingHistorial');
+        console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
+        this.showNotEnoughInfoDialog();
       }
 
 
@@ -986,6 +1025,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   }
 
+  showNotEnoughInfoDialog() {
+    this.dialogDisplay = true;
+  }
 
   clickEliminarHistorial() {
 
