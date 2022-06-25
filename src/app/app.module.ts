@@ -87,12 +87,13 @@ import { FormComponent } from './reports/components/form/form.component';
 import { ResultComponent } from './reports/components/result/result.component';
 import { EventBoardComponent } from './events/components/event-board/event-board.component';
 import { EventListComponent } from './events/components/event-list/event-list.component';
-import { ProfileConfigComponent } from './profile-config/profile-config.component';
 import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-geopoints.component';
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { ModalComponent } from './reports/components/modal/modal.component'; 
+import { ModalComponent } from './reports/components/modal/modal.component';
+import { UserConfigComponent } from './profile-config/user-config/user-config.component';
+import { CredConfigComponent } from './profile-config/cred-config/cred-config.component'; 
 
 @NgModule({
   declarations: [
@@ -139,10 +140,11 @@ import { ModalComponent } from './reports/components/modal/modal.component';
     ResultComponent,
     EventBoardComponent,
     EventListComponent,
-    ProfileConfigComponent,
     AddGeopointsComponent,
     ListGeopointsComponent,
-    ModalComponent
+    ModalComponent,
+    UserConfigComponent,
+    CredConfigComponent
   ],
   imports: [
     ToastrModule.forRoot({

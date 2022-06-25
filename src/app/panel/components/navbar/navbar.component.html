@@ -63,15 +63,24 @@
             <span>Auditoría</span>
           </button>
         </li>
+        <!-- <li class="nav-item">
+          <button class="btn btn-info" [ngClass]="panelService.nombreComponente == 'CONFIG'? 'active': ''" (click)="panelService.clickShowPanel('CONFIG');">
+            <i class="fa fa-history" aria-hidden="true"></i>
+            <span>Configuración</span>
+          </button>
+        </li> -->
+        
         <li ngbDropdown class="nav-item">
-          <button ngbDropdownToggle class="btn btn-info">
+          <button ngbDropdownToggle class="btn btn-info" [ngClass]="panelService.nombreComponente == 'CRED-CONFIG' || panelService.nombreComponente == 'USER-PREFERENCES'? 'active': ''">
             <i class="fa fa-cog" aria-hidden="true"></i>
             <span id="span_config">Configuración</span>  
           </button>
           <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
-            <button ngbDropdownItem routerLink="/profile">Configuración de Perfil</button>
+            <button ngbDropdownItem (click)="panelService.clickShowPanel('USER-PREFERENCES');">Preferencias</button>
+            <button ngbDropdownItem (click)="panelService.clickShowPanel('CRED-CONFIG');">Configuración de Perfil</button>
           </div>
         </li>
+
         <!-- <li class="nav-item">
           <a class="nav-link" aria-current="page" (click)="showHideSideBar()"  title="Menú" data-bs-toggle="tooltip" data-bs-placement="bottom">
             <i class="fa fa-list-ul" ></i>
@@ -148,15 +157,22 @@
             <i class="fa fa-book" aria-hidden="true"></i>
           </button>
         </li>
+        <!-- <li class="nav-item">
+          <button class="btn btn-info config" [ngClass]="panelService.nombreComponente == 'CONFIG'? 'active': ''" (click)="panelService.clickShowPanel('CONFIG');" title="Configuración" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+          </button>
+        </li> -->
+
         <li class="nav-item" ngbDropdown>
-          <button ngbDropdownToggle class="btn btn-info config">
-          <!-- <button ngbDropdownToggle class="btn btn-info config" title="Configuración" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();"> -->
+          <button ngbDropdownToggle class="btn btn-info config" [ngClass]="panelService.nombreComponente == 'CRED-CONFIG' || panelService.nombreComponente == 'USER-PREFERENCES'? 'active': ''">
             <i class="fa fa-cog" aria-hidden="true"></i>
           </button>
           <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
-            <button ngbDropdownItem routerLink="/profile">Configuración de Perfil</button>
+            <button ngbDropdownItem (click)="panelService.clickShowPanel('USER-PREFERENCES');">Preferencias</button>
+            <button ngbDropdownItem (click)="panelService.clickShowPanel('CRED-CONFIG');">Configuración de Perfil</button>
           </div>
         </li>
+
         <!-- <li class="nav-item">
           <a class="nav-link" aria-current="page" (click)="showHideSideBar()"  title="Menú" data-bs-toggle="tooltip" data-bs-placement="bottom">
             <i class="fa fa-list-ul" ></i>

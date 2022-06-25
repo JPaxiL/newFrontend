@@ -17,7 +17,9 @@ export class PanelService {
     { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Accesorios"},
     { id:'GEOFENCES', name:"Geocercas"},
-    { id: 'EVENT-USER', name: 'Eventos'}
+    { id:'EVENT-USER', name:'Eventos'},
+    { id:'USER-PREFERENCES', name:'Preferencias'},
+    { id:'CRED-CONFIG', name:'Configuración de Perfil'},
   );
 
   nombreComponente: string = '';
@@ -26,15 +28,18 @@ export class PanelService {
   constructor() { }
 
   clickShowPanel( nomComponent:string ){
+    console.log('clickShowPanel');
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
       $("#panelMonitoreo").hide( "slow" );
       this.nombreComponente = '';
     } else {
       $("#panelMonitoreo").show( "slow" );
       this.nombreComponente = nomComponent;
+      console.log(this.nombreComponente);
   
       const item = this.options.filter((item)=> item.id == nomComponent);
       this.nombreCabecera = item[0].name;
+      console.log(this.nombreCabecera);
     }
   }
 

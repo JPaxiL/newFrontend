@@ -1,0 +1,79 @@
+<div style="height: 100%; overflow:auto;">
+    <!--     <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;">Configuración</div>
+    
+        <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div> -->
+    
+        <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
+            <div class="panel-izq-form">
+
+                <div class="row">
+                    <legend class="col-12">Mapa</legend>
+                    <div class="col-12 mb-2">
+                        <label class="row">
+                            <span class="col-4">Mostrar dirección de vehículo</span>
+                            <div class="col-8">
+                                <p-dropdown 
+                                    [options]="[{id:0, name:'Mostrar'},{id:1, name: 'Ocultar'}]" 
+                                    optionLabel="name" 
+                                    optionValue="id"
+                                    [(ngModel)]="mostrarDirVehicle"
+                                    [showClear]="false" 
+                                    [appendTo]="'body'" 
+                                    (onChange)="consoleMostrar()"
+                                    placeholder="Seleccione una opción..."></p-dropdown>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label class="row">
+                            <span class="col-4">Mostrar ícono de vehículo</span>
+                            <div class="col-8">
+                                <p-dropdown 
+                                    [options]="configIcon" 
+                                    optionLabel="name" 
+                                    optionValue="id"
+                                    [(ngModel)]="mostrarIcono"
+                                    [showClear]="false" 
+                                    [appendTo]="'body'" 
+                                    (onChange)="consoleMostrar()"
+                                    placeholder="Seleccione una opción..."></p-dropdown>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label class="row">
+                            <span class="col-4">Tamaño de ícono de vehículo</span>
+                            <div class="col-8">
+                                <p-dropdown 
+                                    [options]="sizeIcon" 
+                                    optionLabel="name" 
+                                    optionValue="id"
+                                    [(ngModel)]="sizeIcono"
+                                    [showClear]="false" 
+                                    [appendTo]="'body'" 
+                                    (onChange)="consoleMostrar()"
+                                    placeholder="Seleccione una opción..."></p-dropdown>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+    
+                <div class="row"></div>
+    
+            </div>
+
+            <div class="modal-footer">
+                <div class="row w-100 justify-content-around">
+                  <div class="col-5 d-flex justify-content-center flex-column">
+                    <button type="button" class="btn btn-success w-100">Cancelar</button>
+                  </div>
+                  <div class="col-5">
+                    <button type="button" class="btn btn-success w-100">Guardar Cambios</button>
+                  </div>
+                </div>
+              </div>
+
+    
+        </div>
+    
+    </div>

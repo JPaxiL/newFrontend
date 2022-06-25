@@ -89,6 +89,14 @@
       <app-event-board></app-event-board>
     </div>
 
+    <div *ngIf="(panelService.nombreComponente == 'USER-PREFERENCES')">
+      <app-user-config></app-user-config>
+    </div>
+
+    <div *ngIf="(panelService.nombreComponente == 'CRED-CONFIG')">
+      <app-cred-config></app-cred-config>
+    </div>
+
 
 
   </div>
