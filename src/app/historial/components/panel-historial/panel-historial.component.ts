@@ -151,10 +151,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const hoy = Date.now();
-    this.fecha_ini = new Date(moment(hoy).format('YYYY-MM-DD HH:mm'));
+    this.fecha_ini = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
     this.fecha_fin = this.fecha_ini;
-    this.hora_ini = new Date('12/03/2018 00:00');
-    this.hora_fin = new Date('12/03/2018 23:59');
+    this.hora_ini = new Date('2018-03-12T00:00');
+    this.hora_fin = new Date('2018-03-12T23:59');
     this.form.selectedRango = '0';
     //this.form.duracionParada = '60';
     // $( "#datepicker" ).datepicker();
@@ -374,8 +374,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.form.hora_hasta  = '00';//{id: '00', name: '00'};
       this.form.min_hasta   = '00';//{id: '00', name: '00'}; */
 
-      this.hora_ini = new Date('12/03/2018 00:00');
-      this.hora_fin = new Date('12/03/2018 23:59');
+      this.hora_ini = new Date('2018-03-12T00:00');
+      this.hora_fin = new Date('2018-03-12T23:59');
   };
 
 

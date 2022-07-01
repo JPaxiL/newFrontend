@@ -3,7 +3,7 @@
   /* border-right: 2px solid #34518D; */
   display: none;
   background: #fff;
-  height: -webkit-fill-available;
+  /* height: -webkit-fill-available; */
   /* width: 100%;
   max-width: 450px; */
   width: 425px;
@@ -21,6 +21,8 @@
   top: auto;
   bottom: auto;
   /* left: 65px; */
+  /* margin-top: -2.75rem; */
+  height: 100%;
 }
 
 .header-panel-monitoreo {
@@ -126,7 +128,8 @@
   }
 
   #panelMonitoreo > .card > div:not(:first-child) {
-    flex-grow: 1;
+    /* flex-grow: 1; */
+    height: calc(100% - 2.5rem);
   }
 
   #rowBusqueda{
@@ -273,6 +276,13 @@
 @media (max-width: 960px) {
   #dragbar {
     width: 0.5rem;
+  }
+}
+
+@media (max-width: 740px) {
+  #panelMonitoreo {
+    margin-top: 2.75rem;
+    height: calc(100% - 2.75rem);
   }
 }
 

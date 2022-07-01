@@ -28,7 +28,6 @@ export class PanelService {
   constructor() { }
 
   clickShowPanel( nomComponent:string ){
-    console.log('clickShowPanel');
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
       $("#panelMonitoreo").hide( "slow" );
       this.nombreComponente = '';
@@ -39,7 +38,6 @@ export class PanelService {
   
       const item = this.options.filter((item)=> item.id == nomComponent);
       this.nombreCabecera = item[0].name;
-      console.log(this.nombreCabecera);
     }
   }
 

@@ -1,13 +1,21 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
-  <div class="container-fluid no-x-padding" style="align-items: stretch;">
-    <div>
-      <a href="#" class="navbar-brand" style="margin: 0px;">
-        <img [src]="logo" width="100px"/>
-      </a>
+<nav class="navbar navbar-expand-sm" style="height: 2.75rem; padding: 0;">
+  <div class="container-fluid no-x-padding" style="align-items: stretch; height: 100%;">
+    <div class="d-flex">
+      <!-- BURGER BUTTON -->
+      <!-- <div class="d-none justify-content-end align-items-center collapse-toggle" style="height: 100%; width: 2rem; color: #fff; background-color: var(--gl-blue-dark);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" stroke-width="2" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+      </div> -->
+      <div class="gl-logo">
+        <a class="navbar-brand" style="margin: 0px;">
+          <img [src]="logo" width="100px"/>
+        </a>
+      </div>
     </div>
     
     <!-- EXPANDIDO -->
-    <div class="collapse navbar-collapse justify-content-start" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse justify-content-start bg-light" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
           <button class="btn btn-info" [ngClass]="panelService.nombreComponente == 'VEHICLES'? 'active': ''" (click)="panelService.clickShowPanel('VEHICLES');">
@@ -110,7 +118,7 @@
     </div>
 
     <!-- COLAPSADO -->
-    <div class="collapse navbar-collapse justify-content-start" id="navbarSupportedContent_collapsed" style="padding: 0px 0.25rem;">
+    <div class="collapse navbar-collapse justify-content-start bg-light" id="navbarSupportedContent_collapsed" style="padding: 0px 0.25rem;">
       <ul class="navbar-nav">
         <li class="nav-item">
           <button class="btn btn-info" [ngClass]="panelService.nombreComponente == 'VEHICLES'? 'active': ''" (click)="panelService.clickShowPanel('VEHICLES');" title="Vehiculos" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
@@ -164,7 +172,7 @@
         </li> -->
 
         <li class="nav-item" ngbDropdown>
-          <button ngbDropdownToggle class="btn btn-info config" [ngClass]="panelService.nombreComponente == 'CRED-CONFIG' || panelService.nombreComponente == 'USER-PREFERENCES'? 'active': ''">
+          <button ngbDropdownToggle class="btn btn-info" [ngClass]="panelService.nombreComponente == 'CRED-CONFIG' || panelService.nombreComponente == 'USER-PREFERENCES'? 'active': ''">
             <i class="fa fa-cog" aria-hidden="true"></i>
           </button>
           <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
@@ -202,9 +210,9 @@
     </div>
 
 
-    <div class="d-flex bd-highlight">
-      <div class="me-auto p-2 bd-highlight" style="width: 1rem; white-space: nowrap; margin-left: 0.5rem;">
-        <a href="#" class="link-secondary" title="Eventos" data-bs-toggle="tooltip" data-bs-placement="bottom">
+    <div class="d-flex bd-highlight bg-light">
+      <div class="p-2 bd-highlight notif-button" title="Eventos" data-bs-toggle="tooltip" data-bs-placement="bottom">
+        <a href="#" class="link-secondary">
           <i class="fa badge1" data-badge=0 id="notification_count"></i>
           <i class="fa fa-bell badge1" data-badge=0 id="notification_count"></i>
           <span class="badge rounded-pill bg-danger leftTop" style="position: relative; left: -2rem; top: 0.4rem;">
@@ -212,19 +220,100 @@
         </a>
       </div>
       
-      <div class="p-2 bd-highlight col d-flex" id="span_notif">
+      <div class="py-2 bd-highlight col d-flex" id="span_notif" style="margin-left: -0.5rem;">
         <div class="d-inline-block align-self-center">
-          <span class="p-2 bd-highlight">
+          <span class="bd-highlight">
             Notificaciones</span>
         </div>
       </div>
 
-      <div class="p-2 bd-highlight col d-flex" style="height: 2.4rem;">
+      <!-- <div class="p-2 bd-highlight col d-flex" style="height: 2.4rem;">
         <div class="d-inline-block align-self-center">
-          <span class="p-2 bd-highlight" id="span_user">
+          <span class="p-2 bd-highlight text-ellipsis" id="span_user">
             user123456789abcdef@hotmail.com</span>
         </div>
+      </div> -->
+
+      <div ngbDropdown>
+        <div ngbDropdownToggle class="user-menu-container d-flex justify-content-between align-items-center text-unselectable" style="cursor: pointer;">
+          <div class="one-character-circled">{{ 'U' }}</div>
+          <div class="user-menu-name text-ellipsis">
+            <span>{{ 'Nombre1' + ' ' + 'Apellido1' }}</span>
+          </div>
+          <div style="display: grid; place-items: flex-center; color: #fff;">
+            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" stroke-width="2" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+          </div>
+        </div>
+        <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
+
+          <div class="dropdown-user-info">
+            <div class="px-3 text-ellipsis text-bold" style="max-width: 22ch; font-size: 1.125rem;">
+              <span>{{ 'Nombre1' + ' ' + 'Apellido1' }}</span>
+            </div>
+            <div class="px-3 text-ellipsis" style="max-width: 22ch;">
+              <span>user123456789abcdef@hotmail.com</span>
+            </div>
+            <div class="dropdown-divider"></div>
+          </div>
+
+          <div class="dropdown-navbar-items">
+            <button ngbDropdownItem class="btn-info" [ngClass]="panelService.nombreComponente == 'VEHICLES'? 'active': ''" (click)="panelService.clickShowPanel('VEHICLES');">
+              <i class="fa fa-truck" aria-hidden="true"></i>
+              <span>Vehículos</span>
+            </button>
+            <button ngbDropdownItem class="btn-info" [ngClass]="panelService.nombreComponente == 'EVENT-USER'? 'active': ''" (click)="panelService.clickShowPanel('EVENT-USER');">
+              <i class="fa fa-bolt" aria-hidden="true"></i>
+              <span>Eventos</span>
+            </button>
+            <button ngbDropdownItem class="btn-info" [ngClass]="panelService.nombreComponente.includes('ALERTS')? 'active': ''" (click)="panelService.clickShowPanel('ALERTS')">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span>Alertas</span>
+            </button>
+            <button ngbDropdownItem class="btn-info" [ngClass]="panelService.nombreComponente == 'GEOFENCES'? 'active': ''" (click)="panelService.clickShowPanel('GEOFENCES');">
+              <i class="fa fa-map" aria-hidden="true"></i>
+            <span>Geocercas</span>
+            </button>
+            <button ngbDropdownItem class="btn-info" [ngClass]="panelService.nombreComponente == 'GEOPOINTS'? 'active': ''" (click)="panelService.clickShowPanel('GEOPOINTS');">
+              <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+              <span>Geopuntos</span>
+            </button>
+            <button ngbDropdownItem class="btn-info" [ngClass]="panelService.nombreComponente == 'HISTORIAL'? 'active': ''" (click)="panelService.clickShowPanel('HISTORIAL');">
+              <i class="fa fa-history" aria-hidden="true"></i>
+              <span>Historial</span>
+            </button>
+            <button ngbDropdownItem class="btn-info">
+              <i class="fa fa-users" aria-hidden="true"></i>
+              <span>Subcuentas</span>
+            </button>
+            <button ngbDropdownItem class="btn-info" (click)="windowAccess.open('/reports');">
+              <i class="fa fa-line-chart" aria-hidden="true"></i>
+              <span>Reportes</span>
+            </button>
+            <button ngbDropdownItem class="btn-info">
+              <i class="fa fa-book" aria-hidden="true"></i>
+              <span>Auditoría</span>
+            </button>
+            <div class="dropdown-divider"></div>
+          </div>
+
+          <button ngbDropdownItem (click)="panelService.clickShowPanel('USER-PREFERENCES')">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+            <span>Preferencias</span>
+          </button>
+          <button ngbDropdownItem (click)="panelService.clickShowPanel('CRED-CONFIG')">
+            <i class="fa fa-key" aria-hidden="true"></i>
+            <span>Configuración de Perfil</span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <button ngbDropdownItem (click)="logOutModalIsOpen = true;">
+            <i class="fa fas fa-sign-out" aria-hidden="true"></i>
+            <span>Cerrar Sesión</span>
+          </button>
+        </ul>
       </div>
+      
       
       <!-- <div class="p-2 bd-highlight col">
         <div ngbDropdown class="d-inline-block">
@@ -248,11 +337,13 @@
             user
           </span></a>
       </div> -->
-      <div class="p-2 bd-highlight" style="background-color: var(--gl-dark-gray); padding: 0.65rem 0.65rem 0.65rem 1rem !important; cursor: pointer;" (click)="logOutModalIsOpen = true;" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom">
+
+      <!-- BOTON CERRAR SESION -->
+      <!-- <div class="p-2 bd-highlight" style="background-color: var(--gl-dark-gray); padding: 0.65rem 0.65rem 0.65rem 1rem !important; cursor: pointer;" (click)="logOutModalIsOpen = true;" title="Cerrar sesión" data-bs-toggle="tooltip" data-bs-placement="bottom">
           <a (click)="logOutModalIsOpen = true;" class="link-secondary">
               <i class="fa fas fa-sign-out" style="color: #fff;"></i>
           </a>
-      </div>
+      </div> -->
 
     </div>
   </div>

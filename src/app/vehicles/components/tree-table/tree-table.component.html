@@ -98,20 +98,18 @@
 
 </p-dialog>
 
-<div style="position: relative;">
+<div style="position: relative; height: 100%;">
   <ngx-spinner *ngIf="!alreadyLoaded" bdColor = "rgba(0, 0, 0, 0.8)" name="loadingTreeTable" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Vehículos... </p></ngx-spinner>
 
-  <div class="col" id="rowBusqueda">
-    <div class="row" style="margin-right: 0px; margin-left: 15px;">
-      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="padding-left: 0px; padding-right: 0px;">
-        <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Buscar..." class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
-      </div>
-      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left: 0px; padding-right: 0px;">
+  <div id="rowBusqueda">
+    <div class="d-flex gap-3">
+      <div class="d-flex flex-grow-1">
+        <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Buscar..." class="form-control ng-pristine ng-untouched ng-valid ng-empty flex-grow-1" ng-change="something.search()" aria-invalid="false">
         <button (click)="onClickGroup()" type="button" class="btn btn-primary">
           <i class="fa fa-plus"></i>
         </button>
       </div>
-      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right" style="padding-left: 0px; padding-right: 0px;">
+      <div>
         <div ngbDropdown container="body">
           <button class="btn btn-primary" ngbDropdownToggle>
             <i class="fa fa-fw fa-sliders fa-1"></i>
@@ -201,6 +199,8 @@
     </div>
   </div>
   <div class="">
+    <!-- Cambiar scrollHeight a 100% - 4.375rem artificialmente -->
+    <!-- scrollHeight no soporta porcentajes % -->
     <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="calc(100vh - 12.125rem)" styleClass="p-treetable-sm" sortField="name" [sortOrder]="sortOrder" [virtualScroll]="true" [virtualRowHeight]="30">
       <!-- <ng-template pTemplate="caption">
         <div style="text-align: right">

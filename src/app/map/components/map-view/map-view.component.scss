@@ -4,6 +4,16 @@
 
   :host ::ng-deep {
 
+    .leaflet-top.leaflet-left .leaflet-control-zoom.leaflet-bar.leaflet-control {
+      display: none;
+    }
+  
+    @media (max-width: 740px) {
+      .leaflet-top.leaflet-right {
+        top: 2.75rem;
+      }
+    }
+
     /* PROPUESTAS */
     .fatiga,
     .somnolencia,

@@ -2,6 +2,32 @@
     font-family: Titillium-Regular, Verdana, sans-serif;
 }
 
+.navbar-app {
+    height: 2.75rem; 
+    background-color: var(--gl-blue-dark);
+    width: 100%;
+}
+
+.map-area-app {
+    height: calc(100% - 2.75rem); 
+    /* background-color: red; */
+}
+
+@media (max-width: 740px) {
+    .navbar-app {
+        position: absolute;
+        z-index: 2;
+        height: 2.75rem; 
+        background-color: rgba(#000000, 0);
+        pointer-events: none;
+    }
+    
+    .map-area-app {
+        height: 100% 
+        /* background-color: red; */
+    }
+}
+
 :host ::ng-deep {
 
     .marker-cluster-small {
