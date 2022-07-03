@@ -88,8 +88,10 @@
                 <th *ngIf="v_table[2].Paradas">Posición detenida</th>
                 <th *ngIf="v_table[2].Movimientos">Recorrido</th>
                 <th *ngIf="v_table[2].Movimientos">Velocidad Máxima</th>
+                <th *ngIf="v_table[2].Movimientos">Vel. máx. CAN</th>
                 <th *ngIf="v_table[2].Paradas">Punto cercano</th>
                 <th *ngIf="v_table[2].Movimientos">Velocidad Promedio</th>
+                <th *ngIf="v_table[2].Movimientos">Vel. prom. CAN</th>
                 <th *ngIf="v_table[2].Paradas">Referencia</th>
               </tr>
             </thead>
@@ -111,8 +113,12 @@
                 </td><td *ngIf="row.esInt == 1">---</td>
                 <td *ngIf="row.esInt == 0">---</td><td *ngIf="row.esInt == 1">{{row.recorrido}}</td>
                 <td *ngIf="row.esInt == 0">---</td><td *ngIf="row.esInt == 1">{{row.maxima_velocidad}}</td>
+                <td *ngIf="row.esInt == 0">---</td><td *ngIf="row.esInt == 1">{{row.vel_max_can}}</td>
+
                 <td *ngIf="row.esInt == 0">{{row.pCercano}}</td><td *ngIf="row.esInt == 1">---</td>
                 <td *ngIf="row.esInt == 0">---</td><td *ngIf="row.esInt == 1">{{row.vel_promedio}}</td>
+                <td *ngIf="row.esInt == 0">---</td><td *ngIf="row.esInt == 1">{{row.vel_prom_can}}</td>
+
                 <td *ngIf="row.esInt == 0">{{row.referencia}}</td><td *ngIf="row.esInt == 1">---</td>
               </tr>
             </tbody>
@@ -131,7 +137,11 @@
                 <td>{{row.duracion}}</td>
                 <td>{{row.recorrido}}</td>
                 <td>{{row.maxima_velocidad}}</td>
+                <td>{{row.vel_max_can}}</td>
+
                 <td>{{row.vel_promedio}}</td>
+                <td>{{row.vel_prom_can}}</td>
+
               </tr>
             </tbody>
 
@@ -1737,6 +1747,30 @@
       </div> -->
 
         <!-- <md-button class="md-raised md-primary" ng-click="res.exportPdfParadasMovimientos()">EXPORTAR PDF</md-button>  -->
+
+        <!-- <md-button ng-if="res.mostrarPdf()" class="md-raised md-primary" ng-click="res.exportPdfPosicion()">EXPORTAR PDF</md-button> -->
+
+
+        <button *ngIf="num_rep == 0" class="btn btn-success" (click)="exportPdfParadasMovimientos();">EXPORTAR PDF</button>
+
+        <button *ngIf="num_rep == 1" class="btn btn-success" (click)="exportPdfExcesosVelocidad();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 2" class="btn btn-success" (click)="exportPdfEntradaSalida();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 3" class="btn btn-success" (click)="showSelectExcel('exportPdfCombustible');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 4" class="btn btn-success" (click)="showSelectExcel('exportPdfExcesosEnZona');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 5" class="btn btn-success" (click)="showSelectExcel('exportPdfGeneral');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportPdfEventos');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 10" class="btn btn-success" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 11" class="btn btn-success" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 12" class="btn btn-success" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 13" class="btn btn-success" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 14" class="btn btn-success" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 15" class="btn btn-success" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 16" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilIzquierda');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 17" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 18" class="btn btn-success" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 20" class="btn btn-success" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR PDF</button>
+
     </div>
 
   </ng-container>

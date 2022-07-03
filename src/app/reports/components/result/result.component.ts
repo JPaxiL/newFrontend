@@ -957,6 +957,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
   }
 
+
   exportExcelExcesosVelocidad(vrs: number) {
     /* vm.dateHour() y datee; //Obtiene el chkDateHour para separar las columnas de fecha y hora*/
 
@@ -5195,7 +5196,331 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 
+    // /* EXPORTAR */
+    // t1=18; // Titulo Principal
+    // t2=16; // Sub titulos
+    // t3=14; // Cabeceras
+    // c1=12; // Cuerpo
+    // r1=12; // RESUMEN
 
+    // t1_2=18; // Titulo Principal
+    // tt1_2=16; // Titulo Principal linea 2
+    // t2_2=15; // Sub titulos
+    // c1_2=12; // Cuerpo del nuevo formato
+
+    //--> 1
+
+    exportPdfParadasMovimientos() {
+      var exportFilePdf :any = [];
+      var bol_datos_pdf = false;
+
+
+      this.data.forEach((data:any, index:any) => {
+        console.log(data);
+        console.log(index);
+        if(data[1].length > 0){
+          bol_datos_pdf = true;
+
+          exportFilePdf.push({
+            columns: [
+              [
+                {
+                  text: 'REPORTE DE PARADAS Y MOVIMIENTOS',
+                  fontSize: this.c1,
+                  bold: true,
+                  alignment: 'left',
+                  margin: [0, 25, 0, 0]
+                },
+                {
+                  text: 'Nombre del vehículo: ' + data[0][1],
+                  fontSize: 10,
+                  alignment: 'left'
+                },
+                {
+                  text: 'Fechas: ' + this.period,
+                  fontSize: 10,
+                  alignment: 'left'
+                }
+              ]
+              //,
+              // {
+              // 	image: img,
+              // 	width: 125,
+              // 	height: 80,
+              // 	alignment: 'justify'
+              // }
+            ],
+            pageBreak: index != 0 ? 'before' : ''
+          });
+
+          exportFilePdf.push({
+            table: {
+              widths: ['*'],
+              body: [[" "], [" "]]
+            },
+            layout: {
+              hLineWidth: function(i:any, node:any) {
+                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+              },
+              vLineWidth: function(i:any, node:any) {
+                return 0;
+              },
+            }
+          });
+
+          var tabla = [];
+
+          var cabecera = [];
+
+          cabecera.push({ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          cabecera.push({ text: 'Estado', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          if(this.chkDateHour) {
+            cabecera.push({ text: 'Fecha de Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Hora de Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Fecha de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Hora de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          } else {
+            cabecera.push({ text: 'Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          };
+
+          cabecera.push({ text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          if ( data[2].Paradas == true) 	{ cabecera.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Recorrido', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad máxima', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Vel. máx. CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+
+          if ( data[2].Paradas == true) 	{ cabecera.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad Promedio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Vel. prom. CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+
+          if ( data[2].Paradas == true) 	{ cabecera.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+
+          tabla.push(cabecera);
+
+          if ( data[2].Paradas == true && data[2].Movimientos == true ) {
+            data[1].forEach((item:any, index2:any) => {
+              var ubicacion = item.latitud + "," + item.longitud + "";
+                            var cellsCuerpo = [];
+
+              cellsCuerpo.push({ text: index2 + 1, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: item.estado, bold: true, fontSize: 6, alignment: 'center' });
+
+              if (this.chkDateHour) {
+                cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: this.isChe(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: this.isChs(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+              } else {
+                cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: this.isChe(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+              }
+
+              cellsCuerpo.push({ text: item.duracion, bold: true, fontSize: 6, alignment: 'center' });
+
+              if (item.esInt == 0) {
+                cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.referencia, bold: true, fontSize: 6, alignment: 'center' });
+              }
+
+              if (item.esInt == 1) {
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.recorrido, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.maxima_velocidad, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_max_can, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_promedio, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_prom_can, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: "--", bold: true, fontSize: 6, alignment: 'center' });
+              }
+
+              tabla.push(cellsCuerpo);
+
+            });
+          }
+
+
+          if ( data[2].Paradas == true && data[2].Movimientos == false ) {
+            data[1].forEach((item:any, index2:any) => {
+              if (item.esInt==0) {
+
+                var ubicacion = item.latitud + "," + item.longitud + "";
+                var cellsCuerpo = [];
+
+                cellsCuerpo.push({ text: ( Math.floor(index2/2) + 1 ), bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.estado, bold: true, fontSize: 6, alignment: 'center' });
+
+                if (this.chkDateHour) {
+                  cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChe(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChs(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                  cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChe(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+                }
+
+                cellsCuerpo.push({ text: item.duracion, bold: true, fontSize: 6, alignment: 'center' });
+
+
+                cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.referencia, bold: true, fontSize: 6, alignment: 'center' });
+
+                tabla.push(cellsCuerpo);
+
+              }
+
+            });
+          }
+
+
+
+          if ( data[2].Paradas == false && data[2].Movimientos == true ) {
+            data[1].forEach((item:any, index2:any) => {
+
+              if (item.esInt==1) {
+
+                var ubicacion = item.latitud + "," + item.longitud + "";
+                var cellsCuerpo = [];
+
+                cellsCuerpo.push({ text: ( Math.floor(index2/2) + 1 ), bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.estado, bold: true, fontSize: 6, alignment: 'center' });
+
+                if (this.chkDateHour) {
+                  cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChe(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChs(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                  cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: this.isChe(item.fechasig), bold: true, fontSize: 6, alignment: 'center' });
+                }
+
+                cellsCuerpo.push({ text: item.duracion, bold: true, fontSize: 6, alignment: 'center' });
+
+                cellsCuerpo.push({ text: item.recorrido, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.maxima_velocidad, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_max_can, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_promedio, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_prom_can, bold: true, fontSize: 6, alignment: 'center' });
+
+                tabla.push(cellsCuerpo);
+
+              }
+
+            });
+          }
+
+
+
+          console.log("despues del for ");
+          exportFilePdf.push({
+            columns: [
+              { width: '*', text: ''},
+              {
+                width: 'auto',
+                table: {
+                body: tabla
+                }
+              },
+              { width: '*', text: ''}
+            ]
+          });
+
+
+          var tabla2 = [];
+
+          tabla2.push([
+            { text: 'LONGITUD DE RUTA : ', bold: true, fontSize: 10, alignment: 'center' },
+            { text: data[3][0], bold: true, fontSize: 6, alignment: 'center' }
+            ]);
+          tabla2.push([
+              { text: 'DURACIÓN DE MOVIMIENTO : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: data[3][1], bold: true, fontSize: 6, alignment: 'center' }
+            ]);
+          tabla2.push([
+              { text: 'DURACIÓN DETENIDO : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: data[3][2], bold: true, fontSize: 6, alignment: 'center' }
+            ]);
+          tabla2.push([
+              { text: 'VELOCIDAD MÁS ALTA : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: data[3][3], bold: true, fontSize: 6, alignment: 'center' }
+            ]);
+          tabla2.push([
+              { text: 'VELOCIDAD PROMEDIO : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: data[3][4], bold: true, fontSize: 6, alignment: 'center' }
+          ]);
+
+
+          // console.log("despues del for 222222");
+          exportFilePdf.push({
+            columns: [
+              { width: '*', text: ''},
+              {
+                width: 'auto',
+                table: {
+                body: tabla2
+                }
+              },
+              { width: '*', text: ''}
+            ]
+          });
+
+
+
+        }
+      });
+
+      console.log(" ===> bol_datos_pdf ");
+
+      console.log(exportFilePdf);
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+          pageOrientation: 'landscape',
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+              columns: [
+                {
+                  alignment: 'center',
+                  text: [
+                    { text: '----------------------------------------------------------------------- ' + page.toString()},
+                    ' de ',
+                    { text: pages.toString() + ' -----------------------------------------------------------------------'}
+                  ]
+                }
+              ],
+              margin: [0, 0]
+
+              };
+            }
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteParadasMovimientos.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+    }
+
+
+      exportPdfExcesosVelocidad() {
+
+      }
+
+      exportPdfEntradaSalida() {
+
+      }
 
 
 
