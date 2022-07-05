@@ -76,7 +76,7 @@ export class TreeTableComponent implements OnInit {
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private confirmationService: ConfirmationService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
   ) {
     // this.vehicleService.listTable=1;
     if(this.loading) {
@@ -91,6 +91,7 @@ export class TreeTableComponent implements OnInit {
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
       this.spinner.hide('loadingTreeTable');
+      this.treeTableResizing(true);
     });
 
     this.vehicleService.reloadTableTree.subscribe(res=>{
@@ -124,6 +125,21 @@ export class TreeTableComponent implements OnInit {
           { field: 'point_color', header: 'speed' },
           { field: 'activo', header: 'speed' }
       ];
+    this.treeTableResizing(true);
+    window.addEventListener('resize', this.treeTableResizing, true);
+    screen.orientation.addEventListener('change', this.treeTableResizing);
+  }
+
+  treeTableResizing(e: any) {
+    /* this.toastr.success('treeTable altura previa:' + $('.map-area-app').height()!); */
+    console.log('treeTable altura previa:' + $('.map-area-app').height()!);
+    const rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    // var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * 4.375;
+    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * ($('.map-area-app').width()! > 740? 9.375: 12.125) ;
+    //$('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr("style", '');
+    $('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
+    console.log('treeTable altura en px:' + treeTable_height_in_px);
+    /* this.toastr.success('treeTable altura en px:' + treeTable_height_in_px); */
   }
 
   onChangeDisplay(res : boolean){
@@ -423,6 +439,8 @@ export class TreeTableComponent implements OnInit {
   }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;
+    window.removeEventListener('resize', this.treeTableResizing, true);
+    screen.orientation.removeEventListener('change', this.treeTableResizing);
   }
   onClickGroup(){
     // this.displayGroup=true;
