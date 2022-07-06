@@ -10,7 +10,7 @@
   
     @media (max-width: 740px) {
       .leaflet-top.leaflet-right {
-        top: 2.75rem;
+        top: var(--navbar-height);
       }
     }
 
@@ -48,6 +48,10 @@
 
       .leaflet-popup-content-wrapper,
       a.leaflet-popup-close-button{
+        color: #fff;
+      }
+
+      td a {
         color: #fff;
       }
       

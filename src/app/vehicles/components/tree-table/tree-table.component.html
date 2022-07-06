@@ -105,14 +105,14 @@
     <div class="d-flex gap-3">
       <div class="d-flex flex-grow-1">
         <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Buscar..." class="form-control ng-pristine ng-untouched ng-valid ng-empty flex-grow-1" ng-change="something.search()" aria-invalid="false">
-        <button (click)="onClickGroup()" type="button" class="btn btn-primary">
+        <button (click)="onClickGroup()" type="button" class="btn btn-gl-blue btn-circle">
           <i class="fa fa-plus"></i>
         </button>
       </div>
       <div>
         <div ngbDropdown container="body" placement="right-top left-top">
-          <button class="btn btn-primary" ngbDropdownToggle>
-            <i class="fa fa-fw fa-sliders fa-1"></i>
+          <button class="btn btn-gl-gray-blue btn-circle" ngbDropdownToggle>
+            <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
           </button>
           <div ngbDropdownMenu>
             <div class="container">
@@ -202,7 +202,7 @@
   <div class="">
     <!-- Cambiar scrollHeight a 100% - 4.375rem artificialmente -->
     <!-- scrollHeight no soporta porcentajes % -->
-    <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="calc(100vh - 12.125rem)" styleClass="p-treetable-sm" sortField="name" [sortOrder]="sortOrder" [virtualScroll]="true" [virtualRowHeight]="30" [ngClass]="{'vehicle-treetable' : true}">
+    <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--panel-monitoreo-header-height) + var(--treetable-header-height))) + 0.125rem))" styleClass="p-treetable-sm" sortField="name" [sortOrder]="sortOrder" [virtualScroll]="true" [virtualRowHeight]="30" [ngClass]="{'vehicle-treetable' : true}">
       <!-- <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
