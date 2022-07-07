@@ -2,7 +2,7 @@
 
   <div class="card w-100">
     <div class="card-header header-panel-monitoreo">
-    <!-- <div class="card-header header-panel-monitoreo" (click)="clickHidePanel()" > -->
+      <!-- <div class="card-header header-panel-monitoreo" (click)="clickHidePanel()" > -->
       <div class="d-flex align-items-center">
         <div class="circled-fa"  (click)="clickHidePanel()">
           <div class="d-flex flex-column justify-content-center" style="height: 100%; width: 100%;">
@@ -28,7 +28,7 @@
 
     </div>
 
-    <div style="height: calc(100% - 2.5rem);">
+    <div>
       <ng-container *ngIf="(panelService.nombreComponente == 'GEOPOINTS')">
         <app-panel-geopoints></app-panel-geopoints>
       </ng-container>

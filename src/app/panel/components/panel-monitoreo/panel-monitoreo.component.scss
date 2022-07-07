@@ -24,6 +24,7 @@
 }
 
 .header-panel-monitoreo {
+  padding: 0 1rem;
   margin-bottom: 0px;
   /* background-color: #6D99CB; */
   background-color: var(--gl-blue-dark);
@@ -134,12 +135,13 @@
 
   #panelMonitoreo > .card > div:not(:first-child) {
     /* flex-grow: 1; */
-    height: calc(100% - 2.5rem);
+    height: calc(100% - var(--panel-monitoreo-header-height));
   }
 
   #rowBusqueda{
     padding: 1rem;
     flex: none;
+    background-color: var(--gl-blue-dark);
   }
 
   .table-content-component-panel-monitoreo {
@@ -180,8 +182,8 @@
       vertical-align: middle;
 
       > thead > tr{
-        background-color: var(--gl-blue-dark) !important;
-        color: #fff !important;
+        /* background-color: var(--gl-light-gray-treetable) !important;
+        color: var(--gl-dark-gray-blue) !important; */
       }
       > tbody {
         border-top: none;

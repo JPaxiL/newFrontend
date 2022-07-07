@@ -13,7 +13,7 @@ declare var $: any;
 })
 export class NavbarComponent implements OnInit {
 
-  logo:string = "assets/images/logo-gl-tracker.svg";
+  logo:string = "assets/images/logo-gl-tracker-blue-dark.svg";
   sidevarIZ:boolean=true;
   logOutModalIsOpen = false;
   windowAccess = window;
