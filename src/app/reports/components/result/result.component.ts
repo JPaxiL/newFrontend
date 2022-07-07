@@ -5302,7 +5302,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           if ( data[2].Paradas == true && data[2].Movimientos == true ) {
             data[1].forEach((item:any, index2:any) => {
-              var ubicacion = item.latitud + "," + item.longitud + "";
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                             var cellsCuerpo = [];
 
               cellsCuerpo.push({ text: index2 + 1, bold: true, fontSize: 6, alignment: 'center' });
@@ -5352,7 +5352,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             data[1].forEach((item:any, index2:any) => {
               if (item.esInt==0) {
 
-                var ubicacion = item.latitud + "," + item.longitud + "";
+                var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                 var cellsCuerpo = [];
 
                 cellsCuerpo.push({ text: ( Math.floor(index2/2) + 1 ), bold: true, fontSize: 6, alignment: 'center' });
@@ -5389,7 +5389,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
               if (item.esInt==1) {
 
-                var ubicacion = item.latitud + "," + item.longitud + "";
+                var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                 var cellsCuerpo = [];
 
                 cellsCuerpo.push({ text: ( Math.floor(index2/2) + 1 ), bold: true, fontSize: 6, alignment: 'center' });
@@ -5514,14 +5514,1559 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
 
 
-      exportPdfExcesosVelocidad() {
+    exportPdfExcesosVelocidad() {
+      var exportFilePdf :any = [];
+      var bol_datos_pdf = false;
 
+
+      this.data.forEach((data:any, index:any) => {
+        console.log(data);
+        console.log(index);
+        if(data[1].length > 0){
+          bol_datos_pdf = true;
+
+          exportFilePdf.push({
+            columns: [
+              [
+                {
+                  text: 'REPORTE DE EXCESOS DE VELOCIDAD',
+                  fontSize: this.c1,
+                  bold: true,
+                  alignment: 'left',
+                  margin: [0, 25, 0, 0]
+                },
+                {
+                  text: 'Nombre del vehículo: ' + data[0][1],
+                  fontSize: 10,
+                  alignment: 'left'
+                },
+                {
+                  text: 'Fechas: ' + this.period,
+                  fontSize: 10,
+                  alignment: 'left'
+                }
+              ]
+              //,
+              // {
+              // 	image: img,
+              // 	width: 125,
+              // 	height: 80,
+              // 	alignment: 'justify'
+              // }
+            ],
+            pageBreak: index != 0 ? 'before' : ''
+          });
+
+          exportFilePdf.push({
+            table: {
+              widths: ['*'],
+              body: [[" "], [" "]]
+            },
+            layout: {
+              hLineWidth: function(i:any, node:any) {
+                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+              },
+              vLineWidth: function(i:any, node:any) {
+                return 0;
+              },
+            }
+          });
+
+          var tabla = [];
+
+          var cabecera = [];
+
+          cabecera.push({ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          cabecera.push({ text: 'Nombre', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          if(this.chkDateHour) {
+            cabecera.push({ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          } else {
+            cabecera.push({ text: 'Fecha y Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          };
+
+          cabecera.push({ text: 'Máxima Velocidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          cabecera.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+          cabecera.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          tabla.push(cabecera);
+
+
+          data[1].forEach((item:any, index2:any) => {
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+              var cellsCuerpo = [];
+
+              cellsCuerpo.push({ text: index2 + 1, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: item.nombre, bold: true, fontSize: 6, alignment: 'center' });
+
+              if (this.chkDateHour) {
+                cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+              } else {
+                cellsCuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+              }
+
+              cellsCuerpo.push({ text: item.maxima_velocidad, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
+
+                tabla.push(cellsCuerpo);
+
+          });
+
+
+          console.log("despues del for ");
+          exportFilePdf.push({
+            columns: [
+              { width: '*', text: ''},
+              {
+                width: 'auto',
+                table: {
+                body: tabla
+                }
+              },
+              { width: '*', text: ''}
+            ]
+          });
+
+
+        }
+      });
+
+      console.log(" ===> bol_datos_pdf ");
+
+      console.log(exportFilePdf);
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+          pageOrientation: 'landscape',
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+              columns: [
+                {
+                  alignment: 'center',
+                  text: [
+                    { text: '----------------------------------------------------------------------- ' + page.toString()},
+                    ' de ',
+                    { text: pages.toString() + ' -----------------------------------------------------------------------'}
+                  ]
+                }
+              ],
+              margin: [0, 0]
+
+              };
+            }
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteExcesosVelocidad.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
       }
+    }
 
-      exportPdfEntradaSalida() {
+    // Dejarlo por el momento
+    exportPdfEntradaSalida() {
+    }
 
-      }
 
+
+    // PDF DE MINA
+    //11
+    exportPdfFrenadaAceleracionBrusca() {
+
+			var exportFilePdf: any = [];
+			var bol_datos_pdf = false;
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: "REPORTE DE FRENADA Y ACELERACIÓN BRUSCA",
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+						table: {
+							widths: ['*'],
+							body: [[" "], [" "]]
+						},
+						layout: {
+							hLineWidth: function(i:any, node:any) {
+								return (i === 0 || i === node.table.body.length) ? 0 : 2;
+							},
+							vLineWidth: function(i:any, node:any) {
+								return 0;
+							},
+						}
+					});
+
+					var tabla = [];
+
+					//--------- CABECERA ------------
+
+					if(this.chkDateHour){
+						tabla.push([
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+						]);
+
+
+						data[1].forEach((item:any, index2:any) =>{
+
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+
+							tabla.push([
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha_final), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChs(item.fecha_final), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tipo_frenada, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center'},
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+
+					} else {
+
+						tabla.push([
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+
+						]);
+
+
+						data[1].forEach((item:any, index2:any) => {
+
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+
+							tabla.push([
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha_final), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tipo_frenada, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center'},
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+					}
+
+					exportFilePdf.push({
+						columns: [
+							{ width: '*', text: ''},
+							{
+								width: 'auto',
+								table: {
+								body: tabla
+								}
+							},
+							{ width: '*', text: ''}
+						]
+					});
+				}
+			});
+
+			console.log(exportFilePdf);
+
+			if(bol_datos_pdf){
+					var docDefinition = {
+						pageOrientation: 'landscape',
+						content: exportFilePdf,
+						footer: function(page:any, pages:any) {
+							return {
+							columns: [
+								{
+									alignment: 'center',
+									text: [
+										{ text: '----------------------------------------------------------------------- ' + page.toString()},
+										' de ',
+										{ text: pages.toString() + ' -----------------------------------------------------------------------'}
+									]
+								}
+							],
+							margin: [0, 0]
+
+							};
+						}
+
+				};
+				pdfMake.createPdf(docDefinition).download('ReporteFrenadaAceleracionBrusca.pdf');
+
+			} else {
+				alert('No se han encontrado datos para exportar');
+			}
+		}
+
+
+    exportPdfDistraccionPosibleFatiga() {
+
+    }
+
+    exportPdfCalificacionManejo() {
+
+    }
+
+    exportPdfFatigaExtrema() {
+
+    }
+
+    exportPdfAnticolisionFrontal()  {
+
+			var exportFilePdf:any = [];
+			var bol_datos_pdf = false;
+			this.data.forEach((data:any, index:any) => {
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: "REPORTE DE ANTICOLISION FRONTAL",
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+						table: {
+							widths: ['*'],
+							body: [[" "], [" "]]
+						},
+						layout: {
+							hLineWidth: function(i:any, node:any) {
+								return (i === 0 || i === node.table.body.length) ? 0 : 2;
+							},
+							vLineWidth: function(i:any, node:any) {
+								return 0;
+							},
+						}
+					});
+
+					var tabla = [];
+
+					//--------- CABECERA ------------
+
+					if(this.chkDateHour){
+						tabla.push([
+							// { text: 'Posición', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Convoy', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Vel.GPS (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'GPS speed (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ME431', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ACC(di4x)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								// { text: (index + 1)+"/"+(vm.datos.length), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.convoy, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.GPS_speed, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.ME431, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: acc, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+
+					} else {
+
+						tabla.push([
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+
+
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+					}
+
+
+					exportFilePdf.push({
+						columns: [
+							{ width: '*', text: ''},
+							{
+								width: 'auto',
+								table: {
+								body: tabla
+								}
+							},
+							{ width: '*', text: ''}
+						]
+					});
+				}
+			});
+
+			console.log(exportFilePdf);
+
+			if(bol_datos_pdf){
+					var docDefinition = {
+						pageOrientation: 'landscape',
+						content: exportFilePdf,
+						footer: function(page:any, pages:any) {
+							return {
+							columns: [
+								{
+									alignment: 'center',
+									text: [
+										{ text: '----------------------------------------------------------------------- ' + page.toString()},
+										' de ',
+										{ text: pages.toString() + ' -----------------------------------------------------------------------'}
+									]
+								}
+							],
+							margin: [0, 0]
+
+							};
+						}
+
+				};
+				pdfMake.createPdf(docDefinition).download('ReporteAnticolisionFrontal.pdf');
+
+			} else {
+				alert('No se han encontrado datos para exportar');
+			}
+		}
+
+    exportPdfColisionConPeatones() {
+
+			var exportFilePdf:any = [];
+			var bol_datos_pdf = false;
+			this.data.forEach((data:any, index:any) => {
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: "REPORTE DE COLISION CON PEATONES",
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+						table: {
+							widths: ['*'],
+							body: [[" "], [" "]]
+						},
+						layout: {
+							hLineWidth: function(i:any, node:any) {
+								return (i === 0 || i === node.table.body.length) ? 0 : 2;
+							},
+							vLineWidth: function(i:any, node:any) {
+								return 0;
+							},
+						}
+					});
+
+					var tabla = [];
+
+					//--------- CABECERA ------------
+
+					if(this.chkDateHour){
+						tabla.push([
+							// { text: 'Posición', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Convoy', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Vel.GPS (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'GPS speed (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ME434', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ACC(di4x)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+						]);
+
+
+						data[1].forEach((item:any, index2:any) => {
+
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								// { text: (index + 1)+"/"+(vm.datos.length), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.convoy, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.GPS_speed, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.ME434, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: acc, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+
+					} else {
+
+						tabla.push([
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+						]);
+
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+					}
+
+					exportFilePdf.push({
+						columns: [
+							{ width: '*', text: ''},
+							{
+								width: 'auto',
+								table: {
+								body: tabla
+								}
+							},
+							{ width: '*', text: ''}
+						]
+					});
+				}
+			});
+
+			console.log(exportFilePdf);
+
+			if(bol_datos_pdf){
+					var docDefinition = {
+						pageOrientation: 'landscape',
+						content: exportFilePdf,
+						footer: function(page:any, pages:any) {
+							return {
+							columns: [
+								{
+									alignment: 'center',
+									text: [
+										{ text: '----------------------------------------------------------------------- ' + page.toString()},
+										' de ',
+										{ text: pages.toString() + ' -----------------------------------------------------------------------'}
+									]
+								}
+							],
+							margin: [0, 0]
+
+							};
+						}
+
+				};
+				pdfMake.createPdf(docDefinition).download('ReporteColisionConPeatones.pdf');
+
+			} else {
+				alert('No se han encontrado datos para exportar');
+			}
+		}
+
+    exportPdfDesvioCarrilIzquierda() {
+
+			var exportFilePdf:any = [];
+			var bol_datos_pdf = false;
+			this.data.forEach((data:any, index:any) => {
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: "REPORTE DE DESVIO DE CARRIL HACIA LA IZQUIERDA",
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+						table: {
+							widths: ['*'],
+							body: [[" "], [" "]]
+						},
+						layout: {
+							hLineWidth: function(i:any, node:any) {
+								return (i === 0 || i === node.table.body.length) ? 0 : 2;
+							},
+							vLineWidth: function(i:any, node:any) {
+								return 0;
+							},
+						}
+					});
+
+					var tabla = [];
+
+					//--------- CABECERA ------------
+
+					if(this.chkDateHour){
+						tabla.push([
+							// { text: 'Posición', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Convoy', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Vel.GPS (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'GPS speed (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ME429', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ACC (di4x)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+						]);
+
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								// { text: (index + 1)+"/"+(vm.datos.length), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.convoy, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.GPS_speed, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.ME429, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: acc, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+
+					} else {
+
+						tabla.push([
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+					}
+
+					exportFilePdf.push({
+						columns: [
+							{ width: '*', text: ''},
+							{
+								width: 'auto',
+								table: {
+								body: tabla
+								}
+							},
+							{ width: '*', text: ''}
+						]
+					});
+				}
+			});
+
+			console.log(exportFilePdf);
+
+			if(bol_datos_pdf){
+					var docDefinition = {
+						pageOrientation: 'landscape',
+						content: exportFilePdf,
+						footer: function(page:any, pages:any) {
+							return {
+							columns: [
+								{
+									alignment: 'center',
+									text: [
+										{ text: '----------------------------------------------------------------------- ' + page.toString()},
+										' de ',
+										{ text: pages.toString() + ' -----------------------------------------------------------------------'}
+									]
+								}
+							],
+							margin: [0, 0]
+
+							};
+						}
+
+				};
+				pdfMake.createPdf(docDefinition).download('ReporteDesvioCarrilIzquierda.pdf');
+
+			} else {
+				alert('No se han encontrado datos para exportar');
+			}
+		}
+
+    exportPdfDesvioCarrilDerecha() {
+
+			var exportFilePdf:any = [];
+			var bol_datos_pdf = false;
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: "REPORTE DE DESVIO DE CARRIL HACIA LA DERECHA",
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+						table: {
+							widths: ['*'],
+							body: [[" "], [" "]]
+						},
+						layout: {
+							hLineWidth: function(i:any, node:any) {
+								return (i === 0 || i === node.table.body.length) ? 0 : 2;
+							},
+							vLineWidth: function(i:any, node:any) {
+								return 0;
+							},
+						}
+					});
+
+					var tabla = [];
+
+					//--------- CABECERA ------------
+
+					if(this.chkDateHour){
+						tabla.push([
+							// { text: 'Posición', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Convoy', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Vel.GPS (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'GPS speed (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ME430', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ACC (di4x)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+						]);
+
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								// { text: (index + 1)+"/"+(vm.datos.length), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.convoy, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.GPS_speed, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.ME430, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: acc, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+
+
+					} else {
+
+						tabla.push([
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+					}
+
+					exportFilePdf.push({
+						columns: [
+							{ width: '*', text: ''},
+							{
+								width: 'auto',
+								table: {
+								body: tabla
+								}
+							},
+							{ width: '*', text: ''}
+						]
+					});
+				}
+			});
+
+			console.log(exportFilePdf);
+
+			if(bol_datos_pdf){
+					var docDefinition = {
+						pageOrientation: 'landscape',
+						content: exportFilePdf,
+						footer: function(page:any, pages:any) {
+							return {
+							columns: [
+								{
+									alignment: 'center',
+									text: [
+										{ text: '----------------------------------------------------------------------- ' + page.toString()},
+										' de ',
+										{ text: pages.toString() + ' -----------------------------------------------------------------------'}
+									]
+								}
+							],
+							margin: [0, 0]
+
+							};
+						}
+
+				};
+				pdfMake.createPdf(docDefinition).download('ReporteDesvioCarrilDerecha.pdf');
+
+			} else {
+				alert('No se han encontrado datos para exportar');
+			}
+		}
+
+    exportPdfBloqueoVisionMobileye() {
+
+			var exportFilePdf:any = [];
+			var bol_datos_pdf = false;
+			this.data.forEach((data:any, index:any) => {
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: "REPORTE DE BLOQUEO DE VISION DEL MOBILEYE",
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+						table: {
+							widths: ['*'],
+							body: [[" "], [" "]]
+						},
+						layout: {
+							hLineWidth: function(i:any, node:any) {
+								return (i === 0 || i === node.table.body.length) ? 0 : 2;
+							},
+							vLineWidth: function(i:any, node:any) {
+								return 0;
+							},
+						}
+					});
+
+					var tabla = [];
+
+					//--------- CABECERA ------------
+
+					if(this.chkDateHour){
+						tabla.push([
+							// { text: 'Posición', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Convoy', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Vel.GPS (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'GPS speed (km/h)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ME436', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'ACC (di4x)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							// { text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							// { text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+						]);
+
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								// { text: (index + 1)+"/"+(vm.datos.length), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.convoy, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								// { text: isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.GPS_speed, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.ME436, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: acc, bold: true, fontSize: 6, alignment: 'center' },
+
+								// { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								// { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+
+
+					} else {
+
+						tabla.push([
+							{ text: 'Item', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+							// if (item.di4x > 0) {
+							// 	var acc = "Activado (" + item.di4x + ")";
+							// } else {
+							// 	var acc = "Desactivado (" + item.di4x + ")";
+							// }
+
+							tabla.push([
+								{ text: (index2 + 1), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_gps_speed+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+							]);
+						});
+					}
+
+					exportFilePdf.push({
+						columns: [
+							{ width: '*', text: ''},
+							{
+								width: 'auto',
+								table: {
+								body: tabla
+								}
+							},
+							{ width: '*', text: ''}
+						]
+					});
+				}
+			});
+
+			console.log(exportFilePdf);
+
+			if(bol_datos_pdf){
+					var docDefinition = {
+						pageOrientation: 'landscape',
+						content: exportFilePdf,
+						footer: function(page:any, pages:any) {
+							return {
+							columns: [
+								{
+									alignment: 'center',
+									text: [
+										{ text: '----------------------------------------------------------------------- ' + page.toString()},
+										' de ',
+										{ text: pages.toString() + ' -----------------------------------------------------------------------'}
+									]
+								}
+							],
+							margin: [0, 0]
+
+							};
+						}
+
+				};
+				pdfMake.createPdf(docDefinition).download('ReporteBloqueoVisionMobileye.pdf');
+
+			} else {
+				alert('No se han encontrado datos para exportar');
+			}
+		}
+
+
+    exportPdfExcesosVelocidadFormatoExtendido() {
+
+    }
 
 
 

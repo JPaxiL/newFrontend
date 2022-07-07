@@ -770,11 +770,15 @@
                 <th *ngIf="!chkDateHour">Fecha / Hora</th>
                 <th *ngIf="chkDateHour">Fecha</th>
                 <th *ngIf="chkDateHour">Hora</th>
+                <th>Código</th>
+                <th>Placa</th>
                 <th>Tipo Unidad</th>
+
                 <th>ID Conductor</th>
                 <th>Conductor</th>
                 <th>Vel. GPS</th>
                 <th>Vel. CAN</th>
+
                 <th>Descripción</th>
                 <th>Tramo</th>
                 <th>Punto Cercano</th>
@@ -788,11 +792,15 @@
                 <td *ngIf="!chkDateHour">{{row.fecha_final}}</td>
                 <td *ngIf="chkDateHour">{{row.fecha_final.split(' ')[0]}}</td>
                 <td *ngIf="chkDateHour">{{row.fecha_final.split(' ')[1]}}</td>
+                <td>{{row.codigo}}</td>
+                <td>{{row.placa}}</td>
                 <td>{{row.tipo_unidad}}</td>
+
                 <td>{{row.id_conductor}}</td>
                 <td>{{row.nombre_conductor}}</td>
                 <td>{{row.vel_final}}</td>
                 <td>{{row.vel_can}}</td>
+
                 <td>{{row.tipo_frenada}}</td>
                 <td>{{row.tramo}}</td>
                 <td>{{row.PC}}</td>
@@ -1760,16 +1768,17 @@
         <button *ngIf="num_rep == 5" class="btn btn-success" (click)="showSelectExcel('exportPdfGeneral');">EXPORTAR PDF</button>
         <button *ngIf="num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportPdfEventos');">EXPORTAR PDF</button>
         <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 10" class="btn btn-success" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 11" class="btn btn-success" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 12" class="btn btn-success" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 13" class="btn btn-success" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 14" class="btn btn-success" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 15" class="btn btn-success" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 16" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilIzquierda');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 17" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 18" class="btn btn-success" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 20" class="btn btn-success" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR PDF</button>
+
+        <button *ngIf="num_rep == 10" class="btn btn-success" (click)="exportPdfFrenadaAceleracionBrusca();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 11" class="btn btn-success" (click)="exportPdfDistraccionPosibleFatiga();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 12" class="btn btn-success" (click)="exportPdfCalificacionManejo();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 13" class="btn btn-success" (click)="exportPdfFatigaExtrema();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 14" class="btn btn-success" (click)="exportPdfAnticolisionFrontal();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 15" class="btn btn-success" (click)="exportPdfColisionConPeatones();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 16" class="btn btn-success" (click)="exportPdfDesvioCarrilIzquierda();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 17" class="btn btn-success" (click)="exportPdfDesvioCarrilDerecha();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 18" class="btn btn-success" (click)="exportPdfBloqueoVisionMobileye();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 20" class="btn btn-success" (click)="exportPdfExcesosVelocidadFormatoExtendido();">EXPORTAR PDF</button>
 
     </div>
 

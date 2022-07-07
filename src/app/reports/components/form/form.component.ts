@@ -426,9 +426,13 @@ export class FormComponent implements OnInit {
       console.log(this.selectedVehicles);
     }
 
-    var M1 = f1.format("YYYY-MM-DD") + ' ' + h1.format("HH:mm:ss.SSS");
-		var M2 = f2.format("YYYY-MM-DD") + ' ' + h2.format("HH:mm:59.999");
-		var M2_t = f2.format("YYYY-MM-DD") + ' ' + h2.format("HH:mm:59");
+
+
+
+    var M1 = f1.format("YYYY-MM-DD") + 'T' + h1.format("HH:mm") + ':00-05:00';
+		var M2 = f2.format("YYYY-MM-DD") + 'T' + h2.format("HH:mm") + ':00-05:00';
+    var M1_t = f1.format("YYYY-MM-DD") + ' ' + h1.format("HH:mm:00");
+		var M2_t = f2.format("YYYY-MM-DD") + ' ' + h2.format("HH:mm:00");
     /* var M1 = f1.format("YYYY-MM-DD") + 'T' + this.timeInit + ':00-05:00';
 		var M2 = f2.format("YYYY-MM-DD") + 'T' + this.timeEnd + ':00-05:00'; */
 /* 		var M1_t = f1.format("YYYY-MM-DD") + ' ' + this.timeInit + ':00';
@@ -529,7 +533,7 @@ export class FormComponent implements OnInit {
           chkDuracion: chkDuracion,
           chkOdomV: chkOdomV,
           repTitle: this.reports[param.numRep].value,
-          period: M1 + ' - ' + M2_t,
+          period: M1_t + ' - ' + M2_t,
           isVehicleReport: !cv,
         }
         if(new_tab === undefined || new_tab == true){
