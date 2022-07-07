@@ -38,8 +38,15 @@
 
 :root{
   --gl-danger-red: #dc3545;
-  --gl-blue-dark: #1c3e65;
-  --gl-light-blue: #0093e6;
+  --gl-purple-blue: #686c96;
+  --gl-purple-blue-dark: #21265c;
+  --gl-gray-blue: #8ca2c9;
+  --gl-dark-gray-blue: #51586b;
+  --gl-blue-dark-hover: #121928;
+  --gl-blue-dark: #2d4064;
+  --gl-blue: #48659c;
+  --gl-light-blue: #30a9d9 ;
+  --gl-light-gray-treetable: #e3e3e3;
   --gl-light-blue-alpha: rgba(33,150,243,0.1);
   --gl-light-gray: #f2f2f2;
   --gl-light-gray-hover: #dedede;
@@ -47,6 +54,11 @@
   --gl-gray-hover: #646464;
   --gl-gray-subtitle: #dbdfe0;
   --gl-dark-gray: #727176;
+  
+  --navbar-height: 4.75rem;
+  --row-busqueda-height: 4.375rem;
+  --panel-monitoreo-header-height: 3.5rem;
+  --treetable-header-height: 2.375rem;
 }
 
 html, body { height: 100%; }
@@ -156,31 +168,36 @@ div.leaflet-tooltip-own {
 }
 
 .btn-gl-light-blue,
-.btn-info.active,
-.show > .btn-info.dropdown-toggle{
-  background-color: var(--gl-light-blue) !important;
-  border-color: var(--gl-light-blue) !important;
+.nav-item.active .btn-navbar,
+.show > .btn-navbar.dropdown-toggle{
+  background-color: var(--gl-blue-dark) !important;
+  border-color: var(--gl-blue-dark) !important;
   color: #ffffff !important;
 }
 
-.btn-info{
+.btn-navbar{
   background-color: transparent;
   border: none;
 }
-.btn-info:focus{
+.btn-navbar:focus{
   outline: none !important;
   box-shadow: none !important;
 }
-.btn-info:focus:not(.btn-info.active, .show > .btn-info.dropdown-toggle){
+.btn-navbar:focus:not(.btn-navbar.active, .show > .btn-navbar.dropdown-toggle){
   background: none;
 }
 
 
-.btn-info:hover:not(.btn-info.active, .show > .btn-info.dropdown-toggle.active){
+.btn-navbar:hover:not(.btn-navbar.active, .show > .btn-navbar.dropdown-toggle.active){
   background-color: var(--gl-light-gray-hover);
   /* background-color: rgba(0,170,220,0.4); */
   border: none;
   color: #000000;
+}
+
+.btn-gl-dark{
+  background-color: var(--gl-blue-dark);
+  color: #fff;
 }
 
 .btn-circle{
@@ -194,8 +211,8 @@ thead.visible-on-scroll {
   > tr {
     position: sticky;
     top: 0;
-    background-color: var(--gl-blue-dark) !important;
-    color: white !important;
+    background-color: var(--gl-light-gray-treetable);
+        color: var(--gl-dark-gray-blue);
   }
 }
 

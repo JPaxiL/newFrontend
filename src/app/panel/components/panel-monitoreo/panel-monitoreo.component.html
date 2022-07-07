@@ -1,8 +1,8 @@
-<div class="content-panel-monitoreo" id="panelMonitoreo">
+<div id="panelMonitoreo">
 
   <div class="card w-100">
     <div class="card-header header-panel-monitoreo">
-    <!-- <div class="card-header header-panel-monitoreo" (click)="clickHidePanel()" > -->
+      <!-- <div class="card-header header-panel-monitoreo" (click)="clickHidePanel()" > -->
       <div class="d-flex align-items-center">
         <div class="circled-fa"  (click)="clickHidePanel()">
           <div class="d-flex flex-column justify-content-center" style="height: 100%; width: 100%;">
@@ -14,7 +14,7 @@
         </div>
       </div>
       <!-- <i class="fa fas fa-caret-left"></i> -->
-      <div ngbDropdown *ngIf="panelService.nombreComponente.includes('ALERTS')"  role="button" container="body" placement="right-top" onclick="this.blur();" [autoClose]="true">
+      <div ngbDropdown *ngIf="panelService.nombreComponente.includes('ALERTS')"  role="button" container="body" placement="right-top left-top" onclick="this.blur();" [autoClose]="true">
         <svg ngbDropdownToggle xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
         </svg>
@@ -28,79 +28,81 @@
 
     </div>
 
-
-    <div *ngIf="(panelService.nombreComponente == 'GEOPOINTS')">
-      <app-panel-geopoints></app-panel-geopoints>
+    <div>
+      <ng-container *ngIf="(panelService.nombreComponente == 'GEOPOINTS')">
+        <app-panel-geopoints></app-panel-geopoints>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'HISTORIAL')">
+        <app-panel-historial ></app-panel-historial>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'VEHICLES')">
+        <app-panel-vehicles></app-panel-vehicles>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS')">
+        <app-panel-alerts></app-panel-alerts>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-GPS')">
+        <app-panel-alerts-gps></app-panel-alerts-gps>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-CREATE')">
+        <app-gps-alerts-create></app-gps-alerts-create>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-EDIT')">
+        <app-alert-gps-edit></app-alert-gps-edit>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORMS')">
+        <app-panel-alerts-platform></app-panel-alerts-platform>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-CREATE')">
+        <app-platform-alerts-create></app-platform-alerts-create>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-EDIT')">
+        <app-platform-alerts-edit></app-platform-alerts-edit>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIES')">
+        <app-panel-alerts-accessories></app-panel-alerts-accessories>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-CREATE')">
+        <app-alert-accessories-create></app-alert-accessories-create>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-EDIT')">
+        <app-alert-accessories-edit></app-alert-accessories-edit>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'GEOFENCES')">
+        <app-geocerca-main></app-geocerca-main>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'EVENT-USER')">
+        <app-event-board></app-event-board>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'USER-PREFERENCES')">
+        <app-user-config></app-user-config>
+      </ng-container>
+  
+      <ng-container *ngIf="(panelService.nombreComponente == 'CRED-CONFIG')">
+        <app-cred-config></app-cred-config>
+      </ng-container>
     </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'HISTORIAL')">
-      <app-panel-historial ></app-panel-historial>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'VEHICLES')">
-      <app-panel-vehicles></app-panel-vehicles>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS')">
-      <app-panel-alerts></app-panel-alerts>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-GPS')">
-      <app-panel-alerts-gps></app-panel-alerts-gps>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-CREATE')">
-      <app-gps-alerts-create></app-gps-alerts-create>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-EDIT')">
-      <app-alert-gps-edit></app-alert-gps-edit>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORMS')">
-      <app-panel-alerts-platform></app-panel-alerts-platform>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-CREATE')">
-      <app-platform-alerts-create></app-platform-alerts-create>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-EDIT')">
-      <app-platform-alerts-edit></app-platform-alerts-edit>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIES')">
-      <app-panel-alerts-accessories></app-panel-alerts-accessories>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-CREATE')">
-      <app-alert-accessories-create></app-alert-accessories-create>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-EDIT')">
-      <app-alert-accessories-edit></app-alert-accessories-edit>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'GEOFENCES')">
-      <app-geocerca-main></app-geocerca-main>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'EVENT-USER')">
-      <app-event-board></app-event-board>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'USER-PREFERENCES')">
-      <app-user-config></app-user-config>
-    </div>
-
-    <div *ngIf="(panelService.nombreComponente == 'CRED-CONFIG')">
-      <app-cred-config></app-cred-config>
-    </div>
+    
 
 
 
   </div>
-  <div id="dragbar" class="d-flex flex-column justify-content-end">
+  <div id="dragbar">
     <div class="d-flex flex-column justify-content-center" style="padding: 0.75rem; height: 3rem; width: 3rem; margin-left: 16px; margin-bottom: 6px; border-radius: 50%;">
       <svg version="1.1" x="0px" y="0px" viewBox="0 0 767.5 580.5" xml:space="preserve">
         <path d="M0,290.25,290.25,580.5V0Z"/><path d="M767.5,290.25,477.25,0V580.5Z"/>

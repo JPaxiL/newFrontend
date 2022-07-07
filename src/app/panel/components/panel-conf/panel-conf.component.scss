@@ -3,13 +3,14 @@
 }
 
 .navbar-app {
-    height: 2.75rem; 
-    background-color: var(--gl-blue-dark);
+    height: var(--navbar-height); 
+    /* background-color: var(--gl-blue-dark); */
+    background-color: #fff;
     width: 100%;
 }
 
 .map-area-app {
-    height: calc(100% - 2.75rem); 
+    height: calc(100% - var(--navbar-height)); 
     /* background-color: red; */
 }
 
@@ -17,7 +18,7 @@
     .navbar-app {
         position: absolute;
         z-index: 2;
-        height: 2.75rem; 
+        height: var(--navbar-height); 
         background-color: rgba(#000000, 0);
         pointer-events: none;
     }

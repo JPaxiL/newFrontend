@@ -14,7 +14,7 @@
   </ag-grid-angular>
 </div> -->
 <!-- <div style="height: calc(100vh - 150px);"> -->
-<div style="height: 100%; position: relative;">
+<div class="table-content-component-panel-monitoreo" style="position: relative;">
   <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Alertas... </p></ngx-spinner>
   <div class="card-body p-fluid" id="rowBusqueda">
     <div class="row">
@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="table-responsive panel-izq-table-container" style="height: calc(100vh - 9.875rem); max-height: calc(100vh - 9.875rem);">
+  <div class="panel-izq-table-container">
     <!-- <div class="table-responsive" style="width: 100%; height: 450px; font-size: 12px;"> -->
     <table class="table">
       <thead class="visible-on-scroll">
@@ -48,7 +48,7 @@
           <th scope="col">TIPO</th>
           <th scope="col">ACTIVOS</th>
           <th scope="col">SISTEMA</th>
-          <th scope="col">E-MAIL</th>
+          <th scope="col">@</th>
         </tr>
       </thead>
       <tbody>

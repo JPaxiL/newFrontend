@@ -1,47 +1,42 @@
 .content-panel-monitoreo {
-  /* border-left: 2px solid #34518D; */
-  /* border-right: 2px solid #34518D; */
-  display: none;
-  background: #fff;
-  /* height: -webkit-fill-available; */
-  /* width: 100%;
-  max-width: 450px; */
-  width: 425px;
-  /* width: 33vw; */
-  /*
-  float: left;
-  clear: both; */
-  position: absolute;
-  /* border: 2px;
-  border-style: solid;
-  border-color: #34518D; */
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
-  z-index: 20001;
-  border-radius: 4px;
-  top: auto;
-  bottom: auto;
-  /* left: 65px; */
-  /* margin-top: -2.75rem; */
   height: 100%;
 }
 
+
+
+#panelMonitoreo{
+  display: none;
+  background: #fff;
+  width: 425px;
+  position: absolute;
+  /* box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65); */
+  z-index: 20001;
+  top: auto;
+  bottom: auto;
+  height: 100%;
+  &[style*='display: block']{
+    display: flex !important;
+  }
+  .card, .card-header{
+    border: none;
+    border-radius: 0px;
+  }
+}
+
 .header-panel-monitoreo {
+  padding: 0 1rem;
   margin-bottom: 0px;
   /* background-color: #6D99CB; */
-  background-color: var(--gl-light-gray);
+  background-color: var(--gl-blue-dark);
   /* color: #fff; */
-  color: #000;
+  color: #fff;
   text-align: left;
   display: flex;
   justify-content: space-between;
   overflow: hidden;
   white-space: nowrap;
-  height: 2.5rem;
-  min-height: 2.5rem;
-}
-
-#panelMonitoreo[style*='display: block']{
-  display: flex !important;
+  height: var(--panel-monitoreo-header-height);
+  min-height: var(--panel-monitoreo-header-height);
 }
 
 .header-panel-monitoreo + p-treetable > *{
@@ -53,6 +48,9 @@
   height: 100%;
   float: right;
   width: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 #dragbar.dragging:not(.trigger-dragging), #dragbar.dragging:not(.trigger-dragging) > div{
@@ -95,7 +93,7 @@
       border-radius: 50%;
   } */
   &:hover{
-    background-color: var(--gl-gray);
+    background-color: var(--gl-blue-dark-hover);
   }
 
    i {
@@ -123,17 +121,33 @@
     border-bottom: 1px solid #e5e5e5;
   }
 
-  .btn-primary:not(.dropdown-toggle){
-    background-color: var(--gl-blue-dark);
+  .btn-gl-blue{
+    background-color: var(--gl-blue);
+    border-color: var(--gl-blue);
+    color: #fff;
+  }
+
+  .btn-gl-gray-blue{
+    background-color: var(--gl-gray-blue);
+    border-color: var(--gl-gray-blue);
+    color: #fff;
   }
 
   #panelMonitoreo > .card > div:not(:first-child) {
     /* flex-grow: 1; */
-    height: calc(100% - 2.5rem);
+    height: calc(100% - var(--panel-monitoreo-header-height));
   }
 
   #rowBusqueda{
     padding: 1rem;
+    flex: none;
+    background-color: var(--gl-blue-dark);
+  }
+
+  .table-content-component-panel-monitoreo {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .panel-izq-container{
@@ -161,11 +175,15 @@
   div.panel-izq-table-container{
     overflow: auto !important;
     font-size: 0.75rem;
+    /* height: calc(100% - 4.375rem); */
+    flex-grow: 1;
 
     table {
+      vertical-align: middle;
+
       > thead > tr{
-        background-color: var(--gl-blue-dark) !important;
-        color: #fff !important;
+        /* background-color: var(--gl-light-gray-treetable) !important;
+        color: var(--gl-dark-gray-blue) !important; */
       }
       > tbody {
         border-top: none;
@@ -197,18 +215,6 @@
     > tr:hover {
       background-color: var(--gl-light-blue-alpha);
     }
-  }
-
-  .table-responsive > table {
-
-    > thead > tr {
-      background-color: var(--gl-blue-dark);
-      color: #fff;
-    }
-
-    > tbody > tr:nth-child(even) {
-      background: var(--gl-light-gray);
-    } 
   }
 
   .p-dialog-content {
@@ -281,8 +287,8 @@
 
 @media (max-width: 740px) {
   #panelMonitoreo {
-    margin-top: 2.75rem;
-    height: calc(100% - 2.75rem);
+    margin-top: var(--navbar-height);
+    height: calc(100% - var(--navbar-height));
   }
 }
 
@@ -292,8 +298,16 @@
   }
 }
 
-@media (max-width: 540px) {
+/* @media (max-width: 540px) { */
+@media (max-width: 640px) {
   #dragbar {
-    width: 1rem;
+    /* width: 1rem; */
+    display: none;
+  }
+}
+
+@media (max-width: 490px) {
+  #panelMonitoreo {
+    width: 100vw !important;
   }
 }

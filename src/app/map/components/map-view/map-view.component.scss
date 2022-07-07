@@ -10,7 +10,7 @@
   
     @media (max-width: 740px) {
       .leaflet-top.leaflet-right {
-        top: 2.75rem;
+        top: var(--navbar-height);
       }
     }
 
@@ -32,6 +32,7 @@
     .bateria-desconectada,
     .motor-encendido,
     .motor-apagado,
+    .distraccion,
 
     /* DEFINIDOS */
     .zona-entrada,
@@ -47,6 +48,10 @@
 
       .leaflet-popup-content-wrapper,
       a.leaflet-popup-close-button{
+        color: #fff;
+      }
+
+      td a {
         color: #fff;
       }
       
@@ -171,6 +176,15 @@
       }
     }
 
+    .distraccion{
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: #546e7a;
+      }
+    }
+
+
+    
     .zona-entrada{
       .leaflet-popup-content-wrapper,
       .leaflet-popup-tip-container > .leaflet-popup-tip{

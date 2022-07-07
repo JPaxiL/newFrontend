@@ -47,5 +47,7 @@
     .ag-body-viewport[ref="eBodyViewport"] {
         text-align: center;
     }
-    
+    .dropdown-toggle::after {
+        display:none;
+    }
 }

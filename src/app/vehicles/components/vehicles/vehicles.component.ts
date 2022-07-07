@@ -191,6 +191,7 @@ export class VehiclesComponent implements OnInit {
     this.api.setRowData([]);
     this.api.updateRowData({add:this.vehicleService.vehicles});
     this.statusTable=true;
+    this.api.sizeColumnsToFit();
 
     // this.vehicleService.reloadTable.subscribe(res=>{
     //   const vehicles = this.vehicleService.vehicles;

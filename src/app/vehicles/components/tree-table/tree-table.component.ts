@@ -76,7 +76,7 @@ export class TreeTableComponent implements OnInit {
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private confirmationService: ConfirmationService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
   ) {
     // this.vehicleService.listTable=1;
     if(this.loading) {
@@ -91,6 +91,7 @@ export class TreeTableComponent implements OnInit {
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
       this.spinner.hide('loadingTreeTable');
+      this.treeTableResizing(true);
     });
 
     this.vehicleService.reloadTableTree.subscribe(res=>{
@@ -124,6 +125,31 @@ export class TreeTableComponent implements OnInit {
           { field: 'point_color', header: 'speed' },
           { field: 'activo', header: 'speed' }
       ];
+    this.treeTableResizing(true);
+    window.addEventListener('resize', this.treeTableResizing, true);
+    screen.orientation.addEventListener('change', this.treeTableResizing);
+  }
+
+  treeTableResizing(e: any) {
+    console.log('--navbar-height: ',getComputedStyle(document.documentElement).getPropertyValue('--navbar-height'));
+    console.log('--navbar-height: ',getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
+    console.log('--navbar-height: ', Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', '')));
+    const navbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
+    const rowBusquedaHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--row-busqueda-height').replace('rem', ''));
+    const panelMonitoreoHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--panel-monitoreo-header-height').replace('rem', ''));
+    const treetableHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--treetable-header-height').replace('rem', ''));
+    /* this.toastr.success('treeTable altura previa:' + $('.map-area-app').height()!); */
+    console.log('treeTable altura previa:' + $('.map-area-app').height()!);
+    const rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    // var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * 4.375;
+
+    //0.125rem es tolerancia para evitar overflow
+    //12.125 era 9.375 + 2.75 (previa altura del navbar)
+    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (0.125 + rowBusquedaHeight + panelMonitoreoHeaderHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
+    //$('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr("style", '');
+    $('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
+    console.log('treeTable altura en px:' + treeTable_height_in_px);
+    /* this.toastr.success('treeTable altura en px:' + treeTable_height_in_px); */
   }
 
   onChangeDisplay(res : boolean){
@@ -423,6 +449,8 @@ export class TreeTableComponent implements OnInit {
   }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;
+    window.removeEventListener('resize', this.treeTableResizing, true);
+    screen.orientation.removeEventListener('change', this.treeTableResizing);
   }
   onClickGroup(){
     // this.displayGroup=true;

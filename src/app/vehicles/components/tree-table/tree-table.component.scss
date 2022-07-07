@@ -37,21 +37,22 @@ p {
 :host ::ng-deep {
 
     .p-treetable-scrollable-header {
-        background-color: var(--gl-blue-dark);
+        background-color: var(--gl-light-gray-treetable);
+        height: 2.375rem;
     }
 
     .p-treetable-thead {
-        border-bottom: solid 1.1px var(--gl-blue-dark);
+        border-bottom: solid 1.1px var(--gl-light-gray-treetable);
         
         tr > th {
             text-align: center;
-            background-color: var(--gl-blue-dark);
-            color: #fff;
+            background-color: var(--gl-light-gray-treetable);
+            color: var(--gl-dark-gray-blue);
 
-            * > div > span > i,
+            /* * > div > span > i,
             * > span > i {
                 color: #fff !important;
-            }
+            } */
         }
     }
 

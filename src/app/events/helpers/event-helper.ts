@@ -452,7 +452,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
         <tbody style="font-size: 0.7rem;">
           ${(typeof event_content.nombre_objeto !== 'undefined')? `<tr><td>UNIDAD:</td><td>${event_content.nombre_objeto}</td></tr>`:''}
           ${(typeof event_content.luminaria !== 'undefined')? `<tr><td>LUMINARIA:</td><td>${event_content.luminaria}</td></tr>`:''}
-          ${(typeof event_content.latitud !== 'undefined' && typeof event_content.latitud !== 'undefined')? `<tr><td>UBICACIÓN:</td><td><a href="http://maps.google.com/maps?q=${event_content.latitud},${event_content.longitud}&amp;t=m" target="_blank" style="color: white">${event_content.latitud} °,  ${event_content.longitud} °</a></td></tr>`:''}
+          ${(typeof event_content.latitud !== 'undefined' && typeof event_content.latitud !== 'undefined')? `<tr><td>UBICACIÓN:</td><td><a href="http://maps.google.com/maps?q=${event_content.latitud},${event_content.longitud}&amp;t=m" target="_blank">${event_content.latitud} °,  ${event_content.longitud} °</a></td></tr>`:''}
           ${(typeof event_content.int_mant_ultimo_mantenimiento !== 'undefined')? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.int_mant_ultimo_mantenimiento} h</td></tr>`:''}
           ${(typeof event_content.int_mant_horas_transcurridas !== 'undefined')? `<tr><td>HORAS TRANSCURRIDAS:</td><td>${event_content.int_mant_horas_transcurridas} h</td></tr>`:''}
           ${(typeof event_content.int_mant_horas_restantes !== 'undefined')? `<tr><td>HORAS RESTANTES:</td><td>${event_content.int_mant_horas_restantes} h</td></tr>`:''}
