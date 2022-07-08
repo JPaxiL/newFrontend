@@ -65,7 +65,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = "ALERTS-ACCESSORIE-EDIT";
-    this.panelService.nombreCabecera =   "Alerta Accesorio";
+    this.panelService.nombreCabecera =   "Alerta Seguridad Vehicular";
   }
 
 }

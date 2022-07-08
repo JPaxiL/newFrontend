@@ -12,8 +12,8 @@ declare var $: any;
 export class PanelAlertsAccessoriesComponent implements OnInit {
   options = new Array(
     { id:'ALERTS', name:"Alertas"},
-    { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
-    { id:'ALERTS-ACCESSORIE-CREATE', name:"Crear Alertas Accesorios"},
+    { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
+    { id:'ALERTS-ACCESSORIE-CREATE', name:"Crear Alertas Seguridad Vehicular"},
   );
   constructor(
     public panelService: PanelService,

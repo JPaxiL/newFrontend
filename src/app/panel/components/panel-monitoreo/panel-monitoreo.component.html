@@ -22,7 +22,7 @@
           <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS')">Todas las alertas</a></li>
           <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">Alertas GPS</a></li>
           <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-PLATFORMS')">Alertas Plataformas</a></li>
-          <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">Alertas Accesorios</a></li>
+          <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">Alertas Seguridad Vehicular</a></li>
         </ul>
       </div>
 
@@ -32,72 +32,72 @@
       <ng-container *ngIf="(panelService.nombreComponente == 'GEOPOINTS')">
         <app-panel-geopoints></app-panel-geopoints>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'HISTORIAL')">
         <app-panel-historial ></app-panel-historial>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'VEHICLES')">
         <app-panel-vehicles></app-panel-vehicles>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS')">
         <app-panel-alerts></app-panel-alerts>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-GPS')">
         <app-panel-alerts-gps></app-panel-alerts-gps>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-CREATE')">
         <app-gps-alerts-create></app-gps-alerts-create>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-GPS-EDIT')">
         <app-alert-gps-edit></app-alert-gps-edit>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORMS')">
         <app-panel-alerts-platform></app-panel-alerts-platform>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-CREATE')">
         <app-platform-alerts-create></app-platform-alerts-create>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-PLATFORM-EDIT')">
         <app-platform-alerts-edit></app-platform-alerts-edit>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIES')">
         <app-panel-alerts-accessories></app-panel-alerts-accessories>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-CREATE')">
         <app-alert-accessories-create></app-alert-accessories-create>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-EDIT')">
         <app-alert-accessories-edit></app-alert-accessories-edit>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'GEOFENCES')">
         <app-geocerca-main></app-geocerca-main>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'EVENT-USER')">
         <app-event-board></app-event-board>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'USER-PREFERENCES')">
         <app-user-config></app-user-config>
       </ng-container>
-  
+
       <ng-container *ngIf="(panelService.nombreComponente == 'CRED-CONFIG')">
         <app-cred-config></app-cred-config>
       </ng-container>
     </div>
-    
+
 
 
 

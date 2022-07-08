@@ -14,8 +14,8 @@ export class PanelService {
     { id:'ALERTS-GPS-CREATE', name:"Alertas GPS"},
     { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
     { id:'ALERTS-PLATFORM-CREATE', name:"Alertas Plataforma"},
-    { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
-    { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Accesorios"},
+    { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
+    { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Seguridad Vehicular"},
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'EVENT-USER', name:'Eventos'},
     { id:'USER-PREFERENCES', name:'Preferencias'},
@@ -35,7 +35,7 @@ export class PanelService {
       $("#panelMonitoreo").show( "slow" );
       this.nombreComponente = nomComponent;
       console.log(this.nombreComponente);
-  
+
       const item = this.options.filter((item)=> item.id == nomComponent);
       this.nombreCabecera = item[0].name;
     }
