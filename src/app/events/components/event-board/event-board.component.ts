@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { EventService } from './../../services/event.service';
 @Component({
   selector: 'app-event-board',
   templateUrl: './event-board.component.html',
@@ -7,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventBoardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private eventService: EventService) { }
 
   ngOnInit(): void {
+    this.eventService.initialize();
   }
 
 }

@@ -7,8 +7,6 @@ import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
 import { GeopointsService } from '../../../geopoints/services/geopoints.service';
 
-import { EventService } from './../../../events/services/event.service';
-import { EventSocketService } from './../../../events/services/event-socket.service';
 
 declare var $: any;
 
@@ -25,8 +23,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService,
-    public eventService: EventService,
-    public eventSocketService: EventSocketService
+
   ) {}
   // constructor() { }
 
@@ -37,8 +34,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     //$("#panelMonitoreo").hide( "slow" )
     await this.geofencesService.initialize();
     await this.geopointsService.initialize();
-    this.eventService.initialize();
-    this.eventSocketService.listen();
+
     this.setLayers();
 
     //=============Agregar Buscador de direccion.====================
