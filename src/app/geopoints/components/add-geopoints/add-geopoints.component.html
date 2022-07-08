@@ -1,13 +1,11 @@
-<div>
+<div class="h-100">
 
-  <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;" [innerHTML]="this.geopointsService.action == 'edit' ? 'Configurar Geopunto' : 'Nuevo Geopunto'">
+  <div class="card-body p-fluid d-flex" id="rowBusqueda" style="font-size: 1rem; height: var(--pm-general-header-height);" [innerHTML]="this.geopointsService.action == 'edit' ? 'Configurar Geopunto' : 'Nuevo Geopunto'">
   </div>
-
-  <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
 
   <!-- <button type="submit" (click)="fin_editar()" class="btn btn-success btn-sm" >fin editar</button> -->
 
-  <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
+  <div class="modal-body panel-izq-container p-fluid" style="height: calc(100% - var(--pm-general-header-height)); max-height: calc(100% - var(--pm-general-header-height));">
     <div class="panel-izq-form">
       <label class="row">
         <span class="col-4">Nombre:</span>

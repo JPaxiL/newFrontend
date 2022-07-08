@@ -1,9 +1,7 @@
 <div style="height: 100%; overflow: auto;">
   <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca Poligonal' "></div>
 
-  <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
-
-  <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
+  <div class="modal-body panel-izq-container p-fluid" style="height: calc(100% - var(--pm-row-header-height)); max-height: calc(100% - var(--row-header-height));">
     <div class="panel-izq-form">
       <label class="row">
         <span class="col-4">Nombre:</span>

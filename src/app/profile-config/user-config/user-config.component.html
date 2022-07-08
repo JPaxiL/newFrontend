@@ -3,7 +3,84 @@
     
         <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div> -->
     
-        <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
+        <div class="modal-body panel-izq-container p-fluid">
+            <form [formGroup]="profileConfigForm">
+                <div class="row">
+                    <legend class="col-12">Contraseña</legend>
+                    <div class="col-12 mb-2">
+                        <label class="row">
+                            <span class="col-4">Contraseña actual:</span>
+                            <div class="col-8">
+                                <input 
+                                id="actual_pass"
+                                [class.is-invalid]="profileConfigForm.get('actual_pass')?.touched && profileConfigForm.get('actual_pass')?.invalid"
+                                type="password" 
+                                class="form-control" 
+                                formControlName="actual_pass"
+                                maxlength="25">
+                                <div class="invalid-feedback">
+                                    Este campo no puede quedar vacío
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label class="row">
+                            <span class="col-4">Nueva contraseña:</span>
+                            <div class="col-8">
+                                <input 
+                                    id="new_pass_1"
+                                    [class.is-invalid]="profileConfigForm.get('new_pass_1')?.touched && profileConfigForm.get('new_pass_1')?.invalid"
+                                    type="password" 
+                                    class="form-control" 
+                                    formControlName="new_pass_1"
+                                    maxlength="25">
+                                <div class="invalid-feedback">
+                                    Este campo no puede quedar vacío
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label class="row">
+                            <span class="col-4">Repetir nueva contraseña:</span>
+                            <div class="col-8">
+                                <input 
+                                    id="new_pass_2"
+                                    [class.is-invalid]="profileConfigForm.get('new_pass_2')?.touched && (profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value)"
+                                    type="password" 
+                                    class="form-control" 
+                                    formControlName="new_pass_2"
+                                    maxlength="25">
+                                <div 
+                                    *ngIf="!(profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value) &&profileConfigForm.get('new_pass_2')?.touched && profileConfigForm.get('new_pass_2')?.invalid"            
+                                    class="invalid-feedback">
+                                    Este campo no puede quedar vacío
+                                </div>
+                                <div 
+                                    *ngIf="profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value" 
+                                    class="invalid-feedback">
+                                    La nueva contraseña debe coincidir
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+    
+                <div class="row"></div>
+    
+                <div class="modal-footer">
+                    <div class="row w-100 justify-content-around">
+                        <!-- <div class="col-5">
+                          <button type="button" class="btn btn-success w-100">Cancelar</button>
+                        </div> -->
+                        <div class="col-5">
+                          <button type="button" class="btn btn-success w-100 not-cancel" [disabled]="profileConfigForm.get('actual_pass')?.invalid || profileConfigForm.get('new_pass_1')?.invalid || profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value">Actualizar Contraseña</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="panel-izq-form">
 
                 <div class="row">

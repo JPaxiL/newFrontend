@@ -20,6 +20,11 @@ export class PanelMonitoreoComponent implements OnInit {
     
     /* Redimensionar panel en window resize */
     window.addEventListener('resize', function(e: any) {
+      console.log('Vehicle height header: ', getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height'));
+      console.log('Vehicle height header: ', getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height') != '0rem');
+      console.log('Vehicle height header: ', typeof getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height'));
+      console.log('Vehicle height header: ', typeof getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height'));
+      console.log(Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', '')));
       minWidth = 425;
       if(window.innerWidth > 600) {
         maxWidth = 0.725 * window.innerWidth < 800? 0.725 * window.innerWidth: 800;
@@ -66,6 +71,30 @@ export class PanelMonitoreoComponent implements OnInit {
   clickHidePanel(): void {
     $("#panelMonitoreo").hide( "slow" );
     this.panelService.nombreComponente = '';
+  }
+
+  hasHeader(){
+    switch(this.panelService.nombreComponente){
+      case "VEHICLES": 
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', '')) != 0;
+      case "ALERTS": 
+      case "ALERTS-GPS": 
+      case "ALERTS-PLATFORMS": 
+      case "ALERTS-ACCESSORIES": 
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-alertas-header-height').replace('rem', '')) != 0;
+      case "GEOFENCES": 
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geocercas-header-height').replace('rem', '')) != 0;
+      case "GEOPOINTS": 
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geopunto-header-height').replace('rem', '')) != 0;
+      case "HISTORIAL": 
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-historial-header-height').replace('rem', '')) != 0;
+      case "EVENT-USER": 
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-notificaciones-header-height').replace('rem', '')) != 0;
+      case "USER-CONFIG": 
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-configuracion-header-height').replace('rem', '')) != 0;
+      default:
+        return false;
+    }
   }
 
 }

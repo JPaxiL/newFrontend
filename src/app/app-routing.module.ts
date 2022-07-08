@@ -10,7 +10,7 @@ import { MapComponent } from './vehicles/components/map/map.component';
 import { ReportComponent } from './reports/components/report/report.component';
 import { ResultComponent } from './reports/components/result/result.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { Dashboard2Component } from './dashboard2/dashboard2.component';
+/* import { Dashboard2Component } from './dashboard2/dashboard2.component'; */
 
 // import { AuthGuard } from './vehicles/services/auth.guard';
 
@@ -20,11 +20,11 @@ const routes: Routes = [
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
     canActivate: [IsLoggedGuard],
   },
-  {
+/*   {
     path: 'dashboard',
     component: Dashboard2Component,
     canActivate: [AuthGuard]
-  },
+  }, */
   {
     path: 'panel',
     component: PanelConfComponent,

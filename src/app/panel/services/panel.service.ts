@@ -17,13 +17,14 @@ export class PanelService {
     { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Seguridad Vehicular"},
     { id:'GEOFENCES', name:"Geocercas"},
-    { id:'EVENT-USER', name:'Eventos'},
-    { id:'USER-PREFERENCES', name:'Preferencias'},
+    { id:'EVENT-USER', name:'Notificación de Eventos'},
+    { id:'USER-CONFIG', name:'Configuración del Usuario'},
     { id:'CRED-CONFIG', name:'Configuración de Perfil'},
   );
 
   nombreComponente: string = '';
   nombreCabecera: string = '';
+  clasePanelActivo: string = '';
 
   constructor() { }
 
@@ -34,8 +35,9 @@ export class PanelService {
     } else {
       $("#panelMonitoreo").show( "slow" );
       this.nombreComponente = nomComponent;
+      this.clasePanelActivo = this.activePanelClass();
       console.log(this.nombreComponente);
-
+  
       const item = this.options.filter((item)=> item.id == nomComponent);
       this.nombreCabecera = item[0].name;
     }
@@ -45,5 +47,29 @@ export class PanelService {
     this.nombreComponente = nomComponent;
     const item = this.options.filter((item)=> item.id == nomComponent);
     this.nombreCabecera = item[0].name;
+  }
+
+  activePanelClass(){
+    switch(this.nombreComponente){
+      case "VEHICLES": 
+        return 'vehiculos';
+      case "ALERTS": 
+      case "ALERTS-GPS": 
+      case "ALERTS-PLATFORMS": 
+      case "ALERTS-ACCESSORIES": 
+        return 'alertas';
+      case "GEOFENCES": 
+        return 'geocercas';
+      case "GEOPOINTS": 
+        return 'geopuntos';
+      case "HISTORIAL": 
+        return 'historial';
+      case "EVENT-USER": 
+        return 'notificaciones';
+      case "USER-CONFIG": 
+        return 'configuracion';
+      default:
+        return '';
+    }
   }
 }

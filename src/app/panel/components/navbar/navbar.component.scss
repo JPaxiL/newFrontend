@@ -45,12 +45,21 @@ a {
     padding-right: 0px;
 }
 
+.profile-picture-mini{
+    --size: 2.125rem;
+     
+    img, div{
+        height: var(--size);
+        width: var(--size);
+        border-radius: 50%;
+    }
+}
+
 .one-character-circled {
     display: grid;
     place-items: center;
-    width: 2.125rem;
-    height: 2.125rem;
-    background-color: #fff;
+    background-color: var(--gl-blue-dark);
+    color: #fff;
     border-radius: 50%;
 }
 
@@ -58,35 +67,51 @@ a {
     user-select: none;
 }
 
+.navbar-last-container {
+    padding: 0.5rem 3rem 0.5rem 0.5rem;
+}
+
 .user-menu-container {
     margin-left: 1rem;
-    height: 100%;
+    height: calc(var(--navbar-height) - 1.5rem);
     width: auto;
-    background-color: var(--gl-gray-hover);
-    padding: 0 0.375rem;
-    border-radius: 2.375rem 0 0 2.375rem;
+    background-color: #f8f8f9; 
+    padding: 0 calc(calc(var(--navbar-height) - 1.5rem) / 2);
+    border-radius: calc(calc(var(--navbar-height) - 1.5rem) / 2);
+    border: 2px solid var(--gl-gray-border);
     gap: 0.5rem;
 
     &.dropdown-toggle::after {
         display:none;
     }
 
-    .dropdown-menu.dropdown-menu-end.show {
-        top: 2.125rem;
-    }
-
     .user-menu-name {
-        color: #fff;
+        color: #000;
         display: block;
     }
+
+    i{
+        color: var(--gl-gray-hover);
+    }
 }
 
-.dropdown-user-info {
-    display: none;
-}
-
-.dropdown-navbar-items { 
-    display: none;
+.navbar-last-container {
+    .dropdown-menu.dropdown-menu-end.show {
+        border-radius: calc(calc(var(--navbar-height) - 1.5rem) / 3);
+        border: 2px solid var(--gl-gray-border);
+        min-width: 100%;
+        margin-top: -2px;
+        overflow: hidden;
+    }
+    
+    .dropdown-user-info {
+        display: none;
+    }
+    
+    .dropdown-navbar-items { 
+        display: none;
+    }
+    
     .btn-navbar > i {
         width: 1.5rem;
         padding: 0 0.25rem 0 0;
@@ -204,13 +229,20 @@ li.nav-item {
         bottom: 0;
         left: 0;
         width: 100%;
-        background-color: var(--gl-blue-dark);
         transform: scaleX(0);
         transition: transform 250ms ease;
+        background-color: var(--gl-light-gray-hover);
     }
 
     &.active{
         color: var(--gl-blue-dark);
+        &::after{
+            background-color: var(--gl-blue-dark);
+            transform: scaleX(1);
+        }
+    }
+
+    &:hover:not(.active){
         &::after{
             transform: scaleX(1);
         }
@@ -351,7 +383,7 @@ i.fa + span {
         display: flex !important;
     }
 
-    .dropdown-navbar-items {
+    .navbar-last-container .dropdown-navbar-items {
         display: block;
     }
 
