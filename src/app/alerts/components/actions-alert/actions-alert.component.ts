@@ -18,7 +18,7 @@ export class ActionsAlertComponent implements OnInit {
   params: any;
 
   options = new Array(
-    { id:'ALERTS-ACCESSORIES', name:"Alertas Accesorios"},
+    { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
     { id:'ALERTS-GPS', name:"Alertas GPS"},
     { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
 

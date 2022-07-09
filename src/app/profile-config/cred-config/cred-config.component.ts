@@ -12,7 +12,6 @@ export class CredConfigComponent implements OnInit {
     actual_pass: new FormControl('', Validators.required),
     new_pass_1: new FormControl('', Validators.required),
     new_pass_2: new FormControl('', Validators.required),
-
   });
   constructor() { }
 

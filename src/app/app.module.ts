@@ -91,6 +91,9 @@ import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
+import { DashboardModule } from './dashboard/dashboard.module';
+/* import { Dashboard2Component } from './dashboard2/dashboard2.component';
+import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component'; */
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
 import { CredConfigComponent } from './profile-config/cred-config/cred-config.component'; 
@@ -145,6 +148,8 @@ import { CredConfigComponent } from './profile-config/cred-config/cred-config.co
     ModalComponent,
     UserConfigComponent,
     CredConfigComponent
+/*     Dashboard2Component,
+    AreagraphsComponent */
   ],
   imports: [
     ToastrModule.forRoot({
@@ -207,7 +212,6 @@ import { CredConfigComponent } from './profile-config/cred-config/cred-config.co
       FollowComponent,
       VehicleHeaderComponent
     ])
-
   ],
   providers: [
     ConfirmationService,

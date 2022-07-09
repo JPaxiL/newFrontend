@@ -1,7 +1,7 @@
-<div id="panelMonitoreo">
+<div id="panelMonitoreo" class="{{panelService.clasePanelActivo}}">
 
   <div class="card w-100">
-    <div class="card-header header-panel-monitoreo">
+    <div class="card-header header-panel-monitoreo pt-2" *ngIf="hasHeader()">
       <!-- <div class="card-header header-panel-monitoreo" (click)="clickHidePanel()" > -->
       <div class="d-flex align-items-center">
         <div class="circled-fa"  (click)="clickHidePanel()">
@@ -22,13 +22,13 @@
           <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS')">Todas las alertas</a></li>
           <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">Alertas GPS</a></li>
           <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-PLATFORMS')">Alertas Plataformas</a></li>
-          <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">Alertas Accesorios</a></li>
+          <li><a ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">Alertas Seguridad Vehicular</a></li>
         </ul>
       </div>
 
     </div>
 
-    <div>
+    <div class="component-containers">
       <ng-container *ngIf="(panelService.nombreComponente == 'GEOPOINTS')">
         <app-panel-geopoints></app-panel-geopoints>
       </ng-container>
@@ -89,7 +89,7 @@
         <app-event-board></app-event-board>
       </ng-container>
   
-      <ng-container *ngIf="(panelService.nombreComponente == 'USER-PREFERENCES')">
+      <ng-container *ngIf="(panelService.nombreComponente == 'USER-CONFIG')">
         <app-user-config></app-user-config>
       </ng-container>
   

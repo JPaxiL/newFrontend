@@ -23,11 +23,11 @@ export class DashboardComponent implements OnInit {
 
 
   constructor(
-    private userService: UsersService
+    // private userService: UsersService
   ) { }
 
   ngOnInit(): void {
-    this.loadAllUsers();
+    // this.loadAllUsers();
     // this.userService.getUsers('nuevoo').pipe(
     //   tap( nuevo => {
     //     //console.log(nuevo);
@@ -37,10 +37,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadAllUsers(): void {
-    this.userService.getAll().pipe(first()).subscribe(users => {
-        // this.users = users;
-        //console.log(users);
-    });
+    // this.userService.getAll().pipe(first()).subscribe(users => {
+    //     // this.users = users;
+    //     //console.log(users);
+    // });
   }
 
 }

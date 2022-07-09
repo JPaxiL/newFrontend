@@ -22,7 +22,7 @@ declare var $: any;
   styleUrls: ['./alert-accessories-edit.component.scss'],
 })
 export class AlertAccessoriesEditComponent implements OnInit {
-  options = new Array({ id: 'ALERTS-ACCESSORIES', name: 'Alertas Accesorios' });
+  options = new Array({ id: 'ALERTS-ACCESSORIES', name: 'Alertas Seguridad Vehicular' });
 
   public alertForm!: FormGroup;
   public events: any = [];

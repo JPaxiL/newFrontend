@@ -46,7 +46,7 @@
   --gl-blue-dark: #2d4064;
   --gl-blue: #48659c;
   --gl-light-blue: #30a9d9 ;
-  --gl-light-gray-treetable: #e3e3e3;
+  --gl-lighter-gray: #e3e3e3;
   --gl-light-blue-alpha: rgba(33,150,243,0.1);
   --gl-light-gray: #f2f2f2;
   --gl-light-gray-hover: #dedede;
@@ -54,11 +54,26 @@
   --gl-gray-hover: #646464;
   --gl-gray-subtitle: #dbdfe0;
   --gl-dark-gray: #727176;
+
+  --gl-gray-border: #b0afb5;
   
   --navbar-height: 4.75rem;
-  --row-busqueda-height: 4.375rem;
-  --panel-monitoreo-header-height: 3.5rem;
+  //--row-busqueda-height: 4.375rem;
+  //--panel-monitoreo-header-height: 3.5rem;
+  --row-busqueda-height: 4rem;
+  --panel-monitoreo-header-height: 4rem;
   --treetable-header-height: 2.375rem;
+
+  --pm-general-header-height: 3.5rem;
+  --pm-vehiculos-header-height: 0rem;
+  --pm-alertas-header-height: 0rem;
+  --pm-geocercas-header-height: var( --pm-general-header-height);
+  --pm-geopuntos-header-height: 0rem;
+  --pm-historial-header-height: var( --pm-general-header-height);
+  --pm-subcuentas-header-height: var( --pm-general-header-height);
+  --pm-notificaciones-header-height: var( --pm-general-header-height);
+  --pm-configuracion-header-height: var( --pm-general-header-height);
+
 }
 
 html, body { height: 100%; }
@@ -202,6 +217,8 @@ div.leaflet-tooltip-own {
 
 .btn-circle{
   border-radius: 50%;
+  border: none !important;
+  padding: 0;
 }
 
 thead.visible-on-scroll {
@@ -211,7 +228,7 @@ thead.visible-on-scroll {
   > tr {
     position: sticky;
     top: 0;
-    background-color: var(--gl-light-gray-treetable);
+    background-color: var(--gl-lighter-gray);
         color: var(--gl-dark-gray-blue);
   }
 }
@@ -219,3 +236,11 @@ thead.visible-on-scroll {
 .fa.fa-minus-circle:before {
   color: var(--gl-danger-red);
 }
+
+.flex-none {
+  flex: none;
+}
+
+/* .dropdown-item.active{
+  background-color: var(--gl-blue-dark);
+} */

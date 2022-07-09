@@ -34,19 +34,51 @@ p {
     }
 }
 
+.dropdown-customize-vehicle-panel {
+    margin-left: 1.875rem; //Padding de rowBusqueda + ancho de dragbar + espacio adicional 0.375
+    margin-right: 0.625rem;  
+    position: relative;
+    border: none;
+    border-radius: 0.75rem;
+    background: linear-gradient(0deg, #fff 50%, var(--gl-lighter-gray) 50%);
+
+    > .container {
+       background-color: #fff; 
+    }
+
+    &::after{
+        content: "";
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        top: 0.75rem;
+        border: 0.625rem solid transparent;
+    }
+
+    &[x-placement="right-top"]::after{
+        left: 0.75rem;
+        border-right: 0.625rem solid var(--gl-lighter-gray);
+    }
+
+    &[x-placement="left-top"]::after{
+        right: -0.5rem;
+        border-left: 0.625rem solid var(--gl-lighter-gray);
+    }
+}
+
 :host ::ng-deep {
 
     .p-treetable-scrollable-header {
-        background-color: var(--gl-light-gray-treetable);
+        background-color: var(--gl-lighter-gray);
         height: 2.375rem;
     }
 
     .p-treetable-thead {
-        border-bottom: solid 1.1px var(--gl-light-gray-treetable);
+        border-bottom: solid 1.1px var(--gl-lighter-gray);
         
         tr > th {
             text-align: center;
-            background-color: var(--gl-light-gray-treetable);
+            background-color: var(--gl-lighter-gray);
             color: var(--gl-dark-gray-blue);
 
             /* * > div > span > i,

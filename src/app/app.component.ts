@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EventSocketService } from './events/services/event-socket.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'my-app';
+  constructor(
+    private eventSocketService: EventSocketService
+  ){
+    this.eventSocketService.listen();
+  }
 }
