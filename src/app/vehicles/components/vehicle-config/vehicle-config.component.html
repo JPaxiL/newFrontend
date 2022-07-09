@@ -9,7 +9,10 @@
 </p-confirmDialog>
 <p-dialog [(visible)]="display" (onShow)="onShow()" [breakpoints]="{'1200px': '65vw', '960px': '75vw', '640px': '100vw'}" [style]="{width: '55vw'}">
     <ng-template class="p-dialog-title" pTemplate="header">
-      <strong>Configuración de Unidad</strong>
+      <div>
+        <i class="fa fa-pencil me-2" aria-hidden="true"></i>
+        <strong>Configuración de Unidad</strong>
+      </div>
     </ng-template>
 
     <div class="dialog-body-container">
@@ -18,98 +21,107 @@
         <div class="" *ngIf="loading">
           <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         </div>
-        <div class="dialog-form-container" [ngStyle]="{'display':formDisplay}">
+        <div class="dialog-form-container gl-middleline" [ngStyle]="{'display':formDisplay}">
+
           <div class="row">
-            <div class="col-sm-12 col-md-6 p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="firstname">Nombre / Cod. Interno:</label>
                 </div>
-                <div class="col">
+                <div class="col-7">
                   <input #name id="firstname" type="text" value="{{config.name}}"  pInputText class="p-inputtext-sm" placeholder="">
                 </div>
               </div>
             </div>
-            <div class="col-sm-12 col-md-6 p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="lastname">IMEI:</label>
                 </div>
-                <div class="col-9">
+                <div class="col-7">
                   <input id="lastname" type="text" value="{{config.IMEI}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="row">
-            
-  
-            <div class="col-sm-12 col-md-6 p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="sim">Número SIM:</label>
                 </div>
-                <div class="col-9">
+                <div class="col-7">
                   <input #sim id="sim" type="text" value="{{config.sim_number}}" pInputText class="p-inputtext-sm" placeholder="">
                 </div>
               </div>
             </div>
-            <div class="col-sm-12 col-md-6 p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="placa">Placa:</label>
                 </div>
-                <div class="col-9">
+                <div class="col-7">
                   <input #placa type="text" value="{{config.plate_number}}" pInputText class="p-inputtext-sm" placeholder="">
                 </div>
               </div>
             </div>
           </div>
-          <div class="row">
-           
-            <div class="col-sm-12 col-md-6 p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+
+          <div class="row">          
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="tolva">Cisterna / Tolva:</label>
                 </div>
-                <div class="col-9">
+                <div class="col-7">
                   <input #tolva type="text" value="{{config.tolva}}" pInputText class="p-inputtext-sm" placeholder="">
                 </div>
               </div>
             </div>
-            <div class="col-sm-12 col-md-6 p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="conductor">Conductor:</label>
                 </div>
-                <div class="col-9">
+                <div class="col-7">
                   <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                 </div>
               </div>
             </div>
           </div>
 
-          <div style="background-color: var(--gl-gray); height: 0.125rem; width: 100%; margin: 1rem 0px;"></div>
-
-          <div class="row d-flex justify-content-center">
-            <div class="col-sm-12 col-md-10 align-self-center p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+          <div class="row">          
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="empresa">Empresa:</label>
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                   <input #empresa id="empresa" type="text" value="{{config.empresa}}" pInputText class="p-inputtext-sm" placeholder="">
                 </div>
               </div>
             </div>
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label>Grupo:</label>
+                </div>
+                <div class="col-7">
+                  <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="row d-flex justify-content-center">
-            <div class="col-sm-12 col-md-10 align-self-center p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+
+          <div class="row">          
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="state">Icono:</label>
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                   <p-dropdown inputId="state" [options]="icons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name">
                     <ng-template pTemplate="selectedItem">
                       <div class="icon-item icon-item-value"  *ngIf="selectedIcon">
@@ -131,26 +143,12 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row d-flex justify-content-center">
-            <div class="col-sm-12 col-md-10 align-self-center p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
-                  <label>Grupo:</label>
-                </div>
-                <div class="col-8">
-                  <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row d-flex justify-content-center">
-            <div class="col-sm-12 col-md-10 align-self-center p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="tipo-unidad">Tipo de Unidad :</label>
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                   <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'">
                     <ng-template pTemplate="selectedItem">
                       <div class="type-item type-item-value"  *ngIf="selectedType">
@@ -167,7 +165,8 @@
               </div>
             </div>
           </div>
-          <div class="row d-flex justify-content-center">
+            
+          <!-- <div class="row d-flex justify-content-center">
             <div class="col-sm-12 col-md-10 align-self-center p-field">
               <div class="row">
                 <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
@@ -178,7 +177,8 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
+
         </div>
       </div>
 
@@ -188,10 +188,10 @@
     <p-footer>
       <div class="row d-flex justify-content-center" *ngIf="loading==false">
         <div class="col-4">
-          <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm w-100">Cancelar</button>
+          <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100">Cancelar</button>
         </div>
         <div class="col-4">
-          <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm w-100">Guardar</button>
+          <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100">Guardar</button>
         </div>
       </div>
       <div class="" *ngIf="loading">

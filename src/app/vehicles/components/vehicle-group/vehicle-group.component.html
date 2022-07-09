@@ -1,114 +1,78 @@
 <p-dialog [(visible)]="display" (onHide)="onHide()" (onShow)="onShow()" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
     <ng-template class="p-dialog-title" pTemplate="header">
-      <strong>Crear nuevo Grupo/Convoy</strong>
+      <div>
+        <i class="fa fa-plus me-2" aria-hidden="true"></i>
+        <strong>Crear nuevo Grupo/Convoy</strong>
+      </div>
     </ng-template>
 
     <div class="dialog-body-container">
 
-      <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+      <div class="p-fluid p-formgrid p-grid">
         <div class="" *ngIf="loading">
           <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         </div>
   
-        <div class="dialog-form-container" [ngStyle]="{'display':formDisplay}">
-          <div class="row">
-            <div class="col-md-10 col-lg-6 col-xl-4 offset-md-1 offset-lg-3 offset-xl-4 d-flex justify-content-around">
-              <div class="p-field-radiobutton">
-                <p-radioButton (click)="onOption('grupo')" value="grupo" [(ngModel)]="option" inputId="city1"></p-radioButton>
-                <label for="city1" style="padding-left: 0.25rem;">Grupo</label>
+        <div class="dialog-form-container">
+
+          <div class="gl-middleline mt-2">
+            <div class="row">
+              <div class="col p-field">
+                <div class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label>Creación de:</label>
+                  </div>
+                  <div class="col-7">
+                    <p-dropdown (onChange)="onOption(option)" [options]="stateOptions" [(ngModel)]="option" optionLabel="label" optionValue="value" placeholder="Seleccione...">
+                      <ng-template let-option pTemplate="item">
+                        <div>
+                            {{option.label}}
+                        </div>
+                    </ng-template>
+                    </p-dropdown>
+                  </div>
+                </div>
               </div>
-              <div class="p-field-radiobutton">
-                <p-radioButton (click)="onOption('convoy')" value="convoy" [(ngModel)]="option" inputId="city2"></p-radioButton>
-                <label for="city2" style="padding-left: 0.25rem;">Convoy</label>
+              <div class="col p-field">
+                <div class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label>Nombre:</label>
+                  </div>
+                  <div class="col-7">
+                    <input (keyup)="onName($event)" #name id="float-input" type="text" pInputText>
+                  </div>
+                </div>
               </div>
+              
+              <!-- <div class="col p-field" [ngStyle]="{'display':formDisplayCreate}">
+                <div class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label>Descripción:</label>
+                  </div>
+                  <div class="col-7">
+                    <input (keyup)="onDescription($event)" #description id="float-input" type="text" pInputText>
+                  </div>
+                </div>
+              </div> -->
             </div>
           </div>
 
-          <div class="row justify-content-center" *ngIf="option=='convoy'" [ngStyle]="{'display':formDisplayCreate}">
-            <div class="col-sm-12 col-md-10 align-self-center p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
+          <div class="row gl-out-middleline">
+            <div class="col p-field p-0" *ngIf="option=='convoy'">
+              <div class="row gl-row-underline m-0 w-100">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label>Seleccione Grupo:</label>
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                   <p-dropdown (onChange)="onChangeGroup()" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="grupo" optionValue="idgrupo" placeholder="Seleccione grupo"></p-dropdown>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row justify-content-center" [ngStyle]="{'display':formDisplayCreate}">
-            <div class="col-sm-12 col-md-10 align-self-center p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
-                  <label>Nombre:</label>
-                </div>
-                <div class="col-8">
-                  <input (keyup)="onName($event)" #name id="float-input" type="text" pInputText>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center" [ngStyle]="{'display':formDisplayCreate}">
-            <div class="col-sm-12 col-md-10 align-self-center p-field">
-              <div class="row">
-                <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
-                  <label>Descripción:</label>
-                </div>
-                <div class="col-8">
-                  <input (keyup)="onDescription($event)" #description id="float-input" type="text" pInputText>
-                </div>
-              </div>
-            </div>
-          </div>
 
-            <!-- <div class="row d-flex justify-content-center">
-              <div class="col-sm-12 col-md-10 align-self-center p-field">
-                <div class="row">
-                  <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
-                    <label>Ingrese nombre y descripcion:</label>
-                  </div>
-                  <div class="col-8">
-                    <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-
-            <!-- <div class="col-6" [ngStyle]="{'display':formDisplayCreate}">
-              <h5>Ingrese nombre y descripcion</h5>
-                <span *ngIf="option=='convoy'"  class="p-label">
-                  <label for="float-input">Seleccione Grupo :</label>
-                  <p-dropdown (onChange)="onChangeGroup()" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="grupo" optionValue="idgrupo" [showClear]="true" placeholder="Seleccione grupo"></p-dropdown>
-                </span>
-                <span class="p-label">
-                  <label for="float-input">Nombre :</label>
-                  <input (keyup)="onName($event)" #name id="float-input" type="text" pInputText>
-                </span>
-                <span class="p-label">
-                  <label for="float-input">Descripcion :</label>
-                  <input (keyup)="onDescription($event)" #description id="float-input" type="text" pInputText>
-                </span>
-  
-  
-            </div> -->
-
-          <div [ngStyle]="{'display':formDisplayCreate}" class="flex-column">
-            <div style="background-color: var(--gl-gray); height: 0.125rem; width: 100%; margin: 1rem 0px;"></div>
-
-            <div class="row">
-              <!-- <div *ngIf="option!='nada'" class="row" [ngStyle]="{'display':formDisplay}"> -->
-                
-                <!-- <p-pickList [source]="list1" [target]="list2" [responsive]="true" [sourceStyle]="{'height':'200px'}" [targetStyle]="{'height':'200px'}"
-                  sourceFilterPlaceholder="Buscar por placa" targetFilterPlaceholder="Buscar por placa" filterBy="name">
-                  <ng-template let-car pTemplate="item">
-                    <div>
-                      <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                      <div style="font-size:12px;float:right;margin:5px 2px 0 0">{{car.name}}</div>
-                    </div>
-                  </ng-template>
-                </p-pickList> -->
+          <div class="flex-column mt-3">
+            <div class="row gl-listbox-container">
                 <div class="col">
-                  <label style="font-size: 1rem; margin-bottom: 0.5rem;">Lista de Vehículos</label>
                   <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
                     <ng-template let-car pTemplate="item">
                       <div class="car-item">
@@ -117,28 +81,26 @@
                       </div>
                     </ng-template>
                   </p-listbox>
-                  <!-- <p-listbox [options]="list1" [(ngModel)]="selectedList1" optionLabel="name"></p-listbox> -->
                 </div>
-                <div class="col-1 d-flex flex-column justify-content-center">
+                <div class="col-1 d-flex flex-column justify-content-center align-items-center">
                   <div style="height: 1.5rem;"></div>
                   <div class="">
-                    <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
+                    <button (click)="upList2()" type="button" class="btn-gl-light-blue btn-circle" name="button">
                       <span>
-                        <i class="fa fa-arrow-right"></i>
+                        <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
                       </span>
                     </button>
                   </div>
-                  <br>
+                  <div style="height: 1rem;"></div>
                   <div class="">
-                    <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
+                    <button (click)="upList1()" type="button" class="btn-gl-light-blue btn-circle" name="button">
                       <span>
-                        <i class="fa fa-arrow-left"></i>
+                        <i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i>
                       </span>
                     </button>
                   </div>
                 </div>
                 <div class="col">
-                  <label style="font-size: 1rem; margin-bottom: 0.5rem;">Lista de Vehículos</label>
                   <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
                     <ng-template let-car pTemplate="item">
                       <div class="car-item">
@@ -159,10 +121,10 @@
     <p-footer>
       <div class="row d-flex justify-content-center" *ngIf="loading==false">
         <div class="col-3">
-          <button (click)="onHide()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm w-100">Cancelar</button>
+          <button (click)="onHide()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100">Cancelar</button>
         </div>
         <div class="col-3">
-          <button (click)="onConfirmGroup()" _ngcontent-cic-c118="" type="button" class="btn btn-success btn-sm w-100">Guardar</button>
+          <button (click)="onConfirmGroup()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100">Guardar</button>
         </div>
       </div>
       <div class="" *ngIf="loading">

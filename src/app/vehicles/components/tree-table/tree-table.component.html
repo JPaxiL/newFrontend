@@ -1,12 +1,18 @@
 <app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
 
-<p-dialog header="Descomponer" icon="pi pi-info-circle" [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayDelete">
-    Esta seguro de descomponer {{textDelete}}?
+<p-dialog icon="pi pi-info-circle" [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayDelete">
+  <ng-template class="p-dialog-title" pTemplate="header">
+    <div>
+      <i class="fa fa-exclamation-triangle me-2" aria-hidden="true"></i>
+      <strong>Descomponer</strong>
+    </div>
+  </ng-template>
+    ¿Está seguro de descomponer {{textDelete}}?
       <div class="" *ngIf="loadingDelete">
         <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
       </div>
     <ng-template *ngIf="loadingDelete==false" pTemplate="footer">
-      <div [ngStyle]="{'display':buttonDisplay}" class="">
+      <div [ngStyle]="{'display':buttonDisplay, 'margin-top':'-1rem'}">
         <p-button icon="pi pi-check" (click)="onDelete()" label="Si" class="p-button-text"></p-button>
         <p-button icon="pi pi-times" (click)="displayDelete=false" label="No"></p-button>
       </div>
@@ -15,15 +21,35 @@
 
 <p-dialog header="" icon="pi pi-info-circle" [style]="{width: '50vw'}" [(visible)]="displayEditGroup">
   <ng-template class="p-dialog-title" pTemplate="header">
-    <strong>Editar {{textHeaderEdit}}</strong>
+    <div>
+      <i class="fa fa-pencil me-2" aria-hidden="true"></i>
+      <strong>Editar {{textHeaderEdit}}</strong>
+    </div>
   </ng-template>
   <div class="dialog-body-container">
-    <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+
+    <div class="p-fluid p-formgrid p-grid">
+
       <div class="" *ngIf="loading">
         <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
       </div>
+
       <div class="dialog-form-container" [ngStyle]="{'display':formDisplay}">
-        <div class="row d-flex justify-content-center">
+
+        <div class="row gl-out-middleline">
+          <div class="col p-field p-0">
+            <div class="row gl-row-underline m-0 w-100">
+              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                <label>Nombre:</label>
+              </div>
+              <div class="col-7">
+                <input  #nameEdit id="float-input" type="text" pInputText class="p-inputtext-sm" placeholder="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="row d-flex justify-content-center">
           <div class="col-sm-12 col-md-10 align-self-center p-field">
             <div class="row">
               <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
@@ -34,64 +60,65 @@
               </div>
             </div>
           </div>
+        </div> -->
+
+        <div class="flex-column mt-3">
+          <div class="row gl-listbox-container">
+            <div class="col">
+
+              <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
+                <ng-template let-car pTemplate="item">
+                    <div class="car-item">
+                      <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
+                      <label>{{car.name}}</label>
+                    </div>
+                </ng-template>
+              </p-listbox>
+            </div>
+
+            <div class="col-1 d-flex flex-column justify-content-center align-items-center">
+              <div style="height: 1.5rem;"></div>
+              <div class="">
+                <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
+                  <span>
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+              <div style="height: 1rem;"></div>
+              <div class="">
+                <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
+                  <span>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div class="col">
+              <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
+                <ng-template let-car pTemplate="item">
+                    <div class="car-item">
+                      <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
+                      <label>{{car.name}}</label>
+                    </div>
+                </ng-template>
+              </p-listbox>
+            </div>
+
+          </div>
         </div>
 
-        <div style="background-color: var(--gl-gray); height: 0.125rem; width: 100%; margin: 1rem 0px;"></div>
-
-        <div class="row">
-          <div class="col">
-            <label style="font-size: 1rem; margin-bottom: 0.5rem;">Lista de Vehículos</label>
-            <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
-              <ng-template let-car pTemplate="item">
-                  <div class="car-item">
-                    <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                    <label>{{car.name}}</label>
-                  </div>
-              </ng-template>
-            </p-listbox>
-          </div>
-
-          <div class="col-1 d-flex flex-column justify-content-center">
-            <div style="height: 1.5rem;"></div>
-            <div class="">
-              <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
-                <span>
-                  <i class="fa fa-arrow-right"></i>
-                </span>
-              </button>
-            </div>
-            <br>
-            <div class="">
-              <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
-                <span>
-                  <i class="fa fa-arrow-left"></i>
-                </span>
-              </button>
-            </div>
-          </div>
-
-          <div class="col">
-            <label style="font-size: 1rem; margin-bottom: 0.5rem;">Lista de Vehículos</label>
-            <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
-              <ng-template let-car pTemplate="item">
-                  <div class="car-item">
-                    <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                    <label>{{car.name}}</label>
-                  </div>
-              </ng-template>
-            </p-listbox>
-          </div>
-        </div>
       </div>
     </div>
   </div>
   <p-footer>
     <div class="row d-flex justify-content-center">
       <div class="col-4">
-        <button (click)="displayEditGroup=false" type="button" class="btn btn-success btn-sm w-100">Cancelar</button>
+        <button (click)="displayEditGroup=false" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100">Cancelar</button>
       </div>
       <div class="col-4">
-        <button (click)="onConfirmationEdit()" type="button" class="btn btn-success btn-sm w-100">Guardar</button>
+        <button (click)="onConfirmationEdit()" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100">Guardar</button>
       </div>
     </div>
   </p-footer>
@@ -118,7 +145,7 @@
           <button class="btn-gl-gray-blue btn-circle" ngbDropdownToggle>
             <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
           </button>
-          <div ngbDropdownMenu class="dropdown-customize-vehicle-panel">
+          <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel">
             <div class="text-center pb-2 pt-1">
               Personalizar Panel
             </div>
@@ -250,7 +277,40 @@
   
         <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'grupo', 'row-header-convoy': rowData['type'] === 'convoy'}">
           <td [attr.colspan]="column">
-            <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
+
+              <div class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header">
+                <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
+                {{rowData['type'] === 'grupo' && rowData['name']!='Unidades Sin Grupo'? 'Grupo: ': rowData['type'] === 'convoy' && rowData['name']!='Unidades Sin Convoy'? 'Convoy: ': ''}}{{rowData["name"]}}
+              </div>
+
+              <div class="d-flex justify-content-end pe-3 flex-none">
+                <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
+                  <div class="d-flex justify-content-end">
+                    <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+                      <span ngbDropdownToggle class="btn-label burger-options" title="Opciones" data-bs-toggle="tooltip" data-bs-placement="top">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="stroke-width:1.5;" viewBox="0 0 16 16" class="dropdown-toggle bi bi-list" aria-expanded="false"><path _ngcontent-atd-c211="" fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
+                      </span>
+                      <div ngbDropdownMenu class="gl-custom-dropdown treetable-dropdown">
+                        <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" (click)="showEditGroup(rowData)" ngbDropdownItem>
+                          <span class="btn-label">
+                            Editar {{rowData['type']}}
+                          </span>
+                        </div>
+                        <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" (click)="showDelete(rowData)" ngbDropdownItem>
+                          <span class="btn-label">
+                            Descomponer {{rowData['type']}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="width: 48px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="row">
               <div class="col-9">
                 <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
                 {{rowData['type'] === 'grupo' && rowData['name']!='Unidades Sin Grupo'? 'Grupo: ': rowData['type'] === 'convoy' && rowData['name']!='Unidades Sin Convoy'? 'Convoy: ': ''}}{{rowData["name"]}}
@@ -281,7 +341,7 @@
                 </div>
               </div>
   
-            </div>
+            </div> -->
           </td>
         </tr>
         <tr *ngIf="rowData['col']!=3">

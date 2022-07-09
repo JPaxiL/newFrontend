@@ -40,7 +40,7 @@
   justify-content: space-between;
   overflow: hidden;
   white-space: nowrap;
-  height: var(--panel-monitoreo-header-height);
+  height: var(--pm-general-header-height);
   /* min-height: var(--panel-monitoreo-header-height); */
 }
 
@@ -171,6 +171,7 @@
     justify-content: center;
     height: var(--row-busqueda-height);
     padding: 0 1rem;
+    /* padding: 0.625rem 1rem; */
     flex: none;
     background-color: var(--gl-blue-dark);
     color: #fff;
@@ -182,6 +183,11 @@
       height: 37.97px;
       width: 37.97px;
     }
+  }
+
+  #panelMonitoreo.notificaciones #rowBusqueda{
+    height: auto;
+    padding: calc(calc(var(--row-busqueda-height) - 38px) / 2) 1rem; //38px es la altura ded los input
   }
 
   .table-content-component-panel-monitoreo {
@@ -255,47 +261,6 @@
     > tr:hover {
       background-color: var(--gl-light-blue-alpha);
     }
-  }
-
-  .p-dialog-content {
-    > .dialog-body-container {
-      padding: 1.5rem 0rem 0rem;
-
-      > div > .dialog-form-container {
-        flex-direction:column;
-        row-gap:0.75rem;
-      }
-    }
-  }
-
-  p-dialog {
-    > div > div div.p-dialog-header {
-      background-color: var(--gl-blue-dark);
-      color: white;
-      height: 2rem;
-  
-      > .p-dialog-header-icons {
-        > button > span {
-          color: #fff;
-        }
-        > button:focus {
-          outline: none;
-          box-shadow: none;
-        }
-        > button:enabled:hover {
-          background: inherit;
-          > span {
-            color: var(--gl-light-gray-hover);
-          }
-        }
-      }
-    }
-    &.error-dialog{
-      > div > div div.p-dialog-header {
-        background-color: black;
-      }
-    }
-      
   }
 
   .modal-footer > div > div:first-child,

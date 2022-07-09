@@ -72,7 +72,6 @@ a {
 }
 
 .user-menu-container {
-    margin-left: 1rem;
     height: calc(var(--navbar-height) - 1.5rem);
     width: auto;
     background-color: #f8f8f9; 
@@ -334,7 +333,7 @@ i.fa + span {
 
 @media (max-width: 1770px) {
     .user-menu-container {
-        margin-left: 0.125rem;
+        /* margin-left: 0.125rem; */
     }
 
     #span_notif,
