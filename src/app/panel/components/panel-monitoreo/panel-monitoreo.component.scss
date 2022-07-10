@@ -185,6 +185,13 @@
     }
   }
 
+  .dropdown-toggle {
+    cursor: pointer;
+  }
+  .dropdown-toggle::after {
+      display:none;
+  }
+
   #panelMonitoreo.notificaciones #rowBusqueda{
     height: auto;
     padding: calc(calc(var(--row-busqueda-height) - 38px) / 2) 1rem; //38px es la altura ded los input

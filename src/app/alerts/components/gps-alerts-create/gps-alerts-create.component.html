@@ -1,54 +1,58 @@
 <div class="loading-gral" *ngIf="loading"></div>
-<div>
-    <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;">
+<div class="d-flex flex-column h-100">
+    <div class="card-body p-fluid pt-2" id="rowBusqueda">
         Crear Alerta GPS
     </div>
 
-    <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
-
-    <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
+    <div class="modal-body panel-izq-container p-fluid flex-grow-1">
         <form [formGroup]="alertForm" (submit)="onSubmit($event)">
             <div class="row">
-                <div class="col-1 text-end" *ngIf="loadingEventSelectInput">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <div class="col-12">
+                    <label>ALERTA</label>
                 </div>
-                <div class="col">
-                    <div class="p-field">
-                        <select class="form-select" aria-label="Alerta" disabled *ngIf="loadingEventSelectInput">
-                            <option value="" disabled selected hidden>Cargando...</option>
-                        </select>
-                        <select class="form-select" aria-label="Alerta" formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
-                            <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
-                            <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
-                        </select>
+                <div class="col-12">
+                    <div class="row gl-row-underline">
+                        <div class="col-1 text-end d-flex flex-column justify-content-center" *ngIf="loadingEventSelectInput">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        </div>
+                        <div class="col">
+                            <div class="p-field">
+                                <select class="form-select" aria-label="Alerta" disabled *ngIf="loadingEventSelectInput">
+                                    <option value="" disabled selected hidden>Cargando...</option>
+                                </select>
+                                <select class="form-select" aria-label="Alerta" formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
+                                    <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
+                                    <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="row"></div>
-
-            <div class="row">
-                <label class="col-4">Nombre:</label>
-                <div class="col-8">
-                    <div class="text">
-                        <input class="form-control" placeholder="Nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row"></div>
 
             <div class="row">
                 <div class="col-12">
+                    <label>NOMBRE</label>
+                </div>
+                <div class="col-12 gl-row-underline">
+                    <div class="text">
+                        <input class="form-control" placeholder="Nombre del evento..." aria-label="nombre del evento" formControlName="nombre" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <label>VEHÍCULOS</label>
+                </div>
+                <div class="col-12 gl-row-underline">
                     <div class="p-field">
-                        <label class="bg-subtitle text-end dropdown-toggle"></label>
-                        <label class="bg-subtitle bg-subtitle-on-top text-center">Vehículos</label>
                         <p-multiSelect
                         [options]="vehicles"
                         optionLabel="label"
                         optionValue="value"
                         formControlName="vehicles"
-                        defaultLabel="VEHÍCULOS"
+                        defaultLabel="Seleccione un vehículo..."
                         [maxSelectedLabels]="3"
                         [selectedItemsLabel]="'{0} vehiculos seleccionados'"
                         ></p-multiSelect>
@@ -146,10 +150,10 @@
             <div class="modal-footer">
                 <div class="row w-100 justify-content-around">
                     <div class="col-5">
-                        <button type="button" class="btn btn-success w-100" ui-sref="alertas-accesorios" (click)="clickShowPanel('ALERTS-GPS')">Cancelar</button>
+                        <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickShowPanel('ALERTS-GPS')">Cancelar</button>
                     </div>
                     <div class="col-5">
-                        <button type="submit" class="btn btn-success w-100" [disabled]="loadingEventSelectInput">Guardar</button>
+                        <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import { ActiveAlertComponent } from '../active-alert/active-alert.component';
 import { SystemAlertComponent } from '../system-alert/system-alert.component';
 import { EmailAlertComponent } from '../email-alert/email-alert.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { PanelService } from 'src/app/panel/services/panel.service';
 
 
 @Component({
@@ -31,7 +32,11 @@ export class AlertListComponent implements OnInit {
     { headerName: 'E-Mail', field: 'notificacion_email_bol', resizable: true, wrapText: true,width: 150, valueGetter: params=>{return params.data}, cellRendererFramework: EmailAlertComponent},
   ];
 
-  constructor(private AlertService: AlertService, private spinner: NgxSpinnerService) { }
+  constructor(
+    private AlertService: AlertService, 
+    private spinner: NgxSpinnerService,
+    public panelService: PanelService,
+  ) { }
 
 
   ngOnInit(): void {

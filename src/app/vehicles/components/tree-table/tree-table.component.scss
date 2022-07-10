@@ -24,8 +24,6 @@ p {
 }
 
 .dropdown-item {
-    cursor: pointer;
-
     &.active-view {
         color: #000;
         cursor: default;
@@ -212,14 +210,6 @@ p {
     /* i.pi{
         color: #fff;
     } */
-
-    
-    .dropdown-toggle {
-        cursor: pointer;
-    }
-    .dropdown-toggle::after {
-        display:none;
-    }
 
     .p-treetable-loading > .p-treetable-loading-overlay { 
         display: none;

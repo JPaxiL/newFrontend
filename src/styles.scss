@@ -303,6 +303,8 @@ p-dialog {
   /* padding-bottom: 0.25rem; */
 
   input,
+  select,
+  p-multiselect > .p-multiselect.p-component,
   p-dropdown > .p-dropdown.p-component{
     border: none !important;
     background-color: inherit !important;
@@ -403,6 +405,10 @@ p-dialog {
     background: rgba(0, 0, 0, 0.25);
     z-index: -1;
   }
+}
+
+.dropdown-item{
+  cursor: pointer;
 }
 
 @media screen and (max-width: 850px) {
