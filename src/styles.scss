@@ -66,7 +66,8 @@
 
   --pm-general-header-height: 3.5rem;
   --pm-vehiculos-header-height: 0rem;
-  --pm-alertas-header-height: 0rem;
+  //--pm-alertas-header-height: 0rem;
+  --pm-alertas-header-height: var( --pm-general-header-height);
   --pm-geocercas-header-height: var( --pm-general-header-height);
   --pm-geopuntos-header-height: 0rem;
   --pm-historial-header-height: var( --pm-general-header-height);
@@ -224,6 +225,19 @@ div.leaflet-tooltip-own {
   padding: 0;
 }
 
+.btn-gl-clear{
+  background-color: inherit;
+  border: none;
+}
+
+i.icon-gl-blue{
+  color: var(--gl-blue);
+}
+
+button[disabled] i.icon-gl-blue{
+  color: var(--gl-gray);
+}
+
 thead.visible-on-scroll {
   position: relative;
   z-index: 1;
@@ -302,16 +316,28 @@ p-dialog {
   border-bottom: 1px solid var(--gl-gray-border);
   /* padding-bottom: 0.25rem; */
 
-  input,
+  input:not(.p-multiselect-filter, [type="checkbox"]),
   select,
   p-multiselect > .p-multiselect.p-component,
-  p-dropdown > .p-dropdown.p-component{
+  p-dropdown > .p-dropdown.p-component,
+  p-inputnumber .p-inputnumber-button,
+  p-calendar .p-datepicker-trigger.p-button-icon-only{
     border: none !important;
     background-color: inherit !important;
+
+    span.p-button-icon {
+      color: #6c757d;
+    }
+  }
+
+  .p-inputnumber-button:not([disabled]):hover,
+  .p-datepicker-trigger.p-button-icon-only:not([disabled]):hover{
+    background-color: var(--gl-light-gray-hover) !important;
+    border-radius: 3px !important;
   }
 
   input:not([disabled]){
-    text-shadow: 0 0 black;
+    text-shadow: 0 0 #000;
   }
 }
 
@@ -329,6 +355,11 @@ p-dialog {
     left: 50%;
     top: -0.375rem;
   }
+}
+
+.gl-row-underline .gl-middleline::after,
+.gl-row-underline.gl-middleline::after{
+  top: 0;
 }
 
 .gl-out-middleline{
@@ -405,10 +436,33 @@ p-dialog {
     background: rgba(0, 0, 0, 0.25);
     z-index: -1;
   }
+
+  &.btn-circle::after{
+    border-radius: 50%;
+  }
+
+  &.dropdown-toggle:hover::after{
+    border: none;
+    margin: 0;
+    display: inline-block;
+  }
 }
 
 .dropdown-item{
   cursor: pointer;
+}
+
+p-checkbox .p-checkbox-disabled > .p-checkbox-box{
+  background-color: var(--gl-gray);
+}
+
+.pm-config-w-header-rb{
+  height: calc(100% + var(--row-busqueda-height));
+  position: relative; //for ngxSpinner
+
+  #rowBusqueda{
+    padding-top: 0.5rem !important;
+  }
 }
 
 @media screen and (max-width: 850px) {

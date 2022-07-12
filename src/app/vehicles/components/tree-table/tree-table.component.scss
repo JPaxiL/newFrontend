@@ -33,17 +33,6 @@ p {
 }
 
 .gl-custom-dropdown { 
-    position: relative;
-    border: none;
-    border-radius: 0.75rem;
-
-    &::after{
-        content: "";
-        position: absolute;
-        width: 0px;
-        height: 0px;
-    }
-
     &.dropdown-customize-vehicle-panel{
         margin-left: 1.875rem; //Padding de rowBusqueda + ancho de dragbar + espacio adicional 0.375
         margin-right: 0.625rem; 
@@ -74,10 +63,11 @@ p {
         margin-bottom: -0.25rem;
         margin-left: 3rem;
         margin-right: 0.75rem;
-        border-radius: 0.375rem;
-        background: linear-gradient(0deg, var(--gl-purple-blue) 50%, var(--gl-purple-blue-dark) 50%);
+        --border-radius: 0.375rem;
+        border-radius: var(--border-radius);
+        background-color: var(--gl-purple-blue);
         font-size: 0.75rem;
-        padding: 0.125rem 0;
+        padding: 0 0;
         
         > div {
             color: #fff;
@@ -94,28 +84,102 @@ p {
             border: 0.625rem solid transparent;
         }
 
-        &[x-placement="right-top"]::after{
-            left: 1.75rem;
-            top: 0;
-            border-right: 0.75rem solid var(--gl-purple-blue-dark);
+        &[x-placement="right-top"]{
+            &::after{
+                left: 1.875rem;
+                top: -0.25rem;
+                border-right: 0.625rem solid var(--gl-purple-blue);
+            }
+            
+            & > .dropdown-item:first-child:hover{
+                position: relative;
+                &::after{
+                    content: "";
+                    position: absolute;
+                    left: -1.125rem;
+                    top: 0.25rem;
+                    border: 0.625rem solid transparent;
+                    border-right: 0.625rem solid var(--gl-purple-blue-dark);
+                    z-index: 2;
+                }
+            }
         }
     
-        &[x-placement="left-top"]::after{
-            right: -0.5rem;
-            top: 0;
-            border-left: 0.625rem solid var(--gl-purple-blue-dark);
+        &[x-placement="left-top"]{
+            &::after{
+                right: -0.375rem;
+                top: -0.25rem;
+                border-left: 0.625rem solid var(--gl-purple-blue);
+            }
+            
+            & > .dropdown-item:first-child:hover{
+                position: relative;
+                &::after{
+                    content: "";
+                    position: absolute;
+                    right: -1.125rem;
+                    top: 0.25rem;
+                    border: 0.625rem solid transparent;
+                    border-left: 0.625rem solid var(--gl-purple-blue-dark);
+                    z-index: 2;
+                }
+            }
         }
         
-        &[x-placement="right-bottom"]::after{
-            left: 1.75rem;
-            bottom: 0;
-            border-right: 0.75rem solid var(--gl-purple-blue);
+        &[x-placement="right-bottom"]{
+            &::after{
+                left: 1.875rem;
+                bottom: 0;
+                border-right: 0.625rem solid var(--gl-purple-blue);
+            }
+            
+            & > .dropdown-item:last-child:hover{
+                position: relative;
+                &::after{
+                    content: "";
+                    position: absolute;
+                    left: -1.125rem;
+                    bottom: 0.25rem;
+                    border: 0.625rem solid transparent;
+                    border-right: 0.625rem solid var(--gl-purple-blue-dark);
+                    z-index: 2;
+                }
+            }
         }
     
-        &[x-placement="left-bottom"]::after{
-            right: -0.5rem;
-            bottom: 0;
-            border-left: 0.625rem solid var(--gl-purple-blue);
+        &[x-placement="left-bottom"]{
+            &::after{
+                right: -0.375rem;
+                bottom: 0;
+                border-left: 0.625rem solid var(--gl-purple-blue);
+            }
+
+            & > .dropdown-item:last-child:hover{
+                position: relative;
+                &::after{
+                    content: "";
+                    position: absolute;
+                    right: -1.125rem;
+                    bottom: 0.25rem;
+                    border: 0.625rem solid transparent;
+                    border-left: 0.625rem solid var(--gl-purple-blue-dark);
+                    z-index: 2;
+                }
+            }
+        }
+
+        > .dropdown-item {
+            &:hover{
+                background-color: var(--gl-purple-blue-dark);
+            }
+
+            &:hover:first-child{
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+            }
+
+            &:last-child:hover{
+                border-radius: 0 0 var(--border-radius) var(--border-radius);
+            }
         }
     }
 }

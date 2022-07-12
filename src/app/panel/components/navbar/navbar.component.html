@@ -164,7 +164,7 @@
 
     <!-- COLAPSADO -->
     <div class="collapse navbar-collapse justify-content-start" id="navbarSupportedContent_collapsed" style="padding: 0px 0.25rem;">
-      <ul class="navbar-nav h-100" (click)="clearTooltips();">
+      <ul class="navbar-nav h-100">
         <li class="nav-item" [ngClass]="panelService.nombreComponente == 'VEHICLES'? 'active': ''" (click)="panelService.clickShowPanel('VEHICLES');" title="Vehiculos" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar">

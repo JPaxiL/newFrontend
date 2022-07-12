@@ -368,6 +368,10 @@ i.fa + span {
     #notification_bell_counter {
         width: 2.25rem !important;
     }
+
+    #navbarSupportedContent > .navbar-nav {
+        gap: 1rem;
+    }
 }
 
 @media (max-width: 1490px) {

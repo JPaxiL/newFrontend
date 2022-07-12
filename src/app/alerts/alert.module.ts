@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Select2Module } from 'ng-select2-component';
 import { DataTablesModule } from "angular-datatables";
 import {MultiSelectModule} from 'primeng-lts/multiselect';
+import {DropdownModule} from 'primeng-lts/dropdown';
 import {CardModule} from 'primeng-lts/card';
 
 import { AlertRoutingModule } from './alert-routing.module';
@@ -31,6 +32,10 @@ import { PlatformAlertsEditComponent } from './components/platform-alerts-edit/p
 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { InputNumberModule } from 'primeng-lts/inputnumber';
+import { CheckboxModule } from 'primeng-lts/checkbox';
+import { InputTextModule } from 'primeng-lts/inputtext';
+import { CalendarModule } from 'primeng-lts/calendar';
 
 
 
@@ -66,6 +71,11 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     NgbModule,
     DataTablesModule,
     MultiSelectModule,
+    DropdownModule,
+    InputNumberModule,
+    InputTextModule,
+    CheckboxModule,
+    CalendarModule,
     CardModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,

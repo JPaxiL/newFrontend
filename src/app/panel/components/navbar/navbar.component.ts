@@ -52,8 +52,4 @@ export class NavbarComponent implements OnInit {
     window.location.reload();
   };
 
-  clearTooltips(){
-    //$('body > div.toolip.fade.show[role="tooltip"]').remove;
-    console.log('Intento de remover tooltips');
-  }
 }
