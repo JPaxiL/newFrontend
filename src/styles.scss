@@ -360,6 +360,7 @@ p-dialog {
 .gl-row-underline .gl-middleline::after,
 .gl-row-underline.gl-middleline::after{
   top: 0;
+  height: calc(100% - 0.375rem);
 }
 
 .gl-out-middleline{
@@ -450,6 +451,15 @@ p-dialog {
 
 .dropdown-item{
   cursor: pointer;
+}
+
+.center-icon{
+  display: grid;
+  place-items: center;
+}
+
+.neutral-icon-color{
+  color: var(--gl-gray-border);
 }
 
 p-checkbox .p-checkbox-disabled > .p-checkbox-box{

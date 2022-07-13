@@ -1,13 +1,19 @@
-<div class="table-content-component-panel-monitoreo">
+<div class="table-content-component-panel-monitoreo" style="position: relative;">
+
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingPlatformAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Alertas Plataforma... </p></ngx-spinner>
 
   <div class="card-body p-fluid" id="rowBusqueda">
-    <div class="row">
-      <div class="col">
-        <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">
+    <div class="d-flex">
+      <div class="d-flex flex-grow-1">
+        <span class="p-input-icon-right flex-grow-1 me-2">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/>
+        </span>
       </div>
-      <div class="col-2">
-        <button type="button" class="btn btn-primary" (click)="clickAgregarGeocerca()" title="Crear geocerca"><i class="fa fa-plus"></i></button>
-      </div>
+
+      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocerca()" title="Crear geocerca">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
     </div>
   </div>
 
@@ -64,13 +70,13 @@
   
   
               <td width="5%" >
-                <div ngbDropdown container="body" class="d-inline-block" placement="right-bottom right-top">
-                  <button class="btn btn-xs btn-link" id="dropdownBasic1" ngbDropdownToggle>
+                <div ngbDropdown container="body" class="d-inline-block" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+                  <button class="btn btn-xs btn-link" ngbDropdownToggle>
                     <i class="fa fa-wrench fa-lg" style="font-size: 14px;"></i>
                   </button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button ngbDropdownItem><a (click)="clickConfigurarGeocerca(geo.trama.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</a></button>
-                    <button ngbDropdownItem><a (click)="clickEliminarGeocerca($event, geo.trama.id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</a></button>
+                  <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                    <div ngbDropdownItem (click)="clickConfigurarGeocerca(geo.trama.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                    <div ngbDropdownItem (click)="clickEliminarGeocerca($event, geo.trama.id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
                   </div>
                 </div>
               </td>
