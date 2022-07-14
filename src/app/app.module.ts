@@ -92,8 +92,8 @@ import { ListGeopointsComponent } from './geopoints/components/list-geopoints/li
 
 import { DataTablesModule } from 'angular-datatables';
 import { DashboardModule } from './dashboard/dashboard.module';
-/* import { Dashboard2Component } from './dashboard2/dashboard2.component';
-import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component'; */
+import { Dashboard2Component } from './dashboard2/dashboard2.component';
+import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
 import { CredConfigComponent } from './profile-config/cred-config/cred-config.component'; 
@@ -147,9 +147,9 @@ import { CredConfigComponent } from './profile-config/cred-config/cred-config.co
     ListGeopointsComponent,
     ModalComponent,
     UserConfigComponent,
-    CredConfigComponent
-/*     Dashboard2Component,
-    AreagraphsComponent */
+    CredConfigComponent,
+    Dashboard2Component,
+    AreagraphsComponent
   ],
   imports: [
     ToastrModule.forRoot({
