@@ -1,0 +1,97 @@
+<div class="map-wrapper" id="wraper_map">
+
+    <div class="map-border">
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboardSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando Dashboard... </p></ngx-spinner>
+        <div class="row">
+            <div class="col-sm" >
+                <span style="border-radius: 100%; background-color: darkgrey; width: 200px;height: 200px;">{{ totalVehicle }}</span>
+                <br>
+                <label for="">Total</label>
+            </div>
+            <div class="col-sm" >
+                <span style="border-radius: 100%; background-color: green; width: 200px;height: 200px;">{{ green }}</span>
+                <br>
+                <label for="">En Movimiento</label>
+            </div>
+            <div class="col-sm" >
+                <span style="border-radius: 100%; background-color: blue; width: 200px;height: 200px;">{{ blue }}</span>
+                <br>
+                <label for="">Detenidos</label>
+            </div>
+            <div class="col-sm" >
+                <span style="border-radius: 100%; background-color: orange; width: 200px;height: 200px;">{{ orange }}</span>
+                <br>
+                <label for="">Sin cobertura</label>
+            </div>
+            <div class="col-sm" >
+                <span style="border-radius: 100%; background-color:#51586b; width: 200px;height: 200px;">{{ black }}</span>
+                <br>
+                <label for="">Sin transmision</label>
+            </div>
+            <div class="col-sm" >
+                <span style="border-radius: 100%; background-color:red; width: 200px;height: 200px;">{{ red }}</span>
+                <br>
+                <label for="">Corte de transmision</label>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xl">
+                <ngx-charts-pie-chart
+                    [scheme]="colorScheme"
+                    [results]="data"
+                    [gradient]="gradient"
+                    [legend]="showLegend"
+
+                >
+                </ngx-charts-pie-chart>
+            </div>
+            <div class="col-sm">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span>
+                                    <label for="">Vehiculos en movimiento</label>
+                                    <ul>
+                                        <li *ngFor="let imei of imeiGreen">{{imei}}</li>
+                                    </ul>
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <label for="">Vehiculos detenidos</label>
+                                    <ul>
+                                        <li *ngFor="let imei of imeiBlue">{{imei}}</li>
+                                    </ul>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>
+                                    <label for="">Vehiculos sin cobertura</label>
+                                    <ul>
+                                        <li *ngFor="let imei of imeiOrange">{{imei}}</li>
+                                    </ul>
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <label for="">Vehiculos sin transmision</label>
+                                    <ul>
+                                        <li *ngFor="let imei of imeiBlack">{{imei}}</li>
+                                    </ul>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

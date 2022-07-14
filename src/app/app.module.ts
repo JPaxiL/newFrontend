@@ -96,7 +96,9 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
-import { CredConfigComponent } from './profile-config/cred-config/cred-config.component'; 
+import { CredConfigComponent } from './profile-config/cred-config/cred-config.component';
+
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -149,7 +151,8 @@ import { CredConfigComponent } from './profile-config/cred-config/cred-config.co
     UserConfigComponent,
     CredConfigComponent,
     Dashboard2Component,
-    AreagraphsComponent
+    AreagraphsComponent,
+
   ],
   imports: [
     ToastrModule.forRoot({
@@ -211,7 +214,8 @@ import { CredConfigComponent } from './profile-config/cred-config/cred-config.co
       TagComponent,
       FollowComponent,
       VehicleHeaderComponent
-    ])
+    ]),
+    NgxChartsModule
   ],
   providers: [
     ConfirmationService,
