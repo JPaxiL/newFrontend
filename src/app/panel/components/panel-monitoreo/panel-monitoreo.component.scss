@@ -173,8 +173,7 @@
     padding: 0 1rem;
     /* padding: 0.625rem 1rem; */
     flex: none;
-    background-color: var(--gl-blue-dark);
-    color: #fff;
+    color: #000;
 
     .btn-circle{
       //37.97px es la altura del input que acompaña a los botones
@@ -182,6 +181,10 @@
       width: calc(var(--row-busqueda-height) - 2rem); */
       height: 37.97px;
       width: 37.97px;
+    }
+
+    &.bg-gl-blue-dark{
+      color: #fff;
     }
   }
 
@@ -206,8 +209,7 @@
   .panel-izq-container{
     font-size: 0.9rem;
     overflow: auto;
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
+    padding: 1rem 2.5rem;
     
     > form, .panel-izq-form {
       display: flex;
@@ -223,7 +225,8 @@
       }
     }
 
-    .gl-row-underline {
+    .gl-row-underline, 
+    .gl-form {
       label {
         text-shadow: 0 0 #000;
         font-size: 0.8rem;
@@ -299,6 +302,10 @@
 }
 
 ::ng-deep{
+  .bg-gl-blue-dark{
+    background-color: var(--gl-blue-dark);
+  }
+
   .gl-custom-dropdown { 
     position: relative;
     border: none;

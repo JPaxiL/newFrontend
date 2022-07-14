@@ -7,12 +7,17 @@ import { environment } from 'src/environments/environment';
 import { MapServicesService } from '../../map/services/map-services.service';
 
 import * as L from 'leaflet';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeopointsService {
+
+  initializingGeopoints: boolean = false;
+  tblDataGeo = new Array();
+  
 
   public geopoints:any = [];
   public nombreComponente:string = "LISTAR";
@@ -23,7 +28,7 @@ export class GeopointsService {
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
-
+    private spinner: NgxSpinnerService,
   ) { }
 
 
@@ -39,6 +44,7 @@ export class GeopointsService {
       // console.log(response);
 
       this.geopoints = response.data;
+      this.initializeTable();
 
 
 
@@ -199,11 +205,24 @@ export class GeopointsService {
 
       }
 
+      console.log('Geopuntos Cargados');
+      this.initializingGeopoints = true;
+
     });
   }
 
   public getData() {
     return this.geopoints;
+  }
+
+  public initializeTable(){
+    for (let i = 0; i < this.geopoints.length; i++) {
+      this.geopoints[i].geopunto_nombre_visible_bol = (this.geopoints[i].geopunto_nombre_visible === 'true');
+      this.geopoints[i].geopunto_visible_bol = (this.geopoints[i].geopunto_visible === 'true');
+
+      this.tblDataGeo.push({trama:this.geopoints[i]});
+    }
+    this.spinner.hide('loadingGeopointsSpinner');
   }
 
 

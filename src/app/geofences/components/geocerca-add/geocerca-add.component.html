@@ -1,5 +1,5 @@
 <div class="d-flex flex-column" style="height: 100%;">
-  <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca Poligonal' "></div>
+  <div class="card-body p-fluid" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca Poligonal' "></div>
 
   <div class="modal-body panel-izq-container p-fluid overflow-auto" style="position: relative;">
 
@@ -50,7 +50,7 @@
                 <div class="row">
                     <div class="col-12 d-flex">
                       <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" [(ngModel)]="formColor" id="color_picker" title="Elige un color">
-                      <label role="button" class="p-dropdown-trigger flex-none" for="color_picker">
+                      <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center" for="color_picker">
                         <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
                       </label>
                     </div>
@@ -114,7 +114,7 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center mt-3">
+      <div class="d-flex justify-content-center my-3">
         <div class="row w-100 justify-content-around">
             <div class="col-5">
                 <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelar(form.id)">Cancelar</button>

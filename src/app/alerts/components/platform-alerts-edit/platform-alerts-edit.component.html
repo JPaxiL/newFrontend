@@ -1,286 +1,292 @@
 <div class="loading-gral" *ngIf="loading"></div>
 <div class="d-flex flex-column pm-config-w-header-rb">
-    <div class="card-body p-fluid" id="rowBusqueda">
+    <div class="card-body p-fluid bg-gl-blue-dark pt-2" id="rowBusqueda">
         Editar Alerta Plataforma
     </div>
 
-    <div class="modal-body panel-izq-container p-fluid flex-grow-1" style="position: relative;">
+    <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
         <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
-        
-        <form [formGroup]="alertForm" (submit)="onSubmit($event)">
-            <div class="gl-row-underline p-field">
-                <div class="col-12">
-                    <label>ALERTA</label>
-                </div>
-                <div class="col-12">
-                    <p-dropdown [options]="events" [(ngModel)]="tipoAlerta" optionLabel="name" placeholder="Tipo de Alerta" optionValue="name" [appendTo]="'body'" (onChange)="chageAlertType()" [ngModelOptions]="{standalone: true}"></p-dropdown>
-                    <!-- <div class="row">
-                        <div class="col-1 text-end d-flex flex-column justify-content-center" *ngIf="loadingEventSelectInput">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        </div>
-                        <div class="col">
-                            <div class="p-field">
-                                <select class="form-select" aria-label="Alerta" disabled *ngIf="loadingEventSelectInput">
-                                    <option value="" disabled selected hidden>Cargando...</option>
-                                </select>
-                                <select (change)="chageAlertType()" class="form-select" aria-label="Alerta"  formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
-                                    <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
-                                    <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-            </div>
 
-            <div class="gl-row-underline p-field">
-                <div class="col-12">
-                    <label>NOMBRE</label>
-                </div>
-                <div class="col-12">
-                    <input type="text" placeholder="Nombre del evento" pInputText [(ngModel)]="nombreAlerta" [ngModelOptions]="{standalone: true}"/>
-                    <!-- <div class="text">
-                        <input class="form-control" placeholder="Nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
-                    </div> -->
-                </div>
-            </div>
+        <div class="panel-izq-container h-100">
 
-            <div class="gl-row-underline p-field">
-                <div class="col-12">
-                    <label>VEHÍCULOS</label>
-                </div>
-                <div class="col-12">
-                    <p-multiSelect
-                        [options]="vehicles"
-                        optionLabel="label"
-                        optionValue="value"
-                        [(ngModel)]="vehiclesSelected"
-                        defaultLabel="VEHÍCULOS"
-                        [maxSelectedLabels]="3"
-                        [selectedItemsLabel]="'{0} vehiculos seleccionados'"
-                        [ngModelOptions]="{standalone: true}"
-                    ></p-multiSelect>
-                </div>
-            </div>
-
-            <div *ngIf="showGeocercas" class="gl-row-underline p-field">
-                <div class="col-12">
-                    <label>GEOCERCAS</label>
-                </div>
-                <div class="col-12">
-                    <p-multiSelect
-                        [options]="geocercas"
-                        optionLabel="label"
-                        optionValue="value"
-                        [(ngModel)]="geoSelected"
-                        defaultLabel="GEOCERCAS"
-                        [maxSelectedLabels]="3"
-                        [selectedItemsLabel]="'{0} geocercas seleccionadas'"
-                        [ngModelOptions]="{standalone: true}"
-                    ></p-multiSelect>
-                </div>
-            </div>
-
-            <!-- <div class="gl-row-underline"*ngIf="showFechaCaducidad">
-                <div class="row">
-                    <div class="col-12 p-field d-flex flex-column justify-content-center mb-2">
-                        <label class="row">
-                            <span class="col-9 control-label align-middle">FECHA DE CADUCIDAD</span>
-                            <div class="col-2 d-flex flex-column justify-content-center">
-                                <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkCaducidad" [ngModelOptions]="{standalone: true}"></p-checkbox>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 gl-middleline p-field">
-                        <div class="row">
-                            <div class="col p-field d-flex flex-column justify-content-center">
-                                <label>
-                                    DESDE
-                                </label>
-                            </div>
-                            <div class="col p-field d-flex flex-column justify-content-center">
-                                <label>
-                                    HASTA
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <p-calendar 
-                                [(ngModel)]="fechaDesde" 
-                                [appendTo]="'body'" 
-                                [showIcon]="true" 
-                                dateFormat="yy-mm-dd" 
-                                [monthNavigator]="true" 
-                                [yearNavigator]="true"
-                                (onChange)="changeDisabledExpirationDate($event);"
-                                [ngModelOptions]="{standalone: true}"
-                                ></p-calendar>
-                            </div>
-                            <div class="col">
-                                <p-calendar 
-                                [(ngModel)]="fechaHasta" 
-                                [appendTo]="'body'" 
-                                [showIcon]="true" 
-                                dateFormat="yy-mm-dd" 
-                                [monthNavigator]="true" 
-                                [yearNavigator]="true"
-                                (onChange)="changeDisabledExpirationDate($event);"
-                                [ngModelOptions]="{standalone: true}"
-                                ></p-calendar>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <div class="gl-middleline gl-row-underline">
-                <div class="row">
-                    <div class="col p-field">
-                        <div class="col-12">
-                            <label>EVENTO ACTIVADO</label>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <p-dropdown [options]="booleanOptions" [(ngModel)]="chkEventoActivado"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col p-field">
-                        <div class="col-12">
-                            <label>ALERTA DEL SISTEMA</label>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <p-dropdown [options]="booleanOptions" [(ngModel)]="chkSonido"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}" (onChange)="changeDisabled($event)"></p-dropdown>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gl-row-underline p-field">
-                <div class="col-12">
-                    <label>TIPO DE SONIDO</label>
-                </div>
-                <div class="col-12">
-                    <div class="p-field">
-                        <p-dropdown
-                        [options]="listaSonidos"
-                        optionLabel="label"
-                        optionValue="ruta"
-                        [(ngModel)]="notificationSoundPath"
-                        defaultLabel="Selecciona un sonido..."
-                        [ngModelOptions]="{standalone: true}"
-                        (onChange)="playAudio"
-                        ></p-dropdown>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gl-row-underline p-field" *ngIf='showTiempoLimite'>
-                <div class="row">
+            <form [formGroup]="alertForm" (submit)="onSubmit($event)">
+                <div class="gl-row-underline p-field">
                     <div class="col-12">
-                        <label>TIEMPO LÍMITE</label>
+                        <label>ALERTA</label>
                     </div>
-                    <div class="col-12 gl-middleline p-field">
-                        <div class="row">
-                            <div class="col">
-                                <p-inputNumber [(ngModel)]="duracionParada" [min]="0" [max]="1000" [showButtons]="true" [ngModelOptions]="{standalone: true}"></p-inputNumber>
-                                <!-- <input class="form-control" placeholder="Segundos ,minutos, horas" formControlName="duracion_parada" min="0" max="1000" type="number" /> -->
+                    <div class="col-12">
+                        <p-dropdown [options]="events" [(ngModel)]="tipoAlerta" optionLabel="name" placeholder="Tipo de Alerta" optionValue="name" [appendTo]="'body'" (onChange)="chageAlertType()" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                        <!-- <div class="row">
+                            <div class="col-1 text-end d-flex flex-column justify-content-center" *ngIf="loadingEventSelectInput">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             </div>
                             <div class="col">
-                                <p-dropdown [options]="timeFormatOptions" [(ngModel)]="duracionFormatoParada"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                                <div class="p-field">
+                                    <select class="form-select" aria-label="Alerta" disabled *ngIf="loadingEventSelectInput">
+                                        <option value="" disabled selected hidden>Cargando...</option>
+                                    </select>
+                                    <select (change)="chageAlertType()" class="form-select" aria-label="Alerta"  formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
+                                        <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
+                                        <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-            </div>
-
-            <div *ngIf="showInfraccion" class="gl-middleline gl-row-underline">
-                <div class="row">
-                    <div class="col p-field d-flex flex-column justify-content-center">
-                        <label class="row">
-                            <span class="col-9 control-label align-middle">FIJAR TIEMPO</span>
-                            <div class="col-2 d-flex flex-column justify-content-center">
-                                <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkFijarTiempo" [ngModelOptions]="{standalone: true}" [disabled]="chkFijarLimiteVelocidad"></p-checkbox>
-                            </div>
-                        </label>
+    
+                <div class="gl-row-underline p-field">
+                    <div class="col-12">
+                        <label>NOMBRE</label>
                     </div>
-                    <div class="col p-field d-flex flex-column justify-content-center">
-                        <label class="row">
-                            <span class="col-9 control-label align-middle">FIJAR LÍMITE DE VELOCIDAD</span>
-                            <div class="col-2 d-flex flex-column justify-content-center">
-                                <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkFijarLimiteVelocidad" [ngModelOptions]="{standalone: true}" [disabled]="chkFijarTiempo"></p-checkbox>
-                            </div>
-                        </label>
+                    <div class="col-12">
+                        <input type="text" placeholder="Nombre del evento" pInputText [(ngModel)]="nombreAlerta" [ngModelOptions]="{standalone: true}"/>
+                        <!-- <div class="text">
+                            <input class="form-control" placeholder="Nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
+                        </div> -->
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col p-field">
-                        <p-dropdown [options]="fijarTiempoOptions" [(ngModel)]="tiempoLimiteInfraccion"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}" [disabled]="!chkFijarTiempo"></p-dropdown>
+    
+                <div class="gl-row-underline p-field">
+                    <div class="col-12">
+                        <label>VEHÍCULOS</label>
                     </div>
-                    <div class="col p-field">
-                        <p-inputNumber [(ngModel)]="velocidadLimiteInfraccion" suffix=" km/h" [min]="0" [max]="1000" [showButtons]="true" [ngModelOptions]="{standalone: true}" [disabled]="!chkFijarLimiteVelocidad"></p-inputNumber>
+                    <div class="col-12">
+                        <p-multiSelect
+                            [options]="vehicles"
+                            optionLabel="label"
+                            optionValue="value"
+                            [(ngModel)]="vehiclesSelected"
+                            defaultLabel="VEHÍCULOS"
+                            [maxSelectedLabels]="3"
+                            [selectedItemsLabel]="'{0} vehiculos seleccionados'"
+                            [ngModelOptions]="{standalone: true}"
+                        ></p-multiSelect>
                     </div>
                 </div>
-            </div>
-
-            <div class="row d-flex justify-content-center mt-3">
-                <div class="col-5">
+    
+                <div *ngIf="showGeocercas" class="gl-row-underline p-field">
+                    <div class="col-12">
+                        <label>GEOCERCAS</label>
+                    </div>
+                    <div class="col-12">
+                        <p-multiSelect
+                            [options]="geocercas"
+                            optionLabel="label"
+                            optionValue="value"
+                            [(ngModel)]="geoSelected"
+                            defaultLabel="GEOCERCAS"
+                            [maxSelectedLabels]="3"
+                            [selectedItemsLabel]="'{0} geocercas seleccionadas'"
+                            [ngModelOptions]="{standalone: true}"
+                        ></p-multiSelect>
+                    </div>
+                </div>
+    
+                <!-- <div class="gl-row-underline"*ngIf="showFechaCaducidad">
                     <div class="row">
-                        <label class="col-9 form-check-label">Agregar Correo:</label>
-                        <div class="col-2 d-flex flex-column justify-content-center">
-                            <div class="form-check">
-                                <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkCorreo" [ngModelOptions]="{standalone: true}"></p-checkbox>
-                                <!-- <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" /> -->
+                        <div class="col-12 p-field d-flex flex-column justify-content-center mb-2">
+                            <label class="row">
+                                <span class="col-9 control-label align-middle">FECHA DE CADUCIDAD</span>
+                                <div class="col-2 d-flex flex-column justify-content-center">
+                                    <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkCaducidad" [ngModelOptions]="{standalone: true}"></p-checkbox>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="col-12 gl-middleline p-field">
+                            <div class="row">
+                                <div class="col p-field d-flex flex-column justify-content-center">
+                                    <label>
+                                        DESDE
+                                    </label>
+                                </div>
+                                <div class="col p-field d-flex flex-column justify-content-center">
+                                    <label>
+                                        HASTA
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <p-calendar 
+                                    [(ngModel)]="fechaDesde" 
+                                    [appendTo]="'body'" 
+                                    [showIcon]="true" 
+                                    dateFormat="yy-mm-dd" 
+                                    [monthNavigator]="true" 
+                                    [yearNavigator]="true"
+                                    (onChange)="changeDisabledExpirationDate($event);"
+                                    [ngModelOptions]="{standalone: true}"
+                                    ></p-calendar>
+                                </div>
+                                <div class="col">
+                                    <p-calendar 
+                                    [(ngModel)]="fechaHasta" 
+                                    [appendTo]="'body'" 
+                                    [showIcon]="true" 
+                                    dateFormat="yy-mm-dd" 
+                                    [monthNavigator]="true" 
+                                    [yearNavigator]="true"
+                                    (onChange)="changeDisabledExpirationDate($event);"
+                                    [ngModelOptions]="{standalone: true}"
+                                    ></p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+    
+                <div class="gl-middleline gl-row-underline">
+                    <div class="row">
+                        <div class="col p-field">
+                            <div class="col-12">
+                                <label>EVENTO ACTIVADO</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p-dropdown [options]="booleanOptions" [(ngModel)]="chkEventoActivado"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col p-field">
+                            <div class="col-12">
+                                <label>ALERTA DEL SISTEMA</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p-dropdown [options]="booleanOptions" [(ngModel)]="chkSonido"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}" (onChange)="changeDisabled($event)"></p-dropdown>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-5"></div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-12 d-flex">
-                    <input type="text" placeholder="example@mail.com" class="flex-grow-1" pInputText [(ngModel)]="emailInput" [disabled]="!chkCorreo" [ngModelOptions]="{standalone: true}"/>
-                    <!-- <div class="flex-grow-1">
-                        <div class="text">
-                            <input  class="form-control" placeholder="example@mail.com" formControlName="email" type="text" />
+    
+                <div class="gl-row-underline p-field">
+                    <div class="col-12">
+                        <label>TIPO DE SONIDO</label>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-field">
+                            <p-dropdown
+                            [options]="listaSonidos"
+                            optionLabel="label"
+                            optionValue="ruta"
+                            [(ngModel)]="notificationSoundPath"
+                            defaultLabel="Selecciona un sonido..."
+                            [ngModelOptions]="{standalone: true}"
+                            (onChange)="playAudio"
+                            ></p-dropdown>
                         </div>
-                    </div> -->
-                    <button class="btn-gl-clear flex-none ms-2" [disabled]="!chkCorreo">
-                        <i class="fa fa-plus-circle fa-2x icon-gl-blue" (click)="addEmail()" data-placement="bottom" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-9">
-                    <div class="text">
-                        <ul>
-                          <li *ngFor="let email of alertForm.value.lista_emails; let i = index"  ng-bind-html-unsafe="opt" >
-                              {{ email }}
-                              <i class="ms-1 fa fa-minus-circle" (click)="restEmail(i)" type="button" data-placement="bottom" aria-hidden="true"></i>
-                          </li>
-                        </ul>
                     </div>
                 </div>
-            </div>
-
-            <div class="modal-footer">
-                <div class="row w-100 justify-content-around">
+    
+                <div class="gl-row-underline p-field" *ngIf='showTiempoLimite'>
+                    <div class="row">
+                        <div class="col-12">
+                            <label>TIEMPO LÍMITE</label>
+                        </div>
+                        <div class="col-12 gl-middleline p-field">
+                            <div class="row">
+                                <div class="col">
+                                    <p-inputNumber [(ngModel)]="duracionParada" [min]="0" [max]="1000" [showButtons]="true" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+                                    <!-- <input class="form-control" placeholder="Segundos ,minutos, horas" formControlName="duracion_parada" min="0" max="1000" type="number" /> -->
+                                </div>
+                                <div class="col">
+                                    <p-dropdown [options]="timeFormatOptions" [(ngModel)]="duracionFormatoParada"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div *ngIf="showInfraccion" class="gl-middleline gl-row-underline">
+                    <div class="row">
+                        <div class="col p-field d-flex flex-column justify-content-center">
+                            <label class="row">
+                                <span class="col-9 control-label align-middle">FIJAR TIEMPO</span>
+                                <div class="col-2 d-flex flex-column justify-content-center">
+                                    <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkFijarTiempo" [ngModelOptions]="{standalone: true}" [disabled]="chkFijarLimiteVelocidad"></p-checkbox>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="col p-field d-flex flex-column justify-content-center">
+                            <label class="row">
+                                <span class="col-9 control-label align-middle">FIJAR LÍMITE DE VELOCIDAD</span>
+                                <div class="col-2 d-flex flex-column justify-content-center">
+                                    <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkFijarLimiteVelocidad" [ngModelOptions]="{standalone: true}" [disabled]="chkFijarTiempo"></p-checkbox>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col p-field">
+                            <p-dropdown [options]="fijarTiempoOptions" [(ngModel)]="tiempoLimiteInfraccion"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}" [disabled]="!chkFijarTiempo"></p-dropdown>
+                        </div>
+                        <div class="col p-field">
+                            <p-inputNumber [(ngModel)]="velocidadLimiteInfraccion" suffix=" km/h" [min]="0" [max]="1000" [showButtons]="true" [ngModelOptions]="{standalone: true}" [disabled]="!chkFijarLimiteVelocidad"></p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row d-flex justify-content-center mt-3">
                     <div class="col-5">
-                        <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-PLATFORMS')">Cancelar</button>
+                        <div class="row">
+                            <label class="col-9 form-check-label">Agregar Correo:</label>
+                            <div class="col-2 d-flex flex-column justify-content-center">
+                                <div class="form-check">
+                                    <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkCorreo" [ngModelOptions]="{standalone: true}"></p-checkbox>
+                                    <!-- <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" /> -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-5">
-                        <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>
+                    <div class="col-5"></div>
+                </div>
+    
+                <div class="form-group row">
+                    <div class="col-12 d-flex">
+                        <input type="text" placeholder="example@mail.com" class="flex-grow-1" pInputText [(ngModel)]="emailInput" [disabled]="!chkCorreo" [ngModelOptions]="{standalone: true}"/>
+                        <!-- <div class="flex-grow-1">
+                            <div class="text">
+                                <input  class="form-control" placeholder="example@mail.com" formControlName="email" type="text" />
+                            </div>
+                        </div> -->
+                        <button class="btn-gl-clear flex-none ms-2" [disabled]="!chkCorreo">
+                            <i class="fa fa-plus-circle fa-2x icon-gl-blue" (click)="addEmail()" data-placement="bottom" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
+    
+                <div class="form-group row">
+                    <div class="col-9">
+                        <div class="text">
+                            <ul>
+                              <li *ngFor="let email of alertForm.value.lista_emails; let i = index"  ng-bind-html-unsafe="opt" >
+                                  {{ email }}
+                                  <i class="ms-1 fa fa-minus-circle" (click)="restEmail(i)" type="button" data-placement="bottom" aria-hidden="true"></i>
+                              </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="d-flex justify-content-center my-3">
+                    <div class="row w-100 justify-content-around">
+                        <div class="col-5">
+                            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-PLATFORMS')">Cancelar</button>
+                        </div>
+                        <div class="col-5">
+                            <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>
+                        </div>
+                    </div>
+                </div>
 
+    
+            </form>
 
-        </form>
+        </div>
+        
+        
     </div>
 
     <!-- <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">

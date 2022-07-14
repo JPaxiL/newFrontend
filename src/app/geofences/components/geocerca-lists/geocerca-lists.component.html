@@ -18,7 +18,7 @@
   </div>
 
   <div class="panel-izq-table-container">
-    <table id="tbl_geos" class="table table-hover">
+    <table id="tbl_geos">
       <colgroup>
         <col width="7%" />
         <col width="7%" />
@@ -53,7 +53,7 @@
               <!-- <td>{{geo.trama.zone_color}}</td> -->
               <td class="text-center" width="7%">
                 <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.id)" >
-                  <div [ngStyle]="{'background-color': geo.trama.zone_color}" style="width: 15px;height: 15px;" class="geofence-color" ></div>
+                  <div [ngStyle]="{'background-color': geo.trama.zone_color}" class="geofence-color" ></div>
                 </button>
               </td>
   
