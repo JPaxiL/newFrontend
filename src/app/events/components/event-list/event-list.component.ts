@@ -108,7 +108,6 @@ export class EventListComponent implements OnInit {
 
   async loadData(){
     this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
-    console.log(this.tipoEvento);
     /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
 
     //Trigger reload of event table
@@ -156,9 +155,6 @@ export class EventListComponent implements OnInit {
   }
 
   public changeTypeEvent(){
-    console.log(this.selectedEvent);
-    console.log(this.selectedEvent === null);
-
     /* if(this.selectedEvent == ''){ */
     if(this.selectedEvent === null){
       this.events = this.eventService.getData();

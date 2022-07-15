@@ -195,16 +195,16 @@ export class PanelHistorialGraficoComponent implements OnInit {
   cargarGrafico(): void {
 
 
-    jQuery.fn.jquery
-    jQuery().jquery
-    console.log(jQuery.fn.jquery);
-    console.log(jQuery().jquery);
-    console.log($().jquery);
+    // jQuery.fn.jquery
+    // jQuery().jquery
+    // console.log(jQuery.fn.jquery);
+    // console.log(jQuery().jquery);
+    // console.log($().jquery);
 
 
 
-    console.log($().jquery); // This prints v1.4.2
-    console.log($j().jquery); // This prints v1.9.1
+    // console.log($().jquery); // This prints v1.4.2
+    // console.log($j().jquery); // This prints v1.9.1
 
 
 
