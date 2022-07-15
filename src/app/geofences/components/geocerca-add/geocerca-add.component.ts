@@ -51,6 +51,24 @@ declare var $: any;
 export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
   form :any = {};
+
+  
+
+  booleanOptions = [
+    { label: 'Sí', value: true },
+    { label: 'No', value: false },
+  ];
+
+  formPerimetro: number= 0;
+  formArea: number= 0;
+  formColor: string = '#ff0000';
+  formChkVelocidad: boolean = true;
+
+  formLimiteVelocidad: number = 0;
+  formTolerable: number = 0;
+  formGrave: number = 0;
+  formMuyGrave: number = 0;
+
   constructor(
     public geofencesService: GeofencesService,
     // public MeasureDrawService: MeasureDrawService,

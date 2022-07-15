@@ -1,9 +1,15 @@
-<div ngbDropdown placement="right-bottom right-top" container="body">
-  <a class="dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle>
+<div ngbDropdown container="body" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+  <a class="dropdown-toggle" ngbDropdownToggle>
     <i class="fa fa-wrench fa-lg"></i>
   </a>
-  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-    <button ngbDropdownItem (click)="edit(alert.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</button>
-    <button ngbDropdownItem (click)="delete($event, alert)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</button>
+  <div ngbDropdownMenu class="gl-custom-dropdown alert-table-dropdown">
+    <div ngbDropdownItem (click)="edit(alert.id)">
+      <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar
+    </div>
+    <div ngbDropdownItem (click)="delete($event, alert)">
+      <i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar
+    </div>
+    <!-- <button ngbDropdownItem (click)="edit(alert.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</button>
+    <button ngbDropdownItem (click)="delete($event, alert)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</button> -->
   </div>
 </div>

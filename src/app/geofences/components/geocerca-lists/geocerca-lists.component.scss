@@ -14,9 +14,10 @@ background-color: #ffffff !important;
   border-right: none;
   padding: 3px;
 }
-#tbl_geos tbody tr:hover { /* 4 tables */
+/* #tbl_geos tbody tr:hover 
+{
   background-color: #EFF0F4 !important;
-}
+} */
 /* #tbl_geos tbody {
   overflow-x: auto;
   overflow-y: auto;
@@ -26,4 +27,9 @@ background-color: #ffffff !important;
   font-size: 11px;
   text-align: center;
   vertical-align: middle;
+}
+
+td .geofence-color{
+  width: 1.5rem;
+  height: 1.5rem;
 }

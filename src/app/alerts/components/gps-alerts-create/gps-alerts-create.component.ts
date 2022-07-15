@@ -7,6 +7,7 @@ import { Select2Data } from 'ng-select2-component';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { PanelService } from 'src/app/panel/services/panel.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var $: any;
 
@@ -31,14 +32,57 @@ export class GpsAlertsCreateComponent implements OnInit {
 
   loadingEventSelectInput: boolean = true;
 
+  booleanOptions = [
+    { label: 'Sí', value: true },
+    { label: 'No', value: false },
+  ];
+
+  listaSonidos = [
+    { id: 1, ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
+    { id: 2, ruta: 'sonidos/alarm2.mp3', label: 'Sonido 2' },
+    { id: 3, ruta: 'sonidos/CartoonBullets3.mp3', label: 'Sonido 3' },
+    { id: 4, ruta: 'sonidos/DjStop4.mp3', label: 'Sonido 4' },
+    { id: 5, ruta: 'sonidos/messenger5.mp3', label: 'Sonido 5' },
+    { id: 6, ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
+    { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
+    { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
+    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
+  ];
+
+  tipoAlerta: string = '';
+  chkEventoActivado: boolean = true;
+  chkCorreo: boolean = true;
+  chkSonido: boolean = true;
+  notificationSoundPath: string = '';
+  nombreAlerta: string = '';
+  listaEmails: any;
+  fechaDesde: any;
+  fechaHasta: any;
+  emailInput: string = '';
+  eventType: string = 'platform';
+  chkCaducidad: boolean = false;
+  duracionParada = 0;
+  duracionFormatoParada: string = 'S';
+  idAlert: number = -1 ;
+  chkFijarTiempo: boolean = false;
+  chkFijarLimiteVelocidad: boolean = false;
+  tiempoLimiteInfraccion: number = 10;
+  velocidadLimiteInfraccion: number = 0;
+
+  loadingAlertDropdownReady: boolean = false;
+  loadingVehicleMultiselectReady: boolean = false;
+
   constructor(
     private AlertService: AlertService,
     private VehicleService: VehicleService,
     private formBuilder: FormBuilder,
-    public panelService: PanelService
+    public panelService: PanelService,
+    private spinner: NgxSpinnerService,
   ) {}
 
   ngOnInit(): void {
+    this.spinner.show('loadingAlertData');
+    
     this.alertForm = this.formBuilder.group({
       vehicles: ['', [Validators.required]],
       tipoAlerta: ['', [Validators.required]],
@@ -69,6 +113,9 @@ export class GpsAlertsCreateComponent implements OnInit {
     this.setDataVehicles();
     this.events = await this.AlertService.getEventsByType('gps');
     this.loadingEventSelectInput = false;
+
+    this.loadingAlertDropdownReady = true;
+    this.hideLoadingSpinner();
   }
 
   setDataVehicles() {
@@ -80,6 +127,9 @@ export class GpsAlertsCreateComponent implements OnInit {
         label: vehicle.name,
       };
     });
+
+    this.loadingVehicleMultiselectReady = true;
+    this.hideLoadingSpinner();
   }
 
   playAudio() {}
@@ -175,5 +225,11 @@ export class GpsAlertsCreateComponent implements OnInit {
 
     const item = this.options.filter((item) => item.id == nomComponent);
     this.panelService.nombreCabecera = item[0].name;
+  }
+
+  hideLoadingSpinner(){
+    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){ 
+      this.spinner.hide('loadingAlertData');
+    }
   }
 }

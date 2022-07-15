@@ -15,7 +15,7 @@ export class PanelAlertsPlatformComponent implements OnInit {
   );
 
   constructor(
-    private panelService: PanelService,
+    public panelService: PanelService,
     private spinner: NgxSpinnerService
   ) { }
 

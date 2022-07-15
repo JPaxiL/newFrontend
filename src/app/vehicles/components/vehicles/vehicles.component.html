@@ -1,5 +1,5 @@
-<div id="rowBusqueda">
-  <div class="d-flex gap-3">
+<div id="rowBusqueda" class="bg-gl-blue-dark">
+  <div class="d-flex">
     <div class="d-flex flex-grow-1">
 
       <span class="p-input-icon-right flex-grow-1 me-2">
@@ -7,12 +7,12 @@
         <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Placa/Código" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
       </span>
 
-      <button type="button" class="btn-gl-blue btn-circle flex-none me-2">
+      <button type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
 
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
-        <button ngbDropdownToggle class="btn-gl-gray-blue btn-circle">
+        <button ngbDropdownToggle class="btn-gl-gray-blue btn-dark-hover btn-circle">
           <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
         </button>
         <div ngbDropdownMenu class="dropdown-customize-vehicle-panel">

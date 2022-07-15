@@ -7,6 +7,7 @@ import { GeofencesService } from 'src/app/geofences/services/geofences.service';
 import { PanelService } from 'src/app/panel/services/panel.service';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var $: any;
 
@@ -43,21 +44,79 @@ export class PlatformAlertsEditComponent implements OnInit {
   overlayGeo = false;
   loadingEventSelectInput: boolean = true;
 
+  booleanOptions = [
+    { label: 'Sí', value: true },
+    { label: 'No', value: false },
+  ];
+
+  listaSonidos = [
+    { ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
+    { ruta: 'sonidos/alarm2.mp3', label: 'Sonido 2' },
+    { ruta: 'sonidos/CartoonBullets3.mp3', label: 'Sonido 3' },
+    { ruta: 'sonidos/DjStop4.mp3', label: 'Sonido 4' },
+    { ruta: 'sonidos/messenger5.mp3', label: 'Sonido 5' },
+    { ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
+    { ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
+    { ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
+    { ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
+  ];
+
+  tipoAlerta: string = '';
+  chkEventoActivado: boolean = false;
+  chkCorreo: boolean = true;
+  chkSonido: boolean = false;
+  notificationSoundPath: string = '';
+  nombreAlerta: string = '';
+  listaEmails: any;
+  fechaDesde: any;
+  fechaHasta: any;
+  emailInput: string = '';
+  eventType: string = 'platform';
+  chkCaducidad: boolean = false;
+  duracionParada = 0;
+  duracionFormatoParada: string = 'S';
+  idAlert: number = -1 ;
+  chkFijarTiempo: boolean = false;
+  chkFijarLimiteVelocidad: boolean = false;
+  tiempoLimiteInfraccion: number = 10;
+  velocidadLimiteInfraccion: number = 0;
+
+  loadingAlertDropdownReady: boolean = false;
+  loadingVehicleMultiselectReady: boolean = false;
+  loadingGeofencesMultiselectReady: boolean = false;
+  
+  timeFormatOptions = [
+    { label: 'segundos', value: 'S' },
+    { label: 'minutos', value: 'M' },
+    { label: 'horas', value: 'H' },
+  ];
+
+  fijarTiempoOptions = [
+    { label: '10 Seg.', value: 10 },
+    { label: '30 Seg.', value: 30 },
+    { label: '1 Min.', value: 60 },
+    { label: '2 Min.', value: 120 },
+  ];
+  
+
   constructor(
     private AlertService: AlertService,
     private VehicleService: VehicleService,
     private formBuilder: FormBuilder,
     public panelService: PanelService,
-    private geofencesService: GeofencesService
+    private geofencesService: GeofencesService,
+    private spinner: NgxSpinnerService,
   ) {
     this.loadData();
   }
 
   ngOnInit(): void {
+    this.spinner.show('loadingAlertData');
+
     let alert = this.AlertService.getAlertEditData();
 
-    this.vehiclesSelected = alert.imei.split(',');
-    this.geoSelected = alert.valor_verificado.split(',');
+    //this.vehiclesSelected = alert.imei.split(',');
+    //this.geoSelected = alert.valor_verificado.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
     let notificacion_system =
       arrayNotificationSystem[2].toLowerCase() === 'true';
@@ -68,6 +127,8 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.expirationDate = !alert.bol_fecha_caducidad;
     let fecha_desde = alert.fecha_desde.split('-').map(Number);
     let fecha_hasta = alert.fecha_hasta.split('-').map(Number);
+
+    console.log('Objeto Alertas: ',alert);
 
     this.disabledTimeLimit = !alert.bol_fijar_tiempo;
     this.disabledSpeed = !alert.bol_fijar_velocidad;
@@ -83,6 +144,27 @@ export class PlatformAlertsEditComponent implements OnInit {
       month: fecha_hasta[1],
       day: fecha_hasta[2],
     };
+
+    this.vehiclesSelected = alert.imei.split(',');
+    this.geoSelected = alert.valor_verificado.split(',');
+    this.tipoAlerta = alert.tipo;
+    this.chkEventoActivado = alert.activo;
+    this.chkSonido = notificacion_system;
+    this.chkCorreo = notificacion_email;
+    this.notificationSoundPath = `sonidos/${arrayNotificationSystem[3]}`;
+    this.nombreAlerta = alert.nombre;
+    this.listaEmails = emails;
+    this.fechaDesde = new Date(fecha_desde + ' 00:00:00-05');
+    this.fechaHasta = new Date(fecha_desde + ' 00:00:00-05');
+    this.emailInput = '';
+    this.chkCaducidad = alert.bol_fecha_caducidad;
+    this.duracionParada = alert.duracion_parada;
+    this.duracionFormatoParada = alert.duracion_formato_parada;
+    this.idAlert = alert.id;
+    this.chkFijarTiempo = alert.bol_fijar_tiempo;
+    this.tiempoLimiteInfraccion = alert.tiempo_limite_infraccion;
+    this.chkFijarLimiteVelocidad = alert.bol_fijar_velocidad;
+    this.velocidadLimiteInfraccion = alert.velocidad_limite_infraccion;
 
     this.alertForm = this.formBuilder.group({
       vehicles: [this.vehiclesSelected, [Validators.required]],
@@ -130,8 +212,9 @@ export class PlatformAlertsEditComponent implements OnInit {
         },
       ],
     });
-    this.loading = false;
 
+
+    this.loading = false;
     this.chageAlertType();
   }
 
@@ -141,6 +224,9 @@ export class PlatformAlertsEditComponent implements OnInit {
 
     this.events = await this.AlertService.getEventsByType('platform');
     this.loadingEventSelectInput = false;
+
+    this.loadingAlertDropdownReady = true;
+    this.hideLoadingSpinner();
   }
 
   async setDataVehicles() {
@@ -152,6 +238,9 @@ export class PlatformAlertsEditComponent implements OnInit {
         label: vehicle.name
       };
     });
+
+    this.loadingVehicleMultiselectReady = true;
+    this.hideLoadingSpinner();
   }
 
   async setDataGeofences() {
@@ -162,6 +251,9 @@ export class PlatformAlertsEditComponent implements OnInit {
         label: geocerca.zone_name
       };
     });
+
+    this.loadingGeofencesMultiselectReady = true;
+    this.hideLoadingSpinner();
   }
 
   restEmail(index: any) {
@@ -292,8 +384,9 @@ export class PlatformAlertsEditComponent implements OnInit {
   }
 
   chageAlertType() {
-    console.log(this.alertForm.value.tipoAlerta);
-    switch (this.alertForm.value.tipoAlerta) {
+    //console.log(this.alertForm.value.tipoAlerta);
+    //switch (this.alertForm.value.tipoAlerta) {
+    switch (this.tipoAlerta) {
       case 'Zona de entrada':
       case 'Zona de salida':
         this.showTiempoLimite = false;
@@ -343,6 +436,12 @@ export class PlatformAlertsEditComponent implements OnInit {
       this.alertForm.controls['velocidad_limite_infraccion'].disable();
       this.alertForm.controls['chkFijarTiempo'].enable();
       this.alertForm.value.tiempo_limite_infraccion = null;
+    }
+  }
+
+  hideLoadingSpinner(){
+    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){ 
+      this.spinner.hide('loadingAlertData');
     }
   }
 }

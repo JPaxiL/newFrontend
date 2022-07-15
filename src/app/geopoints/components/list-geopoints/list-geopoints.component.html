@@ -1,20 +1,35 @@
-<div class="table-content-component-panel-monitoreo">
+<div class="table-content-component-panel-monitoreo" style="position: relative;">
 
-  <div class="card-body p-fluid" id="rowBusqueda">
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGeopointsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Geopuntos... </p></ngx-spinner>
+
+  <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda">
+    <div class="d-flex">
+      <div class="d-flex flex-grow-1">
+        <span class="p-input-icon-right flex-grow-1 me-2">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">
+        </span>
+      </div>
+
+      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeopunto()" title="Crear geocerca">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- <div class="card-body p-fluid" id="rowBusqueda">
       <div class="row">
           <div class="col">
               <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre">
-
-
           </div>
           <div class="col-2">
               <button type="button" class="btn btn-primary" (click)="clickAgregarGeocerca()" title="Crear geocerca"><i class="fa fa-plus"></i></button>
           </div>
       </div>
-  </div>
+  </div> -->
 
   <div class="panel-izq-table-container">
-    <table id="tbl_geos" class="table table-hover text-center">
+    <table id="tbl_geos">
       <colgroup>
         <col width="7%" />
         <col width="7%" />
@@ -26,8 +41,8 @@
       <thead class="visible-on-scroll" style="border-style: solid 1.1px var(--gl-blue-dark);">
           <tr>
               <td><span class="fa fa-eye fa-lg"></span></td>
-              <td></td>
-              <td>Geopunto</td>
+              <!-- <td></td> -->
+              <td colspan="2">Geopunto</td>
               <td><span class="fa fa-tag fa-lg"></span></td>
               <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
               <td><span class="fa fa-wrench fa-lg"></span></td>
@@ -36,7 +51,8 @@
       </thead>
       <tbody style="border-top: inherit;">
   
-          <tr *ngFor="let geo of tblDataGeo;let indice=index" >
+          <!-- <tr *ngFor="let geo of tblDataGeo;let indice=index" > -->
+          <tr *ngFor="let geo of geopointsService.tblDataGeo;let indice=index" >
   
               <td>
                 <button class="btn btn-xs btn-link p-n" (click)="clickShow(geo.trama.geopunto_id)">
@@ -59,13 +75,13 @@
               <!-- <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td> -->
   
               <td>
-                <div ngbDropdown container="body" class="d-inline-block">
-                  <button class="btn btn-xs btn-link" id="dropdownBasic1" ngbDropdownToggle>
+                <div ngbDropdown container="body" class="d-inline-block" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+                  <button class="btn btn-xs btn-link" ngbDropdownToggle>
                     <i class="fa fa-wrench fa-lg" style="font-size: 14px;"></i>
                   </button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button ngbDropdownItem><a (click)="clickConfigurarGeopunto(geo.trama.geopunto_id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</a></button>
-                    <button ngbDropdownItem><a (click)="clickEliminarGeopunto($event, geo.trama.geopunto_id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</a></button>
+                  <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                    <div ngbDropdownItem (click)="clickConfigurarGeopunto(geo.trama.geopunto_id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                    <div ngbDropdownItem (click)="clickEliminarGeopunto($event, geo.trama.geopunto_id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
                   </div>
                 </div>
               </td>

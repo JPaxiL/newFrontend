@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { PanelService } from 'src/app/panel/services/panel.service';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { GeofencesService } from 'src/app/geofences/services/geofences.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var $: any;
 
@@ -39,15 +40,73 @@ export class PlatformAlertsCreateComponent implements OnInit {
   public disabledTimeLimit = true;
   loadingEventSelectInput: boolean = true;
 
+  booleanOptions = [
+    { label: 'Sí', value: true },
+    { label: 'No', value: false },
+  ];
+
+  listaSonidos = [
+    { id: 1, ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
+    { id: 2, ruta: 'sonidos/alarm2.mp3', label: 'Sonido 2' },
+    { id: 3, ruta: 'sonidos/CartoonBullets3.mp3', label: 'Sonido 3' },
+    { id: 4, ruta: 'sonidos/DjStop4.mp3', label: 'Sonido 4' },
+    { id: 5, ruta: 'sonidos/messenger5.mp3', label: 'Sonido 5' },
+    { id: 6, ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
+    { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
+    { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
+    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
+  ];
+
+  tipoAlerta: string = '';
+  chkEventoActivado: boolean = false;
+  chkCorreo: boolean = true;
+  chkSonido: boolean = false;
+  notificationSoundPath: string = '';
+  nombreAlerta: string = '';
+  listaEmails: any;
+  fechaDesde: any;
+  fechaHasta: any;
+  emailInput: string = '';
+  eventType: string = 'platform';
+  chkCaducidad: boolean = false;
+  duracionParada = 0;
+  duracionFormatoParada: string = 'S';
+  idAlert: number = -1 ;
+  chkFijarTiempo: boolean = false;
+  chkFijarLimiteVelocidad: boolean = false;
+  tiempoLimiteInfraccion: number = 10;
+  velocidadLimiteInfraccion: number = 0;
+
+  loadingAlertDropdownReady: boolean = false;
+  loadingVehicleMultiselectReady: boolean = false;
+  loadingGeofencesMultiselectReady: boolean = false;
+
+  timeFormatOptions = [
+    { label: 'segundos', value: 'S' },
+    { label: 'minutos', value: 'M' },
+    { label: 'horas', value: 'H' },
+  ];
+
+  fijarTiempoOptions = [
+    { label: '10 Seg.', value: 10 },
+    { label: '30 Seg.', value: 30 },
+    { label: '1 Min.', value: 60 },
+    { label: '2 Min.', value: 120 },
+  ];
+
   constructor(
     private AlertService: AlertService,
     private VehicleService: VehicleService,
     private formBuilder: FormBuilder,
     public panelService: PanelService,
-    private geofencesService: GeofencesService
+    private geofencesService: GeofencesService,
+    private spinner: NgxSpinnerService,
   ) {}
 
   ngOnInit(): void {
+    this.spinner.show('loadingAlertData');
+
+    console.log('Dur Par', this.duracionParada);
     let dateCurrent = {
       year: moment().year(),
       month: moment().month() + 1,
@@ -97,6 +156,9 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();
+
+    this.loadingAlertDropdownReady = true;
+    this.hideLoadingSpinner();
   }
 
   setDataVehicles() {
@@ -108,6 +170,9 @@ export class PlatformAlertsCreateComponent implements OnInit {
         label: vehicle.name,
       };
     });
+
+    this.loadingVehicleMultiselectReady = true;
+    this.hideLoadingSpinner();
   }
 
   setDataGeofences() {
@@ -118,6 +183,9 @@ export class PlatformAlertsCreateComponent implements OnInit {
         label: geocerca.zone_name,
       };
     });
+
+    this.loadingGeofencesMultiselectReady = true;
+    this.hideLoadingSpinner();
   }
 
   restEmail(index: any) {
@@ -211,7 +279,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   addEmail() {
-    if (this.alertForm.value.chkCorreo) {
+    if (this.alertForm.value.chkCorreo || this.chkCorreo) {
       if (this.validateEmail(this.alertForm.value.email)) {
         if (
           !this.isInArray(
@@ -251,7 +319,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       .toString();
   }
 
-  chageAlertType() {
+  changeAlertType() {
     console.log(this.alertForm.value.tipoAlerta);
     switch (this.alertForm.value.tipoAlerta) {
       case 'Zona de entrada':
@@ -299,6 +367,12 @@ export class PlatformAlertsCreateComponent implements OnInit {
     } else {
       this.alertForm.controls['velocidad_limite_infraccion'].disable();
       this.alertForm.controls['chkFijarTiempo'].enable();
+    }
+  }
+
+  hideLoadingSpinner(){
+    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){ 
+      this.spinner.hide('loadingAlertData');
     }
   }
 }

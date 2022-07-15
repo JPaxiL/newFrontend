@@ -5,6 +5,7 @@ import { MapServicesService } from '../../../map/services/map-services.service';
 
 import Swal from 'sweetalert2';
 import * as L from 'leaflet';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -22,13 +23,18 @@ export class ListGeopointsComponent implements OnInit {
   constructor(
     public geopointsService: GeopointsService,
     public mapService: MapServicesService,
+    public spinner: NgxSpinnerService,
 
   ) {}
 
   ngOnInit(): void {
-
-      console.log("DATOS DE GEOPUNTOS");
-      this.mostrar_tabla();
+    if(this.geopointsService.initializingGeopoints){
+      this.spinner.hide('loadingGeopointsSpinner');
+    } else {
+      this.spinner.show('loadingGeopointsSpinner');
+    }
+    console.log("DATOS DE GEOPUNTOS");
+    this.mostrar_tabla();
 
   }
 
@@ -172,7 +178,7 @@ export class ListGeopointsComponent implements OnInit {
 
   }
 
-  clickAgregarGeocerca() {
+  clickAgregarGeopunto() {
     this.geopointsService.nombreComponente = "AGREGAR";
     this.geopointsService.action         = "add";
 

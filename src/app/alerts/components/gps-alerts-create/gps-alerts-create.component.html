@@ -1,158 +1,214 @@
 <div class="loading-gral" *ngIf="loading"></div>
-<div>
-    <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;">
+<div class="d-flex flex-column pm-config-w-header-rb">
+    <div class="card-body p-fluid bg-gl-blue-dark pt-2" id="rowBusqueda">
         Crear Alerta GPS
     </div>
 
-    <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div>
+    <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
 
-    <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">
-        <form [formGroup]="alertForm" (submit)="onSubmit($event)">
-            <div class="row">
-                <div class="col-1 text-end" *ngIf="loadingEventSelectInput">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                </div>
-                <div class="col">
-                    <div class="p-field">
-                        <select class="form-select" aria-label="Alerta" disabled *ngIf="loadingEventSelectInput">
-                            <option value="" disabled selected hidden>Cargando...</option>
-                        </select>
-                        <select class="form-select" aria-label="Alerta" formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
-                            <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
-                            <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
-                        </select>
+        <div class="panel-izq-container h-100">
+
+            <form [formGroup]="alertForm" (submit)="onSubmit($event)">
+                <div class="gl-row-underline">
+                    <div class="col-12">
+                        <label>ALERTA</label>
+                    </div>
+                    <div class="col-12">
+                        <p-dropdown [options]="events" [(ngModel)]="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="name" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                        <!-- <div class="row">
+                            <div class="col-1 text-end d-flex flex-column justify-content-center" *ngIf="loadingEventSelectInput">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            </div>
+                            <div class="col">
+                                <div class="p-field">
+                                    <select class="form-select" aria-label="Alerta" disabled *ngIf="loadingEventSelectInput">
+                                        <option value="" disabled selected hidden>Cargando...</option>
+                                    </select>
+                                    <select class="form-select" aria-label="Alerta" formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
+                                        <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
+                                        <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
                 </div>
-            </div>
-
-            <div class="row"></div>
-
-            <div class="row">
-                <label class="col-4">Nombre:</label>
-                <div class="col-8">
-                    <div class="text">
-                        <input class="form-control" placeholder="Nombre del evento" aria-label="nombre del evento" formControlName="nombre" type="text" />
+    
+                <div class="gl-row-underline">
+                    <div class="col-12">
+                        <label>NOMBRE</label>
+                    </div>
+                    <div class="col-12">
+                        <input type="text" placeholder="Nombre del evento" pInputText [(ngModel)]="nombreAlerta" [ngModelOptions]="{standalone: true}"/>
+                        <!-- <div class="text">
+                            <input class="form-control" placeholder="Nombre del evento..." aria-label="nombre del evento" formControlName="nombre" type="text" />
+                        </div> -->
                     </div>
                 </div>
-            </div>
-
-            <div class="row"></div>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="p-field">
-                        <label class="bg-subtitle text-end dropdown-toggle"></label>
-                        <label class="bg-subtitle bg-subtitle-on-top text-center">Vehículos</label>
-                        <p-multiSelect
-                        [options]="vehicles"
-                        optionLabel="label"
-                        optionValue="value"
-                        formControlName="vehicles"
-                        defaultLabel="VEHÍCULOS"
-                        [maxSelectedLabels]="3"
-                        [selectedItemsLabel]="'{0} vehiculos seleccionados'"
-                        ></p-multiSelect>
+    
+                <div class="gl-row-underline">
+                    <div class="col-12">
+                        <label>VEHÍCULOS</label>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-field">
+                            <p-multiSelect
+                            [options]="vehicles"
+                            optionLabel="label"
+                            optionValue="value"
+                            formControlName="vehicles"
+                            defaultLabel="Seleccione un vehículo..."
+                            [maxSelectedLabels]="3"
+                            [selectedItemsLabel]="'{0} vehiculos seleccionados'"
+                            ></p-multiSelect>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row"></div>
-
-            <div class="row d-flex justify-content-center">
-                <div class="col-5">
-                    <label class="row">
-                        <span class="col-9 form-check-label">Evento activado:</span>
-                        <div class="col-2">
-                            <div class="form-check">
-                                <input class="form-check-input" formControlName="chkEventoActivado" type="checkbox" />
+    
+                <div class="gl-middleline gl-row-underline">
+                    <div class="row">
+                        <div class="col p-field">
+                            <div class="col-12">
+                                <label>EVENTO ACTIVADO</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p-dropdown [options]="booleanOptions" [(ngModel)]="chkEventoActivado"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                                </div>
                             </div>
                         </div>
-                    </label>
-                </div>
-                <div class="col-5">
-                    <label class="row">
-                        <span class="col-9 form-check-label">Alerta del Sistema:</span>
-                        <div class="col-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" formControlName="chkSonido" (change)="changeDisabled($event)"/>
+                        <div class="col p-field">
+                            <div class="col-12">
+                                <label>ALERTA DEL SISTEMA</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p-dropdown [options]="booleanOptions" [(ngModel)]="chkSonido"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}" (onChange)="changeDisabled($event)"></p-dropdown>
+                                </div>
                             </div>
                         </div>
-                    </label>
-                </div>
-            </div>
-
-            <div class="row"></div>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="p-field">
-                        <select class="form-select" (change)="playAudio" formControlName="sonido">
-                            <option value="sonidos/alarm8.mp3">Sonido 1</option>
-                            <option value="sonidos/alarm2.mp3">Sonido 2</option>
-                            <option value="sonidos/CartoonBullets3.mp3">Sonido 3</option>
-                            <option value="sonidos/DjStop4.mp3">Sonido 4</option>
-                            <option value="sonidos/messenger5.mp3">Sonido 5</option>
-                            <option value="sonidos/Ping6.mp3">Sonido 6</option>
-                            <option value="sonidos/Twitter7.mp3">Sonido 7</option>
-                            <option value="sonidos/Whatsap8.mp3">Sonido 8</option>
-                            <option value="sonidos/WhatsappSound9.mp3">Sonido 9</option>
-                        </select>
                     </div>
                 </div>
-            </div>
-
-            <div class="row"></div>
-
-            <div class="row d-flex justify-content-center">
-                <div class="col-5">
-                    <label class="row">
-                        <span class="col-9 form-check-label">Agregar Correo:</span>
-                        <div class="col-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" />
-                            </div>
+    
+                <div class="gl-row-underline mb-3">
+                    <div class="col-12">
+                        <label>TIPO DE SONIDO</label>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-field">
+                            <p-dropdown
+                            [options]="listaSonidos"
+                            optionLabel="label"
+                            optionValue="ruta"
+                            [(ngModel)]="notificationSoundPath"
+                            defaultLabel="Selecciona un sonido..."
+                            [ngModelOptions]="{standalone: true}"
+                            ></p-dropdown>
                         </div>
-                    </label>
-                </div>
-                <div class="col-5"></div>
-            </div>
-
-            <div class="row"></div>
-
-            <div class="form-group row">
-
-                <div class="col-10">
-                    <div class="text">
-                        <input  class="form-control" placeholder="example@mail.com" formControlName="email" type="text" />
                     </div>
                 </div>
-                <i class="col-2 fa fa-plus-circle fa-2x" (click)="addEmail()" data-placement="bottom" aria-hidden="true"></i>
-
-            </div>
-
-            <div class="form-group row">
-                <div class="col-9">
-                    <div class="text">
-                        <ul>
-                          <li *ngFor="let email of alertForm.value.lista_emails; let i = index"  ng-bind-html-unsafe="opt" >
-                              {{ email }}
-                              <i class="col-2 fa fa-minus-circle" (click)="restEmail(i)" data-placement="bottom" aria-hidden="true"></i>
-                          </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <div class="row w-100 justify-content-around">
+    
+                <!-- <div class="row d-flex justify-content-center">
                     <div class="col-5">
-                        <button type="button" class="btn btn-success w-100" ui-sref="alertas-accesorios" (click)="clickShowPanel('ALERTS-GPS')">Cancelar</button>
+                        <label class="row">
+                            <span class="col-9 form-check-label">Evento activado:</span>
+                            <div class="col-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="chkEventoActivado" type="checkbox" />
+                                </div>
+                            </div>
+                        </label>
                     </div>
                     <div class="col-5">
-                        <button type="submit" class="btn btn-success w-100" [disabled]="loadingEventSelectInput">Guardar</button>
+                        <label class="row">
+                            <span class="col-9 form-check-label">Alerta del Sistema:</span>
+                            <div class="col-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" formControlName="chkSonido" (change)="changeDisabled($event)"/>
+                                </div>
+                            </div>
+                        </label>
                     </div>
                 </div>
-            </div>
-        </form>
+    
+                <div class="row"></div>
+    
+                <div class="row">
+                    <div class="col-12">
+                        <div class="p-field">
+                            <select class="form-select" (change)="playAudio" formControlName="sonido">
+                                <option value="sonidos/alarm8.mp3">Sonido 1</option>
+                                <option value="sonidos/alarm2.mp3">Sonido 2</option>
+                                <option value="sonidos/CartoonBullets3.mp3">Sonido 3</option>
+                                <option value="sonidos/DjStop4.mp3">Sonido 4</option>
+                                <option value="sonidos/messenger5.mp3">Sonido 5</option>
+                                <option value="sonidos/Ping6.mp3">Sonido 6</option>
+                                <option value="sonidos/Twitter7.mp3">Sonido 7</option>
+                                <option value="sonidos/Whatsap8.mp3">Sonido 8</option>
+                                <option value="sonidos/WhatsappSound9.mp3">Sonido 9</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row"></div> -->
+    
+                <div class="row d-flex justify-content-center">
+                    <div class="col-5">
+                        <label class="row">
+                            <span class="col-9 form-check-label">Agregar Correo:</span>
+                            <div class="col-2 d-flex flex-column justify-content-center">
+                                <div class="form-check">
+                                    <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkCorreo" [ngModelOptions]="{standalone: true}"></p-checkbox>
+                                    <!-- <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" /> -->
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-5"></div>
+                </div>
+    
+                <div class="row"></div>
+    
+                <div class="form-group row">
+                    <div class="col-12 d-flex">
+                        <input type="text" placeholder="example@mail.com" class="flex-grow-1" pInputText [(ngModel)]="emailInput" [disabled]="!chkCorreo" [ngModelOptions]="{standalone: true}"/>
+                        <!-- <div class="text">
+                            <input  class="form-control" placeholder="example@mail.com" formControlName="email" type="text" />
+                        </div> -->
+                        <button class="btn-gl-clear flex-none ms-2" [disabled]="!chkCorreo">
+                            <i class="fa fa-plus-circle fa-2x icon-gl-blue" (click)="addEmail()" data-placement="bottom" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+    
+                <div class="form-group row">
+                    <div class="col-9">
+                        <div class="text">
+                            <ul>
+                              <li *ngFor="let email of alertForm.value.lista_emails; let i = index"  ng-bind-html-unsafe="opt" >
+                                  {{ email }}
+                                  <i class="ms-1 fa fa-minus-circle" (click)="restEmail(i)" type="button" data-placement="bottom" aria-hidden="true"></i>
+                              </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="d-flex justify-content-center my-3">
+                    <div class="row w-100 justify-content-around">
+                        <div class="col-5">
+                            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickShowPanel('ALERTS-GPS')">Cancelar</button>
+                        </div>
+                        <div class="col-5">
+                            <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+ 
     </div>
 </div>

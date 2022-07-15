@@ -14,6 +14,8 @@ import { Logger } from 'ag-grid-community';
 export class AddGeopointsComponent implements OnInit, OnDestroy {
 
   form :any = {};
+  chkMostrarGeopunto: boolean = true;
+  chkMostrarNombre: boolean = true;
 
   constructor(
     public geopointsService: GeopointsService,

@@ -25,8 +25,8 @@ export class VehicleGroupComponent implements OnInit {
   multiple: boolean = true;
   value2: number = 1;
 
-  option: string="nada";
-  formDisplayCreate : string = "none";
+  //option: string="nada";
+  option: string="grupo";
 
   selectedCategory: any = null;
 
@@ -37,7 +37,6 @@ export class VehicleGroupComponent implements OnInit {
       targetProducts: any=[];
 
   loading : boolean = false;
-  formDisplay : string = "flex";
   list1: any=[];
   selectedList1: any=[];
   list2: any=[];
@@ -65,7 +64,7 @@ export class VehicleGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.onOption(this.option);
   }
 
   onHide(){
@@ -76,7 +75,6 @@ export class VehicleGroupComponent implements OnInit {
     // //console.log('option...',e);
     // //console.log('vehicles',this.vehicleService.vehicles);
     // //console.log('vehiclestree',this.vehicleService.vehiclesTree);
-    this.formDisplayCreate = "flex";
     if(e=='grupo'){
       this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
 
@@ -237,7 +235,6 @@ export class VehicleGroupComponent implements OnInit {
     // //console.log("dat enviada",req);
 
     this.loading=true;
-    this.formDisplay = "none";
     if(this.vehicleService.demo){
       //console.log('demoo');
       const info = {
@@ -284,10 +281,8 @@ export class VehicleGroupComponent implements OnInit {
           // // this.eventDisplay.emit(false);
           // this.loading=false;
           // this.list2=[];
-          // this.formDisplay = "block";
         }else{
           this.loading=false;
-          this.formDisplay = "flex";
           //mensaje de error
         }
       });
@@ -327,9 +322,8 @@ export class VehicleGroupComponent implements OnInit {
     // this.eventDisplay.emit(false);
     this.loading=false;
     this.list2=[];
-    this.option = "nada";
-    this.formDisplay = "flex";
-    this.formDisplayCreate = "none";
+    //this.option = "nada";
+    this.option = "grupo";
     this.name.nativeElement.value = "";
     this.description.nativeElement.value = "";
 

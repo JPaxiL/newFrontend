@@ -13,11 +13,27 @@ nav > .container-fluid > div {
     cursor: pointer;
 }
 
+#navbarSupportedContent > .navbar-nav{
+    gap: 1.5rem;
+}
+
 #navbarSupportedContent,
 #navbarSupportedContent_collapsed{
     /* margin-top: -4px;  */
     padding: 0px 0.25rem;
 }
+
+#navbarSupportedContent_collapsed {
+    > .navbar-nav {
+        gap: 0.5rem;
+    }
+    
+    //Evitar el bug del tooltip permanente
+    ul > li > div {
+        pointer-events: none;
+    }
+}
+
 
 .nav-item > button {
     white-space: nowrap;
@@ -72,7 +88,6 @@ a {
 }
 
 .user-menu-container {
-    margin-left: 1rem;
     height: calc(var(--navbar-height) - 1.5rem);
     width: auto;
     background-color: #f8f8f9; 
@@ -195,6 +210,11 @@ a {
     margin: 0px;
     /* background-color: var(--gl-blue-dark); */
     display: flex;
+
+    height: calc(var(--navbar-height) - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 li.nav-item {
@@ -334,7 +354,7 @@ i.fa + span {
 
 @media (max-width: 1770px) {
     .user-menu-container {
-        margin-left: 0.125rem;
+        /* margin-left: 0.125rem; */
     }
 
     #span_notif,
@@ -348,6 +368,10 @@ i.fa + span {
     #notification_bell_counter {
         width: 2.25rem !important;
     }
+
+    #navbarSupportedContent > .navbar-nav {
+        gap: 1rem;
+    }
 }
 
 @media (max-width: 1490px) {
@@ -358,23 +382,41 @@ i.fa + span {
     #navbarSupportedContent_collapsed{
         display: flex !important;
     }
+
+/*     .nav-item span{
+        display: none;
+    } */
+}
+
+@media (max-width: 1200px) {
+    .navbar-last-container{
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 1100px) {
+    #navbarSupportedContent_collapsed > .navbar-nav {
+        gap: 0;
+    }
+    .user-menu-name {
+        display: none !important;
+    }
+    .dropdown-user-info {
+        display: block !important;
+    }
 }
 
 @media (max-width: 850px) {
     #span_user{
         max-width: 125px;
     }
-
-    .user-menu-name {
-        display: none !important;
-    }
-
-    .dropdown-user-info {
-        display: block !important;
+    li.nav-item{
+        padding: 0 0.125rem;
     }
 }
 
 @media (max-width: 740px) {
+
     #navbarSupportedContent, #navbarSupportedContent_collapsed {
         display: none !important;
     }
@@ -388,7 +430,9 @@ i.fa + span {
     }
 
     .gl-logo {
-        border-radius: 0 1.375rem 1.375rem 0;
+        border-radius: 0 calc(calc(var(--navbar-height) - 1.5rem) / 2) calc(calc(var(--navbar-height) - 1.5rem) / 2) 0;
+        border: 2px solid var(--gl-gray-border);
+        border-left: none;
     }
 
     .notif-button {

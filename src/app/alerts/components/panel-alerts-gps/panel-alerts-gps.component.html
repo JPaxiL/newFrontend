@@ -2,23 +2,36 @@
   <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGPSAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Alertas GPS... </p></ngx-spinner>
 
   <div class="card-body p-fluid" id="rowBusqueda">
-    <div class="row">
-      <div class="col">
-        <input
-          type="text"
-  
-          class="form-control"
-          placeholder="Buscar..."
-        />
+    <div class="d-flex">
+      <div class="d-flex flex-grow-1">
+        <span class="p-input-icon-right flex-grow-1 me-2">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" class="form-control" placeholder="Buscar..."/>
+        </span>
       </div>
-      <div class="col-2">
-          <div class="btn-toolbar" role="toolbar">
-            <div class="btn-group">
-              <button type="button" class="btn btn-primary" (click)="clickShowPanel('ALERTS-GPS-CREATE')">
-                <span class="fa fa-plus"></span>
-              </button>
-            </div>
+
+      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickShowPanel('ALERTS-GPS-CREATE')">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+
+      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
+        <button class="btn-gl-gray-blue btn-dark-hover btn-circle" ngbDropdownToggle>
+          <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
+        </button>
+        <div ngbDropdownMenu class="gl-custom-dropdown dropdown-alert-panel">
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS')">
+            <span>Todas las Alertas</span>
           </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">
+            <span>Alertas GPS</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-PLATFORMS')">
+            <span>Alertas Plataforma</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">
+            <span>Alertas Seg. Vehicular</span>
+          </div> 
+        </div>
       </div>
     </div>
   </div>
