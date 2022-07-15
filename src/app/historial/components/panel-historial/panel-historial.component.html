@@ -16,21 +16,21 @@
 
     <div class="modal-body panel-izq-container p-fluid">
       <div class="panel-izq-form">
-        
+
         <div class="row">
           <legend class="col-12">Datos Vehículo</legend>
           <div class="col-12">
             <label class="row d-flex align-items-center">
               <div class="col-4 text-end">Vehículo</div>
               <div class="col-8">
-                <!-- <p-dropdown 
+                <!-- <p-dropdown
                   [filter]="true"
-                  [options]="cars" 
-                  optionLabel="nombre" 
+                  [options]="cars"
+                  optionLabel="nombre"
                   optionValue="imei"
-                  [(ngModel)]="form.selectedCar" 
-                  [showClear]="false" 
-                  [appendTo]="'body'" 
+                  [(ngModel)]="form.selectedCar"
+                  [showClear]="false"
+                  [appendTo]="'body'"
                   placeholder="Seleccione el vehículo..."></p-dropdown> -->
                 <ng-select class="custom" id="selectVehiculo"
                   [items]="cars"
@@ -54,13 +54,13 @@
             <div class="row d-flex align-items-center">
               <div class="col-4 text-end">Filtrar por:</div>
               <div class="col-8">
-                <p-dropdown 
-                  [options]="availableOptionsDay" 
-                  optionLabel="name" 
+                <p-dropdown
+                  [options]="availableOptionsDay"
+                  optionLabel="name"
                   optionValue="id"
-                  [(ngModel)]="form.selectedRango" 
-                  [showClear]="false" 
-                  [appendTo]="'body'" 
+                  [(ngModel)]="form.selectedRango"
+                  [showClear]="false"
+                  [appendTo]="'body'"
                   (onChange)="changeRangoFechas()"></p-dropdown>
                 <!-- <select class="claseinputs" (change)="changeRangoFechas()" name="miselect" [(ngModel)]="form.selectedRango">
                   <option [value]="item.id" *ngFor="let item of availableOptionsDay">{{item.name}}</option>
@@ -72,12 +72,12 @@
             <div class="row d-flex align-items-center">
               <div class="col-4 text-end">Fecha inicial:</div>
               <div class="col-8">
-                <p-calendar 
-                  [(ngModel)]="fecha_ini" 
-                  dateFormat="yy-mm-dd" 
+                <p-calendar
+                  [(ngModel)]="fecha_ini"
+                  dateFormat="yy-mm-dd"
                   [appendTo]="'body'"
-                  [monthNavigator]="true" 
-                  [yearNavigator]="true" 
+                  [monthNavigator]="true"
+                  [yearNavigator]="true"
                   yearRange="2000:2040"
                   [showIcon]="true"
                   ></p-calendar>
@@ -129,12 +129,12 @@
             <div class="row d-flex align-items-center">
               <div class="col-4 text-end">Fecha final:</div>
               <div class="col-8">
-                <p-calendar 
-                  [(ngModel)]="fecha_fin" 
-                  dateFormat="yy-mm-dd" 
+                <p-calendar
+                  [(ngModel)]="fecha_fin"
+                  dateFormat="yy-mm-dd"
                   [appendTo]="'body'"
-                  [monthNavigator]="true" 
-                  [yearNavigator]="true" 
+                  [monthNavigator]="true"
+                  [yearNavigator]="true"
                   yearRange="2000:2040"
                   [showIcon]="true"
                   ></p-calendar>
@@ -197,12 +197,12 @@
                 </div>
               </div>
               <div class="col-7">
-                <p-dropdown 
-                  [options]="availableOptionsTempoParada" 
-                  optionLabel="name" 
+                <p-dropdown
+                  [options]="availableOptionsTempoParada"
+                  optionLabel="name"
                   optionValue="id"
-                  [(ngModel)]="form.duracionParada" 
-                  [showClear]="false" 
+                  [(ngModel)]="form.duracionParada"
+                  [showClear]="false"
                   [appendTo]="'body'" [disabled]="!form.chckParada"></p-dropdown>
                 <!-- <select class="claseinputs"  [(ngModel)]="form.duracionParada">
                   <option [value]="item.id" *ngFor="let item of availableOptionsTempoParada">{{item.name}}</option>
@@ -239,14 +239,316 @@
               <div class="col-4 text-end">Eventos:</div>
               <div class="col-1">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento">
+                  <input class="form-check-input" (change)="changeShowingEventos()" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento">
                 </div>
               </div>
               <div class="col-7">
-                <button type="button" class="btn btn-outline-secondary btn-xs-gl" [disabled]="!form.chckEvento">Elegir</button>
+                <!-- <button type="button" (click)="showEventos = !showEventos" class="btn btn-outline-secondary btn-xs-gl" [disabled]="!form.chckEvento">Elegir</button> -->
+                <button type="button" (click)="showEventos = !showEventos" class="btn btn-outline-secondary btn-xs-gl">Elegir</button>
+
               </div>
             </div>
           </div>
+
+
+          <div class="row" *ngIf="showEventos">
+            <div class="col-12">
+              <label class="bg-subtitle">Seleccione los eventos:</label>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-12">
+                <label class="">Evento GPS</label>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSbateriaBaja">
+                  Bateria baja</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSbateriaDesconectada">
+                  Bateria desconectada</label>
+                </div>
+              </div>
+            </div>
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSaceleracionBrusca">
+                  Aceleracion brusca</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSfrenadaBrusca">
+                  Frenada brusca</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSbloqueoTransmision">
+                  Bloqueo de transmision</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSsos">
+                  SOS</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSremolque">
+                  Remolque</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSparada">
+                  Parada</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSmotorEncendido">
+                  Motor Encendido</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.GPSmotorApagado">
+                  Motor Apagado</label>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-12">
+                <label class="">Evento Plataforma</label>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evEntrada">
+                    Zona de Entrada</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evSalida">
+                    Zona de Salida</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evEstadia">
+                    Tiempo de estadia en Zona</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evParada">
+                    Parada en zona no Autorizada</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evMovSinProgramacion">
+                    Vehículo en movimiento sin programación</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evInfraccion">
+                    Infraccion</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evAnticolisionFrontal">
+                    Anticolisión frontal</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evColisionConPeatones">
+                    Colisión con Peatones</label>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evNoRostro">
+                    No Rostro</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evFatigaExtrema">
+                    Fatiga Extrema</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evDesvioCarrilIzquierda">
+                    Desvío de carril hacia la izquierda</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evDesvioCarrilDerecha">
+                    Desvío de carril hacia la derecha</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.evBloqueoVisionMobileye">
+                    Bloqueo de visión del mobileye</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-12">
+                <label class="">Evento Accesorios</label>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <!-- <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <p-checkbox [(ngModel)]="form.eventos.AccFatiga" [binary]="true" inputId="binary" (click)="changeShowingEventos()"></p-checkbox>
+                    Posible Fatiga</label>
+                </div>
+              </div> -->
+
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.AccSomnolencia">
+                  Posible Fatiga</label>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.AccDistraccion">
+                    Distracción</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.AccAlcoholemia">
+                    Alcoholemia</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-12">
+                <label class="">Otros</label>
+              </div>
+            </div>
+
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.OtroTodos">
+                    Todos</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.OtroExVelocidad">
+                    Exceso de Velocidad</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
         </div>
 
       </div>

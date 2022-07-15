@@ -8,6 +8,9 @@ import { BehaviorSubject } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { EventService } from 'src/app/events/services/event.service';
+
+
 
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 
@@ -44,7 +47,8 @@ export class HistorialService {
 
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private EventService : EventService) {
     //this.tramasHistorial = RefDataHistorial.data;
     // //console.log("XXXXXXX");
     // //console.log(this.tramasHistorial);
@@ -167,6 +171,9 @@ export class HistorialService {
     // const response2 = new Array();
     // response2.push(  await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise() );
     this.tramasHistorial = await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise();
+
+
+
     //const response2 = await this.http.get(`${environment.apiUrl}/api/historial2`).toPromise();
     //(//console.log(response2);
 

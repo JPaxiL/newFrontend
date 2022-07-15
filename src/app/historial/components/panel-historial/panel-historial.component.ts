@@ -10,6 +10,8 @@ import 'leaflet-polylinedecorator';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
 
 import { MapServicesService } from '../../../map/services/map-services.service';
+import { EventService } from 'src/app/events/services/event.service';
+
 
 import { HistorialService } from '../../services/historial.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -54,6 +56,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // chckEvento:boolean=false;
 
   conHistorial = false;
+  showEventos = false;
   nombreUnidad = '';
 
   form : any = {};
@@ -123,7 +126,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     public mapService: MapServicesService,
     public historialService: HistorialService,
     private VehicleService : VehicleService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private EventService: EventService
     ) {
 
     // this.historialService.currentMessage.subscribe(message => this.message = message);
@@ -154,7 +158,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     this.fecha_ini = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
     this.fecha_fin = this.fecha_ini;
     this.hora_ini = new Date('2018-03-12T00:00');
-    this.hora_fin = new Date('2018-03-12T23:59');
+    this.hora_fin = new Date('2018-03-12T00:00');
     this.form.selectedRango = '0';
     //this.form.duracionParada = '60';
     // $( "#datepicker" ).datepicker();
@@ -306,6 +310,19 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   }
 
+  changeShowingEventos() {
+    console.log(this.form.chckEvento);
+    // if (!this.form.chckEvento) {
+    //   this.showEventos = false;
+    // }
+    // if (this.conHistorial) {
+    //   var dH =  this.historialService.tramasHistorial; // Data Historial
+    //   var iH  = dH[0].index_historial; //indices de paradas y movimientos
+    //   this.mostrar_tabla(dH,iH);
+    // }
+    this.changeShowingParadasHistorial()
+  }
+
 
   changeRangoFechas() {
 
@@ -375,7 +392,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.form.min_hasta   = '00';//{id: '00', name: '00'}; */
 
       this.hora_ini = new Date('2018-03-12T00:00');
-      this.hora_fin = new Date('2018-03-12T23:59');
+      this.hora_fin = new Date('2018-03-12T00:00');
   };
 
 
@@ -401,7 +418,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     console.log('Form', DDstr); */
     let MDstr = "" + moment(this.fecha_ini).format("M");
     let DDstr = "" + moment(this.fecha_ini).format("D");
-    let HMDstr = "" + moment(this.hora_ini).format("hh:mm:00");
+    let HMDstr = "" + moment(this.hora_ini).format("HH:mm:00");
     /* console.log('Date', MDstr);
     console.log('Date', DDstr); */
 
@@ -409,7 +426,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     let DHstr = "" + this.form.fecha_hasta.day; */
     let MHstr = "" + moment(this.fecha_fin).format("M");
     let DHstr = "" + moment(this.fecha_fin).format("D");
-    let HMHstr = "" + moment(this.hora_fin).format("hh:mm:59");
+    let HMHstr = "" + moment(this.hora_fin).format("HH:mm:00");
 
     /* var M1 = this.form.fecha_desde.year+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.form.hora_desde + ':' + this.form.min_desde + ':00-05:00';
     var M2 = this.form.fecha_hasta.year+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.form.hora_hasta + ':' + this.form.min_hasta + ':00-05:00'; */
@@ -425,504 +442,511 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 // colorHistorial:vm.form.colorHistorial, colorSubHistorial:vm.form.colorSubHistorial,
                 // icono : values[0].icon
               };
-    //console.log(param);
+    console.log(param);
 
     this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
 
     this.historialService.get_tramas_recorrido(param).then( res => {
 
-      const duracion = parseInt(this.form.duracionParada);
-      //let dH = res[0];
-      var dH =  this.historialService.tramasHistorial; // Data Historial
+      this.EventService.ShowAllHistorial(param).then( res1 => {
 
-      //console.log('HISTORIALLLLLL');
-      //console.log(res);
-      // //console.log(res[0]);
-
-      //console.log('-----clickCargarHistorial');
-      //console.log(this.form);
-      //console.log(dH.length);
-      //console.log(dH);
+          // console.log("=== VERDADERO EVENTOS HISTORIAL");
+          // console.log(res1);
 
 
 
-      // var h1 = new Array();
+          const duracion = parseInt(this.form.duracionParada);
+          //let dH = res[0];
+          var dH =  this.historialService.tramasHistorial; // Data Historial
 
-      var index_historial2 = new Array();
-      // var poly = [];
+          //console.log('HISTORIALLLLLL');
+          //console.log(res);
+          // //console.log(res[0]);
 
-
-      if (dH.length > 1) {
-
-        this.conHistorial = true;  // tenemos historial con datod
-
-
-        var d = 0;
-
-        var k = [];
-        let l = new Array();
-
-        k.length = 0;
-        l.length = 0;
-
-        var o;
-
-        const h = dH.length - 1; //Ultimo indice del array
-
-        var minLat = parseFloat(dH[0].lat);
-        var maxLat = parseFloat(dH[0].lat);
-        var minLng = parseFloat(dH[0].lng);
-        var maxLng = parseFloat(dH[0].lng);
-
-        dH[0].rutaH = [];
-
-        dH[0].primero = h; // guardar el numero de elementos en la primera trama.
-        dH[0].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
-
-        dH[h].ultimo  = h; // guardar el numero de elementos en la ultima trama.
-        dH[h].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
-
-        for (let i = 0; i < dH.length; i++) {
-
-            dH[i].dt_ss = new Date(dH[i].dt_server);
-            dH[i].dt_js = new Date(dH[i].dt_tracker);
-
-            dH[i].dt_tracker = dH[i].dt_tracker.replace(/\//g, "-");
-            dH[i].lat = parseFloat(dH[i].lat);
-            dH[i].lng = parseFloat(dH[i].lng);
-
-            dH[i].paramsGet = this.getParams(dH[i].params);
-
-            dH[i]._trama = this.get_trama_marker(dH[i]);//.addTo(this.mapService.map);
-
-            var arrayP = [];
-
-            dH[0].rutaH.push([dH[i].lat, dH[i].lng]); // guardar puntos para dibujar la linea del recorrido
-
-            if (dH[i].lat < minLat) {  minLat = dH[i].lat; }
-            if (dH[i].lat > maxLat) {  maxLat = dH[i].lat; }
-            if (dH[i].lng < minLng) {  minLng = dH[i].lng; }
-            if (dH[i].lng > maxLng) {  maxLng = dH[i].lng; }
-
-            dH[i].historial2 = 0;
-            dH[i].indice = i;
-
-
-            if (dH[i].speed <= 3) {
-                if (i == h) {
-                    if (l.length == 0) {
-                        //estado = 0;
-                        var p = dH[0].dt_js;
-                        var q = dH[h].dt_js;
-                        var r = this.string_diffechas(p, q);
-                        dH[0].historial2 = 1;
-                        dH[0].estado = 0;
-                        dH[0].temp = r;
-
-                        dH[0].marker = "PARADA";
-
-                        index_historial2[d] = 0;
-                        d++
-                    } else if (l.length > 0 && k.length > 0) {
-                        var p = dH[k[0]].dt_js;
-                        var q = dH[i].dt_js;
-                        var s = Math.floor((q - p) / 1000);
-                        if (s > duracion) {
-                            //estado = 1;
-                            var p = dH[l[0]].dt_js;
-                            var q = dH[k[0]].dt_js;
-                            var r = this.string_diffechas(p, q);
-                            dH[l[0]].historial2 = 1;
-                            dH[l[0]].estado = 1;
-                            dH[l[0]].temp = r;
-                            index_historial2[d] = l[0];
-                            d++;
-                            //estado = 0;
-                            var p = dH[k[0]].dt_js;
-                            var q = dH[i].dt_js;
-                            var t = this.string_diffechas(p, q);
-                            dH[k[0]].historial2 = 1;
-                            dH[k[0]].estado = 0;
-                            dH[k[0]].temp = t;
-
-                            // dH[k[0]].marker = new google.maps.Marker({
-                            //     map: mapa,
-                            //     visible: false,
-                            //     position: {
-                            //         lat: dH[k[0]].lat,
-                            //         lng: dH[k[0]].lng
-                            //     },
-                            //     icon: "images/stop.png"
-                            // });
-
-                            // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
-
-                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
-                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                            //dH[k[0]].marker.addTo(mymap);
-                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+          //console.log('-----clickCargarHistorial');
+          //console.log(this.form);
+          //console.log(dH.length);
+          //console.log(dH);
 
 
 
-                            index_historial2[d] = k[0];
-                            d++;
-                            l.length = 0;
-                            k.length = 0
-                        } else {
-                            //estado = 1;
-                            var p = dH[l[0]].dt_js;
-                            var q = dH[i].dt_js;
-                            var r = this.string_diffechas(p, q);
-                            dH[l[0]].historial2 = 1;
-                            dH[l[0]].estado = 1;
-                            dH[l[0]].temp = r;
-                            index_historial2[d] = l[0];
-                            d++
-                        }
-                    } else if (l.length > 0 && k.length == 0) {
-                        if (l.length >= 1) {
-                            //estado = 1;
-                            var p = dH[l[0]].dt_js;
-                            var q = dH[i].dt_js;
-                            var r = this.string_diffechas(p, q);
-                            dH[l[0]].historial2 = 1;
-                            dH[l[0]].estado = 1;
-                            dH[l[0]].temp = r;
-                            index_historial2[d] = l[0];
-                            d++
-                        }
-                    }
-                }
-                k.push(i)
-            } else {
-                if (k.length > 0) {
-                    var p = dH[k[0]].dt_js;
-                    var q = dH[i].dt_js;
-                    var t = this.string_diffechas(p, q);
-                    var s = Math.floor((q - p) / 1000);
-                    if (s > duracion) {
-                        if (o == 1) {
-                            //estado = 1;
-                            var p = dH[l[0]].dt_js;
-                            var q = dH[k[0]].dt_js;
-                            var r = this.string_diffechas(p, q);
-                            dH[l[0]].historial2 = 1;
-                            dH[l[0]].estado = 1;
-                            dH[l[0]].temp = r;
-                            index_historial2[d] = l[0];
-                            d++;
-                            //estado = 0;
-                            dH[k[0]].historial2 = 1;
-                            dH[k[0]].estado = 0;
-                            dH[k[0]].temp = t;
-                            // dH[k[0]].marker = new google.maps.Marker({
-                            //     map: mapa,
-                            //     visible: false,
-                            //     position: {
-                            //         lat: dH[k[0]].lat,
-                            //         lng: dH[k[0]].lng
-                            //     },
-                            //     icon: "images/stop.png"
-                            // });
+          // var h1 = new Array();
 
-                            // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
+          var index_historial2 = new Array();
+          // var poly = [];
 
-                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
-                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                            //dH[k[0]].marker.addTo(mymap);
-                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
 
-                            index_historial2[d] = k[0];
-                            d++;
-                            l.length = 0;
-                            k.length = 0
-                        }
-                        if (l.length > 0 && dH[l[0]].dt_tracker == dH[0].dt_tracker) {
-                            //estado = 1;
-                            var p = dH[l[0]].dt_js;
-                            var q = dH[k[0]].dt_js;
-                            var r = this.string_diffechas(p, q);
-                            dH[l[0]].historial2 = 1;
-                            dH[l[0]].estado = 1;
-                            dH[l[0]].temp = r;
-                            index_historial2[d] = l[0];
-                            d++;
-                            //estado = 0;
-                            dH[k[0]].historial2 = 1;
-                            dH[k[0]].estado = 0;
-                            dH[k[0]].temp = t;
-                            // dH[k[0]].marker = new google.maps.Marker({
-                            //     map: mapa,
-                            //     visible: false,
-                            //     position: {
-                            //         lat: dH[k[0]].lat,
-                            //         lng: dH[k[0]].lng
-                            //     },
-                            //     icon: "images/stop.png"
-                            // });
+          if (dH.length > 1) {
 
-                            // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
+            this.conHistorial = true;  // tenemos historial con datod
 
-                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
-                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                            //dH[k[0]].marker.addTo(mymap);
-                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
 
-                            index_historial2[d] = k[0];
-                            d++;
-                            l.length = 0;
-                            k.length = 0;
-                            o = 1;
-                        }
-                        if (k.length > 0 && dH[k[0]].dt_tracker == dH[0].dt_tracker) {
-                            //estado = 0;
-                            dH[k[0]].historial2 = 1;
-                            dH[k[0]].estado = 0;
-                            dH[k[0]].temp = t;
-                            // dH[k[0]].marker = new google.maps.Marker({
-                            //     map: mapa,
-                            //     visible: false,
-                            //     position: {
-                            //         lat: dH[k[0]].lat,
-                            //         lng: dH[k[0]].lng
-                            //     },
-                            //     icon: "images/stop.png"
-                            // });
+            var d = 0;
 
-                            // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
-                            // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
+            var k = [];
+            let l = new Array();
 
-                            dH[k[0]].marker = "PARADA";//marker_x("images/stop.png" , [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
-                            //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
-                            //dH[k[0]].marker.addTo(mymap);
-                            //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+            k.length = 0;
+            l.length = 0;
 
-                            index_historial2[d] = k[0];
-                            d++;
-                            k.length = 0;
-                            o = 1
-                        }
-                    } else {
-                        var u = l.concat(k);
-                        k.length = 0;
-                        l.length = 0;
-                        l = u;
-                        if (i == h) {
-                            //estado = 1;
-                            var p = dH[l[0]].dt_js;
-                            var q = dH[i].dt_js;
-                            var r = this.string_diffechas(p, q);
-                            dH[l[0]].historial2 = 1;
-                            dH[l[0]].estado = 1;
-                            dH[l[0]].temp = r;
-                            index_historial2[d] = l[0];
-                            d++
-                        }
-                    }
-                } else {
+            var o;
+
+            const h = dH.length - 1; //Ultimo indice del array
+
+            var minLat = parseFloat(dH[0].lat);
+            var maxLat = parseFloat(dH[0].lat);
+            var minLng = parseFloat(dH[0].lng);
+            var maxLng = parseFloat(dH[0].lng);
+
+            dH[0].rutaH = [];
+
+            dH[0].primero = h; // guardar el numero de elementos en la primera trama.
+            dH[0].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
+
+            dH[h].ultimo  = h; // guardar el numero de elementos en la ultima trama.
+            dH[h].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
+
+            for (let i = 0; i < dH.length; i++) {
+
+                dH[i].dt_ss = new Date(dH[i].dt_server);
+                dH[i].dt_js = new Date(dH[i].dt_tracker);
+
+                dH[i].dt_tracker = dH[i].dt_tracker.replace(/\//g, "-");
+                dH[i].lat = parseFloat(dH[i].lat);
+                dH[i].lng = parseFloat(dH[i].lng);
+
+                dH[i].paramsGet = this.getParams(dH[i].params);
+
+                dH[i]._trama = this.get_trama_marker(dH[i]);//.addTo(this.mapService.map);
+
+                var arrayP = [];
+
+                dH[0].rutaH.push([dH[i].lat, dH[i].lng]); // guardar puntos para dibujar la linea del recorrido
+
+                if (dH[i].lat < minLat) {  minLat = dH[i].lat; }
+                if (dH[i].lat > maxLat) {  maxLat = dH[i].lat; }
+                if (dH[i].lng < minLng) {  minLng = dH[i].lng; }
+                if (dH[i].lng > maxLng) {  maxLng = dH[i].lng; }
+
+                dH[i].historial2 = 0;
+                dH[i].indice = i;
+
+
+                if (dH[i].speed <= 3) {
                     if (i == h) {
                         if (l.length == 0) {
-                            //estado = 1;
+                            //estado = 0;
                             var p = dH[0].dt_js;
                             var q = dH[h].dt_js;
                             var r = this.string_diffechas(p, q);
                             dH[0].historial2 = 1;
-                            dH[0].estado = 1;
+                            dH[0].estado = 0;
                             dH[0].temp = r;
+
+                            dH[0].marker = "PARADA";
+
                             index_historial2[d] = 0;
                             d++
-                        } else if (l.length > 0) {
-                            //estado = 1;
-                            var p = dH[l[0]].dt_js;
+                        } else if (l.length > 0 && k.length > 0) {
+                            var p = dH[k[0]].dt_js;
                             var q = dH[i].dt_js;
-                            var r = this.string_diffechas(p, q);
-                            dH[l[0]].historial2 = 1;
-                            dH[l[0]].estado = 1;
-                            dH[l[0]].temp = r;
-                            index_historial2[d] = l[0];
-                            d++
+                            var s = Math.floor((q - p) / 1000);
+                            if (s > duracion) {
+                                //estado = 1;
+                                var p = dH[l[0]].dt_js;
+                                var q = dH[k[0]].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[l[0]].historial2 = 1;
+                                dH[l[0]].estado = 1;
+                                dH[l[0]].temp = r;
+                                index_historial2[d] = l[0];
+                                d++;
+                                //estado = 0;
+                                var p = dH[k[0]].dt_js;
+                                var q = dH[i].dt_js;
+                                var t = this.string_diffechas(p, q);
+                                dH[k[0]].historial2 = 1;
+                                dH[k[0]].estado = 0;
+                                dH[k[0]].temp = t;
+
+                                // dH[k[0]].marker = new google.maps.Marker({
+                                //     map: mapa,
+                                //     visible: false,
+                                //     position: {
+                                //         lat: dH[k[0]].lat,
+                                //         lng: dH[k[0]].lng
+                                //     },
+                                //     icon: "images/stop.png"
+                                // });
+
+                                // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                                // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
+
+                                dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
+                                //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                                //dH[k[0]].marker.addTo(mymap);
+                                //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
+
+
+
+                                index_historial2[d] = k[0];
+                                d++;
+                                l.length = 0;
+                                k.length = 0
+                            } else {
+                                //estado = 1;
+                                var p = dH[l[0]].dt_js;
+                                var q = dH[i].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[l[0]].historial2 = 1;
+                                dH[l[0]].estado = 1;
+                                dH[l[0]].temp = r;
+                                index_historial2[d] = l[0];
+                                d++
+                            }
+                        } else if (l.length > 0 && k.length == 0) {
+                            if (l.length >= 1) {
+                                //estado = 1;
+                                var p = dH[l[0]].dt_js;
+                                var q = dH[i].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[l[0]].historial2 = 1;
+                                dH[l[0]].estado = 1;
+                                dH[l[0]].temp = r;
+                                index_historial2[d] = l[0];
+                                d++
+                            }
                         }
                     }
-                }
-                l.push(i)
-            }
+                    k.push(i)
+                } else {
+                    if (k.length > 0) {
+                        var p = dH[k[0]].dt_js;
+                        var q = dH[i].dt_js;
+                        var t = this.string_diffechas(p, q);
+                        var s = Math.floor((q - p) / 1000);
+                        if (s > duracion) {
+                            if (o == 1) {
+                                //estado = 1;
+                                var p = dH[l[0]].dt_js;
+                                var q = dH[k[0]].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[l[0]].historial2 = 1;
+                                dH[l[0]].estado = 1;
+                                dH[l[0]].temp = r;
+                                index_historial2[d] = l[0];
+                                d++;
+                                //estado = 0;
+                                dH[k[0]].historial2 = 1;
+                                dH[k[0]].estado = 0;
+                                dH[k[0]].temp = t;
+                                // dH[k[0]].marker = new google.maps.Marker({
+                                //     map: mapa,
+                                //     visible: false,
+                                //     position: {
+                                //         lat: dH[k[0]].lat,
+                                //         lng: dH[k[0]].lng
+                                //     },
+                                //     icon: "images/stop.png"
+                                // });
 
-        } //el for termina aqui
+                                // var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                                // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: icon_0, opacity: 0 }).addTo(mymap);
 
+                                dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng], [7, 26], k[0]);
+                                //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                                //dH[k[0]].marker.addTo(mymap);
+                                //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
 
-            var count = 1;
-            index_historial2.forEach((item, i) => {
-              // //console.log("--------xD");
-              // //console.log(item);
-              // //console.log(dH[item]);
-              // //console.log(i);
-              //Es parada y tiene el check de mostrar paradas
-              if ( dH[item].marker == "PARADA") {
+                                index_historial2[d] = k[0];
+                                d++;
+                                l.length = 0;
+                                k.length = 0
+                            }
+                            if (l.length > 0 && dH[l[0]].dt_tracker == dH[0].dt_tracker) {
+                                //estado = 1;
+                                var p = dH[l[0]].dt_js;
+                                var q = dH[k[0]].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[l[0]].historial2 = 1;
+                                dH[l[0]].estado = 1;
+                                dH[l[0]].temp = r;
+                                index_historial2[d] = l[0];
+                                d++;
+                                //estado = 0;
+                                dH[k[0]].historial2 = 1;
+                                dH[k[0]].estado = 0;
+                                dH[k[0]].temp = t;
+                                // dH[k[0]].marker = new google.maps.Marker({
+                                //     map: mapa,
+                                //     visible: false,
+                                //     position: {
+                                //         lat: dH[k[0]].lat,
+                                //         lng: dH[k[0]].lng
+                                //     },
+                                //     icon: "images/stop.png"
+                                // });
 
-                  if (i != index_historial2.length-1) {
-                    dH[item].paradaFin = dH[index_historial2[i+1]].dt_tracker;
-                  } else {
-                    ////console.log("--------xD-- ULTIMO");
-                    dH[item].paradaFin = dH[dH.length-1].dt_tracker;
-                  }
-                  //var icon = { iconUrl: 'images/stop.png', iconAnchor: [7, 26] };
-                  dH[item].count = count++;
-                  dH[item].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
-                  dH[item].layer = this.get_parada_marker(dH[item]);
+                                // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                                // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
 
+                                dH[k[0]].marker = "PARADA";//marker_x("images/stop.png", [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
+                                //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                                //dH[k[0]].marker.addTo(mymap);
+                                //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
 
+                                index_historial2[d] = k[0];
+                                d++;
+                                l.length = 0;
+                                k.length = 0;
+                                o = 1;
+                            }
+                            if (k.length > 0 && dH[k[0]].dt_tracker == dH[0].dt_tracker) {
+                                //estado = 0;
+                                dH[k[0]].historial2 = 1;
+                                dH[k[0]].estado = 0;
+                                dH[k[0]].temp = t;
+                                // dH[k[0]].marker = new google.maps.Marker({
+                                //     map: mapa,
+                                //     visible: false,
+                                //     position: {
+                                //         lat: dH[k[0]].lat,
+                                //         lng: dH[k[0]].lng
+                                //     },
+                                //     icon: "images/stop.png"
+                                // });
 
-                  if (this.form.chckParada) {
+                                // //var icon_0 = L.icon({ iconUrl: "images/stop.png" });
+                                // dH[k[0]].marker = L.marker([dH[k[0]].lat, dH[k[0]].lng], {icon: L.icon({ iconUrl: "images/stop.png" }), opacity: 0 }).addTo(mymap);
 
-                    dH[item].layer.addTo(this.mapService.map);
-                  }
+                                dH[k[0]].marker = "PARADA";//marker_x("images/stop.png" , [dH[k[0]].lat, dH[k[0]].lng],  [7, 26], k[0]);
+                                //var label = "<div id='ih"+ k[0] +"' class='infoboxICON'> <span></span> </div>";
+                                //dH[k[0]].marker.addTo(mymap);
+                                //$("div#ih"+k[0]).parents('div.leaflet-label').css("opacity", 0);
 
-              } else {
-                  dH[item].marker = "MOVIMIENTO";
-
-                  let a1,a2;//Primer y ultimo punto de una sublinea
-                  if ( i == 0 ) {
-
-                    a1 = 0;
-                    if (index_historial2.length == 1) {
-                      a2 = dH.length-1;
+                                index_historial2[d] = k[0];
+                                d++;
+                                k.length = 0;
+                                o = 1
+                            }
+                        } else {
+                            var u = l.concat(k);
+                            k.length = 0;
+                            l.length = 0;
+                            l = u;
+                            if (i == h) {
+                                //estado = 1;
+                                var p = dH[l[0]].dt_js;
+                                var q = dH[i].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[l[0]].historial2 = 1;
+                                dH[l[0]].estado = 1;
+                                dH[l[0]].temp = r;
+                                index_historial2[d] = l[0];
+                                d++
+                            }
+                        }
                     } else {
-                      a2 = index_historial2[i+1];
+                        if (i == h) {
+                            if (l.length == 0) {
+                                //estado = 1;
+                                var p = dH[0].dt_js;
+                                var q = dH[h].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[0].historial2 = 1;
+                                dH[0].estado = 1;
+                                dH[0].temp = r;
+                                index_historial2[d] = 0;
+                                d++
+                            } else if (l.length > 0) {
+                                //estado = 1;
+                                var p = dH[l[0]].dt_js;
+                                var q = dH[i].dt_js;
+                                var r = this.string_diffechas(p, q);
+                                dH[l[0]].historial2 = 1;
+                                dH[l[0]].estado = 1;
+                                dH[l[0]].temp = r;
+                                index_historial2[d] = l[0];
+                                d++
+                            }
+                        }
                     }
+                    l.push(i)
+                }
 
-                  } else if( i == index_historial2.length-1 ) {
-                    a1 = index_historial2[i-1];
-                    a2 = dH.length-1;
+            } //el for termina aqui
+
+
+                var count = 1;
+                index_historial2.forEach((item, i) => {
+                  // //console.log("--------xD");
+                  // //console.log(item);
+                  // //console.log(dH[item]);
+                  // //console.log(i);
+                  //Es parada y tiene el check de mostrar paradas
+                  if ( dH[item].marker == "PARADA") {
+
+                      if (i != index_historial2.length-1) {
+                        dH[item].paradaFin = dH[index_historial2[i+1]].dt_tracker;
+                      } else {
+                        ////console.log("--------xD-- ULTIMO");
+                        dH[item].paradaFin = dH[dH.length-1].dt_tracker;
+                      }
+                      //var icon = { iconUrl: 'images/stop.png', iconAnchor: [7, 26] };
+                      dH[item].count = count++;
+                      dH[item].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
+                      dH[item].layer = this.get_parada_marker(dH[item]);
+
+
+
+                      if (this.form.chckParada) {
+
+                        dH[item].layer.addTo(this.mapService.map);
+                      }
+
                   } else {
-                    a1 = index_historial2[i-1];
-                    a2 = index_historial2[i+1];
+                      dH[item].marker = "MOVIMIENTO";
+
+                      let a1,a2;//Primer y ultimo punto de una sublinea
+                      if ( i == 0 ) {
+
+                        a1 = 0;
+                        if (index_historial2.length == 1) {
+                          a2 = dH.length-1;
+                        } else {
+                          a2 = index_historial2[i+1];
+                        }
+
+                      } else if( i == index_historial2.length-1 ) {
+                        a1 = index_historial2[i-1];
+                        a2 = dH.length-1;
+                      } else {
+                        a1 = index_historial2[i-1];
+                        a2 = index_historial2[i+1];
+                      }
+
+                      dH[item].cc = [a1, a2];
+                      // for (let i = a1; i <= a2; i++) {
+                      //   dH[item].cc.push([dH[i].lat, dH[i].lng]);
+                      // }
+
                   }
+                });
+                // //console.log('------>>>>> '+index_historial2);
 
-                  dH[item].cc = [a1, a2];
-                  // for (let i = a1; i <= a2; i++) {
-                  //   dH[item].cc.push([dH[i].lat, dH[i].lng]);
-                  // }
-
-              }
-            });
-            // //console.log('------>>>>> '+index_historial2);
-
-            // //console.log(index_historial2);
+                // //console.log(index_historial2);
 
 
-            dH[0].index_historial = index_historial2;
-            dH[0].layer0 = this.get_inicial_marker(dH[0]).addTo(this.mapService.map);
-            dH[h].layerN = this.get_final_marker(dH[h]).addTo(this.mapService.map);
+                dH[0].index_historial = index_historial2;
+                dH[0].layer0 = this.get_inicial_marker(dH[0]).addTo(this.mapService.map);
+                dH[h].layerN = this.get_final_marker(dH[h]).addTo(this.mapService.map);
 
-            this.mostrar_tabla(dH, dH[0].index_historial);
-            this.changeShowingTramas();
-            this.changeShowingGrafico();
+                this.mostrar_tabla(dH, dH[0].index_historial);
+                this.changeShowingTramas();
+                this.changeShowingGrafico();
 
-            console.log('Mostrar tabla', dH);
+                // console.log('Mostrar tabla', dH);
 
-            this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
-
-
-            var color = 'red';
-            var color_sub = 'blue';
-            dH[0].rutaH2 = this.get_historial_line( dH[0].rutaH , color).addTo(this.mapService.map); //Linea del historial
-            dH[0].ruta_sub = this.get_historial_line( [] , color_sub); //Sub linea del historial
+                this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
 
 
-            dH[0].rutaH2_trace = L.polylineDecorator( dH[0].rutaH , {
-              patterns: [
-                  //{ offset: 12, repeat: 25, symbol: L.Symbol.dash({pixelSize: 10, pathOptions: {color: 'black', weight: 2}})},
-                  { offset: 2, repeat: 30, symbol: L.Symbol.arrowHead({pixelSize: 4.3,polygon: false,pathOptions: {stroke: true,weight: 1.4,color: 'black',opacity: 1}})}
-              ]
-            }).addTo(this.mapService.map);
+                var color = 'red';
+                var color_sub = 'blue';
+                dH[0].rutaH2 = this.get_historial_line( dH[0].rutaH , color).addTo(this.mapService.map); //Linea del historial
+                dH[0].ruta_sub = this.get_historial_line( [] , color_sub).addTo(this.mapService.map); //Sub linea del historial
 
 
-            this.historialService.changeMessage("desde com panel-historial")
+                dH[0].rutaH2_trace = L.polylineDecorator( dH[0].rutaH , {
+                  patterns: [
+                      //{ offset: 12, repeat: 25, symbol: L.Symbol.dash({pixelSize: 10, pathOptions: {color: 'black', weight: 2}})},
+                      { offset: 2, repeat: 30, symbol: L.Symbol.arrowHead({pixelSize: 4.3,polygon: false,pathOptions: {stroke: true,weight: 1.4,color: 'black',opacity: 1}})}
+                  ]
+                }).addTo(this.mapService.map);
 
 
-            // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
-            // allmap._trace.addTo(overlay);
+                this.historialService.changeMessage("desde com panel-historial")
 
 
-            // var misOpciones2 = {
-            //     //color: '#E7AB1E',
-            //     color: 'red',
-            //     weight: 3,
-            //     opacity: 1.0
-            // }
+                // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
+                // allmap._trace.addTo(overlay);
 
-         // poly_h2 = L.polyline([], misOpciones2).addTo(mymap);
+
+                // var misOpciones2 = {
+                //     //color: '#E7AB1E',
+                //     color: 'red',
+                //     weight: 3,
+                //     opacity: 1.0
+                // }
+
+            // poly_h2 = L.polyline([], misOpciones2).addTo(mymap);
 
 
 
 
 
-            // // h1.push([dH[0].lat, dH[0].lng]);
-            // // h1.push([dH[dH.length-1].lat, dH[dH.length-1].lng]);
-            // // //console.log("---- FF ------- 1");
-            // // //console.log(overlay);
-            // // //console.log("---- FF ------- 2");
-            // // //console.log("------");
-            // // //console.log(overlay);
-            // // //console.log("------");
-            // // mapData.map.fitBounds(overlay.getBounds());
-            // //mapData.map.fitBounds(bounds);
+                // // h1.push([dH[0].lat, dH[0].lng]);
+                // // h1.push([dH[dH.length-1].lat, dH[dH.length-1].lng]);
+                // // //console.log("---- FF ------- 1");
+                // // //console.log(overlay);
+                // // //console.log("---- FF ------- 2");
+                // // //console.log("------");
+                // // //console.log(overlay);
+                // // //console.log("------");
+                // // mapData.map.fitBounds(overlay.getBounds());
+                // //mapData.map.fitBounds(bounds);
 
 
-            // mapData.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
-            // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
-            // allmap._trace.addTo(overlay);
+                // mapData.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
+                // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
+                // allmap._trace.addTo(overlay);
 
-            // var submap = new map.Movimiento([],{color: param.colorSubHistorial});//.addTo(overlay);
-            // var poly = [allmap, submap];
-            // // //console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
-            // // ////console.log(lili);
-            // // //console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
-            // //------------------------ MOVIMEINTO DEL GRAFICO ------------------------------
-            // var iconc = { iconUrl: 'images/mm_20_red.png', iconAnchor: [6, 20] };
-            // var icoG1 = new map.Parada([0, 0], { icon: new L.Icon(iconc), showTrace: true })
-            //                   .bindPopup( {offset: new L.Point(0, -16)} );
+                // var submap = new map.Movimiento([],{color: param.colorSubHistorial});//.addTo(overlay);
+                // var poly = [allmap, submap];
+                // // //console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
+                // // ////console.log(lili);
+                // // //console.log("XXXXXXXXXXXXXXXXXXXXXX-------------------------------------");
+                // //------------------------ MOVIMEINTO DEL GRAFICO ------------------------------
+                // var iconc = { iconUrl: 'images/mm_20_red.png', iconAnchor: [6, 20] };
+                // var icoG1 = new map.Parada([0, 0], { icon: new L.Icon(iconc), showTrace: true })
+                //                   .bindPopup( {offset: new L.Point(0, -16)} );
 
-            // var icons = { iconUrl: 'images/objects/nuevo/'+param.icono, iconSize: [32, 32], iconAnchor: [16, 16] };
-            // var icoG2 = new map.Parada([0, 0], { icon: new L.Icon(icons), showTrace: true })
-            //                   .bindPopup( {offset: new L.Point(-18, -10)} );
-
-
-
-            //   // //console.log(this.getParams(this.historialService.tramasHistorial[0].params));
+                // var icons = { iconUrl: 'images/objects/nuevo/'+param.icono, iconSize: [32, 32], iconAnchor: [16, 16] };
+                // var icoG2 = new map.Parada([0, 0], { icon: new L.Icon(icons), showTrace: true })
+                //                   .bindPopup( {offset: new L.Point(-18, -10)} );
 
 
 
-        //console.log(dH[0].paramsGet);
-
-
-        //this.panelService.nombreComponente = nomComponent;
-
-        // const item1 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0].value;
-        // const item2 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0];
-
-        // //console.log("===================================");
-
-        // //console.log(item1);
-        // //console.log(item2);
-
-
-        // this.panelService.nombreCabecera =   item[0].name;
+                //   // //console.log(this.getParams(this.historialService.tramasHistorial[0].params));
 
 
 
-        this.spinner.hide('loadingHistorial');
-      } else {
-        this.spinner.hide('loadingHistorial');
-        console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
-        this.showNotEnoughInfoDialog();
-      }
+            //console.log(dH[0].paramsGet);
 
 
-    });
+            //this.panelService.nombreComponente = nomComponent;
+
+            // const item1 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0].value;
+            // const item2 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0];
+
+            // //console.log("===================================");
+
+            // //console.log(item1);
+            // //console.log(item2);
+
+
+            // this.panelService.nombreCabecera =   item[0].name;
+
+
+
+            this.spinner.hide('loadingHistorial');
+          } else {
+            this.spinner.hide('loadingHistorial');
+            console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
+            this.showNotEnoughInfoDialog();
+          }
+
+      }); // fin de eventosa historial
+    }); // fin de historial tramas
 
     // var dH22  = await this.historialService.get_tramas_recorrido(param);
     // //console.log('================== DDD ');
@@ -958,6 +982,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         this.mapService.map.removeLayer(dH[i]._trama);
       }
 
+
+      for (let index = 0; index < this.EventService.eventsHistorial.length; index++) {
+        const item = this.EventService.eventsHistorial[index];
+        this.mapService.map.removeLayer(item.layer);
+      }
 
 
       this.historialService.tramasHistorial = [];
@@ -1001,22 +1030,152 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   mostrar_tabla(dH:any, iH:any) {
       if (this.conHistorial) {
+
+            // console.log("========================== HISTORIAL ===========================");
+            // console.log(this.EventService.eventsHistorial);
+
             // para la tabla
+
+
+                              //   // console.log(tableH);
+                              //   vm.tramasEventos.forEach(item => {
+                              //     if (item.inHistorial) {
+                              //       item.dt_tracker = item.fecha_tracker.replace(/\//g, "-");
+                              //       item.lat = item.latitud;
+                              //       item.lng = item.longitud;
+                              //       item.icono = item.layer.options.icon.options.iconUrl.substring(9);
+                              //       item.icono_height = "17px";
+                              //       item.icono_width = "18px";
+                              //       if ( item.tipo == "Tiempo de estadia en zona" || item.tipo == "Parada en zona no autorizada" ) {item.temp = item.tiempo_limite;} else { item.temp = "";}
+                              //       tableH.push(item);
+                              //     }
+
+                              // });
+
+
             this.transfers = [];
-            this.transfers.push({icono:"assets/images/start.png", trama:dH[0],icono_width:"13px",icono_height:"13px"});
+            this.transfers.push({icono:"assets/images/start.png", trama:dH[0],icono_width:"13px",icono_height:"13px",dt_tracker:dH[0].dt_tracker});
             for (let i = 0; i < iH.length; i++) {
               if (dH[iH[i]].marker == "PARADA") {
                 if (this.form.chckParada ) {
-                  this.transfers.push({icono:"assets/images/stop.png",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px"});
+                  this.transfers.push({icono:"assets/images/stop.png",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
                 }
               }
               else {
-                this.transfers.push({icono:"assets/images/drive.png",trama:dH[iH[i]],icono_width:"13px",icono_height:"13px"});
+                this.transfers.push({icono:"assets/images/drive.png",trama:dH[iH[i]],icono_width:"13px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
               }
             }
-            this.transfers.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
+
+            if (this.form.chckEvento) {
+                for (let index = 0; index < this.EventService.eventsHistorial.length; index++) {
+
+
+                  const item = this.EventService.eventsHistorial[index];
+                  var activar = false;
+
+                  if (this.form.eventos.OtroTodos) {
+                    activar = true;
+                  } else {
+
+                    if (item.evento == "Zona de salida" && this.form.eventos.evSalida) {
+                      activar = true;
+                    } else if (item.evento == "Zona de entrada" && this.form.eventos.evEntrada) {
+                      activar = true;
+                    } else if (item.evento == "Tiempo de estadia en zona" && this.form.eventos.evEstadia) {
+                      activar = true;
+                    } else if (item.evento == "Parada en zona no autorizada" && this.form.eventos.evParada) {
+                      activar = true;
+                    } else if (item.evento == "Infraccion" && this.form.eventos.evInfraccion) {
+                      activar = true;
+                    } else if (item.evento == "Anticolision frontal" && this.form.eventos.evAnticolisionFrontal) {
+                      activar = true;
+                    } else if (item.evento == "Colision con peatones" && this.form.eventos.evColisionConPeatones) {
+                      activar = true;
+                    } else if (item.evento == "No Rostro" && this.form.eventos.evNoRostro) {
+                      activar = true;
+                    } else if (item.evento == "Fatiga Extrema" && this.form.eventos.evFatigaExtrema) {
+                      activar = true;
+                    } else if (item.evento == "Desvío de carril hacia la izquierda" && this.form.eventos.evDesvioCarrilIzquierda) {
+                      activar = true;
+                    } else if (item.evento == "Desvío de carril hacia la derecha" && this.form.eventos.evDesvioCarrilDerecha) {
+                      activar = true;
+                    } else if (item.evento == "Bloqueo de vision del mobileye" && this.form.eventos.evBloqueoVisionMobileye) {
+                      activar = true;
+                    } else if (item.evento == "Cambio de conductor" && this.form.eventos.evCambioConductor) {
+                      activar = true;
+                    } else if (item.evento == "Cambio de conductor no realizado" && this.form.eventos.evCambioConductorNoRealizado) {
+                      activar = true;
+                    } else if (item.evento == "Mantenimiento preventivo" && this.form.eventos.evManPreventivo) {
+                      activar = true;
+                    } else if (item.evento == "Mantenimiento correctivo" && this.form.eventos.evManCorrectivo) {
+                      activar = true;
+                    } else if (item.evento == "Mantenimiento preventivo realizado" && this.form.eventos.evManPreventivoRealizado) {
+                      activar = true;
+                    } else if (item.evento == "Mantenimiento correctivo realizado" && this.form.eventos.evManCorrectivoRealizado) {
+                      activar = true;
+                    } else if ( (item.evento == "Exceso de Velocidad" || item.evento == "Transgresion") && this.form.eventos.OtroExVelocidad) {
+                      activar = true;
+                    } else if (item.evento == "SOS" && this.form.eventos.GPSsos) {  //=================  GPS
+                      activar = true;
+                    } else if (item.evento == "Bateria desconectada" && this.form.eventos.GPSbateriaDesconectada) {
+                      activar = true;
+                    } else if (item.evento == "Aceleracion brusca" && this.form.eventos.GPSaceleracionBrusca) {
+                      activar = true;
+                    } else if (item.evento == "Frenada brusca" && this.form.eventos.GPSfrenadaBrusca) {
+                      activar = true;
+                    } else if (item.evento == "Motor encendido" && this.form.eventos.GPSmotorEncendido) {
+                      activar = true;
+                    } else if (item.evento == "Motor apagado" && this.form.eventos.GPSmotorApagado) {
+                      activar = true;
+                    } else if (item.evento == "Fatiga" && this.form.eventos.AccFatiga) {   //========== ACCESORIOS
+                      activar = true;
+                    } else if (item.evento == "Somnolencia" && this.form.eventos.AccSomnolencia) {   //========== ACCESORIOS
+                      activar = true;
+                    } else if (item.evento == "Distraccion" && this.form.eventos.AccDistraccion) {   //========== ACCESORIOS
+                      activar = true;
+                    } else if (item.evento == "Alcoholemia" && this.form.eventos.AccAlcoholemia) {   //========== ACCESORIOS
+                      activar = true;
+                    }
+
+                  }
+
+                  if (activar) {
+
+                    item.layer.addTo(this.mapService.map);//.openPopup();
+
+                    item.lat = parseFloat(item.latitud);
+                    item.lng = parseFloat(item.longitud);
+                    item.dt_tracker = item.fecha_tracker.replace(/\//g, "-");
+                    this.transfers.push({icono: item.layer.options.icon.options.iconUrl, trama:item,icono_width:"17px",icono_height:"18px",dt_tracker:item.dt_tracker});
+
+                  } else {
+                    this.mapService.map.removeLayer(item.layer);
+                  }
+
+                }
+                this.transfers = this.sortByKey(this.transfers, "dt_tracker");
+                // console.log("=== ORDENADO");
+                // console.log(this.transfers);
+            } else {
+              for (let index = 0; index < this.EventService.eventsHistorial.length; index++) {
+                const item = this.EventService.eventsHistorial[index];
+                this.mapService.map.removeLayer(item.layer);
+              }
+            }
+
+
+            this.transfers.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px",dt_tracker:dH[dH.length-1].dt_tracker});
+
       }
   }
+
+  sortByKey(array:any, key:any) {
+    return array.sort((a:any, b:any) => {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+  }
+
 
   clickLocate(row:any) {
 
@@ -1026,7 +1185,12 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       //console.log("click en el tr");
       //console.log(trama);
 
-    if (row.icono == "assets/images/start.png") {
+    if (row.icono == "assets/images/eventos/pin_point.svg") {
+
+      trama.layer.openPopup();
+      this.mapService.map.setView([trama.lat, trama.lng], 15);
+
+    } else if (row.icono == "assets/images/start.png") {
       //console.log("--primero ----");
       trama.layer0.fireEvent('click');
       this.mapService.map.setView([trama.lat, trama.lng], 15);
@@ -1066,8 +1230,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
       //this.mapService.map.fitBounds(cc, { padding: [30, 30] });
       this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]], { padding: [30, 30] });
-
-      dH[0].ruta_sub.setLatLngs(cc).addTo(this.mapService.map);
+      // console.log("log ==> cc");
+      // console.log(cc);
+      // console.log(dH[0].ruta_sub);
+      dH[0].ruta_sub.setLatLngs(cc); //.addTo(this.mapService.map);
       dH[0].ruta_sub.setStyle({opacity: 1, color: 'blue'});
 
     }
