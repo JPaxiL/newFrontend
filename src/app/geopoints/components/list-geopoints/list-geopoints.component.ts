@@ -28,9 +28,7 @@ export class ListGeopointsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(this.geopointsService.initializingGeopoints){
-      this.spinner.hide('loadingGeopointsSpinner');
-    } else {
+    if(!this.geopointsService.initializingGeopoints){
       this.spinner.show('loadingGeopointsSpinner');
     }
     console.log("DATOS DE GEOPUNTOS");

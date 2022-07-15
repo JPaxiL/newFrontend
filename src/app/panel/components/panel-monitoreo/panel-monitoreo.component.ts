@@ -20,11 +20,6 @@ export class PanelMonitoreoComponent implements OnInit {
     
     /* Redimensionar panel en window resize */
     window.addEventListener('resize', function(e: any) {
-      console.log('Vehicle height header: ', getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height'));
-      console.log('Vehicle height header: ', getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height') != '0rem');
-      console.log('Vehicle height header: ', typeof getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height'));
-      console.log('Vehicle height header: ', typeof getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height'));
-      console.log(Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', '')));
       minWidth = 425;
       if(window.innerWidth > 600) {
         maxWidth = 0.725 * window.innerWidth < 800? 0.725 * window.innerWidth: 800;

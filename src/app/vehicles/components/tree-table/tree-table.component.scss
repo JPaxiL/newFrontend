@@ -187,16 +187,16 @@ p {
 :host ::ng-deep {
 
     .p-treetable-scrollable-header {
-        background-color: var(--gl-lighter-gray);
-        height: 2.375rem;
+        background-color: var(--gl-light-gray);
+        height: var(--treetable-header-height);
     }
 
     .p-treetable-thead {
-        border-bottom: solid 1.1px var(--gl-lighter-gray);
+        border-bottom: solid 1.1px var(--gl-light-gray);
         
         tr > th {
             text-align: center;
-            background-color: var(--gl-lighter-gray);
+            background-color: var(--gl-light-gray);
             color: var(--gl-dark-gray-blue);
 
             /* * > div > span > i,
@@ -236,6 +236,14 @@ p {
 
         tr > td {
             padding: 0 !important;
+            &.eye-column{
+                color: var(--gl-light-blue);
+                cursor: pointer;
+            }
+            &.edit-column{
+                color: var(--gl-dark-gray-blue);
+                cursor: pointer;
+            }
         }
         
     }
@@ -254,7 +262,7 @@ p {
         }
     }
     tr.row-header-convoy {
-        background-color: var(--gl-gray-subtitle) !important;
+        background-color: var(--gl-lighter-gray) !important;
         color: #000;
 
         .burger-options > svg {

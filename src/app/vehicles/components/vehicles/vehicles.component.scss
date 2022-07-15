@@ -52,6 +52,17 @@
 }
 
 :host ::ng-deep{
+    .ag-root.ag-unselectable.ag-layout-normal > .ag-header.ag-focus-managed.ag-pivot-off{
+        height: var(--treetable-header-height) !important;
+        min-height: var(--treetable-header-height) !important;
+        border-bottom: none;
+        .ag-header-row.ag-header-row-column{
+            height: var(--treetable-header-height) !important;
+            background-color: var(--gl-light-gray);
+        }
+    }
+
+
     .ag-root-wrapper.ag-layout-normal.ag-ltr{
         border: none;
     }
@@ -85,5 +96,9 @@
     }
     .dropdown-toggle::after {
         display:none;
+    }
+
+    [col-id="eye"]{
+        color: var(--gl-light-blue);
     }
 }

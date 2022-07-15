@@ -49,6 +49,7 @@
   --gl-light-blue: #30a9d9 ;
   --gl-lighter-gray: #e3e3e3;
   --gl-light-blue-alpha: rgba(33,150,243,0.1);
+  --gl-light-blue-selected-alpha: rgba(33,150,243,0.4);
   --gl-light-gray: #f2f2f2;
   --gl-light-gray-hover: #dedede;
   --gl-gray: #c4c4c9;
@@ -68,7 +69,8 @@
   --pm-vehiculos-header-height: 0rem;
   //--pm-alertas-header-height: 0rem;
   --pm-alertas-header-height: var( --pm-general-header-height);
-  --pm-geocercas-header-height: var( --pm-general-header-height);
+  //--pm-geocercas-header-height: var( --pm-general-header-height);
+  --pm-geocercas-header-height: 0rem;
   --pm-geopuntos-header-height: 0rem;
   --pm-historial-header-height: var( --pm-general-header-height);
   --pm-subcuentas-header-height: var( --pm-general-header-height);
@@ -203,13 +205,13 @@ div.leaflet-tooltip-own {
   box-shadow: none !important;
 }
 .btn-navbar:focus:not(.btn-navbar.active, .show > .btn-navbar.dropdown-toggle){
+  color: #000;
   background: none;
 }
 
 
-.btn-navbar:hover:not(.btn-navbar.active, .show > .btn-navbar.dropdown-toggle.active){
+li:hover .btn-navbar:not(.btn-navbar.active, .show > .btn-navbar.dropdown-toggle.active){
   background-color: var(--gl-light-gray-hover);
-  /* background-color: rgba(0,170,220,0.4); */
   border: none;
   color: #000000;
 }
@@ -477,6 +479,7 @@ p-checkbox .p-checkbox-disabled > .p-checkbox-box{
   .panel-izq-table-container{
     table{
       width: 100%;
+      vertical-align: middle;
     }
 
     th,td{
@@ -489,8 +492,8 @@ p-checkbox .p-checkbox-disabled > .p-checkbox-box{
     }
 
     tbody tr{
-      background-color: inherit !important;
-      border: none !important;
+      background-color: inherit;
+      border: none;
       position: relative;
       height: 3.5rem;
       &::after{
@@ -504,7 +507,10 @@ p-checkbox .p-checkbox-disabled > .p-checkbox-box{
         background-color: #000;
       }
       &:hover{
-        background-color: var(--gl-light-blue-alpha) !important;
+        background-color: var(--gl-light-blue-alpha);
+      }
+      &.tr-selected {
+        background-color: var(--gl-light-blue-selected-alpha) !important;
       }
     }
   

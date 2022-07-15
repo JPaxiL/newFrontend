@@ -240,38 +240,6 @@
     font-size: 0.75rem;
     /* height: calc(100% - 4.375rem); */
     flex-grow: 1;
-
-    table {
-      vertical-align: middle;
-
-      > thead > tr{
-        /* background-color: var(--gl-lighter-gray) !important;
-        color: var(--gl-dark-gray-blue) !important; */
-      }
-      > tbody {
-        border-top: none;
-
-        > tr {
-          border: none !important;
-          > td {
-            border: none !important;
-          }
-        }
-        > tr:nth-child(even) {
-          background: var(--gl-light-gray);
-        }
-        > tr:hover { /* 4 tables */
-          background-color: #EFF0F4 !important;
-          > * {
-            --bs-table-accent-bg: var(--bs-table-hover-bg);
-          }
-        }
-        > tr.tr-selected {
-          background-color: var(--gl-gray) !important;
-        }
-      } 
-    }
-
   }
 
   tbody.p-treetable-tbody {

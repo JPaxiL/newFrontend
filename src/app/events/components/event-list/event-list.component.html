@@ -22,7 +22,7 @@
           class="form-control"
           placeholder="Tipo de Evento"
         /> -->
-        <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="false" placeholder="Tipo de Evento" (ngModelChange)="changeTypeEvent()"></p-dropdown>
+        <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="true" [filter]="true" filterBy="option" placeholder="Todos los Eventos" (ngModelChange)="changeTypeEvent()"></p-dropdown>
       </div>
     </div>
   </div>
@@ -41,6 +41,7 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let event of events">
+        <!-- <ng-container *ngFor="let event of eventService.events"> -->
           <tr #currRow (click)="switchEventOnMap(event, currRow)">
             <td>{{ event.evento }}</td>
             <td>{{ event.nombre }}</td>

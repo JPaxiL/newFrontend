@@ -17,13 +17,12 @@ export class EventListComponent implements OnInit {
   selectedEvent: any = {};
   eventPopupClass: any ={};
   activeEventLayer: any = false;
-  loadingEvents: boolean = true;
 
   public events:any[] = [];
   public placa:string = '';
 
   constructor(
-    private eventService: EventService,
+    public eventService: EventService,
     public mapService: MapServicesService,
     public ess:EventSocketService,
     private spinner: NgxSpinnerService
@@ -99,23 +98,22 @@ export class EventListComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    if(this.loadingEvents) {
-      this.spinner.show('loadingEventList');
-    }
+    this.spinner.show('loadingEventList');
+    this.eventService.loadingEvents = true;
+    this.eventService.loadingEventFilters = true;
+
     this.events = this.eventService.getData();
     this.loadData()
-  }
-  
-  ngOnDestroy(){
-    console.log('destruccion');
-    this.spinner.hide('loadingEventList');
-    this.loadingEvents = false;
   }
 
   async loadData(){
     this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
-    this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' });
-    this.spinner.hide('loadingEventList');
+    console.log(this.tipoEvento);
+    /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
+
+    //Trigger reload of event table
+    this.selectedEvent = null;
+    this.changeTypeEvent();
   }
 
   public showEvent(event:any){
@@ -158,8 +156,11 @@ export class EventListComponent implements OnInit {
   }
 
   public changeTypeEvent(){
+    console.log(this.selectedEvent);
+    console.log(this.selectedEvent === null);
 
-    if(this.selectedEvent == ''){
+    /* if(this.selectedEvent == ''){ */
+    if(this.selectedEvent === null){
       this.events = this.eventService.getData();
     }else{
       this.events = this.eventService.getData().filter( (event:any)  => {
