@@ -228,6 +228,9 @@ p {
                 outline: none;
                 box-shadow: none;
             }
+            /* td{
+                border: none;
+            } */
         }
 
         tr.row-header-grupo button.p-treetable-toggler.p-link.p-ripple{
@@ -238,11 +241,15 @@ p {
             padding: 0 !important;
             &.eye-column{
                 color: var(--gl-light-blue);
-                cursor: pointer;
             }
             &.edit-column{
                 color: var(--gl-dark-gray-blue);
-                cursor: pointer;
+            }
+            &.eye-column,
+            &.edit-column{
+                i{
+                    cursor: pointer;
+                } 
             }
         }
         

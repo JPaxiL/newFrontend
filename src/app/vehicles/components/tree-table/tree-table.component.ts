@@ -131,15 +131,13 @@ export class TreeTableComponent implements OnInit {
   }
 
   treeTableResizing(e: any) {
-    console.log('--navbar-height: ',getComputedStyle(document.documentElement).getPropertyValue('--navbar-height'));
-    console.log('--navbar-height: ',getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
-    console.log('--navbar-height: ', Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', '')));
+    /* console.log('--navbar-height: ', Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''))); */
     const navbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
     const rowBusquedaHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--row-busqueda-height').replace('rem', ''));
     const panelMonitoreoVehiclesHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', ''));
     const treetableHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--treetable-header-height').replace('rem', ''));
     /* this.toastr.success('treeTable altura previa:' + $('.map-area-app').height()!); */
-    console.log('treeTable altura previa:' + $('.map-area-app').height()!);
+    console.log('treeTable altura previa en px:' + $('.map-area-app').height()!);
     const rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
     // var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * 4.375;
 

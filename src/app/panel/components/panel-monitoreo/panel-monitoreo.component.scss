@@ -230,6 +230,10 @@
       label {
         text-shadow: 0 0 #000;
         font-size: 0.8rem;
+        &.custom-chevron{
+          width: 2.357rem; //Width del chevron en primeng
+          color: #6c757d; //Color del chevron en primeng
+        }
       }
     }
   }

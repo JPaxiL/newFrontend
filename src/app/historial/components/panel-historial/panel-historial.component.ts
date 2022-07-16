@@ -86,6 +86,95 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     {id : '8' , name: 'Mes pasado'}
   ];
 
+  hourPicker = [
+    { value: 0, label: '00' },
+    { value: 1, label: '01' },
+    { value: 2, label: '02' },
+    { value: 3, label: '03' },
+    { value: 4, label: '04' },
+    { value: 5, label: '05' },
+    { value: 6, label: '06' },
+    { value: 7, label: '07' },
+    { value: 8, label: '08' },
+    { value: 9, label: '09' },
+    { value: 10, label: '10' },
+    { value: 11, label: '11' },
+    { value: 12, label: '12' },
+    { value: 13, label: '13' },
+    { value: 14, label: '14' },
+    { value: 15, label: '15' },
+    { value: 16, label: '16' },
+    { value: 17, label: '17' },
+    { value: 18, label: '18' },
+    { value: 19, label: '19' },
+    { value: 20, label: '20' },
+    { value: 21, label: '21' },
+    { value: 22, label: '22' },
+    { value: 23, label: '23' },
+  ];
+
+  minPicker = [
+    { value: 0, label: '00' },
+    { value: 1, label: '01' },
+    { value: 2, label: '02' },
+    { value: 3, label: '03' },
+    { value: 4, label: '04' },
+    { value: 5, label: '05' },
+    { value: 6, label: '06' },
+    { value: 7, label: '07' },
+    { value: 8, label: '08' },
+    { value: 9, label: '09' },
+    { value: 10, label: '10' },
+    { value: 11, label: '11' },
+    { value: 12, label: '12' },
+    { value: 13, label: '13' },
+    { value: 14, label: '14' },
+    { value: 15, label: '15' },
+    { value: 16, label: '16' },
+    { value: 17, label: '17' },
+    { value: 18, label: '18' },
+    { value: 19, label: '19' },
+    { value: 20, label: '20' },
+    { value: 21, label: '21' },
+    { value: 22, label: '22' },
+    { value: 23, label: '23' },
+    { value: 24, label: '24' },
+    { value: 25, label: '25' },
+    { value: 26, label: '26' },
+    { value: 27, label: '27' },
+    { value: 28, label: '28' },
+    { value: 29, label: '29' },
+    { value: 30, label: '30' },
+    { value: 31, label: '31' },
+    { value: 32, label: '32' },
+    { value: 33, label: '33' },
+    { value: 34, label: '34' },
+    { value: 35, label: '35' },
+    { value: 36, label: '36' },
+    { value: 37, label: '37' },
+    { value: 38, label: '38' },
+    { value: 39, label: '39' },
+    { value: 40, label: '40' },
+    { value: 41, label: '41' },
+    { value: 42, label: '42' },
+    { value: 43, label: '43' },
+    { value: 44, label: '44' },
+    { value: 45, label: '45' },
+    { value: 46, label: '46' },
+    { value: 47, label: '47' },
+    { value: 48, label: '48' },
+    { value: 49, label: '49' },
+    { value: 50, label: '50' },
+    { value: 51, label: '51' },
+    { value: 52, label: '52' },
+    { value: 53, label: '53' },
+    { value: 54, label: '54' },
+    { value: 55, label: '55' },
+    { value: 56, label: '56' },
+    { value: 57, label: '57' },
+    { value: 58, label: '58' },
+    { value: 59, label: '59' },
+  ];
 
 
   columnDefs = [
@@ -98,6 +187,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         { make: 'Toyota', model: 'Celica', price: 35000 },
         { make: 'Ford', model: 'Mondeo', price: 32000 },
         { make: 'Porsche', model: 'Boxter', price: 72000 }
+    ];
+
+    booleanOptions = [
+      { label: 'Sí', value: true },
+      { label: 'No', value: false },
     ];
 
   // campaignOne: FormGroup;
@@ -113,13 +207,23 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   public expirationDate = false;
 
-  fecha_ini!: Date;
-  hora_ini!: Date;
-  fecha_fin!: Date;
-  hora_fin!: Date;
+  pngFechaIni!: Date;
+  pngHoraIni!: Date;
+  pngFechaFin!: Date;
+  pngHoraFin!: Date;
 
+  pngColorRuta: string = '#ff0000';
   dialogDisplay: boolean = false;
   loadingHistorial: boolean = false;
+  pngHoraIni2: number = 0;
+  pngMinIni: number = 0;
+  pngHoraFin2: number = 0;
+  pngMinFin: number = 0;
+
+  pngChkParadas: boolean = true;
+  pngChkTrama: boolean = false;
+  pngVelFecha: boolean = true;
+  pngGrafico: boolean = false;
 
 
   constructor(
@@ -155,10 +259,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const hoy = Date.now();
-    this.fecha_ini = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
-    this.fecha_fin = this.fecha_ini;
-    this.hora_ini = new Date('2018-03-12T00:00');
-    this.hora_fin = new Date('2018-03-12T00:00');
+    this.pngFechaIni = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
+    this.pngFechaFin = this.pngFechaIni;
+    this.pngHoraIni = new Date('2018-03-12T00:00');
+    this.pngHoraFin = new Date('2018-03-14T00:00');
     this.form.selectedRango = '0';
     //this.form.duracionParada = '60';
     // $( "#datepicker" ).datepicker();
@@ -380,19 +484,19 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         day: parseInt(fecha_hasta.format("DD")),
       }; */
 
-      this.fecha_ini = fecha_desde.toDate();
-      this.fecha_fin = fecha_hasta.toDate();
+      this.pngFechaIni = fecha_desde.toDate();
+      this.pngFechaFin = fecha_hasta.toDate();
 
-      console.log(this.fecha_ini);
-      console.log(this.fecha_fin);
+      console.log(this.pngFechaIni);
+      console.log(this.pngFechaFin);
 
       /* this.form.hora_desde  = '00';//{id: '00', name: '00'};
       this.form.min_desde   = '00';//{id: '00', name: '00'};
       this.form.hora_hasta  = '00';//{id: '00', name: '00'};
       this.form.min_hasta   = '00';//{id: '00', name: '00'}; */
 
-      this.hora_ini = new Date('2018-03-12T00:00');
-      this.hora_fin = new Date('2018-03-12T00:00');
+      this.pngHoraIni = new Date('2018-03-12T00:00');
+      this.pngHoraFin = new Date('2018-03-12T00:00');
   };
 
 
@@ -416,22 +520,22 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     let DDstr = "" + this.form.fecha_desde.day;
     console.log('Form', MDstr);
     console.log('Form', DDstr); */
-    let MDstr = "" + moment(this.fecha_ini).format("M");
-    let DDstr = "" + moment(this.fecha_ini).format("D");
-    let HMDstr = "" + moment(this.hora_ini).format("HH:mm:00");
+    let MDstr = "" + moment(this.pngFechaIni).format("M");
+    let DDstr = "" + moment(this.pngFechaIni).format("D");
+    let HMDstr = "" + moment(this.pngHoraIni).format("HH:mm:00");
     /* console.log('Date', MDstr);
     console.log('Date', DDstr); */
 
     /* let MHstr = "" + this.form.fecha_hasta.month;
     let DHstr = "" + this.form.fecha_hasta.day; */
-    let MHstr = "" + moment(this.fecha_fin).format("M");
-    let DHstr = "" + moment(this.fecha_fin).format("D");
-    let HMHstr = "" + moment(this.hora_fin).format("HH:mm:00");
+    let MHstr = "" + moment(this.pngFechaFin).format("M");
+    let DHstr = "" + moment(this.pngFechaFin).format("D");
+    let HMHstr = "" + moment(this.pngHoraFin).format("HH:mm:00");
 
     /* var M1 = this.form.fecha_desde.year+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.form.hora_desde + ':' + this.form.min_desde + ':00-05:00';
     var M2 = this.form.fecha_hasta.year+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.form.hora_hasta + ':' + this.form.min_hasta + ':00-05:00'; */
-    var M1 = moment(this.fecha_ini).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + HMDstr + '-05:00';
-    var M2 = moment(this.fecha_fin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + HMHstr + '-05:00';
+    var M1 = moment(this.pngFechaIni).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + HMDstr + '-05:00';
+    var M2 = moment(this.pngFechaFin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + HMHstr + '-05:00';
 
     var param = {
                 fecha_desde:M1, fecha_hasta:M2,

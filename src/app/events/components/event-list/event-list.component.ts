@@ -98,6 +98,7 @@ export class EventListComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    this.selectedEvent = null;
     this.spinner.show('loadingEventList');
     this.eventService.loadingEvents = true;
     this.eventService.loadingEventFilters = true;
