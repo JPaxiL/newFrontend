@@ -13,19 +13,28 @@ export class UserConfigComponent implements OnInit {
     new_pass_1: new FormControl('', Validators.required),
     new_pass_2: new FormControl('', Validators.required),
   });
+
+  pngNewPass: string = '';
+  pngNewPassR: string = '';
+
   mostrarDirVehicle: number = 0;
   mostrarIcono: number = 0;
   sizeIcono: number = 2;
-  configIcon = [
+  configIconOptions = [
     { id: 0, name: 'Ícono'},
     { id: 1, name: 'Flecha 1'},
     { id: 2, name: 'Flecha 2'},
   ];
-  sizeIcon = [
+  sizeIconOptions = [
     { id: 1, name: '1x'},
     { id: 2, name: '2x'},
     { id: 3, name: '3x'},
     { id: 4, name: '4x'},
+  ];
+
+  showVehicleDirOptions = [
+    { id: 1, name: 'Flecha de dirección' },
+    { id: 2, name: 'Cola de dirección' },
   ];
   
   constructor() { }

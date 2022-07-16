@@ -1,0 +1,48 @@
+.profile-picture-container{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    
+    .profile-picture{
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+    }
+
+    button.picture-update{
+        position: absolute;
+        border: none;
+        bottom: 0.5rem;
+        left: -0.5rem;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        background-color: var(--gl-blue);
+
+        &.btn-dark-hover::after{
+            border-radius: 50%;
+        }
+
+        svg{
+            fill: #fff;
+        }
+    }
+
+    span{
+        user-select: none;
+        font-size: 6rem;
+        line-height: 7.75rem;
+    }
+
+    img{
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.one-character-circled {
+    text-align: center;
+    background-color: var(--gl-danger-red);
+    color: #fff;
+    border-radius: 50%;
+}

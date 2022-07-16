@@ -12,7 +12,7 @@
             <form [formGroup]="alertForm" (submit)="onSubmit($event)">
                 <div class="gl-row-underline p-field">
                     <div class="col-12">
-                        <label>ALERTA</label>
+                        <label>ALERTA:</label>
                     </div>
                     <div class="col-12">
                         <p-dropdown [options]="events" [(ngModel)]="tipoAlerta" optionLabel="name" placeholder="Tipo de Alerta" optionValue="name" [appendTo]="'body'" (onChange)="chageAlertType()" [ngModelOptions]="{standalone: true}"></p-dropdown>
@@ -37,7 +37,7 @@
     
                 <div class="gl-row-underline p-field">
                     <div class="col-12">
-                        <label>NOMBRE</label>
+                        <label>NOMBRE:</label>
                     </div>
                     <div class="col-12">
                         <input type="text" placeholder="Nombre del evento" pInputText [(ngModel)]="nombreAlerta" [ngModelOptions]="{standalone: true}"/>
@@ -49,7 +49,7 @@
     
                 <div class="gl-row-underline p-field">
                     <div class="col-12">
-                        <label>VEHÍCULOS</label>
+                        <label>VEHÍCULOS:</label>
                     </div>
                     <div class="col-12">
                         <p-multiSelect
@@ -67,7 +67,7 @@
     
                 <div *ngIf="showGeocercas" class="gl-row-underline p-field">
                     <div class="col-12">
-                        <label>GEOCERCAS</label>
+                        <label>GEOCERCAS:</label>
                     </div>
                     <div class="col-12">
                         <p-multiSelect
@@ -140,7 +140,7 @@
                     <div class="row">
                         <div class="col p-field">
                             <div class="col-12">
-                                <label>EVENTO ACTIVADO</label>
+                                <label>EVENTO ACTIVADO:</label>
                             </div>
                             <div class="row">
                                 <div class="col-12">
@@ -150,7 +150,7 @@
                         </div>
                         <div class="col p-field">
                             <div class="col-12">
-                                <label>ALERTA DEL SISTEMA</label>
+                                <label>ALERTA DEL SISTEMA:</label>
                             </div>
                             <div class="row">
                                 <div class="col-12">
@@ -163,7 +163,7 @@
     
                 <div class="gl-row-underline p-field">
                     <div class="col-12">
-                        <label>TIPO DE SONIDO</label>
+                        <label>TIPO DE SONIDO:</label>
                     </div>
                     <div class="col-12">
                         <div class="p-field">
@@ -183,7 +183,7 @@
                 <div class="gl-row-underline p-field" *ngIf='showTiempoLimite'>
                     <div class="row">
                         <div class="col-12">
-                            <label>TIEMPO LÍMITE</label>
+                            <label>TIEMPO LÍMITE:</label>
                         </div>
                         <div class="col-12 gl-middleline p-field">
                             <div class="row">
@@ -203,7 +203,7 @@
                     <div class="row">
                         <div class="col p-field d-flex flex-column justify-content-center">
                             <label class="row">
-                                <span class="col-9 control-label align-middle">FIJAR TIEMPO</span>
+                                <span class="col-9 control-label align-middle">FIJAR TIEMPO:</span>
                                 <div class="col-2 d-flex flex-column justify-content-center">
                                     <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkFijarTiempo" [ngModelOptions]="{standalone: true}" [disabled]="chkFijarLimiteVelocidad"></p-checkbox>
                                 </div>
@@ -211,7 +211,7 @@
                         </div>
                         <div class="col p-field d-flex flex-column justify-content-center">
                             <label class="row">
-                                <span class="col-9 control-label align-middle">FIJAR LÍMITE DE VELOCIDAD</span>
+                                <span class="col-9 control-label align-middle">FIJAR LÍMITE DE VELOCIDAD:</span>
                                 <div class="col-2 d-flex flex-column justify-content-center">
                                     <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkFijarLimiteVelocidad" [ngModelOptions]="{standalone: true}" [disabled]="chkFijarTiempo"></p-checkbox>
                                 </div>
@@ -270,14 +270,12 @@
                     </div>
                 </div>
     
-                <div class="d-flex justify-content-center my-3">
-                    <div class="row w-100 justify-content-around">
-                        <div class="col-5">
-                            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-PLATFORMS')">Cancelar</button>
-                        </div>
-                        <div class="col-5">
-                            <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>
-                        </div>
+                <div class="row justify-content-center mt-4 panel-izq-container-footer">
+                    <div class="col-6">
+                        <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-PLATFORMS')">Cancelar</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>
                     </div>
                 </div>
 

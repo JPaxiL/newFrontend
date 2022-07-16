@@ -12,7 +12,7 @@
     <div class="panel-izq-form gl-form">
       <div class="gl-row-underline">
         <div class="col-12">
-            <label>NOMBRE</label>
+            <label>NOMBRE:</label>
         </div>
         <div class="col-12">
           <input type="text" class="form-control" id="geofence-name" name="nombre" [(ngModel)]="form.geopunto_name" required pInputText>
@@ -21,7 +21,7 @@
 
       <div class="gl-row-underline">
         <div class="col-12">
-          <label>COLOR</label>
+          <label>COLOR:</label>
         </div>
         <div class="row">
             <div class="col-12 d-flex">
@@ -36,7 +36,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-5 d-flex flex-column justify-content-center">
           <label class="row">
-            <label class="col-9 form-check-label">MOSTRAR GEOPUNTO</label>
+            <label class="col-9 form-check-label">MOSTRAR GEOPUNTO:</label>
             <div class="col-2 d-flex flex-column justify-content-center">
               <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkMostrarGeopunto" [ngModelOptions]="{standalone: true}"></p-checkbox>
             </div>
@@ -44,7 +44,7 @@
         </div>
         <div class="col-5 d-flex flex-column justify-content-center">
           <label class="row">
-            <label class="col-9 form-check-label">MOSTRAR NOMBRE</label>
+            <label class="col-9 form-check-label">MOSTRAR NOMBRE:</label>
             <div class="col-2 d-flex flex-column justify-content-center">
               <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkMostrarNombre" [ngModelOptions]="{standalone: true}"></p-checkbox>
             </div>
@@ -52,14 +52,12 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center my-3">
-        <div class="row w-100 justify-content-around">
-            <div class="col-5">
-                <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelar(form.geopunto_id)">Cancelar</button>
-            </div>
-            <div class="col-5">
-                <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickGuardar(form.geopunto_id)">Guardar</button>
-            </div>
+      <div class="row justify-content-center mt-4 panel-izq-container-footer">
+        <div class="col-6">
+            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelar(form.geopunto_id)">Cancelar</button>
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickGuardar(form.geopunto_id)">Guardar</button>
         </div>
       </div>
 

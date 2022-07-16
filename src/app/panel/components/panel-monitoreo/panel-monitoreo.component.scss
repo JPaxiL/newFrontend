@@ -236,6 +236,12 @@
         }
       }
     }
+
+    .panel-izq-container-footer{
+      .col-6 {
+        max-width: 18rem;
+      }
+    }
   }
 
   /* Estilos de tablas en panel lateral */
@@ -635,7 +641,7 @@
 
 @media (max-width: 960px) {
   #dragbar {
-    width: 0.5rem;
+    width: 0.375rem;
   }
 }
 
@@ -643,12 +649,6 @@
   #panelMonitoreo {
     margin-top: var(--navbar-height);
     height: calc(100% - var(--navbar-height));
-  }
-}
-
-@media (max-width: 720px) {
-  #dragbar {
-    width: 0.75rem;
   }
 }
 

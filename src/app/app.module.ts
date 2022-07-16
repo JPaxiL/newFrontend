@@ -96,7 +96,6 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
-import { CredConfigComponent } from './profile-config/cred-config/cred-config.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -149,7 +148,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ListGeopointsComponent,
     ModalComponent,
     UserConfigComponent,
-    CredConfigComponent,
     Dashboard2Component,
     AreagraphsComponent,
 

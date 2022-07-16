@@ -38,7 +38,7 @@
 
 :root{
   font-size: 16px;
-  --gl-danger-red: #dc3545;
+  --gl-danger-red: #f9524d;
   --gl-purple-blue: #686c96;
   --gl-purple-blue-dark: #21265c;
   --gl-gray-blue: #8ca2c9;
@@ -49,7 +49,8 @@
   --gl-light-blue: #30a9d9 ;
   --gl-lighter-gray: #e3e3e3;
   --gl-light-blue-alpha: rgba(33,150,243,0.1);
-  --gl-light-blue-selected-alpha: rgba(33,150,243,0.4);
+  //--gl-light-blue-selected-alpha: rgba(33,150,243,0.4);
+  --gl-light-blue-selected-alpha: #bcdffb;
   --gl-light-gray: #f2f2f2;
   --gl-light-gray-hover: #dedede;
   --gl-gray: #c4c4c9;
@@ -204,13 +205,12 @@ div.leaflet-tooltip-own {
   outline: none !important;
   box-shadow: none !important;
 }
-.btn-navbar:focus:not(.btn-navbar.active, .show > .btn-navbar.dropdown-toggle){
+.btn-navbar:focus:not(.btn-navbar.active, .btn-navbar:active, .show > .btn-navbar.dropdown-toggle){
   color: #000;
   background: none;
 }
 
-
-li:hover .btn-navbar:not(.btn-navbar.active, .show > .btn-navbar.dropdown-toggle.active){
+li:hover .btn-navbar:not(.btn-navbar.active, .btn-navbar:active, .show > .btn-navbar.dropdown-toggle.active){
   background-color: var(--gl-light-gray-hover);
   border: none;
   color: #000000;
@@ -258,9 +258,10 @@ thead.visible-on-scroll {
   flex: none;
 }
 
-/* .dropdown-item.active{
+.dropdown-item.active,
+.dropdown-item:active{
   background-color: var(--gl-blue-dark);
-} */
+}
 
 p-dialog {
   &.error-dialog{
@@ -498,6 +499,7 @@ p-checkbox .p-checkbox-disabled > .p-checkbox-box{
     thead tr{
       background-color: var(--gl-lighter-gray);
       color: var(--gl-dark-gray-blue);
+      text-align: center;
     }
 
     tbody tr{

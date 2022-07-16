@@ -19,7 +19,6 @@ export class PanelService {
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'EVENT-USER', name:'Notificación de Eventos'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
-    { id:'CRED-CONFIG', name:'Configuración de Perfil'},
   );
 
   nombreComponente: string = '';
