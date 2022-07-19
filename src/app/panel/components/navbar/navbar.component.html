@@ -13,7 +13,7 @@
         </a>
       </div>
     </div>
-    
+
     <!-- EXPANDIDO -->
     <div class="collapse navbar-collapse justify-content-start" id="navbarSupportedContent">
       <ul class="navbar-nav h-100">
@@ -313,7 +313,7 @@
           </div>
           <span>Subcuentas</span>
         </li>
-        
+
         <li class="nav-item" [ngClass]="panelService.nombreComponente == 'EVENT-USER'? 'active': ''" (click)="panelService.clickShowPanel('EVENT-USER');">
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventSocketService.count">
@@ -402,14 +402,14 @@
             <span>Configuración</span>
           </button>
         </li> -->
-<!--         
+<!--
         <li ngbDropdown class="nav-item">
           <div class="d-flex justify-content-center">
             <button ngbDropdownToggle class="btn btn-navbar" [ngClass]="panelService.nombreComponente == 'CRED-CONFIG' || panelService.nombreComponente == 'USER-CONFIG'? 'active': ''">
               <i class="fa fa-cog" aria-hidden="true"></i>
             </button>
           </div>
-          <span id="span_config">Configuración</span>  
+          <span id="span_config">Configuración</span>
           <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
             <button ngbDropdownItem (click)="panelService.clickShowPanel('USER-CONFIG');">Configuración del Usuario</button>
             <button ngbDropdownItem (click)="panelService.clickShowPanel('CRED-CONFIG');">Configuración de Perfil</button>
@@ -630,7 +630,7 @@
             </button>
           </div>
         </li>
-        <li class="nav-item" title="Dashboard" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
+        <li class="nav-item" (click)="windowAccess.open('/dashboard');" title="Dashboard" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -727,7 +727,7 @@
             </button>
           </div>
         </li>
-        
+
         <li class="nav-item" [ngClass]="panelService.nombreComponente == 'EVENT-USER'? 'active': ''" (click)="panelService.clickShowPanel('EVENT-USER');" title="Notificaciones" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventSocketService.count">
@@ -814,7 +814,7 @@
             {{eventSocketService.count}}</span>
         </a>
       </div>
-      
+
       <div class="py-2 bd-highlight col d-flex" id="span_notif" style="margin-left: -0.5rem;">
         <div class="d-inline-block align-self-center">
           <span class="bd-highlight">
@@ -838,7 +838,7 @@
           <div class="user-menu-name text-ellipsis me-3">
             <span>{{ 'Nombre1' + ' ' + 'Apellido1' }}</span>
           </div>
-          <i class="fa fa-chevron-down" aria-hidden="true"></i>    
+          <i class="fa fa-chevron-down" aria-hidden="true"></i>
         </div>
         <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
 
@@ -1333,8 +1333,8 @@
           </button>
         </ul>
       </div>
-      
-      
+
+
       <!-- <div class="p-2 bd-highlight col">
         <div ngbDropdown class="d-inline-block">
           <button class="btn" id="userDropdown" ngbDropdownToggle>
