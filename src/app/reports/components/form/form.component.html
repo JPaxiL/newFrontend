@@ -63,7 +63,7 @@
           <div class="p-field">
             <label class="bg-subtitle" id="vehicle_label">Vehículos:</label>
             <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione..." (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
-            <div style="padding: 0px 0.3rem; margin: 0px; text-align: right;">
+            <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
               <label>
                 <p-checkbox [(ngModel)]="chkAllVehicles" [binary]="true" inputId="binary" (onChange)="selectAllVehicles(); validateForm();" [disabled]="!areVehiclesLoaded"></p-checkbox>
                 Todos
@@ -249,7 +249,7 @@
         <div class="p-field">
           <label class="bg-subtitle" id="zone_label">Geocercas :</label>
           <p-multiSelect [options]="zones" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();"></p-multiSelect>
-          <div style="padding: 0px 0.3rem; margin: 0px; text-align: right;">
+          <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
             <label>
               <p-checkbox [(ngModel)]="chkAllZones" [binary]="true" inputId="binary" (onChange)="selectAllZones(); validateForm();" [disabled]="!areZonesLoaded"></p-checkbox>
               Todos

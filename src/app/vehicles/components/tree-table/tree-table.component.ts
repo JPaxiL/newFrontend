@@ -18,6 +18,8 @@ export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
+  vehicleIconState: boolean = false;
+
   sortOrder: number=1;
   display: boolean = false;
   displayDelete: boolean = false;
@@ -64,10 +66,13 @@ export class TreeTableComponent implements OnInit {
     limit: true,
     gps: false,
     gsm: false,
-    trans: true,
+    trans: false,
     config: true,
     sort: 'asc'
   }
+
+  dummyPngCheckboxShowName: boolean = true;
+  dummyPngCheckboxFollow: boolean = false;
 
   @ViewChild('tt') tt!:any;
 
@@ -457,7 +462,8 @@ export class TreeTableComponent implements OnInit {
     //console.log('displaygroup true');
   }
   onClickSetting(e: string):void{
-    //console.log("clikc setting",e);
+    console.log("clikc setting",e);
+    console.log("clikc setting",this.setting[e]);
     this.setting[e] = !this.setting[e];
     if(this.setting[e]){
       this.column++;
@@ -485,6 +491,10 @@ export class TreeTableComponent implements OnInit {
   onTableGeneral(){
     this.vehicleService.listTable=0;
     this.vehicleService.clickListTable.emit(0);
+  }
+
+  onTableTransmision(){
+
   }
 
   public onQuickFilterChanged(data: any) {

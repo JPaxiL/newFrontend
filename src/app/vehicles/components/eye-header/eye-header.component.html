@@ -1,4 +1,4 @@
-<div *ngIf="value == true" class="">
+<!-- <div *ngIf="value == true" class="">
   <span (click)="onClickEye()" class="btn-label" style="cursor: pointer;">
     <i class="fas fa-eye ag-grid-header-icon"></i>
   </span>
@@ -7,4 +7,5 @@
   <span (click)="onClickEye()" class="btn-label" style="cursor: pointer;">
     <i class="fa fa-eye-slash ag-grid-header-icon"></i>
   </span>
-</div>
+</div> -->
+<p-inputSwitch [(ngModel)]="value" (onChange)="onClickEye()" ngDefaultControl></p-inputSwitch>

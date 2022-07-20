@@ -25,7 +25,7 @@ export class EyeHeaderComponent implements IHeaderAngularComp {
 
   onClickEye(){
     //console.log('all eye');
-    this.value = !this.value;
+    //this.value = !this.value;
     //console.log('params',this.params);
 
     const data = this.vehicleService.vehicles;

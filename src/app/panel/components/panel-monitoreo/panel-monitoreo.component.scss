@@ -258,6 +258,13 @@
     }
   }
 
+  td, th{
+    i.fa-pencil{
+      font-size: 0.875rem;
+      color: var(--gl-dark-gray-blue);
+    }
+  }
+
   .modal-footer > div > div:first-child,
   .p-dialog-footer > p-footer > div > div:first-child {
     > button.btn.btn-success:not(.not-cancel) {

@@ -56,7 +56,7 @@
               <td colspan="2">Geopunto</td>
               <td><span class="fa fa-id-card fa-lg"></span></td>
               <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
-              <td><span class="fa fa-wrench fa-lg"></span></td>
+              <td><span class="fa fa-pencil fa-lg"></span></td>
   
           </tr>
       </thead>
@@ -73,7 +73,7 @@
   
               <td class="text-center">
                 <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.geopunto_id)" >
-                  <div [ngStyle]="{'background-color': geo.trama.geopunto_color}" style="width: 15px;height: 15px;" class="geofence-color" ></div>
+                  <div [ngStyle]="{'background-color': geo.trama.geopunto_color}" class="geofence-color" ></div>
                 </button>
               </td>
   
@@ -88,7 +88,7 @@
               <td>
                 <div ngbDropdown container="body" class="d-inline-block" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
                   <button class="btn btn-xs btn-link" ngbDropdownToggle>
-                    <i class="fa fa-wrench fa-lg" style="font-size: 14px;"></i>
+                    <i class="fa fa-pencil fa-lg" style="font-size: 14px;"></i>
                   </button>
                   <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                     <div ngbDropdownItem (click)="clickConfigurarGeopunto(geo.trama.geopunto_id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>

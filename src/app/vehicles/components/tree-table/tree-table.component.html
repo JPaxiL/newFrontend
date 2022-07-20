@@ -149,66 +149,72 @@
             <div class="text-center pb-2 pt-1">
               Personalizar Panel
             </div>
-            <div class="container pt-2">
+            <div class="container pt-2 png-checkbox-container">
               <div>
-                <label>
-                  <input (click)="onClickSetting('eye')" style="padding: 5px" type="checkbox" checked>
+                <span (click)="onClickSetting('eye')">
+                  <p-checkbox [(ngModel)]="setting['eye']" [binary]="true"></p-checkbox>
                   Ver
-                </label>
+                </span>
               </div>
               <div>
                 <label>
-                  <input (click)="onClickSetting('imei')" style="padding: 5px" type="checkbox">
+                  <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
+                  Ícono de Vehículo
+                </label>
+              </div>
+              <div>
+                <span (click)="onClickSetting('imei')">
+                  <p-checkbox [(ngModel)]="setting['imei']" [binary]="true"></p-checkbox>
                   IMEI
-                </label>
+                </span>
               </div>
               <div>
-                <label>
-                  <input (click)="onClickSetting('vehicle')" type="checkbox" checked>
+                <span (click)="onClickSetting('vehicle')">
+                  <p-checkbox [(ngModel)]="setting['vehicle']" [binary]="true"></p-checkbox>
                   Vehículos
-                </label>
+                </span>
               </div>
               <div>
-                <label>
-                  <input (click)="onClickSetting('tag')" type="checkbox" checked>
+                <span (click)="onClickSetting('tag')">
+                  <p-checkbox [(ngModel)]="setting['tag']" [binary]="true"></p-checkbox>
                   Mostrar nombre
-                </label>
+                </span>
               </div>
               <div>
-                <label>
-                  <input (click)="onClickSetting('follow')" type="checkbox" checked>
+                <span (click)="onClickSetting('follow')">
+                  <p-checkbox [(ngModel)]="setting['follow']" [binary]="true"></p-checkbox>
                   Seguir Vehículo
-                </label>
+                </span>
               </div>
               <div>
-                <label>
-                  <input (click)="onClickSetting('limit')" type="checkbox" checked>
+                <span (click)="onClickSetting('limit')">
+                  <p-checkbox [(ngModel)]="setting['limit']" [binary]="true"></p-checkbox>
                   Limite de velocidad
-                </label>
+                </span>
               </div>
               <div>
-                <label>
-                  <input (click)="onClickSetting('gps')" type="checkbox" >
+                <span (click)="onClickSetting('gps')">
+                  <p-checkbox [(ngModel)]="setting['gps']" [binary]="true"></p-checkbox>
                   GPS
-                </label>
+                </span>
               </div>
               <div>
-                <label>
-                  <input (click)="onClickSetting('gsm')" type="checkbox" >
+                <span (click)="onClickSetting('gsm')">
+                  <p-checkbox [(ngModel)]="setting['gsm']" [binary]="true"></p-checkbox>
                   GSM
-                </label>
+                </span>
               </div>
-              <div>
-                <label>
-                  <input (click)="onClickSetting('trans')" type="checkbox" checked>
+              <!-- <div>
+                <span (click)="onClickSetting('trans')">
+                  <p-checkbox [(ngModel)]="setting['trans']" [binary]="true"></p-checkbox>
                   Transmisión
-                </label>
-              </div>
+                </span>
+              </div> -->
               <div>
-                <label>
-                  <input (click)="onClickSetting('config')" type="checkbox" checked>
+                <span (click)="onClickSetting('config')">
+                  <p-checkbox [(ngModel)]="setting['config']" [binary]="true"></p-checkbox>
                   Configurar
-                </label>
+                </span>
               </div>
               <div class="dropdown-divider"></div>
             </div>
@@ -221,6 +227,10 @@
             <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
               <i class="fas fa-list ag-grid-header-icon text-center" style="width: 20px;"></i>
               <span (click)="onTableGeneral()">Vista General</span>
+            </div>
+            <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+              <i class="fas fa-signal ag-grid-header-icon text-center" style="width: 20px;"></i>
+              <span (click)="onTableTransmision()">Vista por Transmisión*</span>
             </div>
             
           </div>
@@ -256,15 +266,16 @@
       <ng-template pTemplate="header" let-columns>
   
         <tr>
-          <th *ngIf="setting['eye']"><app-eye-header></app-eye-header></th>
-          <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th>
+          <th *ngIf="setting['eye']"><app-eye-header style="height: 1rem; display: flex;"></app-eye-header></th>
+          <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
+          <th *ngIf="setting['vehicle']"></th>
           <th *ngIf="setting['imei']" style="text-align: center; white-space: nowrap;">IMEI</th>
           <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
           <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
           <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
           <th *ngIf="setting['gps']" ><app-gps-header></app-gps-header></th>
           <th *ngIf="setting['gsm']" ><app-gsm-header></app-gsm-header></th>
-          <th *ngIf="setting['trans']"><app-transmission-header></app-transmission-header></th>
+          <!-- <th *ngIf="setting['trans']"><app-transmission-header></app-transmission-header></th> -->
           <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th>
   
         </tr>
@@ -356,30 +367,34 @@
             </div>
             <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
           </td>
-          <td *ngIf="setting['vehicle']" style="min-width: 215px;">
-            <div class="row">
-              <div class="col-3 icon-float-right p-0">
+          <td *ngIf="setting['vehicle']" style="min-width: 215px;" class="vehicle-column">
+            <div class="d-flex justify-content-center mx-2">
+              <div class="flex-none icon-float-right vehicle-icon me-2" *ngIf="vehicleIconState">
                 <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
               </div>
-              <div class="col-9 text-start">
-                <aside class="">
+              <div class="flex-grow-1 d-flex flex-column text-start vehicle-data" style="background-color:{{color[rowData['point_color']]}}">
+                <strong>{{rowData['name']}}</strong>
+                <span>{{rowData['dt_tracker']}}</span>
+                <!-- <aside class="">
                   {{rowData['name']}} <br>
                   <small>
                     {{rowData['dt_tracker']}}
                   </small>
-                </aside>
+                </aside> -->
               </div>
             </div>
           </td>
           <td *ngIf="setting['imei']">
             {{rowData['IMEI']}}
           </td>
-          <td *ngIf="setting['tag']">
-            <input type="checkbox" name="" value="" checked>
+          <td *ngIf="setting['tag']" class="inline-png-checkbox">
+            <!-- <input type="checkbox" name="" value="" checked> -->
+            <p-checkbox [(ngModel)]="dummyPngCheckboxShowName" [binary]="true"></p-checkbox>
           </td>
-          <td *ngIf="setting['follow']">
+          <td *ngIf="setting['follow']" class="inline-png-checkbox follow-column">
             <span  class="btn-label" title="Seguir vehículo">
-              <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i>
+              <!-- <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i> -->
+              <p-checkbox [(ngModel)]="dummyPngCheckboxFollow" [binary]="true"></p-checkbox>
             </span>
           </td>
           <td *ngIf="setting['limit']">
@@ -391,12 +406,11 @@
           <td *ngIf="setting['gsm']">
             <span class="btn-label"><i class="fa fa-wifi"></i></span>
           </td>
-          <td *ngIf="setting['trans']">
+          <!-- <td *ngIf="setting['trans']">
             <span class="btn-label">
               <i class="fa fa-circle" style="color:{{color[rowData['point_color']]}}"></i>
-              <!-- <i class="fa fa-circle" style="color:black"></i> -->
             </span>
-          </td>
+          </td> -->
           <td *ngIf="setting['config']" class="edit-column">
             <i (click)="onClickConfig(rowData)" class="fa fa-pencil"></i>
           </td>
