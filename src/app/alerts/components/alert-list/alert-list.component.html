@@ -75,16 +75,17 @@
           <td>{{ i + 1 }}</td>
           <td>{{ alert?.nombre }}</td>
           <td>{{ alert?.tipo }}</td>
-          <td>
-            <div  class="text-center">
-              <input type="checkbox" [(ngModel)]="alert.activo_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
-            </div>
+          <td class="text-center inline-png-checkbox">
+            <!-- <input type="checkbox" [(ngModel)]="alert.activo_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled /> -->
+            <p-checkbox [(ngModel)]="alert.activo_bol" [binary]="true" [disabled]="true"></p-checkbox>
           </td>
-          <td>
-            <input type="checkbox" [(ngModel)]="alert.sonido_sistema_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
+          <td class="text-center inline-png-checkbox">
+            <!-- <input type="checkbox" [(ngModel)]="alert.sonido_sistema_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled /> -->
+            <p-checkbox [(ngModel)]="alert.sonido_sistema_bol" [binary]="true" [disabled]="true"></p-checkbox>
           </td>
-          <td>
-            <input type="checkbox" [(ngModel)]="alert.notificacion_email_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled />
+          <td class="text-center inline-png-checkbox">
+            <!-- <input type="checkbox" [(ngModel)]="alert.notificacion_email_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled /> -->
+            <p-checkbox [(ngModel)]="alert.notificacion_email_bol" [binary]="true" [disabled]="true"></p-checkbox>      
           </td>
         </tr>
       </tbody>

@@ -1,13 +1,32 @@
 #tbl_geos{
   text-align: center;
+  thead th{
+    height: 2.5rem;
+    svg{
+      fill: var(--gl-dark-gray-blue);
+    }
+    i{
+      font-size: 1.25rem;
+      &.fa-pencil{
+        font-size: 1.125rem;
+      }
+    }
+  } 
+
   tbody td { 
     padding: 3px;
-    .geofence-color{
-      width: 1.5rem;
-      height: 1.5rem;
+    .geopoint-marker{
+      font-size: 1.625rem;
+      cursor: pointer;
     }
   }
 }
+
+.eye-column i,
+.edit-column i{
+  font-size: 1rem;
+}
+
 
 .resumen-tabla-geo{
   font-size: 0.875rem;

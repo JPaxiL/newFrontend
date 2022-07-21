@@ -113,4 +113,10 @@
     .show-vehicle-icon .ag-body-viewport[ref="eBodyViewport"] .vehicle-icon-column{
         display: block;
     }
+
+    ag-grid-angular app-limit-header{
+        svg{
+            width: 1.25rem;
+        }
+    }
 }

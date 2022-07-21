@@ -250,6 +250,10 @@
     font-size: 0.75rem;
     /* height: calc(100% - 4.375rem); */
     flex-grow: 1;
+
+    .eye-column{
+      color: var(--gl-light-blue);
+    }
   }
 
   tbody.p-treetable-tbody {
@@ -516,8 +520,8 @@
     }
 
     &.geofences-table-dropdown{
-      margin-top: 0.375rem;
-      margin-bottom: 0.5rem;
+      margin-top: -0.25rem;
+      margin-bottom: -0.25rem;
       margin-left: 1.5rem;
       margin-right: 0.75rem;
       --border-radius: 0.375rem;
@@ -544,7 +548,7 @@
       &[x-placement="right-top"]{
           &::after{
               left: 0.375rem;
-              top: 0.625rem;
+              top: 0rem;
               border-right: 0.625rem solid var(--gl-purple-blue);
           }
           
@@ -565,7 +569,7 @@
       &[x-placement="left-top"]{
           &::after{
               right: -0.375rem;
-              top: 0.625rem;
+              top: 0rem;
               border-left: 0.625rem solid var(--gl-purple-blue);
           }
           
@@ -586,7 +590,7 @@
       &[x-placement="right-bottom"]{
           &::after{
               left: 0.375rem;
-              bottom: 0.75rem;
+              bottom: 0rem;
               border-right: 0.625rem solid var(--gl-purple-blue);
           }
           
@@ -607,7 +611,7 @@
       &[x-placement="left-bottom"]{
           &::after{
               right: -0.375rem;
-              bottom: 0.75rem;
+              bottom: 0rem;
               border-left: 0.625rem solid var(--gl-purple-blue);
           }
 

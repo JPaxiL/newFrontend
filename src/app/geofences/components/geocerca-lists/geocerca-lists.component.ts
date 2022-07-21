@@ -23,6 +23,8 @@ export class GeocercaListsComponent implements OnInit {
   datosCargados = false;
   NomBusqueda = "";
 
+  eyeInputSwitch: boolean = true;
+
   constructor(
     public geofencesService: GeofencesService,
     public mapService: MapServicesService,
@@ -185,6 +187,9 @@ export class GeocercaListsComponent implements OnInit {
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
   }
 
+  onClickEye(){
+    
+  }
 
 
 }

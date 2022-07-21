@@ -22,7 +22,7 @@ export class FollowComponent implements OnInit {
   }
 
   onClick(){
-    this.params.value = !this.params.value;
+    /* this.params.value = !this.params.value; */
     this.followService.add(this.params.data);
 
   }

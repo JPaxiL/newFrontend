@@ -534,24 +534,26 @@ p-inputswitch{
       outline: none !important;
       box-shadow: none !important;
       &::before{
-        width: calc(var(--size-handler) * 50);
-        height: calc(var(--size-handler) * 50);
-        left: calc(var(--size-handler) * 10);
-        margin-top: calc(var(--size-handler) * -25)
+        width: calc(var(--size-handler) * 75);
+        height: calc(var(--size-handler) * 75);
+        left: calc(var(--size-handler) * -5);
+        margin-top: calc(var(--size-handler) * -37.5)
       }
     }
     
   }
   .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider{
-    background: #d7ead9;
+    /* background: #d7ead9; */
+    background: var(--gl-gray);
     &::before{
-      transform: translateX(calc(var(--size-handler) * 49));
+      transform: translateX(calc(var(--size-handler) * 73.5));
       background: var(--gl-light-blue);
     }
   }
 
   .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider{
-    background: #C1D2C3;
+    /* background: #C1D2C3; */
+    background: var(--gl-gray-hover);
   }
   /* .p-inputswitch{
     height: 0.875rem;
@@ -606,8 +608,8 @@ p-inputswitch{
         position: absolute;
         bottom: 0;
         left: 0;
-        width: calc(100% - 0.75rem);
-        margin: 0 0.375rem;
+        width: calc(100% - 1.25rem);
+        margin: 0 0.615rem;
         height: 1px;
         //background-color: #000;
         background-color: #e9ecef; //Same color as Treetable border bottom

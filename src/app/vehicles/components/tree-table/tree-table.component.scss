@@ -207,6 +207,13 @@ p {
             * > span > i {
                 color: #fff !important;
             } */
+            i.ag-grid-header-icon{
+                font-size: 1.25rem;
+                &.fa-crosshairs,
+                &.fa-pencil{
+                    font-size: 1.125rem;
+                }
+            }
         }
     }
 

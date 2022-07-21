@@ -42,21 +42,24 @@
   <div class="panel-izq-table-container">
     <table id="tbl_geos">
       <colgroup>
-        <col width="7%" />
-        <col width="7%" />
-        <col width="56%" />
-        <col width="20%" />
+        <col width="15%" />
         <col width="10%" />
+        <col width="40%" />
+        <col width="20%" />
+        <col width="20%" />
   
       </colgroup>
       <thead class="visible-on-scroll">
           <tr>
-              <td><span class="fa fa-eye fa-lg"></span></td>
+              <th>
+                <!-- <i class="fa fa-eye fa-lg"></i> -->
+                <p-inputSwitch [(ngModel)]="eyeInputSwitch" (onChange)="onClickEye()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
+              </th>
               <!-- <td></td> -->
-              <td colspan="2">Geopunto</td>
-              <td><span class="fa fa-id-card fa-lg"></span></td>
+              <th colspan="2">Geopunto</th>
+              <th><i class="fa fa-id-card fa-lg"></i></th>
               <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
-              <td><span class="fa fa-pencil fa-lg"></span></td>
+              <th><i class="fa fa-pencil fa-lg"></i></th>
   
           </tr>
       </thead>
@@ -65,31 +68,34 @@
           <!-- <tr *ngFor="let geo of tblDataGeo;let indice=index" > -->
           <tr *ngFor="let geo of geopointsService.tblDataGeo;let indice=index" >
   
-              <td>
-                <button class="btn btn-xs btn-link p-n" (click)="clickShow(geo.trama.geopunto_id)">
-                  <i class="fa fa-lg" [ngClass]="{'far fa-eye': geo.trama.geopunto_visible === 'true', 'far fa-eye-slash' : geo.trama.geopunto_visible === 'false'}" style="font-size: 14px;" ></i>
+              <td >
+                <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShow(geo.trama.geopunto_id)">
+                  <i [ngClass]="{'fas fa-eye': geo.trama.geopunto_visible === 'true', 'far fa-eye-slash' : geo.trama.geopunto_visible === 'false'}"></i>
                 </button>
               </td>
   
               <td class="text-center">
-                <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.geopunto_id)" >
-                  <div [ngStyle]="{'background-color': geo.trama.geopunto_color}" class="geofence-color" ></div>
-                </button>
+                <i [ngStyle]="{'color': geo.trama.geopunto_color}" (click)="clickLocate(geo.trama.geopunto_id)" class="fa fa-map-marker geopoint-marker"></i>
+                <!-- <button class="btn btn-xs btn-link p-n geopoint-color" (click)="clickLocate(geo.trama.geopunto_id)" >
+                  <i [ngStyle]="{'background-color': geo.trama.geopunto_color}" class=" fa fa-map-marker"></i>
+                </button> -->
               </td>
   
               <td><span class="d-flex text-start">{{geo.trama.geopunto_name}}</span></td>
   
-              <td>
-                <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.geopunto_id)"  [(ngModel)]="geo.trama.geopunto_nombre_visible_bol">
+              <td class="inline-png-checkbox text-center">
+                <!-- <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.geopunto_id)"  [(ngModel)]="geo.trama.geopunto_nombre_visible_bol"> -->
+                <p-checkbox [(ngModel)]="geo.trama.geopunto_nombre_visible_bol" (onChange)="clickShowNameGeocerca(geo.trama.geopunto_id)" [binary]="true"></p-checkbox>
               </td>
   
               <!-- <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td> -->
   
               <td>
-                <div ngbDropdown container="body" class="d-inline-block" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
-                  <button class="btn btn-xs btn-link" ngbDropdownToggle>
-                    <i class="fa fa-pencil fa-lg" style="font-size: 14px;"></i>
-                  </button>
+                <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+                  <!-- <button class="btn btn-xs btn-link edit-column" ngbDropdownToggle>
+                    <i class="fa fa-pencil fa-lg"></i>
+                  </button> -->
+                  <i class="fa fa-pencil" ngbDropdownToggle></i>
                   <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                     <div ngbDropdownItem (click)="clickConfigurarGeopunto(geo.trama.geopunto_id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
                     <div ngbDropdownItem (click)="clickEliminarGeopunto($event, geo.trama.geopunto_id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
