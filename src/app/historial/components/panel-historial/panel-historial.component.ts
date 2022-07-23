@@ -86,113 +86,74 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     {id : '8' , name: 'Mes pasado'}
   ];
 
-  hourPicker = [
-    { value: 0, label: '00' },
-    { value: 1, label: '01' },
-    { value: 2, label: '02' },
-    { value: 3, label: '03' },
-    { value: 4, label: '04' },
-    { value: 5, label: '05' },
-    { value: 6, label: '06' },
-    { value: 7, label: '07' },
-    { value: 8, label: '08' },
-    { value: 9, label: '09' },
-    { value: 10, label: '10' },
-    { value: 11, label: '11' },
-    { value: 12, label: '12' },
-    { value: 13, label: '13' },
-    { value: 14, label: '14' },
-    { value: 15, label: '15' },
-    { value: 16, label: '16' },
-    { value: 17, label: '17' },
-    { value: 18, label: '18' },
-    { value: 19, label: '19' },
-    { value: 20, label: '20' },
-    { value: 21, label: '21' },
-    { value: 22, label: '22' },
-    { value: 23, label: '23' },
-  ];
-
-  minPicker = [
-    { value: 0, label: '00' },
-    { value: 1, label: '01' },
-    { value: 2, label: '02' },
-    { value: 3, label: '03' },
-    { value: 4, label: '04' },
-    { value: 5, label: '05' },
-    { value: 6, label: '06' },
-    { value: 7, label: '07' },
-    { value: 8, label: '08' },
-    { value: 9, label: '09' },
-    { value: 10, label: '10' },
-    { value: 11, label: '11' },
-    { value: 12, label: '12' },
-    { value: 13, label: '13' },
-    { value: 14, label: '14' },
-    { value: 15, label: '15' },
-    { value: 16, label: '16' },
-    { value: 17, label: '17' },
-    { value: 18, label: '18' },
-    { value: 19, label: '19' },
-    { value: 20, label: '20' },
-    { value: 21, label: '21' },
-    { value: 22, label: '22' },
-    { value: 23, label: '23' },
-    { value: 24, label: '24' },
-    { value: 25, label: '25' },
-    { value: 26, label: '26' },
-    { value: 27, label: '27' },
-    { value: 28, label: '28' },
-    { value: 29, label: '29' },
-    { value: 30, label: '30' },
-    { value: 31, label: '31' },
-    { value: 32, label: '32' },
-    { value: 33, label: '33' },
-    { value: 34, label: '34' },
-    { value: 35, label: '35' },
-    { value: 36, label: '36' },
-    { value: 37, label: '37' },
-    { value: 38, label: '38' },
-    { value: 39, label: '39' },
-    { value: 40, label: '40' },
-    { value: 41, label: '41' },
-    { value: 42, label: '42' },
-    { value: 43, label: '43' },
-    { value: 44, label: '44' },
-    { value: 45, label: '45' },
-    { value: 46, label: '46' },
-    { value: 47, label: '47' },
-    { value: 48, label: '48' },
-    { value: 49, label: '49' },
-    { value: 50, label: '50' },
-    { value: 51, label: '51' },
-    { value: 52, label: '52' },
-    { value: 53, label: '53' },
-    { value: 54, label: '54' },
-    { value: 55, label: '55' },
-    { value: 56, label: '56' },
-    { value: 57, label: '57' },
-    { value: 58, label: '58' },
-    { value: 59, label: '59' },
-  ];
-
-
   columnDefs = [
-        { field: 'make' },
-        { field: 'model' },
-        { field: 'price' }
-    ];
+    { field: 'make' },
+    { field: 'model' },
+    { field: 'price' }
+  ];
 
-    rowData = [
-        { make: 'Toyota', model: 'Celica', price: 35000 },
-        { make: 'Ford', model: 'Mondeo', price: 32000 },
-        { make: 'Porsche', model: 'Boxter', price: 72000 }
-    ];
+  rowData = [
+    { make: 'Toyota', model: 'Celica', price: 35000 },
+    { make: 'Ford', model: 'Mondeo', price: 32000 },
+    { make: 'Porsche', model: 'Boxter', price: 72000 }
+  ];
 
-    booleanOptions = [
-      { label: 'Sí', value: true },
-      { label: 'No', value: false },
-    ];
+  booleanOptions = [
+    { label: 'Sí', value: true },
+    { label: 'No', value: false },
+  ];
+
+  selectedEvents: any = [];
+  chkAllEvents: boolean = false;
+   eventList = [
+    {
+      label: 'Evento GPS',
+      items: [
+        { name: 'Batería baja', value: false },
+        { name: 'Batería desconectada', value: false },
+        { name: 'Aceleración brusca', value: false },
+        { name: 'Frenada brusca', value: false },
+        { name: 'Bloqueo de Transmisión', value: false },
+        { name: 'SOS', value: false },
+        { name: 'Remolque', value: false },
+        { name: 'Parada', value: false },
+        { name: 'Motor Encendido', value: false },
+        { name: 'Motor Apagado', value: false },
+      ]
+    },
+    {
+      label: 'Evento Plataforma',
+      items: [
+        { name: 'Zona de Entrada', value: false },
+        { name: 'Zona de Salida', value: false },
+        { name: 'Tiempo de Estadía en Zona', value: false },
+        { name: 'Parad en Zona no Autorizada', value: false },
+        { name: 'Vehículo en movimiento sin programación', value: false },
+        { name: 'Infracción', value: false },
+        { name: 'Anticolisión frontal', value: false },
+        { name: 'Colisión con Peatones', value: false },
+        { name: 'No Rostro', value: false },
+        { name: 'Fatiga Extrema', value: false },
+        { name: 'Desvío de carril hacia la izquierda', value: false },
+        { name: 'Desvío de carril hacia la derecha', value: false },
+        { name: 'Bloqueo de visión del mobileye', value: false },
+      ]
+    },
+    {
+      label: 'Evento Accesorios',
+      items: [
+        { name: 'Posible Fatiga', value: false },
+        { name: 'Distracción', value: false },
+        { name: 'Alcoholemia', value: false },
+      ]
+    },
+    {
+      label: 'Evento Plataforma',
+      items: [
+        { name: 'Exceso de Velocidad', value: false },
+      ]
+    }
+   ];
 
   // campaignOne: FormGroup;
   // campaignTwo: FormGroup;
@@ -415,7 +376,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
   changeShowingEventos() {
-    console.log(this.form.chckEvento);
+    //console.log(this.form.chckEvento);
+    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items].length;
     // if (!this.form.chckEvento) {
     //   this.showEventos = false;
     // }
@@ -424,7 +386,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     //   var iH  = dH[0].index_historial; //indices de paradas y movimientos
     //   this.mostrar_tabla(dH,iH);
     // }
-    this.changeShowingParadasHistorial()
+    this.changeShowingParadasHistorial();
   }
 
 
@@ -1648,6 +1610,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         g = '' + c + ' s'
     }
     return g;
+  }
+
+  onChkAllEvents(){
+    this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items]: [];
   }
 
 

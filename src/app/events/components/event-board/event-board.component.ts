@@ -10,7 +10,7 @@ export class EventBoardComponent implements OnInit {
   constructor(private eventService: EventService) { }
 
   ngOnInit(): void {
-    this.eventService.initialize();
+    //this.eventService.initialize();
   }
 
 }

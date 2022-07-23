@@ -42,8 +42,13 @@
       <tbody>
         <ng-container *ngFor="let event of events">
         <!-- <ng-container *ngFor="let event of eventService.events"> -->
-          <tr #currRow (click)="switchEventOnMap(event, currRow)">
-            <td>{{ event.evento }}</td>
+          <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="{ 'new-event': isNewEvent(event.id) }" [class]="event.clase">
+          <!-- <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="eventDataToClass(event.evento, event.id)"> -->
+            <td>
+              <div class="event-column">
+                <span>{{ event.evento }}</span>
+              </div>
+            </td>
             <td>{{ event.nombre }}</td>
             <td>{{ event.nombre_objeto }}</td>
             <td>{{ event.fecha_tracker }}</td>

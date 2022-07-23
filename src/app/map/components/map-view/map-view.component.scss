@@ -2,6 +2,123 @@
     height: 100%;
   }
 
+  ::ng-deep{
+    /* PROPUESTAS de COLOR*/
+    .fatiga{
+      --event-main-color: #546e7a;
+    }
+    .somnolencia{
+      --event-main-color: #757575;
+    }
+    .desvio-carril-izq, .desvio-carril-izquierda{
+      --event-main-color: #006978;
+    }
+    .desvio-carril-der, .desvio-carril-derecha{
+      --event-main-color: #387002;
+    }
+    .bloqueo-vision-mobileye{
+      --event-main-color: #424242;
+    }
+    .colision-peatones{
+      --event-main-color: #ba000d;
+    }
+
+    .colision-delantera{
+      --event-main-color: #ba000d;
+    }
+
+    .posible-fatiga{
+      --event-main-color: #8d6e63;
+    }
+
+    .fatiga-extrema{
+      --event-main-color: #c53d13;
+    }
+
+    .frenada-brusca{
+      --event-main-color: #9e00c5;
+    }
+
+    .aceleracion-brusca{
+      --event-main-color: #7c4dff;
+    }
+
+    .vehiculo-sin-programacion{
+      --event-main-color: #b4004e;
+    }
+
+    .mantenimiento-correctivo-realizado{
+      --event-main-color: #7e57c2;
+    }
+
+    .mantenimiento-preventivo-realizado{
+      --event-main-color: #5c6bc0;
+    }
+
+    .bateria-desconectada{
+      --event-main-color: #f44336;
+    }
+
+    .motor-encendido{
+      --event-main-color: #039be5;
+    }
+
+    .motor-apagado{
+      --event-main-color: #757575;
+    }
+
+    .distraccion{
+      --event-main-color: #546e7a;
+    }
+
+
+    /* COLORES DEFINIDOS */
+    .zona-entrada, .zona-de-entrada{
+      --event-main-color: #F58634;
+    }
+
+    .zona-salida, .zona-de-salida{
+      --event-main-color: #DFC136;
+    }
+
+    .tiempo-estadia-zona{
+      --event-main-color: #72BF88;
+    }
+
+    .parada-zona-no-autorizada, .parada-en-zona-no-autorizada{
+      --event-main-color: #00A3E4;
+    }
+
+    .mantenimiento-correctivo{
+      --event-main-color: #7C7BBB;
+    }
+
+    .mantenimiento-preventivo{
+      --event-main-color: #264E86;
+    }
+
+    .infraccion{
+      --event-main-color: #373435;
+    }
+
+    .sos-event, .sos{
+      --event-main-color: #A9BF45;
+    }
+
+    .exceso-velocidad{
+      --event-main-color: #EE3142;
+    }
+
+    .tiempo-estadia-zona, .tiempo-de-estadia-en-zona{
+      --event-main-color: #72BF88;
+    }
+
+    .default-event{
+      --event-main-color: #bdbdbd;
+    }
+
+  }
+
   :host ::ng-deep {
 
     .leaflet-top.leaflet-left .leaflet-control-zoom.leaflet-bar.leaflet-control {
@@ -17,8 +134,8 @@
     /* PROPUESTAS */
     .fatiga,
     .somnolencia,
-    .desvio-carril-izq,
-    .desvio-carril-der,
+    .desvio-carril-izq, .desvio-carril-izquierda,
+    .desvio-carril-der, .desvio-carril-derecha,
     .bloqueo-vision-mobileye,
     .colision-peatones,
     .colision-delantera,
@@ -35,229 +152,36 @@
     .distraccion,
 
     /* DEFINIDOS */
-    .zona-entrada,
-    .zona-salida,
-    .tiempo-estadia-zona,
-    .parada-zona-no-autorizada,
+    .zona-entrada, .zona-de-entrada,
+    .zona-salida, .zona-de-salida,
+    .tiempo-estadia-zona, .tiempo-de-estadia-en-zona,
+    .parada-zona-no-autorizada, .parada-en-zona-no-autorizada,
     .mantenimiento-correctivo,
     .mantenimiento-preventivo,
     .infraccion,
-    .sos-event,
+    .sos-event, .sos,
     .exceso-velocidad,
-    .tiempo-estadia-zona{
+    .tiempo-estadia-zona,
+    
+    .default-event{
 
       .leaflet-popup-content-wrapper,
-      a.leaflet-popup-close-button{
+      a.leaflet-popup-close-button,
+      td a{
         color: #fff;
       }
 
-      td a {
-        color: #fff;
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip-container > .leaflet-popup-tip{
+        background-color: var(--event-main-color);
       }
       
     }
 
-    .fatiga{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #546e7a;
-      }
-    }
-
-    .somnolencia{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #757575;
-      }
-    }
-
-    .desvio-carril-izq{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #006978;
-      }
-    }
-
-    .desvio-carril-der{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #387002;
-      }
-    }
-
-    .bloqueo-vision-mobileye{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #424242;
-      }
-    }
-
-    .colision-peatones{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #ba000d;
-      }
-    }
-
-    .colision-delantera{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #ba000d;
-      }
-    }
-
-    .posible-fatiga{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #8d6e63;
-      }
-    }
-
-    .fatiga-extrema{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #c53d13;
-      }
-    }
-
-    .frenada-brusca{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #9e00c5;
-      }
-    }
-
-    .aceleracion-brusca{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #7c4dff;
-      }
-    }
-
-    .vehiculo-sin-programacion{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #b4004e;
-      }
-    }
-
-    .mantenimiento-correctivo-realizado{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #7e57c2;
-      }
-    }
-
-    .mantenimiento-preventivo-realizado{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #5c6bc0;
-      }
-    }
-
-    .bateria-desconectada{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #f44336;
-      }
-    }
-
-    .motor-encendido{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #039be5;
-      }
-    }
-
-    .motor-apagado{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #757575;
-      }
-    }
-
-    .distraccion{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #546e7a;
-      }
-    }
-
-
-    
-    .zona-entrada{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #F58634;
-      }
-    }
-
-    .zona-salida{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #DFC136;
-      }
-    }
-
-    .tiempo-estadia-zona{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #72BF88;
-      }
-    }
-
-    .parada-zona-no-autorizada{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #00A3E4;
-      }
-    }
-
-    .mantenimiento-correctivo{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #7C7BBB;
-      }
-    }
-
-    .mantenimiento-preventivo{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #264E86;
-      }
-    }
-
-    .infraccion{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #373435;
-      }
-    }
-
-    .sos-event{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #A9BF45;
-      }
-    }
-
-    .exceso-velocidad{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #EE3142;
-      }
-    }
-
-    .tiempo-estadia-zona{
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: #72BF88;
-      }
-    }
-
     .default-event{
       .leaflet-popup-content-wrapper,
-      a.leaflet-popup-close-button{
+      a.leaflet-popup-close-button,
+      td a{
         color: #000;
       }
     }
@@ -296,9 +220,5 @@
         border-radius: 1rem; 
       }
     }
-
-    
-
-    
 
   }
