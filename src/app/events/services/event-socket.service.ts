@@ -32,7 +32,6 @@ export class EventSocketService extends Socket {
 
     this.eventService.panelNotifKey = + new Date();
     console.log('Panel notif first key on service', this.eventService.panelNotifKey); 
-    console.log('Panel notif first key on service', new Date ( + this.eventService.panelNotifKey)); 
   }
 
   public listen() {

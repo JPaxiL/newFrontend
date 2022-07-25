@@ -42,7 +42,7 @@
       <tbody>
         <ng-container *ngFor="let event of events">
         <!-- <ng-container *ngFor="let event of eventService.events"> -->
-          <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="{ 'new-event': isNewEvent(event.id) }" [class]="event.clase">
+          <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="{ 'new-event': isNewEvent(event.id), 'tr-selected': event.id == eventService.activeEvent.id }" [class]="event.clase">
           <!-- <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="eventDataToClass(event.evento, event.id)"> -->
             <td>
               <div class="event-column">

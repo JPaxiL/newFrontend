@@ -17,7 +17,7 @@ export class EventListComponent implements OnInit {
 
   tipoEvento: any = [];
   selectedEvent: any = {};
-  activeEventLayer: any = false;
+  activeEvent: any = false;
 
   panelNotifKey: Number = 0;
   panelNotifKeyBeforeOpening: Number = 0;
@@ -102,7 +102,7 @@ export class EventListComponent implements OnInit {
   async loadFilterData(){
     this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
     this.filterLoaded = true;
-    console.log('Filtros cargados');
+    //console.log('Filtros cargados');
     this.showEventPanel(this.panelNotifKey == this.eventService.panelNotifKey, this.filterLoaded, this.eventsLoaded);
     
     /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
@@ -111,13 +111,14 @@ export class EventListComponent implements OnInit {
   async loadEventTableData(){
     this.events = await this.eventService.getAll();
     this.eventsLoaded = true;
-    console.log('Tabla cargada');
+    //console.log('Tabla cargada');
     this.showEventPanel(this.panelNotifKey == this.eventService.panelNotifKey, this.filterLoaded, this.eventsLoaded);
   }
 
   public showEvent(event:any){
-    if(this.activeEventLayer) {
-      this.hideEvent(this.activeEventLayer);
+    if(this.eventService.activeEvent) {
+      this.hideEvent(this.eventService.activeEvent);
+      //console.log('Ocultar evento previo');
     }
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
@@ -128,28 +129,21 @@ export class EventListComponent implements OnInit {
       minWidth: 250,
       maxWidth: 350,
     } );
-    this.activeEventLayer = event;
+    this.eventService.activeEvent = event;
     event.layer.addTo(this.mapService.map).openPopup();
   }
 
   public hideEvent(event:any){
     this.mapService.map.removeLayer(event.layer);
-    this.activeEventLayer = false;
+    this.eventService.activeEvent = false;
   }
 
   public switchEventOnMap(event: any, currentRow: HTMLElement){
-    if(currentRow.classList.contains('tr-selected')){
-      currentRow.classList.remove('tr-selected');
-      this.hideEvent(event);
-      this.eventService.openEventIdOnMap = 0;
+    if(event.id == this.eventService.activeEvent.id){
+      this.hideEvent(this.eventService.activeEvent);
     } else {
-      for(let i = 0; i < document.querySelectorAll('tr.tr-selected').length; i++){
-        document.querySelectorAll('tr.tr-selected')[i].classList.remove('tr-selected');
-      }
-      currentRow.classList.add('tr-selected');
       currentRow.classList.add('watched-event');
-      this.eventService.openEventIdOnMap = event.id;
-      console.log('Mostrando evento con ID: ', event.id);
+      //console.log('Mostrando evento con ID: ', event.id);
       this.showEvent(event); 
 
       //Si el evento clickeado es una de las nuevas notificaciones, sacarlo del array de nuevas notificaciones
@@ -195,12 +189,12 @@ export class EventListComponent implements OnInit {
     if(keyComparison && filterLoaded && eventsLoaded){
       this.eventService.attachClassesToEvents();
       this.spinner.hide('loadingEventList');
-      console.log(this.panelNotifKey);
-      console.log(this.eventService.panelNotifKey);
+      //console.log(this.panelNotifKey);
+      //console.log(this.eventService.panelNotifKey);
       this.clearNotifCounterOnClose = true;
-      console.log('Ocultar Spinner');
+      //console.log('Ocultar Spinner');
     } else {
-      console.log('Failed attempt');
+      //console.log('Failed attempt');
     }
   }
 

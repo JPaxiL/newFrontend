@@ -28,6 +28,7 @@ export class EventService {
   public panelNotifKey: Number = 0;
   public classFilterArray: any = [];
   public openEventIdOnMap: Number = 0;
+  public activeEvent: any = false;
 
   constructor(
     private http: HttpClient,
