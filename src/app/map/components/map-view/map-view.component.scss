@@ -3,6 +3,45 @@
   }
 
   ::ng-deep{
+    .leaflet-popup-content{
+      &.leaflet-popup-scrolled{
+        border-top: none;
+        border-bottom: none;
+      }
+
+      .infovehiculos{
+        margin: -0.125rem 0rem;
+        font-size: 0.875rem;
+        td > .dot-vehicle{
+          border-radius: 50%; 
+          width: 10px; 
+          height: 10px;
+          margin-right: 0.375rem;
+          &.green{
+            background-color: green;
+          }
+          &.blue{
+            background-color: blue;
+          }
+          &.purple{
+            background-color: purple;
+          }
+          &.black{
+            background-color: black;
+          }
+          &.orange{
+            background-color: orange;
+          }
+          &.red{
+            background-color: red;
+          }
+          &.transm-color-not-defined{
+            background-color: white;
+          }
+        }
+      }
+    }
+
     /* PROPUESTAS de COLOR*/
     .fatiga{
       --event-main-color: #546e7a;

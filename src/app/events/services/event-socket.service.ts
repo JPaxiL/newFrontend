@@ -31,7 +31,7 @@ export class EventSocketService extends Socket {
     this.user_id = localStorage.getItem('user_id');
 
     this.eventService.panelNotifKey = + new Date();
-    console.log('Panel notif first key on service', this.eventService.panelNotifKey); 
+    //console.log('Panel notif first key on service', this.eventService.panelNotifKey); 
   }
 
   public listen() {
@@ -54,12 +54,11 @@ export class EventSocketService extends Socket {
         let newEvent = this.setLayer(even);
         this.eventService.addNewEvent(newEvent);
 
-        //console.log('new notification counter', this.count);
         this.new_notif_stack.push(even.id);
         this.updateNotifCounter();
-        console.log('new notification stack', this.new_notif_stack);
+        //console.log('new notification stack', this.new_notif_stack);
         //console.log('new notification stack counter', this.new_notif_stack.length);
-        console.log('new notification Event Content en Socket', even);
+        //console.log('new notification Event Content en Socket', even);
         //console.log('new notification time', new Date());
       }
     });

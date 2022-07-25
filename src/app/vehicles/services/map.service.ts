@@ -329,6 +329,16 @@ export class MapService {
     const e = this.vehicleService.vehicles;
     let aux_cont = 0;
 
+    const transmissionStatusColor: any = {
+      10:"green",
+      20:"blue",
+      30:"purple",
+      40:"black",
+      50:"orange",
+      60:"red",
+      100:"green"
+    }
+
     this.markerClusterGroup.clearLayers();
     // for (const layer in this.marker){
     //   // this.map.removeLayer(this.marker[layer]);
@@ -375,8 +385,11 @@ export class MapService {
                       //console.log('array'+array);
                       for (const i in array) {
                         var aaa = array[i]['_tooltip']['_content'];
-                        //console.log(aaa);
-                        lista = lista + '<tr style="margin:10px;"><td><div style="border-radius: 50%; width: 10px; height: 10px; "></div></td><td style="font-size: 14px;">' + aaa + '</td></tr>';
+                        console.log(aaa);
+                        console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+                        var vehicleData = e.find((vehicle: { name: string; }) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+                        var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color]: 'transm-color-not-defined'
+                        lista = lista + '<tr><td><div class="dot-vehicle ' + transmissionColorClass + '"></div></td><td>' + aaa + '</td></tr>';
                       }
                       // for (var i=0; i<array.length; i++){
                       //     var aaa = array[i].label._content.split(' <');

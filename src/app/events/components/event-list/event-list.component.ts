@@ -74,7 +74,7 @@ export class EventListComponent implements OnInit {
     this.filterLoaded = false;
     this.eventsLoaded = false;
     this.panelNotifKeyBeforeOpening = this.eventService.panelNotifKey;
-    console.log('Panel notif key before opening', this.panelNotifKeyBeforeOpening);
+    //console.log('Panel notif key before opening', this.panelNotifKeyBeforeOpening);
     this.panelNotifKey = + new Date();
     this.eventService.panelNotifKey = this.panelNotifKey;
 
