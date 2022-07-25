@@ -1,3 +1,29 @@
+::ng-deep .p-dialog{
+    .p-dialog-header{
+        justify-content: center;
+        padding-bottom: 0;
+        background-color: #fff !important;
+        color: #000;
+        height: fit-content !important;
+        svg{
+            fill: var(--gl-blue-dark);
+        }
+    }
+    .p-dialog-content{
+        padding-top: 0.375rem !important;
+    }
+
+    p-footer{
+        button{
+            width: 8rem !important;
+        }
+    }
+}
+
+.logout-modal-header{
+    fill: red;
+}
+
 nav > .container-fluid > div {
     pointer-events: auto;
 }
@@ -352,10 +378,6 @@ i.fa + span {
 }
 
 @media (max-width: 1770px) {
-    .user-menu-container {
-        /* margin-left: 0.125rem; */
-    }
-
     #span_notif,
     #span_config {
         display: none !important;

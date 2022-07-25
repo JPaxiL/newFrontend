@@ -39,6 +39,7 @@
 :root{
   font-size: 16px;
   --gl-danger-red: #f9524d;
+  --gl-vivid-red: #c13133;
   --gl-purple-blue: #686c96;
   --gl-purple-blue-dark: #21265c;
   --gl-gray-blue: #8ca2c9;
@@ -218,6 +219,11 @@ li:hover .btn-navbar:not(.btn-navbar.active, .btn-navbar:active, .show > .btn-na
 
 .btn-gl-dark{
   background-color: var(--gl-blue-dark);
+  color: #fff;
+}
+
+.btn-gl-red{
+  background-color: var(--gl-vivid-red);
   color: #fff;
 }
 
@@ -403,6 +409,7 @@ p-dialog {
 
 .btn-gl-cancel,
 .btn-gl-save,
+.btn-gl-red,
 .btn-dark-hover:hover::after{
   border-radius: var(--gl-btn-border-radius);
   padding-top: var(--gl-btn-y-padding);

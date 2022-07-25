@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
 
   logo:string = "assets/images/logo-gl-tracker-blue-dark.svg";
   sidevarIZ:boolean=true;
-  logOutModalIsOpen = false;
+  logOutModalDisplay: boolean = false;
   windowAccess = window;
 
   constructor(
@@ -40,10 +40,6 @@ export class NavbarComponent implements OnInit {
       this.sidevarIZ = true;
     }
 
-  }
-
-  closeLogOutModal(): void{
-    this.logOutModalIsOpen = false;
   }
 
   logOut(): void {

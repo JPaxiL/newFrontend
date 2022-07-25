@@ -385,8 +385,7 @@ export class MapService {
                       //console.log('array'+array);
                       for (const i in array) {
                         var aaa = array[i]['_tooltip']['_content'];
-                        console.log(aaa);
-                        console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+                        //console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
                         var vehicleData = e.find((vehicle: { name: string; }) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
                         var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color]: 'transm-color-not-defined'
                         lista = lista + '<tr><td><div class="dot-vehicle ' + transmissionColorClass + '"></div></td><td>' + aaa + '</td></tr>';
