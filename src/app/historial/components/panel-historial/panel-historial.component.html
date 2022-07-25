@@ -43,7 +43,8 @@
                     <label>COLOR DE RUTA:</label>
                   </div>
                   <div class="col-12 d-flex">
-                    <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" id="colorRuta" [(ngModel)]="pngColorRuta" title="Elige un color">
+                    <!-- <input type="color" class="form-control form-control-color" id="chckGrafico" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color" [disabled]="!form.chckGrafico"> -->
+                    <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" id="colorRuta" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color">
                     <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="colorRuta">
                       <span class="p-dropdown-trigger-icon pi pi-chevron-down"></span>
                     </label>
@@ -69,24 +70,24 @@
           </div>
         </div>
 
-        <div class="gl-row-underline">
+        <!-- <div class="gl-row-underline">
           <div class="col-12">
               <label>FECHA INICIAL:</label>
           </div>
           <div class="col-12">
             <p-calendar
-                  [(ngModel)]="pngFechaIni"
+                  [(ngModel)]="form.pngFechaIni"
                   dateFormat="yy-mm-dd"
                   [appendTo]="'body'"
                   [monthNavigator]="true"
                   [yearNavigator]="true"
                   yearRange="2000:2040"
                   [showIcon]="true"
-                  [maxDate]="pngFechaFin"
+                  [maxDate]="form.pngFechaFin"
                   ></p-calendar>
           </div>
         </div>
-        
+
         <div class="gl-row-underline">
           <div class="col-12">
               <label>HORA INICIAL:</label>
@@ -98,43 +99,43 @@
                   [options]="hourPicker"
                   optionLabel="label"
                   optionValue="value"
-                  [(ngModel)]="pngHoraIni2"
+                  [(ngModel)]="form.pngHoraIni2"
                   [showClear]="false"
                   [appendTo]="'body'"
-                  (onChange)="changeRangoFechas()"></p-dropdown>
+                  ></p-dropdown>
               </div>
               <div class="col-6 p-field">
                 <p-dropdown
                 [options]="minPicker"
                 optionLabel="label"
                 optionValue="value"
-                [(ngModel)]="pngMinIni"
+                [(ngModel)]="form.pngMinIni"
                 [showClear]="false"
                 [appendTo]="'body'"
-                (onChange)="changeRangoFechas()"></p-dropdown>
+                ></p-dropdown>
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="gl-row-underline">
+        <!-- <div class="gl-row-underline">
           <div class="col-12">
               <label>FECHA FINAL:</label>
           </div>
           <div class="col-12">
             <p-calendar
-                  [(ngModel)]="pngFechaFin"
+                  [(ngModel)]="form.pngFechaFin"
                   dateFormat="yy-mm-dd"
                   [appendTo]="'body'"
                   [monthNavigator]="true"
                   [yearNavigator]="true"
                   yearRange="2000:2040"
                   [showIcon]="true"
-                  [minDate]="pngFechaIni"
+                  [minDate]="form.pngFechaIni"
                   ></p-calendar>
           </div>
         </div>
-        
+
         <div class="gl-row-underline">
           <div class="col-12">
               <label>HORA FINAL:</label>
@@ -146,24 +147,29 @@
                   [options]="hourPicker"
                   optionLabel="label"
                   optionValue="value"
-                  [(ngModel)]="pngHoraFin2"
+                  [(ngModel)]="form.pngHoraFin2"
                   [showClear]="false"
                   [appendTo]="'body'"
-                  (onChange)="changeRangoFechas()"></p-dropdown>
+                  ></p-dropdown>
               </div>
               <div class="col-6 p-field">
                 <p-dropdown
                 [options]="minPicker"
                 optionLabel="label"
                 optionValue="value"
-                [(ngModel)]="pngMinFin"
+                [(ngModel)]="form.pngMinFin"
                 [showClear]="false"
                 [appendTo]="'body'"
-                (onChange)="changeRangoFechas()"></p-dropdown>
+                ></p-dropdown>
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
+
+
+
+
+
 
         <div class="gl-middleline gl-row-underline">
           <div class="row">
@@ -173,14 +179,14 @@
               </div>
               <div class="col-12">
                 <p-calendar
-                [(ngModel)]="pngFechaIni"
+                [(ngModel)]="form.pngFechaIni"
                 dateFormat="yy-mm-dd"
                 [appendTo]="'body'"
                 [monthNavigator]="true"
                 [yearNavigator]="true"
                 yearRange="2000:2040"
                 [showIcon]="true"
-                [maxDate]="pngFechaFin"
+                [maxDate]="form.pngFechaFin"
                 ></p-calendar>
               </div>
             </div>
@@ -189,7 +195,7 @@
                   <label>HORA INICIAL:</label>
               </div>
               <div class="col-12">
-                <p-calendar [(ngModel)]="pngHoraIni" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [showIcon]="true" icon="pi pi-clock"></p-calendar>
+                <p-calendar [(ngModel)]="form.pngHoraIni2" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [showIcon]="true" icon="pi pi-clock"></p-calendar>
               </div>
             </div>
           </div>
@@ -203,14 +209,14 @@
               </div>
               <div class="col-12">
                 <p-calendar
-                  [(ngModel)]="pngFechaFin"
+                  [(ngModel)]="form.pngFechaFin"
                   dateFormat="yy-mm-dd"
                   [appendTo]="'body'"
                   [monthNavigator]="true"
                   [yearNavigator]="true"
                   yearRange="2000:2040"
                   [showIcon]="true"
-                  [minDate]="pngFechaIni"
+                  [minDate]="form.pngFechaIni"
                   ></p-calendar>
               </div>
             </div>
@@ -219,13 +225,13 @@
                   <label>HORA FINAL:</label>
               </div>
               <div class="col-12">
-                <p-calendar [(ngModel)]="pngHoraFin" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [minDate]="pngHoraIni" [showIcon]="true" icon="pi pi-clock"></p-calendar>
+                <p-calendar [(ngModel)]="form.pngHoraFin2" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [showIcon]="true" icon="pi pi-clock"></p-calendar>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="gl-row-underline">
+        <!-- <div class="gl-row-underline">
           <div class="col-12">
               <label>PARADAS:</label>
           </div>
@@ -236,10 +242,44 @@
                   optionValue="id"
                   [(ngModel)]="form.duracionParada"
                   [showClear]="false"
-                  [appendTo]="'body'" 
-                  [disabled]="pngChkParadas"></p-dropdown>
+                  [appendTo]="'body'"
+                  [disabled]="pngChkParadas">
+                </p-dropdown>
+          </div>
+        </div> -->
+
+
+        <div class="gl-middleline gl-row-underline">
+          <div class="row">
+            <div class="col-6 p-field">
+              <div class="col-12">
+                  <label>PARADAS:</label>
+              </div>
+              <div class="col-12">
+                <!-- <input class="form-check-input"  (change)="changeShowingTramas()" type="checkbox" id="chckTrama" [(ngModel)]="form.chckTrama"> -->
+                <!-- <p-dropdown [options]="booleanOptions" [(ngModel)]="pngChkTrama"  (onChange)="changeShowingTramas1($event)"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown> -->
+                <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckParada"  (onChange)="changeShowingParadasHistorial()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+              </div>
+            </div>
+            <div class="col-6 p-field">
+              <div class="col-12">
+                  <label>DURACION:</label>
+              </div>
+              <div class="col-12">
+                <p-dropdown
+                  [options]="availableOptionsTempoParada"
+                  optionLabel="name"
+                  optionValue="id"
+                  [(ngModel)]="form.duracionParada"
+                  [showClear]="false"
+                  [appendTo]="'body'"
+                  >
+                </p-dropdown>
+              </div>
+            </div>
           </div>
         </div>
+
 
         <div class="gl-middleline gl-row-underline">
           <div class="row">
@@ -248,7 +288,10 @@
                   <label>TRAMA:</label>
               </div>
               <div class="col-12">
-                <p-dropdown [options]="booleanOptions" [(ngModel)]="pngChkTrama"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+
+                <!-- <input class="form-check-input"  (change)="changeShowingTramas()" type="checkbox" id="chckTrama" [(ngModel)]="form.chckTrama"> -->
+                <!-- <p-dropdown [options]="booleanOptions" [(ngModel)]="pngChkTrama"  (onChange)="changeShowingTramas1($event)"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown> -->
+                <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckTrama"  (onChange)="changeShowingTramas()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
               </div>
             </div>
             <div class="col-6 p-field">
@@ -256,9 +299,20 @@
                   <label>VELOCIDAD Y FECHA:</label>
               </div>
               <div class="col-12">
-                <p-dropdown [options]="booleanOptions" [(ngModel)]="pngChkTrama"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+                <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckTramaFechaVelocidad" (onChange)="changeShowingTramasFechaVelocidad()"   optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
               </div>
             </div>
+          </div>
+        </div>
+
+
+        <div class="gl-row-underline">
+          <div class="col-12">
+              <label>GRÁFICO:</label>
+          </div>
+          <div class="col-12">
+            <!-- <input class="form-check-input" (change)="changeShowingGrafico()" type="checkbox" id="chckGrafico" [(ngModel)]="form.chckGrafico"> -->
+            <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckGrafico" (onChange)="changeShowingGrafico()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
           </div>
         </div>
 
@@ -268,36 +322,22 @@
           </div>
           <div class="col-12">
             <!-- MULTISELECT con placeholder "NINGUNO"-->
-            <input class="form-check-input" (change)="changeShowingEventos()" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento">
+            <!-- <input class="form-check-input" (change)="changeShowingEventos()" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento"> -->
+            <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckEvento" (onChange)="changeShowingEventos()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
           </div>
         </div>
 
-        <div class="gl-row-underline">
-          <div class="col-12">
-              <label>GRÁFICO:</label>
-          </div>
-          <div class="col-12">
-            <p-dropdown [options]="booleanOptions" [(ngModel)]="pngGrafico"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
-          </div>
-        </div>
+        <!-- ================================================================================================================================================================================================================ -->
+               <!-- ================================================================================================================================================================================================================ -->
 
-
+                       <!-- ================================================================================================================================================================================================================ -->
+      <!--
         <div class="row">
           <legend class="col-12">Datos Vehículo</legend>
           <div class="col-12">
             <label class="row d-flex align-items-center">
               <div class="col-4 text-end">Vehículo</div>
               <div class="col-8">
-                <!-- <p-dropdown
-                  [filter]="true"
-                  [options]="cars"
-                  optionLabel="nombre"
-                  optionValue="imei"
-                  [(ngModel)]="form.selectedCar"
-                  [showClear]="false"
-                  [appendTo]="'body'"
-                  placeholder="Seleccione el vehículo..."
-                  [ngModelOptions]="{standalone: true}"></p-dropdown> -->
                 <ng-select class="custom" id="selectVehiculo"
                   [items]="cars"
                   bindLabel="nombre"
@@ -328,9 +368,6 @@
                   [showClear]="false"
                   [appendTo]="'body'"
                   (onChange)="changeRangoFechas()"></p-dropdown>
-                <!-- <select class="claseinputs" (change)="changeRangoFechas()" name="miselect" [(ngModel)]="form.selectedRango">
-                  <option [value]="item.id" *ngFor="let item of availableOptionsDay">{{item.name}}</option>
-                </select> -->
               </div>
             </div>
           </div>
@@ -347,22 +384,6 @@
                   yearRange="2000:2040"
                   [showIcon]="true"
                   ></p-calendar>
-                <!-- <div class="input-group">
-                  <input
-                    #dpFromDateH
-                    class="form-control claseinputs2"
-                    placeholder="yyyy-mm-dd"
-                    name="dpFromDateH"
-                    [(ngModel)]="form.fecha_desde"
-                    ngbDatepicker
-                    #h1="ngbDatepicker"
-                    (click)="h1.toggle()"
-                    [disabled]="expirationDate"
-                  >
-                  <div class="input-group-text claseinputs2">
-                    <i class="fa fa-lg fa-calendar"></i>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -373,21 +394,6 @@
                 <div class="row">
                   <p-calendar [(ngModel)]="pngHoraIni" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'"></p-calendar>
                 </div>
-                <!-- <div class="row">
-                  <div class="col-5">
-                    <select class="claseinputs" [(ngModel)]="form.hora_desde">
-                      <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
-                    </select>
-                  </div>
-                  <div class="col-1">
-                    :
-                  </div>
-                  <div class="col-5">
-                    <select class="claseinputs" name="miselect" [(ngModel)]="form.min_desde">
-                      <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
-                    </select>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -404,22 +410,7 @@
                   yearRange="2000:2040"
                   [showIcon]="true"
                   ></p-calendar>
-                <!-- <div class="input-group">
-                  <input
-                    #dpToDateH
-                    class="form-control claseinputs2"
-                    placeholder="yyyy-mm-dd"
-                    name="dpToDateH"
-                    [(ngModel)]="form.fecha_hasta"
-                    ngbDatepicker
-                    #h2="ngbDatepicker"
-                    (click)="h2.toggle()"
-                    [disabled]="expirationDate"
-                  >
-                  <div class="input-group-text claseinputs2">
-                    <i class="fa fa-lg fa-calendar"></i>
-                  </div>
-                </div> -->
+
               </div>
             </div>
           </div>
@@ -430,21 +421,6 @@
                 <div class="row">
                   <p-calendar [(ngModel)]="pngHoraFin" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'"></p-calendar>
                 </div>
-                <!-- <div class="row">
-                  <div class="col-5">
-                    <select class="claseinputs" [(ngModel)]="form.hora_hasta">
-                      <option [value]="item.id" *ngFor="let item of availableOptionsHora">{{item.name}}</option>
-                    </select>
-                  </div>
-                  <div class="col-1">
-                    :
-                  </div>
-                  <div class="col-5">
-                    <select class="claseinputs" [(ngModel)]="form.min_hasta">
-                      <option [value]="item.id" *ngFor="let item of availableOptionsMin">{{item.name}}</option>
-                    </select>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -470,9 +446,6 @@
                   [(ngModel)]="form.duracionParada"
                   [showClear]="false"
                   [appendTo]="'body'" [disabled]="!form.chckParada"></p-dropdown>
-                <!-- <select class="claseinputs"  [(ngModel)]="form.duracionParada">
-                  <option [value]="item.id" *ngFor="let item of availableOptionsTempoParada">{{item.name}}</option>
-                </select> -->
               </div>
             </div>
           </div>
@@ -509,13 +482,13 @@
                 </div>
               </div>
               <div class="col-7">
-                <!-- <button type="button" (click)="showEventos = !showEventos" class="btn btn-outline-secondary btn-xs-gl" [disabled]="!form.chckEvento">Elegir</button> -->
                 <button type="button" (click)="showEventos = !showEventos" class="btn btn-outline-secondary btn-xs-gl">Elegir</button>
-
               </div>
             </div>
           </div>
+        -->
 
+        <div class="row">
 
           <div class="row" *ngIf="showEventos">
             <div class="col-12">
@@ -828,7 +801,7 @@
 
       </div>
 
-      
+
 
       <!-- <div class="modal-footer">
         <div class="row w-100 justify-content-around">
@@ -934,9 +907,10 @@
 
     <!-- <legend></legend> -->
 
-    <div style="overflow-y: auto; display: none;">
+    <div style="overflow-y: auto;">
       <!-- <div style="height: calc(100vh - 470px); overflow-y: auto;"> -->
-      <table id="tbl_fechas">
+
+      <table id="tbl_fechas" style="width:100%">
         <colgroup>
           <col width="20%" />
           <col width="50%" />

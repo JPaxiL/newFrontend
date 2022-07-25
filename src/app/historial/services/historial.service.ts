@@ -88,59 +88,80 @@ export class HistorialService {
       duracionParada : '60',//{id: '60'}, //Duracion de la parada
 
 
-      fecha_desde : dateCurrent,// moment().startOf('day').format("YYYY-MM-DD"),
-      fecha_hasta : dateCurrent,//moment().startOf('day').format("YYYY-MM-DD"),
-      hora_desde  : '00',//{id: '00', name:'00'},
-      min_desde   : '00',//{id: '00', name:'00'},
-      hora_hasta  : '00',//{id: '00', name:'00'},
-      min_hasta   : '00',//{id: '00', name:'00'},
+      // fecha_desde : dateCurrent,// moment().startOf('day').format("YYYY-MM-DD"),
+      // fecha_hasta : dateCurrent,//moment().startOf('day').format("YYYY-MM-DD"),
+      // hora_desde  : '00',//{id: '00', name:'00'},
+      // min_desde   : '00',//{id: '00', name:'00'},
+      // hora_hasta  : '00',//{id: '00', name:'00'},
+      // min_hasta   : '00',//{id: '00', name:'00'},
 
 
-      colorHistorial : "#00FFFF",//dataUser.his_color,//"#00FFFF",//dataUser.map_rc,//"#FF0000",
+
+      pngFechaIni: new Date(moment( Date.now() ).format('YYYY-MM-DDTHH:mm')),
+      pngFechaFin: new Date(moment( Date.now() ).format('YYYY-MM-DDTHH:mm')),
+      // pngHoraIni2: 0,
+      // pngMinIni: 0,
+      // pngHoraFin2: 0,
+      // pngMinFin: 0,
+
+      pngHoraIni2 : new Date('2018-03-12T00:00'),
+      pngHoraFin2 : new Date('2018-03-12T00:00'),
+
+
+
+      colorHistorial : "#FF0000",//dataUser.his_color,//"#00FFFF",//dataUser.map_rc,//"#FF0000",
       colorSubHistorial : "#0000FF",//dataUser.resaltado_color,//"#0000FF",
 
       chckParada  :true,
       chckTrama   :false,
+      chckTramaFechaVelocidad : false,
       chckGrafico :false,
       chckEvento  :false,
 
       eventos :
             {
                 all:false,
-                evSalida:false,
-                evEntrada:false,
-                evEstadia:false,
-                evParada:false,
+                evSalida:true,
+                evEntrada:true,
+                evEstadia:true,
+                evParada:true,
 
-                GPSbateriaBaja:false,
-                GPSbateriaDesconectada:false,
-                GPSaceleracionBrusca:false,
-                GPSfrenadaBrusca:false,
-                GPSbloqueoTransmision:false,
-                GPSsos:false,
-                GPSremolque:false,
-                GPSparada:false,
-                GPSmotorEncendido:false,
-                GPSmotorApagado:false,
+                GPSbateriaBaja:true,
+                GPSbateriaDesconectada:true,
+                GPSaceleracionBrusca:true,
+                GPSfrenadaBrusca:true,
+                GPSbloqueoTransmision:true,
+                GPSsos:true,
+                GPSremolque:true,
+                GPSparada:true,
+                GPSmotorEncendido:true,
+                GPSmotorApagado:true,
 
-                evMovSinProgramacion:false,
-                evInfraccion:false,
-                evCambioConductor:false,
-                evCambioConductorNoRealizado:false,
-                evAnticolisionFrontal:false,
-                evColisionConPeatones:false,
+                evMovSinProgramacion:true,
+                evInfraccion:true,
+                evCambioConductor:true,
+                evCambioConductorNoRealizado:true,
+                evAnticolisionFrontal:true,
+                evColisionConPeatones:true,
 
-                evManPreventivo:false,
-                evManCorrectivo:false,
-                evManPreventivoRealizado:false,
-                evManCorrectivoRealizado:false,
+                evNoRostro:true,
+                evFatigaExtrema:true,
+                evDesvioCarrilIzquierda:true,
+                evDesvioCarrilDerecha:true,
+                evBloqueoVisionMobileye:true,
 
-                AccEstadia:false,
-                AccAlcoholemia:false,
-                AccIButton:false,
-                AccSomnolencia:false,
-                AccDistraccion:false,
-                OtroExVelocidad:false,
+
+                evManPreventivo:true,
+                evManCorrectivo:true,
+                evManPreventivoRealizado:true,
+                evManCorrectivoRealizado:true,
+
+                AccEstadia:true,
+                AccAlcoholemia:true,
+                AccIButton:true,
+                AccSomnolencia:true,
+                AccDistraccion:true,
+                OtroExVelocidad:true,
 
             },
        isCollapsedEventos: true

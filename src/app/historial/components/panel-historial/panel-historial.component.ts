@@ -55,6 +55,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // chckGrafico:boolean=false;
   // chckEvento:boolean=false;
 
+
   conHistorial = false;
   showEventos = false;
   nombreUnidad = '';
@@ -207,20 +208,23 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   public expirationDate = false;
 
-  pngFechaIni!: Date;
-  pngHoraIni!: Date;
-  pngFechaFin!: Date;
-  pngHoraFin!: Date;
+  // pngFechaIni!: Date;
+  // pngHoraIni!: Date;
+  // pngFechaFin!: Date;
+  // pngHoraFin!: Date;
+
+  // pngHoraIni2!: Date;
+  // pngHoraFin2!: Date;
 
   pngColorRuta: string = '#ff0000';
   dialogDisplay: boolean = false;
   loadingHistorial: boolean = false;
-  pngHoraIni2: number = 0;
-  pngMinIni: number = 0;
-  pngHoraFin2: number = 0;
-  pngMinFin: number = 0;
+  // pngHoraIni2: number = 0;
+  // pngMinIni: number = 0;
+  // pngHoraFin2: number = 0;
+  // pngMinFin: number = 0;
 
-  pngChkParadas: boolean = true;
+  pngChkParadas: boolean = false;
   pngChkTrama: boolean = false;
   pngVelFecha: boolean = true;
   pngGrafico: boolean = false;
@@ -258,11 +262,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
-    const hoy = Date.now();
-    this.pngFechaIni = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
-    this.pngFechaFin = this.pngFechaIni;
-    this.pngHoraIni = new Date('2018-03-12T00:00');
-    this.pngHoraFin = new Date('2018-03-14T00:00');
+    // const hoy = Date.now();
+    // this.pngFechaIni = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
+    // this.pngFechaFin = this.pngFechaIni;
+    // this.pngHoraIni = new Date('2018-03-12T00:00');
+    // this.pngHoraIni2 = new Date('2018-03-12T00:00');
+    // this.pngHoraFin2 = new Date('2018-03-12T00:00');
+
+    // this.pngHoraFin = new Date('2018-03-14T00:00');
     this.form.selectedRango = '0';
     //this.form.duracionParada = '60';
     // $( "#datepicker" ).datepicker();
@@ -405,7 +412,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // }
 
   changeColorHistorial() {
-
     if (this.conHistorial) {
       let newColor = this.form.colorHistorial;
       let dH =  this.historialService.tramasHistorial; // Data Historial
@@ -416,15 +422,23 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   changeShowingEventos() {
     console.log(this.form.chckEvento);
-    // if (!this.form.chckEvento) {
-    //   this.showEventos = false;
-    // }
+    this.showEventos = this.form.chckEvento;
+    if (this.form.chckEvento) {
+
+      if (this.conHistorial) {
+        var dH =  this.historialService.tramasHistorial; // Data Historial
+        var iH  = dH[0].index_historial; //indices de paradas y movimientos
+        this.mostrar_tabla(dH,iH);
+
+      };
+    }
+
     // if (this.conHistorial) {
     //   var dH =  this.historialService.tramasHistorial; // Data Historial
     //   var iH  = dH[0].index_historial; //indices de paradas y movimientos
     //   this.mostrar_tabla(dH,iH);
     // }
-    this.changeShowingParadasHistorial()
+
   }
 
 
@@ -484,19 +498,29 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         day: parseInt(fecha_hasta.format("DD")),
       }; */
 
-      this.pngFechaIni = fecha_desde.toDate();
-      this.pngFechaFin = fecha_hasta.toDate();
+      this.form.pngFechaIni = fecha_desde.toDate();
+      this.form.pngFechaFin = fecha_hasta.toDate();
 
-      console.log(this.pngFechaIni);
-      console.log(this.pngFechaFin);
+      console.log(this.form.pngFechaIni);
+      console.log(this.form.pngFechaFin);
 
       /* this.form.hora_desde  = '00';//{id: '00', name: '00'};
       this.form.min_desde   = '00';//{id: '00', name: '00'};
       this.form.hora_hasta  = '00';//{id: '00', name: '00'};
       this.form.min_hasta   = '00';//{id: '00', name: '00'}; */
 
-      this.pngHoraIni = new Date('2018-03-12T00:00');
-      this.pngHoraFin = new Date('2018-03-12T00:00');
+      // this.pngHoraIni = new Date('2018-03-12T00:00');
+      // this.pngHoraFin = new Date('2018-03-12T00:00');
+
+      // this.form.pngHoraIni2 = 0;
+      // this.form.pngMinIni = 0;
+      // this.form.pngHoraFin2 = 0;
+      // this.form.pngMinFin = 0;
+
+      this.form.pngHoraIni2 = new Date('2018-03-12T00:00');
+      this.form.pngHoraFin2 = new Date('2018-03-12T00:00');
+
+
   };
 
 
@@ -520,22 +544,49 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     let DDstr = "" + this.form.fecha_desde.day;
     console.log('Form', MDstr);
     console.log('Form', DDstr); */
-    let MDstr = "" + moment(this.pngFechaIni).format("M");
-    let DDstr = "" + moment(this.pngFechaIni).format("D");
-    let HMDstr = "" + moment(this.pngHoraIni).format("HH:mm:00");
+    let MDstr = "" + moment(this.form.pngFechaIni).format("M");
+    let DDstr = "" + moment(this.form.pngFechaIni).format("D");
+    // let HMDstr = "" + moment(this.pngHoraIni).format("HH:mm:00");
+    // let horaDstr = this.form.pngHoraIni2.toString();
+    // let minDstr = this.form.pngMinIni.toString();
+
+    let HMDstr = "" + moment(this.form.pngHoraIni2).format("HH:mm:00");
+
+
     /* console.log('Date', MDstr);
     console.log('Date', DDstr); */
 
     /* let MHstr = "" + this.form.fecha_hasta.month;
     let DHstr = "" + this.form.fecha_hasta.day; */
-    let MHstr = "" + moment(this.pngFechaFin).format("M");
-    let DHstr = "" + moment(this.pngFechaFin).format("D");
-    let HMHstr = "" + moment(this.pngHoraFin).format("HH:mm:00");
+    let MHstr = "" + moment(this.form.pngFechaFin).format("M");
+    let DHstr = "" + moment(this.form.pngFechaFin).format("D");
+    // let HMHstr = "" + moment(this.pngHoraFin).format("HH:mm:00");
+    // let horaHstr = this.form.pngHoraFin2.toString();
+    // let minHstr = this.form.pngMinFin.toString();
+
+    let HMHstr = "" + moment(this.form.pngHoraFin2).format("HH:mm:00");
 
     /* var M1 = this.form.fecha_desde.year+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.form.hora_desde + ':' + this.form.min_desde + ':00-05:00';
     var M2 = this.form.fecha_hasta.year+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.form.hora_hasta + ':' + this.form.min_hasta + ':00-05:00'; */
-    var M1 = moment(this.pngFechaIni).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + HMDstr + '-05:00';
-    var M2 = moment(this.pngFechaFin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + HMHstr + '-05:00';
+    var M1 = moment(this.form.pngFechaIni).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + HMDstr + '-05:00';
+    var M2 = moment(this.form.pngFechaFin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + HMHstr + '-05:00';
+
+    // var M1 = moment(this.form.pngFechaIni).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.fStrMD(horaDstr)+":"+this.fStrMD(minDstr)+':00-05:00';
+    // var M2 = moment(this.form.pngFechaFin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.fStrMD(horaHstr)+":"+this.fStrMD(minHstr)+':00-05:00';
+
+    console.log(this.form.pngFechaIni);
+    // console.log( this.fStrMD(this.form.pngHoraIni2.toString()) );
+    // console.log( this.fStrMD(this.form.pngMinIni.toString()));
+    console.log("===========================");
+    console.log(this.form.pngFechaFin);
+    // console.log(this.form.pngHoraFin2);
+    // console.log(this.form.pngMinFin);
+    console.log(this.form.pngHoraIni2);
+    console.log(this.form.pngHoraFin2);
+
+
+    // console.log( this.fStrMD(this.pngHoraFin2.toString()) );
+    // console.log( this.fStrMD(this.pngMinFin.toString()));
 
     var param = {
                 fecha_desde:M1, fecha_hasta:M2,
@@ -622,6 +673,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 dH[i].paramsGet = this.getParams(dH[i].params);
 
                 dH[i]._trama = this.get_trama_marker(dH[i]);//.addTo(this.mapService.map);
+                dH[i]._trama_fecha_velocidad = this.get_trama_marker_fecha_velocidad(dH[i]);//.addTo(this.mapService.map);
 
                 var arrayP = [];
 
@@ -954,7 +1006,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 this.mapService.map.fitBounds([[minLat, minLng],[maxLat, maxLng]]);
 
 
-                var color = 'red';
+                var color = this.form.colorHistorial;//'red';
                 var color_sub = 'blue';
                 dH[0].rutaH2 = this.get_historial_line( dH[0].rutaH , color).addTo(this.mapService.map); //Linea del historial
                 dH[0].ruta_sub = this.get_historial_line( [] , color_sub).addTo(this.mapService.map); //Sub linea del historial
@@ -1345,11 +1397,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
-
-
-
-
-
   changeShowingTramas(){
 
     if (this.conHistorial) {
@@ -1364,6 +1411,51 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
         for (let i = 0; i < dH.length; i++) {
           this.mapService.map.removeLayer(dH[i]._trama);
+
+        }
+      }
+    }
+
+  }
+
+  changeShowingTramasFechaVelocidad(){
+
+    // : marker.bindTooltip(tooltipText, {permanent:false} )
+
+
+
+
+
+    if (this.conHistorial) {
+
+      var dH =  this.historialService.tramasHistorial; // Data Historial
+
+      if (this.form.chckTrama) {
+
+        if (this.form.chckTramaFechaVelocidad) {
+
+            for (let i = 0; i < dH.length; i++) {
+              dH[i]._trama_fecha_velocidad.addTo(this.mapService.map);
+              // dH[i]._trama.bindTooltip( "gaaaaaaa1",{permanent:true})
+
+
+
+            }
+
+        } else {
+
+            for (let i = 0; i < dH.length; i++) {
+              this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+              // dH[i]._trama.bindTooltip("gaaaaaaa2",{permanent:false})
+            }
+
+        }
+
+      } else {
+
+        for (let i = 0; i < dH.length; i++) {
+          this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+          // dH[i]._trama.bindTooltip("gaaaaaaa3",{permanent:false})
 
         }
       }
@@ -1529,11 +1621,60 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         "color": "#000",//color,
         "weight": 1,
         "opacity": 1
-      }).bindPopup(contenido,{offset: new L.Point(0, -13)});
+      }).bindPopup(contenido,{offset: new L.Point(0, -13)
+      });
+      // .bindTooltip(
+      //   // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+      //   /* '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geopoints[i].geopunto_color+';">'+this.geopoints[i].geopunto_name+'</b>', */
+      //   '<b class="" style=" background-color: '+ this.mapService.hexToRGBA('#F00') +'; color: '+ this.mapService.getContrastYIQ('#F00') +';">'+trama.dt_tracker+'<br>'+trama.speed+' km/h</b>',
+      //   { permanent: true,
+      //     offset: [20, 20],
+      //     direction: 'center',
+      //     className: 'leaflet-tooltip-own',
+      //   });
+
 
 
       return marker;
+
+
+
   }
+
+
+
+
+
+  get_trama_marker_fecha_velocidad(trama:any){
+
+    //============= LEGENDA
+    let marker = L.circleMarker([trama.lat, trama.lng], {
+      // pane: 'markers1',
+      "radius": 0,
+      "fillColor": "#000",//color,
+      "fillOpacity": 1,
+      "color": "#000",//color,
+      "weight": 1,
+      "opacity": 1
+
+    }).bindTooltip(
+        // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+        /* '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geopoints[i].geopunto_color+';">'+this.geopoints[i].geopunto_name+'</b>', */
+        '<b class="" style=" background-color: '+ this.mapService.hexToRGBA('#6633FF') +'; color: '+ this.mapService.getContrastYIQ('#6633FF') +';">'+trama.dt_tracker+'<br>'+trama.speed+' km/h</b>',
+        { permanent: true,
+          offset: [20, 20],
+          direction: 'center',
+          className: 'leaflet-tooltip-own',
+        });
+
+
+
+    return marker;
+  }
+
+
+
+
 
 
   get_parada_marker(trama:any) {
