@@ -7,8 +7,6 @@ import Swal from 'sweetalert2';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 
-
-
 @Component({
   selector: 'app-list-geopoints',
   templateUrl: './list-geopoints.component.html',
@@ -38,7 +36,6 @@ export class ListGeopointsComponent implements OnInit {
 
   }
 
-
   mostrar_tabla() {
     let geos = this.geopointsService.getData();
     console.log(geos);
@@ -53,9 +50,7 @@ export class ListGeopointsComponent implements OnInit {
       this.tblDataGeo.push({trama:geos[i]});
     }
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
-
   }
-
 
   clickLocate(id:number){
     console.log("localizar un GEOPUNTO");
@@ -64,13 +59,8 @@ export class ListGeopointsComponent implements OnInit {
     console.log(geo);
     console.log(geo.geo_elemento.getLatLng());
 
-
-
     // var latlng = this.geopoints[i].geopunto_vertices.split(",")
     //bounds.push([parseFloat(latlng[0]), parseFloat(latlng[1])]);
-
-
-
 
     this.mapService.map.fitBounds([geo.geo_elemento.getLatLng()], {
       padding: [50, 50]
@@ -78,7 +68,7 @@ export class ListGeopointsComponent implements OnInit {
   }
 
 
-  clickShow(id:number){
+  clickShow(id:number, comesFromInputSwitch?: boolean){
     console.log("localizar una geo punto");
     console.log(id);
 
@@ -94,6 +84,12 @@ export class ListGeopointsComponent implements OnInit {
 
       geo.geopunto_visible  = "true";
       geo.geo_elemento.addTo(this.mapService.map);
+    }
+
+    this.geopointsService.updateGeoCounters();
+
+    if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
+      this.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
     }
 
   }
@@ -204,10 +200,13 @@ export class ListGeopointsComponent implements OnInit {
   }
 
   onClickEye(){
-    
+    var geopointsList = this.geopointsService.geopoints.map( (geopoint: { geopunto_id: number, geopunto_visible: string }) =>
+      { return { id: geopoint.geopunto_id, visible: geopoint.geopunto_visible}; } );
+    geopointsList.forEach((geopoint: { id: number, visible: string }) => {
+      if((geopoint.visible == 'true') != this.eyeInputSwitch){
+        this.clickShow(geopoint.id, true);
+      }
+    });
   }
-
-
-
 
 }
