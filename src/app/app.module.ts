@@ -26,6 +26,7 @@ import {CheckboxModule} from 'primeng-lts/checkbox';
 import {MultiSelectModule} from 'primeng-lts/multiselect';
 import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
+import {InputSwitchModule} from 'primeng-lts/inputswitch';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -178,6 +179,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     DropdownModule,
     DialogModule,
     InputTextModule,
+    InputSwitchModule,
     ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,

@@ -5,6 +5,8 @@ import { EventService } from '../../services/event.service';
 import { getContentPopup } from '../../helpers/event-helper';
 import { forEachChild } from 'typescript';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { PanelService } from 'src/app/panel/services/panel.service';
+
 @Component({
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
@@ -15,8 +17,13 @@ export class EventListComponent implements OnInit {
 
   tipoEvento: any = [];
   selectedEvent: any = {};
-  eventPopupClass: any ={};
-  activeEventLayer: any = false;
+  activeEvent: any = false;
+
+  panelNotifKey: Number = 0;
+  panelNotifKeyBeforeOpening: Number = 0;
+  filterLoaded: boolean = false;
+  eventsLoaded: boolean = false;
+  clearNotifCounterOnClose: boolean = false;
 
   public events:any[] = [];
   public placa:string = '';
@@ -25,7 +32,7 @@ export class EventListComponent implements OnInit {
     public eventService: EventService,
     public mapService: MapServicesService,
     public ess:EventSocketService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
     ) {
       // this.tipoEvento = [
       //   { id: 0, option: 'Todos los Eventos', tipo: '' },
@@ -61,66 +68,59 @@ export class EventListComponent implements OnInit {
       //   { id: 28, option: 'Colisión con delantera', tipo: 'Colisión delantera', clase: 'colision-delantera' },
       //   { id: 29, option: 'Bloqueo de visión del mobileye', tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
       // ];
-
-      this.eventPopupClass = [
-        { tipo: 'Zona de entrada', clase: 'zona-entrada' },
-        { tipo: 'Zona de salida', clase: 'zona-salida' },
-        { tipo: 'Tiempo de estadia en zona', clase: 'tiempo-estadia-zona' },
-        { tipo: 'Parada en zona no autorizada', clase: 'parada-zona-no-autorizada' },
-        { tipo: 'Mantenimiento correctivo', clase: 'mantenimiento-correctivo' },
-        { tipo: 'Mantenimiento preventivo', clase: 'mantenimiento-preventivo' },
-        { tipo: 'Mantenimiento correctivo realizado', clase: 'mantenimiento-correctivo-realizado' },
-        { tipo: 'Mantenimiento preventivo realizado', clase: 'mantenimiento-preventivo-realizado' },
-        { tipo: 'SOS', clase: 'sos-event' },
-        { tipo: 'Exceso de Velocidad', clase: 'exceso-velocidad' },
-        { tipo: 'Infraccion', clase: 'infraccion' },
-        { tipo: 'Vehiculo sin programacion', clase: 'vehiculo-sin-programacion' },
-        { tipo: 'Frenada brusca', clase: 'frenada-brusca' },
-        { tipo: 'Aceleracion brusca', clase: 'aceleracion-brusca' },
-        { tipo: 'Bateria desconectada', clase: 'bateria-desconectada' },
-        { tipo: 'Motor encendido', clase: 'motor-encendido' },
-        { tipo: 'Motor apagado', clase: 'motor-apagado' },
-        { tipo: 'Fatiga', clase: 'fatiga' },
-        { tipo: 'Somnolencia', clase: 'somnolencia' },
-        { tipo: 'Distraccion', clase: 'distraccion' },
-        { tipo: 'Distracción', clase: 'distraccion' },
-        { tipo: 'Desvío de carril hacia la izquierda', clase: 'desvio-carril-izq' },
-        { tipo: 'Desvío de carril hacia la derecha', clase: 'desvio-carril-der' },
-        { tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
-        { tipo: 'Colisión con peatones', clase: 'colision-peatones' },
-        { tipo: 'Colisión delantera', clase: 'colision-delantera' },
-        { tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
-        { tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
-      ];
-
-      this.selectedEvent = 0;
-
     }
 
   ngOnInit(): void {
+    this.filterLoaded = false;
+    this.eventsLoaded = false;
+    this.panelNotifKeyBeforeOpening = this.eventService.panelNotifKey;
+    console.log('Panel notif key before opening', this.panelNotifKeyBeforeOpening);
+    this.panelNotifKey = + new Date();
+    this.eventService.panelNotifKey = this.panelNotifKey;
+
     this.selectedEvent = null;
     this.spinner.show('loadingEventList');
-    this.eventService.loadingEvents = true;
-    this.eventService.loadingEventFilters = true;
 
-    this.events = this.eventService.getData();
-    this.loadData()
+    //this.events = this.eventService.getData();
+    this.loadEventTableData();
+    this.loadFilterData();
   }
 
-  async loadData(){
-    this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
-    /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
+  ngOnDestroy(){
+    this.panelNotifKey = 0;
+    //this.ess.count = 0;
+    //Falta condicional para resetear las notificaciones solo si se abrió el panel
+    setTimeout(()=> {
+      if(this.clearNotifCounterOnClose){
+        this.ess.new_notif_stack = [];
+        this.ess.updateNotifCounter();
+      }
+      this.clearNotifCounterOnClose = false;
+    }, 0);
+  }
 
-    //Trigger reload of event table
-    this.selectedEvent = null;
-    this.changeTypeEvent();
+  async loadFilterData(){
+    this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
+    this.filterLoaded = true;
+    //console.log('Filtros cargados');
+    this.showEventPanel(this.panelNotifKey == this.eventService.panelNotifKey, this.filterLoaded, this.eventsLoaded);
+    
+    /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
+  }
+
+  async loadEventTableData(){
+    this.events = await this.eventService.getAll();
+    this.eventsLoaded = true;
+    //console.log('Tabla cargada');
+    this.showEventPanel(this.panelNotifKey == this.eventService.panelNotifKey, this.filterLoaded, this.eventsLoaded);
   }
 
   public showEvent(event:any){
-    if(this.activeEventLayer) {
-      this.hideEvent(this.activeEventLayer);
+    if(this.eventService.activeEvent) {
+      this.hideEvent(this.eventService.activeEvent);
+      //console.log('Ocultar evento previo');
     }
-    var eventClass:any = this.eventPopupClass.filter((eventClass:any) => eventClass.tipo == event.tipo);
+    var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
@@ -129,25 +129,30 @@ export class EventListComponent implements OnInit {
       minWidth: 250,
       maxWidth: 350,
     } );
-    this.activeEventLayer = event;
+    this.eventService.activeEvent = event;
     event.layer.addTo(this.mapService.map).openPopup();
   }
 
   public hideEvent(event:any){
     this.mapService.map.removeLayer(event.layer);
-    this.activeEventLayer = false;
+    this.eventService.activeEvent = false;
   }
 
   public switchEventOnMap(event: any, currentRow: HTMLElement){
-    if(currentRow.classList.contains('tr-selected')){
-      currentRow.classList.remove('tr-selected');
-      this.hideEvent(event);
+    if(event.id == this.eventService.activeEvent.id){
+      this.hideEvent(this.eventService.activeEvent);
     } else {
-      for(let i = 0; i < document.querySelectorAll('tr.tr-selected').length; i++){
-        document.querySelectorAll('tr.tr-selected')[i].classList.remove('tr-selected');
-      }
-      currentRow.classList.add('tr-selected');
+      currentRow.classList.add('watched-event');
+      //console.log('Mostrando evento con ID: ', event.id);
       this.showEvent(event); 
+
+      //Si el evento clickeado es una de las nuevas notificaciones, sacarlo del array de nuevas notificaciones
+      const index = this.ess.new_notif_stack.indexOf(event.id);
+      if(index > -1){
+        this.ess.new_notif_stack.splice(index, 1);
+        this.ess.updateNotifCounter();
+      }
+      //console.log('Stack counter: ', this.ess.new_notif_stack.length);
     }
   }
 
@@ -175,4 +180,22 @@ export class EventListComponent implements OnInit {
       });
     }
   }
+
+  isNewEvent(id: string){
+    return this.ess.new_notif_stack.indexOf(parseInt(id)) > -1;
+  }
+
+  showEventPanel(keyComparison: boolean, filterLoaded: boolean, eventsLoaded: boolean){
+    if(keyComparison && filterLoaded && eventsLoaded){
+      this.eventService.attachClassesToEvents();
+      this.spinner.hide('loadingEventList');
+      //console.log(this.panelNotifKey);
+      //console.log(this.eventService.panelNotifKey);
+      this.clearNotifCounterOnClose = true;
+      //console.log('Ocultar Spinner');
+    } else {
+      //console.log('Failed attempt');
+    }
+  }
+
 }

@@ -45,6 +45,8 @@ export class VehiclesComponent implements OnInit {
   display: boolean = false;
   config: any=[];
 
+  vehicleIconState: boolean = false;
+
   public setting: any = {
     eye: false,
     imei: true,
@@ -133,6 +135,8 @@ export class VehiclesComponent implements OnInit {
   }
   ngOnInit(): void {
     //console.log("ngOnInit table ag GRID status table = ",this.statusTable);
+    //this.onVehicleIcon();
+
     var observerTarget = document.querySelector('#dragbar')!;
     var mutationObserver = new MutationObserver( mutationList => {
         mutationList.forEach( mutation => {
@@ -243,5 +247,18 @@ export class VehiclesComponent implements OnInit {
   onTableGeneral(){
     this.vehicleService.listTable=0;
     this.vehicleService.clickListTable.emit(0);
+  }
+
+  onTableTransmision(){
+    
+  }
+
+  onVehicleIcon(){
+    if(this.vehicleIconState){
+      $('.ag-body-viewport').addClass('show-vehicle-icon');
+    } else {
+      $('.ag-body-viewport').removeClass('show-vehicle-icon');
+    }
+    this.vehicleIconState = !this.vehicleIconState;
   }
 }

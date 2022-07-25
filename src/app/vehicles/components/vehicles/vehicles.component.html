@@ -19,66 +19,82 @@
           <div class="text-center pb-2 pt-1">
             Personalizar Panel
           </div>
-          <div class="container pt-2">
+          <div class="container pt-2 png-checkbox-container">
             <div>
-              <label>
-                <input (click)="onClickSetting('eye')" style="padding: 5px" type="checkbox" checked>
+              <span (click)="onClickSetting('eye')">
+                <!-- <input (click)="onClickSetting('eye')" style="padding: 5px" type="checkbox" checked> -->
+                <p-checkbox [(ngModel)]="!setting['eye']" [binary]="true"></p-checkbox>
                 Ver
-              </label>
+              </span>
             </div>
             <div>
               <label>
-                <input (click)="onClickSetting('imei')" style="padding: 5px" type="checkbox">
+                <!-- <input (click)="vehicleIconState = !vehicleIconState" style="padding: 5px" type="checkbox" (ngModel)="vehicleIconState"> -->
+                <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
+                Ícono de Vehículo
+              </label>
+            </div>
+            <div>
+              <span (click)="onClickSetting('imei')">
+                <!-- <input (click)="onClickSetting('imei')" style="padding: 5px" type="checkbox"> -->
+                <p-checkbox [(ngModel)]="!setting['imei']" [binary]="true"></p-checkbox>
                 IMEI
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('vehicle')" type="checkbox" checked>
+              <span (click)="onClickSetting('vehicle')">
+                <!-- <input (click)="onClickSetting('vehicle')" type="checkbox" checked> -->
+                <p-checkbox [(ngModel)]="!setting['vehicle']" [binary]="true"></p-checkbox>
                 Vehículos
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('tag')" type="checkbox" checked>
+              <span (click)="onClickSetting('tag')">
+                <!-- <input (click)="onClickSetting('tag')" type="checkbox" checked> -->
+                <p-checkbox [(ngModel)]="!setting['tag']" [binary]="true"></p-checkbox>
                 Mostrar nombre
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('follow')" type="checkbox" checked>
+              <span (click)="onClickSetting('follow')">
+                <!-- <input (click)="onClickSetting('follow')" type="checkbox" checked> -->
+                <p-checkbox [(ngModel)]="!setting['follow']" [binary]="true"></p-checkbox>
                 Seguir Vehículo
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('limit')" type="checkbox" checked>
+              <span (click)="onClickSetting('limit')">
+                <!-- <input (click)="onClickSetting('limit')" type="checkbox" checked> -->
+                <p-checkbox [(ngModel)]="!setting['limit']" [binary]="true"></p-checkbox>
                 Limite de velocidad
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('gps')" type="checkbox">
+              <span (click)="onClickSetting('gps')">
+                <!-- <input (click)="onClickSetting('gps')" type="checkbox"> -->
+                <p-checkbox [(ngModel)]="!setting['gps']" [binary]="true"></p-checkbox>
                 GPS
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('gsm')" type="checkbox">
+              <span (click)="onClickSetting('gsm')">
+                <!-- <input (click)="onClickSetting('gsm')" type="checkbox"> -->
+                <p-checkbox [(ngModel)]="!setting['gsm']" [binary]="true"></p-checkbox>
                 GSM
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('transmission')" type="checkbox" checked>
+              <span (click)="onClickSetting('transmission')">
+                <p-checkbox [(ngModel)]="!setting['transmission']" [binary]="true"></p-checkbox>
                 Transmisión
-              </label>
+              </span>
             </div>
             <div>
-              <label>
-                <input (click)="onClickSetting('config')" type="checkbox" checked>
+              <span (click)="onClickSetting('config')">
+                <!-- <input (click)="onClickSetting('config')" type="checkbox" checked> -->
+                <p-checkbox [(ngModel)]="!setting['config']" [binary]="true"></p-checkbox>
                 Configurar
-              </label>
+              </span>
             </div>
             <div class="dropdown-divider"></div>
           </div>
@@ -92,6 +108,10 @@
             <i class="fas fa-list ag-grid-header-icon text-center" style="width: 20px;"></i>
             <span (click)="onTableGeneral()">Vista General</span>
           </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <i class="fas fa-signal ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <span (click)="onTableTransmision()">Vista por Transmisión*</span>
+          </div>
 
         </div>
       </div>
@@ -101,7 +121,7 @@
 
 </div>
 <app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
-<div class="ag-theme-alpine" style="width: 100%; height: calc(100% - var(--row-busqueda-height));">
+<div class="ag-theme-alpine" [ngClass]="{'show-vehicle-icon': vehicleIconState }" style="width: 100%; height: calc(100% - var(--row-busqueda-height));">
     <ag-grid-angular
     #agGrid
     style="width: 100%; height: 100%; font-size: 14px; overflow: auto;"

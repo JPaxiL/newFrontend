@@ -20,6 +20,8 @@ export class ListGeopointsComponent implements OnInit {
   datosCargados = false;
   NomBusqueda = "";
 
+  eyeInputSwitch: boolean = true;
+
   constructor(
     public geopointsService: GeopointsService,
     public mapService: MapServicesService,
@@ -199,6 +201,10 @@ export class ListGeopointsComponent implements OnInit {
         }
 
     }
+  }
+
+  onClickEye(){
+    
   }
 
 

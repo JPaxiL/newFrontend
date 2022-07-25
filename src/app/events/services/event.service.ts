@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
+import * as moment from 'moment';
 
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
 import { MapServicesService } from '../../map/services/map-services.service';
 import { getContentPopup } from '../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { EventSocketService } from './event-socket.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
+  componentKey = new Subject<Number>();
   public events: any[] = [];
   public nombreComponente: string = 'EVENT-USER';
   public img_icon: string = 'assets/images/eventos/pin_point.svg';
@@ -19,11 +23,12 @@ export class EventService {
   public img_iconAnchor: any = [0, 30];
   public eventsLayers = new L.LayerGroup();
 
-  //Para animación de carga
-  public loadingEvents: boolean = true;
-  public loadingEventFilters: boolean = true;
-
   public eventsHistorial: any = []; //==> Usado en el modulo historial
+
+  public panelNotifKey: Number = 0;
+  public classFilterArray: any = [];
+  public openEventIdOnMap: Number = 0;
+  public activeEvent: any = false;
 
   constructor(
     private http: HttpClient,
@@ -58,13 +63,13 @@ export class EventService {
           event.layer._myId = event.id;
           // event.layer.addTo(this.eventsLayers);
 
+          // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
+          event.fecha_tracker = moment(event.fecha_tracker, 'YYYY/MM/DD hh:mm:ss').subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+          //console.log('Evento de tabla: ', event);
           return event;
         });
-        
-        console.log('Eventos cargados');
-        this.loadingEvents = false;
-        this.hideLoadingSpinner();
       });
+      return this.events;
   }
 
   public getData() {
@@ -73,35 +78,28 @@ export class EventService {
 
   public addNewEvent(event:any){
     this.events.unshift(event);
+    this.attachClassesToEvents();
   }
 
   public async getAllEventsForTheFilter() {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
     let events = response.data;
-
-    this.loadingEventFilters = false;
-    console.log('Filtros cargados');
-    this.hideLoadingSpinner();
-
-    return events.map( (event:any) => ({
+    
+    this.classFilterArray = events.map( (event:any) => ({
       id:event.id,
       option:event.name,
-      tipo:event.name
-    }));
-  }
+      tipo:event.name,
+      clase:event.slug
+    }))
 
-  private hideLoadingSpinner(){
-    if(!this.loadingEvents && !this.loadingEventFilters){
-      console.log('Panel Notif cargado totalmente');
-      this.spinner.hide('loadingEventList');
-    }
+    //console.log('Filtros cargados: ', this.classFilterArray);
+    //console.log('Filtros de Eventos: ', events);
+    return this.classFilterArray;
   }
-
 
     //== Para el uso del modulo historial
 
-
-    eventPopupClass = [
+    eventsClassList = [
       { tipo: 'Zona de entrada', clase: 'zona-entrada' },
       { tipo: 'Zona de salida', clase: 'zona-salida' },
       { tipo: 'Tiempo de estadia en zona', clase: 'tiempo-estadia-zona' },
@@ -156,7 +154,7 @@ export class EventService {
             event.layer._myType = 'eventoHistorial';
             event.layer._myId = event.id;
             //---------
-            var eventClass:any = this.eventPopupClass.filter((eventClass:any) => eventClass.tipo == event.tipo);
+            var eventClass:any = this.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
             eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
 
             // this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
@@ -167,20 +165,37 @@ export class EventService {
             } );
             // event.layer.addTo(this.mapService.map);//.openPopup();
 
-
           }
 
           console.log(this.eventsHistorial);
 
-
         });
     }
 
-    public async LocalizarEventoHistorial(id : any) {
+    public attachClassesToEvents(){
+      this.events.forEach(event => {
+        //console.log(event.evento);
+        //console.log(this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ));
 
+        //Usar este IF en caso de querer usar las clases obtenidas en getAllEventsForTheFilter
+        /* if(typeof event.clase == 'undefined' || event.clase == ''){
+          const eventFilter = this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ); 
+          event.clase = typeof eventFilter == 'undefined'? 'default-event': eventFilter.clase;
+        } */
+
+        //Usar este IF en caso de querer usar el objeto declarado localmente para obtener las clases
+        if(typeof event.clase == 'undefined' || event.clase == ''){
+          const eventFilter = this.eventsClassList.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ); 
+          event.clase = typeof eventFilter == 'undefined'? 'default-event': eventFilter.clase;
+          if(typeof eventFilter == 'undefined'){
+            console.log('No se pudo asignar clase a evento: ', event)
+          }
+        }
+      });
     }
 
-
-
+    private prepareStrings(str: string){
+      return str.normalize('NFKD').replace(/[^\w ]/g, '').toLowerCase();
+    }
 
 }

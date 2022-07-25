@@ -43,6 +43,7 @@ export class AlertGpsEditComponent implements OnInit {
     { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
     { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
     { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
+    { id: 10, ruta: '', label: 'Sin Sonido' },
   ];
 
   tipoAlerta: string = '';

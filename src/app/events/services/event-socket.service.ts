@@ -13,7 +13,8 @@ export class EventSocketService extends Socket {
   img_icon: string = '';
   img_iconSize: any;
   img_iconAnchor: any;
-  count : number = 0;
+  count : string = '0';
+  new_notif_stack: number[] = [];
   user_id: any;
 
   private sendEventSuject = new Subject<any>();
@@ -28,6 +29,9 @@ export class EventSocketService extends Socket {
     });
 
     this.user_id = localStorage.getItem('user_id');
+
+    this.eventService.panelNotifKey = + new Date();
+    console.log('Panel notif first key on service', this.eventService.panelNotifKey); 
   }
 
   public listen() {
@@ -35,7 +39,7 @@ export class EventSocketService extends Socket {
     this.ioSocket.on('events', (event: any) => {
       let even = JSON.parse(event);
       if(this.user_id == even.usuario_id){
-        this.count = this.count + 1;
+        //this.count = this.count + 1;
 
         even.evento = even.descripcion_evento;
         even.tipo = even.descripcion_evento;
@@ -49,6 +53,14 @@ export class EventSocketService extends Socket {
 
         let newEvent = this.setLayer(even);
         this.eventService.addNewEvent(newEvent);
+
+        //console.log('new notification counter', this.count);
+        this.new_notif_stack.push(even.id);
+        this.updateNotifCounter();
+        console.log('new notification stack', this.new_notif_stack);
+        //console.log('new notification stack counter', this.new_notif_stack.length);
+        console.log('new notification Event Content en Socket', even);
+        //console.log('new notification time', new Date());
       }
     });
   }
@@ -71,6 +83,10 @@ export class EventSocketService extends Socket {
     event.layer._myType = 'evento';
     event.layer._myId = event.id;
     return event;
+  }
+
+  updateNotifCounter(){
+    this.count = this.new_notif_stack.length > 99? '99+': this.new_notif_stack.length.toString();
   }
 
 }

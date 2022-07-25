@@ -106,6 +106,6 @@ export class MapServicesService {
     }
     console.log('Hex Color inválido');
     return 'rgba(255,255,255,0.9)';
-}
+  }
 
 }

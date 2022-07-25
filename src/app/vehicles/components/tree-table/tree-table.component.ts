@@ -18,6 +18,8 @@ export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
+  vehicleIconState: boolean = false;
+
   sortOrder: number=1;
   display: boolean = false;
   displayDelete: boolean = false;
@@ -64,10 +66,13 @@ export class TreeTableComponent implements OnInit {
     limit: true,
     gps: false,
     gsm: false,
-    trans: true,
+    trans: false,
     config: true,
     sort: 'asc'
   }
+
+  dummyPngCheckboxShowName: boolean = true;
+  dummyPngCheckboxFollow: boolean = false;
 
   @ViewChild('tt') tt!:any;
 
@@ -457,7 +462,8 @@ export class TreeTableComponent implements OnInit {
     //console.log('displaygroup true');
   }
   onClickSetting(e: string):void{
-    //console.log("clikc setting",e);
+    console.log("clikc setting",e);
+    console.log("clikc setting",this.setting[e]);
     this.setting[e] = !this.setting[e];
     if(this.setting[e]){
       this.column++;
@@ -487,10 +493,22 @@ export class TreeTableComponent implements OnInit {
     this.vehicleService.clickListTable.emit(0);
   }
 
+  onTableTransmision(){
+
+  }
+
   public onQuickFilterChanged(data: any) {
     // //console.log("tt",this.tt);
     this.tt.filterGlobal(data.target.value, 'contains')
     this.tt.defaultSortOrder=-1;
+  }
+
+  getContrastYIQ(hex: string){
+    var r = parseInt(hex.slice(1,3),16);
+    var g = parseInt(hex.slice(3,5),16);
+    var b = parseInt(hex.slice(5,7),16);
+    var yiq = ((r*299)+(g*587)+(b*114))/1000;
+    return (yiq >= 128) ? '#000' : '#fff';
   }
 
 }

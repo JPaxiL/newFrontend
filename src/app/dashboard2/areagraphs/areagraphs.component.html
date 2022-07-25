@@ -36,6 +36,7 @@
         </div>
         <br>
         <div class="row">
+            <h3>Estado general de las unidades</h3>
             <div class="col-xl">
                 <ngx-charts-pie-chart
                     [scheme]="colorScheme"
@@ -91,7 +92,36 @@
 
             </div>
         </div>
+        <br><br>
+        <div class="row">
+            <div class="col-sm">
+                <h4>Vehículos en ruta</h4>
+                <ngx-charts-pie-chart
+                    [scheme]="colorSchemeVehiclesOnRoute"
+                    [results]="vehiclesOnRoute"
+                    [gradient]="gradient"
+                    [legend]="showLegend"
 
+                >
+                </ngx-charts-pie-chart>
+                <br>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span>
+                                    <label for="">Vehiculos en movimiento</label>
+                                    <ul>
+                                        <li *ngFor="let imei of imeiGreen">{{imei}}</li>
+                                    </ul>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
 
     </div>
 </div>

@@ -32,7 +32,12 @@ export class AreagraphsComponent implements OnInit {
     domain: ['green', 'blue', 'orange', 'black','red']
   };
 
+  colorSchemeVehiclesOnRoute = {
+    domain: ['green', 'blue']
+  };
+
   data:any = [];
+  vehiclesOnRoute:any = [];
 
 
   constructor(
@@ -72,30 +77,30 @@ export class AreagraphsComponent implements OnInit {
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
       this.totalVehicle = vehicles.length;
 
-      console.log("vehicles.length =====> ", vehicles.length);
+      console.log("vehicles.length =====> ", vehicles);
       vehicles.forEach( (vehicle:any) =>  {
         if(vehicle.point_color == 10){
           this.green += 1;
-          this.imeiGreen.push(vehicle.IMEI);
+          this.imeiGreen.push(vehicle.name);
         }else if(vehicle.point_color == 20){
           this.blue += 1;
-          this.imeiBlue.push(vehicle.IMEI);
+          this.imeiBlue.push(vehicle.name);
         }else if(vehicle.point_color == 30){
           this.purple += 1;
         }else if(vehicle.point_color == 40){
           this.black += 1;
-          this.imeiBlack.push(vehicle.IMEI);
+          this.imeiBlack.push(vehicle.name);
         }else if(vehicle.point_color == 50){
           this.orange += 1;
-          this.imeiOrange.push(vehicle.IMEI);
+          this.imeiOrange.push(vehicle.name);
         }else if(vehicle.point_color == 60){
           this.red += 1;
         }else if(vehicle.point_color == 100){
           this.green += 1;
-          this.imeiGreen.push(vehicle.IMEI);
+          this.imeiGreen.push(vehicle.name);
         }else{
           this.black += 1;
-          this.imeiBlack.push(vehicle.IMEI);
+          this.imeiBlack.push(vehicle.name);
         }
       });
 
@@ -120,6 +125,17 @@ export class AreagraphsComponent implements OnInit {
         {
           "name": "Corte de transmision",
           "value": this.red
+        }
+      ];
+
+      this.vehiclesOnRoute = [
+        {
+          "name": "Vehículos en movimiento",
+          "value": this.green
+        },
+        {
+          "name": "Vehículos detenidos",
+          "value": this.blue
         }
       ];
       this.spinner.hide("loadingDashboardSpinner");

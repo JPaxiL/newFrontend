@@ -167,10 +167,6 @@
         </div> -->
 
 
-
-
-
-
         <div class="gl-middleline gl-row-underline">
           <div class="row">
             <div class="col-6 p-field">
@@ -305,6 +301,39 @@
           </div>
         </div>
 
+        <div>
+          <div class="gl-row-underline">
+            <div class="col-12">
+                <label>EVENTOS:</label>
+            </div>
+            <div class="col-12">
+              <p-multiSelect
+                [options]="eventList"
+                [group]="true"
+                [(ngModel)]="selectedEvents"
+                optionLabel="name"
+                defaultLabel="Sin eventos seleccionados"
+                [selectedItemsLabel]="'{0} eventos seleccionados'"
+                [showToggleAll]="false"
+                scrollHeight="250px"
+                (onChange)="changeShowingEventos();"
+                [appendTo]="'body'">
+                <ng-template let-group pTemplate="group">
+                    <div class="p-d-flex p-ai-center">
+                        <span>{{group.label}}</span>
+                    </div>
+                </ng-template>
+              </p-multiSelect>
+            </div>
+          </div>
+          <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+            <label>
+              <p-checkbox [(ngModel)]="chkAllEvents" [binary]="true" inputId="binary" (onChange)="onChkAllEvents(); changeShowingEventos();"></p-checkbox>
+              Todos
+            </label>
+          </div>
+        </div>
+
 
         <div class="gl-row-underline">
           <div class="col-12">
@@ -316,16 +345,16 @@
           </div>
         </div>
 
-        <div class="gl-row-underline">
+
+
+        <!-- <div class="gl-row-underline">
           <div class="col-12">
               <label>EVENTOS:</label>
           </div>
           <div class="col-12">
-            <!-- MULTISELECT con placeholder "NINGUNO"-->
-            <!-- <input class="form-check-input" (change)="changeShowingEventos()" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento"> -->
             <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckEvento" (onChange)="changeShowingEventos()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
           </div>
-        </div>
+        </div> -->
 
         <!-- ================================================================================================================================================================================================================ -->
                <!-- ================================================================================================================================================================================================================ -->

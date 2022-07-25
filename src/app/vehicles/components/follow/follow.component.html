@@ -1,4 +1,4 @@
-<div (click)="onClick()" *ngIf="params.value == true" class="">
+<!-- <div (click)="onClick()" *ngIf="params.value == true" class="">
   <span class="btn-label" title="Seguir vehículo">
     <i class="fas fa-compass" style="color:green; font-size: 14px;"></i>
   </span>
@@ -7,6 +7,9 @@
   <span *ngIf="params.value == false" class="btn-label" title="Seguir vehículo">
     <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i>
   </span>
+</div> -->
+<div class="inline-png-checkbox d-flex h-100">
+  <p-checkbox [(ngModel)]="params.value" (onChange)="onClick()" [binary]="true"></p-checkbox>
 </div>
 
 <!-- fas fa-bullseye -->
