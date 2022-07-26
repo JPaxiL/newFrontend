@@ -14,29 +14,25 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class ListGeopointsComponent implements OnInit {
 
-  tblDataGeo = new Array();
   datosCargados = false;
   NomBusqueda = "";
-
-  eyeInputSwitch: boolean = true;
 
   constructor(
     public geopointsService: GeopointsService,
     public mapService: MapServicesService,
-    public spinner: NgxSpinnerService,
 
   ) {}
 
   ngOnInit(): void {
     if(!this.geopointsService.initializingGeopoints){
-      this.spinner.show('loadingGeopointsSpinner');
+      this.geopointsService.spinner.show('loadingGeopointsSpinner');
     }
     console.log("DATOS DE GEOPUNTOS");
-    this.mostrar_tabla();
+    //this.mostrar_tabla();
 
   }
 
-  mostrar_tabla() {
+  /* mostrar_tabla() {
     let geos = this.geopointsService.getData();
     console.log(geos);
 
@@ -50,7 +46,7 @@ export class ListGeopointsComponent implements OnInit {
       this.tblDataGeo.push({trama:geos[i]});
     }
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
-  }
+  } */
 
   clickLocate(id:number){
     console.log("localizar un GEOPUNTO");
@@ -89,7 +85,7 @@ export class ListGeopointsComponent implements OnInit {
     this.geopointsService.updateGeoCounters();
 
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
-      this.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
+      this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
     }
 
   }
@@ -158,7 +154,8 @@ export class ListGeopointsComponent implements OnInit {
               i--;
             }
           }
-          this.mostrar_tabla();
+          //this.mostrar_tabla();
+          this.geopointsService.initializeTable();
 
         }
     }).then(data => {
@@ -181,19 +178,19 @@ export class ListGeopointsComponent implements OnInit {
   }
 
   onBusqueda(gaaa:any) {
-    console.log(gaaa);
-    console.log(this.NomBusqueda);
+    //console.log(gaaa);
+    //console.log(this.NomBusqueda);
 
     let geos = this.geopointsService.getData();
     console.log(geos);
 
-    this.tblDataGeo = [];
+    this.geopointsService.tblDataGeo = [];
 
     for (let i = 0; i < geos.length; i++) {
 
         if ( geos[i].geopunto_name.toUpperCase().includes(this.NomBusqueda.toUpperCase()) ) {
             geos[i].geopunto_nombre_visible_bol = (geos[i].geopunto_nombre_visible_bol === 'true');
-            this.tblDataGeo.push({trama:geos[i]});
+            this.geopointsService.tblDataGeo.push({trama:geos[i]});
         }
 
     }
@@ -203,7 +200,7 @@ export class ListGeopointsComponent implements OnInit {
     var geopointsList = this.geopointsService.geopoints.map( (geopoint: { geopunto_id: number, geopunto_visible: string }) =>
       { return { id: geopoint.geopunto_id, visible: geopoint.geopunto_visible}; } );
     geopointsList.forEach((geopoint: { id: number, visible: string }) => {
-      if((geopoint.visible == 'true') != this.eyeInputSwitch){
+      if((geopoint.visible == 'true') != this.geopointsService.eyeInputSwitch){
         this.clickShow(geopoint.id, true);
       }
     });

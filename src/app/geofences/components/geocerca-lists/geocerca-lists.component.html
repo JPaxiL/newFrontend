@@ -1,6 +1,6 @@
 <div class="table-content-component-panel-monitoreo" style="position: relative;">
 
-  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingPlatformAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Alertas Plataforma... </p></ngx-spinner>
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGeofencesSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Geocercas... </p></ngx-spinner>
 
   <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda">
     <div class="d-flex">
@@ -32,7 +32,7 @@
           <tr>
               <th>
                 <!-- <i class="fa fa-eye fa-lg"></i> -->
-                <p-inputSwitch [(ngModel)]="eyeInputSwitch" (onChange)="onClickEye()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
+                <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEye()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
               </th>
               <!-- <td></td> -->
               <th colspan="2">Geocerca</th>
@@ -155,7 +155,7 @@
       </thead>
       <tbody style="border-top: inherit;">
   
-          <tr *ngFor="let geo of tblDataGeo;let indice=index" class="">
+          <tr *ngFor="let geo of geofencesService.tblDataGeo;let indice=index" class="">
   
               <!-- <td>{{geo.trama.zone_visible}}</td> -->
               <td>

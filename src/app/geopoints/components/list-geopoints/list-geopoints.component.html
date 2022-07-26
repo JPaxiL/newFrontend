@@ -53,7 +53,7 @@
           <tr>
               <th>
                 <!-- <i class="fa fa-eye fa-lg"></i> -->
-                <p-inputSwitch [(ngModel)]="eyeInputSwitch" (click)="onClickEye()" class="d-flex justify-content-center align-items-center" [disabled]="geopointsService.tblDataGeo.length == 0" ngDefaultControl></p-inputSwitch>
+                <p-inputSwitch [(ngModel)]="geopointsService.eyeInputSwitch" (click)="onClickEye()" class="d-flex justify-content-center align-items-center" [disabled]="geopointsService.tblDataGeo.length == 0" ngDefaultControl></p-inputSwitch>
               </th>
               <!-- <td></td> -->
               <th colspan="2">Geopunto</th>

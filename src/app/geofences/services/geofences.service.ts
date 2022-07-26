@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { MapServicesService } from '../../map/services/map-services.service';
 
 import * as L from 'leaflet';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +19,18 @@ export class GeofencesService {
   public idGeocercaEdit:number = 0;
   public action:string = "add"; //[add,edit,delete]
 
+  tblDataGeo: any = [];
+  initializingGeofences: boolean = false;
+  eyeInputSwitch: boolean = true;
+  geofenceCounters: any = {
+    visible: 0,
+    hidden: 0,
+  }
 
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
+    public spinner: NgxSpinnerService,
 
     ) {
     //this.getAll();
@@ -36,8 +45,7 @@ export class GeofencesService {
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/zone`).toPromise()
     .then(response => {
       this.geofences = response.data;
-
-
+      this.initializeTable();
 
       for (let i = 0; i < this.geofences.length; i++) {
         //const element = this.geofences[i];
@@ -90,6 +98,11 @@ export class GeofencesService {
 
 
         // this.geofences.geo_elemento.setLabel("NOMBRE");
+
+        this.updateGeoCounters();
+        this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+        console.log('Geocercas Cargadas');
+        this.initializingGeofences = true;
       }
 
     });
@@ -98,6 +111,18 @@ export class GeofencesService {
   public getData() {
     return this.geofences;
   }
+
+  initializeTable() {
+    this.tblDataGeo = [];
+
+    for (let i = 0; i < this.geofences.length; i++) {
+      this.geofences[i].zone_name_visible_bol = (this.geofences[i].zone_name_visible === 'true');
+      this.tblDataGeo.push({trama:this.geofences[i]});
+    }
+    this.spinner.hide('loadingGeofencesSpinner');
+    // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
+
+}
 
 
   getCoordenadas(data:any){
@@ -123,6 +148,13 @@ export class GeofencesService {
   public async delete(id: any){
     const response:ResponseInterface = await this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/zone/${id}`).toPromise();
     return response.data;
+  }
+
+  public updateGeoCounters(){
+    this.geofenceCounters.visible = this.geofences.filter( (geofence: { zone_visible: string; }) => geofence.zone_visible == 'true').length;
+    this.geofenceCounters.hidden = this.geofences.length - this.geofenceCounters.visible;
+    //console.log('Visibles:', this.geofenceCounters.visible);
+    //console.log('Ocultos:', this.geofenceCounters.hidden);
   }
 
 }

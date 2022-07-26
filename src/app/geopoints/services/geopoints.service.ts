@@ -18,6 +18,7 @@ export class GeopointsService {
   initializingGeopoints: boolean = false;
   tblDataGeo = new Array();
 
+  eyeInputSwitch: boolean = true;
   geopointCounters: any = {
     visible: 0,
     hidden: 0,
@@ -32,7 +33,7 @@ export class GeopointsService {
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
-    private spinner: NgxSpinnerService,
+    public spinner: NgxSpinnerService,
   ) { }
 
 
@@ -49,8 +50,6 @@ export class GeopointsService {
 
       this.geopoints = response.data;
       this.initializeTable();
-
-
 
       for (let i = 0; i < this.geopoints.length; i++) {
         // //const element = this.geofences[i];
@@ -210,6 +209,7 @@ export class GeopointsService {
       }
 
       this.updateGeoCounters();
+      this.eyeInputSwitch = this.geopointCounters.visible != 0;
       console.log('Geopuntos Cargados');
       this.initializingGeopoints = true;
 
@@ -221,6 +221,7 @@ export class GeopointsService {
   }
 
   public initializeTable(){
+    this.tblDataGeo = [];
     for (let i = 0; i < this.geopoints.length; i++) {
       this.geopoints[i].geopunto_nombre_visible_bol = (this.geopoints[i].geopunto_nombre_visible === 'true');
       this.geopoints[i].geopunto_visible_bol = (this.geopoints[i].geopunto_visible === 'true');
