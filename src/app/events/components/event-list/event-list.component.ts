@@ -84,6 +84,9 @@ export class EventListComponent implements OnInit {
     //this.events = this.eventService.getData();
     this.loadEventTableData();
     this.loadFilterData();
+    
+    //Initial sort
+    this.ess.sortEventsTableData();
   }
 
   ngOnDestroy(){

@@ -88,4 +88,28 @@ export class EventSocketService extends Socket {
     this.count = this.new_notif_stack.length > 99? '99+': this.new_notif_stack.length.toString();
   }
 
+  //Sort called from event-list.component
+  sortEventsTableData(){
+    this.eventService.events.sort((a,b) => {
+      if(this.new_notif_stack.indexOf(a.id) > -1 ){
+        if(this.new_notif_stack.indexOf(b.id) > -1){
+          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) { 
+            return -1; 
+          } 
+          return 1;
+        } 
+        return -1;
+      } else {
+        if(this.new_notif_stack.indexOf(b.id) > -1){
+          return 1;
+        }
+        if(a.fecha_tracker > b.fecha_tracker){
+          return -1;
+        }
+        return 1;
+      }
+    });
+    console.log('Data Sorted', this.eventService.events);
+  }
+
 }
