@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { PanelService } from 'src/app/panel/services/panel.service';
 
 @Component({
   selector: 'app-user-config',
@@ -37,7 +38,9 @@ export class UserConfigComponent implements OnInit {
     { id: 2, name: 'Cola de dirección' },
   ];
   
-  constructor() { }
+  constructor(
+    public panelService: PanelService,
+  ) { }
 
   ngOnInit(): void {
   }

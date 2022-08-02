@@ -144,6 +144,7 @@ export class GeocercaListsComponent implements OnInit {
           // this.clickShowPanel(this.nameComponent);
 
           this.mapService.map.removeLayer(geo.geo_elemento);
+          this.mapService.map.removeLayer(geo.marker_name);
 
           for (var i = 0; i < this.geofencesService.geofences.length; i++) {
             if (this.geofencesService.geofences[i].id === id) {
@@ -153,6 +154,8 @@ export class GeocercaListsComponent implements OnInit {
           }
           //this.mostrar_tabla();
           this.geofencesService.initializeTable();
+          this.geofencesService.updateGeoCounters();
+          this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
 
         }
     }).then(data => {

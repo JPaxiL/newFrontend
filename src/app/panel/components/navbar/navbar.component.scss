@@ -1,4 +1,4 @@
-::ng-deep .p-dialog{
+::ng-deep .p-dialog.logout-dialog{
     .p-dialog-header{
         justify-content: center;
         padding-bottom: 0;
@@ -64,12 +64,6 @@ nav > .container-fluid > div {
 .nav-item > button {
     white-space: nowrap;
     overflow: hidden;
-}
-
-#span_user{
-    padding-top: 1.2rem !important;
-    display: inline-block;
-    max-width: 250px;
 }
 
 .text-ellipsis {
@@ -370,32 +364,27 @@ i.fa + span {
     margin-right: 0.375rem;
 }
 
-
-@media (min-width: 1491px) {
+//min-width : 91rem + 1. Ver motivo más abajo
+@media (min-width: 1275px) {
     #navbarSupportedContent_collapsed{
         display: none !important;
     }
 }
 
-@media (max-width: 1770px) {
-    #span_notif,
-    #span_config {
-        display: none !important;
-    }
-    #span_user{
-        max-width: 200px;
-    }
-    
-    #notification_bell_counter {
-        width: 2.25rem !important;
-    }
-
+//1770px para rem=16px
+@media (max-width: 1550px) {
     #navbarSupportedContent > .navbar-nav {
         gap: 1rem;
     }
 }
 
-@media (max-width: 1490px) {
+// Usar "rem" dentro de las mediaqueries suele usar rem = 16px, independientemente
+// de si se usa una medida personalizada. Por lo tanto, es necesario especificar 
+// las media queries en px
+
+//El breakpoint aquí es de 91 rem. Entonces, si rem = 16px, 94 x 16 = 1504
+//@media (max-width: 1504px) {
+@media (max-width: 1274px) {
     #navbarSupportedContent {
         display: none !important;
     }
@@ -409,13 +398,15 @@ i.fa + span {
     } */
 }
 
-@media (max-width: 1200px) {
+//1200px para rem=16px
+@media (max-width: 1050px) {
     .navbar-last-container{
         padding: 0.5rem;
     }
 }
 
-@media (max-width: 1100px) {
+//1100px para rem=16px
+@media (max-width: 963px) {
     #navbarSupportedContent_collapsed > .navbar-nav {
         gap: 0;
     }
@@ -427,16 +418,17 @@ i.fa + span {
     }
 }
 
-@media (max-width: 850px) {
-    #span_user{
-        max-width: 125px;
-    }
+//850px para rem=16px
+//Deberia ser 744, pero causa overflow, asi que se cambio a 766px
+@media (max-width: 766px) {
     li.nav-item{
         padding: 0 0.125rem;
     }
 }
 
-@media (max-width: 740px) {
+//740px para rem=16px
+//Deberia ser 648px, pero causa overflow asi que ira 655px
+@media (max-width: 655px) {
 
     #navbarSupportedContent, #navbarSupportedContent_collapsed {
         display: none !important;

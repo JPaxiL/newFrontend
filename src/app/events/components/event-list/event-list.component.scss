@@ -19,6 +19,8 @@
 :host ::ng-deep {
     p-dropdown {
         > .p-dropdown.p-component {
+            border: 1px solid var(--gl-gray);
+            border-radius: 0.25rem;
             height: 2.375rem;
             > span.p-dropdown-label {
                 padding: 0.37rem 0.75rem;

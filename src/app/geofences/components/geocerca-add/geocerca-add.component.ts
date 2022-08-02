@@ -194,6 +194,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         color: '#000000'
       }).addTo(this.mapService.map);
 
+      this.changeGeoColor(this.form.id);
+
       this.poligonAdd.editing.enable();
 
     }
@@ -412,6 +414,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     this.form.geo_geometry          = "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)";
     // if(!L.GeometryUtil){
+
+    /* setTimeout(()=> {
+      this.changeGeoColor(this.form.id);
+    }, 0); */
   }
 
   geodesicArea (latLngs:any) {
@@ -518,6 +524,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
 
         this.mapService.map.removeLayer(geo.geo_elemento);
+        this.mapService.map.removeLayer(geo.marker_name);
+
         geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(gEdit2.geo_coordenadas).coordinates[0] ), {
           weight: 3,
           fill: true,
@@ -544,7 +552,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         }).bindTooltip(
             // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
             // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.zone_color+';">'+geo.zone_name+'</b>',
-            '<b class="" style="border: 0.2rem dashed var(--gl-blue-dark); background-color: '+ this.mapService.hexToRGBA(geo.zone_color) +'; color : '+ this.mapService.getContrastYIQ(geo.zone_color) +';">'+geo.zone_name+'</b>',
+            '<b class="" style="background-color: '+ this.mapService.hexToRGBA(geo.zone_color) +'; color : '+ this.mapService.getContrastYIQ(geo.zone_color) +';">'+geo.zone_name+'</b>',
             { permanent: true,
               // offset: [-100, 0],
               direction: 'center',
@@ -609,7 +617,33 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           color: geo.zone_color //'#000000'
         }).addTo(this.mapService.map);
 
+        var centerPoligon = geo.geo_elemento.getBounds().getCenter();
+
+        geo.marker_name = L.circleMarker(centerPoligon, {
+          // pane: 'markers1',
+          "radius": 0,
+          "fillColor": "#000",//color,
+          "fillOpacity": 1,
+          "color": "#000",//color,
+          "weight": 1,
+          "opacity": 1
+
+        }).bindTooltip(
+            // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+            // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
+            '<b class="" style="background-color: '+ this.mapService.hexToRGBA(geo.zone_color) +'; color : '+ this.mapService.getContrastYIQ(geo.zone_color) +';">'+geo.zone_name+'</b>',
+            { permanent: true,
+              // offset: [-100, 0],
+              direction: 'center',
+              className: 'leaflet-tooltip-own',
+            });
+
+        geo.marker_name.addTo(this.mapService.map);
+
         this.geofencesService.geofences.push(geo);
+        this.geofencesService.initializeTable(geo.id);
+        this.geofencesService.updateGeoCounters();
+        this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
 
       });
     }

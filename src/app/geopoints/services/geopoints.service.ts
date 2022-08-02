@@ -133,7 +133,7 @@ export class GeopointsService {
           }).bindTooltip(
               // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
               /* '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geopoints[i].geopunto_color+';">'+this.geopoints[i].geopunto_name+'</b>', */
-              '<b class="" style="border: 0.2rem solid #000; background-color: '+ this.mapService.hexToRGBA(this.geopoints[i].geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>',
+              '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geopoints[i].geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>',
               { permanent: true,
                 offset: [20, 20],
                 direction: 'center',

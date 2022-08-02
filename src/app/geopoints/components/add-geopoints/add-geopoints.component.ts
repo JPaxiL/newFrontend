@@ -387,7 +387,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
           }).bindTooltip(
               // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
               // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.geopunto_color+';">'+geo.geopunto_name+'</b>',
-              '<b class="" style="border: 0.2rem solid #000; background-color: '+ this.mapService.hexToRGBA(geo.geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(geo.geopunto_color) +';">'+geo.geopunto_name+'</b>',
+              '<b class="" style="background-color: '+ this.mapService.hexToRGBA(geo.geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(geo.geopunto_color) +';">'+geo.geopunto_name+'</b>',
               { permanent: true,
                 offset: [20, 20],
                 direction: 'center',

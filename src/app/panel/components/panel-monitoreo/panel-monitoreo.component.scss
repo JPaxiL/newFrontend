@@ -254,6 +254,10 @@
     .eye-column{
       color: var(--gl-light-blue);
     }
+
+    thead{
+      font-size: 0.8rem;
+    }
   }
 
   tbody.p-treetable-tbody {
@@ -650,27 +654,30 @@
   }
 }
 
-@media (max-width: 960px) {
+//960 para rem=16px
+@media (max-width: 840px) {
   #dragbar {
     width: 0.375rem;
   }
 }
 
-@media (max-width: 740px) {
+//740 para rem=16px
+@media (max-width: 655px) {
   #panelMonitoreo {
     margin-top: var(--navbar-height);
     height: calc(100% - var(--navbar-height));
   }
 }
 
-/* @media (max-width: 540px) { */
-@media (max-width: 640px) {
+//640 para rem=16px
+@media (max-width: 560px) {
   #dragbar {
-    /* width: 1rem; */
     display: none;
   }
 }
 
+// 490px es el min valor aqui, de lo contrario el panel monitoreo
+// tapa parcialmente los controles del mapa
 @media (max-width: 490px) {
   #panelMonitoreo {
     width: 100vw !important;

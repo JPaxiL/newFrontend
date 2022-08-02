@@ -12,7 +12,7 @@
             <label>NOMBRE:</label>
         </div>
         <div class="col-12">
-          <input type="text" class="form-control claseinputs" id="geofence-name" name="nombre" [(ngModel)]="form.nombre" required pInputText>
+          <input type="text" class="form-control" id="geofence-name" name="nombre" [(ngModel)]="form.nombre" required pInputText>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                      <p-inputNumber [(ngModel)]="formPerimetro" suffix=" km" [disabled]="true" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+                      <p-inputNumber [(ngModel)]="form.perimetro" suffix=" km" [disabled]="true"></p-inputNumber>
                     </div>
                 </div>
             </div>
@@ -34,12 +34,31 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                      <p-inputNumber [(ngModel)]="formArea" suffix=" km&#178;" [disabled]="true" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+                      <p-inputNumber [(ngModel)]="form.area" suffix=" km&#178;" [disabled]="true"></p-inputNumber>
                     </div>
                 </div>
             </div>
         </div>
       </div>
+
+      <!-- <div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-6 d-flex flex-column justify-content-center text-start">
+              <div class="input-group">
+                <input type="text" class="form-control text-end" [(ngModel)]="form.perimetro" readonly>
+                <span class="input-group-text">km</span>
+              </div>
+            </div>
+            <div class="col-6 d-flex flex-column justify-content-center text-start">
+              <div class="input-group">
+                <input type="text" class="form-control text-end" [(ngModel)]="form.area"  readonly>
+                <span class="input-group-text">km<sup>2</sup></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
 
       <div class="gl-middleline gl-row-underline">
         <div class="row">
@@ -49,7 +68,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex">
-                      <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" [(ngModel)]="formColor" id="color_picker" title="Elige un color">
+                      <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" [(ngModel)]="form.color" id="color_picker" title="Elige un color">
                       <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="color_picker">
                         <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
                       </label>
@@ -62,7 +81,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                      <p-dropdown [options]="booleanOptions" [(ngModel)]="formChkVelocidad" optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                      <p-dropdown [options]="booleanOptions" [(ngModel)]="form.checkVelocidad" optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
                     </div>
                 </div>
             </div>
@@ -74,7 +93,7 @@
             <label>LÍMITE DE VELOCIDAD:</label>
         </div>
         <div class="col-12 d-flex">
-          <p-inputNumber class="flex-grow-1" [(ngModel)]="formLimiteVelocidad" suffix=" Km/h" [disabled]="!formChkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+          <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_velocidad" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           <span class="flex-none center-icon neutral-icon-color">
             <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un límite de velocidad estándar para todas las unidades que transiten dentro de la geocerca."></i>
           </span>
@@ -85,7 +104,7 @@
             <label>TOLERABLE:</label>
         </div>
         <div class="col-12 d-flex">
-          <p-inputNumber class="flex-grow-1" [(ngModel)]="formTolerable" suffix=" Km/h" [disabled]="!formChkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+          <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_tolerable" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           <span class="flex-none center-icon neutral-icon-color">
             <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un exceso de velocidad tolerable al sobrepasar el límite establecido en el presente campo. Termina hasta llegar al siguiente límite de velocidad."></i>
           </span>
@@ -96,7 +115,7 @@
             <label>GRAVE:</label>
         </div>
         <div class="col-12 d-flex">
-          <p-inputNumber class="flex-grow-1" [(ngModel)]="formGrave" suffix=" Km/h" [disabled]="!formChkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+          <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_grave" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           <span class="flex-none center-icon neutral-icon-color">
             <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un exceso de velocidad grave al sobrepasar el límite establecido en el presente campo. Termina hasta llegar al siguiente límite de velocidad."></i>
           </span>
@@ -107,7 +126,7 @@
             <label>MUY GRAVE:</label>
         </div>
         <div class="col-12 d-flex">
-          <p-inputNumber class="flex-grow-1" [(ngModel)]="formMuyGrave" suffix=" Km/h" [disabled]="!formChkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+          <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_muy_grave" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           <span class="flex-none center-icon neutral-icon-color">
             <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un exceso de velocidad muy grave al sobrepasar el límite establecido en el presente campo. No posee un siguiente límite de velocidad."></i>
           </span>

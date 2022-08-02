@@ -17,7 +17,7 @@ export class PanelService {
     { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Seguridad Vehicular"},
     { id:'GEOFENCES', name:"Geocercas"},
-    { id:'EVENT-USER', name:'Notificación de Eventos'},
+    { id:'EVENT-USER', name:'Eventos'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
   );
 

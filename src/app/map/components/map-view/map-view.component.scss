@@ -163,8 +163,9 @@
     .leaflet-top.leaflet-left .leaflet-control-zoom.leaflet-bar.leaflet-control {
       display: none;
     }
-  
-    @media (max-width: 740px) {
+    
+    //740px para rem=16px
+    @media (max-width: 655px) {
       .leaflet-top.leaflet-right {
         top: var(--navbar-height);
       }
@@ -255,8 +256,9 @@
       border: none;
       box-shadow: none;
       > b {
-        padding: 0.2rem 0.4rem; 
-        border-radius: 1rem; 
+        padding: 0.25rem 0.5rem; 
+        border-radius: 1rem;
+        font-size: 0.675rem; 
       }
     }
 

@@ -78,7 +78,7 @@ export class GeofencesService {
         }).bindTooltip(
             // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
             // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
-            '<b class="" style="border: 0.2rem dashed var(--gl-blue-dark); background-color: '+ this.mapService.hexToRGBA(this.geofences[i].zone_color) +'; color : '+ this.mapService.getContrastYIQ(this.geofences[i].zone_color) +';">'+this.geofences[i].zone_name+'</b>',
+            '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geofences[i].zone_color) +'; color : '+ this.mapService.getContrastYIQ(this.geofences[i].zone_color) +';">'+this.geofences[i].zone_name+'</b>',
             { permanent: true,
               // offset: [-100, 0],
               direction: 'center',
@@ -98,12 +98,11 @@ export class GeofencesService {
 
 
         // this.geofences.geo_elemento.setLabel("NOMBRE");
-
-        this.updateGeoCounters();
-        this.eyeInputSwitch = this.geofenceCounters.visible != 0;
-        console.log('Geocercas Cargadas');
-        this.initializingGeofences = true;
       }
+      this.updateGeoCounters();
+      this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+      console.log('Geocercas Cargadas');
+      this.initializingGeofences = true;
 
     });
   }
@@ -112,11 +111,16 @@ export class GeofencesService {
     return this.geofences;
   }
 
-  initializeTable() {
+  initializeTable(newGeofenceId?: number) {
     this.tblDataGeo = [];
+    console.log('Geocercas: ', this.geofences);
 
     for (let i = 0; i < this.geofences.length; i++) {
-      this.geofences[i].zone_name_visible_bol = (this.geofences[i].zone_name_visible === 'true');
+      if(this.geofences[i].id != newGeofenceId){
+        this.geofences[i].zone_name_visible_bol = (this.geofences[i].zone_name_visible === 'true');
+      } else {
+        this.geofences[i].zone_name_visible_bol = true;
+      }
       this.tblDataGeo.push({trama:this.geofences[i]});
     }
     this.spinner.hide('loadingGeofencesSpinner');

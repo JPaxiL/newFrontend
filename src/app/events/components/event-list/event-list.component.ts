@@ -85,8 +85,6 @@ export class EventListComponent implements OnInit {
     this.loadEventTableData();
     this.loadFilterData();
     
-    //Initial sort
-    this.ess.sortEventsTableData();
   }
 
   ngOnDestroy(){
@@ -190,6 +188,8 @@ export class EventListComponent implements OnInit {
 
   showEventPanel(keyComparison: boolean, filterLoaded: boolean, eventsLoaded: boolean){
     if(keyComparison && filterLoaded && eventsLoaded){
+      //Initial sort
+      this.ess.sortEventsTableData();
       this.eventService.attachClassesToEvents();
       this.spinner.hide('loadingEventList');
       //console.log(this.panelNotifKey);

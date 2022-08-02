@@ -14,7 +14,8 @@
     /* background-color: red; */
 }
 
-@media (max-width: 740px) {
+//740px para rem=16px
+@media (max-width: 655px) {
     .navbar-app {
         position: absolute;
         z-index: 2;

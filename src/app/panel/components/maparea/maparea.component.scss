@@ -13,7 +13,8 @@
   height: 100%;
 }
 
-@media (max-width: 740px) {
+//740px para rem=16px
+@media (max-width: 655px) {
   .map-wrapper {
       margin-top: 0;
   }
