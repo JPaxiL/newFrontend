@@ -153,7 +153,9 @@ export class VehicleService {
   }
   public formatVehicle(vehicle: any): any{
     const today = moment();
+    const date = moment(vehicle.dt_tracker).subtract(5, 'hours');
 
+    vehicle.dt_tracker = date.format('YYYY-MM-DD HH:mm:ss');
     vehicle = this.addSelect(vehicle);
     vehicle = this.addTank(vehicle);
     vehicle.parametrosGet = this.addParams(vehicle.parametros);

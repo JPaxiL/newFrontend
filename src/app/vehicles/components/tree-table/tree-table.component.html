@@ -136,7 +136,7 @@
           <i class="fa fa-search" aria-hidden="true"></i>
           <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Placa/Código" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
         </span>
-        
+
         <button (click)="onClickGroup()" type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2">
           <i class="fa fa-plus" aria-hidden="true"></i>
         </button>
@@ -218,7 +218,7 @@
               </div>
               <div class="dropdown-divider"></div>
             </div>
-  
+
             <!-- <div class="dropdown-item active-view" style="padding: 0.125rem 0.75rem;"> -->
             <div class="dropdown-item active" style="padding: 0.125rem 0.75rem;">
               <i  class="fas fa-sitemap ag-grid-header-icon text-center" style="width: 20px;"></i>
@@ -232,10 +232,10 @@
               <i class="fas fa-signal ag-grid-header-icon text-center" style="width: 20px;"></i>
               <span (click)="onTableTransmision()">Vista por Transmisión*</span>
             </div>
-            
+
           </div>
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -264,7 +264,7 @@
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
-  
+
         <tr>
           <th *ngIf="setting['eye']"><app-eye-header style="height: 1.25rem; display: flex;"></app-eye-header></th>
           <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
@@ -277,7 +277,7 @@
           <th *ngIf="setting['gsm']" ><app-gsm-header></app-gsm-header></th>
           <!-- <th *ngIf="setting['trans']"><app-transmission-header></app-transmission-header></th> -->
           <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th>
-  
+
         </tr>
         <!-- <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
           {{col.header}}
@@ -285,7 +285,7 @@
         </th> -->
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-  
+
         <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'grupo', 'row-header-convoy': rowData['type'] === 'convoy'}">
           <td [attr.colspan]="column">
             <div class="d-flex justify-content-between align-items-center">
@@ -326,7 +326,7 @@
                 <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
                 {{rowData['type'] === 'grupo' && rowData['name']!='Unidades Sin Grupo'? 'Grupo: ': rowData['type'] === 'convoy' && rowData['name']!='Unidades Sin Convoy'? 'Convoy: ': ''}}{{rowData["name"]}}
               </div>
-  
+
               <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'" class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
                 <div class="d-flex justify-content-end">
                   <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
@@ -351,7 +351,7 @@
                   <div style="width: 48px;"></div>
                 </div>
               </div>
-  
+
             </div> -->
           </td>
         </tr>
@@ -418,6 +418,5 @@
       </ng-template>
     </p-treeTable>
   </div>
-  
-</div>
 
+</div>
