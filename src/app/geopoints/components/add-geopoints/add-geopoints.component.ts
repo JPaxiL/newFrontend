@@ -86,10 +86,11 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
 
       const svgIcon = L.divIcon({
-        html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="#F00" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+        //html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="#F00" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+        html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 34.892"><g transform="matrix(1.18559 0 0 1.18559 -965.773 -331.784)"><path d="M817.112 282.971c-1.258 1.343-2.046 3.299-2.015 5.139.064 3.845 1.797 5.3 4.568 10.592.999 2.328 2.04 4.792 3.031 8.873.138.602.272 1.16.335 1.21.062.048.196-.513.334-1.115.99-4.081 2.033-6.543 3.031-8.871 2.771-5.292 4.504-6.748 4.568-10.592.031-1.84-.759-3.798-2.017-5.14-1.437-1.535-3.605-2.67-5.916-2.717-2.312-.048-4.481 1.087-5.919 2.621z" style="fill:#f00;"/><circle r="3.035" cy="288.253" cx="823.031" style="fill:#2BFF00"/></g></svg>`,
         className: "",
-        iconSize: [24, 29],
-        iconAnchor: [12, 29],
+        iconSize: [24, 41.86],
+        iconAnchor: [12, 41.86],
       });
 
       this.pointAdd = L.marker([this.mapService.map.getCenter().lat , this.mapService.map.getCenter().lng],
@@ -115,8 +116,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
             // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
             html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
-            iconSize: [24, 29],
-            iconAnchor: [12, 29],
+            iconSize: [24, 41.86],
+            iconAnchor: [12, 41.86],
           });
 
         geo.geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
@@ -144,10 +145,11 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
     }
 
     const svgIcon = L.divIcon({
-      html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+      //html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+      html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 34.892"><g transform="matrix(1.18559 0 0 1.18559 -965.773 -331.784)"><path d="M817.112 282.971c-1.258 1.343-2.046 3.299-2.015 5.139.064 3.845 1.797 5.3 4.568 10.592.999 2.328 2.04 4.792 3.031 8.873.138.602.272 1.16.335 1.21.062.048.196-.513.334-1.115.99-4.081 2.033-6.543 3.031-8.871 2.771-5.292 4.504-6.748 4.568-10.592.031-1.84-.759-3.798-2.017-5.14-1.437-1.535-3.605-2.67-5.916-2.717-2.312-.048-4.481 1.087-5.919 2.621z" style="fill:`+geo.geopunto_color+`;"/><circle r="3.035" cy="288.253" cx="823.031" style="fill:#fff"/></g></svg>`,
       className: "",
-      iconSize: [24, 29],
-      iconAnchor: [12, 29],
+      iconSize: [24, 41.86],
+      iconAnchor: [12, 41.86],
     });
 
     geo.geo_elemento.setIcon(svgIcon);
@@ -202,8 +204,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
             // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
             html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
-            iconSize: [24, 29],
-            iconAnchor: [12, 29],
+            iconSize: [24, 41.86],
+            iconAnchor: [12, 41.86],
           });
 
         geo.geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
@@ -281,8 +283,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
             // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
             html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
-            iconSize: [24, 29],
-            iconAnchor: [12, 29],
+            iconSize: [24, 41.86],
+            iconAnchor: [12, 41.86],
           });
 
         geo.geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
@@ -304,9 +306,10 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
           }).bindTooltip(
               // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-              '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.geopunto_color+';">'+geo.geopunto_name+'</b>',
+              //'<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.geopunto_color+';">'+geo.geopunto_name+'</b>',
+              '<b class="" style="background-color: '+ this.mapService.hexToRGBA(geo.geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(geo.geopunto_color) +';">'+geo.geopunto_name+'</b>',
               { permanent: true,
-                offset: [20, 20],
+                offset: [0, 20],
                 direction: 'center',
                 className: 'leaflet-tooltip-own',
               });
@@ -315,6 +318,9 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
           geo.marker_name.addTo(this.mapService.map);
         }
 
+
+        this.geopointsService.updateGeoCounters();
+        this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
 
       });
 
@@ -363,8 +369,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
             // html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+geo.geopunto_color+`" stroke="#FFF" stroke-width="6" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#FFF" cx="74" cy="75" r="24"/></svg>`,
             html: this.geopointsService.geopointHTMLMarkerIcon(geo.geopunto_color),
             className: "",
-            iconSize: [24, 29],
-            iconAnchor: [12, 29],
+            iconSize: [24, 41.86],
+            iconAnchor: [12, 41.86],
           });
 
           geo.geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
@@ -389,7 +395,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
               // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.geopunto_color+';">'+geo.geopunto_name+'</b>',
               '<b class="" style="background-color: '+ this.mapService.hexToRGBA(geo.geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(geo.geopunto_color) +';">'+geo.geopunto_name+'</b>',
               { permanent: true,
-                offset: [20, 20],
+                offset: [0, 20],
                 direction: 'center',
                 className: 'leaflet-tooltip-own',
               });
@@ -401,6 +407,13 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
           // ===== 2
 
         this.geopointsService.geopoints.push(geo);
+        
+        this.geopointsService.initializeTable();
+        this.geopointsService.updateGeoCounters();
+        this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
+        
+        
+        
 
         // geopunto_color: "#000000"
         // geopunto_id: 8556
@@ -451,6 +464,10 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
       });
     }
+
+    
+
+    
 
     //Despues de agregar o editar, ordena el array de geocercas por el atributo geopunto_name(nombre de la geocerca en mayuscula)
     // this.geopointsService.geopoints.sort(function (a:any, b:any){
@@ -509,10 +526,11 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
         // geo.geo_elemento.setStyle({opacity: 1, color: newColor });
 
         const svgIcon = L.divIcon({
-          html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+newColor+`" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+          //html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+newColor+`" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+          html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 34.892"><g transform="matrix(1.18559 0 0 1.18559 -965.773 -331.784)"><path d="M817.112 282.971c-1.258 1.343-2.046 3.299-2.015 5.139.064 3.845 1.797 5.3 4.568 10.592.999 2.328 2.04 4.792 3.031 8.873.138.602.272 1.16.335 1.21.062.048.196-.513.334-1.115.99-4.081 2.033-6.543 3.031-8.871 2.771-5.292 4.504-6.748 4.568-10.592.031-1.84-.759-3.798-2.017-5.14-1.437-1.535-3.605-2.67-5.916-2.717-2.312-.048-4.481 1.087-5.919 2.621z" style="fill:`+newColor+`;"/><circle r="3.035" cy="288.253" cx="823.031" style="fill:#fff"/></g></svg>`,
           className: "",
-          iconSize: [24, 29],
-          iconAnchor: [12, 29],
+          iconSize: [24, 41.86],
+          iconAnchor: [12, 41.86],
         });
 
         geo.geo_elemento.setIcon(svgIcon);
@@ -523,10 +541,11 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
         // console.log("CREACION DE GEOCERCA");
         //this.poligonAdd.setStyle({opacity: 1, color: newColor });
         const svgIcon = L.divIcon({
-          html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+newColor+`" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+          //html: `<svg version="1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 149 178"><path fill="`+newColor+`" stroke="#2BFF00" stroke-width="8" stroke-miterlimit="10" d="M126 23l-6-6A69 69 0 0 0 74 1a69 69 0 0 0-51 22A70 70 0 0 0 1 74c0 21 7 38 22 52l43 47c6 6 11 6 16 0l48-51c12-13 18-29 18-48 0-20-8-37-22-51z"/><circle fill="#2BFF00" cx="74" cy="75" r="30"/></svg>`,
+          html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 34.892"><g transform="matrix(1.18559 0 0 1.18559 -965.773 -331.784)"><path d="M817.112 282.971c-1.258 1.343-2.046 3.299-2.015 5.139.064 3.845 1.797 5.3 4.568 10.592.999 2.328 2.04 4.792 3.031 8.873.138.602.272 1.16.335 1.21.062.048.196-.513.334-1.115.99-4.081 2.033-6.543 3.031-8.871 2.771-5.292 4.504-6.748 4.568-10.592.031-1.84-.759-3.798-2.017-5.14-1.437-1.535-3.605-2.67-5.916-2.717-2.312-.048-4.481 1.087-5.919 2.621z" style="fill:`+newColor+`;"/><circle r="3.035" cy="288.253" cx="823.031" style="fill:#2BFF00"/></g></svg>`,
           className: "",
-          iconSize: [24, 29],
-          iconAnchor: [12, 29],
+          iconSize: [24, 41.86],
+          iconAnchor: [12, 41.86],
         });
 
         this.pointAdd.setIcon(svgIcon);

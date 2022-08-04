@@ -147,6 +147,7 @@ export class ListGeopointsComponent implements OnInit {
           // this.clickShowPanel(this.nameComponent);
 
           this.mapService.map.removeLayer(geo.geo_elemento);
+          this.mapService.map.removeLayer(geo.marker_name);
 
           for (var i = 0; i < this.geopointsService.geopoints.length; i++) {
             if (this.geopointsService.geopoints[i].geopunto_id === id) {
@@ -156,6 +157,8 @@ export class ListGeopointsComponent implements OnInit {
           }
           //this.mostrar_tabla();
           this.geopointsService.initializeTable();
+          this.geopointsService.updateGeoCounters();
+          this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
 
         }
     }).then(data => {
