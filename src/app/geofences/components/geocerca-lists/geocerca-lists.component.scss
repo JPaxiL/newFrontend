@@ -5,11 +5,12 @@
     svg{
       fill: var(--gl-dark-gray-blue);
     }
-    i{
+    i:not(.fa-pencil){
       font-size: 1.25rem;
-      &.fa-pencil{
-        font-size: 1.125rem;
-      }
+    }
+    svg{
+      position: relative;
+      top: 0.125rem;
     }
   } 
   

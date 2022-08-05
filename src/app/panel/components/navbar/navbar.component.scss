@@ -24,15 +24,17 @@
     fill: red;
 }
 
-nav > .container-fluid > div {
-    pointer-events: auto;
+nav > .container-fluid{
+    .gl-logo, .navbar-last-container {
+        pointer-events: auto;
+    }
 }
 
 
 .navbar {
-    /* padding-top: 3px; */
-    padding-top: 0px;
-    padding-bottom: 3px;
+    height: var(--navbar-height); 
+    padding: 0;
+    background-color: var(--navbar-background-color);
 }
 
 .collapse-toggle {
@@ -82,7 +84,7 @@ a {
 }
 
 .profile-picture-mini{
-    --size: 2.125rem;
+    --size: 1.875rem; 
      
     img, div{
         height: var(--size);
@@ -108,12 +110,12 @@ a {
 }
 
 .user-menu-container {
-    height: calc(var(--navbar-height) - 1.5rem);
+    height: calc(var(--navbar-height) - 2rem);
     width: auto;
-    background-color: #f8f8f9; 
+    background-color: var(--navbar-background-color);
     padding: 0 calc(calc(var(--navbar-height) - 1.5rem) / 2);
     border-radius: calc(calc(var(--navbar-height) - 1.5rem) / 2);
-    border: 2px solid var(--gl-gray-border);
+    border: 1px solid var(--gl-gray-border);
     gap: 0.5rem;
 
     &.dropdown-toggle::after {
@@ -132,8 +134,9 @@ a {
 
 .navbar-last-container {
     .dropdown-menu.dropdown-menu-end.show {
+        box-shadow: 0 -0.0675rem 1rem -0.375rem;
         border-radius: calc(calc(var(--navbar-height) - 1.5rem) / 3);
-        border: 2px solid var(--gl-gray-border);
+        border: 1px solid var(--gl-gray-border);
         min-width: 100%;
         margin-top: -2px;
         overflow: hidden;
@@ -202,9 +205,9 @@ button.notif-counter:not([notif-count="0"])::after{
 
 /* Navbar */
 .container-fluid.no-x-padding div.gl-logo{
+    background-color: var(--navbar-background-color);
     padding: 0px 1rem;
     margin: 0px;
-    /* background-color: var(--gl-blue-dark); */
     display: flex;
 
     height: calc(var(--navbar-height) - 1.5rem);
@@ -384,7 +387,7 @@ i.fa + span {
 
 //El breakpoint aquí es de 91 rem. Entonces, si rem = 16px, 94 x 16 = 1504
 //@media (max-width: 1504px) {
-@media (max-width: 1274px) {
+@media (max-width: 1274.9999px) {
     #navbarSupportedContent {
         display: none !important;
     }
@@ -429,6 +432,9 @@ i.fa + span {
 //740px para rem=16px
 //Deberia ser 648px, pero causa overflow asi que ira 655px
 @media (max-width: 655px) {
+    .navbar{
+        background: none;
+    }
 
     #navbarSupportedContent, #navbarSupportedContent_collapsed {
         display: none !important;
@@ -444,7 +450,7 @@ i.fa + span {
 
     .gl-logo {
         border-radius: 0 calc(calc(var(--navbar-height) - 1.5rem) / 2) calc(calc(var(--navbar-height) - 1.5rem) / 2) 0;
-        border: 2px solid var(--gl-gray-border);
+        border: 1px solid var(--gl-gray-border);
         border-left: none;
     }
 
