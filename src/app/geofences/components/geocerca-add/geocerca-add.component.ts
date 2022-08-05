@@ -12,6 +12,7 @@ import * as L from 'leaflet';
 
 import 'leaflet-measure-path'
 import 'leaflet-measure-path/leaflet-measure-path.css';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var $: any;
 // import FreeDraw, { CREATE, EDIT } from 'leaflet-freedraw';
@@ -73,6 +74,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     public geofencesService: GeofencesService,
     // public MeasureDrawService: MeasureDrawService,
     public mapService: MapServicesService,
+    private spinner: NgxSpinnerService,
 
   ) { }
 
@@ -487,11 +489,14 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
   clickGuardar(id:number){
     //console.log("---clickGuardar");
+    this.spinner.show('spinnerLoading');
 
     if ( this.geofencesService.action == "edit" ) {
 
       var geo0 = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
       this.form.geo_geometry = this.layerToPoints(geo0.geo_elemento,'POLYGON');
+
+      geo0.geo_elemento.editing.disable();
 
       this.geofencesService.edit(this.form).then( (res1) => {
         //console.log("---clickGuardar----");
@@ -503,7 +508,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         let gEdit2 = res1[3][0];
 
         var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
-        geo.geo_elemento.editing.disable();
 
         // geo.merge(res1[2]);
         // geo = Object.assign(geo, res1[2]);
@@ -564,6 +568,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           geo.marker_name.addTo(this.mapService.map);
         }
 
+        this.spinner.hide('spinnerLoading');
+
 
 
         // geo.geo_elemento.setLatLngs( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ));
@@ -574,6 +580,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     } else {
 
+      this.poligonAdd.editing.disable();
       this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
 
       this.geofencesService.store(this.form).then( (res1) => {
@@ -641,6 +648,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.marker_name.addTo(this.mapService.map);
 
         this.geofencesService.geofences.push(geo);
+        this.spinner.hide('spinnerLoading');
         this.geofencesService.initializeTable(geo.id);
         this.geofencesService.updateGeoCounters();
         this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;

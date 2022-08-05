@@ -5,6 +5,7 @@ import { MapServicesService } from '../../../map/services/map-services.service';
 
 import * as L from 'leaflet';
 import { Logger } from 'ag-grid-community';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-geopoints',
@@ -20,6 +21,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
   constructor(
     public geopointsService: GeopointsService,
     public mapService: MapServicesService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   action:string = "add";
@@ -227,11 +229,12 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
   clickGuardar(id:number){
     console.log("---clickGuardar");
     console.log(this.geopointsService.action);
-
+    this.spinner.show('spinnerLoading');
 
     if ( this.geopointsService.action == "edit" ) {
 
       var geo0 = this.geopointsService.geopoints.filter((item:any)=> item.geopunto_id == id)[0];
+      geo0.geo_elemento.dragging.disable();
 
       //console.log(geo0);
 
@@ -252,7 +255,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
         var geo = this.geopointsService.geopoints.filter((item:any)=> item.geopunto_id == gEdit.id)[0];
 
 
-        geo.geo_elemento.dragging.disable();
+        
         //geo.geo_elemento.editing.disable();
 
         // color_punto: "#00ff59"
@@ -318,7 +321,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
           geo.marker_name.addTo(this.mapService.map);
         }
 
-
+        this.spinner.hide('spinnerLoading');
         this.geopointsService.updateGeoCounters();
         this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
 
@@ -327,6 +330,8 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
     } else {
 
       // this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
+
+      this.pointAdd.dragging.disable();
 
       this.form.geopunto_nombre_visible = (this.form.geopunto_nombre_visible_bol) ? "true"  : "false";
       this.form.geopunto_visible    = (this.form.geopunto_visible_bol) ? "true"  : "false";
@@ -408,6 +413,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
         this.geopointsService.geopoints.push(geo);
         
+        this.spinner.hide('spinnerLoading');
         this.geopointsService.initializeTable();
         this.geopointsService.updateGeoCounters();
         this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
