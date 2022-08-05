@@ -21,6 +21,7 @@ export class SocketWebService extends Socket {
 
   listen = ()=>{
     this.ioSocket.on('envio', (res:string, data: any) => {
+      // console.log('envio',data);
       this.callback.emit(data)
     });
   }
