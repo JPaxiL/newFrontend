@@ -222,7 +222,8 @@ export class FormComponent implements OnInit {
 
   isFormFilled = false;
 
-  chkDateHour = false; //False muestra fecha y h juntas. true separadas
+  //Removido del formulario
+  chkDateHour = true; //False muestra fecha y h juntas. true separadas
 	arrayUsers = [ 472, 204, 483, 467, 360, 394, 364, 445, 489, 491, 503, 504, 515, 522, 537, 554, 552, 555, 573, 587, 529, 590, 591, 595, 613, 620, 621, 734];
   fog = "1";
 	userId = 0;
