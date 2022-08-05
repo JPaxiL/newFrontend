@@ -146,7 +146,7 @@
             <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
           </button>
           <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel">
-            <div class="text-center pb-2 pt-1">
+            <div class="text-center">
               Personalizar Panel
             </div>
             <div class="container pt-2 png-checkbox-container">
@@ -368,11 +368,12 @@
             <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
           </td>
           <td *ngIf="setting['vehicle']" style="min-width: 215px;" class="vehicle-column">
-            <div class="d-flex justify-content-center mx-2">
-              <div class="flex-none icon-float-right vehicle-icon me-2" *ngIf="vehicleIconState">
+            <div class="d-flex justify-content-center align-items-center mx-2">
+              <div class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}"></div>
+              <div class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState">
                 <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
               </div>
-              <div class="flex-grow-1 d-flex flex-column text-start vehicle-data" style="background-color:{{color[rowData['point_color']]}}">
+              <div class="flex-grow-1 d-flex flex-column text-start vehicle-data">
                 <strong>{{rowData['name']}}</strong>
                 <span>{{rowData['dt_tracker']}}</span>
                 <!-- <aside class="">
@@ -392,9 +393,9 @@
             <p-checkbox [(ngModel)]="dummyPngCheckboxShowName" [binary]="true"></p-checkbox>
           </td>
           <td *ngIf="setting['follow']" class="inline-png-checkbox follow-column">
-            <span  class="btn-label" title="Seguir vehículo">
+            <span  class="btn-label" title="Seguir vehículo" (click)="onClickFollow(rowData)">
               <!-- <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i> -->
-              <p-checkbox [(ngModel)]="dummyPngCheckboxFollow" [binary]="true"></p-checkbox>
+              <p-checkbox [(ngModel)]="rowData.follow" [binary]="true"></p-checkbox>
             </span>
           </td>
           <td *ngIf="setting['limit']">

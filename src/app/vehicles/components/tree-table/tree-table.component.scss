@@ -40,6 +40,8 @@ p {
 
         > div:first-child{
             color: #fff;
+            padding-top: 0.25rem;
+            padding-bottom: 0.75rem;
         }
 
         > .container {
@@ -245,12 +247,19 @@ p {
             }
 
             &.vehicle-column{
+                .vehicle-transmission-status{
+                    height: 1.375rem;
+                    width: 1.375rem;
+                    border-radius: 50%;
+                }
                 .vehicle-data{
-                    color: #fff;
-                    max-width: 175px;
-                    border-radius: 0.375rem;
+                    /* max-width: 175px;
+                    border-radius: 0.375rem; */
                     padding: 0.125rem 0.625rem;
                     strong{
+                        font-size: 0.7rem;
+                    }
+                    span{
                         font-size: 0.675rem;
                     }
                 }

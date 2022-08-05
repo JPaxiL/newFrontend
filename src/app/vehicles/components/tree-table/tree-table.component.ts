@@ -8,6 +8,7 @@ import {ConfirmationService} from 'primeng-lts/api';
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FollowService } from '../../services/follow.service';
 
 @Component({
   selector: 'app-tree-table',
@@ -72,7 +73,6 @@ export class TreeTableComponent implements OnInit {
   }
 
   dummyPngCheckboxShowName: boolean = true;
-  dummyPngCheckboxFollow: boolean = false;
 
   @ViewChild('tt') tt!:any;
 
@@ -82,6 +82,7 @@ export class TreeTableComponent implements OnInit {
     private vehicleConfigService : VehicleConfigService,
     private confirmationService: ConfirmationService,
     private spinner: NgxSpinnerService,
+    private followService:FollowService,
   ) {
     // this.vehicleService.listTable=1;
     if(this.loading) {
@@ -133,6 +134,7 @@ export class TreeTableComponent implements OnInit {
     this.treeTableResizing(true);
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
+    console.log(this.vehicleService.vehicles);
   }
 
   treeTableResizing(e: any) {
@@ -495,6 +497,13 @@ export class TreeTableComponent implements OnInit {
 
   onTableTransmision(){
 
+  }
+
+  onClickFollow(rowData: any){
+    rowData.follow = !rowData.follow;
+    console.log('Row data a seguir: ', rowData);
+    console.log('Nuevo Estado Follow: ', rowData.follow);
+    this.followService.add(rowData);
   }
 
   public onQuickFilterChanged(data: any) {
