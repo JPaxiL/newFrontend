@@ -15,10 +15,15 @@
   } 
   
   tbody td { 
-    padding: 3px;
     .geofence-color{
       width: 1.5rem;
       height: 1.5rem;
+    }
+    &:nth-child(2){
+      padding-right: 0;
+    }
+    &:nth-child(3){
+      padding-left: 0;
     }
   }
 

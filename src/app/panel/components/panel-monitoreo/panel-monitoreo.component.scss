@@ -6,7 +6,7 @@
 
 #panelMonitoreo{
   display: none;
-  width: 425px;
+  width: calc(425px + var(--gl-panel-padding-left));
   position: absolute;
   z-index: 20001;
   top: auto;
@@ -29,6 +29,7 @@
 }
 
 .header-panel-monitoreo {
+  font-size: 1.125rem;
   padding: 0 1rem;
   margin-bottom: 0px;
   /* background-color: #6D99CB; */
@@ -170,7 +171,7 @@
     flex-direction: column;
     justify-content: center;
     height: var(--row-busqueda-height);
-    padding: 0 1rem;
+    padding: 0 1rem 0 var(--gl-panel-padding-left);
     /* padding: 0.625rem 1rem; */
     flex: none;
     color: #000;
@@ -679,9 +680,9 @@
   }
 }
 
-// 490px es el min valor aqui, de lo contrario el panel monitoreo
+// (490px + el padding left del panel monitoreo) es el min valor aqui, de lo contrario el panel monitoreo
 // tapa parcialmente los controles del mapa
-@media (max-width: 490px) {
+@media (max-width: 525px) {
   #panelMonitoreo {
     width: 100vw !important;
   }

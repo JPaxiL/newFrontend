@@ -206,7 +206,7 @@ button.notif-counter:not([notif-count="0"])::after{
 /* Navbar */
 .container-fluid.no-x-padding div.gl-logo{
     background-color: var(--navbar-background-color);
-    padding: 0px 1rem;
+    padding: 0px 2rem 0px 2.5rem;
     margin: 0px;
     display: flex;
 
@@ -214,6 +214,10 @@ button.notif-counter:not([notif-count="0"])::after{
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    img{
+        width: 8.9rem;
+    }
 }
 
 li.nav-item {
@@ -377,7 +381,7 @@ i.fa + span {
 //1770px para rem=16px
 @media (max-width: 1550px) {
     #navbarSupportedContent > .navbar-nav {
-        gap: 1rem;
+        gap: 0.5rem;
     }
 }
 
@@ -403,15 +407,11 @@ i.fa + span {
 
 //1200px para rem=16px
 @media (max-width: 1050px) {
+    #navbarSupportedContent_collapsed > .navbar-nav {
+        gap: 0.2rem;
+    }
     .navbar-last-container{
         padding: 0.5rem;
-    }
-}
-
-//1100px para rem=16px
-@media (max-width: 963px) {
-    #navbarSupportedContent_collapsed > .navbar-nav {
-        gap: 0;
     }
     .user-menu-name {
         display: none !important;
@@ -419,6 +419,13 @@ i.fa + span {
     .dropdown-user-info {
         display: block !important;
     }
+}
+
+//1100px para rem=16px
+@media (max-width: 963px) {
+    #navbarSupportedContent_collapsed > .navbar-nav {
+        gap: 0;
+    } 
 }
 
 //850px para rem=16px
@@ -448,10 +455,16 @@ i.fa + span {
         display: block;
     }
 
-    .gl-logo {
+    .container-fluid.no-x-padding div.gl-logo {
         border-radius: 0 calc(calc(var(--navbar-height) - 1.5rem) / 2) calc(calc(var(--navbar-height) - 1.5rem) / 2) 0;
         border: 1px solid var(--gl-gray-border);
         border-left: none;
+
+        padding: 0 1.5rem;
+
+        img{
+            width: 7.5rem;
+        }
     }
 
     .notif-button {

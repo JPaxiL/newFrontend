@@ -17,10 +17,11 @@ export class PanelMonitoreoComponent implements OnInit {
     var clickDistanceFromDragbar: number;
     var maxWidth: number;
     var minWidth: number;
+    const rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
     
     /* Redimensionar panel en window resize */
     window.addEventListener('resize', function(e: any) {
-      minWidth = 425;
+      minWidth = 425 + 2.5 * rem_to_px;
       if(window.innerWidth > 600) {
         maxWidth = 0.725 * window.innerWidth < 800? 0.725 * window.innerWidth: 800;
       } else {
@@ -37,7 +38,7 @@ export class PanelMonitoreoComponent implements OnInit {
 
     /* Redimiensionar panel en drag */
     $('#dragbar > div').on('mousedown touchstart gesturestart', function(e:any){
-      minWidth = 425;
+      minWidth = 425 + 2.5 * rem_to_px;
       if(window.innerWidth > 600) {
         maxWidth = 0.725 * window.innerWidth < 800? 0.725 * window.innerWidth: 800;
       } else {
