@@ -135,7 +135,7 @@ export class GeopointsService {
               /* '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geopoints[i].geopunto_color+';">'+this.geopoints[i].geopunto_name+'</b>', */
               '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geopoints[i].geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>',
               { permanent: true,
-                offset: [20, 20],
+                offset: [0, 20],
                 direction: 'center',
                 className: 'leaflet-tooltip-own',
               });
@@ -220,7 +220,7 @@ export class GeopointsService {
     return this.geopoints;
   }
 
-  public initializeTable(){
+  public initializeTable(newGeopointId?: number){
     this.tblDataGeo = [];
     for (let i = 0; i < this.geopoints.length; i++) {
       this.geopoints[i].geopunto_nombre_visible_bol = (this.geopoints[i].geopunto_nombre_visible === 'true');
@@ -254,6 +254,9 @@ export class GeopointsService {
   }
 
   public updateGeoCounters(){
+    console.log('Geopuntos update: ', this.geopoints);
+    console.log('Geopuntos update: ', this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
+    console.log('Geopuntos update: ', this.tblDataGeo.length - this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
     this.geopointCounters.visible = this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length;
     this.geopointCounters.hidden = this.tblDataGeo.length - this.geopointCounters.visible;
   }

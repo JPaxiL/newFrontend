@@ -38,7 +38,7 @@
           <label class="row">
             <label class="col-9 form-check-label">MOSTRAR GEOPUNTO:</label>
             <div class="col-2 d-flex flex-column justify-content-center">
-              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkMostrarGeopunto" [ngModelOptions]="{standalone: true}"></p-checkbox>
+              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="form.geopunto_visible_bol" [ngModelOptions]="{standalone: true}"></p-checkbox>
             </div>
           </label>
         </div>
@@ -46,7 +46,7 @@
           <label class="row">
             <label class="col-9 form-check-label">MOSTRAR NOMBRE:</label>
             <div class="col-2 d-flex flex-column justify-content-center">
-              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkMostrarNombre" [ngModelOptions]="{standalone: true}"></p-checkbox>
+              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="form.geopunto_nombre_visible_bol" [ngModelOptions]="{standalone: true}"></p-checkbox>
             </div>
           </label>
         </div>
