@@ -49,14 +49,25 @@ export class TreeTableComponent implements OnInit {
 
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   color: any = {
-    10:"green",
-    20:"blue",
-    30:"purple",
-    40:"black",
-    50:"orange",
-    60:"red",
-    100:"green"
-  }
+    10:"#45e845",
+    20:"#2cadf2",
+    30:"#b23ccf",
+    40:"#000",
+    50:"#ffb300",
+    60:"#cc1013",
+    100:"#45e845",
+  };
+
+  hint: any = {
+    10: 'En movimiento',
+    20: 'Detenido encendido',
+    30: 'Detenido apagado',
+    40: 'Sin transmisión',
+    50: 'Sin cobertura',
+    60: 'GPS Sin señal',
+    100: 'En movimiento',
+  };
+
   public column: number = 9;
   public setting: any = {
     eye: true,
@@ -71,8 +82,6 @@ export class TreeTableComponent implements OnInit {
     config: true,
     sort: 'asc'
   }
-
-  dummyPngCheckboxShowName: boolean = true;
 
   @ViewChild('tt') tt!:any;
 
@@ -139,6 +148,7 @@ export class TreeTableComponent implements OnInit {
 
   treeTableResizing(e: any) {
     /* console.log('--navbar-height: ', Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''))); */
+
     const navbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
     const rowBusquedaHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--row-busqueda-height').replace('rem', ''));
     const panelMonitoreoVehiclesHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', ''));

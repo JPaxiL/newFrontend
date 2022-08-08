@@ -42,21 +42,21 @@ export class TransmissionComponent implements OnInit {
     this.params = params;
 
     if(params.value == 10){
-      this.nameColor = "green";
+      this.nameColor = "#45e845";
     }else if(params.value == 20){
-      this.nameColor = "blue";
+      this.nameColor = "#2cadf2";
     }else if(params.value == 30){
-      this.nameColor = "purple";
+      this.nameColor = "#b23ccf";
     }else if(params.value == 40){
-      this.nameColor = "black";
+      this.nameColor = "#000";
     }else if(params.value == 50){
-      this.nameColor = "orange";
+      this.nameColor = "#ffb300";
     }else if(params.value == 60){
-      this.nameColor = "red";
+      this.nameColor = "#cc1013";
     }else if(params.value == 100){
-      this.nameColor = "green";
+      this.nameColor = "#45e845";
     }else{
-      this.nameColor = "black";
+      this.nameColor = "#000";
     }
 
   }

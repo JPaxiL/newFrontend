@@ -369,7 +369,7 @@
           </td>
           <td *ngIf="setting['vehicle']" style="min-width: 215px;" class="vehicle-column">
             <div class="d-flex justify-content-center align-items-center mx-2">
-              <div class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}"></div>
+              <div class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}" title="{{hint[rowData['point_color']]}}" data-bs-toggle="tooltip" data-bs-placement="top" container="body"></div>
               <div class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState">
                 <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
               </div>
@@ -390,7 +390,7 @@
           </td>
           <td *ngIf="setting['tag']" class="inline-png-checkbox">
             <!-- <input type="checkbox" name="" value="" checked> -->
-            <p-checkbox [(ngModel)]="dummyPngCheckboxShowName" [binary]="true"></p-checkbox>
+            <p-checkbox [(ngModel)]="rowData.tag" [binary]="true"></p-checkbox>
           </td>
           <td *ngIf="setting['follow']" class="inline-png-checkbox follow-column">
             <span  class="btn-label" title="Seguir vehículo" (click)="onClickFollow(rowData)">
