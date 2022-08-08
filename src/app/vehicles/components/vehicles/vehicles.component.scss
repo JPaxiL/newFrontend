@@ -115,6 +115,11 @@
     .show-vehicle-icon .ag-body-viewport[ref="eBodyViewport"] .vehicle-icon-column{
         display: block;
     }
+    
+    .ag-cell-focus{
+        border: none !important;
+        outline: none !important;
+    }
 
     ag-grid-angular app-limit-header{
         svg{

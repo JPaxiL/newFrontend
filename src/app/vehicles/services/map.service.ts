@@ -60,6 +60,9 @@ export class MapService {
     this.vehicleService.clickEyeAll.subscribe(res=>{
       this.eyeClickAll();
     });
+    this.vehicleService.clickTag.subscribe(res=>{
+      this.tagClick(res);
+    });
   }
   eyeClick(map: any, IMEI: string){
     //console.log('click eye IMEI = ',IMEI);
@@ -78,6 +81,7 @@ export class MapService {
     if(vehicle.eye==true){
       // this.map.addLayer(this.marker[IMEI]);
       this.markerClusterGroup.addLayer(this.marker[IMEI]);
+      this.tagClick(vehicle.IMEI, false);
     }else{
       //console.log('quitar vehiculo del mapa ...',vehicle);
       // this.map.removeLayer(this.marker[IMEI]);
@@ -93,12 +97,31 @@ export class MapService {
       // }
       if(vehicles[i].eye==true){
         this.markerClusterGroup.addLayer(this.marker[vehicles[i].IMEI]);
+        this.tagClick(vehicles[i].IMEI, false);
       }else{
         this.markerClusterGroup.removeLayer(this.marker[vehicles[i].IMEI]);
       }
     }
     this.vehicleService.vehicles = vehicles;
   }
+
+  tagClick(IMEI: string, comesFromCheckbox?: boolean){
+    let vehicle = [];
+    for (const i in this.vehicleService.vehicles){
+      if(this.vehicleService.vehicles[i].IMEI==IMEI){
+        if(comesFromCheckbox != false){
+          this.vehicleService.vehicles[i].tag=!this.vehicleService.vehicles[i].tag;
+        }
+        vehicle = this.vehicleService.vehicles[i];
+      }
+    }
+    if(vehicle.tag){
+      this.marker[IMEI].openTooltip();
+    } else {
+      this.marker[IMEI].closeTooltip();
+    }
+  }
+
   followClickIcon(map: any, IMEI: string){
     const vehicles = this.vehicleService.vehicles;
     this.dataFitBounds = [];

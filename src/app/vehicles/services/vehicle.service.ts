@@ -43,6 +43,7 @@ export class VehicleService {
   @Output() clickIcon = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
   @Output() clickEyeAll = new EventEmitter<any>();
+  @Output() clickTag = new EventEmitter<any>();
   @Output() clickListTable = new EventEmitter<any>();
 
   constructor(private http: HttpClient) {
@@ -94,6 +95,9 @@ export class VehicleService {
   }
   public onClickIcon(IMEI: string):void{
     this.clickIcon.emit(IMEI);
+  }
+  public onClickTag(IMEI: string): void{
+    this.clickTag.emit(IMEI);
   }
   // public reloadTableVehicles():void{
   //   this.reloadTable.emit();

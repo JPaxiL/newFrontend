@@ -145,7 +145,7 @@
           <button class="btn-gl-gray-blue btn-dark-hover btn-circle" ngbDropdownToggle>
             <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
           </button>
-          <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel">
+          <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior">
             <div class="text-center">
               Personalizar Panel
             </div>
@@ -251,6 +251,7 @@
       </ng-template> -->
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
+          <col style="width: 2.5rem;">
           <col style="width: 45px;" *ngIf="setting['eye']">
           <col style="width: 100%;" *ngIf="setting['vehicle']">
           <col style="width: 50%;" *ngIf="setting['imei']">
@@ -266,6 +267,7 @@
       <ng-template pTemplate="header" let-columns>
 
         <tr>
+          <th></th>
           <th *ngIf="setting['eye']"><app-eye-header style="height: 1.25rem; display: flex;"></app-eye-header></th>
           <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
           <th *ngIf="setting['vehicle']"></th>
@@ -287,6 +289,7 @@
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
 
         <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'grupo', 'row-header-convoy': rowData['type'] === 'convoy'}">
+          <td></td>
           <td [attr.colspan]="column">
             <div class="d-flex justify-content-between align-items-center">
 
@@ -356,6 +359,7 @@
           </td>
         </tr>
         <tr *ngIf="rowData['col']!=3">
+          <td></td>
           <td *ngIf="setting['eye']" class="eye-column">
             <!-- <span class="btn-label"><i class="fa fa-eye-slash" style="color:#444444;"></i></span> -->
             <!-- <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler> -->
@@ -388,12 +392,14 @@
           <td *ngIf="setting['imei']">
             {{rowData['IMEI']}}
           </td>
-          <td *ngIf="setting['tag']" class="inline-png-checkbox">
+          <td *ngIf="setting['tag']" class="inline-png-checkbox disable-chkbox-behavior">
             <!-- <input type="checkbox" name="" value="" checked> -->
-            <p-checkbox [(ngModel)]="rowData.tag" [binary]="true"></p-checkbox>
+            <span class="btn-label" title="{{(rowData.tag? 'Ocultar': 'Mostrar') + ' etiqueta de vehículo'}}" (click)="onClickTag(rowData['IMEI'])">
+              <p-checkbox [(ngModel)]="rowData.tag" [binary]="true"></p-checkbox>
+            </span>
           </td>
           <td *ngIf="setting['follow']" class="inline-png-checkbox follow-column">
-            <span  class="btn-label" title="Seguir vehículo" (click)="onClickFollow(rowData)">
+            <span class="btn-label" title="Seguir vehículo" (click)="onClickFollow(rowData)">
               <!-- <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i> -->
               <p-checkbox [(ngModel)]="rowData.follow" [binary]="true"></p-checkbox>
             </span>

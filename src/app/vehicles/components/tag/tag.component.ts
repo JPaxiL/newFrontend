@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { VehicleService } from '../../services/vehicle.service';
 
 @Component({
   selector: 'app-tag',
@@ -6,16 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tag.component.scss']
 })
 export class TagComponent implements OnInit {
-  dummyPngCheckboxTag: boolean = true;
+  params: any;
 
-  private params: any;
-
-  constructor() { }
+  constructor(
+    private vehicleService: VehicleService,
+  ) { }
 
   ngOnInit(): void {
   }
   agInit(params: any){
     this.params = params;
+  }
+  onClick(){
+    this.vehicleService.clickTag.emit(this.params.data.IMEI);
   }
 
 }

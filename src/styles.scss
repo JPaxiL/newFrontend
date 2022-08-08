@@ -514,7 +514,9 @@ p-checkbox{
   }
 }
 
-.png-checkbox-container{
+
+
+.dropdown-customize-vehicle-panel .png-checkbox-container{
   p-checkbox{
     margin-right: 0.25rem;
   }
@@ -523,11 +525,16 @@ p-checkbox{
     display: flex;
     align-items: center;  
     width: fit-content;
-    p-checkbox{
-      pointer-events: none;
-    }
   }
 }
+
+.disable-chkbox-behavior span{
+  cursor: pointer;
+  p-checkbox{
+    pointer-events: none;
+  }
+}
+
 
 .inline-png-checkbox,
 .png-checkbox-container{

@@ -64,7 +64,7 @@ export class TreeTableComponent implements OnInit {
     30: 'Detenido apagado',
     40: 'Sin transmisión',
     50: 'Sin cobertura',
-    60: 'GPS Sin señal',
+    60: 'GPS sin señal',
     100: 'En movimiento',
   };
 
@@ -494,6 +494,9 @@ export class TreeTableComponent implements OnInit {
     // //console.log("sort desde tree", data);
     this.sortOrder=data;
   }
+  onClickTag(IMEI: string){
+    this.vehicleService.onClickTag(IMEI);
+  }
 
   onTableGroup(){
     this.vehicleService.listTable=1;
@@ -511,8 +514,6 @@ export class TreeTableComponent implements OnInit {
 
   onClickFollow(rowData: any){
     rowData.follow = !rowData.follow;
-    console.log('Row data a seguir: ', rowData);
-    console.log('Nuevo Estado Follow: ', rowData.follow);
     this.followService.add(rowData);
   }
 

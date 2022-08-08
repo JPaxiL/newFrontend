@@ -9,6 +9,7 @@ export class TransmissionComponent implements OnInit {
 
   private params: any;
   public nameColor: string="red";
+  public tooltipText: string="Sin señal";
   private color: any=[];
 
   // color: string="red";
@@ -43,20 +44,28 @@ export class TransmissionComponent implements OnInit {
 
     if(params.value == 10){
       this.nameColor = "#45e845";
+      this.tooltipText = 'En movimiento';
     }else if(params.value == 20){
       this.nameColor = "#2cadf2";
+      this.tooltipText = 'Detenido encendido';
     }else if(params.value == 30){
       this.nameColor = "#b23ccf";
+      this.tooltipText = 'Detenido apagado';
     }else if(params.value == 40){
       this.nameColor = "#000";
+      this.tooltipText = 'Sin transmisión';
     }else if(params.value == 50){
       this.nameColor = "#ffb300";
+      this.tooltipText = 'Sin cobertura';
     }else if(params.value == 60){
       this.nameColor = "#cc1013";
+      this.tooltipText = 'GPS sin señal';
     }else if(params.value == 100){
       this.nameColor = "#45e845";
+      this.tooltipText = 'En movimiento';
     }else{
       this.nameColor = "#000";
+      this.tooltipText = 'Sin transmisión';
     }
 
   }
