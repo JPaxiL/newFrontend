@@ -24,14 +24,14 @@ export class VehicleHeaderComponent implements IHeaderAngularComp {
   }
 
   ngOnDestroy(): void {
-    this.element = document.getElementById(this.spanGroup.nativeElement.getAttribute('aria-describedby'));
+/*     this.element = document.getElementById(this.spanGroup.nativeElement.getAttribute('aria-describedby'));
     this.element1 = document.getElementById(this.spanGeneral.nativeElement.getAttribute('aria-describedby'));
     if(this.element){
       this.renderer.removeClass(this.element, 'show');
     }
     if(this.element1){
       this.renderer.removeClass(this.element1, 'show');
-    }
+    } */
   }
   
   onGroup(){

@@ -113,7 +113,8 @@
     }
 
     .show-vehicle-icon .ag-body-viewport[ref="eBodyViewport"] .vehicle-icon-column{
-        display: block;
+        display: flex;
+        align-items: center;
     }
     
     .ag-cell-focus{
