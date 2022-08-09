@@ -197,6 +197,10 @@ p {
         height: var(--treetable-header-height);
     }
 
+    .p-treetable-scrollable-header-box.no-scroll{
+        padding-right: 0px !important;
+    }
+
     .p-treetable-thead {
         border-bottom: solid 1.1px var(--gl-light-gray);
         

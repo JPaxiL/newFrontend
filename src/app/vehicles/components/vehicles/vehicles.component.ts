@@ -44,6 +44,7 @@ export class VehiclesComponent implements OnInit {
   public defaultColDef:any = [];
   display: boolean = false;
   config: any=[];
+  mutationObserver: any;
 
   vehicleIconState: boolean = false;
 
@@ -141,7 +142,7 @@ export class VehiclesComponent implements OnInit {
     //this.onVehicleIcon();
 
     var observerTarget = document.querySelector('#dragbar')!;
-    var mutationObserver = new MutationObserver( mutationList => {
+    this.mutationObserver = new MutationObserver( mutationList => {
         mutationList.forEach( mutation => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
             if(!document.querySelector('#dragbar')?.classList.contains('dragging')){
@@ -151,12 +152,13 @@ export class VehiclesComponent implements OnInit {
         });
       });
     var config = { attributes: true };
-    mutationObserver.observe(observerTarget, config);
+    this.mutationObserver.observe(observerTarget, config);
   }
 
   ngOnDestroy(): void {
     //console.log("destroy component table...");
     this.statusTable=false;
+    this.mutationObserver.disconnect();
      // this.vehicleService.reloadTable.unsubscribe();
   }
   onChangeDisplay(res : boolean){

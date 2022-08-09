@@ -34,14 +34,14 @@
                 </div>
               </div>
               <div class="col p-field">
-                <div class="row gl-row-underline">
+                <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                    <label>Nombre:</label>
+                    <label for="gv_name">Nombre:</label>
                   </div>
                   <div class="col-7">
-                    <input (keyup)="onName($event)" #name id="float-input" type="text" pInputText>
+                    <input (keyup)="onName($event)" #name id="gv_name" type="text" pInputText>
                   </div>
-                </div>
+                </label>
               </div>
               
               <!-- <div class="col p-field" [ngStyle]="{'display':formDisplayCreate}">

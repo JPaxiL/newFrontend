@@ -107,6 +107,7 @@ export class TreeTableComponent implements OnInit {
       this.loading=false;
       this.spinner.hide('loadingTreeTable');
       this.treeTableResizing(true);
+      this.headerScrollHandler();
     });
 
     this.vehicleService.reloadTableTree.subscribe(res=>{
@@ -129,6 +130,7 @@ export class TreeTableComponent implements OnInit {
       this.vehicles = this.vehicleService.vehiclesTree;
       this.loading=false;
       this.alreadyLoaded = true;
+      this.headerScrollHandler();
     }
     this.cols = [
           { field: 'eye', header: 'eye' },
@@ -144,6 +146,20 @@ export class TreeTableComponent implements OnInit {
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
     console.log(this.vehicleService.vehicles);
+  }
+
+  headerScrollHandler(){
+    setTimeout(()=> {
+      const headerBox = document.querySelector('.p-treetable-scrollable-header-box') as HTMLElement;
+      const contentBox = document.querySelector('.p-treetable-tbody') as HTMLElement;
+      if(headerBox != null && contentBox != null){
+        if(headerBox!.offsetWidth > contentBox!.offsetWidth){
+          headerBox!.classList.remove('no-scroll');
+        } else {
+          headerBox!.classList.add('no-scroll');
+        }
+      }
+    }, 1000);
   }
 
   treeTableResizing(e: any) {
