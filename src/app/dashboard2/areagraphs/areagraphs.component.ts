@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { EventService } from 'src/app/events/services/event.service';
+import collect from 'collect.js';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { DashboardService } from './../service/dashboard.service';
 
 @Component({
   selector: 'app-areagraphs',
@@ -8,7 +13,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./areagraphs.component.scss']
 })
 export class AreagraphsComponent implements OnInit {
-  vehicles:any = [];
+  public vehicles:any = [];
+  group: any = [];
+  convoy:any = [];
+  rangeDates:Date[] = [new Date(), new Date()];
+  imeis:any = [];
   public totalVehicle:number = 0;
   green:number=0;
   imeiGreen:any = [];
@@ -20,6 +29,7 @@ export class AreagraphsComponent implements OnInit {
   orange:number=0;
   imeiOrange:any = [];
   red:number=0;
+  imeiRed:any = [];
 
   // options
   gradient: boolean = true;
@@ -38,12 +48,17 @@ export class AreagraphsComponent implements OnInit {
 
   data:any = [];
   vehiclesOnRoute:any = [];
+  dataEvents:any = [];
 
 
   constructor(
     private vehicleService : VehicleService,
-    private spinner: NgxSpinnerService
-  ) { }
+    private spinner: NgxSpinnerService,
+    private eventService: EventService,
+    private dashboardService: DashboardService
+  ) {
+
+  }
 
 
     /*
@@ -67,18 +82,72 @@ export class AreagraphsComponent implements OnInit {
 
   async ngOnInit() {
     // await setInterval(() => {
-       this.getData();
+
+      //  this.getData();
     // }, 180000);
     this.spinner.show("loadingDashboardSpinner");
+    this.vehicleService.dataCompleted.subscribe( vehicles => {
+      this.vehicles = collect(vehicles).groupBy('grupo');
+
+      this.convoy = _.uniqBy(vehicles, 'convoy');
+      this.convoy = this.convoy.map((convoy:any) => {
+        return { value:convoy.idconvoy, label:convoy.convoy}
+      })
+      .filter( (convoy:any) => convoy.label != "Unidades Sin Convoy");
+
+      this.vehicles.map( (vehicle:any, index:any) => {
+
+        this.group.push(
+          {
+            value:index,
+            label:index,
+            items: vehicle.items.map(
+              (item:any) => {
+                this.imeis.push(item.IMEI);
+                return {
+                  value: item.IMEI,
+                  label: item.name
+                }
+              })
+          }
+        );
+      });
+
+      // let day = new Date();
+      // let yesterday = new Date();
+      // yesterday.setDate(yesterday.getDate() - 1);
+
+      // this.rangeDates = [yesterday,day];
+
+      this.setGraphData(vehicles);
+
+    });
+
   }
 
   async getData(){
-    console.log("dllñsmdlmasd");
-    this.vehicleService.dataCompleted.subscribe(vehicles=>{
+    // await this.eventService.initialize();
+
+    let renge_date = this.rangeDates.map(date => date.getDate());
+
+    console.log("this.renge_date =====> ",this.rangeDates, renge_date);
+
+    // this.dashboardService.getData({renge_date:this.rangeDates, imeis: this.imeis});
+  }
+
+  async onSelect() {
+    await this.dashboardService.getData({renge_date:this.rangeDates, imeis: this.imeis});
+  }
+
+  onClickConsultar(){
+
+  }
+
+  setGraphData(vehicles:any){
       this.totalVehicle = vehicles.length;
 
-      console.log("vehicles.length =====> ", vehicles);
       vehicles.forEach( (vehicle:any) =>  {
+        console.log("vehicle.parameter",vehicle.parametros,vehicle)
         if(vehicle.point_color == 10){
           this.green += 1;
           this.imeiGreen.push(vehicle.name);
@@ -95,6 +164,7 @@ export class AreagraphsComponent implements OnInit {
           this.imeiOrange.push(vehicle.name);
         }else if(vehicle.point_color == 60){
           this.red += 1;
+          this.imeiRed.push(vehicle.name);
         }else if(vehicle.point_color == 100){
           this.green += 1;
           this.imeiGreen.push(vehicle.name);
@@ -128,19 +198,7 @@ export class AreagraphsComponent implements OnInit {
         }
       ];
 
-      this.vehiclesOnRoute = [
-        {
-          "name": "Vehículos en movimiento",
-          "value": this.green
-        },
-        {
-          "name": "Vehículos detenidos",
-          "value": this.blue
-        }
-      ];
       this.spinner.hide("loadingDashboardSpinner");
-      console.log("this.imeiGreen =====> ", this.imeiGreen)
-    });
   }
 
 }
