@@ -35,7 +35,7 @@ export class EventService {
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
     ) {}
-  
+
 
   initialize(): void {
     this.getAll();
@@ -84,7 +84,7 @@ export class EventService {
   public async getAllEventsForTheFilter() {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
     let events = response.data;
-    
+
     this.classFilterArray = events.map( (event:any) => ({
       id:event.id,
       option:event.name,
@@ -133,7 +133,8 @@ export class EventService {
 
     public async ShowAllHistorial(param : any,
     ) {
-      await this.http.post(`${environment.apiUrl}/api/dataEventUserHistorial`,param)
+
+      await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/dataEventUserHistorial`,param)
         .toPromise().then((response:any) => {
           // console.log("=======================");
           // console.log(response.data);
@@ -179,13 +180,13 @@ export class EventService {
 
         //Usar este IF en caso de querer usar las clases obtenidas en getAllEventsForTheFilter
         /* if(typeof event.clase == 'undefined' || event.clase == ''){
-          const eventFilter = this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ); 
+          const eventFilter = this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) );
           event.clase = typeof eventFilter == 'undefined'? 'default-event': eventFilter.clase;
         } */
 
         //Usar este IF en caso de querer usar el objeto declarado localmente para obtener las clases
         if(typeof event.clase == 'undefined' || event.clase == ''){
-          const eventFilter = this.eventsClassList.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ); 
+          const eventFilter = this.eventsClassList.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) );
           event.clase = typeof eventFilter == 'undefined'? 'default-event': eventFilter.clase;
           if(typeof eventFilter == 'undefined'){
             console.log('No se pudo asignar clase a evento: ', event)
