@@ -45,7 +45,7 @@ export class MapService {
       this.onDrawIcon(this.map);
     });
     this.socketWebService.callback.subscribe(res =>{
-      this.monitor(res);
+      this.monitor(res, this.map);
     });
     this.followService.callback.subscribe(res =>{
       // //console.log("desde map service");
@@ -164,7 +164,7 @@ export class MapService {
 
 
   }
-  monitor(data: any): void{
+  monitor(data: any, map: any): void{
     if(this.vehicleService.statusDataVehicle){
       // //console.log(data);
       /*
@@ -315,6 +315,19 @@ export class MapService {
               this.markerClusterGroup.getLayers()[key].setLatLng(coord);
               let aux = this.markerClusterGroup.getLayers()[key];
               // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+              //follow true
+              this.dataFitBounds = [];
+              for (const i in vehicles){
+
+                if(vehicles[i].follow){
+                  const aux2: [string, string] = [vehicles[i].latitud, vehicles[i].longitud];
+                  this.dataFitBounds.push(aux2);
+                }
+              }
+
+              if(this.dataFitBounds.length>0){
+                map.fitBounds(this.dataFitBounds);
+              }
             }
           }
           //console.log('se econtraron '+cont+' resultados');
