@@ -365,6 +365,7 @@ p-dialog {
   > .row {
     --gap: 0.625rem;
     gap: var(--gap);
+    align-items: end;
     > .col-6:first-child{
       padding-right: calc(calc(var(--bs-gutter-x) * .5) + calc(var(--gap) / 2));
       margin-right: calc(var(--gap) * -1 / 2);
@@ -642,8 +643,8 @@ p-inputswitch{
         position: absolute;
         bottom: 0;
         right: 0;
-        width: calc(100% - calc(1.25rem + var(--gl-panel-padding-left)));
-        margin: 0 0.615rem;
+        width: calc(100% - calc(0.25rem + var(--gl-panel-padding-left)));
+        margin: 0 0.465rem;
         height: 1px;
         //background-color: #e9ecef; //Same color as Treetable border bottom
         background-color: #9c9ba0; //Same color as Treetable border bottom
