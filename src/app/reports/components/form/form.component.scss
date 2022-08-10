@@ -4,10 +4,6 @@
     row-gap: 0.8rem;
 }
 
-*:not(i){
-    font-family: Titillium-Regular, Verdana, sans-serif;
-}
-
 .btn-toggle-option{
     width: 50%;
     text-align: center;
@@ -38,9 +34,6 @@
 }
 
 :host ::ng-deep {
-    *:not(i, .p-dropdown-trigger-icon, .p-multiselect-trigger-icon){
-        font-family: Titillium-Regular, Verdana, sans-serif;
-    }
     .p-card-content{
         padding: 0;
     }
