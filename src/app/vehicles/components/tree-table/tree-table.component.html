@@ -372,10 +372,10 @@
             <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
           </td>
           <td *ngIf="setting['vehicle']" style="min-width: 215px;" class="vehicle-column">
-            <div class="d-flex justify-content-center align-items-center mx-2">
+            <div class="d-flex justify-content-center align-items-center mx-2" (click)="onClickIcon(rowData['IMEI'])">
               <div class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}" title="{{hint[rowData['point_color']]}}" data-bs-toggle="tooltip" data-bs-placement="top" container="body"></div>
               <div class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState">
-                <img (click)="onClickIcon(rowData['IMEI'])" border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
+                <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
               </div>
               <div class="flex-grow-1 d-flex flex-column text-start vehicle-data">
                 <strong>{{rowData['name']}}</strong>

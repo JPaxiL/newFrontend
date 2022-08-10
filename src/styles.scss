@@ -284,14 +284,6 @@ thead.visible-on-scroll {
   background-color: var(--gl-blue-dark);
 }
 
-p-dialog {
-  &.error-dialog{
-    > div > div div.p-dialog-header {
-      background-color: black;
-    }
-  } 
-}
-
 .p-input-icon-right > input[type="text"]{
   height: 100%;
 }
@@ -324,7 +316,7 @@ p-dialog {
     } 
   }
   .p-dialog-content{
-    padding: 1.25rem 3rem 0 3rem;
+    padding: 1.25rem 3rem 0.0625rem 3rem;
   }
   .p-dialog-footer{
     padding-top: 1.5rem;
@@ -336,6 +328,41 @@ p-dialog {
     height: 2rem;
   }
 
+}
+
+p-dialog {
+  &.error-dialog{
+    .p-dialog.p-component .p-dialog-header {
+      background-color: #000;
+    }
+  }
+}
+
+p-confirmdialog{
+  &.gl-confirm-dialog .p-dialog.p-component{
+    .p-dialog-header {
+      background-color: #fff;
+      color: #000;
+      justify-content: center;
+      padding-top: 3rem;
+      span, h1, h2, h3{
+        font-weight: bold;
+      }
+    }
+    .p-dialog-content{
+      padding-top: 0;
+      justify-content: center;
+      span, h1, h2, h3{
+        margin: 0;
+      }
+    }
+    .p-dialog-footer{
+      display: flex;
+      padding-top: 1.875rem;
+      justify-content: center;
+      gap: 1rem;
+    }
+  }
 }
 
 .gl-row-underline{
@@ -430,6 +457,7 @@ p-dialog {
 .btn-gl-cancel,
 .btn-gl-save,
 .btn-gl-red,
+.btn-gl-neutral,
 .btn-dark-hover:hover::after{
   border-radius: var(--gl-btn-border-radius);
   padding-top: var(--gl-btn-y-padding);
@@ -448,14 +476,19 @@ p-dialog {
   border: none;
 }
 
-.btn-dark-hover{
+.btn-gl-neutral{
+  color: #000;
+  background-color: inherit;
+  border: 1px solid var(--gl-light-blue);
+}
+
+.btn-dark-hover, .btn-neutral-hover{
   position: relative;
   z-index: 1;
   transition: none;
-  border: none;
-
-  &:hover{
-    color: #fff;
+  
+  &:not(.btn-gl-neutral){
+    border: none;
   }
 
   &:hover::after{
@@ -466,7 +499,6 @@ p-dialog {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.25);
     z-index: -1;
   }
 
@@ -478,6 +510,19 @@ p-dialog {
     border: none;
     margin: 0;
     display: inline-block;
+  }
+}
+
+.btn-dark-hover:hover{
+  color: #fff;
+  &::after{
+    background: rgba(0, 0, 0, 0.25);
+  }
+}
+
+.btn-neutral-hover:hover{
+  &::after{
+    background-color: var(--gl-light-blue-alpha);
   }
 }
 
