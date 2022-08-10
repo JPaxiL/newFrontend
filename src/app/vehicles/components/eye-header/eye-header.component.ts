@@ -11,13 +11,15 @@ import { VehicleService } from '../../services/vehicle.service';
 })
 export class EyeHeaderComponent implements IHeaderAngularComp {
 
-  public value: boolean = true;
+  public value: any;
   params: any;
 
 
   agInit(headerParams: IHeaderParams): void {}
 
-  constructor(private vehicleService:VehicleService) { }
+  constructor(private vehicleService:VehicleService) { 
+    this.value = this.vehicleService.allEyes;
+  }
 
   refresh(params: any) : boolean {
         return true;
@@ -31,8 +33,9 @@ export class EyeHeaderComponent implements IHeaderAngularComp {
     const data = this.vehicleService.vehicles;
 
     for (let x of data){
-      x.eye=this.value;
+      x.eye=this.value.state;
     }
+    this.vehicleService.countOpenEyes = this.value.state? this.vehicleService.vehicles.length: 0;
     // this.vehicleService.clickEyeAll.emit()
     this.vehicleService.updateVehiclesData(data);
   }

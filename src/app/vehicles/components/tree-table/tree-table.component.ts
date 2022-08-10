@@ -170,7 +170,7 @@ export class TreeTableComponent implements OnInit {
     const panelMonitoreoVehiclesHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', ''));
     const treetableHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--treetable-header-height').replace('rem', ''));
     /* this.toastr.success('treeTable altura previa:' + $('.map-area-app').height()!); */
-    console.log('treeTable altura previa en px:' + $('.map-area-app').height()!);
+    //console.log('treeTable altura previa en px:' + $('.map-area-app').height()!);
     const rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
     // var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * 4.375;
 
@@ -180,8 +180,7 @@ export class TreeTableComponent implements OnInit {
     var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (rowBusquedaHeight + panelMonitoreoVehiclesHeaderHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
     //$('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr("style", '');
     $('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
-    console.log('treeTable altura en px:' + treeTable_height_in_px);
-    /* this.toastr.success('treeTable altura en px:' + treeTable_height_in_px); */
+    //console.log('treeTable altura en px:' + treeTable_height_in_px);
   }
 
   onChangeDisplay(res : boolean){

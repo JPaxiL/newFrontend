@@ -31,6 +31,9 @@ export class VehicleService {
   public statusDataVehicle: boolean = false;
   public statusDataVehicleTree: boolean = false;
 
+  public allEyes: any = { state: true };
+  public countOpenEyes: number = 0;
+
   public listTable = -1; // 0 general, 1 = group
 
   @Output() dataCompleted = new EventEmitter<any>();
@@ -83,6 +86,14 @@ export class VehicleService {
         this.dataTreeCompleted.emit(this.vehiclesTree);
         this.statusDataVehicle = true;
         this.statusDataVehicleTree = true;
+
+        //InputSwitch EyeHeader behavior
+        for(let i = 0; i < this.vehicles.length; i++){
+          if(this.vehicles[i].eye){
+            this.countOpenEyes++;
+          }
+        }
+        this.allEyes.state = this.countOpenEyes > 0;
       });
     }
 
