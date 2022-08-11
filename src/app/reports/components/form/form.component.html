@@ -53,7 +53,7 @@
 <p-card>
   <ng-template pTemplate="header">
     <span class="d-block p-2 text-white">
-      <i class="fas fa-chart-bar" style="margin-right: 0.5rem;"></i>Panel de Reportes</span>
+      <i class="fas fa-chart-bar"></i>Panel de Reportes</span>
   </ng-template>
     <div class="p-fluid y-form-container" style="font-size: 0.9rem;">
       <div class="row">
@@ -68,9 +68,10 @@
             <label class="bg-subtitle" id="vehicle_label">Vehículos:</label>
             <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione..." (onChange)="onSelectedVehiclesChange(); validateForm();"></p-multiSelect>
             <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+              <!-- <label class="png-checkbox-container d-flex align-items-center gap-1 ps-1"> -->
               <label>
                 <p-checkbox [(ngModel)]="chkAllVehicles" [binary]="true" inputId="binary" (onChange)="selectAllVehicles(); validateForm();" [disabled]="!areVehiclesLoaded"></p-checkbox>
-                Todos
+                Todos los vehículos
               </label>
             </div>
 
@@ -78,8 +79,7 @@
         </div>
         <div class="col-6">
           <div class="p-field">
-            <button class="bg-subtitle btn-toggle-option btn-toggle-left" [ngClass]="!checkboxGroup? '': 'disabled'" (click)="checkboxGroup = false; onSelectedConvoyChange(); validateForm();">Convoy</button>
-            <button class="bg-subtitle btn-toggle-option btn-toggle-right" [ngClass]="checkboxGroup? '': 'disabled'" (click)="checkboxGroup = true; onSelectedGroupChange(); validateForm();">Grupo</button>
+            <p-dropdown [options]="pDropdownGroup" [(ngModel)]="checkboxGroup" [showClear]="false" optionLabe="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'"></p-dropdown>
             <p-dropdown *ngIf="!checkboxGroup" [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione convoy..." (onChange)="onSelectedConvoyChange(); validateForm();"></p-dropdown>
             <p-dropdown *ngIf="checkboxGroup" [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione grupo..." (onChange)="onSelectedGroupChange(); validateForm();"></p-dropdown>
           </div>
@@ -87,21 +87,11 @@
       </div>
 
       <div class="row" style="padding: 0px 0.3rem">
-        <ng-container>
-          <!-- <div class="col-6">
-            <label>
-              <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange(); validateForm();"></p-checkbox>
-              Fecha/Hora</label>
-          </div> -->
+        <ng-container *ngIf="showOdomOpt">
           <div class="col-6">
-            <label *ngIf="showOdomOpt">
+            <label>
               <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkOdomVirtual" (onChange)="validateForm();"></p-checkbox>
               Odómetro Virtual</label>
-            <!-- <div class="p-field">
-              <label>
-                <p-checkbox name="groupname" [(ngModel)]="checkboxGroup" [binary]="true" inputId="binary" (onChange)="validateForm();"></p-checkbox>
-                Grupo</label>
-            </div> -->
           </div>
         </ng-container>
         <ng-container *ngIf="showMovStop">
@@ -188,9 +178,10 @@
       <div *ngIf="showExcVelOpt">
         <div class="row">
           <div class="p-field">
-            <div style="display: flex;">
-              <button class="bg-subtitle btn-toggle-option btn-toggle-left" [ngClass]="!checkboxDuration? '': 'disabled'" (click)="checkboxDuration = false; onSelectedConvoyChange(); validateForm();">Límite de Velocidad</button>
-              <button class="bg-subtitle btn-toggle-option btn-toggle-right" [ngClass]="checkboxDuration? '': 'disabled'" (click)="checkboxDuration = true; onSelectedGroupChange(); validateForm();">Duración</button>
+            <div class="d-flex p-dropdown-full-width">
+              <p-dropdown [options]="pDropdownDuration" [(ngModel)]="checkboxDuration" [showClear]="false" optionLabe="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'"></p-dropdown>
+              <!-- <button class="bg-subtitle btn-toggle-option btn-toggle-left" [ngClass]="!checkboxDuration? '': 'disabled'" (click)="checkboxDuration = false; onSelectedConvoyChange(); validateForm();">Límite de Velocidad</button>
+              <button class="bg-subtitle btn-toggle-option btn-toggle-right" [ngClass]="checkboxDuration? '': 'disabled'" (click)="checkboxDuration = true; onSelectedGroupChange(); validateForm();">Duración</button> -->
             </div>
             <p-inputNumber *ngIf="!checkboxDuration" [(ngModel)]="limitSpeed" [showButtons]="true" [min]="0" [max]="300" suffix=" km/h" inputId="limiteVelocidad"></p-inputNumber>
             <p-inputNumber *ngIf="checkboxDuration" [(ngModel)]="minimDur" [showButtons]="true" [min]="0" suffix=" seg" inputId="minimaDuracion"></p-inputNumber>
@@ -263,505 +254,513 @@
       </div>
 
 
-      <div class="row" *ngIf="showCheckboxs">
+      <div class="row two-column-checkbox-container" *ngIf="showCheckboxs">
 
         <div class="col-12">
           <label class="bg-subtitle">Seleccione las opciones a incluir en el reporte:</label>
         </div>
 
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.fServidor" [binary]="true" inputId="binary"></p-checkbox>
-              Fecha Servidor</label>
+        <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
+
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.fServidor" [binary]="true" inputId="binary"></p-checkbox>
+                Fecha Servidor</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.alcoholemia" [binary]="true" inputId="binary"></p-checkbox>
+                Alcoholemia</label>
+              </div>
             </div>
           </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.alcoholemia" [binary]="true" inputId="binary"></p-checkbox>
-              Alcoholemia</label>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.ubicacion" [binary]="true" inputId="binary"></p-checkbox>
+                  Ubicación</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.parametros" [binary]="true" inputId="binary"></p-checkbox>
+                Parámetros</label>
+              </div>
             </div>
           </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.velGPS" [binary]="true" inputId="binary"></p-checkbox>
+                  Velocidad GPS</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.cNivel" [binary]="true" inputId="binary"></p-checkbox>
+                  Nivel de Combustible</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.velECO" [binary]="true" inputId="binary"></p-checkbox>
+                  Velocidad ECO</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.cRestante" [binary]="true" inputId="binary"></p-checkbox>
+                  C.Restante</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.velGPS_speed" [binary]="true" inputId="binary"></p-checkbox>
+                  Velocidad GPS_speed</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.cMotor" [binary]="true" inputId="binary"></p-checkbox>
+                  Consumo de Motor</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.altitud" [binary]="true" inputId="binary"></p-checkbox>
+                  Altitud</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.odometro" [binary]="true" inputId="binary"></p-checkbox>
+                  Odómetro</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.angulo" [binary]="true" inputId="binary"></p-checkbox>
+                  Angulo</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.onOff" [binary]="true" inputId="binary"></p-checkbox>
+                  On / Off</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.RPMAlta" [binary]="true" inputId="binary"></p-checkbox>
+                  RPM Alta</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.RxM" [binary]="true" inputId="binary"></p-checkbox>
+                  Rev. X Min.</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                  Referencia</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.recFacial" [binary]="true" inputId="binary"></p-checkbox>
+                  Reconocimiento Facial</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <!-- <label>
+                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                  Referencia</label> -->
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary"></p-checkbox>
+                  Velocidad CAN</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <!-- <label>
+                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                  Referencia</label>-->
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.pCercano" [binary]="true" inputId="binary"></p-checkbox>
+                  Punto Cercano</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <!-- <label>
+                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
+                  Referencia</label>-->
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.DUOT2state" [binary]="true" inputId="binary"></p-checkbox>
+                  DUOT2 state</label>
+              </div>
+            </div>
+          </div>
+
         </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.ubicacion" [binary]="true" inputId="binary"></p-checkbox>
-                Ubicación</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.parametros" [binary]="true" inputId="binary"></p-checkbox>
-              Parámetros</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.velGPS" [binary]="true" inputId="binary"></p-checkbox>
-                Velocidad GPS</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.cNivel" [binary]="true" inputId="binary"></p-checkbox>
-                Nivel de Combustible</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.velECO" [binary]="true" inputId="binary"></p-checkbox>
-                Velocidad ECO</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.cRestante" [binary]="true" inputId="binary"></p-checkbox>
-                C.Restante</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.velGPS_speed" [binary]="true" inputId="binary"></p-checkbox>
-                Velocidad GPS_speed</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.cMotor" [binary]="true" inputId="binary"></p-checkbox>
-                Consumo de Motor</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.altitud" [binary]="true" inputId="binary"></p-checkbox>
-                Altitud</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.odometro" [binary]="true" inputId="binary"></p-checkbox>
-                Odómetro</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.angulo" [binary]="true" inputId="binary"></p-checkbox>
-                Angulo</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.onOff" [binary]="true" inputId="binary"></p-checkbox>
-                On / Off</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.RPMAlta" [binary]="true" inputId="binary"></p-checkbox>
-                RPM Alta</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.RxM" [binary]="true" inputId="binary"></p-checkbox>
-                Rev. X Min.</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
-                Referencia</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.recFacial" [binary]="true" inputId="binary"></p-checkbox>
-                Reconocimiento Facial</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <!-- <label>
-                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
-                Referencia</label> -->
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary"></p-checkbox>
-                Velocidad CAN</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <!-- <label>
-                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
-                Referencia</label>-->
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.pCercano" [binary]="true" inputId="binary"></p-checkbox>
-                Punto Cercano</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <!-- <label>
-                <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
-                Referencia</label>-->
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="oG.DUOT2state" [binary]="true" inputId="binary"></p-checkbox>
-                DUOT2 state</label>
-            </div>
-          </div>
-        </div>
-
-
 
       </div>
 
-      <div class="row" *ngIf="showEvents">
+      <div class="row two-column-checkbox-container" *ngIf="showEvents">
         <div class="col-12">
           <label class="bg-subtitle">Seleccione los eventos a incluir en el reporte:</label>
         </div>
 
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-12">
-            <label class="">Evento GPS</label>
+        <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
+        
+          <div class="row">
+            <div class="col-12">
+              <label class="bg-subtitle bg-subtitle-light">Eventos GPS</label>
+            </div>
           </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSbateriaBaja" [binary]="true" inputId="binary"></p-checkbox>
+                Bateria baja</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSbateriaDesconectada" [binary]="true" inputId="binary"></p-checkbox>
+                Bateria desconectada</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSaceleracionBrusca" [binary]="true" inputId="binary"></p-checkbox>
+                Aceleracion brusca</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSfrenadaBrusca" [binary]="true" inputId="binary"></p-checkbox>
+                Frenada brusca</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSbloqueoTransmision" [binary]="true" inputId="binary"></p-checkbox>
+                Bloqueo de transmision</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSsos" [binary]="true" inputId="binary"></p-checkbox>
+                SOS</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSremolque" [binary]="true" inputId="binary"></p-checkbox>
+                Remolque</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSparada" [binary]="true" inputId="binary"></p-checkbox>
+                Parada</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSmotorEncendido" [binary]="true" inputId="binary"></p-checkbox>
+                Motor Encendido</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.GPSmotorApagado" [binary]="true" inputId="binary"></p-checkbox>
+                Motor Apagado</label>
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-12">
+              <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Plataforma</label>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evEntrada" [binary]="true" inputId="binary"></p-checkbox>
+                  Zona de Entrada</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evSalida" [binary]="true" inputId="binary"></p-checkbox>
+                  Zona de Salida</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evEstadia" [binary]="true" inputId="binary"></p-checkbox>
+                  Tiempo de estadia en Zona</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evParada" [binary]="true" inputId="binary"></p-checkbox>
+                  Parada en zona no Autorizada</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evMovSinProgramacion" [binary]="true" inputId="binary"></p-checkbox>
+                  Vehículo en movimiento sin programación</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evInfraccion" [binary]="true" inputId="binary"></p-checkbox>
+                  Infraccion</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evAnticolisionFrontal" [binary]="true" inputId="binary"></p-checkbox>
+                  Anticolisión frontal</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evColisionConPeatones" [binary]="true" inputId="binary"></p-checkbox>
+                  Colisión con Peatones</label>
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evNoRostro" [binary]="true" inputId="binary"></p-checkbox>
+                  No Rostro</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evFatigaExtrema" [binary]="true" inputId="binary"></p-checkbox>
+                  Fatiga Extrema</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilIzquierda" [binary]="true" inputId="binary"></p-checkbox>
+                  Desvío de carril hacia la izquierda</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilDerecha" [binary]="true" inputId="binary"></p-checkbox>
+                  Desvío de carril hacia la derecha</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evBloqueoVisionMobileye" [binary]="true" inputId="binary"></p-checkbox>
+                  Bloqueo de visión del mobileye</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+  
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-12">
+              <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Accesorios</label>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.AccFatiga" [binary]="true" inputId="binary"></p-checkbox>
+                  Posible Fatiga</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.AccDistraccion" [binary]="true" inputId="binary"></p-checkbox>
+                  Distracción</label>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.AccAlcoholemia" [binary]="true" inputId="binary"></p-checkbox>
+                  Alcoholemia</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+  
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-12">
+              <label class="bg-subtitle bg-subtitle-light mt-2">Otros</label>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary"></p-checkbox>
+                  Todos</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.OtroExVelocidad" [binary]="true" inputId="binary"></p-checkbox>
+                  Exceso de Velocidad</label>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSbateriaBaja" [binary]="true" inputId="binary"></p-checkbox>
-              Bateria baja</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSbateriaDesconectada" [binary]="true" inputId="binary"></p-checkbox>
-              Bateria desconectada</label>
-            </div>
-          </div>
-        </div>
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSaceleracionBrusca" [binary]="true" inputId="binary"></p-checkbox>
-              Aceleracion brusca</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSfrenadaBrusca" [binary]="true" inputId="binary"></p-checkbox>
-              Frenada brusca</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSbloqueoTransmision" [binary]="true" inputId="binary"></p-checkbox>
-              Bloqueo de transmision</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSsos" [binary]="true" inputId="binary"></p-checkbox>
-              SOS</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSremolque" [binary]="true" inputId="binary"></p-checkbox>
-              Remolque</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSparada" [binary]="true" inputId="binary"></p-checkbox>
-              Parada</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSmotorEncendido" [binary]="true" inputId="binary"></p-checkbox>
-              Motor Encendido</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.GPSmotorApagado" [binary]="true" inputId="binary"></p-checkbox>
-              Motor Apagado</label>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-12">
-            <label class="">Evento Plataforma</label>
-          </div>
-        </div>
-
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evEntrada" [binary]="true" inputId="binary"></p-checkbox>
-                Zona de Entrada</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evSalida" [binary]="true" inputId="binary"></p-checkbox>
-                Zona de Salida</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evEstadia" [binary]="true" inputId="binary"></p-checkbox>
-                Tiempo de estadia en Zona</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evParada" [binary]="true" inputId="binary"></p-checkbox>
-                Parada en zona no Autorizada</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evMovSinProgramacion" [binary]="true" inputId="binary"></p-checkbox>
-                Vehículo en movimiento sin programación</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evInfraccion" [binary]="true" inputId="binary"></p-checkbox>
-                Infraccion</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evAnticolisionFrontal" [binary]="true" inputId="binary"></p-checkbox>
-                Anticolisión frontal</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evColisionConPeatones" [binary]="true" inputId="binary"></p-checkbox>
-                Colisión con Peatones</label>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evNoRostro" [binary]="true" inputId="binary"></p-checkbox>
-                No Rostro</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evFatigaExtrema" [binary]="true" inputId="binary"></p-checkbox>
-                Fatiga Extrema</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evDesvioCarrilIzquierda" [binary]="true" inputId="binary"></p-checkbox>
-                Desvío de carril hacia la izquierda</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evDesvioCarrilDerecha" [binary]="true" inputId="binary"></p-checkbox>
-                Desvío de carril hacia la derecha</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.evBloqueoVisionMobileye" [binary]="true" inputId="binary"></p-checkbox>
-                Bloqueo de visión del mobileye</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-12">
-            <label class="">Evento Accesorios</label>
-          </div>
-        </div>
-
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.AccFatiga" [binary]="true" inputId="binary"></p-checkbox>
-                Posible Fatiga</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.AccDistraccion" [binary]="true" inputId="binary"></p-checkbox>
-                Distracción</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.AccAlcoholemia" [binary]="true" inputId="binary"></p-checkbox>
-                Alcoholemia</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-12">
-            <label class="">Otros</label>
-          </div>
-        </div>
-
-
-        <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary"></p-checkbox>
-                Todos</label>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="p-field">
-              <label>
-                <p-checkbox [(ngModel)]="eV.OtroExVelocidad" [binary]="true" inputId="binary"></p-checkbox>
-                Exceso de Velocidad</label>
-            </div>
-          </div>
-        </div>
+        
 
       </div>
 
@@ -774,7 +773,7 @@
     </div>
 
   <ng-template pTemplate="footer">
-    <button [disabled]="!isFormFilled" (click)="confirm()" pButton type="button" label="Generar Reporte"></button>
+    <button [disabled]="!isFormFilled" (click)="confirm()" class="btn-gl-save btn-dark-hover" style="width: 10rem; border: none;">Generar Reporte</button>
 
   </ng-template>
 </p-card>

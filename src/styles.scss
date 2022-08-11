@@ -183,24 +183,11 @@ div.leaflet-tooltip-own {
 }
 
 .bg-subtitle{
-  padding: 0.2rem 1rem;
-  font-weight: bold;
-  border-radius: 4px;
+  padding: 0.4rem 1rem;
   width: 100%;
-  background-color: var(--gl-gray);
+  background-color: var(--gl-lighter-gray);
   color: #000000;
 }
-
-.bg-subtitle.bg-subtitle-on-top{
-  display: block;
-  background-color: transparent;
-  height: 0px;
-  margin: -1.55rem 0 1.55rem 0;
-  padding: 0;
-  overflow: visible;
-}
-
-
 
 .p-dropdown:not(.p-disabled).p-focus, .p-inputtext:enabled:focus{
   outline: none;
@@ -502,6 +489,7 @@ p-confirmdialog{
   }
 }
 
+.btn-gl,
 .btn-gl-cancel,
 .btn-gl-save,
 .btn-gl-red,
@@ -606,6 +594,7 @@ p-checkbox{
     box-shadow: none !important;
     span.p-checkbox-icon{
       font-weight: bold !important;
+      transition: none;
     }
   }
 

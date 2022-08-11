@@ -29,6 +29,10 @@ export class FormComponent implements OnInit {
   groups: any=[];
   selectedGroup: any={};
   checkboxGroup: boolean = false;
+  pDropdownGroup: any= [
+    { label: 'Convoy', value: false },
+    { label: 'Grupo', value: true }
+  ];
   /* checkboxParada: boolean = true; //Renamed to chkStops
   checkboxMovimiento: boolean = true; */ //Renamed to chkMovements
   // checkboxDuracion: boolean = false; //Renamed to chkDuracion
@@ -121,6 +125,11 @@ export class FormComponent implements OnInit {
   excesoVelocidad: string = 'limVel';
   minimDur = 15;
   limitSpeed = 90;
+
+  pDropdownDuration: any= [
+    { label: 'Límite de Velocidad', value: false },
+    { label: 'Duración', value: true }
+  ];
 
   //Reporte 2 - Entrada y Salida
   showZones: boolean = false;
