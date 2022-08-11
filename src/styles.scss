@@ -50,7 +50,9 @@
   --gl-blue-dark: #33486f;
   --gl-blue: #48659c;
   --gl-light-blue: #30a9d9 ;
+  --gl-light-blue-disabled: #71dbff;
   --gl-lighter-gray: #e3e3e3;
+  --gl-lighter-gray-disabled: #f5f5f6;
   --gl-light-blue-alpha: rgba(33,150,243,0.1);
   //--gl-light-blue-selected-alpha: rgba(33,150,243,0.4);
   --gl-light-blue-selected-alpha: #bcdffb;
@@ -344,13 +346,17 @@ p-confirmdialog{
       background-color: #fff;
       color: #000;
       justify-content: center;
-      padding-top: 3rem;
+      height: auto;
+      padding-top: 2rem;
+      padding-bottom: 0rem;
       span, h1, h2, h3{
         font-weight: bold;
+        margin: 0;
       }
     }
     .p-dialog-content{
-      padding-top: 0;
+      font-size: 1.125rem;
+      padding: 1rem 1.6rem .3rem;
       justify-content: center;
       span, h1, h2, h3{
         margin: 0;
@@ -358,9 +364,51 @@ p-confirmdialog{
     }
     .p-dialog-footer{
       display: flex;
-      padding-top: 1.875rem;
+      padding-top: calc(1.25rem + 0.3125rem);
       justify-content: center;
       gap: 1rem;
+      button{
+        font-size: 1rem;
+        font-weight: bold;
+        padding: .625rem 1.1rem;
+      }
+    }
+  }
+}
+
+.swal2-container{
+  .swal2-popup.swal2-modal{
+    border-radius: 0.75rem;
+    .swal2-title{
+      padding-top: 2rem;
+      font-size: 1.75rem;
+      font-weight: bold;
+      color: #000;
+    }
+    .swal2-html-container{
+      margin: 1rem 1.6rem .3rem;
+      font-size: 1.125rem;
+    }
+    .swal2-actions{
+      font-size: 1rem;
+      margin-top: 1.25rem;
+      gap: 1rem;
+      button{
+        border-radius: var(--gl-btn-border-radius);
+        border: none;
+        margin: 0.3125rem 0;
+      }
+      .swal2-styled.swal2-confirm{
+        background-color: var(--gl-light-blue);
+      }
+      .swal2-styled.swal2-cancel{
+        background-color: var(--gl-lighter-gray);
+        color: #000;
+      }
+      .swal2-styled.swal2-confirm:focus,
+      .swal2-styled.swal2-cancel:focus{
+        box-shadow: none;
+      }
     }
   }
 }
@@ -467,13 +515,21 @@ p-confirmdialog{
 .btn-gl-cancel{
   color: #000;
   background-color: var(--gl-lighter-gray);
-  border-color: none;
+  border: none;
+  &[disabled]{
+    background-color: var(--gl-light-gray-disabled);
+    border: 1px solid var(--gl-lighter-gray);
+  }
 }
 
 .btn-gl-save{
   color: #fff;
   background-color: var(--gl-light-blue);
   border: none;
+  &[disabled]{
+    background-color: var(--gl-light-blue-disabled);
+    border: 1px solid var(--gl-lighter-gray);
+  }
 }
 
 .btn-gl-neutral{
@@ -487,7 +543,7 @@ p-confirmdialog{
   z-index: 1;
   transition: none;
   
-  &:not(.btn-gl-neutral){
+  &:not(.btn-gl-neutral, [disabled]){
     border: none;
   }
 
@@ -513,14 +569,14 @@ p-confirmdialog{
   }
 }
 
-.btn-dark-hover:hover{
+.btn-dark-hover:not([disabled]):hover{
   color: #fff;
   &::after{
     background: rgba(0, 0, 0, 0.25);
   }
 }
 
-.btn-neutral-hover:hover{
+.btn-neutral-hover:not([disabled]):hover{
   &::after{
     background-color: var(--gl-light-blue-alpha);
   }
