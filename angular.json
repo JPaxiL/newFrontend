@@ -92,6 +92,14 @@
                   "with": "src/environments/environment.local.ts"
                 }
               ]
+            },
+            "jcm":{
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.jcm.ts"
+                }
+              ]
             }
           }
         },
@@ -106,6 +114,9 @@
             },
             "local": {
               "browserTarget": "my-app:build:local"
+            },
+            "jcm": {
+              "browserTarget": "my-app:build:jcm"
             }
           }
         },

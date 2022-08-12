@@ -72,6 +72,10 @@ export class VehicleGroupComponent implements OnInit {
     this.onHideEvent.emit(false);
   }
   onOption(e : string){
+    console.log("option XD");
+
+    this.list1 = [];
+    this.list2 = [];
     // //console.log('option...',e);
     // //console.log('vehicles',this.vehicleService.vehicles);
     // //console.log('vehiclestree',this.vehicleService.vehiclesTree);
@@ -80,21 +84,46 @@ export class VehicleGroupComponent implements OnInit {
 
     }else{
       //getGroup
+      this.selectedGroup = {};
+      console.log('es convoy');
       let aux = [];
       let vehicles = this.vehicleService.vehicles;
+      console.log('vehicles = ',vehicles);
       for (const key in vehicles) {
         let status = true;
-        // //console.log(vehicles[key]['grupo']);
+        console.log("vehicles[key]['grupo'] / ",vehicles[key]['grupo']);
+        // if(true){
+        console.log('key ============= ',key);
+        // if(vehicles[key]['grupo']=='Unidades Sin Grupo'){
+        //         status=false;
+        // }
         if(aux.length>0){
           for (const j in aux) {
-            if(aux[j]['grupo']==vehicles[key]['grupo']||vehicles[key]['grupo']=='Unidades Sin Grupo'){
-              status=false;
+            if(aux[j]['grupo']!=vehicles[key]['grupo']&&vehicles[key]['grupo']!='Unidades Sin Grupo'){
+                aux.push(vehicles[key]);
             }
           }
+        }else{
+          if(vehicles[key]['grupo']!='Unidades Sin Grupo'){
+            aux.push(vehicles[key]);
+          }
         }
-        if(status){
-          aux.push(vehicles[key]);
-        }
+        // if(aux.length>0){
+        //   for (const j in aux) {
+        //     console.log("aux[j]['grupo'] / ",aux[j]['grupo']);
+        //     // if(aux[j]['grupo']==vehicles[key]['grupo']){ // caso crear convoys en unidades sin grupo
+        //     if(aux[j]['grupo']==vehicles[key]['grupo']||vehicles[key]['grupo']=='Unidades Sin Grupo'){
+        //
+        //       status=false;
+        //       console.log("status = ", status);
+        //     }
+        //   }
+        // }
+        // if(status){
+        //   console.log("primer bucle -> status = ", status);
+        //   aux.push(vehicles[key]);
+        //   console.log('aux = ',aux);
+        // }
       }
       // //console.log('resultado',aux);
       this.groups = aux;
@@ -251,6 +280,7 @@ export class VehicleGroupComponent implements OnInit {
         //console.log("post group res =",info);
         if(info.res){
           this.addGroup(info);
+          this.selectedGroup = {};
           // const vehicles = this.vehicleService.vehicles;
           // for (const key in this.list2) {
           //   const index = vehicles.indexOf(this.list2[key])
