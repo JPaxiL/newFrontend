@@ -821,10 +821,10 @@
 
         <div class="row justify-content-center mt-4 panel-izq-container-footer">
           <div class="col-6">
-              <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="clickCargarHistorial()" [disabled]="form.selectedCar == null">Mostrar</button>
+            <button type="submit" class="btn-gl-cancel btn-dark-hover w-100" (click)="clickEliminarHistorial()" [disabled]="form.selectedCar == null">Ocultar</button>
           </div>
           <div class="col-6">
-              <button type="submit" class="btn-gl-cancel btn-dark-hover w-100" (click)="clickEliminarHistorial()" [disabled]="form.selectedCar == null">Ocultar</button>
+              <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="clickCargarHistorial()" [disabled]="form.selectedCar == null">Mostrar</button>
           </div>
         </div>
 

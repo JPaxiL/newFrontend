@@ -82,11 +82,14 @@ export class MapService {
       // this.map.addLayer(this.marker[IMEI]);
       this.markerClusterGroup.addLayer(this.marker[IMEI]);
       this.tagClick(vehicle.IMEI, false);
+      this.vehicleService.countOpenEyes++;
     }else{
       //console.log('quitar vehiculo del mapa ...',vehicle);
       // this.map.removeLayer(this.marker[IMEI]);
       this.markerClusterGroup.removeLayer(this.marker[IMEI]);
+      this.vehicleService.countOpenEyes--;
     }
+    this.vehicleService.allEyes.state = this.vehicleService.countOpenEyes > 0;
   }
   eyeClickAll(){
     const vehicles = this.vehicleService.vehicles;

@@ -7,9 +7,9 @@
         <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Placa/Código" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
       </span>
 
-      <button type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2">
+      <!-- <button type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2">
         <i class="fa fa-plus" aria-hidden="true"></i>
-      </button>
+      </button> -->
 
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
         <button ngbDropdownToggle class="btn-gl-gray-blue btn-dark-hover btn-circle">
@@ -59,7 +59,7 @@
             <div>
               <span (click)="onClickSetting('limit')">
                 <p-checkbox [(ngModel)]="!setting['limit']" [binary]="true"></p-checkbox>
-                Limite de velocidad
+                Velocidad
               </span>
             </div>
             <!-- <div>

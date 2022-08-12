@@ -1,11 +1,15 @@
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reportSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Generando Reporte... </p></ngx-spinner>
-<p-confirmDialog #cdExport [style]="{width: '400'}" key="showSelectExcelConfirmation">
+<p-confirmDialog #cdExport [style]="{width: '30rem'}" [breakpoints]="{'960px': '50vw', '640px': '75vw'}" class="gl-confirm-dialog" key="showSelectExcelConfirmation">
   <ng-template pTemplate="header">
       <h4>Elija un formato para exportar</h4>
   </ng-template>
   <ng-template pTemplate="footer">
-      <button type="button" pButton label="UNIDO" (click)="cdExport.reject()"></button>
-      <button type="button" pButton label="SEPARADO" (click)="cdExport.accept()"></button>
+    <div class="col-4">
+      <button type="button" class="btn-gl-neutral btn-neutral-hover btn-sm w-100" (click)="cdExport.reject()">Unido</button>
+    </div>
+    <div class="col-4">
+      <button type="button" class="btn-gl-neutral btn-neutral-hover btn-sm w-100" (click)="cdExport.accept()">Separado</button>
+    </div>
   </ng-template>
 </p-confirmDialog>
 
@@ -1730,24 +1734,24 @@
 
 
     <div *ngIf="dtRendered" class="export-container">
-      <button *ngIf="num_rep == 0" class="btn btn-success" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 1" class="btn btn-success" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 2" class="btn btn-success" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 3" class="btn btn-success" (click)="showSelectExcel('exportExcelCombustible');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 4" class="btn btn-success" (click)="showSelectExcel('exportExcelExcesosEnZona');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 5" class="btn btn-success" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 10" class="btn btn-success" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 11" class="btn btn-success" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 12" class="btn btn-success" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 13" class="btn btn-success" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 14" class="btn btn-success" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 15" class="btn btn-success" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 16" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilIzquierda');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 17" class="btn btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 18" class="btn btn-success" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 20" class="btn btn-success" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 0" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 1" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 2" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 3" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelCombustible');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 4" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelExcesosEnZona');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 5" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 6" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 7" class="btn btn-gl btn-success" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 10" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 11" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 12" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 13" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 14" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 15" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 16" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilIzquierda');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 17" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 18" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 20" class="btn btn-gl btn-success" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR EXCEL</button>
 
       <!-- <div style="display: flex; flex-direction: row; justify-content: center; gap: 4rem; margin: 0; padding: 0;">
         <button class="btn btn-success" (click)="exportExcelParadasMovimientos(1)">EXPORTAR EXCEL SEPARADO</button>
@@ -1769,15 +1773,15 @@
         <button *ngIf="num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportPdfEventos');">EXPORTAR PDF</button>
         <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR PDF</button> -->
 
-        <button *ngIf="num_rep == 10" class="btn btn-success" (click)="exportPdfFrenadaAceleracionBrusca();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 11" class="btn btn-success" (click)="exportPdfDistraccionPosibleFatiga();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 12" class="btn btn-success" (click)="exportPdfCalificacionManejo();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 13" class="btn btn-success" (click)="exportPdfFatigaExtrema();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 14" class="btn btn-success" (click)="exportPdfAnticolisionFrontal();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 15" class="btn btn-success" (click)="exportPdfColisionConPeatones();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 16" class="btn btn-success" (click)="exportPdfDesvioCarrilIzquierda();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 17" class="btn btn-success" (click)="exportPdfDesvioCarrilDerecha();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 18" class="btn btn-success" (click)="exportPdfBloqueoVisionMobileye();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 10" class="btn btn-gl btn-success" (click)="exportPdfFrenadaAceleracionBrusca();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 11" class="btn btn-gl btn-success" (click)="exportPdfDistraccionPosibleFatiga();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 12" class="btn btn-gl btn-success" (click)="exportPdfCalificacionManejo();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 13" class="btn btn-gl btn-success" (click)="exportPdfFatigaExtrema();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 14" class="btn btn-gl btn-success" (click)="exportPdfAnticolisionFrontal();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 15" class="btn btn-gl btn-success" (click)="exportPdfColisionConPeatones();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 16" class="btn btn-gl btn-success" (click)="exportPdfDesvioCarrilIzquierda();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 17" class="btn btn-gl btn-success" (click)="exportPdfDesvioCarrilDerecha();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 18" class="btn btn-gl btn-success" (click)="exportPdfBloqueoVisionMobileye();">EXPORTAR PDF</button>
         <!-- <button *ngIf="num_rep == 20" class="btn btn-success" (click)="exportPdfExcesosVelocidadFormatoExtendido();">EXPORTAR PDF</button> -->
 
     </div>

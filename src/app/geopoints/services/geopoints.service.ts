@@ -254,9 +254,9 @@ export class GeopointsService {
   }
 
   public updateGeoCounters(){
-    console.log('Geopuntos update: ', this.geopoints);
-    console.log('Geopuntos update: ', this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
-    console.log('Geopuntos update: ', this.tblDataGeo.length - this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
+    //console.log('Geopuntos update: ', this.geopoints);
+    //console.log('Geopuntos update: ', this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
+    //console.log('Geopuntos update: ', this.tblDataGeo.length - this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
     this.geopointCounters.visible = this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length;
     this.geopointCounters.hidden = this.tblDataGeo.length - this.geopointCounters.visible;
   }
