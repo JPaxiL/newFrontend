@@ -91,6 +91,8 @@ export class FormComponent implements OnInit {
   formSpinnerMsg: string = 'Cargando';
   fullScreenSpinnerMsg: string = '';
 
+  strYearRange: string = '';
+
   //Popup
   popupIconSrc='./assets/images/popup-icon-chrome.svg';
   popupDialogPosition: string = 'top-right';
@@ -230,6 +232,7 @@ export class FormComponent implements OnInit {
   newWindow = false;
 
   isFormFilled = false;
+  areDatesValid = true;
 
   //Removido del formulario
   chkDateHour = true; //False muestra fecha y h juntas. true separadas
@@ -292,6 +295,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.strYearRange = '2000:' + new Date().getFullYear();
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
     // console.log(this.selectedReport.keys().length);
@@ -698,6 +702,7 @@ export class FormComponent implements OnInit {
     console.log('date end', this.dateEnd);
     console.log('time init', moment(new Date(this.timeInit)).format("HH:mm"));
     console.log('time end', this.timeEnd);
+    this.areDatesValid = this.dateInit != null && this.dateEnd != null && this.timeInit <= this.timeEnd;
   }
 
   validateForm(){
@@ -706,6 +711,7 @@ export class FormComponent implements OnInit {
 
     this.isFormFilled =
       (JSON.stringify(this.selectedReport) != '{}') &&
+      this.areDatesValid &&
       (
         (this.selectedReport == 0 && is_vehicle_selected && (this.chkStops || this.chkMovements))
         ||

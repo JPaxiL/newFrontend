@@ -30,8 +30,14 @@ export interface AllRows{
     hAlign?: string;
     fontSize?: any;
     colSpan?: number;
+    rowSpan?: number;
     formula?: string;
     wrap?: boolean;
+    borderRight?: { color: string; size: number; };
+    borderLeft?: { color: string; size: number; };
+    borderTop?: { color: string; size: number; };
+    borderBottom?: { color: string; size: number; };
+
   }[];
   height?: number;
 }
@@ -74,16 +80,17 @@ export class ResultComponent implements OnDestroy, OnInit {
   dtRendered = localStorage.getItem("report_data") !== null;
 
   /* EXPORTAR */
-  t1=18; // Titulo Principal
-  t2=16; // Sub titulos
-  t3=14; // Cabeceras
-  c1=12; // Cuerpo
-  r1=12; // RESUMEN
+  t1=14; // Titulo Principal
+  t2=9; // Sub titulos
+  t2_c=9; // Contenido Sub titulos
+  t3=9; // Cabeceras
+  c1=9; // Cuerpo
+  r1=9; // RESUMEN
 
-  t1_2=18; // Titulo Principal
-  tt1_2=16; // Titulo Principal linea 2
-  t2_2=15; // Sub titulos
-  c1_2=12; // Cuerpo del nuevo formato
+  t1_2=14; // Titulo Principal
+  tt1_2=9; // Titulo Principal linea 2
+  t2_2=9; // Sub titulos
+  c1_2=9; // Cuerpo del nuevo formato
 
   /* ANCHOS COLUMNAS */
   //NOTA: width * 1.28 (aprox) = Ancho de columna en excel
@@ -116,6 +123,44 @@ export class ResultComponent implements OnDestroy, OnInit {
   detalleExcesosEnZona : any = "";
   tablaString = "";
 
+  headerBackground = '#fff';
+  headerTextColor = '#244062';
+  headerBold: boolean = true;
+  headerRowSpan = 3;
+
+  vehicleHeaderBackground = '#a6a6a6';
+  vehicleHeaderTextColor = '#fff';
+  vehicleHeaderBold: boolean = false;
+  periodHeaderBackground = '#a6a6a6';
+  periodHeaderTextColor = '#fff';
+  periodHeaderBold: boolean = false;
+
+  vehicleContentBackground = '#eeece1';
+  vehicleContentTextColor = '#000';
+  vehicleContentBold: boolean = false;
+  periodContentBackground = '#eeece1';
+  periodContentTextColor = '#000';
+  periodContentBold: boolean = false;
+  contentRowSpan = 2;
+
+  colsHeaderBackground = '#244062';
+  colsHeaderTextColor = '#fff';
+  colsHeaderBold : boolean = false;
+  freezeRowBorderColor = '#000';
+  overviewTotalLeft = '#c5d9f1';
+  overviewTotalRight = '#95b3d7';
+
+  headersBorderColor = '#fff';
+  headersBorderSize = 1;
+
+  headerRowsHeight = 12;
+  subHeaderPosicionHeight = 15;
+  subHeadertHeight = 12;
+  colsHeaderHeight = 18.75;
+  bodyRowsHeight = 12;
+  
+  excelUnitstoPxRatio = 4/3;
+
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
@@ -136,6 +181,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     localStorage.removeItem('report_data');
 
     console.log('Iniciando result component');
+    this.calculateRowHeights();
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -258,6 +305,14 @@ export class ResultComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
     localStorage.removeItem('report_data');
+  }
+
+  calculateRowHeights(){
+    this.headerRowsHeight = this.headerRowsHeight * this.excelUnitstoPxRatio;
+    this.subHeaderPosicionHeight = this.subHeaderPosicionHeight * this.excelUnitstoPxRatio;
+    this.subHeadertHeight = this.subHeadertHeight * this.excelUnitstoPxRatio;
+    this.colsHeaderHeight = this.colsHeaderHeight * this.excelUnitstoPxRatio;
+    this.bodyRowsHeight = this.bodyRowsHeight * this.excelUnitstoPxRatio;
   }
 
   filterMovimientos(a: any[]): any[] {
@@ -2505,13 +2560,14 @@ export class ResultComponent implements OnDestroy, OnInit {
     } */
 
     var allRows: AllRows[] = [
-        {},
         {
           cells: [
-            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+            { value: nom_inf, bold: true, color: this.headerTextColor, background: this.headerBackground, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width, rowSpan: this.headerRowSpan }
           ],
           height: 30,
-        }
+        },
+        {},
+        {},
     ];
 
     var cc = 0;
@@ -2521,48 +2577,52 @@ export class ResultComponent implements OnDestroy, OnInit {
     if(this.data.length > 0) {
         bol_datos_ex = true;
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
-            ]
+              { value: nom_inf, bold: true, color: this.headerTextColor, background: this.headerBackground, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width, rowSpan: this.headerRowSpan }
+            ],
+            height: this.headerRowsHeight,
           },
-          {},
+          {
+            height: this.headerRowsHeight,
+          },
+          {
+            height: this.headerRowsHeight,
+          },
           {
             cells: [
-              { value: this.rep_subtitle , color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width },
-              // { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              // { value: "PERIODO : " + vm.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
-          },
-          {}
+              { value: this.rep_subtitle , color: this.vehicleContentTextColor, background: this.vehicleContentBackground, vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width, borderBottom: { color: this.headersBorderColor, size: this.headersBorderSize } },
+            ],
+            height: this.subHeaderPosicionHeight,
+          }
         ];
 
 
         if(this.chkDateHour) {
           rows.push({
             cells: [
-              { value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ítem", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Código", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Placa", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
 
 /*               { value: "Servicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Origen", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Destino", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }, */
 
-              { value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Hora", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
 
-              { value: "Status", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Status", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Velocidad GPS", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Velocidad CAN", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Odómetro", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Ubicación", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Referencia", bold: this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
               /* { value: "Zona Cercana", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Latitud/Longitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 } */
 
-            ]
+            ],
+            height: this.colsHeaderHeight,
           });
           this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
             //var fh = item.fecha_final.split(" ");
@@ -2590,7 +2650,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.odometro, vAlign: "center", hAlign: "center", fontSize: this.c1 },
                 { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', vAlign: "center", hAlign: "center", fontSize: this.c1_2 },
                 { value: item.zonaCercana, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-              ]
+              ],
+              height: this.bodyRowsHeight,
             });
           });
 
@@ -2599,23 +2660,24 @@ export class ResultComponent implements OnDestroy, OnInit {
         } else {
           rows.push({
             cells: [
-              { value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ítem", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Código", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Placa", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
 
               /* { value: "Servicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Origen", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Destino", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }, */
 
-              { value: "Fecha y Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha y Hora", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
 
-              { value: "Status", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-            ]
+              { value: "Status", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Velocidad GPS", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Velocidad CAN", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Odómetro", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Ubicación", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Referencia", bold: true, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+            ],
+            height: this.colsHeaderHeight,
           });
 
           this.data.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
@@ -2644,7 +2706,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', vAlign: "center", hAlign: "center", fontSize: this.c1_2 },
                 { value: item.zonaCercana, vAlign: "center", hAlign: "center", fontSize: this.c1 },
 
-              ]
+              ],
+              height: this.bodyRowsHeight,
             });
           });
 
@@ -2678,7 +2741,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (vrs == 1) {
             exportFileEx.push({
               freezePane: {
-                  rowSplit: 6
+                  rowSplit: 5
                 },
               columns: column_config,
               title: "Resultado",//data[0][1],

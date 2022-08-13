@@ -209,14 +209,36 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha inicio:
-                  <p-calendar [(ngModel)]="dateInit" dateFormat="dd/mm/yy" [maxDate]="dateEnd" [appendTo]="'body'" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar 
+                    [(ngModel)]="dateInit" 
+                    dateFormat="dd/mm/yy" 
+                    [maxDate]="dateEnd" 
+                    [appendTo]="'body'" 
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    yearRange="{{strYearRange}}"
+                    (onSelect)="onTimeChange(); validateForm();"
+                    (onBlur)="onTimeChange(); validateForm();"
+                    (onInput)="onTimeChange(); validateForm();"
+                    (onClickOutside)="onTimeChange(); validateForm();"
+                    ></p-calendar>
                 </label>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label>Hora inicio:
-                  <p-calendar [(ngModel)]="timeInit" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [maxDate]="timeEnd" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar 
+                    [(ngModel)]="timeInit" 
+                    [timeOnly]="true" 
+                    [readonlyInput]="true" 
+                    [appendTo]="'body'"  
+                    [maxDate]="timeEnd" 
+                    (onSelect)="onTimeChange(); validateForm();"
+                    (onBlur)="onTimeChange(); validateForm();"
+                    (onInput)="onTimeChange(); validateForm();"
+                    (onClickOutside)="onTimeChange(); validateForm();"
+                    ></p-calendar>
                 </label>
               </div>
             </div>
@@ -225,14 +247,36 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha final:
-                  <p-calendar [(ngModel)]="dateEnd" dateFormat="dd/mm/yy" [minDate]="dateInit" [appendTo]="'body'" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar 
+                    [(ngModel)]="dateEnd" 
+                    dateFormat="dd/mm/yy" 
+                    [minDate]="dateInit" 
+                    [appendTo]="'body'" 
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    yearRange="{{strYearRange}}"
+                    (onSelect)="onTimeChange(); validateForm();"
+                    (onBlur)="onTimeChange(); validateForm();"
+                    (onInput)="onTimeChange(); validateForm();"
+                    (onClickOutside)="onTimeChange(); validateForm();"
+                    ></p-calendar>
                 </label>
               </div>
             </div>
             <div class="row">
               <div class="p-field">
                 <label>Hora final:
-                  <p-calendar [(ngModel)]="timeEnd" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'" [minDate]="timeInit" (onSelect)="validateForm(); onTimeChange();"></p-calendar>
+                  <p-calendar 
+                    [(ngModel)]="timeEnd" 
+                    [timeOnly]="true" 
+                    [readonlyInput]="true" 
+                    [appendTo]="'body'" 
+                    [minDate]="timeInit" 
+                    (onSelect)="onTimeChange(); validateForm();"
+                    (onBlur)="onTimeChange(); validateForm();"
+                    (onInput)="onTimeChange(); validateForm();"
+                    (onClickOutside)="onTimeChange(); validateForm();"
+                    ></p-calendar>
                 </label>
               </div>
             </div>
