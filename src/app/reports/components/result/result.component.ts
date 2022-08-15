@@ -93,9 +93,10 @@ export class ResultComponent implements OnDestroy, OnInit {
   c1_2=9; // Cuerpo del nuevo formato
 
   /* ANCHOS COLUMNAS */
-  //NOTA: width * 1.28 (aprox) = Ancho de columna en excel
-  w_item = 50; // index
+  w_item = 40; // index
   w_date_hour = 94;
+  w_date = 80;
+  w_hour = 64;
   w_date_and_hour = 172;
   w_codigo = 80;
   w_placa = 70;
@@ -104,9 +105,11 @@ export class ResultComponent implements OnDestroy, OnInit {
   w_velocidad_gps_can_short = 88;
   w_odometro = 110;
   w_duracion = 173;
-  w_lat_long = 190;
+  w_lat_long = 140;
 
-  char_to_px = 10; // Ancho de un caracter en pixeles
+  //Width de col en px = (ancho de caracter * nro de letras) + 5
+  //char_to_px = 11; // Ancho de un caracter en pixeles, considerando M como la letra más ancha, 
+  char_to_px = 10; // Ancho de un caracter en pixeles 
 
   isChromium = window.chrome? true:false;
 	winNav = window.navigator;
@@ -305,6 +308,10 @@ export class ResultComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
     localStorage.removeItem('report_data');
+  }
+
+  calculateColWidth(noOfCharacters: number){
+    return (this.char_to_px * noOfCharacters) + 5;
   }
 
   calculateRowHeights(){
@@ -2571,8 +2578,13 @@ export class ResultComponent implements OnDestroy, OnInit {
     ];
 
     var cc = 0;
-    var status_cell_width = 83;
-    var referencia_cell_width = 160;
+    var codigo_cell_ch_width = "Codigo".length;
+    var placa_cell_ch_width = "Placa".length;
+    var status_cell_ch_width = "Status".length;
+    var vel_gps_cell_ch_width = "Velocidad GPS".length;
+    var vel_can_cell_ch_width = "Velocidad CAN".length;
+    var odometro_cell_ch_width = "Odometro".length;
+    var referencia_cell_ch_width = "Referencia".length;
 
     if(this.data.length > 0) {
         bol_datos_ex = true;
@@ -2628,8 +2640,13 @@ export class ResultComponent implements OnDestroy, OnInit {
             //var fh = item.fecha_final.split(" ");
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
-            status_cell_width = Math.max(status_cell_width, item.estado.length * 11);
-            referencia_cell_width = Math.max(referencia_cell_width, item.zonaCercana.length * 11);
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, item.codigo.toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, item.placa.toString().length);
+            status_cell_ch_width = Math.max(status_cell_ch_width, item.estado.toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velocidad+" km/h").length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.velocidad_can+" km/h").length);
+            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, item.odometro.toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, item.zonaCercana.toString().length);
 
             rows.push({
               cells: [
@@ -2684,8 +2701,13 @@ export class ResultComponent implements OnDestroy, OnInit {
             var ubicacion = item.latitud + "," + item.longitud;
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
-            status_cell_width = Math.max(status_cell_width, item.estado.length * 11);
-            referencia_cell_width = Math.max(referencia_cell_width, item.zonaCercana.length * 11);
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, item.codigo.toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, item.placa.toString().length);
+            status_cell_ch_width = Math.max(status_cell_ch_width, item.estado.toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velocidad+" km/h").length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.velocidad_can+" km/h").length);
+            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, item.odometro.toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, item.zonaCercana.toString().length);
 
             rows.push({
               cells: [
@@ -2717,25 +2739,25 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         column_config = [
           { width: this.w_item },
-          { width: this.w_codigo },
-          { width: this.w_placa },
+          { width: this.calculateColWidth(codigo_cell_ch_width) },
+          { width: this.calculateColWidth(placa_cell_ch_width) },
         ];
         if(this.chkDateHour){
           column_config.push(
-            { width: this.w_date_hour },
-            { width: this.w_date_hour },
+            { width: this.w_date },
+            { width: this.w_hour },
           )
         } else {
           column_config.push(
             { width: this.w_date_and_hour },
           )
         }
-        column_config.push({ width: status_cell_width});
-        column_config.push({ width: this.w_velocidad_gps_can});
-        column_config.push({ width: this.w_velocidad_gps_can});
-        column_config.push({ width: this.w_odometro});
+        column_config.push({ width: this.calculateColWidth(status_cell_ch_width)});
+        column_config.push({ width: this.calculateColWidth(vel_gps_cell_ch_width)});
+        column_config.push({ width: this.calculateColWidth(vel_can_cell_ch_width)});
+        column_config.push({ width: this.calculateColWidth(odometro_cell_ch_width)});
         column_config.push({ width: this.w_lat_long});
-        column_config.push({ width: Math.floor(referencia_cell_width / 1.28)});
+        column_config.push({ width: this.calculateColWidth(referencia_cell_ch_width)});
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
