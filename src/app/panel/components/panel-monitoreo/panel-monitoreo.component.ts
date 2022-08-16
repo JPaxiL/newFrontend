@@ -9,7 +9,7 @@ declare var $: any;
   styleUrls: ['./panel-monitoreo.component.scss']
 })
 export class PanelMonitoreoComponent implements OnInit {
-  
+
 
   constructor( public panelService: PanelService ) { }
 
@@ -18,7 +18,7 @@ export class PanelMonitoreoComponent implements OnInit {
     var maxWidth: number;
     var minWidth: number;
     const rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    
+
     /* Redimensionar panel en window resize */
     window.addEventListener('resize', function(e: any) {
       minWidth = 425 + 2.5 * rem_to_px;
@@ -30,8 +30,8 @@ export class PanelMonitoreoComponent implements OnInit {
 
       if(this.document.getElementById('panelMonitoreo')!.getBoundingClientRect().width < minWidth) {
         $('#panelMonitoreo').css("width", minWidth);
-      } 
-      else if(this.document.getElementById('panelMonitoreo')!.getBoundingClientRect().width > maxWidth) { 
+      }
+      else if(this.document.getElementById('panelMonitoreo')!.getBoundingClientRect().width > maxWidth) {
         $('#panelMonitoreo').css("width", maxWidth);
       }
     }, true);
@@ -48,7 +48,7 @@ export class PanelMonitoreoComponent implements OnInit {
       clickDistanceFromDragbar = e.originalEvent.touches? e.targetTouches[0].pageX - document.getElementById('panelMonitoreo')!.offsetWidth: e.pageX - document.getElementById('panelMonitoreo')!.offsetWidth;
 
       $('#dragbar').addClass('dragging');
-      e.preventDefault();  
+      e.preventDefault();
       $(document).on('mousemove touchmove gesturechange', function(e:any){
         if(e.originalEvent.touches){
           $('#panelMonitoreo').css("width",(e.targetTouches[0].pageX - clickDistanceFromDragbar < minWidth? minWidth: (e.targetTouches[0].pageX - clickDistanceFromDragbar > maxWidth? maxWidth: e.targetTouches[0].pageX - clickDistanceFromDragbar)));
@@ -71,24 +71,26 @@ export class PanelMonitoreoComponent implements OnInit {
 
   hasHeader(){
     switch(this.panelService.nombreComponente){
-      case "VEHICLES": 
+      case "VEHICLES":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', '')) != 0;
-      case "ALERTS": 
-      case "ALERTS-GPS": 
-      case "ALERTS-PLATFORMS": 
-      case "ALERTS-ACCESSORIES": 
+      case "ALERTS":
+      case "ALERTS-GPS":
+      case "ALERTS-PLATFORMS":
+      case "ALERTS-ACCESSORIES":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-alertas-header-height').replace('rem', '')) != 0;
-      case "GEOFENCES": 
+      case "GEOFENCES":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geocercas-header-height').replace('rem', '')) != 0;
-      case "GEOPOINTS": 
+      case "GEOPOINTS":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geopunto-header-height').replace('rem', '')) != 0;
-      case "HISTORIAL": 
-        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-historial-header-height').replace('rem', '')) != 0;
-      case "EVENT-USER": 
+      case "HISTORIAL":
+        // return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-historial-header-height').replace('rem', '')) != 0;
+      case "EVENT-USER":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-notificaciones-header-height').replace('rem', '')) != 0;
-      case "USER-CONFIG": 
+      case "USER-CONFIG":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-configuracion-header-height').replace('rem', '')) != 0;
-      default:
+        case "DASHBOARD":
+          return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-historial-header-height').replace('rem', '')) != 0;
+        default:
         return false;
     }
   }

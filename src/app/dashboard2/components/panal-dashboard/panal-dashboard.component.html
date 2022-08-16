@@ -1,0 +1,82 @@
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboard" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Cargando Dashboard... </p></ngx-spinner>
+
+<div id="panel_dashboard" class="modal-body p-fluid p-0 overflow-auto">
+    <div class="panel-izq-container h-100">
+        <div class="panel-izq-form">
+            <div class="gl-middleline gl-row-underline">
+                <div class="row">
+                    <div class="col-6 p-field">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="">Grupo</label>
+                            </div>
+                            <div class="col-12">
+                                <p-dropdown
+                                    [(ngModel)]="selectedGroup"
+                                    (onChange)="changeGroup()"
+                                    [filter]="true"
+                                    filterBy="label"
+                                    [options]="group"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    [showClear]="true"
+                                    [appendTo]="'body'"
+                                    placeholder="Seleccione el grupo..."></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 p-field">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="">Convoy</label>
+                            </div>
+                            <div class="col-12">
+                                <p-dropdown
+                                    [(ngModel)]="selectedConvoy"
+                                    [options]="convoy"
+                                    optionLabel="label"
+                                    [filter]="true"
+                                    filterBy="label"
+                                    placeholder="Todas las unidades"
+                                    optionValue="value"
+                                    [appendTo]="'body'"
+                                    (onChange)="changeConvoy()"
+                                >
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4 panel-izq-container-footer">
+                <div class="col-6">
+                  <button type="submit" class="btn-gl-cancel btn-dark-hover w-100" >Ocultar</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="windowAccess.open('/dashboard');">Mostrar</button>
+                </div>
+              </div>
+        </div>
+    </div>
+    <!-- <div class="row">
+        <div class="col">
+
+
+
+        </div>
+        <div class="col">
+            <label for="">Convoy</label>
+            <p-dropdown
+                [options]="convoy"
+                optionLabel="label"
+                [filter]="true"
+                filterBy="label"
+                defaultLabel="Todas las unidades"
+                placeholder="Todas las unidades"
+                optionValue="value"
+            >
+            </p-dropdown>
+        </div>
+
+    </div> -->
+</div>

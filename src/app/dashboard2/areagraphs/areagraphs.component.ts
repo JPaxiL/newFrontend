@@ -85,7 +85,11 @@ export class AreagraphsComponent implements OnInit {
 
       //  this.getData();
     // }, 180000);
-    this.spinner.show("loadingDashboardSpinner");
+    // this.spinner.show("loadingDashboardSpinner");
+    console.log("localStorage.setItem('vahivles-dashboard',vehicles); ===> ", JSON.parse(localStorage.getItem('vahivles-dashboard')!) )
+    console.log("this.dashboardService.getVehicles ====> ", await this.dashboardService.getVehicles());
+
+    return 0;
     this.vehicleService.dataCompleted.subscribe( vehicles => {
       this.vehicles = collect(vehicles).groupBy('grupo');
 

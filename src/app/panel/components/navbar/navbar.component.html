@@ -13,7 +13,7 @@
         </a>
       </div>
     </div>
-    
+
     <!-- EXPANDIDO -->
     <div class="collapse navbar-collapse justify-content-start" id="navbarSupportedContent">
       <ul class="navbar-nav h-100">
@@ -213,7 +213,7 @@
           </div>
           <span>Reportes</span>
         </li>
-        <li class="nav-item" (click)="windowAccess.open('/dashboard');">
+        <li class="nav-item" [ngClass]="panelService.nombreComponente == 'DASHBOARD'? 'active': ''" (click)="panelService.clickShowPanel('DASHBOARD')" >
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -313,7 +313,7 @@
           </div>
           <span>Subcuentas</span>
         </li>
-        
+
         <li class="nav-item" [ngClass]="panelService.nombreComponente == 'EVENT-USER'? 'active': ''" (click)="panelService.clickShowPanel('EVENT-USER');">
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventSocketService.count">
@@ -714,7 +714,7 @@
             </button>
           </div>
         </li>
-        
+
         <li class="nav-item" [ngClass]="panelService.nombreComponente == 'EVENT-USER'? 'active': ''" (click)="panelService.clickShowPanel('EVENT-USER');" title="Eventos" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventSocketService.count">
@@ -803,7 +803,7 @@
           <div class="user-menu-name text-ellipsis me-3">
             <span>{{ 'Nombre1' + ' ' + 'Apellido1' }}</span>
           </div>
-          <i class="fa fa-chevron-down" aria-hidden="true"></i>    
+          <i class="fa fa-chevron-down" aria-hidden="true"></i>
         </div>
         <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
 
@@ -948,7 +948,7 @@
                 </svg>
               </div>
               <!-- <i class="fa fa-history" aria-hidden="true"></i> -->
-              <span>Historial</span>
+              <span>Historial evev</span>
             </button>
             <button ngbDropdownItem class="btn-navbar d-flex align-items-center" (click)="windowAccess.open('/reports');">
               <div class="svg-container">
@@ -1298,8 +1298,8 @@
           </button>
         </ul>
       </div>
-      
-      
+
+
       <!-- <div class="p-2 bd-highlight col">
         <div ngbDropdown class="d-inline-block">
           <button class="btn" id="userDropdown" ngbDropdownToggle>
