@@ -6,53 +6,7 @@
         <div class="row">
             <h4>Dash Board</h4>
             <hr>
-            <div class="col">
-
-                <label for="">Grupo</label>
-                <p-multiSelect
-                    [options]="group"
-                    optionLabel="label"
-                    optionValue="value"
-                    [(ngModel)]="imeis"
-                    defaultLabel="Todas las unidades"
-                    [maxSelectedLabels]="3"
-                    [selectedItemsLabel]="'{0} vehiculos seleccionados'"
-                    [group]="true"
-                ></p-multiSelect>
-
-            </div>
-            <div class="col">
-                <label for="">Convoy</label>
-                <p-dropdown
-                    [options]="convoy"
-                    optionLabel="label"
-                    [filter]="true"
-                    filterBy="label"
-                    defaultLabel="Todas las unidades"
-                    placeholder="Todas las unidades"
-                    optionValue="value"
-                >
-                </p-dropdown>
-            </div>
-
-            <div class="col">
-                <!-- <p-calendar
-                    [showIcon]="true"
-                    selectionMode="range"
-                    [readonlyInput]="true"
-                    inputId="range"
-                    dateFormat="dd/mm/yy"
-                    [(ngModel)]="rangeDates"
-                    (onClose)="onSelect()"
-                ></p-calendar> -->
-
-                <button type="button" class="btn btn-secondary" (click)="onClickConsultar()">Consultar</button>
-                <button type="button" class="btn btn-success">Descargar</button>
-            </div>
-
         </div>
-
-<br><br><br><br>
 
         <br>
         <div class="row">

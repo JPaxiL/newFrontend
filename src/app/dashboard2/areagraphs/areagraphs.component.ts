@@ -80,71 +80,26 @@ export class AreagraphsComponent implements OnInit {
   */
 
 
-  async ngOnInit() {
-    // await setInterval(() => {
+  ngOnInit():void {
+    this.spinner.show("loadingDashboardSpinner");
+    this.load();
+    // setInterval(() => {
 
-      //  this.getData();
+    //    this.load();
+    //    console.log(" this.load()");
     // }, 180000);
-    // this.spinner.show("loadingDashboardSpinner");
-    console.log("localStorage.setItem('vahivles-dashboard',vehicles); ===> ", JSON.parse(localStorage.getItem('vahivles-dashboard')!) )
-    console.log("this.dashboardService.getVehicles ====> ", await this.dashboardService.getVehicles());
+    // this.load();
+  }
 
-    return 0;
+  load(){
+    let imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
+
     this.vehicleService.dataCompleted.subscribe( vehicles => {
-      this.vehicles = collect(vehicles).groupBy('grupo');
+      this.vehicles = vehicles.filter( (vehicle:any) => { return imeis.includes(vehicle.IMEI)});
 
-      this.convoy = _.uniqBy(vehicles, 'convoy');
-      this.convoy = this.convoy.map((convoy:any) => {
-        return { value:convoy.idconvoy, label:convoy.convoy}
-      })
-      .filter( (convoy:any) => convoy.label != "Unidades Sin Convoy");
-
-      this.vehicles.map( (vehicle:any, index:any) => {
-
-        this.group.push(
-          {
-            value:index,
-            label:index,
-            items: vehicle.items.map(
-              (item:any) => {
-                this.imeis.push(item.IMEI);
-                return {
-                  value: item.IMEI,
-                  label: item.name
-                }
-              })
-          }
-        );
-      });
-
-      // let day = new Date();
-      // let yesterday = new Date();
-      // yesterday.setDate(yesterday.getDate() - 1);
-
-      // this.rangeDates = [yesterday,day];
-
-      this.setGraphData(vehicles);
+      this.setGraphData(this.vehicles);
 
     });
-
-  }
-
-  async getData(){
-    // await this.eventService.initialize();
-
-    let renge_date = this.rangeDates.map(date => date.getDate());
-
-    console.log("this.renge_date =====> ",this.rangeDates, renge_date);
-
-    // this.dashboardService.getData({renge_date:this.rangeDates, imeis: this.imeis});
-  }
-
-  async onSelect() {
-    await this.dashboardService.getData({renge_date:this.rangeDates, imeis: this.imeis});
-  }
-
-  onClickConsultar(){
-
   }
 
   setGraphData(vehicles:any){

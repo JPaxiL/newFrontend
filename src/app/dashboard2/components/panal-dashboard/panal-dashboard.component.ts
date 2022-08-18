@@ -48,10 +48,9 @@ export class PanalDashboardComponent implements OnInit {
   }
 
   changeGroup(){
-    console.log("this.selectedGroup ====> ", this.selectedGroup);
+
     this.convoy = _.uniqBy(this.getVehicles(), 'convoy');
     this.convoy = this.convoy.map((convoy:any) => {
-      console.log("convoy ====> ", convoy)
       return { value:convoy.idconvoy, label:convoy.convoy, groupName: convoy.grupo}
     })
     .filter( (convoy:any) => {
@@ -63,9 +62,8 @@ export class PanalDashboardComponent implements OnInit {
 
     let vehicles = this.getVehicles()
     .filter( (vehicle:any) => vehicle.idconvoy == this.selectedConvoy )
-    .map( (item:any) => {return { id:item.id, imei:item.IMEI}} );
+    .map( (item:any) => {return item.IMEI} );
 
-    this.dashboardService.setVehicles(vehicles);
     localStorage.setItem('vahivles-dashboard',JSON.stringify(vehicles));
 
   }
