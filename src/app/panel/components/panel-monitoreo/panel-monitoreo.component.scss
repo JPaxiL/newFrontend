@@ -178,7 +178,7 @@
 
   #panelMonitoreo.notificaciones #rowBusqueda{
     height: auto;
-    padding: calc(calc(var(--row-busqueda-height) - 38px) / 2) 1rem; //38px es la altura ded los input
+    padding: calc(calc(var(--row-busqueda-height) - 38px) / 2) 1rem calc(calc(var(--row-busqueda-height) - 38px) / 2) var(--gl-panel-padding-left); //38px es la altura ded los input
   }
 
   .table-content-component-panel-monitoreo {

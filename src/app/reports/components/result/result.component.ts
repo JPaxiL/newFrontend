@@ -2640,13 +2640,13 @@ export class ResultComponent implements OnDestroy, OnInit {
             //var fh = item.fecha_final.split(" ");
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
-            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, item.codigo.toString().length);
-            placa_cell_ch_width = Math.max(placa_cell_ch_width, item.placa.toString().length);
-            status_cell_ch_width = Math.max(status_cell_ch_width, item.estado.toString().length);
-            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velocidad+" km/h").length);
-            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.velocidad_can+" km/h").length);
-            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, item.odometro.toString().length);
-            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, item.zonaCercana.toString().length);
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            status_cell_ch_width = Math.max(status_cell_ch_width, (item.estado??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
+            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.zonaCercana??'').toString().length);
 
             rows.push({
               cells: [
@@ -2701,13 +2701,13 @@ export class ResultComponent implements OnDestroy, OnInit {
             var ubicacion = item.latitud + "," + item.longitud;
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
-            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, item.codigo.toString().length);
-            placa_cell_ch_width = Math.max(placa_cell_ch_width, item.placa.toString().length);
-            status_cell_ch_width = Math.max(status_cell_ch_width, item.estado.toString().length);
-            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velocidad+" km/h").length);
-            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.velocidad_can+" km/h").length);
-            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, item.odometro.toString().length);
-            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, item.zonaCercana.toString().length);
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            status_cell_ch_width = Math.max(status_cell_ch_width, (item.estado??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
+            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.zonaCercana??'').toString().length);
 
             rows.push({
               cells: [
