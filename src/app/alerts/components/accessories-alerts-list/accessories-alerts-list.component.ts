@@ -37,6 +37,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
   }
 
   public async loadData(){
+    this.spinner.show('loadingAccesoriesAlertsSpinner');
     this.alerts = await this.AlertService.getAlertsByType('accessories');
     this.spinner.hide('loadingAccesoriesAlertsSpinner');
     // this.dtTrigger.next();

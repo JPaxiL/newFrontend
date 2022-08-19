@@ -46,24 +46,6 @@ export class AlertGpsEditComponent implements OnInit {
     { id: 10, ruta: '', label: 'Sin Sonido' },
   ];
 
-  tipoAlerta: string = '';
-  chkEventoActivado: boolean = true;
-  chkCorreo: boolean = true;
-  chkSonido: boolean = true;
-  notificationSoundPath: string = '';
-  nombreAlerta: string = '';
-  listaEmails: any;
-  emailInput: string = '';
-  eventType: string = 'platform';
-  chkCaducidad: boolean = false;
-  duracionParada = 0;
-  duracionFormatoParada: string = 'S';
-  idAlert: number = -1 ;
-  chkFijarTiempo: boolean = false;
-  chkFijarLimiteVelocidad: boolean = false;
-  tiempoLimiteInfraccion: number = 10;
-  velocidadLimiteInfraccion: number = 0;
-
   loadingAlertDropdownReady: boolean = false;
   loadingVehicleMultiselectReady: boolean = false;
 
@@ -95,10 +77,10 @@ export class AlertGpsEditComponent implements OnInit {
 
     let alert = this.alertService.getAlertEditData();
 
-    this.vehiclesSelected = alert.imei.split(',');
+    this.vehiclesSelected = alert.imei ==''? []: alert.imei.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
     let notificacion_system = (arrayNotificationSystem[2].toLowerCase() === 'true');
-    let emails = alert.notificacion_direcion_email.split(',');
+    let emails = alert.notificacion_direcion_email == ''? []: alert.notificacion_direcion_email.split(',');
     let notificacion_email = (alert.notificacion_email.toLowerCase() === 'true')
     this.disabledEventSoundActive = !notificacion_system;
     this.disabledEmail = !notificacion_email;
@@ -120,24 +102,6 @@ export class AlertGpsEditComponent implements OnInit {
       eventType: ['gps'],
       id:[alert.id]
     });
-
-    this.vehiclesSelected = alert.imei.split(',');
-    this.tipoAlerta = alert.tipo;
-    this.chkEventoActivado = alert.activo;
-    this.chkSonido = notificacion_system;
-    this.chkCorreo = notificacion_email;
-    this.notificationSoundPath = `sonidos/${arrayNotificationSystem[3]}`;
-    this.nombreAlerta = alert.nombre;
-    this.listaEmails = emails;
-    this.emailInput = '';
-    this.chkCaducidad = alert.bol_fecha_caducidad;
-    this.duracionParada = alert.duracion_parada;
-    this.duracionFormatoParada = alert.duracion_formato_parada;
-    this.idAlert = alert.id;
-    this.chkFijarTiempo = alert.bol_fijar_tiempo;
-    this.tiempoLimiteInfraccion = alert.tiempo_limite_infraccion;
-    this.chkFijarLimiteVelocidad = alert.bol_fijar_velocidad;
-    this.velocidadLimiteInfraccion = alert.velocidad_limite_infraccion;
 
 
     this.loading = false;
@@ -170,11 +134,19 @@ export class AlertGpsEditComponent implements OnInit {
 
   }
 
-  changeDisabled($event: any){
-    if($event.target.checked){
+  changeDisabled(){
+    if(this.alertForm.value.chkSonido){
       this.alertForm.controls['sonido'].enable();
     } else{
       this.alertForm.controls['sonido'].disable();
+    }
+  }
+
+  chkEmailHandler(){
+    if(this.alertForm.value.chkCorreo){
+      this.alertForm.controls['email'].enable();
+    } else {
+      this.alertForm.controls['email'].disable();
     }
   }
 
@@ -183,13 +155,21 @@ export class AlertGpsEditComponent implements OnInit {
       if(this.validateEmail(this.alertForm.value.email)){
         if(!this.isInArray(this.alertForm.value.email, this.alertForm.value.lista_emails)){
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
+          this.alertForm.controls.email.reset();
+          //console.log('Lista Emails', this.alertForm.value.lista_emails);
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El email ingresado ya existe.',
+            icon: 'warning',
+          });
         }
       } else {
-        Swal.fire(
-          'Error',
-          'Debe ingresar un email válido.',
-          'warning'
-        );
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un email válido.',
+          icon: 'warning',
+        });
       }
     }
   }
@@ -207,14 +187,6 @@ export class AlertGpsEditComponent implements OnInit {
     return array.indexOf(value) > -1;
   }
 
-  changeDisabledEmail($event:any){
-    if($event.target.checked){
-      this.alertForm.controls['email'].enable();
-    } else{
-      this.alertForm.controls['email'].disable();
-    }
-  }
-
   onSubmit(event: any){
 
     event.preventDefault();
@@ -227,11 +199,12 @@ export class AlertGpsEditComponent implements OnInit {
     if (this.alertForm.value.vehicles.length != 0) {
 
       Swal.fire({
-            title: 'Desea guardar los cambios?',
-            text: 'Espere un momento...',
+            title: '¿Desea guardar los cambios?',
+            //text: 'Espere un momento...',
             icon: 'warning',
             showLoaderOnConfirm: true,
             showCancelButton: true,
+            allowOutsideClick: false,
             confirmButtonText: 'Guardar',
             cancelButtonText: 'Cancelar',
             preConfirm:async () => {

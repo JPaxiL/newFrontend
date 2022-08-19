@@ -58,26 +58,6 @@ export class PlatformAlertsCreateComponent implements OnInit {
     { id: 10, ruta: '', label: 'Sin Sonido' },
   ];
 
-  tipoAlerta: string = '';
-  chkEventoActivado: boolean = false;
-  chkCorreo: boolean = true;
-  chkSonido: boolean = false;
-  notificationSoundPath: string = '';
-  nombreAlerta: string = '';
-  listaEmails: any;
-  fechaDesde: any;
-  fechaHasta: any;
-  emailInput: string = '';
-  eventType: string = 'platform';
-  chkCaducidad: boolean = false;
-  duracionParada = 0;
-  duracionFormatoParada: string = 'S';
-  idAlert: number = -1 ;
-  chkFijarTiempo: boolean = false;
-  chkFijarLimiteVelocidad: boolean = false;
-  tiempoLimiteInfraccion: number = 10;
-  velocidadLimiteInfraccion: number = 0;
-
   loadingAlertDropdownReady: boolean = false;
   loadingVehicleMultiselectReady: boolean = false;
   loadingGeofencesMultiselectReady: boolean = false;
@@ -106,8 +86,6 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show('loadingAlertData');
-
-    console.log('Dur Par', this.duracionParada);
     let dateCurrent = {
       year: moment().year(),
       month: moment().month() + 1,
@@ -201,8 +179,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.panelService.nombreCabecera = item[0].name;
   }
 
-  changeDisabled($event: any) {
-    if ($event.target.checked) {
+  changeDisabled() {
+    if (this.alertForm.value.chkSonido) {
       this.alertForm.controls['sonido'].enable();
     } else {
       this.alertForm.controls['sonido'].disable();
@@ -248,31 +226,34 @@ export class PlatformAlertsCreateComponent implements OnInit {
     if (this.alertForm.value.vehiculos.length != 0) {
 
       Swal.fire({
-        title: 'Desea guardar los cambios?',
-        text: 'Espere un momento...',
+        title: '¿Desea guardar los cambios?',
+        //text: 'Espere un momento...',
         icon: 'warning',
         showLoaderOnConfirm: true,
         showCancelButton: true,
+        allowOutsideClick: false,
         confirmButtonText: 'Guardar',
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           await this.AlertService.create(this.alertForm.value);
           this.clickShowPanel('ALERTS-PLATFORMS');
         },
-      }).then(function () {
-        Swal.fire(
-          'Datos guardados',
-          'Los datos se guardaron correctamente!!',
-          'success'
-        );
+      }).then((data) => {
+        if (data.isConfirmed) {
+          Swal.fire(
+            'Datos guardados',
+            'Los datos se guardaron correctamente!!',
+            'success'
+          );
+        }
       });
     } else {
       Swal.fire('Error', 'Debe seleccionar un vehículo', 'warning');
     }
   }
 
-  changeDisabledEmail($event: any) {
-    if ($event.target.checked) {
+  chkEmailHandler() {
+    if (this.alertForm.value.chkCorreo) {
       this.alertForm.controls['email'].enable();
     } else {
       this.alertForm.controls['email'].disable();
@@ -280,7 +261,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   addEmail() {
-    if (this.alertForm.value.chkCorreo || this.chkCorreo) {
+    if (this.alertForm.value.chkCorreo) {
       if (this.validateEmail(this.alertForm.value.email)) {
         if (
           !this.isInArray(
@@ -289,9 +270,22 @@ export class PlatformAlertsCreateComponent implements OnInit {
           )
         ) {
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
+          this.alertForm.controls.email.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El email ingresado ya existe.',
+            icon: 'warning',
+            allowOutsideClick: false,
+          });
         }
       } else {
-        Swal.fire('Error', 'Debe ingresar un email válido.', 'warning');
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un email válido.',
+          icon: 'warning',
+          allowOutsideClick: false,
+        });
       }
     }
   }
@@ -351,8 +345,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
   }
 
-  changechkFijarTiempo($event: any) {
-    if ($event.target.checked) {
+  changechkFijarTiempo() {
+    if (this.alertForm.value.chkFijarTiempo) {
       this.alertForm.controls['tiempo_limite_infraccion'].enable();
       this.alertForm.controls['chkFijarLimiteVelocidad'].disable();
     } else {
@@ -361,8 +355,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
   }
 
-  changechkFijarLimiteVelocidad($event: any) {
-    if ($event.target.checked) {
+  changechkFijarLimiteVelocidad() {
+    if (this.alertForm.value.chkFijarLimiteVelocidad) {
       this.alertForm.controls['velocidad_limite_infraccion'].enable();
       this.alertForm.controls['chkFijarTiempo'].disable();
     } else {

@@ -29,6 +29,7 @@ export class GpsAlertsListComponent implements OnInit {
   }
 
   public async loadData(){
+    this.spinner.show('loadingGPSAlertsSpinner'); //En caso de ser llamado por delete
     this.alerts = await this.AlertService.getAlertsByType('gps');
     this.spinner.hide('loadingGPSAlertsSpinner');
   }

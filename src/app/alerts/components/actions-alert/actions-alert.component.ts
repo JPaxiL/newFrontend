@@ -49,6 +49,7 @@ export class ActionsAlertComponent implements OnInit {
         text: `¿Está seguro que desea eliminar ${alert.nombre}?`,
         showCancelButton: true,
         showLoaderOnConfirm: true,
+        allowOutsideClick: false,
         confirmButtonText: 'Eliminar',
         cancelButtonText: 'Cancelar',
         preConfirm:async () => {

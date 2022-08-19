@@ -26,6 +26,7 @@ export class PlatformAlertsListComponent implements OnInit {
   }
 
   public async loadData(){
+    this.spinner.show('loadingPlatformAlertsSpinner');
     this.alerts = await this.AlertService.getAlertsByType('platform');
     this.spinner.hide('loadingPlatformAlertsSpinner');
   }

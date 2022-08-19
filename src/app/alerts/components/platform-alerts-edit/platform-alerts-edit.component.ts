@@ -61,26 +61,6 @@ export class PlatformAlertsEditComponent implements OnInit {
     { ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
   ];
 
-  tipoAlerta: string = '';
-  chkEventoActivado: boolean = false;
-  chkCorreo: boolean = true;
-  chkSonido: boolean = false;
-  notificationSoundPath: string = '';
-  nombreAlerta: string = '';
-  listaEmails: any;
-  fechaDesde: any;
-  fechaHasta: any;
-  emailInput: string = '';
-  eventType: string = 'platform';
-  chkCaducidad: boolean = false;
-  duracionParada = 0;
-  duracionFormatoParada: string = 'S';
-  idAlert: number = -1 ;
-  chkFijarTiempo: boolean = false;
-  chkFijarLimiteVelocidad: boolean = false;
-  tiempoLimiteInfraccion: number = 10;
-  velocidadLimiteInfraccion: number = 0;
-
   loadingAlertDropdownReady: boolean = false;
   loadingVehicleMultiselectReady: boolean = false;
   loadingGeofencesMultiselectReady: boolean = false;
@@ -120,7 +100,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
     let notificacion_system =
       arrayNotificationSystem[2].toLowerCase() === 'true';
-    let emails = alert.notificacion_direcion_email.split(',');
+    let emails = alert.notificacion_direcion_email == ''? []: alert.notificacion_direcion_email.split(',');
     let notificacion_email = alert.notificacion_email.toLowerCase() === 'true';
     this.disabledEventSoundActive = !notificacion_system;
     this.disabledEmail = !notificacion_email;
@@ -145,26 +125,8 @@ export class PlatformAlertsEditComponent implements OnInit {
       day: fecha_hasta[2],
     };
 
-    this.vehiclesSelected = alert.imei.split(',');
-    this.geoSelected = alert.valor_verificado.split(',');
-    this.tipoAlerta = alert.tipo;
-    this.chkEventoActivado = alert.activo;
-    this.chkSonido = notificacion_system;
-    this.chkCorreo = notificacion_email;
-    this.notificationSoundPath = `sonidos/${arrayNotificationSystem[3]}`;
-    this.nombreAlerta = alert.nombre;
-    this.listaEmails = emails;
-    this.fechaDesde = new Date(fecha_desde + ' 00:00:00-05');
-    this.fechaHasta = new Date(fecha_desde + ' 00:00:00-05');
-    this.emailInput = '';
-    this.chkCaducidad = alert.bol_fecha_caducidad;
-    this.duracionParada = alert.duracion_parada;
-    this.duracionFormatoParada = alert.duracion_formato_parada;
-    this.idAlert = alert.id;
-    this.chkFijarTiempo = alert.bol_fijar_tiempo;
-    this.tiempoLimiteInfraccion = alert.tiempo_limite_infraccion;
-    this.chkFijarLimiteVelocidad = alert.bol_fijar_velocidad;
-    this.velocidadLimiteInfraccion = alert.velocidad_limite_infraccion;
+    this.vehiclesSelected = alert.imei ==''? []: alert.imei.split(',');
+    this.geoSelected = alert.valor_verificado == ''? []: alert.valor_verificado.split(',');
 
     this.alertForm = this.formBuilder.group({
       vehicles: [this.vehiclesSelected, [Validators.required]],
@@ -268,8 +230,8 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.panelService.nombreCabecera = item[0].name;
   }
 
-  changeDisabled($event: any) {
-    if ($event.target.checked) {
+  changeDisabled() {
+    if (this.alertForm.value.chkSonido) {
       this.alertForm.controls['sonido'].enable();
     } else {
       this.alertForm.controls['sonido'].disable();
@@ -282,6 +244,9 @@ export class PlatformAlertsEditComponent implements OnInit {
     //console.log("this.alertForm.value =============> ", moment(this.alertForm.value).format('YYYY MM DD'));
 
     event.preventDefault();
+    console.log('Vehi', this.alertForm.value.vehicles);
+    console.log('Vehi', this.alertForm.value.geocercas);
+
 
     this.alertForm.value.vehiculos = JSON.stringify(
       this.alertForm.value.vehicles
@@ -315,27 +280,33 @@ export class PlatformAlertsEditComponent implements OnInit {
     if (this.alertForm.value.vehiculos.length != 0) {
       Swal.fire({
         title: 'Desea guardar los cambios?',
-        text: 'Espere un momento...',
+        //text: 'Espere un momento...',
         icon: 'warning',
         showLoaderOnConfirm: true,
+        showCancelButton: true,
+        allowOutsideClick: false,
+        confirmButtonText: 'Guardar',
+        cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           await this.AlertService.edit(this.alertForm.value);
           this.clickShowPanel('ALERTS-PLATFORMS');
         },
-      }).then(function () {
-        Swal.fire(
-          'Actualizado',
-          'Los datos se actualizaron correctamente!!',
-          'success'
-        );
+      }).then((data) => {
+        if (data.isConfirmed) {
+          Swal.fire(
+            'Actualizado',
+            'Los datos se actualizaron correctamente!!',
+            'success'
+          );
+        }
       });
     } else {
       Swal.fire('Error', 'Debe seleccionar un vehículo', 'warning');
     }
   }
 
-  changeDisabledEmail($event: any) {
-    if ($event.target.checked) {
+  chkEmailHandler() {
+    if (this.alertForm.value.chkCorreo) {
       this.alertForm.controls['email'].enable();
     } else {
       this.alertForm.controls['email'].disable();
@@ -352,9 +323,22 @@ export class PlatformAlertsEditComponent implements OnInit {
           )
         ) {
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
+          this.alertForm.controls.email.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El email ingresado ya existe.',
+            icon: 'warning',
+            allowOutsideClick: false,
+          });
         }
       } else {
-        Swal.fire('Error', 'Debe ingresar un email válido.', 'warning');
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un email válido.',
+          icon: 'warning',
+          allowOutsideClick: false,
+        });
       }
     }
   }
@@ -386,7 +370,7 @@ export class PlatformAlertsEditComponent implements OnInit {
   chageAlertType() {
     //console.log(this.alertForm.value.tipoAlerta);
     //switch (this.alertForm.value.tipoAlerta) {
-    switch (this.tipoAlerta) {
+    switch (this.alertForm.value.tipoAlerta) {
       case 'Zona de entrada':
       case 'Zona de salida':
         this.showTiempoLimite = false;
@@ -415,8 +399,8 @@ export class PlatformAlertsEditComponent implements OnInit {
     }
   }
 
-  changechkFijarTiempo($event: any) {
-    if ($event.target.checked) {
+  changechkFijarTiempo() {
+    if (this.alertForm.value.chkFijarTiempo) {
       this.alertForm.controls['tiempo_limite_infraccion'].enable();
       this.alertForm.controls['chkFijarLimiteVelocidad'].disable();
       this.alertForm.value.velocidad_limite_infraccion = null;
@@ -427,8 +411,8 @@ export class PlatformAlertsEditComponent implements OnInit {
     }
   }
 
-  changechkFijarLimiteVelocidad($event: any) {
-    if ($event.target.checked) {
+  changechkFijarLimiteVelocidad() {
+    if (this.alertForm.value.chkFijarLimiteVelocidad) {
       this.alertForm.controls['velocidad_limite_infraccion'].enable();
       this.alertForm.controls['chkFijarTiempo'].disable();
       this.alertForm.value.tiempo_limite_infraccion = null;
