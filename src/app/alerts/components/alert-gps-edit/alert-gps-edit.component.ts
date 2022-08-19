@@ -110,6 +110,9 @@ export class AlertGpsEditComponent implements OnInit {
   public async loadData(){
     this.setDataVehicles();
     this.events = await this.alertService.getEventsByType('gps');
+    this.alertForm.patchValue({
+      tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+    });
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;
@@ -243,6 +246,21 @@ export class AlertGpsEditComponent implements OnInit {
     if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){ 
       this.spinner.hide('loadingAlertData');
     }
+  }
+
+  obtenerTipoAlerta( strAlerta: string){
+    //console.log(this.events);
+    for(let i = 0; i < this.events.length; i++){
+      if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
+        return this.events[i].name;
+      }
+    }
+    return strAlerta;
+  }
+
+  prepareString(str: string){
+    return str.toLowerCase().normalize('NFKD').replace(/[^\w ]/g, '').replace(/  +/g, ' ').trim();
+    //return str.toLowerCase().normalize('NFKD').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/  +/g, ' ').trim();
   }
 
 }

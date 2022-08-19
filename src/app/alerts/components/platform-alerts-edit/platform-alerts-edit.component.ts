@@ -108,7 +108,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     let fecha_desde = alert.fecha_desde.split('-').map(Number);
     let fecha_hasta = alert.fecha_hasta.split('-').map(Number);
 
-    console.log('Objeto Alertas: ',alert);
+    //console.log('Objeto Alertas: ',alert);
 
     this.disabledTimeLimit = !alert.bol_fijar_tiempo;
     this.disabledSpeed = !alert.bol_fijar_velocidad;
@@ -185,6 +185,9 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.setDataVehicles();
 
     this.events = await this.AlertService.getEventsByType('platform');
+    this.alertForm.patchValue({
+      tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+    });
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;
@@ -427,5 +430,20 @@ export class PlatformAlertsEditComponent implements OnInit {
     if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){ 
       this.spinner.hide('loadingAlertData');
     }
+  }
+
+  obtenerTipoAlerta( strAlerta: string){
+    //console.log(this.events);
+    for(let i = 0; i < this.events.length; i++){
+      if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
+        return this.events[i].name;
+      }
+    }
+    return strAlerta;
+  }
+
+  prepareString(str: string){
+    return str.toLowerCase().normalize('NFKD').replace(/[^\w ]/g, '').replace(/  +/g, ' ').trim();
+    //return str.toLowerCase().normalize('NFKD').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/  +/g, ' ').trim();
   }
 }

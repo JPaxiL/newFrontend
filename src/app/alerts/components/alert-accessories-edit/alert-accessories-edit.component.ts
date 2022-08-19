@@ -113,6 +113,9 @@ export class AlertAccessoriesEditComponent implements OnInit {
   public async loadData() {
     this.setDataVehicles();
     this.events = await this.alertService.getEventsByType('accessories');
+    this.alertForm.patchValue({
+      tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+    });
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;
@@ -240,4 +243,21 @@ export class AlertAccessoriesEditComponent implements OnInit {
       this.spinner.hide('loadingAlertData');
     }
   }
+
+  obtenerTipoAlerta( strAlerta: string){
+    //console.log(this.events);
+    for(let i = 0; i < this.events.length; i++){
+      if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
+        console.log('Se encontro match');
+        return this.events[i].name;
+      }
+    }
+    return strAlerta;
+  }
+
+  prepareString(str: string){
+    return str.toLowerCase().normalize('NFKD').replace(/[^\w ]/g, '').replace(/  +/g, ' ').trim();
+    //return str.toLowerCase().normalize('NFKD').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/  +/g, ' ').trim();
+  }
+
 }
