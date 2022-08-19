@@ -40,6 +40,7 @@
                             optionValue="value"
                             formControlName="vehicles"
                             defaultLabel="0 vehiculos seleccionados"
+                            [appendTo]="'body'"
                             [maxSelectedLabels]="3"
                             [selectedItemsLabel]="'{0} vehiculos seleccionados'"
                             ></p-multiSelect>
@@ -80,6 +81,7 @@
                         <div class="p-field">
                             <p-dropdown
                             [options]="listaSonidos"
+                            [appendTo]="'body'"
                             optionLabel="label"
                             optionValue="ruta"
                             formControlName="sonido"
