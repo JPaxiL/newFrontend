@@ -59,7 +59,7 @@
       <div class="row">
         <div class="p-field">
           <label class="bg-subtitle">Reporte :</label>
-          <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [appendTo]="'body'" [showClear]="false" placeholder="Seleccione el reporte..." (onChange)="changedReport(); validateForm();"></p-dropdown>
+          <p-dropdown [options]="reports" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [appendTo]="'body'" [showClear]="false" placeholder="Seleccione el reporte..." (onChange)="resetAllFields(); changedReport(); validateForm();"></p-dropdown>
         </div>
       </div>
       <div class="row">

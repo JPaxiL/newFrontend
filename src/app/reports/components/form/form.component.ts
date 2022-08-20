@@ -22,7 +22,6 @@ export class FormComponent implements OnInit {
   reports: any=[];
   selectedReport: any={};
   vehicles: any=[];
-  selectedVehicle: any={};
   selectedVehicles: any=[];
   convoys: any=[];
   selectedConvoy: any={};
@@ -36,17 +35,11 @@ export class FormComponent implements OnInit {
   /* checkboxParada: boolean = true; //Renamed to chkStops
   checkboxMovimiento: boolean = true; */ //Renamed to chkMovements
   // checkboxDuracion: boolean = false; //Renamed to chkDuracion
-  checkboxLimitVelocidad: boolean = false;
   dateInit!: Date;
   dateEnd!: Date;
   timeInit!: Date;
   timeEnd!: Date;
 
-  selectedValues: string[] = [];
-
-  //vehiclesArray = [];
-	vehiclesArrayOrderByConvoy: any=[];
-	vehiclesArrayOrderByGroup: any=[];
 	zones: any=[];
 	/* changedReport = changedReport();
 	onGenerate = onGenerate();
@@ -124,7 +117,6 @@ export class FormComponent implements OnInit {
   //Reporte 1 - Exceso de Vel
   showExcVelOpt: boolean = false;
   checkboxDuration: boolean = false;
-  excesoVelocidad: string = 'limVel';
   minimDur = 15;
   limitSpeed = 90;
 
@@ -225,7 +217,6 @@ export class FormComponent implements OnInit {
 	chkFatigaDistraccion = true;
 
   chkTrans1min = false;
-	chkForGroup = false;
 
 	spinnerOptions = false;
 
@@ -366,12 +357,6 @@ export class FormComponent implements OnInit {
     console.log("Es firefox ? " + this.isFirefox);
     console.log("Es safari ? " + this.isSafari);
 
-  }
-
-  showExcVel(){
-    console.log(this.excesoVelocidad);
-    console.log(this.excesoVelocidad == 'limVel');
-    console.log(this.excesoVelocidad == 'durExc');
   }
 
   selectAllVehicles(){
@@ -752,4 +737,119 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 20 && is_vehicle_selected)
       );
   }
+
+  resetAllFields(){
+    this.selectedVehicles =[];
+    this.chkAllVehicles = false;
+    this.selectedConvoy ={};
+    this.selectedGroup ={};
+    this.checkboxGroup  = false;
+
+    this.chkOdomVirtual = false;
+    this.chkStops = false;
+    this.chkMovements = false;
+    this.chkFrenada = false;
+    this.chkAceleracion = false;
+
+    //0. Paradas y Movimientos
+    this.chkStops = true;
+	  this.chkMovements = true;
+
+    //1. Exceso de velocidad
+    this.checkboxDuration = false;
+    this.minimDur = 15;
+    this.limitSpeed = 90;
+
+    //2. Entrada y Salida
+    this.selectedZones = [];
+
+    //3. Combustible
+    this.chkOdomVirtual = false;
+    this.odometroVirtual = 0;
+
+    //4. Frenada y Acel Brusca
+    this.chkFrenada = true;
+	  this.chkAceleracion = true;
+
+    //5. General
+    this.oG = {
+      DUOT2state:false, // --- NEW2
+      RPMAlta:false,
+      RxM:false,
+      aBrusca:false,
+      alcoholemia:false,
+      altitud:false,
+      angulo:false,
+      cMotor:false,
+      cRestante: false, // --- NEW
+      fBrusca:false,
+      fExBrusca:false,
+      fServidor:false,   // --- NEW
+      fatiga:false,
+      cNivel:false,  //  NEW
+      odometro:false,
+      onOff:false,
+      pCercano:false,
+      parametros: false,  // --- NEW
+      recFacial:false,
+      referencia:false,
+      ubicacion:false,
+      velCAN:false,
+      velECO:false,
+      velGPS:false,
+      velGPS_speed:false,
+    };
+
+    //6. Eventos
+    this.eV = {
+      GPSbateriaBaja:false,
+      GPSbateriaDesconectada:false,
+      GPSaceleracionBrusca:false,
+      GPSfrenadaBrusca:false,
+      GPSbloqueoTransmision:false,
+      GPSsos:false,
+      GPSremolque:false,
+      GPSparada: false, // --- NEW
+      GPSmotorEncendido: false, // --- NEW
+      GPSmotorApagado: false, // --- NEW
+
+      evEntrada:false,
+      evSalida:false,
+      evEstadia:false,   // --- NEW
+      evParada:false,
+      evMovSinProgramacion:false,  //  NEW
+      evInfraccion:false,
+      evAnticolisionFrontal:false,
+      evColisionConPeatones:false,
+
+      evNoRostro:false,
+      evFatigaExtrema:false,
+      evDesvioCarrilIzquierda:false,
+      evDesvioCarrilDerecha:false,
+      evBloqueoVisionMobileye:false,
+
+
+      AccFatiga:false, // DESACTIVADO
+      AccAlcoholemia:false,
+      AccIButton: false,  // --- DESACTIVADO
+      AccSomnolencia: false,
+      AccDistraccion: false,
+
+      OtroTodos:false,
+      OtroExVelocidad:false,
+    };
+
+    //Reporte 10
+    this.chkFatigaSomnolencia = true;
+	  this.chkFatigaDistraccion = true;
+
+    this.areDatesValid = true;
+
+    this.dateInit = new Date(moment(Date.now()).format("MM/DD/YYYY"));
+    this.dateEnd = this.dateInit;
+    console.log('time',new Date('12/03/2018'));
+    this.timeInit = new Date('12/03/2018 00:00');
+    this.timeEnd = new Date('12/03/2018 23:59');
+  }
+
 }
