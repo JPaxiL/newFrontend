@@ -2265,7 +2265,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var placa_cell_ch_width = "Placa".length;
     var convoy_cell_ch_width = "Convoy".length;
     var vel_limite_comb_cell_ch_width = "vel. limite".length;
-    var exceso_vel_max_litros_cell_ch_width = "vel maxima".length;
+    var exceso_vel_max_litros_cell_ch_width = "vel. maxima".length;
     var duracion_cell_ch_width = "Duracion".length;
     var geocerca_restante_cell_ch_width = "Geocerca ".length;
     var referencia_motor_cell_ch_width = "Referencia".length;
@@ -2325,7 +2325,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCampos.push({ value: "Placa", ...this.colHeaderConfig });
 
           cellsCampos.push({ value: "Vel. Límite", ...this.colHeaderConfig });
-          cellsCampos.push({ value: "Exceso vel maxima", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Exceso Vel. Maxima", ...this.colHeaderConfig });
 
           if(this.chkDateHour) {
               cellsCampos.push({ value: "Fecha de Inicio", ...this.colHeaderConfig });
@@ -3482,7 +3482,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             ],
             height: this.colsHeaderHeight,
           });
-          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
+          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
             //var fh = item.fecha_final.split(" ");
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
@@ -3492,7 +3492,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
-            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.zonaCercana??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
 
             rows.push({
               cells: [
@@ -3512,7 +3512,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
                 { value: item.odometro, ...this.bodyRowsConfig },
                 { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', ...this.bodyRowsConfig, fontSize: this.c1_2 },
-                { value: item.zonaCercana, ...this.bodyRowsConfig },
+                { value: item.referencia, ...this.bodyRowsConfig },
               ],
               height: this.bodyRowsHeight,
             });
@@ -3572,7 +3572,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
                 { value: item.odometro, ...this.bodyRowsConfig },
                 { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', ...this.bodyRowsConfig, fontSize: this.c1_2 },
-                { value: item.zonaCercana, ...this.bodyRowsConfig },
+                { value: item.referencia, ...this.bodyRowsConfig },
 
               ],
               height: this.bodyRowsHeight,

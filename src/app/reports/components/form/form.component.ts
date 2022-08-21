@@ -762,6 +762,7 @@ export class FormComponent implements OnInit {
 
     //2. Entrada y Salida
     this.selectedZones = [];
+    this.chkAllZones = false;
 
     //3. Combustible
     this.chkOdomVirtual = false;
