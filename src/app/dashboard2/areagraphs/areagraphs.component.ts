@@ -31,6 +31,14 @@ export class AreagraphsComponent implements OnInit {
   red:number=0;
   imeiRed:any = [];
 
+  horizontalChart:any = [];
+  viewHorizontalChart = [700, 100];
+  in_service = 0
+  without_programming  = 0;
+  total = 0;
+  in_service_percentage = 0;
+  without_programming_percentage = 0;
+
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
@@ -40,6 +48,10 @@ export class AreagraphsComponent implements OnInit {
 
   colorScheme = {
     domain: ['green', 'blue', 'orange', 'black','red']
+  };
+
+  colorScheme1111horizontalChart = {
+    domain: ['blue','gray']
   };
 
   colorSchemeVehiclesOnRoute = {
@@ -106,7 +118,6 @@ export class AreagraphsComponent implements OnInit {
       this.totalVehicle = vehicles.length;
 
       vehicles.forEach( (vehicle:any) =>  {
-        console.log("vehicle.parameter",vehicle.parametros,vehicle)
         if(vehicle.point_color == 10){
           this.green += 1;
           this.imeiGreen.push(vehicle.name);
@@ -157,7 +168,43 @@ export class AreagraphsComponent implements OnInit {
         }
       ];
 
+      this.setHorizontalChart();
+
       this.spinner.hide("loadingDashboardSpinner");
+  }
+
+
+  setHorizontalChart(){
+
+    this.in_service = this.green
+    this.data
+    .forEach((item:any) => {
+      if(item.name != 'En movimiento'){
+        this.without_programming += item.value;
+      }
+      this.total += item.value;
+    });
+
+    this.in_service_percentage = (this.in_service * 100) / this.total;
+    this.without_programming_percentage = (this.without_programming * 100) / this.total;
+    console.log(" in_service_percentage =====>  ",this.in_service_percentage);
+    console.log(" without_programming_percentage =====>  ",this.without_programming_percentage);
+
+    this.horizontalChart = [
+      {
+        "name": "",
+        "series": [
+          {
+            "name": "En servicio",
+            "value": this.in_service,
+          },
+          {
+            "name": "Sin programación",
+            "value": this.without_programming,
+          }
+        ]
+      }
+    ]
   }
 
 }

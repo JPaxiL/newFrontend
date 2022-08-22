@@ -72,6 +72,30 @@
             </div>
         </div>
         <br><br>
+        <div class="row">
+            <h4>Unidades en servicio y sin programación</h4>
+            <hr>
+            <div class="col-6">
+                <label for="">
+                    En servicio <br> {{in_service}}/{{in_service_percentage}}%
+                </label>
+                <ngx-charts-bar-horizontal-stacked
+                    *ngIf="'bar-horizontal-stacked' === 'bar-horizontal-stacked'"
+                    class="chart-container"
+                    [view]="[700,100]"
 
+                    [scheme]="colorScheme1111horizontalChart"
+
+                    [results]="horizontalChart"
+
+                >
+                </ngx-charts-bar-horizontal-stacked>
+
+                <label>
+                    Sin programación <br> {{without_programming}}/{{without_programming_percentage}}%
+                </label>
+
+            </div>
+        </div>
     </div>
 </div>
