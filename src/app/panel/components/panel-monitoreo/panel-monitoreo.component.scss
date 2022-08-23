@@ -139,6 +139,9 @@
   #panelMonitoreo.historial > .card > div.component-containers {
     height: calc(100% - var(--pm-historial-header-height));
   }
+  #panelMonitoreo.dashboard > .card > div.component-containers {
+    height: calc(100% - var(--pm-dashboard-header-height));
+  }
   #panelMonitoreo.notificaciones > .card > div.component-containers {
     height: calc(100% - var(--pm-notificaciones-header-height));
   }

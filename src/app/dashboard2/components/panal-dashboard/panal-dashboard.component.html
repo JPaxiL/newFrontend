@@ -1,6 +1,6 @@
-<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboard" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Cargando Dashboard... </p></ngx-spinner>
+<div id="panel_dashboard" class="modal-body p-fluid p-0 overflow-auto" style="position: relative; height: 100%;">
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboard" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Cargando información... </p></ngx-spinner>
 
-<div id="panel_dashboard" class="modal-body p-fluid p-0 overflow-auto">
     <div class="panel-izq-container h-100">
         <div class="panel-izq-form">
             <div class="gl-middleline gl-row-underline">
@@ -8,7 +8,7 @@
                     <div class="col-6 p-field">
                         <div class="row">
                             <div class="col-12">
-                                <label for="">Grupo</label>
+                                <label for="">GRUPO</label>
                             </div>
                             <div class="col-12">
                                 <p-dropdown
@@ -28,7 +28,7 @@
                     <div class="col-6 p-field">
                         <div class="row">
                             <div class="col-12">
-                                <label for="">Convoy</label>
+                                <label for="">CONVOY</label>
                             </div>
                             <div class="col-12">
                                 <p-dropdown
@@ -37,10 +37,11 @@
                                     optionLabel="label"
                                     [filter]="true"
                                     filterBy="label"
-                                    placeholder="Todas las unidades"
+                                    placeholder="Seleccione un convoy..."
                                     optionValue="value"
                                     [appendTo]="'body'"
                                     (onChange)="changeConvoy()"
+                                    [disabled]="!isGroupSelected"
                                 >
                                 </p-dropdown>
                             </div>
@@ -49,11 +50,11 @@
                 </div>
             </div>
             <div class="row justify-content-center mt-4 panel-izq-container-footer">
+                <!-- <div class="col-6">
+                  <button type="button" class="btn-gl-cancel btn-dark-hover w-100" >Ocultar</button>
+                </div> -->
                 <div class="col-6">
-                  <button type="submit" class="btn-gl-cancel btn-dark-hover w-100" >Ocultar</button>
-                </div>
-                <div class="col-6">
-                    <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="windowAccess.open('/dashboard');">Mostrar</button>
+                    <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="windowAccess.open('/dashboard');" [disabled]="!isConvoySelected">Mostrar</button>
                 </div>
               </div>
         </div>

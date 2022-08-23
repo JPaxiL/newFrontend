@@ -15,6 +15,7 @@ import { EventService } from 'src/app/events/services/event.service';
 
 import { HistorialService } from '../../services/historial.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import Swal from 'sweetalert2';
 
 
 
@@ -199,6 +200,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     private EventService: EventService
     ) {
 
+      
+
     // this.historialService.currentMessage.subscribe(message => this.message = message);
     // this.historialService.currentMessage.subscribe( () => {//console.log('com 1 -> gaaaaaaaaa');
     // });
@@ -223,6 +226,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
+    if(!this.VehicleService.statusDataVehicle){
+      this.spinner.show('loadingHistorialForm');
+      this.VehicleService.dataCompleted.subscribe( vehicles => {
+        this.getCars(vehicles);
+        this.spinner.hide('loadingHistorialForm');
+      });
+    } else {
+      let vehicles = this.VehicleService.getVehiclesData();
+      this.getCars(vehicles);
+    }
+
     // const hoy = Date.now();
     // this.pngFechaIni = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
     // this.pngFechaFin = this.pngFechaIni;
@@ -240,12 +254,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     // this.historialService.currentMessage.subscribe(message => this.message = message)
 
-    let vehicles = this.VehicleService.getVehiclesData();
-
-    for (let i = 0; i < vehicles.length; i++) {
-      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
-      this.cars.push(gaa);
-    }
+    
 
   //   cars = [
   //     { nombre: 'ABC-676',imei:'111111111' },
@@ -340,9 +349,18 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     this.historialService.dataFormulario = this.form;
 
+    this.VehicleService.dataCompleted.unsubscribe;
+
 
 
   }
+
+  getCars(vehicles: any){
+    for (let i = 0; i < vehicles.length; i++) {
+      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
+      this.cars.push(gaa);
+    }
+  } 
 
 
   // function changeColorHistorial() {
@@ -1076,7 +1094,12 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           } else {
             this.spinner.hide('loadingHistorial');
             console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
-            this.showNotEnoughInfoDialog();
+            Swal.fire({
+              title: 'Error',
+              text: 'No hay suficiente información.',
+              icon: 'error',
+            });
+            //this.showNotEnoughInfoDialog();
           }
 
       }); // fin de eventosa historial

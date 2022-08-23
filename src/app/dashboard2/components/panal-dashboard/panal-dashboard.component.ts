@@ -20,6 +20,8 @@ export class PanalDashboardComponent implements OnInit {
   selectedGroup:any;
   selectedConvoy:any;
   windowAccess = window;
+  isGroupSelected:boolean = false;
+  isConvoySelected:boolean = false;
 
   constructor(
     private vehicleService : VehicleService,
@@ -28,23 +30,33 @@ export class PanalDashboardComponent implements OnInit {
     private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
-    this.spinner.show('loadingDashboard');
+    if(!this.vehicleService.statusDataVehicle){
+      this.spinner.show('loadingDashboard');
+      this.vehicleService.dataCompleted.subscribe( vehicles => {
+        let gp = collect(this.getVehicles()).groupBy('grupo');
+        this.getGroups(gp);
+        this.spinner.hide('loadingDashboard');
+      });
+    } else {
+      let gp = collect(this.getVehicles()).groupBy('grupo');
+      //console.log("gp =====> ", gp);
+      this.getGroups(gp);
+    }
 
-    let gp = collect(this.getVehicles()).groupBy('grupo');
-    console.log("gp =====> ", gp);
-    gp.each( (items:any, index:any) => {
+  }
+
+  getVehicles(){
+    return this.vehicleService.getVehiclesData();
+  }
+
+  getGroups(group: any){
+    group.each( (items:any, index:any) => {
       console.log("items:any, index:any", items, index)
       this.group.push({
         value:index,
         label:index,
       });
     });
-
-    this.spinner.hide('loadingDashboard');
-  }
-
-  getVehicles(){
-    return this.vehicleService.getVehiclesData();
   }
 
   changeGroup(){
@@ -56,6 +68,9 @@ export class PanalDashboardComponent implements OnInit {
     .filter( (convoy:any) => {
       return convoy.label != "Unidades Sin Convoy" && convoy.groupName == this.selectedGroup
     });
+    this.selectedConvoy = null; 
+    this.isConvoySelected = false; 
+    this.isGroupSelected = this.selectedGroup == null? false: true; 
   }
 
   changeConvoy(){
@@ -63,7 +78,7 @@ export class PanalDashboardComponent implements OnInit {
     let vehicles = this.getVehicles()
     .filter( (vehicle:any) => vehicle.idconvoy == this.selectedConvoy )
     .map( (item:any) => {return item.IMEI} );
-
+    this.isConvoySelected = true;
     localStorage.setItem('vahivles-dashboard',JSON.stringify(vehicles));
 
   }
