@@ -189,7 +189,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     vAlign: "center", 
     hAlign: "center", 
     fontSize: this.t1, 
-    rowSpan: this.headerRowSpan
+    rowSpan: this.headerRowSpan,
+    wrap: true,
   };
 
   subHeaderVehicleHeaderConfig = {
@@ -538,6 +539,39 @@ export class ResultComponent implements OnDestroy, OnInit {
         height: this.bodyRowsHeight
       },
     ];
+  }
+
+  calculateSingleRowHeight(cellContent: string, defaultRowHeight: number){
+    return (cellContent.split("\n").length) * defaultRowHeight;
+  }
+
+  breakParameterColValue(params: string){
+    const paramsArr = params.split('|');
+    var cellContent = '';
+    var tempContent = '';
+    for(let i = 0; i < paramsArr.length; i++){
+      if( this.calculateColWidth((tempContent + '|' + paramsArr[i]).length) > 560 ){
+        if(cellContent == ''){
+          cellContent = tempContent;
+        } else {
+          cellContent = cellContent + "\n" + tempContent;
+        }
+        tempContent = '';
+      }
+      tempContent = tempContent + '|' + paramsArr[i];
+    }
+    cellContent = cellContent + tempContent;
+    return cellContent.substring(1);
+  }
+
+  getChWidth(val1: string){
+    var chWidth1 = val1.split("\n")[0].length;
+    for( let i = 1; i < val1.split("\n").length; i++ ){
+      if( chWidth1 < val1.split("\n")[i].length ){
+        chWidth1 = val1.split("\n")[i].length;
+      }
+    }
+    return chWidth1;
   }
 
   filterMovimientos(a: any[]): any[] {
@@ -2560,9 +2594,9 @@ export class ResultComponent implements OnDestroy, OnInit {
     var column_config = [];
 
     var ubicacion_cell_ch_width = "Ubicacion".length;
-    var vel_gps_cell_ch_width = "Velocidad gps".length;
-    var vel_eco_cell_ch_width = "Velocidad eco".length;
-    var vel_gps_speed_cell_ch_width = "Velocidad GPS speed".length;
+    var vel_gps_cell_ch_width = "Velocidad".length;
+    var vel_eco_cell_ch_width = "Velocidad".length;
+    var vel_gps_speed_cell_ch_width = "Velocidad".length;
 
     var altitud_cell_ch_width = "Altitud".length;
     var angulo_cell_ch_width = "Angulo".length;
@@ -2615,6 +2649,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bool_col_referencia = false;
     var bool_col_DUOT2state = false;
 
+    var header_two_lines = false;
+
     var allRows: AllRows[] = [
         {
           cells: [
@@ -2646,26 +2682,26 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (data[2].altitud){ table_width++; bool_col_altitud = true;  }
         if (data[2].angulo){  table_width++; bool_col_angulo = true;  }
         if (data[2].fatiga){  table_width++; bool_col_fatiga = true;  }
-        if (data[2].fExBrusca){ table_width++; bool_col_fExBrusca = true;  }
-        if (data[2].fBrusca){ table_width++; bool_col_fBrusca = true;  }
-        if (data[2].aBrusca){ table_width++; bool_col_aBrusca = true;  }
+        if (data[2].fExBrusca){ table_width++; bool_col_fExBrusca = true;  header_two_lines = true; }
+        if (data[2].fBrusca){ table_width++; bool_col_fBrusca = true;  header_two_lines = true; }
+        if (data[2].aBrusca){ table_width++; bool_col_aBrusca = true;  header_two_lines = true; }
         if (data[2].RPMAlta){ table_width++; bool_col_RPMAlta = true;  }
 
         if (data[2].alcoholemia){ table_width++; bool_col_alcoholemia = true;  }
         if (data[2].parametros){  table_width++; bool_col_parametros = true;  }
-        if (data[2].cNivel){  table_width++; bool_col_cNivel = true;  }
+        if (data[2].cNivel){  table_width++; bool_col_cNivel = true;  header_two_lines = true; }
         if (data[2].cRestante){ table_width++; bool_col_cRestante = true;  }
         if (data[2].cMotor){  table_width++; bool_col_cMotor = true;  }
         if (data[2].odometro){  table_width++; bool_col_odometro = true;  }
         if (data[2].onOff){ table_width++; bool_col_onOff = true;  }
         if (data[2].RxM){ table_width++; bool_col_RxM = true;  }
-        if (data[2].recFacial){ table_width++; bool_col_recFacial = true;  }
+        if (data[2].recFacial){ table_width++; bool_col_recFacial = true;  header_two_lines = true; }
         if (data[2].velCAN){  table_width++; bool_col_velCAN = true;  }
         if (data[2].pCercano){  table_width++; bool_col_pCercano = true;  }
         if (data[2].referencia){  table_width++; bool_col_referencia = true;  }
         if (data[2].DUOT2state){  table_width++; bool_col_DUOT2state = true;  }
 
-        vehiculo_width = 3 + (this.chkDateHour? 2:1) + (data[2].fServidor? (this.chkDateHour? 2:1): 0);
+        vehiculo_width = 1 + (this.chkDateHour? 2:1) + (data[2].fServidor? (this.chkDateHour? 2:1): 0);
       }
 
       if(data[1].length > 0){
@@ -2717,36 +2753,36 @@ export class ResultComponent implements OnDestroy, OnInit {
                 }
 
         };
-        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig }); };
-        if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", ...this.colHeaderConfig }); };
-        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", ...this.colHeaderConfig }); };
-        if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", ...this.colHeaderConfig }); };
+        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", ...this.colHeaderConfig, wrap: header_two_lines }); };
 
-        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", ...this.colHeaderConfig }); };
-        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", ...this.colHeaderConfig }); };
-        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", ...this.colHeaderConfig }); };
-        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", ...this.colHeaderConfig }); };
-        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", ...this.colHeaderConfig }); };
-        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", ...this.colHeaderConfig }); };
-        if (data[2].RPMAlta) { cellsCampos.push({ value: "RPM Alta", ...this.colHeaderConfig }); };
+        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].RPMAlta) { cellsCampos.push({ value: "RPM Alta", ...this.colHeaderConfig, wrap: header_two_lines }); };
 
-        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", ...this.colHeaderConfig }); };
-        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", ...this.colHeaderConfig }); };
-        if (data[2].cNivel) { cellsCampos.push({ value: "Nivel de Combustible", ...this.colHeaderConfig }); };
-        if (data[2].cRestante) { cellsCampos.push({ value: "C. Restante", ...this.colHeaderConfig }); };
-        if (data[2].cMotor) { cellsCampos.push({ value: "C. Motor", ...this.colHeaderConfig }); };
-        if (data[2].odometro) { cellsCampos.push({ value: "Odómetro", ...this.colHeaderConfig }); };
-        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", ...this.colHeaderConfig }); };
-        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", ...this.colHeaderConfig }); };
-        if (data[2].recFacial) { cellsCampos.push({ value: "Reconocimiento Facial", ...this.colHeaderConfig }); };
-        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", ...this.colHeaderConfig }); };
-        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig }); };
-        if (data[2].referencia) { cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig }); };
-        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", ...this.colHeaderConfig }); };
+        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].cNivel) { cellsCampos.push({ value: "Nivel de Combustible", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].cRestante) { cellsCampos.push({ value: "C. Restante", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].cMotor) { cellsCampos.push({ value: "C. Motor", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].odometro) { cellsCampos.push({ value: "Odómetro", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].recFacial) { cellsCampos.push({ value: "Reconocimiento Facial", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].referencia) { cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", ...this.colHeaderConfig, wrap: header_two_lines }); };
 
         rows.push({
             cells: cellsCampos,
-            height: this.colsHeaderHeight,
+            height: header_two_lines? this.colsHeaderHeightTwoLine: this.colsHeaderHeight,
         });
 
         //================= FIN CABECERA =================
@@ -2761,6 +2797,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.lat + "," + item.lng + "";
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+            var parametros = this.breakParameterColValue(item.parametros??'');
 
             var cellsCuerpo = [];
 
@@ -2778,7 +2816,11 @@ export class ResultComponent implements OnDestroy, OnInit {
             rpm_alta_cell_ch_width = Math.max(rpm_alta_cell_ch_width, (item.RPMAlta??'').toString().length);
 
             alcoholemia_cell_ch_width = Math.max(alcoholemia_cell_ch_width, (item.alcohol_nombre??'').toString().length);
-            parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
+
+            //parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
+            parametros_cell_ch_width = Math.max(parametros_cell_ch_width, this.getChWidth(parametros));
+
+
             nivel_de_combustible_cell_ch_width = Math.max(nivel_de_combustible_cell_ch_width, (item.cNivel??'').toString().length);
             c_restante_cell_ch_width = Math.max(c_restante_cell_ch_width, (item.cRestante??'').toString().length);
             c_motor_cell_ch_width = Math.max(c_motor_cell_ch_width, (item.cMotor??'').toString().length);
@@ -2825,7 +2867,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             if (data[2].RPMAlta) { cellsCuerpo.push({ value: item.RPMAlta, ...this.bodyRowsConfig }); };
 
             if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, ...this.bodyRowsConfig }); };
-            if (data[2].parametros) { cellsCuerpo.push({ value: item.parametros, ...this.bodyRowsConfig }); };
+            if (data[2].parametros) { cellsCuerpo.push({ value: parametros, ...this.bodyRowsConfig, wrap: true }); };
             if (data[2].cNivel) { cellsCuerpo.push({ value: item.cNivel, ...this.bodyRowsConfig }); };
             if (data[2].cRestante) { cellsCuerpo.push({ value: item.cRestante, ...this.bodyRowsConfig }); };
             if (data[2].cMotor) { cellsCuerpo.push({ value: item.cMotor, ...this.bodyRowsConfig }); };
@@ -2841,8 +2883,11 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             rows.push({
                 cells:cellsCuerpo,
-                height: this.bodyRowsHeight
+                height: Math.max(this.bodyRowsHeight, this.calculateSingleRowHeight(parametros, this.bodyRowsHeight))
             });
+
+            console.log(this.bodyRowsHeight);
+            console.log(this.calculateSingleRowHeight(parametros, this.bodyRowsHeight));
 
         });
         //==================== FIN CUERPO =============================
@@ -2852,21 +2897,21 @@ export class ResultComponent implements OnDestroy, OnInit {
           ...this.spaceBetweenTables,
           {
             cells:[
-              { value: "TOTAL de Excesos de Velocidad(GPS) : ", ...this.overviewLeftConfig, colSpan: 4 },
+              { value: "TOTAL de Excesos de Velocidad(GPS) : ", ...this.overviewLeftConfig },
               { value: data[3][0], ...this.overviewRightConfig, colSpan: 1 }  
             ],
             height: this.overviewRowsHeight
           },
           {
             cells:[
-              { value: "TOTAL de Excesos de Velocidad(ECO) : ", ...this.overviewLeftConfig, colSpan: 4 },
+              { value: "TOTAL de Excesos de Velocidad(ECO) : ", ...this.overviewLeftConfig },
               { value: data[3][1], ...this.overviewRightConfig, colSpan: 1 }  
             ],
             height: this.overviewRowsHeight
           },
           {
             cells:[
-              { value: "TOTAL de Excesos de Velocidad(CAN) : ", ...this.overviewLeftConfig, colSpan: 4 },
+              { value: "TOTAL de Excesos de Velocidad(CAN) : ", ...this.overviewLeftConfig },
               { value: data[3][2], ...this.overviewRightConfig, colSpan: 1 }  
             ],
             height: this.overviewRowsHeight
@@ -2877,7 +2922,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL de Fatigas : ", ...this.overviewLeftConfig, colSpan: 4 },
+                { value: "TOTAL de Fatigas : ", ...this.overviewLeftConfig },
                 { value: data[3][3], ...this.overviewRightConfig, colSpan: 1 }   
               ],
               height: this.overviewRowsHeight
@@ -2888,7 +2933,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL de Frenada Extremadamente Brusca : ", ...this.overviewLeftConfig, colSpan: 4 },        
+                { value: "TOTAL de Frenada Extremadamente Brusca : ", ...this.overviewLeftConfig },        
                 { value: data[3][4], ...this.overviewRightConfig, colSpan: 1 }   
               ],
               height: this.overviewRowsHeight
@@ -2899,7 +2944,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL de Frenada Brusca : ", ...this.overviewLeftConfig, colSpan: 4 },        
+                { value: "TOTAL de Frenada Brusca : ", ...this.overviewLeftConfig },        
                 { value: data[3][5], ...this.overviewRightConfig, colSpan: 1 }   
               ],
               height: this.overviewRowsHeight
@@ -2910,7 +2955,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL RPM Alta : ", ...this.overviewLeftConfig, colSpan: 4 },        
+                { value: "TOTAL RPM Alta : ", ...this.overviewLeftConfig },        
                 { value: data[3][6], ...this.overviewRightConfig, colSpan: 1 }   
               ],
               height: this.overviewRowsHeight
@@ -2921,7 +2966,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL de alerta de alcohol en la sangre : ", ...this.overviewLeftConfig, colSpan: 4 },        
+                { value: "TOTAL de alerta de alcohol en la sangre : ", ...this.overviewLeftConfig },        
                 { value: data[3][7], ...this.overviewRightConfig, colSpan: 1 }   
               ],
               height: this.overviewRowsHeight
@@ -2938,14 +2983,33 @@ export class ResultComponent implements OnDestroy, OnInit {
             { width: this.w_item },
           ];
           if(this.chkDateHour){
-            column_config.push(
-              { width: this.w_date },
-              { width: this.w_hour },
-            )
+            if(data[2].fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+              column_config.push(
+                //{ width: this.w_date },
+                //{ width: this.w_hour },
+                { width: 120 }, 
+                { width: 85 }, 
+              )
+            } else {
+              column_config.push(
+                //{ width: this.w_date },
+                //{ width: this.w_hour },
+                { width: 105 }, 
+                { width: 75 }, 
+              )
+            }
           } else {
-            column_config.push(
-              { width: this.w_date_and_hour },
-            )
+            if(data[2].fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+              column_config.push(
+                //{ width: this.w_date_and_hour },
+                { width: 205 }, 
+              )
+            } else {
+              column_config.push(
+                //{ width: this.w_date_and_hour },
+                { width: 180 }, 
+              )
+            }
           }
           if(bool_col_fServidor){
             if(this.chkDateHour){
@@ -3044,14 +3108,33 @@ export class ResultComponent implements OnDestroy, OnInit {
         { width: this.w_item },
       ];
       if(this.chkDateHour){
-        column_config.push(
-          { width: this.w_date },
-          { width: this.w_hour },
-        )
+        if(bool_col_fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+          column_config.push(
+            //{ width: this.w_date },
+            //{ width: this.w_hour },
+            { width: 120 }, 
+            { width: 85 }, 
+          )
+        } else {
+          column_config.push(
+            //{ width: this.w_date },
+            //{ width: this.w_hour },
+            { width: 105 }, 
+            { width: 75 }, 
+          )
+        }
       } else {
-        column_config.push(
-          { width: this.w_date_and_hour },
-        )
+        if(bool_col_fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+          column_config.push(
+            //{ width: this.w_date_and_hour },
+            { width: 205 }, 
+          )
+        } else {
+          column_config.push(
+            //{ width: this.w_date_and_hour },
+            { width: 180 }, 
+          )
+        }
       }
       if(bool_col_fServidor){
         if(this.chkDateHour){
