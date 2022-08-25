@@ -1,5 +1,5 @@
 export const getContentPopup = (event: any, d: any = '...') => {
-  if (event.tipo == 'Zona de entrada') {
+  if (event.tipo == 'Zona de entrada') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -8,12 +8,13 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         referencia: d,
+        geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/entrada_zona.svg'
     );
     
-  } else if (event.tipo == 'Zona de salida') {
+  } else if (event.tipo == 'Zona de salida') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -22,12 +23,13 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         referencia: d,
+        geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/salida_zona.svg'
     );
    
-  } else if (event.tipo == 'Tiempo de estadia en zona') {
+  } else if (event.tipo == 'Tiempo de estadia en zona') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -37,12 +39,13 @@ export const getContentPopup = (event: any, d: any = '...') => {
         velocidad: event.velocidad,
         tiempo_estadia: event.tiempo_limite,
         referencia: d,
+        geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/tiempo_estadia_zona.svg',
     );
 
-  } else if (event.tipo == 'Parada en zona no autorizada') {
+  } else if (event.tipo == 'Parada en zona no autorizada') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -51,6 +54,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         tiempo_tolerancia: event.tiempo_limite,
         referencia: d,
+        geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/parada_zona_no_autorizada.svg',
@@ -154,7 +158,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       'assets/images/events-icons/exceso_velocidad.svg',
     );
 
-  } else if (event.tipo == 'Infraccion') {
+  } else if (event.tipo == 'Infraccion') { 
     if (event.nombre_zona == '') {
       return render_leaflet_tootlip(
         {
@@ -170,7 +174,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         'assets/images/events-icons/infraccion.svg',
       );
 
-    } else if (event.nombre_zona != '') {
+    } else if (event.nombre_zona != '') { // PLATAFORMA
       return render_leaflet_tootlip(
         {
           tipo: event.tipo,
@@ -181,13 +185,14 @@ export const getContentPopup = (event: any, d: any = '...') => {
           velocidad_limite: event.velocidad_limite,
           tiempo_limite_infraccion: event.tiempo_limite_infraccion,
           referencia: d,
+          geocerca: event.nombre_zona,
           fecha_tracker: event.fecha_tracker,
         },
         'assets/images/events-icons/infraccion.svg',
       );
 
     }
-  } else if (event.tipo == 'Vehiculo sin programacion') {
+  } else if (event.tipo == 'Vehiculo sin programacion') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -196,6 +201,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         referencia: d,
+        geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/sin_programacion.svg',
@@ -467,6 +473,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
           ${(typeof event_content.tiempo_tolerancia !== 'undefined')? `<tr><td>TIEMPO DE TOLERANCIA:</td><td>${event_content.tiempo_tolerancia}</td></tr>`:''}
           ${(typeof event_content.tiempo_estadia !== 'undefined')? `<tr><td>TIEMPO DE ESTADÍA:</td><td>${event_content.tiempo_estadia}</td></tr>`:''}
           ${(typeof event_content.referencia !== 'undefined')? `<tr><td>REFERENCIA:</td><td>${event_content.referencia}</td></tr>`:''}
+          ${(typeof event_content.geocerca !== 'undefined')? `<tr><td>GEOCERCA:</td><td>${event_content.geocerca}</td></tr>`:''}
           ${(typeof event_content.fecha_tracker !== 'undefined')? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>`:''}
         </tbody>
       </table>  
