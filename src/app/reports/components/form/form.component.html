@@ -531,19 +531,10 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.GPSbateriaBaja" [binary]="true" inputId="binary"></p-checkbox>
-                Bateria baja</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
                   <p-checkbox [(ngModel)]="eV.GPSbateriaDesconectada" [binary]="true" inputId="binary"></p-checkbox>
                 Bateria desconectada</label>
               </div>
             </div>
-          </div>
-          <div class="row">
             <div class="col-6">
               <div class="p-field">
                 <label>
@@ -551,21 +542,14 @@
                 Aceleracion brusca</label>
               </div>
             </div>
+          </div>
+          
+          <div class="row">
             <div class="col-6">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.GPSfrenadaBrusca" [binary]="true" inputId="binary"></p-checkbox>
                 Frenada brusca</label>
-              </div>
-            </div>
-          </div>
-  
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.GPSbloqueoTransmision" [binary]="true" inputId="binary"></p-checkbox>
-                Bloqueo de transmision</label>
               </div>
             </div>
             <div class="col-6">
@@ -576,48 +560,29 @@
               </div>
             </div>
           </div>
-  
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.GPSremolque" [binary]="true" inputId="binary"></p-checkbox>
-                Remolque</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.GPSparada" [binary]="true" inputId="binary"></p-checkbox>
-                Parada</label>
-              </div>
-            </div>
-          </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.GPSmotorEncendido" [binary]="true" inputId="binary"></p-checkbox>
-                Motor Encendido</label>
+                Motor encendido</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.GPSmotorApagado" [binary]="true" inputId="binary"></p-checkbox>
-                Motor Apagado</label>
+                Motor apagado</label>
               </div>
             </div>
           </div>
-  
   
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Plataforma</label>
             </div>
           </div>
-  
   
           <div class="row">
             <div class="col-6">
@@ -641,7 +606,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.evEstadia" [binary]="true" inputId="binary"></p-checkbox>
-                  Tiempo de estadia en Zona</label>
+                  Tiempo de estadia en zona</label>
               </div>
             </div>
             <div class="col-6">
@@ -656,9 +621,9 @@
           <div class="row">
             <div class="col-6">
               <div class="p-field">
-                <label>
+                <!-- <label>
                   <p-checkbox [(ngModel)]="eV.evMovSinProgramacion" [binary]="true" inputId="binary"></p-checkbox>
-                  Vehículo en movimiento sin programación</label>
+                  Vehículo sin programación</label> -->
               </div>
             </div>
             <div class="col-6">
@@ -670,24 +635,15 @@
             </div>
           </div>
   
+          
+  
+  
           <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.evAnticolisionFrontal" [binary]="true" inputId="binary"></p-checkbox>
-                  Anticolisión frontal</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.evColisionConPeatones" [binary]="true" inputId="binary"></p-checkbox>
-                  Colisión con Peatones</label>
-              </div>
+            <div class="col-12">
+              <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Seguridad Vehicular</label>
             </div>
           </div>
-  
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -704,47 +660,7 @@
               </div>
             </div>
           </div>
-  
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilIzquierda" [binary]="true" inputId="binary"></p-checkbox>
-                  Desvío de carril hacia la izquierda</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilDerecha" [binary]="true" inputId="binary"></p-checkbox>
-                  Desvío de carril hacia la derecha</label>
-              </div>
-            </div>
-          </div>
-  
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.evBloqueoVisionMobileye" [binary]="true" inputId="binary"></p-checkbox>
-                  Bloqueo de visión del mobileye</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-  
-              </div>
-            </div>
-          </div>
-  
-  
-          <div class="row">
-            <div class="col-12">
-              <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Accesorios</label>
-            </div>
-          </div>
-  
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -761,29 +677,67 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
-            <div class="col-6">
+            <!-- <div class="col-6">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.AccAlcoholemia" [binary]="true" inputId="binary"></p-checkbox>
                   Alcoholemia</label>
               </div>
+            </div> -->
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evAnticolisionFrontal" [binary]="true" inputId="binary"></p-checkbox>
+                  Anticolisión frontal</label>
+              </div>
             </div>
             <div class="col-6">
               <div class="p-field">
-  
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evColisionConPeatones" [binary]="true" inputId="binary"></p-checkbox>
+                  Colisión con Peatones</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilIzquierda" [binary]="true" inputId="binary"></p-checkbox>
+                  Desvío de carril hacia la izquierda</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilDerecha" [binary]="true" inputId="binary"></p-checkbox>
+                  Desvío de carril hacia la derecha</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evBloqueoVisionMobileye" [binary]="true" inputId="binary"></p-checkbox>
+                  Bloqueo de visión del Mobileye</label>
               </div>
             </div>
           </div>
   
-  
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Otros</label>
             </div>
           </div>
-  
   
           <div class="row">
             <div class="col-6">
@@ -800,7 +754,7 @@
                   Exceso de Velocidad</label>
               </div>
             </div>
-          </div>
+          </div> -->
 
         </div>
 
