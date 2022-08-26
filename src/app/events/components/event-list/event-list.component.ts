@@ -132,6 +132,11 @@ export class EventListComponent implements OnInit {
     } );
     this.eventService.activeEvent = event;
     event.layer.addTo(this.mapService.map).openPopup();
+
+    //Actualizar el estado de visto del evento
+    /* if(!event.leido){
+      this.markEventAsRead(this.event);
+    } */
   }
 
   public hideEvent(event:any){
@@ -170,6 +175,10 @@ export class EventListComponent implements OnInit {
         return event.tipo == this.selectedEvent
       });
     }
+  }
+
+  private markEventAsRead(){
+    //Actualizar el estado de visto del evento
   }
 
   public searchByPlate(){
