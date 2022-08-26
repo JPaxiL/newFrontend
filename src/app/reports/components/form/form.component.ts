@@ -231,6 +231,8 @@ export class FormComponent implements OnInit {
   fog = "1";
 	userId = 0;
 
+  workingOnReport: boolean = false;
+
   constructor(
     private browserDetectorService: BrowserDetectorService,
     private toastr: ToastrService,
@@ -394,6 +396,7 @@ export class FormComponent implements OnInit {
 
   reportar(new_tab?: any){
     console.log(new_tab !== undefined);
+    this.workingOnReport = true;
 
 
     var repSubtitle = '';
@@ -557,6 +560,7 @@ export class FormComponent implements OnInit {
             });
           }
         }
+        this.workingOnReport = false;
       }
     });
   }
