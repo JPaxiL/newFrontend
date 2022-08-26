@@ -1253,7 +1253,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
                     //Nombres de eventos que cambiaron
 
-                    if (opEve.name == 'Batería desconectada' && item.evento == 'No Rostro') { activar = true; }
+                    if (opEve.name == 'Batería desconectada' && item.evento == 'Bateria desconectada') { activar = true; }
                     if (opEve.name == 'Aceleración brusca' && item.evento == 'Aceleracion brusca') { activar = true; }
                     if (opEve.name == 'Frenada brusca' && item.evento == 'Frenada brusca') { activar = true; }
                     if (opEve.name == 'SOS' && item.evento == 'SOS') { activar = true; }
