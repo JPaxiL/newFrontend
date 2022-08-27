@@ -737,7 +737,7 @@
             </div>
           </div>
   
-          <!-- <div class="row">
+          <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Otros</label>
             </div>
@@ -747,18 +747,22 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary" (onChange)="onChkAllEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Todos</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
+              </div>
+            </div>
+            <!-- <div class="col-6">
+              <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.OtroExVelocidad" [binary]="true" inputId="binary"></p-checkbox>
                   Exceso de Velocidad</label>
               </div>
-            </div>
-          </div> -->
+            </div> -->
+          </div>
 
         </div>
 

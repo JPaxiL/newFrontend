@@ -3212,7 +3212,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bol_datos_ex = false;
     var column_config = [];
 
-    var table_width = 7 + (this.chkDateHour? 2: 1);
+    var table_width = 8 + (this.chkDateHour? 2: 1);
     var vehiculo_width = this.chkDateHour? 5: 4;
 
     var unidad_cell_ch_width = "unidad".length;

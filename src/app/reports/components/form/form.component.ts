@@ -694,6 +694,46 @@ export class FormComponent implements OnInit {
     this.areDatesValid = this.dateInit != null && this.dateEnd != null && this.timeInit <= this.timeEnd;
   }
 
+  onChkAllEvents(){
+    this.eV = {
+      GPSbateriaBaja:this.eV.OtroTodos,
+      GPSbateriaDesconectada:this.eV.OtroTodos,
+      GPSaceleracionBrusca:this.eV.OtroTodos,
+      GPSfrenadaBrusca:this.eV.OtroTodos,
+      GPSbloqueoTransmision:this.eV.OtroTodos,
+      GPSsos:this.eV.OtroTodos,
+      GPSremolque:this.eV.OtroTodos,
+      GPSparada: this.eV.OtroTodos, // --- NEW
+      GPSmotorEncendido: this.eV.OtroTodos, // --- NEW
+      GPSmotorApagado: this.eV.OtroTodos, // --- NEW
+
+      evEntrada:this.eV.OtroTodos,
+      evSalida:this.eV.OtroTodos,
+      evEstadia:this.eV.OtroTodos,   // --- NEW
+      evParada:this.eV.OtroTodos,
+      evMovSinProgramacion:this.eV.OtroTodos,  //  NEW
+      evInfraccion:this.eV.OtroTodos,
+      evAnticolisionFrontal:this.eV.OtroTodos,
+      evColisionConPeatones:this.eV.OtroTodos,
+
+      evNoRostro:this.eV.OtroTodos,
+      evFatigaExtrema:this.eV.OtroTodos,
+      evDesvioCarrilIzquierda:this.eV.OtroTodos,
+      evDesvioCarrilDerecha:this.eV.OtroTodos,
+      evBloqueoVisionMobileye:this.eV.OtroTodos,
+
+
+      AccFatiga:this.eV.OtroTodos, // DESACTIVADO
+      AccAlcoholemia:this.eV.OtroTodos,
+      AccIButton: this.eV.OtroTodos,  // --- DESACTIVADO
+      AccSomnolencia: this.eV.OtroTodos,
+      AccDistraccion: this.eV.OtroTodos,
+
+      OtroTodos:this.eV.OtroTodos,
+      OtroExVelocidad:this.eV.OtroTodos,
+    };
+  }
+
   validateForm(){
     var is_vehicle_selected = (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}');
     var is_zone_selected = this.selectedZones.length != 0;
