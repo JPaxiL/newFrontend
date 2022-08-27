@@ -21,7 +21,7 @@
       <div class="d-flex flex-grow-1">
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <input type="text" class="form-control" placeholder="Alertas"/>
+          <input type="text" class="form-control" placeholder="Alertas" [(ngModel)]="strSearched" (keyup)="onSearch()"/>
         </span>
       </div>
 

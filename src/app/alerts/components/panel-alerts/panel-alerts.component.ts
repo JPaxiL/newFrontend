@@ -13,7 +13,7 @@ export class PanelAlertsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.spinner.show('loadingAlertsSpinner');
+    
   }
 
 }

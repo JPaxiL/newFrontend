@@ -1,47 +1,92 @@
+<div class="table-content-component-panel-monitoreo" style="position: relative;">
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGPSAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Alertas GPS... </p></ngx-spinner>
 
-  <table id="tbl_alerts_gps" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+  <div class="card-body p-fluid" id="rowBusqueda">
+    <div class="d-flex">
+      <div class="d-flex flex-grow-1">
+        <span class="p-input-icon-right flex-grow-1 me-2">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="strSearched" (keyup)="onSearch()"/>
+        </span>
+      </div>
 
-    <thead class="visible-on-scroll">
-      <tr>
-          <!-- <th width="8%" class="text-center">Nº</th> -->
-          <th width="35%" class="text-start">Nombre</th>
-          <th width="35%" class="text-start">Tipo</th>
-          <th width="7.5%" class="text-center">Activos</th>
-          <th width="7.5%" class="text-center">Sistema</th>
-          <th width="7.5%" class="text-center"><i class="fa fas fa-at fa-lg"></i></th>
-          <th width="7.5%" class="text-center"><i class="fa fa-pencil fa-lg"></i></th>
+      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickShowPanel('ALERTS-GPS-CREATE')">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+
+      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
+        <button class="btn-gl-gray-blue btn-dark-hover btn-circle" ngbDropdownToggle>
+          <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
+        </button>
+        <div ngbDropdownMenu class="gl-custom-dropdown dropdown-alert-panel">
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS')">
+            <span>Todas las Alertas</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">
+            <span>Alertas GPS</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-PLATFORMS')">
+            <span>Alertas Plataforma</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">
+            <span>Alertas Seg. Vehicular</span>
+          </div> 
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="panel-izq-table-container">
+    <table id="tbl_alerts_gps" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+
+      <thead class="visible-on-scroll">
+        <tr>
+            <!-- <th width="8%" class="text-center">Nº</th> -->
+            <th width="35%" class="text-start">Nombre</th>
+            <th width="35%" class="text-start">Tipo</th>
+            <th width="7.5%" class="text-center">Activos</th>
+            <th width="7.5%" class="text-center">Sistema</th>
+            <th width="7.5%" class="text-center"><i class="fa fas fa-at fa-lg"></i></th>
+            <th width="7.5%" class="text-center"><i class="fa fa-pencil fa-lg"></i></th>
+        </tr>
+      </thead>
+  
+      <tbody>
+      <tr *ngFor="let alert of alerts">
+          <!-- <td title="'Nº'" class="text-center" >
+            {{alert.nr}}
+          </td> -->
+          <td title="'NOMBRE'" class="text-start">
+            {{alert.nombre}}
+          </td>
+          <td title="'TIPO'" class="text-start">
+            {{alert.tipo}}
+          </td>
+          <td title="'ACTIVOS'" class="text-center">
+            <div data-imei="alert.imei" class="text-center">
+                <app-active-alert [alert]="alert"></app-active-alert>
+            </div>
+          </td>
+          <td title="'SISTEMA'" class="text-center">
+            <div data-imei="alert.imei" class="text-center">
+                <app-system-alert [alert]="alert"></app-system-alert>
+            </div>
+          </td>
+          <td title="'E-MAIL'" class="text-center">
+            <div data-imei="alert.imei" class="text-center">
+                <app-email-alert [alert]="alert"></app-email-alert>
+            </div>
+          </td>
+          <td class="text-center">
+            <app-actions-alert [alert]="alert" [nameComponent]="'ALERTS-GPS'" (editAlert)="edit($event)" (deleteAlert)="loadData()"></app-actions-alert>
+          </td>
       </tr>
-    </thead>
+      </tbody>
+    </table>
+  </div>
+  
+</div>
 
-    <tbody>
-    <tr *ngFor="let alert of alerts">
-        <!-- <td title="'Nº'" class="text-center" >
-          {{alert.nr}}
-        </td> -->
-        <td title="'NOMBRE'" class="text-start">
-          {{alert.nombre}}
-        </td>
-        <td title="'TIPO'" class="text-start">
-          {{alert.tipo}}
-        </td>
-        <td title="'ACTIVOS'" class="text-center">
-          <div data-imei="alert.imei" class="text-center">
-              <app-active-alert [alert]="alert"></app-active-alert>
-          </div>
-        </td>
-        <td title="'SISTEMA'" class="text-center">
-          <div data-imei="alert.imei" class="text-center">
-              <app-system-alert [alert]="alert"></app-system-alert>
-          </div>
-        </td>
-        <td title="'E-MAIL'" class="text-center">
-          <div data-imei="alert.imei" class="text-center">
-              <app-email-alert [alert]="alert"></app-email-alert>
-          </div>
-        </td>
-        <td class="text-center">
-          <app-actions-alert [alert]="alert" [nameComponent]="'ALERTS-GPS'" (editAlert)="edit($event)" (deleteAlert)="loadData()"></app-actions-alert>
-        </td>
-    </tr>
-    </tbody>
-  </table>
+
+
+  

@@ -15,14 +15,34 @@ export class PlatformAlertsListComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
+  options = new Array(
+    { id:'ALERTS-PLATFORM-CREATE', name:"Alertas Plataforma"},
+  );
+  strSearched: string = '';
+
   constructor(
     private AlertService: AlertService,
-    private panelService: PanelService,
+    public panelService: PanelService,
     private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+    this.spinner.show('loadingPlatformAlertsSpinner');
     this.loadData();
+  }
+
+  ngOnDestoy(){
+    this.AlertService.clearDataByType();
+  }
+
+  clickShowPanel( nomComponent:string ): void {
+
+    $("#panelMonitoreo").show( "slow" );
+    this.panelService.nombreComponente = nomComponent;
+
+    const item = this.options.filter((item)=> item.id == nomComponent);
+    this.panelService.nombreCabecera =   item[0].name;
+
   }
 
   public async loadData(){
@@ -38,6 +58,17 @@ export class PlatformAlertsListComponent implements OnInit {
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = "ALERTS-PLATFORM-EDIT";
     this.panelService.nombreCabecera = "Alertas Plataforma";
+  }
+
+  public onSearch(){
+    if(this.strSearched == ''){
+      this.alerts = this.AlertService.getDataByType();
+    }else {
+      this.alerts = this.AlertService.getDataByType().filter( (alert:any)  => {
+        return (alert.nombre??'').toLowerCase().match(this.strSearched.toLowerCase()) 
+          || (alert.tipo??'').toLowerCase().match(this.strSearched.toLowerCase());
+      });
+    }
   }
 
 }

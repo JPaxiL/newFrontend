@@ -22,6 +22,10 @@ export class AlertListComponent implements OnInit {
   public api: GridApi = new GridApi();
   public columnApi: ColumnApi = new ColumnApi();
   public defaultColDef:any = [];
+  public strSearched: string = '';
+
+  panelAlertKey: Number = 0;
+  panelAlertBeforeOpening: Number = 0;
 
   columnDefs: ColDef[] = [
     {headerName: 'Nº', field: 'nr', resizable: true, width: 60, minWidth: 40, maxWidth: 90, wrapText: true},
@@ -40,19 +44,40 @@ export class AlertListComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.panelAlertBeforeOpening = this.AlertService.panelAlertKey;
+    this.panelAlertKey = + new Date();
+    this.AlertService.panelAlertKey = this.panelAlertKey;
+    this.spinner.show('loadingAlertsSpinner');
     this.loadData();
-    
+  }
+
+  ngOnDestroy(){
+    this.panelAlertKey = 0;
+    this.AlertService.clearDataAll();
   }
 
   public async loadData(){
     this.alerts = await this.AlertService.getAll();
-    this.spinner.hide('loadingAlertsSpinner');
+    if(this.AlertService.panelAlertKey == this.panelAlertKey){
+      this.spinner.hide('loadingAlertsSpinner');
+    }
   }
 
   public onGridReady(params: GridReadyEvent) {
     this.api = params.api;
     this.columnApi = params.columnApi;
     this.api.sizeColumnsToFit();
+  }
+
+  public onSearch(){
+    if(this.strSearched == ''){
+      this.alerts = this.AlertService.getDataAll();
+    }else {
+      this.alerts = this.AlertService.getDataAll().filter( (alert:any)  => {
+        return (alert.nombre??'').toLowerCase().match(this.strSearched.toLowerCase()) 
+          || (alert.tipo??'').toLowerCase().match(this.strSearched.toLowerCase());
+      });
+    }
   }
 
 }
