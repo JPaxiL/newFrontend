@@ -23,6 +23,8 @@ export class PanalDashboardComponent implements OnInit {
   isGroupSelected:boolean = false;
   isConvoySelected:boolean = false;
 
+  isUnderConstruction: boolean = true;
+
   constructor(
     private vehicleService : VehicleService,
     private spinner: NgxSpinnerService,
@@ -30,19 +32,22 @@ export class PanalDashboardComponent implements OnInit {
     private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
-    if(!this.vehicleService.statusDataVehicle){
-      this.spinner.show('loadingDashboard');
-      this.vehicleService.dataCompleted.subscribe( vehicles => {
-        let gp = collect(this.getVehicles()).groupBy('grupo');
-        this.getGroups(gp);
-        this.spinner.hide('loadingDashboard');
-      });
-    } else {
-      let gp = collect(this.getVehicles()).groupBy('grupo');
-      //console.log("gp =====> ", gp);
-      this.getGroups(gp);
-    }
+    if(!this.isUnderConstruction){
 
+      if(!this.vehicleService.statusDataVehicle){
+        this.spinner.show('loadingDashboard');
+        this.vehicleService.dataCompleted.subscribe( vehicles => {
+          let gp = collect(this.getVehicles()).groupBy('grupo');
+          this.getGroups(gp);
+          this.spinner.hide('loadingDashboard');
+        });
+      } else {
+        let gp = collect(this.getVehicles()).groupBy('grupo');
+        //console.log("gp =====> ", gp);
+        this.getGroups(gp);
+      }
+  
+    }
   }
 
   getVehicles(){

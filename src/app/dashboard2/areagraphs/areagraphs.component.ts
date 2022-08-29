@@ -13,6 +13,9 @@ import { DashboardService } from './../service/dashboard.service';
   styleUrls: ['./areagraphs.component.scss']
 })
 export class AreagraphsComponent implements OnInit {
+
+  isUnderConstruction: boolean = true;
+
   public vehicles:any = [];
   group: any = [];
   convoy:any = [];
@@ -93,8 +96,10 @@ export class AreagraphsComponent implements OnInit {
 
 
   ngOnInit():void {
-    this.spinner.show("loadingDashboardSpinner");
-    this.load();
+    if(!this.isUnderConstruction){
+      this.spinner.show("loadingDashboardSpinner");
+      this.load();
+    }
     // setInterval(() => {
 
     //    this.load();
