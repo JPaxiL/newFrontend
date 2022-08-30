@@ -1,12 +1,12 @@
-<div 
+<div
         class="d-flex flex-column justify-content-center align-items-center"
         style="position: absolute;
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.8);
         z-index: 999999;" *ngIf="isUnderConstruction">
-        <img 
-            src="./assets/images/en_construccion.png" 
+        <img
+            src="./assets/images/en_construccion.png"
             alt="under_construction"
             style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
         <span style="color: #fff;">Panel en construcción</span>
@@ -47,7 +47,7 @@
                         <div class="col-sm table-responsive">
                             <label>Relación de Vehículos</label>
                             <button type="button" class="btn btn-success">cc</button>
-            
+
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr class="table-active">
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
         </div>
@@ -100,7 +100,7 @@
                 <h4>Unidades en servicio y sin programación</h4>
                 <hr>
             </div>
-            
+
             <div class="col-6">
                 <label for="">
                     En servicio <br> {{in_service}}/{{in_service_percentage}}%
@@ -110,7 +110,7 @@
                     class="chart-container"
                     [view]="[700,100]"
                     [gradient]="true"
-                    [scheme]="colorScheme1111horizontalChart"
+                    [scheme]="colorSchemeHorizontalChart"
 
                     [results]="horizontalChart"
 

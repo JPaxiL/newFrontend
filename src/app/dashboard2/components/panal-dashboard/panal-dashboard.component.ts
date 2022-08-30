@@ -46,7 +46,7 @@ export class PanalDashboardComponent implements OnInit {
         //console.log("gp =====> ", gp);
         this.getGroups(gp);
       }
-  
+
     }
   }
 
@@ -73,19 +73,30 @@ export class PanalDashboardComponent implements OnInit {
     .filter( (convoy:any) => {
       return convoy.label != "Unidades Sin Convoy" && convoy.groupName == this.selectedGroup
     });
-    this.selectedConvoy = null; 
-    this.isConvoySelected = false; 
-    this.isGroupSelected = this.selectedGroup == null? false: true; 
+    this.selectedConvoy = null;
+    this.isConvoySelected = false;
+    this.isGroupSelected = this.selectedGroup == null? false: true;
   }
 
   changeConvoy(){
 
-    let vehicles = this.getVehicles()
+    this.imeis = this.getVehicles()
     .filter( (vehicle:any) => vehicle.idconvoy == this.selectedConvoy )
     .map( (item:any) => {return item.IMEI} );
     this.isConvoySelected = true;
-    localStorage.setItem('vahivles-dashboard',JSON.stringify(vehicles));
 
   }
+
+  send(){
+
+    if(this.selectedConvoy == null){
+
+    }
+    console.log(" this.selectedConvoy ====> ", this.selectedConvoy);
+    console.log("this.imeis ======> ", this.imeis);
+
+    localStorage.setItem('vahivles-dashboard',JSON.stringify(this.imeis));
+  }
+
 
 }
