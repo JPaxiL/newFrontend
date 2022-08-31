@@ -199,4 +199,12 @@ export class EventService {
       return str.normalize('NFKD').replace(/[^\w ]/g, '').toLowerCase();
     }
 
+    async getEventsByImeis(imeis:any){
+      const response:ResponseInterface = await this.http
+      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {imeis:imeis})
+      .toPromise();
+
+      return response.data;
+    }
+
 }
