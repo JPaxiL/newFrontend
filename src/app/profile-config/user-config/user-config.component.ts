@@ -18,6 +18,8 @@ export class UserConfigComponent implements OnInit {
   pngNewPass: string = '';
   pngNewPassR: string = '';
 
+  isUnderConstruction: boolean = true;
+
   mostrarDirVehicle: number = 0;
   mostrarIcono: number = 0;
   sizeIcono: number = 2;

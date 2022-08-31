@@ -100,6 +100,8 @@ import { UserConfigComponent } from './profile-config/user-config/user-config.co
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard/panal-dashboard.component';
+import { AuditoriaComponent } from './auditoria/auditoria.component';
+import { SubcuentasComponent } from './subcuentas/subcuentas.component';
 
 @NgModule({
   declarations: [
@@ -153,6 +155,8 @@ import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard
     Dashboard2Component,
     AreagraphsComponent,
     PanalDashboardComponent,
+    AuditoriaComponent,
+    SubcuentasComponent,
 
   ],
   imports: [

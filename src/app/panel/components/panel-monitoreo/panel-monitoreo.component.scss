@@ -142,6 +142,12 @@
   #panelMonitoreo.dashboard > .card > div.component-containers {
     height: calc(100% - var(--pm-dashboard-header-height));
   }
+  #panelMonitoreo.auditoria > .card > div.component-containers {
+    height: calc(100% - var(--pm-auditoria-header-height));
+  }
+  #panelMonitoreo.subcuentas > .card > div.component-containers {
+    height: calc(100% - var(--pm-subcuentas-header-height));
+  }
   #panelMonitoreo.notificaciones > .card > div.component-containers {
     height: calc(100% - var(--pm-notificaciones-header-height));
   }

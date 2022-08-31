@@ -91,7 +91,9 @@ export class EventListComponent implements OnInit {
     this.panelNotifKey = 0;
     //this.ess.count = 0;
     //Falta condicional para resetear las notificaciones solo si se abrió el panel
-    this.hideEvent(this.eventService.activeEvent);
+    if(this.eventService.activeEvent){
+      this.hideEvent(this.eventService.activeEvent);
+    }
     setTimeout(()=> {
       if(this.clearNotifCounterOnClose){
         this.ess.new_notif_stack = [];

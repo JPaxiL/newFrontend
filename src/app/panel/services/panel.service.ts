@@ -19,7 +19,9 @@ export class PanelService {
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'EVENT-USER', name:'Eventos'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
-    { id: 'DASHBOARD', name: 'Dashboard'}
+    { id:'DASHBOARD', name: 'Dashboard'},
+    { id:'AUDITORIA', name: 'Auditoría'},
+    { id:'SUBCUENTAS', name: 'Subcuentas'},
   );
 
   nombreComponente: string = '';
@@ -70,6 +72,10 @@ export class PanelService {
         return 'configuracion';
       case "DASHBOARD":
         return 'dashboard';
+      case "AUDITORIA":
+        return 'auditoria';
+      case "SUBCUENTAS":
+        return 'subcuentas';
       default:
         return '';
     }

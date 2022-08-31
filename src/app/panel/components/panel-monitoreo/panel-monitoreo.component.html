@@ -97,6 +97,14 @@
         <app-panal-dashboard></app-panal-dashboard>
       </ng-container>
 
+      <ng-container *ngIf="(panelService.nombreComponente == 'AUDITORIA')">
+        <app-auditoria></app-auditoria>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'SUBCUENTAS')">
+        <app-subcuentas></app-subcuentas>
+      </ng-container>
+
     </div>
 
 
