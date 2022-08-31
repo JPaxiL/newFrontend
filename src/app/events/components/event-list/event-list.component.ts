@@ -175,10 +175,12 @@ export class EventListComponent implements OnInit {
     /* if(this.selectedEvent == ''){ */
     if(this.selectedEvent === null){
       this.events = this.eventService.getData();
+      this.noResults = false;
     }else{
       this.events = this.eventService.getData().filter( (event:any)  => {
         return event.tipo == this.selectedEvent
       });
+      this.noResults = this.events.length == 0;
     }
   }
 
