@@ -23,6 +23,7 @@ export class AlertListComponent implements OnInit {
   public columnApi: ColumnApi = new ColumnApi();
   public defaultColDef:any = [];
   public strSearched: string = '';
+  public noResults: boolean = false;
 
   panelAlertKey: Number = 0;
   panelAlertBeforeOpening: Number = 0;
@@ -72,11 +73,13 @@ export class AlertListComponent implements OnInit {
   public onSearch(){
     if(this.strSearched == ''){
       this.alerts = this.AlertService.getDataAll();
+      this.noResults = false;
     }else {
       this.alerts = this.AlertService.getDataAll().filter( (alert:any)  => {
         return (alert.nombre??'').toLowerCase().match(this.strSearched.toLowerCase()) 
           || (alert.tipo??'').toLowerCase().match(this.strSearched.toLowerCase());
       });
+      this.noResults = this.alerts.length == 0;
     }
   }
 

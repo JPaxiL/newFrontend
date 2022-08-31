@@ -82,6 +82,9 @@
             <app-actions-alert [alert]="alert" [nameComponent]="'ALERTS-ACCESSORIES'" (editAlert)="edit($event)" (deleteAlert)="loadData()"></app-actions-alert>
           </td>
       </tr>
+      <tr *ngIf="noResults">
+        <td colspan="6" class="text-center">Sin coinicidencias</td>
+      </tr>
       </tbody>
     </table>
   </div>

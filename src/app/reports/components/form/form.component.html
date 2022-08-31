@@ -535,14 +535,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.GPSbateriaDesconectada" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.GPSbateriaDesconectada" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                 Bateria desconectada</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.GPSaceleracionBrusca" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.GPSaceleracionBrusca" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                 Aceleracion brusca</label>
               </div>
             </div>
@@ -552,14 +552,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.GPSfrenadaBrusca" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.GPSfrenadaBrusca" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                 Frenada brusca</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.GPSsos" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.GPSsos" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                 SOS</label>
               </div>
             </div>
@@ -569,14 +569,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.GPSmotorEncendido" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.GPSmotorEncendido" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                 Motor encendido</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.GPSmotorApagado" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.GPSmotorApagado" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                 Motor apagado</label>
               </div>
             </div>
@@ -592,14 +592,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evEntrada" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evEntrada" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Zona de Entrada</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evSalida" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evSalida" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Zona de Salida</label>
               </div>
             </div>
@@ -609,14 +609,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evEstadia" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evEstadia" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Tiempo de estadia en zona</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evParada" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evParada" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Parada en zona no autorizada</label>
               </div>
             </div>
@@ -633,7 +633,7 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evInfraccion" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evInfraccion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Infracción</label>
               </div>
             </div>
@@ -652,14 +652,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evNoRostro" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evNoRostro" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   No Rostro</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evFatigaExtrema" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evFatigaExtrema" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Fatiga Extrema</label>
               </div>
             </div>
@@ -669,14 +669,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.AccFatiga" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.AccFatiga" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Posible Fatiga</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.AccDistraccion" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.AccDistraccion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Distracción</label>
               </div>
             </div>
@@ -693,14 +693,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evAnticolisionFrontal" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evAnticolisionFrontal" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Anticolisión frontal</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evColisionConPeatones" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evColisionConPeatones" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Colisión con Peatones</label>
               </div>
             </div>
@@ -710,14 +710,14 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilIzquierda" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilIzquierda" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Desvío de carril hacia la izquierda</label>
               </div>
             </div>
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilDerecha" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evDesvioCarrilDerecha" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Desvío de carril hacia la derecha</label>
               </div>
             </div>
@@ -731,7 +731,7 @@
             <div class="col-6">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="eV.evBloqueoVisionMobileye" [binary]="true" inputId="binary" [disabled]="workingOnReport"></p-checkbox>
+                  <p-checkbox [(ngModel)]="eV.evBloqueoVisionMobileye" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="workingOnReport"></p-checkbox>
                   Bloqueo de visión del Mobileye</label>
               </div>
             </div>

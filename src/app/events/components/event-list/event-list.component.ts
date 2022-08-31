@@ -25,6 +25,8 @@ export class EventListComponent implements OnInit {
   eventsLoaded: boolean = false;
   clearNotifCounterOnClose: boolean = false;
 
+  noResults: boolean = false;
+
   public events:any[] = [];
   public placa:string = '';
 
@@ -187,11 +189,15 @@ export class EventListComponent implements OnInit {
   public searchByPlate(){
     if(this.placa == ''){
       this.events = this.eventService.getData();
+      this.noResults = false;
     }else {
       this.events =  this.eventService.getData().filter( (event:any)  => {
         return event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase())
       });
+      this.noResults = this.events.length == 0;
     }
+    console.log(this.events);
+    console.log(this.noResults);
   }
 
   isNewEvent(id: string){

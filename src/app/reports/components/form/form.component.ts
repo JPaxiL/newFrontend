@@ -734,6 +734,33 @@ export class FormComponent implements OnInit {
     };
   }
 
+  onChangeChkEvents(){
+    if(!this.eV.GPSbateriaDesconectada) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSaceleracionBrusca) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSfrenadaBrusca) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSsos) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSmotorEncendido) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSmotorApagado) { this.eV.OtroTodos = false; return; }
+
+    if(!this.eV.evEntrada) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evSalida) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evEstadia) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evParada) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evInfraccion) { this.eV.OtroTodos = false; return; }
+    
+    if(!this.eV.evNoRostro) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evFatigaExtrema) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.AccFatiga) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.AccDistraccion) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evAnticolisionFrontal) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evColisionConPeatones) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDesvioCarrilIzquierda) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDesvioCarrilDerecha) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evBloqueoVisionMobileye) { this.eV.OtroTodos = false; return; }
+    
+    this.eV.OtroTodos = true;
+  }
+
   validateForm(){
     var is_vehicle_selected = (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}');
     var is_zone_selected = this.selectedZones.length != 0;
