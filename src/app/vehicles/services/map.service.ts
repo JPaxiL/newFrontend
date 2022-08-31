@@ -1,20 +1,28 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+// import { Component, OnInit, OnDestroy } from '@angular/core';
+
 import { Vehicle } from '../models/vehicle';
 import RefData from '../data/refData';
 import * as L from 'leaflet';
+import * as moment from 'moment';
 // import 'leaflet.markercluster';
 
 import { SocketWebService } from './socket-web.service';
 import { VehicleService } from './vehicle.service';
 import { FollowService } from './follow.service';
 
+// import { Observable } from 'rxjs/Observable';
+// import 'rxjs/add/operator/takeWhile';
+// import 'rxjs/add/observable/timer'
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
+  @ViewChild('popupText') popupText!: ElementRef;
 
   public map!: L.Map;
+  public respuesta: any = [];
   // public markerClusterGroup!: L.MarkerClusterGroup;
   public markerClusterGroup!: any;
   public markerClusterData!: any;
@@ -23,6 +31,17 @@ export class MapService {
   private dataFitBounds: [string, string][] = [];
   private marker: any = [];
   private statusMap: boolean = false;
+  private statusIcon: boolean = false;
+  private interval!: any;
+  private time: any = 1000;
+  private time_stop = "Calculando ...";
+  private count= 0;
+  private intervalStatus: boolean = false;
+  private imeiPopup = "ninguno";
+  // public mensaje: any = function(){
+  //   console.log("lalalalal");
+  // }
+  // setInvterval = setInterval;
 
   @Output() sendData = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
@@ -30,9 +49,13 @@ export class MapService {
   constructor(
     private vehicleService:VehicleService,
     private followService:FollowService,
-    private socketWebService: SocketWebService
+    private socketWebService: SocketWebService,
   ) {
-
+    // this.interval = setInterval(function(this){
+    //   // this.localStorage
+    //   this.mensaje();
+    //   console.log("calculando ..",this);
+    // },6000);
     this.markerClusterGroup = L.markerClusterGroup({
       removeOutsideVisibleBounds: true,
       zoomToBoundsOnClick: false
@@ -63,6 +86,125 @@ export class MapService {
     this.vehicleService.clickTag.subscribe(res=>{
       this.tagClick(res);
     });
+    this.vehicleService.calcTimeStop.subscribe(data=>{
+      // console.log("XDDDD event time stop res = ",data);
+      let tiempoParada = "";
+      //
+      //
+      let a = moment(new Date(data.dt_tracker));
+      let b = moment(new Date());
+
+      let c = b.diff(a, 'seconds');
+
+      // let c = 100;
+      //dt_tracker es fecha tracker
+      if ( data.speed > 3 && c > 60 ) {
+            // console.log("se cumplio condicion : item.speed > 3 km/h && c > 60 seg ");
+            tiempoParada = "0 s";
+
+        } else if ( parseInt(data.res) == -1) {
+            tiempoParada = "Apagado mas de un día";//"No se encontro Datos";
+        } else if (parseInt(data.res) == -2) {
+            tiempoParada = "Duración mayor a 1 Dia";
+        } else if (parseInt(data.res) == -3) {
+            tiempoParada = "En movimiento...";
+        } else if (parseInt(data.res) == -5) {
+            //inicio de parada
+            tiempoParada = "0 s";
+        } else if (parseInt(data.res) == -6) {
+            //inicio de parada
+            tiempoParada = "...Avise a soporte";
+        } else if (parseInt(data.res) == -4) {
+
+            // var tiempoParada = "En movimiento...";
+            // item.paradaDesde  = item.paradaDesde;
+
+            //var f_now = new Date( item.dt_tracker.replace(/-/g, "/") );
+            let f_now = new Date();
+            let f_past = new Date( data.paradaDesde);
+            // var anios=f_now.diff(f_past,"seconds");
+            let duracion= this.string_diffechas(f_past,f_now)
+            //var tiempoParada = item.paradaDesde  + " - " +item.dt_tracker+ " - " +duracion;
+            tiempoParada = duracion;
+
+        } else {
+
+            data.paradaDesde = data.res;
+
+            //var f_now = new Date( item.dt_tracker.replace(/-/g, "/") );
+            // let aux = moment(data.paradaDesde).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+            let f_now = new Date();
+            // let f_past = new Date( aux );
+            let f_past = new Date( data.paradaDesde );
+            // let anios=f_now.diff(f_past,"seconds");
+            let duracion= this.string_diffechas(f_past,f_now)
+            // let tiempoParada = responseP[0] + " - " +item.dt_tracker+ " - " +duracion;
+            tiempoParada = duracion;
+
+        }
+        // console.log("tiempoParada = ",tiempoParada);
+        let aux = {
+          imei: data.imei,
+          name: data.name,
+          dt_tracker: data.dt_tracker,
+          convoy: data.convoy,
+          longitud: data.longitud,
+          latitud: data.latitud,
+          speed:data.speed,
+          ref:data.direction,
+          tiempoParada: tiempoParada,
+        };
+        this.imeiPopup = data.imei;
+        this.time_stop = tiempoParada;
+        this.printPopup(aux);
+    });
+
+
+  }
+  printPopup(data: any): void{
+
+
+    // console.log("data final",data);
+
+    let object = this.markerClusterGroup.getLayers();
+    //   let cont = 0;
+      for (const key in object) {
+
+        if(object[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
+          // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
+
+            this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+            '<aside class="">'+
+            '<small>CONVOY: '+data.convoy+'</small><br>'+
+            '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+            '<small>REFERENCIA: '+data.ref+'</small><br>'+
+            '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+            '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
+            '</aside>');
+        }
+
+
+      }
+  }
+  string_diffechas(a: any, b: any): any{
+          let c = (Math.floor((b - a) / 1000)) % 60;
+          let d = (Math.floor((b - a) / 60000)) % 60;
+          let e = (Math.floor((b - a) / 3600000)) % 24;
+          let f = Math.floor((b - a) / 86400000);
+          let g = "";
+          if (f > 0) {
+              g = '' + f + ' d ' + e + ' h ' + d + ' min ' + c + ' s'
+          } else if (e > 0) {
+              g = '' + e + ' h ' + d + ' min ' + c + ' s'
+          } else if (d > 0) {
+              g = '' + d + ' min ' + c + ' s'
+          } else if (c >= 0) {
+              g = '' + c + ' s'
+          }
+          return g
+  }
+  callMethod(){
+    console.log('Call Function Every Five Seconds.', new Date());
   }
   eyeClick(map: any, IMEI: string){
     //console.log('click eye IMEI = ',IMEI);
@@ -167,6 +309,21 @@ export class MapService {
 
 
   }
+  // timeStopexample(): void{
+  //   console.log("hola ",localStorage.getItem("dateItem"));
+  //   this.time_stop = "recalculandoXD";
+  //   let object = this.markerClusterGroup.getLayers();
+  //   let cont = 0;
+  //   for (const key in object) {
+  //     // console.log(object[key]['_popup']['_content']);
+  //     let content = object[key]['_popup']['_content'];
+  //     content = content.split(' ');
+  //     content[20]="nuevo";
+  //     content = content.join(" ");
+  //     console.log("content",content);
+  //     object[key]['_popup']['_content'] = content;
+  //   }
+  // }
   monitor(data: any, map: any): void{
     if(this.vehicleService.statusDataVehicle){
       // //console.log(data);
@@ -194,10 +351,13 @@ export class MapService {
       const resultado = vehicles.find( (vehi: any) => vehi.IMEI == data.IMEI.toString() );
       if(resultado){
 
+
+
         // update dataCompleted
         // //console.log("update data");
         const index = vehicles.indexOf( resultado);
         // //console.log("index ",index);
+
 
         vehicles[index].latitud = data.Latitud.toString();
         vehicles[index].longitud = data.Longitud.toString();
@@ -211,7 +371,24 @@ export class MapService {
         vehicles[index].parametros = data.Parametros;
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
 
+        const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
+        vehicles[index].dt_tracker = date.format('YYYY-MM-DD HH:mm:ss');
 
+        if(this.imeiPopup==data.IMEI.toString()){
+          let options = {
+            imei: data.IMEI,
+            name: vehicles[index].name,
+            convoy: vehicles[index].convoy,
+            longitud: data.Longitud,
+            latitud: data.Latitud,
+            speed: data.Velocidad,
+            dt_tracker: vehicles[index].dt_tracker,//luego de pasar por filtro
+            paradaDesde: "",
+            vehicleService : this.vehicleService
+          };
+          // console.log("data enviada a function timeStopAux",options);
+          this.timeStopAux(options);
+        }
 
         // vehicles[index].
         this.vehicleService.vehicles = vehicles;
@@ -286,17 +463,6 @@ export class MapService {
             // console.log("object[key]['_tooltip']['_content']==vehicles[index].name==>"+object[key]['_tooltip']['_content']+"=="+vehicles[index].name)
             if (object[key]['_tooltip']['_content']=="<span>"+vehicles[index].name+"</span>") {
               cont++;
-              // console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+vehicles[index].name);
-              // console.log(' antes content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
-              // console.log('clusterGroup = ',this.markerClusterGroup.getLayers()[key]);
-              // console.log('key = ',key);
-              // console.log('layers',this.markerClusterGroup.getLayers());
-              // //console.log(this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
-
-              // this.markerClusterGroup.getLayers()[this.marker[data.IMEI]]['_latlng']['lat']=vehicles[index].latitud;
-              // this.markerClusterGroup.getLayers()[this.marker[data.IMEI]]['_latlng']['lng']=vehicles[index].longitud;
-              // this.markerClusterGroup.getLayers()[key]['_latlng']['lat']=vehicles[index].latitud;
-              // this.markerClusterGroup.getLayers()[key]['_latlng']['lng']=vehicles[index].longitud;
               let coord = {
                 lat : vehicles[index].latitud,
                 lng : vehicles[index].longitud
@@ -309,9 +475,9 @@ export class MapService {
                 '<aside class="">'+
                   '<small>CONVOY: '+vehicles[index].convoy+'</small><br>'+
                   '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                  '<small>REFERENCIA: '+'NN'+'</small><br>'+
+                  '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                   '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
-                  '<small>TIEMPO DE PARADA: </small>'+
+                  '<small>TIEMPO DE PARADA: Calculando ...</small>'+
                 '</aside>';
               // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
@@ -382,18 +548,6 @@ export class MapService {
     }
 
     this.markerClusterGroup.clearLayers();
-    // for (const layer in this.marker){
-    //   // this.map.removeLayer(this.marker[layer]);
-    //   this.markerClusterGroup.removeLayer(this.marker[layer]);
-    //   aux_cont++;
-    // }
-    //console.log('contador marker = ',aux_cont);
-    //console.log('marker',this.marker);
-    // this.map.on("zoom", (e: any) => {
-    //   //console.log('zoom = ',e['target']['_zoom']);
-    //   //console.log('zoom en mapa ... zoom = ',this.map);
-    //
-    // });
 
     for (const property in e){
         if (e.hasOwnProperty(property)&&e[property].eye == true) {
@@ -407,9 +561,6 @@ export class MapService {
         }
     }
 
-    // this.markerClusterData = this.marker;
-    // this.markerClusterGroup.addTo(this.map);
-    // //console.log('maker',this.marker);
 
     if(this.dataFitBounds.length>0){
       // //console.log("dataFitBounds map",this.dataFitBounds);
@@ -500,37 +651,118 @@ export class MapService {
     return group;
   }
 
-  private drawIconUpdate(data : any, map : any){
-    let iconUrl = './assets/images/objects/nuevo/'+data.icon;
-    // if(data.speed>0){
-    //   iconUrl = './assets/images/accbrusca.png';
-    // }
-    const iconMarker = L.icon({
-      iconUrl: iconUrl,
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
-      popupAnchor:  [-3, -40]
-    });
-
-    const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
-      '<aside class="">'+
-        '<small>CONVOY: '+data.convoy+'</small><br>'+
-        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small>REFERENCIA: '+'NN'+'</small><br>'+
-        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-        '<small>TIEMPO DE PARADA: </small>'+
-      '</aside>';
-
-    // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
-    const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
-    // tempMarker.bindLabel("My Label");
-    // tempMarker.bindTooltip("text here", { permanent: true, offset: [0, 12] });
-    // // this
-
-    this.markerClusterGroup.addLayer(tempMarker);
-    // this.markerClusterGroup.addTo(this.map);
-    this.marker[data.IMEI]=tempMarker;
+  // private drawIconUpdate(data : any, map : any){
+  //   let iconUrl = './assets/images/objects/nuevo/'+data.icon;
+  //   // if(data.speed>0){
+  //   //   iconUrl = './assets/images/accbrusca.png';
+  //   // }
+  //   const iconMarker = L.icon({
+  //     iconUrl: iconUrl,
+  //     iconSize: [30, 30],
+  //     iconAnchor: [15, 30],
+  //     popupAnchor:  [-3, -40]
+  //   });
+  //
+  //   const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+  //     '<aside class="">'+
+  //       '<small>CONVOY: '+data.convoy+'</small><br>'+
+  //       '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+  //       '<small>REFERENCIA: '+'NN'+'</small><br>'+
+  //       '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+  //       '<small>TIEMPO DE PARADA: </small>'+
+  //     '</aside>';
+  //
+  //   // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
+  //   const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
+  //   // tempMarker.bindLabel("My Label");
+  //   // tempMarker.bindTooltip("text here", { permanent: true, offset: [0, 12] });
+  //   // // this
+  //
+  //   this.markerClusterGroup.addLayer(tempMarker);
+  //   // this.markerClusterGroup.addTo(this.map);
+  //   this.marker[data.IMEI]=tempMarker;
+  // }
+  private mensaje(){
+    console.log("mensaje");
   }
+  public timeStopAux(data: any): void{
+
+    // console.log("calculando time stop aux ...");
+
+    let ar_vel = data.speed;
+    if (data.speed > 3) {
+        ar_vel = data.speed;
+        data.paradaDesde = false;
+    } else {
+        if (data.paradaDesde == false) {
+            ar_vel = data.speed;
+        } else {
+            ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
+        }
+    }
+
+        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+    let params = {
+      imei: data.imei,
+      name: data.name,
+      convoy: data.convoy,
+      longitud: data.longitud,
+      latitud: data.latitud,
+      speed: data.speed,
+      dt_tracker: data.dt_tracker,
+      paradaDesde: data.paradaDesde,
+      fecha_i: f_ini,
+      fecha_f: f_fin,
+      vel: ar_vel
+    };
+
+    this.vehicleService.postTimeStop(params);
+  }
+  public timeStop(this: any): void{
+    // console.log("this",this);
+    // consultar data actual
+    let vehicle = this.vehicleService.getVehicle(this.imei);
+
+    this.speed = vehicle.speed;
+    this.dt_tracker = vehicle.dt_tracker;
+
+    // console.log("calculando time stop ...");
+
+    let ar_vel = this.speed;
+    if (this.speed > 3) {
+        ar_vel = this.speed;
+        this.paradaDesde = false;
+    } else {
+        if (this.paradaDesde == false) {
+            ar_vel = this.speed;
+        } else {
+            ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
+        }
+    }
+
+        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+    let params = {
+      imei: this.imei,
+      name: this.name,
+      convoy: this.convoy,
+      longitud: this.longitud,
+      latitud: this.latitud,
+      speed: this.speed,
+      dt_tracker: this.dt_tracker,
+      paradaDesde: this.paradaDesde,
+      fecha_i: f_ini,
+      fecha_f: f_fin,
+      vel: ar_vel
+    };
+
+    this.vehicleService.postTimeStop(params);
+  }
+
+
   private drawIcon(data:any, map: any): void{
     // assets/images/objects/nuevo/{{ rowData['icon']
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
@@ -545,18 +777,34 @@ export class MapService {
     });
     //console.log('data.name',data.name);
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
-      '<aside class="">'+
+      '<aside #popupText class="">'+
         '<small>CONVOY: '+data.convoy+'</small><br>'+
         '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-        '<small>TIEMPO DE PARADA: </small>'+
+        '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
       '</aside>';
 
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
+    // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
     tempMarker.bindTooltip('<span>'+data.name+'</span>', { permanent: true, offset: [0, 12] });
+    let options = {
+      imei: data.IMEI,
+      name: data.name,
+      convoy: data.convoy,
+      longitud: data.longitud,
+      latitud: data.latitud,
+      speed: data.speed,
+      dt_tracker: data.dt_tracker,
+      paradaDesde: "",
+      vehicleService : this.vehicleService
+    };
+    // console.log('envia cero data',data.speed);
+    // console.log('envia cero XD',options.speed);
+    tempMarker.on('click',this.timeStop,options);
+    // tempMarker.on('click',this.timeStop,options);
     // // this
     this.marker[data.IMEI]=tempMarker;
 

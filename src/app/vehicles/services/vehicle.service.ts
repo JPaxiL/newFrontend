@@ -16,6 +16,7 @@ import RefData from '../data/refData';
 export class VehicleService {
 
   private URL_LIST = environment.apiUrl+'/api/tracker';
+  private URL_TIME_STOP = environment.apiUrl+'/api/historialParada'
 
   public demo:boolean = false;
   public demo_id : number = 0;
@@ -48,6 +49,7 @@ export class VehicleService {
   @Output() clickEyeAll = new EventEmitter<any>();
   @Output() clickTag = new EventEmitter<any>();
   @Output() clickListTable = new EventEmitter<any>();
+  @Output() calcTimeStop = new EventEmitter<any>();
 
   constructor(private http: HttpClient) {
     /*
@@ -79,7 +81,7 @@ export class VehicleService {
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
-        // //console.log("vehicles",vehicles);
+        // console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.vehiclesTree = this.createNode(this.vehicles);
         this.dataCompleted.emit(this.vehicles);
@@ -120,11 +122,53 @@ export class VehicleService {
   public getVehicles(): Observable<any>{
     return this.http.get(this.URL_LIST);
   }
+  public queryTimeStop(params: any): Observable<any>{
+    return this.http.get(this.URL_TIME_STOP+'?fecha_i='+params.fecha_i+'&fecha_f='+params.fecha_f+'&imei='+params.imei+'&lat='+params.latitud+'&lng='+params.longitud);
+  }
+  public postTimeStop(data: any){
+    // console.log("function time stop datos de envio",data);
+
+      this.queryTimeStop(data).subscribe(response=>{
+        // console.log('respuesta server response ',response);
+        let aux = {
+          imei: data.imei,
+          name: data.name,
+          convoy: data.convoy,
+          longitud: data.longitud,
+          latitud: data.latitud,
+          speed: data.speed,
+          dt_tracker: data.dt_tracker,
+          direction: response.direction,
+          paradaDesde: response.paradaDesde,
+          res: response.res
+        }
+        // console.log("aux data query vehicle service",aux);
+        this.calcTimeStop.emit(aux);
+      });
+
+  }
+  public postTest(): any {
+    console.log("data test");
+
+    return this.vehicles;
+  }
   public getVehiclesDemo(): any{
     return this.vehicles;
   }
   public getVehiclesData(): any{
     return this.vehicles;
+  }
+  public getVehicle(imei: string):any {
+    // console.log('imei ===',imei);
+    for (let index = 0; index < this.vehicles.length; index++) {
+      // const element = array[index];
+      // console.log(this.vehicles[index].IMEI);
+      if(this.vehicles[index].IMEI==imei){
+        return this.vehicles[index];
+      }
+
+    }
+    return {};
   }
 
   public getSession(): Observable <any>{
@@ -168,7 +212,8 @@ export class VehicleService {
   }
   public formatVehicle(vehicle: any): any{
     const today = moment();
-    const date = moment(vehicle.dt_tracker).subtract(5, 'hours');
+    // const date = moment(vehicle.dt_tracker).subtract(5, 'hours');
+    const date = moment(vehicle.dt_tracker);
 
     vehicle.dt_tracker = date.format('YYYY-MM-DD HH:mm:ss');
     vehicle = this.addSelect(vehicle);
