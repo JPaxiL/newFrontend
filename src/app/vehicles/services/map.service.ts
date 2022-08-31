@@ -87,76 +87,91 @@ export class MapService {
       this.tagClick(res);
     });
     this.vehicleService.calcTimeStop.subscribe(data=>{
-      // console.log("XDDDD event time stop res = ",data);
+      console.log("event time stop res = ",data);
+
       let tiempoParada = "";
       //
+      let aux_vehicle = this.vehicleService.getVehicle(data.imei);
       //
       let a = moment(new Date(data.dt_tracker));
       let b = moment(new Date());
+      let d = moment(new Date(aux_vehicle.dt_tracker));
 
-      let c = b.diff(a, 'seconds');
-
+      /*
+      c es el tiempo que demora en retornar la info desde backend (latencia)
+      e corresponde a la ultima transmision???
+      */
+      let c = b.diff(a, 'seconds');//retorno
+      let e = d.diff(a, 'seconds');//diff fecha
       // let c = 100;
       //dt_tracker es fecha tracker
-      if ( data.speed > 3 && c > 60 ) {
-            // console.log("se cumplio condicion : item.speed > 3 km/h && c > 60 seg ");
-            tiempoParada = "0 s";
+      // console.log("speed  = ",data.speed);
+      // console.log("calc c = ",c);
+      // console.log("calc e = ",e);
+      if(e==0){
+        if ( data.speed > 3 && c > 60 ) {
+              // console.log("se cumplio condicion : item.speed > 3 km/h && c > 60 seg ");
+              tiempoParada = "0 s";
 
-        } else if ( parseInt(data.res) == -1) {
-            tiempoParada = "Apagado mas de un día";//"No se encontro Datos";
-        } else if (parseInt(data.res) == -2) {
-            tiempoParada = "Duración mayor a 1 Dia";
-        } else if (parseInt(data.res) == -3) {
-            tiempoParada = "En movimiento...";
-        } else if (parseInt(data.res) == -5) {
-            //inicio de parada
-            tiempoParada = "0 s";
-        } else if (parseInt(data.res) == -6) {
-            //inicio de parada
-            tiempoParada = "...Avise a soporte";
-        } else if (parseInt(data.res) == -4) {
+          } else if ( parseInt(data.res) == -1) {
+              tiempoParada = "Apagado mas de un día";//"No se encontro Datos";
+          } else if (parseInt(data.res) == -2) {
+              tiempoParada = "Duración mayor a 1 Dia";
+          } else if (parseInt(data.res) == -3) {
+              tiempoParada = "En movimiento...";
+          } else if (parseInt(data.res) == -5) {
+              //inicio de parada
+              tiempoParada = "0 s";
+          } else if (parseInt(data.res) == -6) {
+              //inicio de parada
+              tiempoParada = "...Avise a soporte";
+          } else if (parseInt(data.res) == -4) {
 
-            // var tiempoParada = "En movimiento...";
-            // item.paradaDesde  = item.paradaDesde;
+              // var tiempoParada = "En movimiento...";
+              // item.paradaDesde  = item.paradaDesde;
 
-            //var f_now = new Date( item.dt_tracker.replace(/-/g, "/") );
-            let f_now = new Date();
-            let f_past = new Date( data.paradaDesde);
-            // var anios=f_now.diff(f_past,"seconds");
-            let duracion= this.string_diffechas(f_past,f_now)
-            //var tiempoParada = item.paradaDesde  + " - " +item.dt_tracker+ " - " +duracion;
-            tiempoParada = duracion;
+              //var f_now = new Date( item.dt_tracker.replace(/-/g, "/") );
+              let f_now = new Date();
+              let f_past = new Date( data.paradaDesde);
+              // var anios=f_now.diff(f_past,"seconds");
+              let duracion= this.string_diffechas(f_past,f_now)
+              //var tiempoParada = item.paradaDesde  + " - " +item.dt_tracker+ " - " +duracion;
+              tiempoParada = duracion;
 
-        } else {
+          } else {
 
-            data.paradaDesde = data.res;
+              data.paradaDesde = data.res;
 
-            //var f_now = new Date( item.dt_tracker.replace(/-/g, "/") );
-            // let aux = moment(data.paradaDesde).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
-            let f_now = new Date();
-            // let f_past = new Date( aux );
-            let f_past = new Date( data.paradaDesde );
-            // let anios=f_now.diff(f_past,"seconds");
-            let duracion= this.string_diffechas(f_past,f_now)
-            // let tiempoParada = responseP[0] + " - " +item.dt_tracker+ " - " +duracion;
-            tiempoParada = duracion;
+              //var f_now = new Date( item.dt_tracker.replace(/-/g, "/") );
+              // let aux = moment(data.paradaDesde).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+              let f_now = new Date();
+              // let f_past = new Date( aux );
+              let f_past = new Date( data.paradaDesde );
+              // let anios=f_now.diff(f_past,"seconds");
+              let duracion= this.string_diffechas(f_past,f_now)
+              // let tiempoParada = responseP[0] + " - " +item.dt_tracker+ " - " +duracion;
+              tiempoParada = duracion;
 
-        }
-        // console.log("tiempoParada = ",tiempoParada);
-        let aux = {
-          imei: data.imei,
-          name: data.name,
-          dt_tracker: data.dt_tracker,
-          convoy: data.convoy,
-          longitud: data.longitud,
-          latitud: data.latitud,
-          speed:data.speed,
-          ref:data.direction,
-          tiempoParada: tiempoParada,
-        };
-        this.imeiPopup = data.imei;
-        this.time_stop = tiempoParada;
-        this.printPopup(aux);
+          }
+          // console.log("tiempoParada = ",tiempoParada);
+          let aux = {
+            imei: data.imei,
+            name: data.name,
+            dt_tracker: data.dt_tracker,
+            convoy: data.convoy,
+            longitud: data.longitud,
+            latitud: data.latitud,
+            speed:data.speed,
+            ref:data.direction,
+            tiempoParada: tiempoParada,
+          };
+          this.imeiPopup = data.imei;
+          this.time_stop = tiempoParada;
+          this.printPopup(aux);
+      }
+
+
+
     });
 
 
