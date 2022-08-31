@@ -20,13 +20,21 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
+  strSearched: string = '';
+  options = new Array(
+    { id:'ALERTS', name:"Alertas"},
+    { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
+    { id:'ALERTS-ACCESSORIE-CREATE', name:"Crear Alertas Seguridad Vehicular"},
+  );
+
   constructor(
     private AlertService: AlertService,
-    private panelService: PanelService,
+    public panelService: PanelService,
     private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+    this.spinner.show('loadingAccesoriesAlertsSpinner');
 
     this.dtOptions = {
       "paging": false,
@@ -37,12 +45,14 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
   }
 
   public async loadData(){
+    this.spinner.show('loadingAccesoriesAlertsSpinner');
     this.alerts = await this.AlertService.getAlertsByType('accessories');
     this.spinner.hide('loadingAccesoriesAlertsSpinner');
     // this.dtTrigger.next();
   }
 
   ngOnDestroy(): void {
+    this.AlertService.clearDataByType();
     // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
   }
@@ -67,5 +77,29 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
     this.panelService.nombreComponente = "ALERTS-ACCESSORIE-EDIT";
     this.panelService.nombreCabecera =   "Alerta Seguridad Vehicular";
   }
+
+  clickShowPanel( nomComponent:string ): void {
+
+    $("#panelMonitoreo").show( "slow" );
+    this.panelService.nombreComponente = nomComponent;
+
+    const item = this.options.filter((item)=> item.id == nomComponent);
+    this.panelService.nombreCabecera =   item[0].name;
+
+  }
+
+  public onSearch(){
+    if(this.strSearched == ''){
+      this.alerts = this.AlertService.getDataByType();
+    }else {
+      this.alerts = this.AlertService.getDataByType().filter( (alert:any)  => {
+        return (alert.nombre??'').toLowerCase().match(this.strSearched.toLowerCase()) 
+          || (alert.tipo??'').toLowerCase().match(this.strSearched.toLowerCase());
+      });
+    }
+  }
+
+
+
 
 }

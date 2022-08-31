@@ -15,6 +15,7 @@ import { EventService } from 'src/app/events/services/event.service';
 
 import { HistorialService } from '../../services/historial.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import Swal from 'sweetalert2';
 
 
 
@@ -110,16 +111,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     {
       label: 'Evento GPS',
       items: [
-        { name: 'Batería baja', value: false },
+        // { name: 'Batería baja', value: false },
         { name: 'Batería desconectada', value: false },
         { name: 'Aceleración brusca', value: false },
         { name: 'Frenada brusca', value: false },
-        { name: 'Bloqueo de Transmisión', value: false },
+        // { name: 'Bloqueo de Transmisión', value: false },
         { name: 'SOS', value: false },
-        { name: 'Remolque', value: false },
-        { name: 'Parada', value: false },
-        { name: 'Motor Encendido', value: false },
+        // { name: 'Remolque', value: false },
+        // { name: 'Parada', value: false },
         { name: 'Motor Apagado', value: false },
+        { name: 'Motor Encendido', value: false },
+
       ]
     },
     {
@@ -131,29 +133,37 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         { name: 'Parad en Zona no Autorizada', value: false },
         { name: 'Vehículo en movimiento sin programación', value: false },
         { name: 'Infracción', value: false },
-        { name: 'Anticolisión frontal', value: false },
-        { name: 'Colisión con Peatones', value: false },
-        { name: 'No Rostro', value: false },
-        { name: 'Fatiga Extrema', value: false },
-        { name: 'Desvío de carril hacia la izquierda', value: false },
-        { name: 'Desvío de carril hacia la derecha', value: false },
-        { name: 'Bloqueo de visión del mobileye', value: false },
+        // { name: 'Anticolisión frontal', value: false },
+        // { name: 'Colisión con Peatones', value: false },
+        // { name: 'No Rostro', value: false },
+        // { name: 'Fatiga Extrema', value: false },
+        // { name: 'Desvío de carril hacia la izquierda', value: false },
+        // { name: 'Desvío de carril hacia la derecha', value: false },
+        // { name: 'Bloqueo de visión del mobileye', value: false },
       ]
     },
     {
-      label: 'Evento Accesorios',
+      label: 'Evento Seguridad Vehicular',
       items: [
+        { name: 'Ausencia de rostro', value: false },// { name: 'No Rostro', value: false },
+        { name: 'Fatiga Extrema', value: false },
         { name: 'Posible Fatiga', value: false },
         { name: 'Distracción', value: false },
-        { name: 'Alcoholemia', value: false },
-      ]
-    },
-    {
-      label: 'Otros',
-      items: [
-        { name: 'Exceso de Velocidad', value: false },
+        { name: 'Detección de alcohol', value: false },//  { name: 'Alcoholemia', value: false },
+        { name: 'Anticolisión frontal', value: false },
+        { name: 'Colisión con Peatones', value: false },
+        { name: 'Desvío de carril hacia la izquierda', value: false },
+        { name: 'Desvío de carril hacia la derecha', value: false },
+        { name: 'Bloqueo de visión del Mobileye', value: false },
       ]
     }
+    // ,
+    // {
+    //   label: 'Otros',
+    //   items: [
+    //     { name: 'Exceso de Velocidad', value: false },
+    //   ]
+    // }
    ];
 
   // campaignOne: FormGroup;
@@ -199,6 +209,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     private EventService: EventService
     ) {
 
+
+
     // this.historialService.currentMessage.subscribe(message => this.message = message);
     // this.historialService.currentMessage.subscribe( () => {//console.log('com 1 -> gaaaaaaaaa');
     // });
@@ -223,6 +235,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
+    if(!this.VehicleService.statusDataVehicle){
+      this.spinner.show('loadingHistorialForm');
+      this.VehicleService.dataCompleted.subscribe( vehicles => {
+        this.getCars(vehicles);
+        this.spinner.hide('loadingHistorialForm');
+      });
+    } else {
+      let vehicles = this.VehicleService.getVehiclesData();
+      this.getCars(vehicles);
+    }
+
     // const hoy = Date.now();
     // this.pngFechaIni = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
     // this.pngFechaFin = this.pngFechaIni;
@@ -240,12 +263,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     // this.historialService.currentMessage.subscribe(message => this.message = message)
 
-    let vehicles = this.VehicleService.getVehiclesData();
 
-    for (let i = 0; i < vehicles.length; i++) {
-      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
-      this.cars.push(gaa);
-    }
 
   //   cars = [
   //     { nombre: 'ABC-676',imei:'111111111' },
@@ -340,8 +358,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     this.historialService.dataFormulario = this.form;
 
+    this.VehicleService.dataCompleted.unsubscribe;
 
 
+
+  }
+
+  getCars(vehicles: any){
+    for (let i = 0; i < vehicles.length; i++) {
+      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
+      this.cars.push(gaa);
+    }
   }
 
 
@@ -398,7 +425,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     //console.log(this.form.chckEvento);
 
-    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items].length;
+    //this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items].length;
+    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items].length;
 
     // console.log(this.chkAllEvents);
     // console.log(this.selectedEvents);
@@ -1076,7 +1104,12 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           } else {
             this.spinner.hide('loadingHistorial');
             console.log("NO HAY SUFICIENTE INFORMACIÓN "+dH.length);
-            this.showNotEnoughInfoDialog();
+            Swal.fire({
+              title: 'Error',
+              text: 'No hay suficiente información.',
+              icon: 'error',
+            });
+            //this.showNotEnoughInfoDialog();
           }
 
       }); // fin de eventosa historial
@@ -1216,9 +1249,35 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                   for (let j = 0; j < this.selectedEvents.length; j++) {
                     const opEve = this.selectedEvents[j];
                     // console.log(opEve.name + " -- " +item.evento);
-                    if (opEve.name == item.evento) {
-                      activar = true;
-                    }
+                    // if (opEve.name == item.evento) { activar = true; }
+
+                    //Nombres de eventos que cambiaron
+
+                    if (opEve.name == 'Batería desconectada' && item.evento == 'Bateria desconectada') { activar = true; }
+                    if (opEve.name == 'Aceleración brusca' && item.evento == 'Aceleracion brusca') { activar = true; }
+                    if (opEve.name == 'Frenada brusca' && item.evento == 'Frenada brusca') { activar = true; }
+                    if (opEve.name == 'SOS' && item.evento == 'SOS') { activar = true; }
+                    if (opEve.name == 'Motor Apagado' && item.evento == 'Motor apagado') { activar = true; }
+                    if (opEve.name == 'Motor Encendido' && item.evento == 'Motor encendido') { activar = true; }
+
+                    if (opEve.name == 'Zona de Entrada' && item.evento == 'Zona de entrada') { activar = true; }
+                    if (opEve.name == 'Zona de Salida' && item.evento == 'Zona de salida') { activar = true; }
+                    if (opEve.name == 'Tiempo de Estadía en Zona' && item.evento == 'Tiempo de estadia en zona') { activar = true; }
+                    if (opEve.name == 'Parada en Zona no Autorizada' && item.evento == 'Parada en zona no autorizada') { activar = true; }
+                    if (opEve.name == 'Vehículo en movimiento sin programación' && item.evento == 'Vehiculo sin programacion') { activar = true; }
+                    if (opEve.name == 'Infracción' && item.evento == 'Infraccion') { activar = true; }
+
+                    if (opEve.name == 'Ausencia de rostro' && item.evento == 'No Rostro') { activar = true; }
+                    if (opEve.name == 'Fatiga Extrema' && item.evento == 'Fatiga Extrema') { activar = true; }
+                    if (opEve.name == 'Posible Fatiga' && item.evento == 'Somnolencia') { activar = true; }
+                    if (opEve.name == 'Distracción' && item.evento == 'Distraccion') { activar = true; }
+                    if (opEve.name == 'Detección de alcohol' && item.evento == 'Alcoholemia') { activar = true; }
+                    if (opEve.name == 'Anticolisión frontal' && item.evento == 'Anticolision frontal') { activar = true; }
+                    if (opEve.name == 'Colisión con Peatones' && item.evento == 'Colision con peatones') { activar = true; }
+                    if (opEve.name == 'Desvío de carril hacia la izquierda' && item.evento == 'Desvio de carril hacia la izquierda') { activar = true; }
+                    if (opEve.name == 'Desvío de carril hacia la derecha' && item.evento == 'Desvio de carril hacia la derecha') { activar = true; }
+                    if (opEve.name == 'Bloqueo de visión del Mobileye' && item.evento == 'Bloqueo de vision del mobileye') { activar = true; }
+
                   }
 
                   // for (let j = 0; j < this.eventList.length; j++) {
@@ -1795,7 +1854,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
   onChkAllEvents(){
-    this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items]: [];
+    // this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items]: [];
+    this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
+
   }
 
 

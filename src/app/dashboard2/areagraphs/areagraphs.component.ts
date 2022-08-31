@@ -13,6 +13,9 @@ import { DashboardService } from './../service/dashboard.service';
   styleUrls: ['./areagraphs.component.scss']
 })
 export class AreagraphsComponent implements OnInit {
+
+  isUnderConstruction: boolean = true;
+
   public vehicles:any = [];
   group: any = [];
   convoy:any = [];
@@ -31,6 +34,14 @@ export class AreagraphsComponent implements OnInit {
   red:number=0;
   imeiRed:any = [];
 
+  horizontalChart: any = [];
+  viewHorizontalChart = [700, 100];
+  in_service = 0;
+  without_programming = 0;
+  total = 0;
+  in_service_percentage = 0;
+  without_programming_percentage = 0;
+
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
@@ -42,6 +53,10 @@ export class AreagraphsComponent implements OnInit {
     domain: ['green', 'blue', 'orange', 'black','red']
   };
 
+  colorSchemeHorizontalChart = {
+    domain: ['blue', 'gray'],
+  };
+
   colorSchemeVehiclesOnRoute = {
     domain: ['green', 'blue']
   };
@@ -49,6 +64,11 @@ export class AreagraphsComponent implements OnInit {
   data:any = [];
   vehiclesOnRoute:any = [];
   dataEvents:any = [];
+
+  infraction:any = [];
+  gpsEvents:any = [];
+  countgpsEvents:any = {};
+  vehicleSafetyEvents:any = [];
 
 
   constructor(
@@ -80,125 +100,174 @@ export class AreagraphsComponent implements OnInit {
   */
 
 
-  async ngOnInit() {
-    // await setInterval(() => {
+  ngOnInit():void {
+    if(!this.isUnderConstruction){
+      this.spinner.show("loadingDashboardSpinner");
+      this.load();
+    }
+    // setInterval(() => {
 
-      //  this.getData();
+    //    this.load();
+    //    console.log(" this.load()");
     // }, 180000);
-    this.spinner.show("loadingDashboardSpinner");
-    this.vehicleService.dataCompleted.subscribe( vehicles => {
-      this.vehicles = collect(vehicles).groupBy('grupo');
+    // this.load();
+  }
 
-      this.convoy = _.uniqBy(vehicles, 'convoy');
-      this.convoy = this.convoy.map((convoy:any) => {
-        return { value:convoy.idconvoy, label:convoy.convoy}
-      })
-      .filter( (convoy:any) => convoy.label != "Unidades Sin Convoy");
+  load(){
+    let imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
 
-      this.vehicles.map( (vehicle:any, index:any) => {
+    this.getEvents(imeis);
 
-        this.group.push(
-          {
-            value:index,
-            label:index,
-            items: vehicle.items.map(
-              (item:any) => {
-                this.imeis.push(item.IMEI);
-                return {
-                  value: item.IMEI,
-                  label: item.name
-                }
-              })
-          }
-        );
+    this.vehicleService.dataCompleted.subscribe((vehicles) => {
+      this.vehicles = vehicles.filter((vehicle: any) => {
+        return imeis.includes(vehicle.IMEI);
       });
 
-      // let day = new Date();
-      // let yesterday = new Date();
-      // yesterday.setDate(yesterday.getDate() - 1);
-
-      // this.rangeDates = [yesterday,day];
-
-      this.setGraphData(vehicles);
-
+      this.setGraphData(this.vehicles);
     });
-
-  }
-
-  async getData(){
-    // await this.eventService.initialize();
-
-    let renge_date = this.rangeDates.map(date => date.getDate());
-
-    console.log("this.renge_date =====> ",this.rangeDates, renge_date);
-
-    // this.dashboardService.getData({renge_date:this.rangeDates, imeis: this.imeis});
-  }
-
-  async onSelect() {
-    await this.dashboardService.getData({renge_date:this.rangeDates, imeis: this.imeis});
-  }
-
-  onClickConsultar(){
-
   }
 
   setGraphData(vehicles:any){
-      this.totalVehicle = vehicles.length;
+    this.totalVehicle = vehicles.length;
 
-      vehicles.forEach( (vehicle:any) =>  {
-        console.log("vehicle.parameter",vehicle.parametros,vehicle)
-        if(vehicle.point_color == 10){
-          this.green += 1;
-          this.imeiGreen.push(vehicle.name);
-        }else if(vehicle.point_color == 20){
-          this.blue += 1;
-          this.imeiBlue.push(vehicle.name);
-        }else if(vehicle.point_color == 30){
-          this.purple += 1;
-        }else if(vehicle.point_color == 40){
-          this.black += 1;
-          this.imeiBlack.push(vehicle.name);
-        }else if(vehicle.point_color == 50){
-          this.orange += 1;
-          this.imeiOrange.push(vehicle.name);
-        }else if(vehicle.point_color == 60){
-          this.red += 1;
-          this.imeiRed.push(vehicle.name);
-        }else if(vehicle.point_color == 100){
-          this.green += 1;
-          this.imeiGreen.push(vehicle.name);
-        }else{
-          this.black += 1;
-          this.imeiBlack.push(vehicle.name);
-        }
-      });
+    vehicles.forEach((vehicle: any) => {
+      if (vehicle.point_color == 10) {
+        this.green += 1;
+        this.imeiGreen.push(vehicle.name);
+      } else if (vehicle.point_color == 20) {
+        this.blue += 1;
+        this.imeiBlue.push(vehicle.name);
+      } else if (vehicle.point_color == 30) {
+        this.purple += 1;
+      } else if (vehicle.point_color == 40) {
+        this.black += 1;
+        this.imeiBlack.push(vehicle.name);
+      } else if (vehicle.point_color == 50) {
+        this.orange += 1;
+        this.imeiOrange.push(vehicle.name);
+      } else if (vehicle.point_color == 60) {
+        this.red += 1;
+        this.imeiRed.push(vehicle.name);
+      } else if (vehicle.point_color == 100) {
+        this.green += 1;
+        this.imeiGreen.push(vehicle.name);
+      } else {
+        this.black += 1;
+        this.imeiBlack.push(vehicle.name);
+      }
+    });
 
-      this.data = [
+    this.data = [
+      {
+        name: 'En movimiento',
+        value: this.green,
+      },
+      {
+        name: 'Detenidos',
+        value: this.blue,
+      },
+      {
+        name: 'Sin cobertura',
+        value: this.orange,
+      },
+      {
+        name: 'Sin transmision',
+        value: this.black,
+      },
+      {
+        name: 'Corte de transmision',
+        value: this.red,
+      },
+    ];
 
-        {
-          "name": "En movimiento",
-          "value": this.green
-        },
-        {
-          "name": "Detenidos",
-          "value": this.blue
-        },
-        {
-          "name": "Sin cobertura",
-          "value": this.orange
-        },
+    this.setHorizontalChart();
+
+    this.spinner.hide('loadingDashboardSpinner');
+  }
+
+  setHorizontalChart() {
+    this.in_service = this.green;
+    this.data.forEach((item: any) => {
+      if (item.name != 'En movimiento') {
+        this.without_programming += item.value;
+      }
+      this.total += item.value;
+    });
+
+    this.in_service_percentage = Math.round(
+      (this.in_service * 100) / this.total
+    );
+    this.without_programming_percentage = Math.round(
+      (this.without_programming * 100) / this.total
+    );
+
+    this.horizontalChart = [
+      {
+        name: '',
+        series: [
           {
-          "name": "Sin transmision",
-          "value": this.black
-        },
-        {
-          "name": "Corte de transmision",
-          "value": this.red
-        }
-      ];
+            name: 'En servicio',
+            value: this.in_service,
+          },
+          {
+            name: 'Sin programación',
+            value: this.without_programming,
+          },
+        ],
+      },
+    ];
+  }
 
-      this.spinner.hide("loadingDashboardSpinner");
+  async getEvents(imeis: any){
+
+    this.dataEvents =  await this.eventService.getEventsByImeis(imeis);
+
+    this.dataEvents.forEach((event:any) => {
+      if(event.descripcion_evento === "Infracción" || event.descripcion_evento === "Infraccion"){
+        this.infraction.push(event);
+      }
+
+      if(event.tipo_alerta === 'gps'){
+        this.gpsEvents.push(event);
+      }
+
+      if(event.tipo_alerta === 'accessories'){
+        this.vehicleSafetyEvents.push(event);
+      }
+
+    });
+
+
+    this.infraction = collect(this.infraction)
+    .groupBy('nombre_objeto')
+    .map( (items:any, index:any) => {
+      return {
+        'name':index,
+        'amount':items.items.length,
+        'higher_speed': collect(items.items).max('velocidad')
+      };
+    })
+    .toArray();
+
+    this.gpsEvents.forEach( (event:any) => {
+        if(event.tipo_evento == 'Bateria desconectada'){
+          this.countgpsEvents.batteryDisconnected += 1;
+        }
+
+        if(event.tipo_evento == 'Motor apagado'){
+          this.countgpsEvents.engineoff += 1;
+        }
+
+    });
+
+
+    this.countgpsEvents = collect(this.gpsEvents).countBy((event:any) => event.tipo_evento.toLowerCase().replace(/ /g, "_")).all();
+
+    console.log("this.vehicleSafetyEvents  =========> ", this.vehicleSafetyEvents);
+    console.log("this.gpsEvents  =========> ", this.gpsEvents,this.countgpsEvents);
+
+    console.log("const counted = collection.countBy(email => email.split('@')[1]);",this.rangeDates);
+
   }
 
 }

@@ -139,6 +139,15 @@
   #panelMonitoreo.historial > .card > div.component-containers {
     height: calc(100% - var(--pm-historial-header-height));
   }
+  #panelMonitoreo.dashboard > .card > div.component-containers {
+    height: calc(100% - var(--pm-dashboard-header-height));
+  }
+  #panelMonitoreo.auditoria > .card > div.component-containers {
+    height: calc(100% - var(--pm-auditoria-header-height));
+  }
+  #panelMonitoreo.subcuentas > .card > div.component-containers {
+    height: calc(100% - var(--pm-subcuentas-header-height));
+  }
   #panelMonitoreo.notificaciones > .card > div.component-containers {
     height: calc(100% - var(--pm-notificaciones-header-height));
   }
@@ -178,7 +187,7 @@
 
   #panelMonitoreo.notificaciones #rowBusqueda{
     height: auto;
-    padding: calc(calc(var(--row-busqueda-height) - 38px) / 2) 1rem; //38px es la altura ded los input
+    padding: calc(calc(var(--row-busqueda-height) - 38px) / 2) 1rem calc(calc(var(--row-busqueda-height) - 38px) / 2) var(--gl-panel-padding-left); //38px es la altura ded los input
   }
 
   .table-content-component-panel-monitoreo {

@@ -99,6 +99,9 @@ import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard/panal-dashboard.component';
+import { AuditoriaComponent } from './auditoria/auditoria.component';
+import { SubcuentasComponent } from './subcuentas/subcuentas.component';
 
 @NgModule({
   declarations: [
@@ -151,6 +154,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     UserConfigComponent,
     Dashboard2Component,
     AreagraphsComponent,
+    PanalDashboardComponent,
+    AuditoriaComponent,
+    SubcuentasComponent,
 
   ],
   imports: [

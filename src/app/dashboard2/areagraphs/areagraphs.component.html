@@ -1,123 +1,127 @@
-<div class="map-wrapper" id="wraper_map">
+<div
+        class="d-flex flex-column justify-content-center align-items-center"
+        style="position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 999999;" *ngIf="isUnderConstruction">
+        <img
+            src="./assets/images/en_construccion.png"
+            alt="under_construction"
+            style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
+        <span style="color: #fff;">Panel en construcción</span>
+    </div>
 
-    <div class="map-border">
-        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboardSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando Dashboard... </p></ngx-spinner>
+<div class="container-fluid dashboard-wrapper" style="position: relative;" *ngIf="!isUnderConstruction">
 
-        <div class="row">
-            <h4>Dash Board</h4>
-            <hr>
-            <div class="col">
+    <div class="row header-padding"></div>
+    <div class="row dashboard-content p-3 overflow-auto justify-content-center" >
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboardSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "true"><p style="color: white" class="text-center"> Cargando Dashboard... </p></ngx-spinner>
 
-                <label for="">Grupo</label>
-                <p-multiSelect
-                    [options]="group"
-                    optionLabel="label"
-                    optionValue="value"
-                    [(ngModel)]="imeis"
-                    defaultLabel="Todas las unidades"
-                    [maxSelectedLabels]="3"
-                    [selectedItemsLabel]="'{0} vehiculos seleccionados'"
-                    [group]="true"
-                ></p-multiSelect>
-
+        <div class="row p-card p-2 mb-3">
+            <div class="col-12">
+                <h3>Dash Board</h3>
+                <hr>
             </div>
-            <div class="col">
-                <label for="">Convoy</label>
-                <p-dropdown
-                    [options]="convoy"
-                    optionLabel="label"
-                    [filter]="true"
-                    filterBy="label"
-                    defaultLabel="Todas las unidades"
-                    placeholder="Todas las unidades"
-                    optionValue="value"
-                >
-                </p-dropdown>
-            </div>
-
-            <div class="col">
-                <!-- <p-calendar
-                    [showIcon]="true"
-                    selectionMode="range"
-                    [readonlyInput]="true"
-                    inputId="range"
-                    dateFormat="dd/mm/yy"
-                    [(ngModel)]="rangeDates"
-                    (onClose)="onSelect()"
-                ></p-calendar> -->
-
-                <button type="button" class="btn btn-secondary" (click)="onClickConsultar()">Consultar</button>
-                <button type="button" class="btn btn-success">Descargar</button>
-            </div>
-
         </div>
-
-<br><br><br><br>
 
         <br>
-        <div class="row">
-            <h3>Estatus general de la Flota Vehicular</h3>
-            <hr>
-            <div class="col-xl">
-                <ngx-charts-pie-chart
-                    [scheme]="colorScheme"
-                    [results]="data"
-                    [gradient]="gradient"
-                    [legend]="showLegend"
+        <div class="row p-card p-2 mb-3 rounded">
+            <div class="col-12">
+                <h4>Estatus general de la Flota Vehicular</h4>
+                <hr>
+            </div>
+            <div class="col-12 d-flex">
+                <div class="row">
+                    <div class="col-6">
+                        <ngx-charts-pie-chart
+                        [scheme]="colorScheme"
+                        [results]="data"
+                        [legend]="showLegend"
+                        [legendPosition]="'left'"
+                        [legendTitle]="''"
+                        >
+                        </ngx-charts-pie-chart>
+                    </div>
+                    <div class="col-6">
+                        <div class="col-sm table-responsive">
+                            <label>Relación de Vehículos</label>
+                            <button type="button" class="btn btn-success">cc</button>
 
-                    [legendPosition]="'below'"
-                    [legendTitle]="''"
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>En movimiento</th>
+                                            <th>Detenidos</th>
+                                            <th>Sin cobertura</th>
+                                            <th>Sin transmision</th>
+                                            <th>Corte de transmision</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <ul class="list-unstyled">
+                                                    <li *ngFor="let imei of imeiGreen">{{ imei }}</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul class="list-unstyled">
+                                                    <li *ngFor="let imei of imeiBlue">{{ imei }}</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul class="list-unstyled">
+                                                    <li *ngFor="let imei of imeiOrange">{{ imei }}</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul class="list-unstyled">
+                                                    <li *ngFor="let imei of imeiBlack">{{ imei }}</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul class="list-unstyled">
+                                                    <li *ngFor="let imei of imeiRed">{{ imei }}</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row p-card p-2 mb-3 rounded">
+            <div class="col-12">
+                <h4>Unidades en servicio y sin programación</h4>
+                <hr>
+            </div>
+
+            <div class="col-6">
+                <label for="">
+                    En servicio <br> {{in_service}}/{{in_service_percentage}}%
+                </label>
+                <ngx-charts-bar-horizontal-stacked
+                    *ngIf="'bar-horizontal-stacked' === 'bar-horizontal-stacked'"
+                    class="chart-container"
+                    [view]="[700,100]"
+                    [gradient]="true"
+                    [scheme]="colorSchemeHorizontalChart"
+
+                    [results]="horizontalChart"
 
                 >
-                </ngx-charts-pie-chart>
-            </div>
-            <div class="col-sm table-responsive">
-                <label>Relación de Vehículos</label>
-                <button type="button" class="btn btn-success">cc</button>
+                </ngx-charts-bar-horizontal-stacked>
 
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr class="table-active">
-                                <th>En movimiento</th>
-                                <th>Detenidos</th>
-                                <th>Sin cobertura</th>
-                                <th>Sin transmision</th>
-                                <th>Corte de transmision</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <ul class="list-unstyled">
-                                        <li *ngFor="let imei of imeiGreen">{{ imei }}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul class="list-unstyled">
-                                        <li *ngFor="let imei of imeiBlue">{{ imei }}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul class="list-unstyled">
-                                        <li *ngFor="let imei of imeiOrange">{{ imei }}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul class="list-unstyled">
-                                        <li *ngFor="let imei of imeiBlack">{{ imei }}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul class="list-unstyled">
-                                        <li *ngFor="let imei of imeiRed">{{ imei }}</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <label>
+                    Sin programación <br> {{without_programming}}/{{without_programming_percentage}}%
+                </label>
+
             </div>
-        </div>
-        <br><br>
 
     </div>
 </div>

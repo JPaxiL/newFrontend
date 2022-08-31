@@ -14,6 +14,8 @@ export class AlertService {
 
   public alerts:Alert[] = [];
   public alertEdit:any;
+  public alertsByType: any = [];
+  public panelAlertKey: Number = 0;
 
   constructor(private http: HttpClient) { }
 
@@ -42,6 +44,14 @@ export class AlertService {
     return this.alerts;
   }
 
+  public getDataAll(){
+    return this.alerts;
+  }
+
+  public clearDataAll(){
+    this.alerts = [];
+  }
+
   public async getAllEvents() {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
     let events = response.data;
@@ -56,8 +66,16 @@ export class AlertService {
 
   public async getAlertsByType(type:string){
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts/${type}`).toPromise();
-    let event = response.data;
-    return event;
+    this.alertsByType = response.data;
+    return this.alertsByType;
+  }
+
+  public getDataByType(){
+    return this.alertsByType;
+  }
+
+  public clearDataByType(){
+    this.alertsByType = [];
   }
 
   public async create(alert: any) {

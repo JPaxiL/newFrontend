@@ -30,8 +30,14 @@ export interface AllRows{
     hAlign?: string;
     fontSize?: any;
     colSpan?: number;
+    rowSpan?: number;
     formula?: string;
     wrap?: boolean;
+    borderRight?: { color: string; size: number; };
+    borderLeft?: { color: string; size: number; };
+    borderTop?: { color: string; size: number; };
+    borderBottom?: { color: string; size: number; };
+
   }[];
   height?: number;
 }
@@ -74,22 +80,26 @@ export class ResultComponent implements OnDestroy, OnInit {
   dtRendered = localStorage.getItem("report_data") !== null;
 
   /* EXPORTAR */
-  t1=18; // Titulo Principal
-  t2=16; // Sub titulos
-  t3=14; // Cabeceras
-  c1=12; // Cuerpo
-  r1=12; // RESUMEN
+  t1=14; // Titulo Principal
+  t2=9; // Sub titulos
+  t2_c=9; // Contenido Sub titulos
+  t3=9; // Cabeceras
+  c1=9; // Cuerpo
+  r1=9; // RESUMEN
 
-  t1_2=18; // Titulo Principal
-  tt1_2=16; // Titulo Principal linea 2
-  t2_2=15; // Sub titulos
-  c1_2=12; // Cuerpo del nuevo formato
+  t1_2=14; // Titulo Principal
+  tt1_2=9; // Titulo Principal linea 2
+  t2_2=9; // Sub titulos
+  c1_2=9; // Cuerpo del nuevo formato
 
   /* ANCHOS COLUMNAS */
-  //NOTA: width * 1.28 (aprox) = Ancho de columna en excel
-  w_item = 50; // index
+  w_item = 40; // index
   w_date_hour = 94;
-  w_date_and_hour = 172;
+  w_date = 80;
+  w_hour = 64;
+  w_date_and_hour = 115;
+  w_date_ini_fin= 94;
+  w_hour_ini_fin= 86;
   w_codigo = 80;
   w_placa = 70;
   w_velocidad = 96;
@@ -97,9 +107,11 @@ export class ResultComponent implements OnDestroy, OnInit {
   w_velocidad_gps_can_short = 88;
   w_odometro = 110;
   w_duracion = 173;
-  w_lat_long = 190;
+  w_lat_long = 140;
 
-  char_to_px = 10; // Ancho de un caracter en pixeles
+  //Width de col en px = (ancho de caracter * nro de letras) + 5
+  //char_to_px = 9; // Ancho de un caracter en pixeles, considerando M como la letra más ancha, y tamaño de fuente 9
+  char_to_px = 9; // Ancho de un caracter en pixeles 
 
   isChromium = window.chrome? true:false;
 	winNav = window.navigator;
@@ -115,6 +127,244 @@ export class ResultComponent implements OnDestroy, OnInit {
   modalDetalleRepExcesosEnZona = false;
   detalleExcesosEnZona : any = "";
   tablaString = "";
+
+  headerBackground = '#fff';
+  headerTextColor = '#244062';
+  headerBold: boolean = true;
+  headerRowSpan = 3;
+
+  vehicleHeaderBackground = '#a6a6a6';
+  vehicleHeaderTextColor = '#fff';
+  vehicleHeaderBold: boolean = false;
+  periodHeaderBackground = '#a6a6a6';
+  periodHeaderTextColor = '#fff';
+  periodHeaderBold: boolean = false;
+  rutaHeaderBackground = '#a6a6a6';
+  rutaHeaderTextColor = '#fff';
+  rutaHeaderBold: boolean = false;
+
+  vehicleContentBackground = '#eeece1';
+  vehicleContentTextColor = '#000';
+  vehicleContentBold: boolean = false;
+  periodContentBackground = '#eeece1';
+  periodContentTextColor = '#000';
+  periodContentBold: boolean = false;
+  rutaContentBackground = '#eeece1';
+  rutaContentTextColor = '#000';
+  rutaContentBold: boolean = false;
+
+  subHeaderContentRowSpan = 2;
+  subHeaderContentHeight = 12;
+
+  colsHeaderBackground = '#244062';
+  colsHeaderTextColor = '#fff';
+  colsHeaderBold : boolean = false;
+  freezeRowBorderColor = '#000';
+
+
+  overviewTotalLeftBackground = '#c5d9f1';
+  overviewTotalRightBackground = '#95b3d7';
+  overviewTotalLeftTextColor = '#000';
+  overviewTotalRightTextColor = '#000';
+  overviewTotalLeftBold = false;
+  overviewTotalRightBold = false;
+
+  headersBorderColor = '#fff';
+  headersBorderSize = 1;
+
+  headerRowsHeight = 12;
+  subHeaderRepPosicionHeight = 15;
+  subHeaderHeight = 12;
+  colsHeaderHeight = 18.75;
+  colsHeaderHeightTwoLine = this.colsHeaderHeight * 2 + 2.5;
+  bodyRowsHeight = 12;
+  overviewRowsHeight = this.bodyRowsHeight;
+  
+  excelUnitstoPxRatio = 4/3;
+
+  headerCellConfig = {
+    bold: this.headerBold, 
+    color: this.headerTextColor, 
+    background: this.headerBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t1, 
+    rowSpan: this.headerRowSpan,
+    wrap: true,
+  };
+
+  subHeaderVehicleHeaderConfig = {
+    bold: this.vehicleHeaderBold, 
+    color: this.vehicleHeaderTextColor, 
+    background: this.vehicleHeaderBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t2,
+    borderRight: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    }, 
+    borderLeft: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+    borderTop: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+  };
+  subHeaderPeriodHeaderConfig = {
+    bold: this.periodHeaderBold, 
+    color: this.periodHeaderTextColor, 
+    background: this.periodHeaderBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t2,
+    borderRight: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    }, 
+    borderLeft: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+    borderTop: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+  };
+  subHeaderRutaHeaderConfig = {
+    bold: this.rutaHeaderBold, 
+    color: this.rutaHeaderTextColor, 
+    background: this.rutaHeaderBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t2,
+    borderRight: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    }, 
+    borderLeft: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+    borderTop: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+  };
+
+  subHeaderVehicleContentConfig = {
+    bold: this.vehicleContentBold, 
+    color: this.vehicleContentTextColor, 
+    background: this.vehicleContentBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t2,
+    rowSpan: this.subHeaderContentRowSpan,
+    borderRight: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    }, 
+    borderLeft: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+    borderTop: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+  };
+  subHeaderPeriodContentConfig = {
+    bold: this.periodContentBold, 
+    color: this.periodContentTextColor, 
+    background: this.periodContentBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t2,
+    rowSpan: this.subHeaderContentRowSpan,
+    borderRight: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    }, 
+    borderLeft: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+    borderTop: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+  };
+  subHeaderRutaContentConfig = {
+    bold: this.rutaContentBold, 
+    color: this.rutaContentTextColor, 
+    background: this.rutaContentBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t2,
+    rowSpan: this.subHeaderContentRowSpan,
+    borderRight: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    }, 
+    borderLeft: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+    borderTop: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+  };
+  
+  colHeaderConfig = {
+    bold: this.colsHeaderBold, 
+    color: this.colsHeaderTextColor, 
+    background: this.colsHeaderBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.t3, 
+    borderRight: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    }, 
+    borderLeft: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+    borderTop: { 
+      color: this.headersBorderColor, 
+      size: this.headersBorderSize 
+    },
+  };
+
+  bodyRowsConfig = {
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.c1
+  };
+
+  overviewLeftConfig = {
+    bold: this.overviewTotalLeftBold, 
+    color: this.overviewTotalLeftTextColor, 
+    background: this.overviewTotalLeftBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.r1,
+    colSpan: 3,
+  }
+  overviewRightConfig = {
+    bold: this.overviewTotalRightBold, 
+    color: this.overviewTotalRightTextColor, 
+    background: this.overviewTotalRightBackground, 
+    vAlign: "center", 
+    hAlign: "center", 
+    fontSize: this.r1,
+    colSpan: 2,
+  }
+
+  spaceBetweenTables:any = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -136,6 +386,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     localStorage.removeItem('report_data');
 
     console.log('Iniciando result component');
+    this.calculateRowHeights();
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -255,9 +507,71 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   }
 
+  generateEmptyRowsForRowSpan(rowSpan: number, rowHeight: number){
+    var arr=[];
+    for(let i = 1; i < rowSpan; i++){
+      arr.push({height: rowHeight});
+    }
+    return arr;
+  }
+
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
     localStorage.removeItem('report_data');
+  }
+
+  calculateColWidth(noOfCharacters: number){
+    return (this.char_to_px * noOfCharacters) + 5;
+  }
+
+  calculateRowHeights(){
+    this.headerRowsHeight = this.headerRowsHeight * this.excelUnitstoPxRatio;
+    this.subHeaderRepPosicionHeight = this.subHeaderRepPosicionHeight * this.excelUnitstoPxRatio;
+    this.subHeaderHeight = this.subHeaderHeight * this.excelUnitstoPxRatio;
+    this.colsHeaderHeight = this.colsHeaderHeight * this.excelUnitstoPxRatio;
+    this.bodyRowsHeight = this.bodyRowsHeight * this.excelUnitstoPxRatio;
+    this.overviewRowsHeight = this.overviewRowsHeight * this.excelUnitstoPxRatio;
+    this.spaceBetweenTables = [
+      {
+        height: this.bodyRowsHeight
+      },
+      {
+        height: this.bodyRowsHeight
+      },
+    ];
+  }
+
+  calculateSingleRowHeight(cellContent: string, defaultRowHeight: number){
+    return (cellContent.split("\n").length) * defaultRowHeight;
+  }
+
+  breakParameterColValue(params: string){
+    const paramsArr = params.split('|');
+    var cellContent = '';
+    var tempContent = '';
+    for(let i = 0; i < paramsArr.length; i++){
+      if( this.calculateColWidth((tempContent + '|' + paramsArr[i]).length) > 560 ){
+        if(cellContent == ''){
+          cellContent = tempContent;
+        } else {
+          cellContent = cellContent + "\n" + tempContent;
+        }
+        tempContent = '';
+      }
+      tempContent = tempContent + '|' + paramsArr[i];
+    }
+    cellContent = cellContent + tempContent;
+    return cellContent.substring(1);
+  }
+
+  getChWidth(val1: string){
+    var chWidth1 = val1.split("\n")[0].length;
+    for( let i = 1; i < val1.split("\n").length; i++ ){
+      if( chWidth1 < val1.split("\n")[i].length ){
+        chWidth1 = val1.split("\n")[i].length;
+      }
+    }
+    return chWidth1;
   }
 
   filterMovimientos(a: any[]): any[] {
@@ -486,8 +800,6 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
     var column_config:Columns[] = [];
-    var p_cercano_max_width = 155;
-    var referencia_max_width = 165;
 
     var nom_inf = "REPORTE DE PARADAS Y MOVIMIENTOS";
     /* if (vm.optionUser() == 445 ) {
@@ -495,13 +807,13 @@ export class ResultComponent implements OnDestroy, OnInit {
     } */
 
     var allRows: AllRows[] = [
-        {},
         {
           cells: [
-            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
+            { value: nom_inf, ...this.headerCellConfig, colSpan: 6 }
           ],
-          height: 30,
-        }
+          height: this.headerRowsHeight,
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     var cc = 0;
@@ -510,11 +822,18 @@ export class ResultComponent implements OnDestroy, OnInit {
     var chk_mov:boolean;
     var table_width;
 
+    var estado_cell_ch_width = "Estado".length;
+    var duracion_cell_ch_width = "Duracion".length;
+    var posicion_detenida_cell_ch_width = "Posicion Detenida".length;
+    var recorrido_cell_ch_width = "Recorrido".length;
+    var vel_max_cell_ch_width = "Velocidad Maxima".length;
+    var pc_cell_ch_width = "Punto cercano".length;
+    var vel_promedio_cell_ch_width = "Velocidad Promedio".length;
+    var referencia_cell_ch_width = "Referencia".length;
+
     this.data.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
-        var p_cercano_width = 155;
-        var referencia_width = 165;
 
         bol_datos_ex = true;
 
@@ -537,26 +856,32 @@ export class ResultComponent implements OnDestroy, OnInit {
         var col_spacer = table_width<=5? 0: table_width<=8? 1: 2; */
 
         var rows: AllRows[] = [
-          {},
           {
             cells: [
-              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+              { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
             ],
-            height: 30,
+            height: this.headerRowsHeight,
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + table_data[0][1], bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: vehiculo_width },
-              { value: ruta	,											 bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: ruta==""? 1: ruta_width },
-              { value: "PERIODO : " + this.period,  bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width - (vehiculo_width +(ruta==""? 1:ruta_width)) },
-            /* cells: [
-              { value: "VEHÍCULO : " + data[0][1], bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: vehiculo_width },
-              { value: ruta	,											 bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: col_spacer },
-              { value: "PERIODO : " + this.period,  bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width - (col_spacer + vehiculo_width) }, */
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              //{ value: "RUTA",	...this.subHeaderRutaHeaderConfig, colSpan: ruta==""? 1: ruta_width },
+              //{ value: "PERIODO",  ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - (vehiculo_width +(ruta==""? 1:ruta_width)) },
+              { value: "PERIODO",  ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: table_data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              //{ value: ruta	, ...this.subHeaderRutaContentConfig, colSpan: ruta==""? 1: ruta_width },
+              //{ value: this.period,  ...this.subHeaderPeriodContentConfig, colSpan: table_width - (vehiculo_width +(ruta==""? 1:ruta_width)) },
+              { value: this.period,  ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         console.log("************** DD");
@@ -566,34 +891,35 @@ export class ResultComponent implements OnDestroy, OnInit {
         var cellsCampos = [];
 
         //----------- CABECERA ------------
-        cellsCampos.push({ value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-        cellsCampos.push({ value: "Estado", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Ítem", ...this.colHeaderConfig });
+        cellsCampos.push({ value: "Estado", ...this.colHeaderConfig });
 
         if (this.chkDateHour) {
-          cellsCampos.push({ value: "Fecha de Inicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Hora de Inicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Fecha de Fin", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Hora de Fin", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Fecha de Inicio", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Hora de Inicio", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Fecha de Fin", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Hora de Fin", ...this.colHeaderConfig });
         } else {
-          cellsCampos.push({ value: "Inicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Fin", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Inicio", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Fin", ...this.colHeaderConfig });
         }
 
-        cellsCampos.push({ value: "Duración", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Duración", ...this.colHeaderConfig });
 
         /* if (vm.optionUser() == 445 ) {  cellsCampos.push({ value: "H.Acumuladas", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });  }; */
 
-        if ( table_data[2].Paradas == true) 		{ cellsCampos.push({ value: "Posición detenida", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });  };
-        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Recorrido", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });					};
-        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad máxima", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });		};
-        if ( table_data[2].Paradas == true)			{ cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); 			};
-        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad Promedio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });	};
-        if ( table_data[2].Paradas == true)			{ cellsCampos.push({ value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); 			};
+        if ( table_data[2].Paradas == true) 		{ cellsCampos.push({ value: "Posición detenida", ...this.colHeaderConfig });  };
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Recorrido", ...this.colHeaderConfig });					};
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad máxima", ...this.colHeaderConfig });		};
+        if ( table_data[2].Paradas == true)			{ cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig }); 			};
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad Promedio", ...this.colHeaderConfig });	};
+        if ( table_data[2].Paradas == true)			{ cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig }); 			};
 
         // <td ng-if="dato[2].ubicacion" ><a href="http://maps.google.com/maps?q={{dat.lat.toFixed(6)}},{{dat.lng.toFixed(6)}}&amp;t=m" target="_blank">{{dat.lat.toFixed(6)}},{{dat.lng.toFixed(6)}}</a></td>
 
         rows.push({
-          cells: cellsCampos
+          cells: cellsCampos,
+          height: this.colsHeaderHeight
         });
 
         console.log(table_data[2].Paradas+"   --- x --   "+table_data[2].Movimientos);
@@ -603,49 +929,57 @@ export class ResultComponent implements OnDestroy, OnInit {
           table_data[1].forEach((item: { latitud: number; longitud: number; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; esInt: number; pCercano: any; referencia: any; recorrido: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
                 var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                 var cellsCuerpo = [];
-                p_cercano_width = Math.max(p_cercano_width, item.pCercano.length * this.char_to_px);
-                referencia_width = Math.max(referencia_width, item.referencia.length * this.char_to_px);
 
-                cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                cellsCuerpo.push({ value: item.estado, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                estado_cell_ch_width = Math.max(estado_cell_ch_width, (item.estado??'').toString().length);
+                duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
+                posicion_detenida_cell_ch_width = Math.max(posicion_detenida_cell_ch_width, (ubicacion??'').toString().length);
+                recorrido_cell_ch_width = Math.max(recorrido_cell_ch_width, (item.recorrido??'').toString().length);
+                vel_max_cell_ch_width = Math.max(vel_max_cell_ch_width, (item.maxima_velocidad??'').toString().length);
+                pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.pCercano??'').toString().length);
+                vel_promedio_cell_ch_width = Math.max(vel_promedio_cell_ch_width, (item.vel_promedio??'').toString().length);
+                referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+
+                cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
+                cellsCuerpo.push({ value: item.estado, ...this.bodyRowsConfig });
 
                 if (this.chkDateHour) {
                   // var fh = item.fecha.split(" ");
                   // var fh2 = item.fechasig.split(" ");
 
-                  cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                  cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                  cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                  cellsCuerpo.push({ value: this.isChs(item.fechasig), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                  cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+                  cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
+                  cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+                  cellsCuerpo.push({ value: this.isChs(item.fechasig), format: "hh:mm:ss", ...this.bodyRowsConfig });
 
                 } else {
-                  cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                  cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                  cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+                  cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
                 }
 
-                cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                /* if (vm.optionUser() == 445 ) {  cellsCuerpo.push({ value: item.h_acumuladas, vAlign: "center", hAlign: "center", fontSize: this.c1 });  }; */
+                cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
+                /* if (vm.optionUser() == 445 ) {  cellsCuerpo.push({ value: item.h_acumuladas, ...this.bodyRowsConfig });  }; */
 
                 if (item.esInt == 0) {
-                    cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.pCercano, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.referencia, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                    cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.pCercano, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
                 }
 
                 if (item.esInt == 1) {
-                    cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.recorrido, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.maxima_velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.vel_promedio, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.recorrido, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.maxima_velocidad, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.vel_promedio, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
                 }
 
                 rows.push({
-                  cells:cellsCuerpo
+                  cells: cellsCuerpo,
+                  height: this.bodyRowsHeight
                 });
             });
         }
@@ -656,35 +990,40 @@ export class ResultComponent implements OnDestroy, OnInit {
                 if (item.esInt==0) {
                     var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                     var cellsCuerpo = [];
-                    p_cercano_width = Math.max(p_cercano_width, item.pCercano.length * this.char_to_px);
-                    referencia_width = Math.max(referencia_width, item.referencia.length * this.char_to_px);
 
-                    cellsCuerpo.push({ value: ( Math.floor(index/2) + 1 ), vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.estado, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                    estado_cell_ch_width = Math.max(estado_cell_ch_width, (item.estado??'').toString().length);
+                    duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
+                    posicion_detenida_cell_ch_width = Math.max(posicion_detenida_cell_ch_width, (ubicacion??'').toString().length);
+                    pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.pCercano??'').toString().length);
+                    referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+
+                    cellsCuerpo.push({ value: ( Math.floor(index/2) + 1 ), ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.estado, ...this.bodyRowsConfig });
 
                     if (this.chkDateHour) {
-                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChs(item.fechasig), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChs(item.fechasig), format: "hh:mm:ss", ...this.bodyRowsConfig });
 
                     } else {
-                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
                     }
 
-                    cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    /* if (vm.optionUser() == 445 ) {  cellsCuerpo.push({ value: item.h_acumuladas, vAlign: "center", hAlign: "center", fontSize: this.c1 });  }; */
+                    cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
+                    /* if (vm.optionUser() == 445 ) {  cellsCuerpo.push({ value: item.h_acumuladas, ...this.bodyRowsConfig });  }; */
 
-                    cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    // cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    // cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.pCercano, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    // cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.referencia, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                    cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+                    // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.pCercano, ...this.bodyRowsConfig });
+                    // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
 
                     rows.push({
-                      cells:cellsCuerpo
+                      cells: cellsCuerpo,
+                      height: this.bodyRowsHeight
                     });
                 }
 
@@ -699,31 +1038,38 @@ export class ResultComponent implements OnDestroy, OnInit {
                 if (item.esInt == 1) {
                     var cellsCuerpo = [];
 
-                    cellsCuerpo.push({ value: ( Math.floor(index/2) + 1 ), vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.estado, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                    estado_cell_ch_width = Math.max(estado_cell_ch_width, (item.estado??'').toString().length);
+                    duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
+                    recorrido_cell_ch_width = Math.max(recorrido_cell_ch_width, (item.recorrido??'').toString().length);
+                    vel_max_cell_ch_width = Math.max(vel_max_cell_ch_width, (item.maxima_velocidad??'').toString().length);
+                    vel_promedio_cell_ch_width = Math.max(vel_promedio_cell_ch_width, (item.vel_promedio??'').toString().length);
+
+                    cellsCuerpo.push({ value: ( Math.floor(index/2) + 1 ), ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.estado, ...this.bodyRowsConfig });
 
                     if (this.chkDateHour) {
-                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChs(item.fechasig), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChs(item.fechasig), format: "hh:mm:ss", ...this.bodyRowsConfig });
                     } else {
-                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                      cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+                      cellsCuerpo.push({ value: this.isChe(item.fechasig), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
                     }
 
-                    cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    /* if (vm.optionUser() == 445 ) {  cellsCuerpo.push({ value: item.h_acumuladas, vAlign: "center", hAlign: "center", fontSize: this.c1 });  }; */
+                    cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
+                    /* if (vm.optionUser() == 445 ) {  cellsCuerpo.push({ value: item.h_acumuladas, ...this.bodyRowsConfig });  }; */
 
-                    // cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.recorrido, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.maxima_velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    // cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    cellsCuerpo.push({ value: item.vel_promedio, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                    // cellsCuerpo.push({ value: "--", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                    // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.recorrido, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.maxima_velocidad, ...this.bodyRowsConfig });
+                    // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.vel_promedio, ...this.bodyRowsConfig });
+                    // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
 
                     rows.push({
-                      cells:cellsCuerpo
+                      cells: cellsCuerpo,
+                      height: this.bodyRowsHeight
                     });
                 }
 
@@ -732,36 +1078,42 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //************************** RESUMEN*******************
 
-        rows.push({},
+        rows.push(
+          ...this.spaceBetweenTables,
           {
             cells: [
-              { value: "LONGITUD DE RUTA : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[3][0], vAlign: "center", hAlign: "center", fontSize: this.r1 }
-            ]
+              { value: "Longitud de Ruta : ", ...this.overviewLeftConfig },
+              { value: table_data[3][0], ...this.overviewRightConfig }
+            ],
+            height: this.overviewRowsHeight
           },
           {
             cells: [
-              { value: "DURACIÓN DE MOVIMIENTO : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[3][1], vAlign: "center", hAlign: "center", fontSize: this.r1 }
-            ]
+              { value: "Duración de Movimiento : ", ...this.overviewLeftConfig },
+              { value: table_data[3][1], ...this.overviewRightConfig }
+            ],
+            height: this.overviewRowsHeight
           },
           {
             cells: [
-              { value: "DURACIÓN DETENIDO : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[3][2], vAlign: "center", hAlign: "center", fontSize: this.r1 }
-            ]
+              { value: "Duración Detenido : ", ...this.overviewLeftConfig },
+              { value: table_data[3][2], ...this.overviewRightConfig }
+            ],
+            height: this.overviewRowsHeight
           },
           {
             cells: [
-              { value: "VELOCIDAD MÁS ALTA : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[3][3], vAlign: "center", hAlign: "center", fontSize: this.r1 }
-            ]
+              { value: "Velocidad más Alta : ", ...this.overviewLeftConfig },
+              { value: table_data[3][3], ...this.overviewRightConfig }
+            ],
+            height: this.overviewRowsHeight
           },
           {
             cells: [
-              { value: "VELOCIDAD PROMEDIO : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[3][4], vAlign: "center", hAlign: "center", fontSize: this.r1 }
-            ]
+              { value: "Velocidad Promedio : ", ...this.overviewLeftConfig },
+              { value: table_data[3][4], ...this.overviewRightConfig }
+            ],
+            height: this.overviewRowsHeight
           }
         );
         /* if (vm.optionUser() == 445 ) {
@@ -788,9 +1140,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             chk_par = table_data[2].Paradas;
             chk_mov = table_data[2].Movimientos;
           }
-          p_cercano_max_width = Math.max(p_cercano_max_width, p_cercano_width);
-          referencia_max_width = Math.max(referencia_max_width, referencia_width);
-          rows.splice(1, 1);
+          rows.splice(0, this.headerRowSpan);
+          rows.push(...this.spaceBetweenTables);
           allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -802,14 +1153,14 @@ export class ResultComponent implements OnDestroy, OnInit {
         if( vrs == 1 ){
           column_config = [
             { width: this.w_item },
-            { width: 120 },
+            { width: this.calculateColWidth(estado_cell_ch_width) },
           ];
           if(this.chkDateHour){
             column_config.push(
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
+              { width: this.w_date_ini_fin },
+              { width: this.w_hour_ini_fin },
+              { width: this.w_date_ini_fin },
+              { width: this.w_hour_ini_fin },
             )
           } else {
             column_config.push(
@@ -817,29 +1168,29 @@ export class ResultComponent implements OnDestroy, OnInit {
               { width: this.w_date_and_hour },
             )
           }
-          column_config.push({ width: this.w_duracion});
+          column_config.push({ width: this.calculateColWidth(duracion_cell_ch_width) });
           if( table_data[2].Paradas && table_data[2].Movimientos ){
             column_config.push(
-              { width: 190 },
-              { width: 90 },
-              { width: 150 },
-              { width: Math.floor( p_cercano_width / 1.28 ) },
-              { width: 165 },
-              { width: Math.floor( referencia_width / 1.28 ) },
+              { width: this.calculateColWidth(posicion_detenida_cell_ch_width) },
+              { width: this.calculateColWidth(recorrido_cell_ch_width) },
+              { width: this.calculateColWidth(vel_max_cell_ch_width) },
+              { width: this.calculateColWidth(pc_cell_ch_width) },
+              { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
+              { width: this.calculateColWidth(referencia_cell_ch_width) },
             )
           }
           if( !table_data[2].Paradas && table_data[2].Movimientos ){
             column_config.push(
-              { width: 90 },
-              { width: 150 },
-              { width: 165 },
+              { width: this.calculateColWidth(recorrido_cell_ch_width) },
+              { width: this.calculateColWidth(vel_max_cell_ch_width) },
+              { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
             )
           }
           if( table_data[2].Paradas && !table_data[2].Movimientos ){
             column_config.push(
-              { width: this.w_lat_long },
-              { width: Math.floor( p_cercano_width / 1.28 ) },
-              { width: Math.floor( referencia_width / 1.28 ) },
+              { width: this.calculateColWidth(posicion_detenida_cell_ch_width) },
+              { width: this.calculateColWidth(pc_cell_ch_width) },
+              { width: this.calculateColWidth(referencia_cell_ch_width) },
             )
           }
 
@@ -847,12 +1198,21 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           exportFileEx.push({
             freezePane: {
-                rowSplit: 6
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
               },
             columns: column_config,
             title: nom_vehi,
             rows: rows
           });
+
+          estado_cell_ch_width = "Estado".length;
+          duracion_cell_ch_width = "Duracion".length;
+          posicion_detenida_cell_ch_width = "Posicion Detenida".length;
+          recorrido_cell_ch_width = "Recorrido".length;
+          vel_max_cell_ch_width = "Velocidad Maxima".length;
+          pc_cell_ch_width = "Punto cercano".length;
+          vel_promedio_cell_ch_width = "Velocidad Promedio".length;
+          referencia_cell_ch_width = "Referencia".length;
         }
 
         // //********************************************* excel version 1 *********************************
@@ -864,18 +1224,18 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      allRows[1].cells![0].colSpan = table_width;
+      allRows[0].cells![0].colSpan = table_width;
 
       column_config = [
         { width: this.w_item },
-        { width: 120 },
+        { width: this.calculateColWidth(estado_cell_ch_width) },
       ];
       if(this.chkDateHour){
         column_config.push(
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
+          { width: this.w_date_ini_fin },
+          { width: this.w_hour_ini_fin },
+          { width: this.w_date_ini_fin },
+          { width: this.w_hour_ini_fin },
         )
       } else {
         column_config.push(
@@ -886,32 +1246,32 @@ export class ResultComponent implements OnDestroy, OnInit {
       column_config.push({ width: this.w_duracion});
       if( chk_par! && chk_mov! ){
         column_config.push(
-          { width: 190 },
-          { width: 90 },
-          { width: 150 },
-          { width: Math.floor( p_cercano_max_width / 1.28 ) },
-          { width: 165 },
-          { width: Math.floor( referencia_max_width / 1.28 ) },
+          { width: this.calculateColWidth(posicion_detenida_cell_ch_width) },
+          { width: this.calculateColWidth(recorrido_cell_ch_width) },
+          { width: this.calculateColWidth(vel_max_cell_ch_width) },
+          { width: this.calculateColWidth(pc_cell_ch_width) },
+          { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
+          { width: this.calculateColWidth(referencia_cell_ch_width) },
         )
       }
       if( !chk_par! && chk_mov! ){
         column_config.push(
-          { width: 90 },
-          { width: 150 },
-          { width: 165 },
+          { width: this.calculateColWidth(recorrido_cell_ch_width) },
+          { width: this.calculateColWidth(vel_max_cell_ch_width) },
+          { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
         )
       }
       if( chk_par! && !chk_mov! ){
         column_config.push(
-          { width: this.w_lat_long },
-          { width: Math.floor( p_cercano_max_width / 1.28 ) },
-          { width: Math.floor( referencia_max_width / 1.28 ) },
+          { width: this.calculateColWidth(posicion_detenida_cell_ch_width) },
+          { width: this.calculateColWidth(pc_cell_ch_width) },
+          { width: this.calculateColWidth(referencia_cell_ch_width) },
         )
       }
 
       exportFileEx.push({
         freezePane: {
-            rowSplit: 2
+            rowSplit: this.headerRowSpan
           },
         columns: column_config,
         title: "Resultado",//data[0][1],
@@ -919,7 +1279,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       });
         /* exportFileEx.push({
           freezePane: {
-              rowSplit: 2
+              rowSplit: this.headerRowSpan
             },
           columns: [
             { width: 50 },{ autoWidth: true },{ autoWidth: true },{ autoWidth: true },{ autoWidth: true },
@@ -964,22 +1324,34 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
     var column_config:Columns[] = [];
-    var p_cercano_max_width = 155;
-    var z_cercana_max_width = 165;
 
+    var nombre_cell_ch_width = "Nombre".length;
+    var duracion_cell_ch_width = "Duracion".length;
+    var cant_tramas_cell_ch_width = "Cant. de Tramas".length;
+    var tramas_cell_ch_width = "Tramas".length;
+    var vel_min_cell_ch_width = "Vel. Min".length;
+    var vel_max_cell_ch_width = "Vel. Max".length;
+    var pc_cell_ch_width = "Punto cercano".length;
+    var zc_cell_ch_width = "Zona Cercana".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+    var max_vel_cell_ch_width = "Maxima velocidad".length;
+
+    var table_width = this.chkDuracion? (1 + (this.chkDateHour? 4:2) + 8): (2 + (this.chkDateHour? 2:1) + 3);
+    var vehiculo_width = this.chkDuracion? ((this.chkDateHour? 6:4)): (this.chkDateHour? 4:3);
+    
     var nom_inf = "REPORTE DE EXCESOS DE VELOCIDAD";
 
-    var allRows: AllRows[] = [
-        {},
+    var allRows: AllRows[] = [        
         {
           cells: [
-            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
+            { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
           ],
-          height: 30,
-        }
+          height: this.headerRowsHeight,
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
-    var table_width;
+    
 
     this.data.forEach((table_data: any) => {
       if(table_data[1].length > 0){
@@ -1000,28 +1372,31 @@ export class ResultComponent implements OnDestroy, OnInit {
             }
         } */
 
-        table_width = this.chkDuracion? (1 + (this.chkDateHour? 4:2) + 8): (2 + (this.chkDateHour? 2:1) + 3);
-        var vehiculo_width = this.chkDuracion? ((this.chkDateHour? 6:4)): (this.chkDateHour? 4:3);
-
-
         /* Table Header */
 
         var rows: AllRows[] = [
-          {},
           {
             cells: [
-              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+              { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
             ],
-            height: 36,
+            height: this.headerRowsHeight,
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + table_data[0][1], bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: vehiculo_width },
-              { value: "PERIODO : " + this.period,  bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width - vehiculo_width },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO",  ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight,
           },
-          {}
+          {
+            cells: [
+              { value: table_data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width, rowSpan: this.subHeaderContentRowSpan },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width, rowSpan: this.subHeaderContentRowSpan },
+            ],
+            height: this.subHeaderContentHeight,
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         /* Table Body */
@@ -1031,47 +1406,47 @@ export class ResultComponent implements OnDestroy, OnInit {
         //----------- CABECERA ------------
         if(this.chkDuracion){
 
-          cellsCampos.push({ value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Ítem", ...this.colHeaderConfig });
           if (this.chkDateHour) {
-            cellsCampos.push({ value: "Fecha de Inicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-            cellsCampos.push({ value: "Hora de Inicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-            cellsCampos.push({ value: "Fecha de Fin", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-            cellsCampos.push({ value: "Hora de Fin", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Fecha de Inicio", ...this.colHeaderConfig });
+            cellsCampos.push({ value: "Hora de Inicio", ...this.colHeaderConfig });
+            cellsCampos.push({ value: "Fecha de Fin", ...this.colHeaderConfig });
+            cellsCampos.push({ value: "Hora de Fin", ...this.colHeaderConfig });
           } else {
-            cellsCampos.push({ value: "Inicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-            cellsCampos.push({ value: "Fin", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Inicio", ...this.colHeaderConfig });
+            cellsCampos.push({ value: "Fin", ...this.colHeaderConfig });
           }
 
-          cellsCampos.push({ value: "Duración", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Cant. de Tramas", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-          cellsCampos.push({ value: "Tramas", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Vel. Min.", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Vel. Máx.", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Zona Cercana", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Duración", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Cant. de Tramas", ...this.colHeaderConfig, wrap: true });
+          cellsCampos.push({ value: "Tramas", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Vel. Min.", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Vel. Máx.", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Zona Cercana", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig });
 
         } else {
 
-          cellsCampos.push({ value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Nombre", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Ítem", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Nombre", ...this.colHeaderConfig });
 
           if (this.chkDateHour) {
-            cellsCampos.push({ value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-            cellsCampos.push({ value: "Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Fecha", ...this.colHeaderConfig });
+            cellsCampos.push({ value: "Hora", ...this.colHeaderConfig });
           } else {
-            cellsCampos.push({ value: "Fecha y Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Fecha y Hora", ...this.colHeaderConfig });
           }
 
-          cellsCampos.push({ value: "Máxima Velocidad", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Máxima Velocidad", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig });
 
         }
 
         rows.push({
           cells: cellsCampos,
-          height: 50,
+          height: this.colsHeaderHeight,
         });
 
         //----------- CONTENIDO / FILAS ------------
@@ -1082,31 +1457,41 @@ export class ResultComponent implements OnDestroy, OnInit {
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
             var cellsCuerpo = [];
 
+            duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
+            cant_tramas_cell_ch_width = Math.max(cant_tramas_cell_ch_width, (item.cant_tramas??'').toString().length);
+            tramas_cell_ch_width = Math.max(tramas_cell_ch_width, (item.string_tramas??'').toString().length);
+            vel_min_cell_ch_width = Math.max(vel_min_cell_ch_width, (item.vel_min??'').toString().length);
+            vel_max_cell_ch_width = Math.max(vel_max_cell_ch_width, (item.vel_max??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            zc_cell_ch_width = Math.max(zc_cell_ch_width, (item.ZC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
             z_cercana_width = Math.max(z_cercana_width, item.ZC.length * this.char_to_px);
 
-            cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
 
             if (this.chkDateHour) {
-              cellsCuerpo.push({ value: this.isChe(item.fecha_inicial), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-              cellsCuerpo.push({ value: this.isChs(item.fecha_inicial), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-              cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-              cellsCuerpo.push({ value: this.isChs(item.fecha_final), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              cellsCuerpo.push({ value: this.isChe(item.fecha_inicial), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+              cellsCuerpo.push({ value: this.isChs(item.fecha_inicial), format: "hh:mm:ss", ...this.bodyRowsConfig });
+              cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+              cellsCuerpo.push({ value: this.isChs(item.fecha_final), format: "hh:mm:ss", ...this.bodyRowsConfig });
             } else {
-              cellsCuerpo.push({ value: this.isChe(item.fecha_inicial), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-              cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              cellsCuerpo.push({ value: this.isChe(item.fecha_inicial), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+              cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
             }
-            cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.cant_tramas, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.string_tramas, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.vel_min, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.vel_max, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.ZC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.cant_tramas, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.string_tramas, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.vel_min, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.vel_max, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.ZC, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
 
             rows.push({
-              cells:cellsCuerpo
+              cells:cellsCuerpo,
+              height: this.bodyRowsHeight,
             });
           });
 
@@ -1116,35 +1501,39 @@ export class ResultComponent implements OnDestroy, OnInit {
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
             var cellsCuerpo = [];
 
+            nombre_cell_ch_width = Math.max(nombre_cell_ch_width, (item.nombre??'').toString().length);
+            max_vel_cell_ch_width = Math.max(max_vel_cell_ch_width, (item.maxima_velocidad??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+
             p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
 
-            cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.nombre, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.nombre, ...this.bodyRowsConfig });
 
             if (this.chkDateHour) {
-              cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-              cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+              cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
             } else {
-              cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
             }
-            cellsCuerpo.push({ value: item.maxima_velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.maxima_velocidad, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
 
             rows.push({
-              cells:cellsCuerpo
+              cells:cellsCuerpo,
+              height: this.bodyRowsHeight,
             });
           });
 
         }
 
 
-
         // //********************************************* excel version 2 *********************************
         if ( vrs == 2 ) {
-          p_cercano_max_width = Math.max(p_cercano_max_width, p_cercano_width);
-          z_cercana_max_width = Math.max(z_cercana_max_width, z_cercana_width);
-          rows.splice(1, 1);
+          rows.splice(0, this.headerRowSpan);
+          rows.push(...this.spaceBetweenTables);
           allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -1161,10 +1550,10 @@ export class ResultComponent implements OnDestroy, OnInit {
             ];
             if(this.chkDateHour){
               column_config.push(
-                { width: this.w_date_hour },
-                { width: this.w_date_hour },
-                { width: this.w_date_hour },
-                { width: this.w_date_hour },
+                { width: this.w_date_ini_fin },
+                { width: this.w_hour_ini_fin },
+                { width: this.w_date_ini_fin },
+                { width: this.w_hour_ini_fin },
               )
             } else {
               column_config.push(
@@ -1173,26 +1562,26 @@ export class ResultComponent implements OnDestroy, OnInit {
               )
             }
             column_config.push(
-              { width: 120 },
-              { width: 120 },
-              { width: 600 },
-              { width: 120 },
-              { width: 120 },
-              { width: Math.floor(p_cercano_width / 1.28) },
-              { width: Math.floor(z_cercana_width / 1.28) },
-              { width: this.w_lat_long },
+              { width: this.calculateColWidth(duracion_cell_ch_width) },
+              { width: this.calculateColWidth(cant_tramas_cell_ch_width) },
+              { width: this.calculateColWidth(tramas_cell_ch_width) },
+              { width: this.calculateColWidth(vel_min_cell_ch_width) },
+              { width: this.calculateColWidth(vel_max_cell_ch_width) },
+              { width: this.calculateColWidth(pc_cell_ch_width) },
+              { width: this.calculateColWidth(zc_cell_ch_width) },
+              { width: this.calculateColWidth(ubicacion_cell_ch_width) },
             )
 
           } else {
 
             column_config = [
               { width: this.w_item },
-              { width: 120 },
+              { width: this.calculateColWidth(nombre_cell_ch_width) },
             ];
             if(this.chkDateHour){
               column_config.push(
-                { width: this.w_date_hour },
-                { width: this.w_date_hour },
+                { width: this.w_date },
+                { width: this.w_hour },
               )
             } else {
               column_config.push(
@@ -1200,9 +1589,9 @@ export class ResultComponent implements OnDestroy, OnInit {
               )
             }
             column_config.push(
-              { width: 160 },
-              { width: this.w_lat_long },
-              { width: Math.floor( p_cercano_width / 1.28 ) },
+              { width: this.calculateColWidth(max_vel_cell_ch_width) },
+              { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+              { width: this.calculateColWidth(pc_cell_ch_width) },
             )
 
           }
@@ -1211,12 +1600,24 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           exportFileEx.push({
             freezePane: {
-                rowSplit: 6
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
               },
             columns: column_config,
             title: nom_vehi,
             rows: rows
           });
+
+          nombre_cell_ch_width = "Nombre".length;
+          duracion_cell_ch_width = "Duracion".length;
+          cant_tramas_cell_ch_width = "Cant. de Tramas".length;
+          tramas_cell_ch_width = "Tramas".length;
+          vel_min_cell_ch_width = "Vel. Min".length;
+          vel_max_cell_ch_width = "Vel. Max".length;
+          pc_cell_ch_width = "Punto cercano".length;
+          zc_cell_ch_width = "Zona Cercana".length;
+          ubicacion_cell_ch_width = "Ubicacion".length;
+          max_vel_cell_ch_width = "Maxima velocidad".length;
+          
         }
         // //********************************************* excel version 1 *********************************
 
@@ -1229,7 +1630,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      allRows[1].cells![0].colSpan = table_width;
+      allRows[0].cells![0].colSpan = table_width;
 
       if(this.chkDuracion){
 
@@ -1238,10 +1639,10 @@ export class ResultComponent implements OnDestroy, OnInit {
         ];
         if(this.chkDateHour){
           column_config.push(
-            { width: this.w_date_hour },
-            { width: this.w_date_hour },
-            { width: this.w_date_hour },
-            { width: this.w_date_hour },
+            { width: this.w_date_ini_fin },
+            { width: this.w_hour_ini_fin },
+            { width: this.w_date_ini_fin },
+            { width: this.w_hour_ini_fin },
           )
         } else {
           column_config.push(
@@ -1250,26 +1651,26 @@ export class ResultComponent implements OnDestroy, OnInit {
           )
         }
         column_config.push(
-          { width: 120 },
-          { width: 120 },
-          { width: 400 },
-          { width: 120 },
-          { width: 120 },
-          { width: Math.floor(p_cercano_max_width / 1.28) },
-          { width: Math.floor(z_cercana_max_width / 1.28) },
-          { width: this.w_lat_long },
+          { width: this.calculateColWidth(duracion_cell_ch_width) },
+          { width: this.calculateColWidth(cant_tramas_cell_ch_width) },
+          { width: this.calculateColWidth(tramas_cell_ch_width) },
+          { width: this.calculateColWidth(vel_min_cell_ch_width) },
+          { width: this.calculateColWidth(vel_max_cell_ch_width) },
+          { width: this.calculateColWidth(pc_cell_ch_width) },
+          { width: this.calculateColWidth(zc_cell_ch_width) },
+          { width: this.calculateColWidth(ubicacion_cell_ch_width) },
         )
 
       } else {
 
         column_config = [
           { width: this.w_item },
-          { width: 120 },
+          { width: this.calculateColWidth(nombre_cell_ch_width) },
         ];
         if(this.chkDateHour){
           column_config.push(
-            { width: this.w_date_hour },
-            { width: this.w_date_hour },
+            { width: this.w_date },
+            { width: this.w_hour },
           )
         } else {
           column_config.push(
@@ -1277,16 +1678,16 @@ export class ResultComponent implements OnDestroy, OnInit {
           )
         }
         column_config.push(
-          { width: 160 },
-          { width: this.w_lat_long },
-          { width: Math.floor( p_cercano_max_width / 1.28 ) },
+          { width: this.calculateColWidth(max_vel_cell_ch_width) },
+          { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+          { width: this.calculateColWidth(pc_cell_ch_width) },
         )
 
       }
 
       exportFileEx.push({
         freezePane: {
-            rowSplit: 2
+            rowSplit: this.headerRowSpan
           },
         columns: column_config,
         title: "Resultado",//data[0][1],
@@ -1323,55 +1724,65 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
     var column_config:Columns[] = [];
-    var p_cercano_max_width = 155;
-    var z_nombre_max_width = 165;
+
+    var duracion_cell_ch_width = "Duracion".length;
+    var zone_name_cell_ch_width = "Nombre de Zona".length;
+    var zone_position_cell_ch_width = "Posicion de Zona".length;
+    var pc_cell_ch_width = "Punto cercano".length;
+    var date_cell_px_width = 100; //en px
+    var hour_cell_px_width = 94; //en px
 
     var nom_inf = "REPORTE DE ENTRADA Y SALIDA";
 
     var allRows: AllRows[] = [
-        {},
         {
           cells: [
-            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
+            { value: nom_inf, ...this.headerCellConfig, colSpan: 3 }
           ],
-          height: 30,
-        }
+          height: this.headerRowsHeight,
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
-    var table_width;
+    var table_width = 1 + (this.chkDateHour? 4:2) + 4;
+    var vehiculo_width = (this.chkDateHour? 4:3);
 
     this.data.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
-        var p_cercano_width = 155;
-        var z_nombre_width = 165;
 
         bol_datos_ex = true;
 
         var nom_vehi = table_data[0][1];
 
-        table_width = 1 + (this.chkDateHour? 4:2) + 4;
-        var vehiculo_width = (this.chkDateHour? 4:3);
+        
 
 
         /* Table Header */
 
         var rows: AllRows[] = [
-          {},
           {
             cells: [
-              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+              { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
             ],
-            height: 36,
+            height: this.headerRowsHeight,
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + table_data[0][1], bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: vehiculo_width },
-              { value: "PERIODO : " + this.period,  bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width - vehiculo_width },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO",  ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: table_data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         /* Table Body */
@@ -1379,25 +1790,26 @@ export class ResultComponent implements OnDestroy, OnInit {
         var cellsCampos = [];
 
         //----------- CABECERA ------------
-        cellsCampos.push({ value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Ítem", ...this.colHeaderConfig });
 
         if (this.chkDateHour) {
-          cellsCampos.push({ value: "Fecha de Entrada", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Hora de Entrada", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Fecha de Salida", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Hora de Salida", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Fecha de Entrada", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Hora de Entrada", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Fecha de Salida", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Hora de Salida", ...this.colHeaderConfig });
         } else {
-          cellsCampos.push({ value: "Fecha de Entrada", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Fecha de Salida", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Fecha de Entrada", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Fecha de Salida", ...this.colHeaderConfig });
         }
 
-        cellsCampos.push({ value: "Duración", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-        cellsCampos.push({ value: "Nombre de Zona", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-        cellsCampos.push({ value: "Posición de Zona", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-        cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Duración", ...this.colHeaderConfig });
+        cellsCampos.push({ value: "Nombre de Zona", ...this.colHeaderConfig });
+        cellsCampos.push({ value: "Posición de Zona", ...this.colHeaderConfig });
+        cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig });
 
         rows.push({
           cells: cellsCampos,
+          height: this.colsHeaderHeight
         });
 
         //----------- CONTENIDO / FILAS ------------
@@ -1406,35 +1818,37 @@ export class ResultComponent implements OnDestroy, OnInit {
           var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
           var cellsCuerpo = [];
 
-          p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
-          z_nombre_width = Math.max(z_nombre_width, item.nombre_zona.length * this.char_to_px);
+          duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
+          zone_name_cell_ch_width = Math.max(zone_name_cell_ch_width, (item.nombre_zona??'').toString().length);
+          zone_position_cell_ch_width = Math.max(zone_position_cell_ch_width, (ubicacion??'').toString().length);
+          pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
 
-          cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
 
           if (this.chkDateHour) {
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: this.isChe(item.fecha_out), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: this.isChs(item.fecha_out), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChe(item.fecha_out), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChs(item.fecha_out), format: "hh:mm:ss", ...this.bodyRowsConfig });
           } else {
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: this.isChe(item.fecha_out), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChe(item.fecha_out), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
           }
-          cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.nombre_zona, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
 
           rows.push({
-            cells:cellsCuerpo
+            cells:cellsCuerpo,
+            height: this.bodyRowsHeight,
           });
         });
 
         // //********************************************* excel version 2 *********************************
         if ( vrs == 2 ) {
-          p_cercano_max_width = Math.max(p_cercano_max_width, p_cercano_width);
-          z_nombre_max_width = Math.max(z_nombre_max_width, z_nombre_width);
-          rows.splice(1, 1);
+          rows.splice(0, this.headerRowSpan);
+          rows.push(...this.spaceBetweenTables);
           allRows = allRows.concat(rows);
         }
 
@@ -1448,10 +1862,10 @@ export class ResultComponent implements OnDestroy, OnInit {
           ];
           if(this.chkDateHour){
             column_config.push(
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
+              { width: date_cell_px_width },
+              { width: hour_cell_px_width },
+              { width: date_cell_px_width },
+              { width: hour_cell_px_width },
             )
           } else {
             column_config.push(
@@ -1460,22 +1874,28 @@ export class ResultComponent implements OnDestroy, OnInit {
             )
           }
           column_config.push(
-            { width: 120 },
-            { width: Math.floor(z_nombre_width / 1.28) },
-            { width: this.w_lat_long },
-            { width: Math.floor(p_cercano_width / 1.28) },
+            { width: this.calculateColWidth(duracion_cell_ch_width) },
+            { width: this.calculateColWidth(zone_name_cell_ch_width) },
+            { width: this.calculateColWidth(zone_position_cell_ch_width) },
+            { width: this.calculateColWidth(pc_cell_ch_width) },
           );
 
           /* Fin Ancho de Columnas */
 
           exportFileEx.push({
             freezePane: {
-                rowSplit: 6
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
               },
             columns: column_config,
             title: nom_vehi,
             rows: rows
           });
+
+          duracion_cell_ch_width = "Duracion".length;
+          zone_name_cell_ch_width = "Nombre de Zona".length;
+          zone_position_cell_ch_width = "Posicion de Zona".length;
+          pc_cell_ch_width = "Punto cercano".length;
+
         }
 
       } // if si hay datos del vehiculo
@@ -1485,17 +1905,17 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      allRows[1].cells![0].colSpan = table_width;
+      allRows[0].cells![0].colSpan = table_width;
 
       column_config = [
         { width: this.w_item },
       ];
       if(this.chkDateHour){
         column_config.push(
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
+          { width: date_cell_px_width },
+          { width: hour_cell_px_width },
+          { width: date_cell_px_width },
+          { width: hour_cell_px_width },
         )
       } else {
         column_config.push(
@@ -1504,15 +1924,15 @@ export class ResultComponent implements OnDestroy, OnInit {
         )
       }
       column_config.push(
-        { width: 120 },
-        { width: Math.floor(z_nombre_max_width / 1.28) },
-        { width: this.w_lat_long },
-        { width: Math.floor(p_cercano_max_width / 1.28) },
+        { width: this.calculateColWidth(duracion_cell_ch_width) },
+        { width: this.calculateColWidth(zone_name_cell_ch_width) },
+        { width: this.calculateColWidth(zone_position_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
       );
 
       exportFileEx.push({
         freezePane: {
-            rowSplit: 2
+            rowSplit: this.headerRowSpan
           },
         columns: column_config,
         title: "Resultado",//data[0][1],
@@ -1553,18 +1973,32 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nom_inf = "REPORTE DE COMBUSTIBLE";
 
     var allRows: AllRows[] = [
-        {},
         {
           cells: [
-            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
+            { value: nom_inf, ...this.headerCellConfig, colSpan: 3 }
           ],
-          height: 30,
-        }
+          height: this.headerRowsHeight,
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     var cc = 0;
 
-    var table_width;
+    var velocidad_cell_ch_width = "Velocidad".length;
+    var nivel_comb_cell_ch_width = "combustible".length;
+    var consumo_litros_cell_ch_width = "Combustible litros".length;
+    var consumo_hrfc_cell_ch_width = "Consumo HRFC".length;
+    var combustible_restante_cell_ch_width = "Restante (galones)".length;
+    var contacto_motor_cell_ch_width = "Contacto".length;
+    var odometro_cell_ch_width = "Odometro".length;
+    var ubicacion_cell_ch_width = "Ubicación".length;
+    var mensaje_alerta_cell_ch_width = "de Alerta".length;
+    var combustible_alerta_cell_ch_width = "Alerta galones".length;
+    var can_rpm_cell_ch_width = "can_rpm".length;
+    var altitud_cell_ch_width = "Altitud".length;
+
+    var table_width = 1 + (this.chkDateHour? 2:1) + 12;
+    var vehiculo_width = (this.chkDateHour? 7:5);
 
     this.data.forEach((table_data: any) => {
       if(table_data[1].length > 0){
@@ -1574,28 +2008,32 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         var nom_vehi = table_data[0][1];
 
-        table_width = 1 + (this.chkDateHour? 2:1) + 12;
-        var vehiculo_width = (this.chkDateHour? 7:5);
-
 
         /* Table Header */
 
         var rows: AllRows[] = [
-          {},
           {
             cells: [
-              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+              { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
             ],
-            height: 36,
+            height: this.headerRowsHeight,
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + table_data[0][1], bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: vehiculo_width },
-              { value: "PERIODO : " + this.period,  bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width - vehiculo_width },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO",  ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: table_data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period,  ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         /* Table Body */
@@ -1603,34 +2041,35 @@ export class ResultComponent implements OnDestroy, OnInit {
         var cellsCampos = [];
 
         //----------- CABECERA ------------
-        cellsCampos.push({ value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Ítem", ...this.colHeaderConfig });
 
-        cellsCampos.push({ value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Fecha", ...this.colHeaderConfig });
         if (this.chkDateHour) {
-          cellsCampos.push({ value: "Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Hora", ...this.colHeaderConfig });
         }
 
-        cellsCampos.push({ value: "Velocidad (km/h)", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Nivel de Combustible", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Consumo de Combustible (litros)", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Consumo HRFC (litros)", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Combustible Restante (galones)", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Contacto de Motor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
+        cellsCampos.push({ value: "Velocidad (km/h)", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Nivel de Combustible", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Consumo de Combustible (litros)", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Consumo HRFC (litros)", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Combustible Restante (galones)", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Contacto de Motor", ...this.colHeaderConfig, wrap: true });
 
         if(this.chkOdomV){
-          cellsCampos.push({ value: "Odómetro Virtual", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
+          cellsCampos.push({ value: "Odómetro Virtual", ...this.colHeaderConfig, wrap: true });
         } else {
-          cellsCampos.push({ value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3});
+          cellsCampos.push({ value: "Odómetro", ...this.colHeaderConfig});
         }
 
-        cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3});
-        cellsCampos.push({ value: "Mensaje de Alerta", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true});
-        cellsCampos.push({ value: "Combustible Alerta (galones)", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true});
-        cellsCampos.push({ value: "can_rpm", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3});
-        cellsCampos.push({ value: "Altitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3});
+        cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig});
+        cellsCampos.push({ value: "Mensaje de Alerta", ...this.colHeaderConfig, wrap: true});
+        cellsCampos.push({ value: "Combustible Alerta (galones)", ...this.colHeaderConfig, wrap: true});
+        cellsCampos.push({ value: "can_rpm", ...this.colHeaderConfig});
+        cellsCampos.push({ value: "Altitud", ...this.colHeaderConfig});
 
         rows.push({
           cells: cellsCampos,
+          height: this.colsHeaderHeightTwoLine
         });
 
         //----------- CONTENIDO / FILAS ------------
@@ -1639,62 +2078,82 @@ export class ResultComponent implements OnDestroy, OnInit {
           var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
           var cellsCuerpo = [];
 
-          cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          velocidad_cell_ch_width = Math.max(velocidad_cell_ch_width, (item.can_speed??'').toString().length);
+          nivel_comb_cell_ch_width = Math.max(nivel_comb_cell_ch_width, ((this.isNumber(item.fuel_level)? item.fuel_level.toFixed(2): item.fuel_level)??'').toString().length);
+          consumo_litros_cell_ch_width = Math.max(consumo_litros_cell_ch_width, (item.fuel_level??'').toString().length);
+          consumo_hrfc_cell_ch_width = Math.max(consumo_hrfc_cell_ch_width, (item.can_HRFC??'').toString().length);
+          combustible_restante_cell_ch_width = Math.max(combustible_restante_cell_ch_width, (item.combusrestante??'').toString().length);
+          contacto_motor_cell_ch_width = Math.max(contacto_motor_cell_ch_width, ((item.di4 == 0? 'Cerrado': (item.di4 == 1? 'Abierto': '-'))??'').toString().length);
+          odometro_cell_ch_width = Math.max(odometro_cell_ch_width, ((this.isNumber(item.can_dist)? item.can_dist.toFixed(2): item.can_dist)??'').toString().length);
+          ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+          mensaje_alerta_cell_ch_width = Math.max(mensaje_alerta_cell_ch_width, (item.alerta??'').toString().length);
+          combustible_alerta_cell_ch_width = Math.max(combustible_alerta_cell_ch_width, (item.combustiblealerta??'').toString().length);
+          can_rpm_cell_ch_width = Math.max(can_rpm_cell_ch_width, (item.can_rpm??'').toString().length);
+          altitud_cell_ch_width = Math.max(altitud_cell_ch_width, (item.altitude??'').toString().length);
+
+          cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
 
           if (this.chkDateHour) {
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
           } else {
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
           }
-          cellsCuerpo.push({ value: item.can_speed, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: this.isNumber(item.fuel_level)? item.fuel_level.toFixed(2): item.fuel_level, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.fuel_used, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.can_HRFC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.combusrestante, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.di4 == 0? 'Cerrado': (item.di4 == 1? 'Abierto': '-'), vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: this.isNumber(item.can_dist)? item.can_dist.toFixed(2): item.can_dist, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.alerta, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.combustiblealerta, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.can_rpm, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.altitude, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: item.can_speed, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: this.isNumber(item.fuel_level)? item.fuel_level.toFixed(2): item.fuel_level, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.fuel_used, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.can_HRFC, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.combusrestante, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.di4 == 0? 'Cerrado': (item.di4 == 1? 'Abierto': '-'), ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: this.isNumber(item.can_dist)? item.can_dist.toFixed(2): item.can_dist, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.alerta, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.combustiblealerta, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.can_rpm, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.altitude, ...this.bodyRowsConfig });
 
           rows.push({
-            cells:cellsCuerpo
+            cells:cellsCuerpo,
+            height: this.bodyRowsHeight,
           });
         });
 
-        rows.push({},
+        rows.push(
+          ...this.spaceBetweenTables,
           {
             cells: [
-              { value: "TOTAL DE DISTANCIA RECORRIDA : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[2][0], vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 2 }
-            ]
+              { value: "TOTAL DE DISTANCIA RECORRIDA : ", ...this.overviewLeftConfig, colSpan: 4 },
+              { value: table_data[2][0], ...this.overviewRightConfig, colSpan: 2 }
+            ],
+            height: this.overviewRowsHeight
           },
           {
             cells: [
-              { value: "TOTAL DE COMBUSTIBLE CONSUMIDO : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[2][1], vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 2 }
-            ]
+              { value: "TOTAL DE COMBUSTIBLE CONSUMIDO : ", ...this.overviewLeftConfig, colSpan: 4 },
+              { value: table_data[2][1], ...this.overviewRightConfig, colSpan: 2 }
+            ],
+            height: this.overviewRowsHeight
           },
           {
             cells: [
-              { value: "TOTAL DE COMBUSTIBLE HRFC CONSUMIDO : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[2][2], vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 2 }
-            ]
+              { value: "TOTAL DE COMBUSTIBLE HRFC CONSUMIDO : ", ...this.overviewLeftConfig, colSpan: 4 },
+              { value: table_data[2][2], ...this.overviewRightConfig, colSpan: 2 }
+            ],
+            height: this.overviewRowsHeight
           },
           {
             cells: [
-              { value: "RENDIMIENTO POR GALÓN : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-              { value: table_data[2][3], vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 2 }
-            ]
+              { value: "RENDIMIENTO POR GALÓN : ", ...this.overviewLeftConfig, colSpan: 4 },
+              { value: table_data[2][3], ...this.overviewRightConfig, colSpan: 2 }
+            ],
+            height: this.overviewRowsHeight
           }
         );
 
         // //********************************************* excel version 2 *********************************
         if ( vrs == 2 ) {
-          rows.splice(1, 1);
+          rows.splice(0, this.headerRowSpan);
+          rows.push(...this.spaceBetweenTables);
           allRows = allRows.concat(rows);
         }
 
@@ -1708,8 +2167,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           ];
           if(this.chkDateHour){
             column_config.push(
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
+              { width: this.w_date },
+              { width: this.w_hour },
             )
           } else {
             column_config.push(
@@ -1717,30 +2176,43 @@ export class ResultComponent implements OnDestroy, OnInit {
             )
           }
           column_config.push(
-            { width: this.w_velocidad },
-            { width: 116 },
-            { width: 120 },
-            { width: 120 },
-            { width: 120 },
-            { width: 120 },
-            { width: this.w_odometro },
-            { width: this.w_lat_long },
-            { width: 120 },
-            { width: 120 },
-            { width: 80 },
-            { width: 80 },
+            { width: this.calculateColWidth(velocidad_cell_ch_width) },
+            { width: this.calculateColWidth(nivel_comb_cell_ch_width) },
+            { width: this.calculateColWidth(consumo_litros_cell_ch_width) },
+            { width: this.calculateColWidth(consumo_hrfc_cell_ch_width) },
+            { width: this.calculateColWidth(combustible_restante_cell_ch_width) },
+            { width: this.calculateColWidth(contacto_motor_cell_ch_width) },
+            { width: this.calculateColWidth(odometro_cell_ch_width) },
+            { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+            { width: this.calculateColWidth(mensaje_alerta_cell_ch_width) },
+            { width: this.calculateColWidth(combustible_alerta_cell_ch_width) },
+            { width: this.calculateColWidth(can_rpm_cell_ch_width) },
+            { width: this.calculateColWidth(altitud_cell_ch_width) },
           );
 
           /* Fin Ancho de Columnas */
 
           exportFileEx.push({
             freezePane: {
-                rowSplit: 6
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
               },
             columns: column_config,
             title: nom_vehi,
             rows: rows
           });
+
+          velocidad_cell_ch_width = "Velocidad".length;
+          nivel_comb_cell_ch_width = "combustible".length;
+          consumo_litros_cell_ch_width = "Combustible litros".length;
+          consumo_hrfc_cell_ch_width = "Consumo HRFC".length;
+          combustible_restante_cell_ch_width = "Restante galones".length;
+          contacto_motor_cell_ch_width = "Contacto".length;
+          odometro_cell_ch_width = "Odometro".length;
+          ubicacion_cell_ch_width = "Ubicación".length;
+          mensaje_alerta_cell_ch_width = "de Alerta".length;
+          combustible_alerta_cell_ch_width = "Alerta galones".length;
+          can_rpm_cell_ch_width = "can_rpm".length;
+          altitud_cell_ch_width = "Altitud".length;
         }
 
       } // if si hay datos del vehiculo
@@ -1750,15 +2222,15 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      allRows[1].cells![0].colSpan = table_width;
+      allRows[0].cells![0].colSpan = table_width;
 
       column_config = [
         { width: this.w_item },
       ];
       if(this.chkDateHour){
         column_config.push(
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
+          { width: this.w_date },
+          { width: this.w_hour },
         )
       } else {
         column_config.push(
@@ -1766,23 +2238,23 @@ export class ResultComponent implements OnDestroy, OnInit {
         )
       }
       column_config.push(
-        { width: this.w_velocidad },
-        { width: 116 },
-        { width: 120 },
-        { width: 120 },
-        { width: 120 },
-        { width: 120 },
-        { width: this.w_odometro },
-        { width: this.w_lat_long },
-        { width: 120 },
-        { width: 120 },
-        { width: 80 },
-        { width: 80 },
+        { width: this.calculateColWidth(velocidad_cell_ch_width) },
+        { width: this.calculateColWidth(nivel_comb_cell_ch_width) },
+        { width: this.calculateColWidth(consumo_litros_cell_ch_width) },
+        { width: this.calculateColWidth(consumo_hrfc_cell_ch_width) },
+        { width: this.calculateColWidth(combustible_restante_cell_ch_width) },
+        { width: this.calculateColWidth(contacto_motor_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(mensaje_alerta_cell_ch_width) },
+        { width: this.calculateColWidth(combustible_alerta_cell_ch_width) },
+        { width: this.calculateColWidth(can_rpm_cell_ch_width) },
+        { width: this.calculateColWidth(altitud_cell_ch_width) },
       );
 
       exportFileEx.push({
         freezePane: {
-            rowSplit: 2
+            rowSplit: this.headerRowSpan
           },
         columns: column_config,
         title: "Resultado",//data[0][1],
@@ -1821,13 +2293,29 @@ export class ResultComponent implements OnDestroy, OnInit {
     //vm.dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
+    var column_config:Columns[] = [];
+
+    var codigo_cell_ch_width = "Codigo".length;
+    var placa_cell_ch_width = "Placa".length;
+    var convoy_cell_ch_width = "Convoy".length;
+    var vel_limite_comb_cell_ch_width = "vel. limite".length;
+    var exceso_vel_max_litros_cell_ch_width = "vel. maxima".length;
+    var duracion_cell_ch_width = "Duracion".length;
+    var geocerca_restante_cell_ch_width = "Geocerca ".length;
+    var referencia_motor_cell_ch_width = "Referencia".length;
+    var ubicacion_cell_ch_width = "Ubicación".length;
+
+    var table_width = 1 + (this.chkDateHour? 4:2) + 9;
+    var vehiculo_width = (this.chkDateHour? 8:7);
 
     var allRows: AllRows[] = [
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE EXCESOS EN ZONA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE EXCESOS EN ZONA", ...this.headerCellConfig, colSpan: 6 }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     this.data.forEach((data: any,idx:any) => {
@@ -1836,20 +2324,28 @@ export class ResultComponent implements OnDestroy, OnInit {
         bol_datos_ex = true;
 
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE EXCESOS EN ZONA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE EXCESOS EN ZONA", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
 
@@ -1857,35 +2353,36 @@ export class ResultComponent implements OnDestroy, OnInit {
           //=================CABECERA =================
           var cellsCampos :any = [];
 
-          cellsCampos.push({ value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Convoy", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Item", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Convoy", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Código", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Placa", ...this.colHeaderConfig });
 
-          cellsCampos.push({ value: "Vel. Límite", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Exceso vel maxima", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Vel. Límite", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Exceso Vel. Maxima", ...this.colHeaderConfig });
 
           if(this.chkDateHour) {
-              cellsCampos.push({ value: "Fecha de Inicio", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-              cellsCampos.push({ value: "Hora de Inicio", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+              cellsCampos.push({ value: "Fecha de Inicio", ...this.colHeaderConfig });
+              cellsCampos.push({ value: "Hora de Inicio", ...this.colHeaderConfig });
           } else {
-              cellsCampos.push({ value: "Fecha/Hora Inicio", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+              cellsCampos.push({ value: "Fecha/Hora Inicio", ...this.colHeaderConfig });
           }
 
           if(this.chkDateHour) {
-            cellsCampos.push({ value: "Fecha Final", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-            cellsCampos.push({ value: "Hora Final", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Fecha Final", ...this.colHeaderConfig });
+            cellsCampos.push({ value: "Hora Final", ...this.colHeaderConfig });
           } else {
-              cellsCampos.push({ value: "Fecha/Hora Final", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+              cellsCampos.push({ value: "Fecha/Hora Final", ...this.colHeaderConfig });
           }
 
-          cellsCampos.push({ value: "Duración", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Geocerca", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Referencia", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Duración", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Geocerca", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig });
 
           rows.push({
-              cells: cellsCampos
+              cells: cellsCampos,
+              height: this.colsHeaderHeight
           });
 
           //====================  CUERPO =============================
@@ -1898,39 +2395,50 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             //=================CABECERA =================
             var cellsCuerpo :any = [];
+            
+            vel_limite_comb_cell_ch_width = Math.max(vel_limite_comb_cell_ch_width, (item.v0??'').toString().length);
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.tracto??'').toString().length);
+            convoy_cell_ch_width = Math.max(convoy_cell_ch_width, (item.convoy??'').toString().length);
+            exceso_vel_max_litros_cell_ch_width = Math.max(exceso_vel_max_litros_cell_ch_width, (item.velocidad??'').toString().length);
+            duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
+            geocerca_restante_cell_ch_width = Math.max(geocerca_restante_cell_ch_width, (item.nombre_zona??'').toString().length);
+            referencia_motor_cell_ch_width = Math.max(referencia_motor_cell_ch_width, (item.referencia??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
 
 
-            cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.convoy, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.tracto, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.convoy, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.tracto, ...this.bodyRowsConfig });
 
-            cellsCuerpo.push({ value: item.v0, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.v0, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.velocidad, ...this.bodyRowsConfig });
 
 
             if(this.chkDateHour) {
-              cellsCuerpo.push({ value: this.isChe(item.fecha_inicio), type: 'date', format: "yyyy/MM/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-              cellsCuerpo.push({ value: this.isChs(item.fecha_inicio), type: 'date', format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              cellsCuerpo.push({ value: this.isChe(item.fecha_inicio), type: 'date', format: "yyyy/MM/dd", ...this.bodyRowsConfig });
+              cellsCuerpo.push({ value: this.isChs(item.fecha_inicio), type: 'date', format: "hh:mm:ss", ...this.bodyRowsConfig });
             } else {
-              cellsCuerpo.push({ value: this.isChe(item.fecha_inicio), type: 'date', format: "yyyy/MM/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+              cellsCuerpo.push({ value: this.isChe(item.fecha_inicio), type: 'date', format: "yyyy/MM/dd hh:mm:ss", ...this.bodyRowsConfig });
             }
 
             if(this.chkDateHour) {
                 //var fh2 = item.fServidor.split(" ");
-                cellsCuerpo.push({ value: this.isChe(item.fecha_final), type: 'date', format: "yyyy/MM/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                cellsCuerpo.push({ value: this.isChs(item.fecha_final), type: 'date', format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                cellsCuerpo.push({ value: this.isChe(item.fecha_final), type: 'date', format: "yyyy/MM/dd", ...this.bodyRowsConfig });
+                cellsCuerpo.push({ value: this.isChs(item.fecha_final), type: 'date', format: "hh:mm:ss", ...this.bodyRowsConfig });
             } else {
-                cellsCuerpo.push({ value: this.isChe(item.fecha_final), type: 'date', format: "yyyy/MM/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                cellsCuerpo.push({ value: this.isChe(item.fecha_final), type: 'date', format: "yyyy/MM/dd hh:mm:ss", ...this.bodyRowsConfig });
             }
 
-            cellsCuerpo.push({ value: item.duracion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: item.referencia, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.nombre_zona, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
 
             rows.push({
-              cells: cellsCuerpo
+              cells: cellsCuerpo,
+              height: this.bodyRowsHeight
             });
 
 
@@ -1938,26 +2446,59 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
     if (vrs == 1) {
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(convoy_cell_ch_width) },
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(vel_limite_comb_cell_ch_width) },
+        { width: this.calculateColWidth(exceso_vel_max_litros_cell_ch_width) },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date_ini_fin },
+          { width: this.w_hour_ini_fin },
+          { width: this.w_date_ini_fin },
+          { width: this.w_hour_ini_fin },
+        )
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+          { width: this.w_date_and_hour },
+        )
+      }
+      column_config.push(
+        { width: this.calculateColWidth(duracion_cell_ch_width) },
+        { width: this.calculateColWidth(geocerca_restante_cell_ch_width) },
+        { width: this.calculateColWidth(referencia_motor_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
       freezePane: {
-        rowSplit: 6
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
         },
-      columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-      ],
+      columns: column_config,
       title: data[0][1],
       rows: rows
       });
+
+      codigo_cell_ch_width = "Codigo".length;
+      placa_cell_ch_width = "Placa".length;
+      convoy_cell_ch_width = "Convoy".length;
+      vel_limite_comb_cell_ch_width = "vel. limite".length;
+      exceso_vel_max_litros_cell_ch_width = "vel maxima".length;
+      duracion_cell_ch_width = "Duracion".length;
+      geocerca_restante_cell_ch_width = "Geocerca".length;
+      referencia_motor_cell_ch_width = "Referencia".length;
+      ubicacion_cell_ch_width = "Ubicación".length;
     }
     // //********************************************* excel version 1 *********************************
 
     // //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      rows.splice(1, 1);
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
       allRows = allRows.concat(rows);
     }
     // //********************************************* excel version 2 *********************************
@@ -1968,17 +2509,41 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(convoy_cell_ch_width) },
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(vel_limite_comb_cell_ch_width) },
+        { width: this.calculateColWidth(exceso_vel_max_litros_cell_ch_width) },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date_ini_fin },
+          { width: this.w_hour_ini_fin },
+          { width: this.w_date_ini_fin },
+          { width: this.w_hour_ini_fin },
+        )
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+          { width: this.w_date_and_hour },
+        )
+      }
+      column_config.push(
+        { width: this.calculateColWidth(duracion_cell_ch_width) },
+        { width: this.calculateColWidth(geocerca_restante_cell_ch_width) },
+        { width: this.calculateColWidth(referencia_motor_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
         freezePane: {
-          rowSplit: 2
+          rowSplit: this.headerRowSpan
         },
-        columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-        ],
+        columns: column_config,
         title: "Resultado",//data[0][1],
         rows: allRows
       });
@@ -2024,86 +2589,200 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
 
+    var table_width = 0;
+    var vehiculo_width = 0;
+    var column_config = [];
+
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+    var vel_gps_cell_ch_width = "Velocidad".length;
+    var vel_eco_cell_ch_width = "Velocidad".length;
+    var vel_gps_speed_cell_ch_width = "Velocidad".length;
+
+    var altitud_cell_ch_width = "Altitud".length;
+    var angulo_cell_ch_width = "Angulo".length;
+    var fatiga_cell_ch_width = "Fatiga".length;
+    var frenada_extrema_brusca_cell_ch_width = "Extrema brusca".length;
+    var frenada_brusca_cell_ch_width = "Frenada".length;
+    var acelaracion_brusca_cell_ch_width = "Aceleracion".length;
+    var rpm_alta_cell_ch_width = "RPM Alta".length;
+
+    var alcoholemia_cell_ch_width = "Alcoholemia".length;
+    var parametros_cell_ch_width = "Parametros".length;
+    var nivel_de_combustible_cell_ch_width = "Combustible".length;
+    var c_restante_cell_ch_width = "C. Restante".length;
+    var c_motor_cell_ch_width = "C. Motor".length;
+    var odometro_cell_ch_width = "Odometro".length;
+    var on_off_cell_ch_width = "On-off".length;
+    var rev_x_min_cell_ch_width = "Rev.x.min".length;
+    var reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
+    var vel_can_cell_ch_width = "Velocidad".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var referencia_cell_ch_width = "Referencia".length;
+    var duot2_state_cell_ch_width = "DUOT2 state".length;
+
+
+    var bool_col_fServidor = false;
+    var bool_col_ubicacion = false;
+    var bool_col_velGPS = false;
+    var bool_col_velECO = false;
+    var bool_col_velGPS_speed = false;
+
+    var bool_col_altitud = false;
+    var bool_col_angulo = false;
+    var bool_col_fatiga = false;
+    var bool_col_fExBrusca = false;
+    var bool_col_fBrusca = false;
+    var bool_col_aBrusca = false;
+    var bool_col_RPMAlta = false;
+
+    var bool_col_alcoholemia = false;
+    var bool_col_parametros = false;
+    var bool_col_cNivel = false;
+    var bool_col_cRestante = false;
+    var bool_col_cMotor = false;
+    var bool_col_odometro = false;
+    var bool_col_onOff = false;
+    var bool_col_RxM = false;
+    var bool_col_recFacial = false;
+    var bool_col_velCAN = false;
+    var bool_col_pCercano = false;
+    var bool_col_referencia = false;
+    var bool_col_DUOT2state = false;
+
+    var header_two_lines = false;
+
     var allRows: AllRows[] = [
-        {}, {
+        {
           cells: [
-            { value: "REPORTE GENERAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE GENERAL", ...this.headerCellConfig, colSpan: 6 }
+          ],
+          height: this.headerRowsHeight,
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     this.data.forEach((data: any,idx:any) => {
+
+      if(table_width == 0){
+        table_width++; //Item
+        table_width++; //Fecha
+        if(this.chkDateHour){ table_width++;  }
+
+        if (data[2].fServidor){
+          table_width++;
+          bool_col_fServidor = true;
+          if(this.chkDateHour){ table_width++;  }
+        }
+
+        if (data[2].ubicacion){ table_width++; bool_col_ubicacion = true;  }
+        if (data[2].velGPS){  table_width++; bool_col_velGPS = true;  }
+        if (data[2].velECO){  table_width++; bool_col_velECO = true;  }
+        if (data[2].velGPS_speed){  table_width++; bool_col_velGPS_speed = true;  }
+
+        if (data[2].altitud){ table_width++; bool_col_altitud = true;  }
+        if (data[2].angulo){  table_width++; bool_col_angulo = true;  }
+        if (data[2].fatiga){  table_width++; bool_col_fatiga = true;  }
+        if (data[2].fExBrusca){ table_width++; bool_col_fExBrusca = true;  header_two_lines = true; }
+        if (data[2].fBrusca){ table_width++; bool_col_fBrusca = true;  header_two_lines = true; }
+        if (data[2].aBrusca){ table_width++; bool_col_aBrusca = true;  header_two_lines = true; }
+        if (data[2].RPMAlta){ table_width++; bool_col_RPMAlta = true;  }
+
+        if (data[2].alcoholemia){ table_width++; bool_col_alcoholemia = true;  }
+        if (data[2].parametros){  table_width++; bool_col_parametros = true;  }
+        if (data[2].cNivel){  table_width++; bool_col_cNivel = true;  header_two_lines = true; }
+        if (data[2].cRestante){ table_width++; bool_col_cRestante = true;  }
+        if (data[2].cMotor){  table_width++; bool_col_cMotor = true;  }
+        if (data[2].odometro){  table_width++; bool_col_odometro = true;  }
+        if (data[2].onOff){ table_width++; bool_col_onOff = true;  }
+        if (data[2].RxM){ table_width++; bool_col_RxM = true;  }
+        if (data[2].recFacial){ table_width++; bool_col_recFacial = true;  header_two_lines = true; }
+        if (data[2].velCAN){  table_width++; bool_col_velCAN = true;  }
+        if (data[2].pCercano){  table_width++; bool_col_pCercano = true;  }
+        if (data[2].referencia){  table_width++; bool_col_referencia = true;  }
+        if (data[2].DUOT2state){  table_width++; bool_col_DUOT2state = true;  }
+
+        vehiculo_width = 1 + (this.chkDateHour? 2:1) + (data[2].fServidor? (this.chkDateHour? 2:1): 0);
+      }
 
       if(data[1].length > 0){
         bol_datos_ex = true;
 
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE GENERAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE GENERAL", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
 
         //=================CABECERA =================
         var cellsCampos :any = [];
 
-        cellsCampos.push({ value: "Item", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Item", ...this.colHeaderConfig });
         if(this.chkDateHour) {
-            cellsCampos.push({ value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-            cellsCampos.push({ value: "Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Fecha", ...this.colHeaderConfig });
+            cellsCampos.push({ value: "Hora", ...this.colHeaderConfig });
         } else {
-            cellsCampos.push({ value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+            cellsCampos.push({ value: "Fecha", ...this.colHeaderConfig });
         }
 
         if (data[2].fServidor) {
                 if(this.chkDateHour) {
-                    cellsCampos.push({ value: "Fecha servidor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-                    cellsCampos.push({ value: "Hora servidor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+                    cellsCampos.push({ value: "Fecha servidor", ...this.colHeaderConfig });
+                    cellsCampos.push({ value: "Hora servidor", ...this.colHeaderConfig });
                 } else {
-                    cellsCampos.push({ value: "Fecha servidor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+                    cellsCampos.push({ value: "Fecha servidor", ...this.colHeaderConfig });
                 }
 
         };
-        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", ...this.colHeaderConfig, wrap: header_two_lines }); };
 
-        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].RPMAlta) { cellsCampos.push({ value: "RPM Alta", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].RPMAlta) { cellsCampos.push({ value: "RPM Alta", ...this.colHeaderConfig, wrap: header_two_lines }); };
 
-        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].cNivel) { cellsCampos.push({ value: "Nivel de Combustible", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].cRestante) { cellsCampos.push({ value: "C.Restante", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].cMotor) { cellsCampos.push({ value: "C.Motor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].odometro) { cellsCampos.push({ value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].recFacial) { cellsCampos.push({ value: "Reconocimiento Facial", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].referencia) { cellsCampos.push({ value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].cNivel) { cellsCampos.push({ value: "Nivel de Combustible", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].cRestante) { cellsCampos.push({ value: "C. Restante", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].cMotor) { cellsCampos.push({ value: "C. Motor", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].odometro) { cellsCampos.push({ value: "Odómetro", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].recFacial) { cellsCampos.push({ value: "Reconocimiento Facial", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].referencia) { cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", ...this.colHeaderConfig, wrap: header_two_lines }); };
 
         rows.push({
-            cells: cellsCampos
+            cells: cellsCampos,
+            height: header_two_lines? this.colsHeaderHeightTwoLine: this.colsHeaderHeight,
         });
 
         //================= FIN CABECERA =================
@@ -2119,132 +2798,303 @@ export class ResultComponent implements OnDestroy, OnInit {
             var ubicacion = item.lat + "," + item.lng + "";
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
+            var parametros = this.breakParameterColValue(item.parametros??'');
+
             var cellsCuerpo = [];
-            cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
+            vel_eco_cell_ch_width = Math.max(vel_eco_cell_ch_width, (item.velECO??'').toString().length);
+            vel_gps_speed_cell_ch_width = Math.max(vel_gps_speed_cell_ch_width, (item.velGPS_speed??'').toString().length);
+            
+            altitud_cell_ch_width = Math.max(altitud_cell_ch_width, (item.altitud??'').toString().length);
+            angulo_cell_ch_width = Math.max(angulo_cell_ch_width, (item.angulo??'').toString().length);
+            fatiga_cell_ch_width = Math.max(fatiga_cell_ch_width, (item.fatiga??'').toString().length);
+            frenada_extrema_brusca_cell_ch_width = Math.max(frenada_extrema_brusca_cell_ch_width, (item.fExBrusca??'').toString().length);
+            frenada_brusca_cell_ch_width = Math.max(frenada_brusca_cell_ch_width, (item.fBrusca??'').toString().length);
+            acelaracion_brusca_cell_ch_width = Math.max(acelaracion_brusca_cell_ch_width, (item.aBrusca??'').toString().length);
+            rpm_alta_cell_ch_width = Math.max(rpm_alta_cell_ch_width, (item.RPMAlta??'').toString().length);
+
+            alcoholemia_cell_ch_width = Math.max(alcoholemia_cell_ch_width, (item.alcohol_nombre??'').toString().length);
+
+            //parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
+            parametros_cell_ch_width = Math.max(parametros_cell_ch_width, this.getChWidth(parametros));
+
+
+            nivel_de_combustible_cell_ch_width = Math.max(nivel_de_combustible_cell_ch_width, (item.cNivel??'').toString().length);
+            c_restante_cell_ch_width = Math.max(c_restante_cell_ch_width, (item.cRestante??'').toString().length);
+            c_motor_cell_ch_width = Math.max(c_motor_cell_ch_width, (item.cMotor??'').toString().length);
+            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
+            on_off_cell_ch_width = Math.max(on_off_cell_ch_width, (item.onOff??'').toString().length);
+            rev_x_min_cell_ch_width = Math.max(rev_x_min_cell_ch_width, (item.RxM??'').toString().length);
+            reconocimiento_facial_cell_ch_width = Math.max(reconocimiento_facial_cell_ch_width, (item.recFacial??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.velCAN??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.velCAN??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.pCercano??'').toString().length);
+            duot2_state_cell_ch_width = Math.max(duot2_state_cell_ch_width, (item.DUOT2state??'').toString().length);
+
+            cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
             if(this.chkDateHour) {
-                cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+                cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
             } else {
-                cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
             }
 
 
             if (data[2].fServidor) {
               if(this.chkDateHour) {
                   //var fh2 = item.fServidor.split(" ");
-                  cellsCuerpo.push({ value: this.isChe(item.fServidor), type: 'date', format: "yyyy/MM/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-                  cellsCuerpo.push({ value: this.isChs(item.fServidor), type: 'date', format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                  cellsCuerpo.push({ value: this.isChe(item.fServidor), type: 'date', format: "yyyy/MM/dd", ...this.bodyRowsConfig });
+                  cellsCuerpo.push({ value: this.isChs(item.fServidor), type: 'date', format: "hh:mm:ss", ...this.bodyRowsConfig });
               } else {
-                  cellsCuerpo.push({ value: this.isChe(item.fServidor), type: 'date', format: "yyyy/MM/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+                  cellsCuerpo.push({ value: this.isChe(item.fServidor), type: 'date', format: "yyyy/MM/dd hh:mm:ss", ...this.bodyRowsConfig });
               }
             };
 
-            if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
+            if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, ...this.bodyRowsConfig }); };
+            if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, ...this.bodyRowsConfig }); };
+            if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, ...this.bodyRowsConfig }); };
 
 
-            if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].fatiga) { cellsCuerpo.push({ value: item.fatiga, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].fExBrusca) { cellsCuerpo.push({ value: item.fExBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].fBrusca) { cellsCuerpo.push({ value: item.fBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].aBrusca) { cellsCuerpo.push({ value: item.aBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].RPMAlta) { cellsCuerpo.push({ value: item.RPMAlta, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, ...this.bodyRowsConfig }); };
+            if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, ...this.bodyRowsConfig }); };
+            if (data[2].fatiga) { cellsCuerpo.push({ value: item.fatiga, ...this.bodyRowsConfig }); };
+            if (data[2].fExBrusca) { cellsCuerpo.push({ value: item.fExBrusca, ...this.bodyRowsConfig }); };
+            if (data[2].fBrusca) { cellsCuerpo.push({ value: item.fBrusca, ...this.bodyRowsConfig }); };
+            if (data[2].aBrusca) { cellsCuerpo.push({ value: item.aBrusca, ...this.bodyRowsConfig }); };
+            if (data[2].RPMAlta) { cellsCuerpo.push({ value: item.RPMAlta, ...this.bodyRowsConfig }); };
 
-            if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].parametros) { cellsCuerpo.push({ value: item.parametros, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].cNivel) { cellsCuerpo.push({ value: item.cNivel, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].cRestante) { cellsCuerpo.push({ value: item.cRestante, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].cMotor) { cellsCuerpo.push({ value: item.cMotor, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].odometro) { cellsCuerpo.push({ value: item.odometro, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].onOff) { cellsCuerpo.push({ value: item.onOff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].RxM) { cellsCuerpo.push({ value: item.RxM, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].recFacial) { cellsCuerpo.push({ value: item.recFacial, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].velCAN) { cellsCuerpo.push({ value: item.velCAN, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].pCercano) { cellsCuerpo.push({ value: item.pCercano, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].referencia) { cellsCuerpo.push({ value: rreeff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, ...this.bodyRowsConfig }); };
+            if (data[2].parametros) { cellsCuerpo.push({ value: parametros, ...this.bodyRowsConfig, wrap: true }); };
+            if (data[2].cNivel) { cellsCuerpo.push({ value: item.cNivel, ...this.bodyRowsConfig }); };
+            if (data[2].cRestante) { cellsCuerpo.push({ value: item.cRestante, ...this.bodyRowsConfig }); };
+            if (data[2].cMotor) { cellsCuerpo.push({ value: item.cMotor, ...this.bodyRowsConfig }); };
+            if (data[2].odometro) { cellsCuerpo.push({ value: item.odometro, ...this.bodyRowsConfig }); };
+            if (data[2].onOff) { cellsCuerpo.push({ value: item.onOff, ...this.bodyRowsConfig }); };
+            if (data[2].RxM) { cellsCuerpo.push({ value: item.RxM, ...this.bodyRowsConfig }); };
+            if (data[2].recFacial) { cellsCuerpo.push({ value: item.recFacial, ...this.bodyRowsConfig }); };
+            if (data[2].velCAN) { cellsCuerpo.push({ value: item.velCAN, ...this.bodyRowsConfig }); };
+            if (data[2].pCercano) { cellsCuerpo.push({ value: item.pCercano, ...this.bodyRowsConfig }); };
+            if (data[2].referencia) { cellsCuerpo.push({ value: rreeff, ...this.bodyRowsConfig }); };
 
-            if (data[2].DUOT2state) { cellsCuerpo.push({ value: item.DUOT2state, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].DUOT2state) { cellsCuerpo.push({ value: item.DUOT2state, ...this.bodyRowsConfig }); };
 
             rows.push({
-                cells:cellsCuerpo
+                cells:cellsCuerpo,
+                height: Math.max(this.bodyRowsHeight, this.calculateSingleRowHeight(parametros, this.bodyRowsHeight))
             });
+
+            console.log(this.bodyRowsHeight);
+            console.log(this.calculateSingleRowHeight(parametros, this.bodyRowsHeight));
 
         });
         //==================== FIN CUERPO =============================
 
         //==================== RESUMEN =============================
-        rows.push({});
-
-        rows.push({cells:[
-          { value: "TOTAL de Excesos de Velocidad(GPS) : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-          { value: data[3][0], vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
-
-        rows.push({cells: [
-                { value: "TOTAL de Excesos de Velocidad(ECO) : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                { value: data[3][1], vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
-
-        rows.push({cells: [
-                { value: "TOTAL de Excesos de Velocidad(CAN) : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                { value: data[3][2], vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
+        rows.push(
+          ...this.spaceBetweenTables,
+          {
+            cells:[
+              { value: "TOTAL de Excesos de Velocidad(GPS) : ", ...this.overviewLeftConfig },
+              { value: data[3][0], ...this.overviewRightConfig, colSpan: 1 }  
+            ],
+            height: this.overviewRowsHeight
+          },
+          {
+            cells:[
+              { value: "TOTAL de Excesos de Velocidad(ECO) : ", ...this.overviewLeftConfig },
+              { value: data[3][1], ...this.overviewRightConfig, colSpan: 1 }  
+            ],
+            height: this.overviewRowsHeight
+          },
+          {
+            cells:[
+              { value: "TOTAL de Excesos de Velocidad(CAN) : ", ...this.overviewLeftConfig },
+              { value: data[3][2], ...this.overviewRightConfig, colSpan: 1 }  
+            ],
+            height: this.overviewRowsHeight
+          },
+        );
 
         if (data[2].fatiga) {
-                rows.push({cells: [
-                        { value: "TOTAL de Fatigas : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                        { value: data[3][3], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+          rows.push(
+            {
+              cells:[
+                { value: "TOTAL de Fatigas : ", ...this.overviewLeftConfig },
+                { value: data[3][3], ...this.overviewRightConfig, colSpan: 1 }   
+              ],
+              height: this.overviewRowsHeight
+            }
+          );
         }
         if (data[2].fExBrusca) {
-                rows.push({cells: [
-                        { value: "TOTAL de Frenada Extremadamente Brusca : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                        { value: data[3][4], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+          rows.push(
+            {
+              cells:[
+                { value: "TOTAL de Frenada Extremadamente Brusca : ", ...this.overviewLeftConfig },        
+                { value: data[3][4], ...this.overviewRightConfig, colSpan: 1 }   
+              ],
+              height: this.overviewRowsHeight
+            }
+          );
         }
         if (data[2].fBrusca) {
-                rows.push({cells: [
-                        { value: "TOTAL de Frenada Brusca : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                        { value: data[3][5], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+          rows.push(
+            {
+              cells:[
+                { value: "TOTAL de Frenada Brusca : ", ...this.overviewLeftConfig },        
+                { value: data[3][5], ...this.overviewRightConfig, colSpan: 1 }   
+              ],
+              height: this.overviewRowsHeight
+            }
+          );
         }
         if (data[2].RPMAlta) {
-                rows.push({cells: [
-                        { value: "TOTAL RPM Alta : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                        { value: data[3][6], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+          rows.push(
+            {
+              cells:[
+                { value: "TOTAL RPM Alta : ", ...this.overviewLeftConfig },        
+                { value: data[3][6], ...this.overviewRightConfig, colSpan: 1 }   
+              ],
+              height: this.overviewRowsHeight
+            }
+          );
         }
         if (data[2].alcoholemia) {
-                rows.push({cells: [
-                        { value: "TOTAL de alerta de alcohol en la sangre : ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                        { value: data[3][7], vAlign: "center", hAlign: "center", fontSize: this.r1 }   ]});
+          rows.push(
+            {
+              cells:[
+                { value: "TOTAL de alerta de alcohol en la sangre : ", ...this.overviewLeftConfig },        
+                { value: data[3][7], ...this.overviewRightConfig, colSpan: 1 }   
+              ],
+              height: this.overviewRowsHeight
+            }
+          );
         }
-
-        rows.push({cells: [
-                { value: " ", vAlign: "center", hAlign: "center", fontSize: this.r1, colSpan: 3 },
-                { value: " ", vAlign: "center", hAlign: "center", fontSize: this.r1 }  ]});
 
         //======================= FIN RESUMEN =======================================================
 
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
+          column_config = [
+            { width: this.w_item },
+          ];
+          if(this.chkDateHour){
+            if(data[2].fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+              column_config.push(
+                //{ width: this.w_date },
+                //{ width: this.w_hour },
+                { width: 120 }, 
+                { width: 85 }, 
+              )
+            } else {
+              column_config.push(
+                //{ width: this.w_date },
+                //{ width: this.w_hour },
+                { width: 105 }, 
+                { width: 75 }, 
+              )
+            }
+          } else {
+            if(data[2].fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+              column_config.push(
+                //{ width: this.w_date_and_hour },
+                { width: 205 }, 
+              )
+            } else {
+              column_config.push(
+                //{ width: this.w_date_and_hour },
+                { width: 180 }, 
+              )
+            }
+          }
+          if(bool_col_fServidor){
+            if(this.chkDateHour){
+              column_config.push(
+                { width: this.w_date_ini_fin },
+                { width: this.w_hour_ini_fin },
+              );
+            } else {
+              column_config.push(
+                { width: this.w_date_and_hour },
+              );
+            }
+          }
+          if (bool_col_ubicacion) {  column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) } )}
+          if (bool_col_velGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) } )}
+          if (bool_col_velECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) } )}
+          if (bool_col_velGPS_speed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) } )}
+
+          if (bool_col_altitud) {  column_config.push( { width: this.calculateColWidth(altitud_cell_ch_width) } )}
+          if (bool_col_angulo) { column_config.push( { width: this.calculateColWidth(angulo_cell_ch_width) } )}
+          if (bool_col_fatiga) { column_config.push( { width: this.calculateColWidth(fatiga_cell_ch_width) } )}
+          if (bool_col_fExBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_extrema_brusca_cell_ch_width) } )}
+          if (bool_col_fBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_brusca_cell_ch_width) } )}
+          if (bool_col_aBrusca) {  column_config.push( { width: this.calculateColWidth(acelaracion_brusca_cell_ch_width) } )}
+          if (bool_col_RPMAlta) {  column_config.push( { width: this.calculateColWidth(rpm_alta_cell_ch_width) } )}
+
+          if (bool_col_alcoholemia) {  column_config.push( { width: this.calculateColWidth(alcoholemia_cell_ch_width) } )}
+          if (bool_col_parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) } )}
+          if (bool_col_cNivel) { column_config.push( { width: this.calculateColWidth(nivel_de_combustible_cell_ch_width) } )}
+          if (bool_col_cRestante) {  column_config.push( { width: this.calculateColWidth(c_restante_cell_ch_width) } )}
+          if (bool_col_cMotor) { column_config.push( { width: this.calculateColWidth(c_motor_cell_ch_width) } )}
+          if (bool_col_odometro) { column_config.push( { width: this.calculateColWidth(odometro_cell_ch_width) } )}
+          if (bool_col_onOff) {  column_config.push( { width: this.calculateColWidth(on_off_cell_ch_width) } )}
+          if (bool_col_RxM) {  column_config.push( { width: this.calculateColWidth(rev_x_min_cell_ch_width) } )}
+          if (bool_col_recFacial) {  column_config.push( { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) } )}
+          if (bool_col_velCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) } )}
+          if (bool_col_pCercano) { column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) } )}
+          if (bool_col_referencia) { column_config.push( { width: this.calculateColWidth(referencia_cell_ch_width) } )}
+          if (bool_col_DUOT2state) { column_config.push( { width: this.calculateColWidth(duot2_state_cell_ch_width) } )}
+
+
           exportFileEx.push({
           freezePane: {
-            rowSplit: 6
+            rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
             },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
+          columns: column_config,
           title: data[0][1],
           rows: rows
           });
+
+          ubicacion_cell_ch_width = "Ubicacion".length;
+          vel_gps_cell_ch_width = "Velocidad gps".length;
+          vel_eco_cell_ch_width = "Velocidad eco".length;
+          vel_gps_speed_cell_ch_width = "Velocidad GPS speed".length;
+
+          altitud_cell_ch_width = "Altitud".length;
+          angulo_cell_ch_width = "Angulo".length;
+          fatiga_cell_ch_width = "Fatiga".length;
+          frenada_extrema_brusca_cell_ch_width = "Extrema brusca".length;
+          frenada_brusca_cell_ch_width = "Frenada".length;
+          acelaracion_brusca_cell_ch_width = "Aceleracion".length;
+          rpm_alta_cell_ch_width = "RPM Alta".length;
+
+          alcoholemia_cell_ch_width = "Alcoholemia".length;
+          parametros_cell_ch_width = "Parametros".length;
+          nivel_de_combustible_cell_ch_width = "Combustible".length;
+          c_restante_cell_ch_width = "C. Restante".length;
+          c_motor_cell_ch_width = "C. Motor".length;
+          odometro_cell_ch_width = "Odometro".length;
+          on_off_cell_ch_width = "On-off".length;
+          rev_x_min_cell_ch_width = "Rev.x.min".length;
+          reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
+          vel_can_cell_ch_width = "Velocidad".length;
+          pc_cell_ch_width = "Punto Cercano".length;
+          referencia_cell_ch_width = "Referencia".length;
+          duot2_state_cell_ch_width = "DUOT2 state".length;
+
+
         }
         // //********************************************* excel version 1 *********************************
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-          rows.splice(1, 1);
+          rows.splice(0, this.headerRowSpan);
+          rows.push(...this.spaceBetweenTables);
           allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -2254,17 +3104,84 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        if(bool_col_fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+          column_config.push(
+            //{ width: this.w_date },
+            //{ width: this.w_hour },
+            { width: 120 }, 
+            { width: 85 }, 
+          )
+        } else {
+          column_config.push(
+            //{ width: this.w_date },
+            //{ width: this.w_hour },
+            { width: 105 }, 
+            { width: 75 }, 
+          )
+        }
+      } else {
+        if(bool_col_fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
+          column_config.push(
+            //{ width: this.w_date_and_hour },
+            { width: 205 }, 
+          )
+        } else {
+          column_config.push(
+            //{ width: this.w_date_and_hour },
+            { width: 180 }, 
+          )
+        }
+      }
+      if(bool_col_fServidor){
+        if(this.chkDateHour){
+          column_config.push(
+            { width: this.w_date_ini_fin },
+            { width: this.w_hour_ini_fin },
+          );
+        } else {
+          column_config.push(
+            { width: this.w_date_and_hour },
+          );
+        }
+      }
+      if (bool_col_ubicacion) {  column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) } )}
+      if (bool_col_velGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) } )}
+      if (bool_col_velECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) } )}
+      if (bool_col_velGPS_speed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) } )}
+
+      if (bool_col_altitud) {  column_config.push( { width: this.calculateColWidth(altitud_cell_ch_width) } )}
+      if (bool_col_angulo) { column_config.push( { width: this.calculateColWidth(angulo_cell_ch_width) } )}
+      if (bool_col_fatiga) { column_config.push( { width: this.calculateColWidth(fatiga_cell_ch_width) } )}
+      if (bool_col_fExBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_extrema_brusca_cell_ch_width) } )}
+      if (bool_col_fBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_brusca_cell_ch_width) } )}
+      if (bool_col_aBrusca) {  column_config.push( { width: this.calculateColWidth(acelaracion_brusca_cell_ch_width) } )}
+      if (bool_col_RPMAlta) {  column_config.push( { width: this.calculateColWidth(rpm_alta_cell_ch_width) } )}
+
+      if (bool_col_alcoholemia) {  column_config.push( { width: this.calculateColWidth(alcoholemia_cell_ch_width) } )}
+      if (bool_col_parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) } )}
+      if (bool_col_cNivel) { column_config.push( { width: this.calculateColWidth(nivel_de_combustible_cell_ch_width) } )}
+      if (bool_col_cRestante) {  column_config.push( { width: this.calculateColWidth(c_restante_cell_ch_width) } )}
+      if (bool_col_cMotor) { column_config.push( { width: this.calculateColWidth(c_motor_cell_ch_width) } )}
+      if (bool_col_odometro) { column_config.push( { width: this.calculateColWidth(odometro_cell_ch_width) } )}
+      if (bool_col_onOff) {  column_config.push( { width: this.calculateColWidth(on_off_cell_ch_width) } )}
+      if (bool_col_RxM) {  column_config.push( { width: this.calculateColWidth(rev_x_min_cell_ch_width) } )}
+      if (bool_col_recFacial) {  column_config.push( { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) } )}
+      if (bool_col_velCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) } )}
+      if (bool_col_pCercano) { column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) } )}
+      if (bool_col_referencia) { column_config.push( { width: this.calculateColWidth(referencia_cell_ch_width) } )}
+      if (bool_col_DUOT2state) { column_config.push( { width: this.calculateColWidth(duot2_state_cell_ch_width) } )}
+      
       exportFileEx.push({
         freezePane: {
-          rowSplit: 2
+          rowSplit: this.headerRowSpan
         },
-        columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-        ],
+        columns: column_config,
         title: "Resultado",//data[0][1],
         rows: allRows
       });
@@ -2293,15 +3210,28 @@ export class ResultComponent implements OnDestroy, OnInit {
     // dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
+    var column_config = [];
+
+    var table_width = 8 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = this.chkDateHour? 5: 4;
+
+    var unidad_cell_ch_width = "unidad".length;
+    var evento_cell_ch_width = "evento".length;
+    var vel_gps_speed_cell_ch_width = "Velocidad GPS".length;
+    var vel_can_cell_ch_width = "Velocidad CAN".length;
+    var geocerca_cell_ch_width = "Geocerca".length;
+    var ubicacion_cell_ch_width = "ubicacion".length;
+    var referencia_cell_ch_width = "referencia".length;
 
     // var allRows = [
     var allRows: AllRows[] = [
-
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE EVENTOS", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE EVENTOS", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
 
@@ -2314,20 +3244,28 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // var rows = [
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE EVENTOS", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE EVENTOS", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value:  data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
 
@@ -2336,19 +3274,20 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Evento", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Unidad", ...this.colHeaderConfig },
+              { value: "Evento", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
 
-              { value: "Velocidad GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Velocidad GPS", ...this.colHeaderConfig },
+              { value: "Velocidad CAN", ...this.colHeaderConfig },
 
-              { value: "Geocerca", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Referencia", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }
-            ]
+              { value: "Geocerca", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Referencia", ...this.colHeaderConfig }
+            ],
+            height: this.colsHeaderHeight
           });
 
           // data[1].forEach(function(item:any, index:any){
@@ -2357,22 +3296,31 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            unidad_cell_ch_width = Math.max(unidad_cell_ch_width, (item.nombre_objeto??'').toString().length);
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            vel_gps_speed_cell_ch_width = Math.max(vel_gps_speed_cell_ch_width, (item.velocidad??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            geocerca_cell_ch_width = Math.max(geocerca_cell_ch_width, (item.nombre_zona??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+
             rows.push({
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.nombre_objeto, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.descripcion_evento, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: item.nombre_objeto, ...this.bodyRowsConfig },
+                { value: item.descripcion_evento, ...this.bodyRowsConfig },
 
-                { value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha_tracker), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha_tracker), format: "hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.velocidad, ...this.bodyRowsConfig },
+                { value: item.vel_can, ...this.bodyRowsConfig },
+                { value: item.nombre_zona, ...this.bodyRowsConfig },
 
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.referencia, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-              ]
+                { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.referencia, ...this.bodyRowsConfig },
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -2383,19 +3331,20 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Evento", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha/Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Unidad", ...this.colHeaderConfig },
+              { value: "Evento", ...this.colHeaderConfig },
+              { value: "Fecha/Hora", ...this.colHeaderConfig },
 
-              { value: "Velocidad GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Velocidad GPS", ...this.colHeaderConfig },
+              { value: "Velocidad CAN", ...this.colHeaderConfig },
 
-              { value: "Geocerca", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Referencia", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }
+              { value: "Geocerca", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Referencia", ...this.colHeaderConfig }
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
           // data[1].forEach(function(item:any, index:any){
@@ -2403,22 +3352,30 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            unidad_cell_ch_width = Math.max(unidad_cell_ch_width, (item.nombre_objeto??'').toString().length);
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            vel_gps_speed_cell_ch_width = Math.max(vel_gps_speed_cell_ch_width, (item.velocidad??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            geocerca_cell_ch_width = Math.max(geocerca_cell_ch_width, (item.nombre_zona??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+
             rows.push({
 
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.nombre_objeto, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.descripcion_evento, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: item.nombre_objeto, ...this.bodyRowsConfig },
+                { value: item.descripcion_evento, ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.velocidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.velocidad, ...this.bodyRowsConfig },
+                { value: item.vel_can, ...this.bodyRowsConfig },
 
-                { value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.referencia, vAlign: "center", hAlign: "center", fontSize: this.c1 }
-              ]
-
+                { value: item.nombre_zona, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.referencia, ...this.bodyRowsConfig }
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -2426,26 +3383,52 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
-            exportFileEx.push({
-              freezePane: {
-                  rowSplit: 6
-                },
-              columns: [
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-              ],
-              title: data[0][1],
-              rows: rows
-            });
+          column_config = [
+            { width: this.w_item },
+            { width: this.calculateColWidth(unidad_cell_ch_width) },
+            { width: this.calculateColWidth(evento_cell_ch_width) },
+          ];
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+            );
+          }
+          column_config.push(
+            { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) },
+            { width: this.calculateColWidth(vel_can_cell_ch_width) },
+            { width: this.calculateColWidth(geocerca_cell_ch_width) },
+            { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+            { width: this.calculateColWidth(referencia_cell_ch_width) },
+          );
+
+          exportFileEx.push({
+            freezePane: {
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+              },
+            columns: column_config,
+            title: data[0][1],
+            rows: rows
+          });
+
+          unidad_cell_ch_width = "unidad".length;
+          evento_cell_ch_width = "evento".length;
+          vel_gps_speed_cell_ch_width = "Velocidad GPS".length;
+          vel_can_cell_ch_width = "Velocidad CAN".length;
+          geocerca_cell_ch_width = "Geocerca".length;
+          ubicacion_cell_ch_width = "ubicacion".length;
+          referencia_cell_ch_width = "referencia".length;
         }
         // //********************************************* excel version 1 *********************************
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-           rows.splice(1, 1);
+           rows.splice(0, this.headerRowSpan);
+           rows.push(...this.spaceBetweenTables);
            allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -2456,20 +3439,39 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-        exportFileEx.push({
-          freezePane: {
-              rowSplit: 2
-            },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
-          title: "Resultado",//data[0][1],
-          rows: allRows
-        });
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(unidad_cell_ch_width) },
+        { width: this.calculateColWidth(evento_cell_ch_width) },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(geocerca_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(referencia_cell_ch_width) },
+      );
+
+      exportFileEx.push({
+        freezePane: {
+            rowSplit: this.headerRowSpan
+          },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
     }
     //********************************************* excel version 2 *********************************
 
@@ -2482,14 +3484,13 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelEventos.xlsx"
+        fileName: "ReporteEventos.xlsx"
       });
 
     } else {
       alert('No se han encontrado datos para exportar');
     }
   }
-
 
   exportExcelPosicion(vrs: number) {
 
@@ -2505,92 +3506,102 @@ export class ResultComponent implements OnDestroy, OnInit {
     } */
 
     var allRows: AllRows[] = [
-        {},
         {
           cells: [
-            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+            { value: nom_inf, colSpan: table_width, ...this.headerCellConfig }
           ],
-          height: 30,
-        }
+          height: this.headerRowsHeight,
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     var cc = 0;
-    var status_cell_width = 83;
-    var referencia_cell_width = 160;
+    var codigo_cell_ch_width = "Codigo".length;
+    var placa_cell_ch_width = "Placa".length;
+    var status_cell_ch_width = "Status".length;
+    var vel_gps_cell_ch_width = "Velocidad GPS".length;
+    var vel_can_cell_ch_width = "Velocidad CAN".length;
+    var odometro_cell_ch_width = "Odometro".length;
+    var referencia_cell_ch_width = "Referencia".length;
 
     if(this.data.length > 0) {
         bol_datos_ex = true;
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
-            ]
+              { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight,
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: this.rep_subtitle , color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width },
-              // { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              // { value: "PERIODO : " + vm.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
-          },
-          {}
+              { value: this.rep_subtitle , color: this.vehicleContentTextColor, background: this.vehicleContentBackground, vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width, borderBottom: { color: this.headersBorderColor, size: this.headersBorderSize } },
+            ],
+            height: this.subHeaderRepPosicionHeight,
+          }
         ];
 
 
         if(this.chkDateHour) {
           rows.push({
             cells: [
-              { value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ítem", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
 
 /*               { value: "Servicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Origen", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Destino", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }, */
 
-              { value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
 
-              { value: "Status", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Status", ...this.colHeaderConfig },
+              { value: "Velocidad GPS", ...this.colHeaderConfig },
+              { value: "Velocidad CAN", ...this.colHeaderConfig },
+              { value: "Odómetro", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Referencia", ...this.colHeaderConfig },
               /* { value: "Zona Cercana", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Latitud/Longitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 } */
 
-            ]
+            ],
+            height: this.colsHeaderHeight,
           });
-          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
+          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
             //var fh = item.fecha_final.split(" ");
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
-            status_cell_width = Math.max(status_cell_width, item.estado.length * 11);
-            referencia_cell_width = Math.max(referencia_cell_width, item.zonaCercana.length * 11);
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            status_cell_ch_width = Math.max(status_cell_ch_width, (item.estado??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
+            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
 
             rows.push({
               cells: [
-                { value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: index + 1, ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
 
-                /* { value: item.convoy, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.origen, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.destino, vAlign: "center", hAlign: "center", fontSize: this.c1 }, */
+                /* { value: item.convoy, ...this.bodyRowsConfig },
+                { value: item.origen, ...this.bodyRowsConfig },
+                { value: item.destino, ...this.bodyRowsConfig }, */
 
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.estado, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velocidad+" km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velocidad_can+" km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.odometro, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', vAlign: "center", hAlign: "center", fontSize: this.c1_2 },
-                { value: item.zonaCercana, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-              ]
+                { value: item.estado, ...this.bodyRowsConfig },
+                { value: item.velocidad+" km/h", ...this.bodyRowsConfig },
+                { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
+                { value: item.odometro, ...this.bodyRowsConfig },
+                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', ...this.bodyRowsConfig, fontSize: this.c1_2 },
+                { value: item.referencia, ...this.bodyRowsConfig },
+              ],
+              height: this.bodyRowsHeight,
             });
           });
 
@@ -2599,52 +3610,59 @@ export class ResultComponent implements OnDestroy, OnInit {
         } else {
           rows.push({
             cells: [
-              { value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Ítem", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
 
               /* { value: "Servicio", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Origen", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Destino", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }, */
 
-              { value: "Fecha y Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Fecha y Hora", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
 
-              { value: "Status", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-            ]
+              { value: "Status", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Velocidad GPS", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Velocidad CAN", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Odómetro", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Ubicación", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Referencia", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+            ],
+            height: this.colsHeaderHeight,
           });
 
           this.data.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
             var ubicacion = item.latitud + "," + item.longitud;
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
-            status_cell_width = Math.max(status_cell_width, item.estado.length * 11);
-            referencia_cell_width = Math.max(referencia_cell_width, item.zonaCercana.length * 11);
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            status_cell_ch_width = Math.max(status_cell_ch_width, (item.estado??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
+            odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.zonaCercana??'').toString().length);
 
             rows.push({
               cells: [
-                { value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: index + 1, ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
 
-                /* { value: item.convoy, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.origen, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.destino, vAlign: "center", hAlign: "center", fontSize: this.c1 }, */
+                /* { value: item.convoy, ...this.bodyRowsConfig },
+                { value: item.origen, ...this.bodyRowsConfig },
+                { value: item.destino, ...this.bodyRowsConfig }, */
 
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.estado, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velocidad+" km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velocidad_can+" km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.odometro, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', vAlign: "center", hAlign: "center", fontSize: this.c1_2 },
-                { value: item.zonaCercana, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.estado, ...this.bodyRowsConfig },
+                { value: item.velocidad+" km/h", ...this.bodyRowsConfig },
+                { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
+                { value: item.odometro, ...this.bodyRowsConfig },
+                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', ...this.bodyRowsConfig, fontSize: this.c1_2 },
+                { value: item.referencia, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight,
             });
           });
 
@@ -2654,31 +3672,31 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         column_config = [
           { width: this.w_item },
-          { width: this.w_codigo },
-          { width: this.w_placa },
+          { width: this.calculateColWidth(codigo_cell_ch_width) },
+          { width: this.calculateColWidth(placa_cell_ch_width) },
         ];
         if(this.chkDateHour){
           column_config.push(
-            { width: this.w_date_hour },
-            { width: this.w_date_hour },
+            { width: this.w_date },
+            { width: this.w_hour },
           )
         } else {
           column_config.push(
             { width: this.w_date_and_hour },
           )
         }
-        column_config.push({ width: status_cell_width});
-        column_config.push({ width: this.w_velocidad_gps_can});
-        column_config.push({ width: this.w_velocidad_gps_can});
-        column_config.push({ width: this.w_odometro});
+        column_config.push({ width: this.calculateColWidth(status_cell_ch_width)});
+        column_config.push({ width: this.calculateColWidth(vel_gps_cell_ch_width)});
+        column_config.push({ width: this.calculateColWidth(vel_can_cell_ch_width)});
+        column_config.push({ width: this.calculateColWidth(odometro_cell_ch_width)});
         column_config.push({ width: this.w_lat_long});
-        column_config.push({ width: Math.floor(referencia_cell_width / 1.28)});
+        column_config.push({ width: this.calculateColWidth(referencia_cell_ch_width)});
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
             exportFileEx.push({
               freezePane: {
-                  rowSplit: 6
+                  rowSplit: this.headerRowSpan + 2
                 },
               columns: column_config,
               title: "Resultado",//data[0][1],
@@ -2689,7 +3707,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-           rows.splice(1, 1);
+           rows.splice(0, this.headerRowSpan);
+           rows.push(...this.spaceBetweenTables);
            allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -2701,7 +3720,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     if (vrs == 2) {
         exportFileEx.push({
           freezePane: {
-              rowSplit: 2
+              rowSplit: this.headerRowSpan
             },
           columns: [
             { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
@@ -2737,58 +3756,66 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bol_datos_ex = false;
     var column_config:Columns[] = [];
 
-    var p_cercano_max_width = 155;
-    var tramo_max_width = 165;
+    var table_width = 1 + (this.chkDateHour? 2:1) + 9;
+    var vehiculo_width = (this.chkDateHour? 5:4);
+
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var descripcion_cell_ch_width = "descripcion".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
 
     var nom_inf = "REPORTE DE FRENADA Y ACELERACIÓN BRUSCA";
 
     var allRows: AllRows[] = [
-        {},
         {
           cells: [
-            { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 3 }
+            { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
           ],
-          height: 30,
-        }
+          height: this.headerRowsHeight,
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     var cc = 0;
-
-    var table_width;
 
     this.data.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
 
-        var p_cercano_width = 155;
-        var tramo_width = 165;
-
         bol_datos_ex = true;
 
         var nom_vehi = table_data[0][1];
 
-        table_width = 1 + (this.chkDateHour? 2:1) + 9;
-        var vehiculo_width = (this.chkDateHour? 5:4);
-
-
         /* Table Header */
 
         var rows: AllRows[] = [
-          {},
           {
             cells: [
-              { value: nom_inf, bold: true, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: table_width }
+              { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
             ],
-            height: 36,
+            height: this.headerRowsHeight,
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + table_data[0][1], bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: vehiculo_width },
-              { value: "PERIODO : " + this.period,  bold: false, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width - vehiculo_width },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO",  ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: table_data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         /* Table Body */
@@ -2796,66 +3823,74 @@ export class ResultComponent implements OnDestroy, OnInit {
         var cellsCampos = [];
 
         //----------- CABECERA ------------
-        cellsCampos.push({ value: "Ítem", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+        cellsCampos.push({ value: "Ítem", ...this.colHeaderConfig });
 
         if (this.chkDateHour) {
-          cellsCampos.push({ value: "Fecha", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
-          cellsCampos.push({ value: "Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Fecha", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Hora", ...this.colHeaderConfig });
         } else {
-          cellsCampos.push({ value: "Fecha / Hora", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });
+          cellsCampos.push({ value: "Fecha / Hora", ...this.colHeaderConfig });
         }
 
-        cellsCampos.push({ value: "Tipo Unidad", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "ID Conductor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Conductor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Vel. GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Vel. CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Descripción", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Tramo", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
-        cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3, wrap: true });
+        cellsCampos.push({ value: "Tipo Unidad", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "ID Conductor", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Conductor", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Vel. GPS", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Vel. CAN", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Descripción", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Tramo", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig, wrap: true });
+        cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig, wrap: true });
 
         rows.push({
           cells: cellsCampos,
+          height: this.colsHeaderHeight
         });
 
         //----------- CONTENIDO / FILAS ------------
         table_data[1].forEach((item: { latitud: number; longitud: number; tipo_unidad: any; id_conductor: any; nombre_conductor: any; tipo_frenada: any; tramo: any; vel_final: any; vel_can: any; PC: any; fecha_final: any; }, index: number) => {
 
-          p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
-          tramo_width = Math.max(tramo_width, item.tramo.length * this.char_to_px);
-
           var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
           var cellsCuerpo = [];
 
-          cellsCuerpo.push({ value: index + 1, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+          id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.id_conductor??'').toString().length);
+          conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.nombre_conductor??'').toString().length);
+          vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_final??'').toString().length);
+          vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+          descripcion_cell_ch_width = Math.max(descripcion_cell_ch_width, (item.tipo_frenada??'').toString().length);
+          tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+          pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+          ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+          cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
 
           if (this.chkDateHour) {
-            cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 });
-            cellsCuerpo.push({ value: this.isChs(item.fecha_final), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChs(item.fecha_final), format: "hh:mm:ss", ...this.bodyRowsConfig });
           } else {
-            cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 });
+            cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
           }
-          cellsCuerpo.push({ value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.id_conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.nombre_conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.vel_final, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.vel_can, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.tipo_frenada, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 });
-          cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 });
+          cellsCuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.id_conductor, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.nombre_conductor, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.vel_final, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.vel_can, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.tipo_frenada, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
 
           rows.push({
-            cells:cellsCuerpo
+            cells:cellsCuerpo,
+            height: this.bodyRowsHeight
           });
         });
 
         // //********************************************* excel version 2 *********************************
         if ( vrs == 2 ) {
-          p_cercano_max_width = Math.max(p_cercano_max_width, p_cercano_width);
-          tramo_max_width = Math.max(tramo_max_width, tramo_width);
-          rows.splice(1, 1);
+          rows.splice(0, this.headerRowSpan);
+          rows.push(...this.spaceBetweenTables);
           allRows = allRows.concat(rows);
         }
 
@@ -2869,8 +3904,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           ];
           if(this.chkDateHour){
             column_config.push(
-              { width: this.w_date_hour },
-              { width: this.w_date_hour },
+              { width: this.w_date },
+              { width: this.w_hour },
             )
           } else {
             column_config.push(
@@ -2878,27 +3913,37 @@ export class ResultComponent implements OnDestroy, OnInit {
             )
           }
           column_config.push(
-            { width: 100 },
-            { width: 116 },
-            { width: 100 },
-            { width: this.w_velocidad_gps_can_short },
-            { width: this.w_velocidad_gps_can_short },
-            { width: 116 },
-            { width: Math.floor(tramo_width / 1.28) },
-            { width: Math.floor(p_cercano_width / 1.28) },
-            { width: this.w_lat_long },
+            { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+            { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+            { width: this.calculateColWidth(conductor_cell_ch_width) },
+            { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+            { width: this.calculateColWidth(vel_can_cell_ch_width) },
+            { width: this.calculateColWidth(descripcion_cell_ch_width) },
+            { width: this.calculateColWidth(tramo_cell_ch_width) },
+            { width: this.calculateColWidth(pc_cell_ch_width) },
+            { width: this.calculateColWidth(ubicacion_cell_ch_width) },
           );
 
           /* Fin Ancho de Columnas */
 
           exportFileEx.push({
             freezePane: {
-                rowSplit: 6
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
               },
             columns: column_config,
             title: nom_vehi,
             rows: rows
           });
+
+          tipo_unidad_cell_ch_width = "Tipo unidad".length;
+          id_conductor_cell_ch_width = "ID conductor".length;
+          conductor_cell_ch_width = "conductor".length;
+          vel_gps_cell_ch_width = "Vel. GPS".length;
+          vel_can_cell_ch_width = "Vel. CAN".length;
+          descripcion_cell_ch_width = "descripcion".length;
+          tramo_cell_ch_width = "tramo".length;
+          pc_cell_ch_width = "Punto Cercano".length;
+          ubicacion_cell_ch_width = "Ubicacion".length;
         }
 
       } // if si hay datos del vehiculo
@@ -2908,15 +3953,15 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      allRows[1].cells![0].colSpan = table_width;
+      allRows[0].cells![0].colSpan = table_width;
 
       column_config = [
         { width: this.w_item },
       ];
       if(this.chkDateHour){
         column_config.push(
-          { width: this.w_date_hour },
-          { width: this.w_date_hour },
+          { width: this.w_date },
+          { width: this.w_hour },
         )
       } else {
         column_config.push(
@@ -2924,20 +3969,20 @@ export class ResultComponent implements OnDestroy, OnInit {
         )
       }
       column_config.push(
-        { width: 100 },
-        { width: 116 },
-        { width: 100 },
-        { width: this.w_velocidad_gps_can_short },
-        { width: this.w_velocidad_gps_can_short },
-        { width: 116 },
-        { width: Math.floor(tramo_max_width / 1.28) },
-        { width: Math.floor(p_cercano_max_width / 1.28) },
-        { width: this.w_lat_long },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(descripcion_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
       );
 
       exportFileEx.push({
         freezePane: {
-            rowSplit: 2
+            rowSplit: this.headerRowSpan
           },
         columns: column_config,
         title: "Resultado",//data[0][1],
@@ -2947,7 +3992,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
     //********************************************* excel version 2 *********************************
 
-    console.log(exportFileEx);
+    //console.log(exportFileEx);
 
     var nom_inf_xls = "ReporteFrenadaAceleracionBrusca.xlsx";
     /* if (vm.optionUser() == 445 ) {
@@ -2975,14 +4020,32 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
 
+    var column_config:Columns[];
+    var table_width = 13 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = (this.chkDateHour? 5: 4);
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var descripcion_cell_ch_width = "descripcion".length;
+    var reconocimiento_facial_cell_ch_width = "reconocimiento facial (alix)".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+
     // var allRows = [
     var allRows: AllRows[] = [
-
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
 
@@ -2995,20 +4058,28 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // var rows = [
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
 
@@ -3017,25 +4088,26 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Descripción", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
+              { value: "Descripción", ...this.colHeaderConfig },
 
-              { value: "Reconocimiento Facial (ai1x)", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Reconocimiento Facial (ai1x)", ...this.colHeaderConfig },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -3052,27 +4124,41 @@ export class ResultComponent implements OnDestroy, OnInit {
                 var rec_facial = "Rostro ausente (" + item.ai1x + ")";
             }
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            descripcion_cell_ch_width = Math.max(descripcion_cell_ch_width, (item.descripcion??'').toString().length);
+            reconocimiento_facial_cell_ch_width = Math.max(reconocimiento_facial_cell_ch_width, (rec_facial??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velGPS+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.descripcion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.velGPS+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
+                { value: item.descripcion, ...this.bodyRowsConfig },
 
-                { value: rec_facial, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: rec_facial, ...this.bodyRowsConfig },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -3082,24 +4168,25 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Descripción", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
+              { value: "Descripción", ...this.colHeaderConfig },
 
-              { value: "Reconocimiento Facial (ai1x)", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Reconocimiento Facial (ai1x)", ...this.colHeaderConfig },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -3114,28 +4201,42 @@ export class ResultComponent implements OnDestroy, OnInit {
                 var rec_facial = "Rostro ausente (" + item.ai1x + ")";
             }
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            descripcion_cell_ch_width = Math.max(descripcion_cell_ch_width, (item.descripcion??'').toString().length);
+            reconocimiento_facial_cell_ch_width = Math.max(reconocimiento_facial_cell_ch_width, (rec_facial??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
 
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velGPS+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.descripcion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.velGPS+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
+                { value: item.descripcion, ...this.bodyRowsConfig },
 
-                { value: rec_facial, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: rec_facial, ...this.bodyRowsConfig },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
 
             });
           });
@@ -3145,26 +4246,62 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
-            exportFileEx.push({
-              freezePane: {
-                  rowSplit: 6
-                },
-              columns: [
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-              ],
-              title: data[0][1],
-              rows: rows
-            });
+          column_config = [
+            { width: this.w_item },
+          ];
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+            );
+          }
+          column_config.push(
+            { width: this.calculateColWidth(codigo_cell_ch_width) },
+            { width: this.calculateColWidth(placa_cell_ch_width) },
+            { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+            { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+            { width: this.calculateColWidth(conductor_cell_ch_width) },
+            { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+            { width: this.calculateColWidth(vel_can_cell_ch_width) },
+            { width: this.calculateColWidth(descripcion_cell_ch_width) },
+            { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) },
+            { width: this.calculateColWidth(tramo_cell_ch_width) },
+            { width: this.calculateColWidth(pc_cell_ch_width) },
+            { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+          );
+
+          exportFileEx.push({
+            freezePane: {
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+              },
+            columns: column_config,
+            title: data[0][1],
+            rows: rows
+          });
+
+          codigo_cell_ch_width = "codigo".length;
+          placa_cell_ch_width = "placa".length;
+          tipo_unidad_cell_ch_width = "Tipo unidad".length;
+          id_conductor_cell_ch_width = "ID conductor".length;
+          conductor_cell_ch_width = "conductor".length;
+          vel_gps_cell_ch_width = "Vel. GPS".length;
+          vel_can_cell_ch_width = "Vel. CAN".length;
+          descripcion_cell_ch_width = "descripcion".length;
+          reconocimiento_facial_cell_ch_width = "reconocimiento facial (alix)".length;
+          tramo_cell_ch_width = "tramo".length;
+          pc_cell_ch_width = "Punto Cercano".length;
+          ubicacion_cell_ch_width = "Ubicacion".length;
         }
         // //********************************************* excel version 1 *********************************
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-           rows.splice(1, 1);
+           rows.splice(0, this.headerRowSpan);
+           rows.push(...this.spaceBetweenTables);
            allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -3175,20 +4312,44 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-        exportFileEx.push({
-          freezePane: {
-              rowSplit: 2
-            },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
-          title: "Resultado",//data[0][1],
-          rows: allRows
-        });
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(descripcion_cell_ch_width) },
+        { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
+      exportFileEx.push({
+        freezePane: {
+            rowSplit: this.headerRowSpan
+          },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
     }
     //********************************************* excel version 2 *********************************
 
@@ -3214,14 +4375,35 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
 
+    var column_config: Columns[];
+    var table_width = 16 + (this.chkDateHour? 4: 2);
+    var vehiculo_width = this.chkDateHour? 6: 4;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var c01_cell_ch_width = "c01".length;
+    var c02_cell_ch_width = "c02".length;
+    var c03_cell_ch_width = "c03".length;
+    var c04_cell_ch_width = "c04".length;
+    var c05_cell_ch_width = "c05".length;
+    var c06_cell_ch_width = "c06".length;
+    var c07_cell_ch_width = "c07".length;
+    var c08_cell_ch_width = "c08".length;
+    var c09_cell_ch_width = "c09".length;
+    var c10_cell_ch_width = "c10".length;
+    var c11_cell_ch_width = "c11".length;
+    var calificacion_cell_ch_width = "calificacion".length;
+
     // var allRows = [
     var allRows: AllRows[] = [
-
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE CALIFICACION DE MANEJO", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE CALIFICACION DE MANEJO", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
 
@@ -3234,87 +4416,112 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // var rows = [
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE CALIFICACION DE MANEJO", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE CALIFICACION DE MANEJO", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
 
         if(this.chkDateHour) {
 
-
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha Fin", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora Fin", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Fecha Fin", ...this.colHeaderConfig },
+              { value: "Hora Fin", ...this.colHeaderConfig },
 
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "C01", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C02", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C03", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C04", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C05", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C06", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C07", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C08", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C09", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C10", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C11", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C01", ...this.colHeaderConfig },
+              { value: "C02", ...this.colHeaderConfig },
+              { value: "C03", ...this.colHeaderConfig },
+              { value: "C04", ...this.colHeaderConfig },
+              { value: "C05", ...this.colHeaderConfig },
+              { value: "C06", ...this.colHeaderConfig },
+              { value: "C07", ...this.colHeaderConfig },
+              { value: "C08", ...this.colHeaderConfig },
+              { value: "C09", ...this.colHeaderConfig },
+              { value: "C10", ...this.colHeaderConfig },
+              { value: "C11", ...this.colHeaderConfig },
 
-              { value: "Calificación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Calificación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
           // data[1].forEach(function(item:any, index:any){
 
           data[1].forEach((item: { fecha: number;  fecha_fin: number; codigo: any; placa: any; tipo_unidad: any; C01: any; C02: any; C03: any; C04: any; C05: any; C06: any; C07: any; C08: any;C09: any; C10: any; C11: any; puntuacion: any;}, index: number) => {
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            c01_cell_ch_width = Math.max(c01_cell_ch_width, (item.C01??'').toString().length);
+            c02_cell_ch_width = Math.max(c02_cell_ch_width, (item.C02??'').toString().length);
+            c03_cell_ch_width = Math.max(c03_cell_ch_width, (item.C03??'').toString().length);
+            c04_cell_ch_width = Math.max(c04_cell_ch_width, (item.C04??'').toString().length);
+            c05_cell_ch_width = Math.max(c05_cell_ch_width, (item.C05??'').toString().length);
+            c06_cell_ch_width = Math.max(c06_cell_ch_width, (item.C06??'').toString().length);
+            c07_cell_ch_width = Math.max(c07_cell_ch_width, (item.C07??'').toString().length);
+            c08_cell_ch_width = Math.max(c08_cell_ch_width, (item.C08??'').toString().length);
+            c09_cell_ch_width = Math.max(c09_cell_ch_width, (item.C09??'').toString().length);
+            c10_cell_ch_width = Math.max(c10_cell_ch_width, (item.C10??'').toString().length);
+            c11_cell_ch_width = Math.max(c11_cell_ch_width, (item.C11??'').toString().length);
+            calificacion_cell_ch_width = Math.max(calificacion_cell_ch_width, (item.puntuacion??'').toString().length);
+
             rows.push({
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha_fin), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha_fin), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_fin), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha_fin), format: "hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.C01, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C02, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C03, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C04, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C05, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C01, ...this.bodyRowsConfig },
+                { value: item.C02, ...this.bodyRowsConfig },
+                { value: item.C03, ...this.bodyRowsConfig },
+                { value: item.C04, ...this.bodyRowsConfig },
+                { value: item.C05, ...this.bodyRowsConfig },
 
-                { value: item.C06, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C07, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C08, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C09, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C10, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C11, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C06, ...this.bodyRowsConfig },
+                { value: item.C07, ...this.bodyRowsConfig },
+                { value: item.C08, ...this.bodyRowsConfig },
+                { value: item.C09, ...this.bodyRowsConfig },
+                { value: item.C10, ...this.bodyRowsConfig },
+                { value: item.C11, ...this.bodyRowsConfig },
 
-                { value: item.puntuacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.puntuacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -3325,61 +4532,79 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha Fin", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Fecha Fin", ...this.colHeaderConfig },
 
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "C01", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C02", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C03", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C04", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C05", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C06", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C07", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C08", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C09", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C10", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "C11", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "C01", ...this.colHeaderConfig },
+              { value: "C02", ...this.colHeaderConfig },
+              { value: "C03", ...this.colHeaderConfig },
+              { value: "C04", ...this.colHeaderConfig },
+              { value: "C05", ...this.colHeaderConfig },
+              { value: "C06", ...this.colHeaderConfig },
+              { value: "C07", ...this.colHeaderConfig },
+              { value: "C08", ...this.colHeaderConfig },
+              { value: "C09", ...this.colHeaderConfig },
+              { value: "C10", ...this.colHeaderConfig },
+              { value: "C11", ...this.colHeaderConfig },
 
-              { value: "Calificación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Calificación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
           // data[1].forEach(function(item:any, index:any){
           data[1].forEach((item: { fecha: number;  fecha_fin: number; codigo: any; placa: any; tipo_unidad: any; C01: any; C02: any; C03: any; C04: any; C05: any; C06: any; C07: any; C08: any;C09: any; C10: any; C11: any; puntuacion: any;}, index: number) => {
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            c01_cell_ch_width = Math.max(c01_cell_ch_width, (item.C01??'').toString().length);
+            c02_cell_ch_width = Math.max(c02_cell_ch_width, (item.C02??'').toString().length);
+            c03_cell_ch_width = Math.max(c03_cell_ch_width, (item.C03??'').toString().length);
+            c04_cell_ch_width = Math.max(c04_cell_ch_width, (item.C04??'').toString().length);
+            c05_cell_ch_width = Math.max(c05_cell_ch_width, (item.C05??'').toString().length);
+            c06_cell_ch_width = Math.max(c06_cell_ch_width, (item.C06??'').toString().length);
+            c07_cell_ch_width = Math.max(c07_cell_ch_width, (item.C07??'').toString().length);
+            c08_cell_ch_width = Math.max(c08_cell_ch_width, (item.C08??'').toString().length);
+            c09_cell_ch_width = Math.max(c09_cell_ch_width, (item.C09??'').toString().length);
+            c10_cell_ch_width = Math.max(c10_cell_ch_width, (item.C10??'').toString().length);
+            c11_cell_ch_width = Math.max(c11_cell_ch_width, (item.C11??'').toString().length);
+            calificacion_cell_ch_width = Math.max(calificacion_cell_ch_width, (item.puntuacion??'').toString().length);
+
             rows.push({
 
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha_fin), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_fin), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.C01, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C02, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C03, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C04, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C05, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C01, ...this.bodyRowsConfig },
+                { value: item.C02, ...this.bodyRowsConfig },
+                { value: item.C03, ...this.bodyRowsConfig },
+                { value: item.C04, ...this.bodyRowsConfig },
+                { value: item.C05, ...this.bodyRowsConfig },
 
-                { value: item.C06, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C07, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C08, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C09, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C10, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.C11, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.C06, ...this.bodyRowsConfig },
+                { value: item.C07, ...this.bodyRowsConfig },
+                { value: item.C08, ...this.bodyRowsConfig },
+                { value: item.C09, ...this.bodyRowsConfig },
+                { value: item.C10, ...this.bodyRowsConfig },
+                { value: item.C11, ...this.bodyRowsConfig },
 
-                { value: item.puntuacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.puntuacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
 
             });
           });
@@ -3389,26 +4614,71 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
+            column_config = [
+              { width: this.w_item },
+            ];
+            if(this.chkDateHour){
+              column_config.push(
+                { width: this.w_date },
+                { width: this.w_hour },
+                { width: this.w_date_ini_fin },
+                { width: this.w_hour_ini_fin },
+              );
+            } else {
+              column_config.push(
+                { width: this.w_date_and_hour },
+                { width: this.w_date_and_hour },
+              );
+            }
+            column_config.push(
+              { width: this.calculateColWidth(codigo_cell_ch_width) },
+              { width: this.calculateColWidth(placa_cell_ch_width) },
+              { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+              { width: this.calculateColWidth(c01_cell_ch_width) },
+              { width: this.calculateColWidth(c02_cell_ch_width) },
+              { width: this.calculateColWidth(c03_cell_ch_width) },
+              { width: this.calculateColWidth(c04_cell_ch_width) },
+              { width: this.calculateColWidth(c05_cell_ch_width) },
+              { width: this.calculateColWidth(c06_cell_ch_width) },
+              { width: this.calculateColWidth(c07_cell_ch_width) },
+              { width: this.calculateColWidth(c08_cell_ch_width) },
+              { width: this.calculateColWidth(c09_cell_ch_width) },
+              { width: this.calculateColWidth(c10_cell_ch_width) },
+              { width: this.calculateColWidth(c11_cell_ch_width) },
+              { width: this.calculateColWidth(calificacion_cell_ch_width) },
+            );
+
             exportFileEx.push({
               freezePane: {
-                  rowSplit: 6
+                  rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
                 },
-              columns: [
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-              ],
+              columns: column_config,
               title: data[0][1],
               rows: rows
             });
+
+            codigo_cell_ch_width = "codigo".length;
+            placa_cell_ch_width = "placa".length;
+            tipo_unidad_cell_ch_width = "Tipo unidad".length;
+            c01_cell_ch_width = "c01".length;
+            c02_cell_ch_width = "c02".length;
+            c03_cell_ch_width = "c03".length;
+            c04_cell_ch_width = "c04".length;
+            c05_cell_ch_width = "c05".length;
+            c06_cell_ch_width = "c06".length;
+            c07_cell_ch_width = "c07".length;
+            c08_cell_ch_width = "c08".length;
+            c09_cell_ch_width = "c09".length;
+            c10_cell_ch_width = "c10".length;
+            c11_cell_ch_width = "c11".length;
+            calificacion_cell_ch_width = "calificacion".length;
         }
         // //********************************************* excel version 1 *********************************
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-           rows.splice(1, 1);
+           rows.splice(0, this.headerRowSpan);
+           rows.push(...this.spaceBetweenTables);
            allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -3419,17 +4689,46 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+        allRows[0].cells![0].colSpan = table_width;
+
+        column_config = [
+          { width: this.w_item },
+        ];
+        if(this.chkDateHour){
+          column_config.push(
+            { width: this.w_date },
+            { width: this.w_hour },
+            { width: this.w_date_ini_fin },
+            { width: this.w_hour_ini_fin },
+          );
+        } else {
+          column_config.push(
+            { width: this.w_date_and_hour },
+          );
+        }
+        column_config.push(
+          { width: this.calculateColWidth(codigo_cell_ch_width) },
+          { width: this.calculateColWidth(placa_cell_ch_width) },
+          { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+          { width: this.calculateColWidth(c01_cell_ch_width) },
+          { width: this.calculateColWidth(c02_cell_ch_width) },
+          { width: this.calculateColWidth(c03_cell_ch_width) },
+          { width: this.calculateColWidth(c04_cell_ch_width) },
+          { width: this.calculateColWidth(c05_cell_ch_width) },
+          { width: this.calculateColWidth(c06_cell_ch_width) },
+          { width: this.calculateColWidth(c07_cell_ch_width) },
+          { width: this.calculateColWidth(c08_cell_ch_width) },
+          { width: this.calculateColWidth(c09_cell_ch_width) },
+          { width: this.calculateColWidth(c10_cell_ch_width) },
+          { width: this.calculateColWidth(c11_cell_ch_width) },
+          { width: this.calculateColWidth(calificacion_cell_ch_width) },
+        );
+
         exportFileEx.push({
           freezePane: {
-              rowSplit: 2
+              rowSplit: this.headerRowSpan
             },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
+          columns: column_config,
           title: "Resultado",//data[0][1],
           rows: allRows
         });
@@ -3445,7 +4744,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelCalificacionManejo.xlsx"
+        fileName: "ReporteCalificacionManejo.xlsx"
       });
 
     } else {
@@ -3459,14 +4758,31 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
 
+    var column_config: Columns[];
+    var table_width = 12 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = this.chkDateHour? 5: 4;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var reconocimiento_facial_cell_ch_width = "reconocimiento facial (alix)".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+
     // var allRows = [
     var allRows: AllRows[] = [
-
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE FATIGA EXTREMA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE FATIGA EXTREMA", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
 
@@ -3479,20 +4795,28 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // var rows = [
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE FATIGA EXTREMA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE FATIGA EXTREMA", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
 
@@ -3501,24 +4825,25 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Reconocimiento Facial (ai1x)", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Reconocimiento Facial (ai1x)", ...this.colHeaderConfig },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -3535,26 +4860,39 @@ export class ResultComponent implements OnDestroy, OnInit {
                 var rec_facial = "Rostro ausente (" + item.ai1x + ")";
             }
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            reconocimiento_facial_cell_ch_width = Math.max(reconocimiento_facial_cell_ch_width, (rec_facial??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velGPS+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.velGPS+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: rec_facial, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: rec_facial, ...this.bodyRowsConfig },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -3564,23 +4902,24 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Reconocimiento Facial (ai1x)", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Reconocimiento Facial (ai1x)", ...this.colHeaderConfig },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -3595,27 +4934,40 @@ export class ResultComponent implements OnDestroy, OnInit {
                 var rec_facial = "Rostro ausente (" + item.ai1x + ")";
             }
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            reconocimiento_facial_cell_ch_width = Math.max(reconocimiento_facial_cell_ch_width, (rec_facial??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
 
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velGPS+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.velGPS+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: rec_facial, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: rec_facial, ...this.bodyRowsConfig },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
 
             });
           });
@@ -3625,26 +4977,61 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
+
+            column_config = [
+              { width: this.w_item },
+            ];
+            if(this.chkDateHour){
+              column_config.push(
+                { width: this.w_date },
+                { width: this.w_hour },
+              );
+            } else {
+              column_config.push(
+                { width: this.w_date_and_hour },
+              );
+            }
+            column_config.push(
+              { width: this.calculateColWidth(codigo_cell_ch_width) },
+              { width: this.calculateColWidth(placa_cell_ch_width) },
+              { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+              { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+              { width: this.calculateColWidth(conductor_cell_ch_width) },
+              { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+              { width: this.calculateColWidth(vel_can_cell_ch_width) },
+              { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) },
+              { width: this.calculateColWidth(tramo_cell_ch_width) },
+              { width: this.calculateColWidth(pc_cell_ch_width) },
+              { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+            );
+
             exportFileEx.push({
               freezePane: {
-                  rowSplit: 6
+                  rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
                 },
-              columns: [
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-              ],
+              columns: column_config,
               title: data[0][1],
               rows: rows
             });
+
+            codigo_cell_ch_width = "codigo".length;
+            placa_cell_ch_width = "placa".length;
+            tipo_unidad_cell_ch_width = "Tipo unidad".length;
+            id_conductor_cell_ch_width = "ID conductor".length;
+            conductor_cell_ch_width = "conductor".length;
+            vel_gps_cell_ch_width = "Vel. GPS".length;
+            vel_can_cell_ch_width = "Vel. CAN".length;
+            reconocimiento_facial_cell_ch_width = "reconocimiento facial (alix)".length;
+            tramo_cell_ch_width = "tramo".length;
+            pc_cell_ch_width = "Punto Cercano".length;
+            ubicacion_cell_ch_width = "Ubicacion".length;
         }
         // //********************************************* excel version 1 *********************************
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-           rows.splice(1, 1);
+           rows.splice(0, this.headerRowSpan);
+           rows.push(...this.spaceBetweenTables);
            allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -3655,17 +5042,40 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+        allRows[0].cells![0].colSpan = table_width;
+
+        column_config = [
+          { width: this.w_item },
+        ];
+        if(this.chkDateHour){
+          column_config.push(
+            { width: this.w_date },
+            { width: this.w_hour },
+          );
+        } else {
+          column_config.push(
+            { width: this.w_date_and_hour },
+          );
+        }
+        column_config.push(
+          { width: this.calculateColWidth(codigo_cell_ch_width) },
+          { width: this.calculateColWidth(placa_cell_ch_width) },
+          { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+          { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+          { width: this.calculateColWidth(conductor_cell_ch_width) },
+          { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+          { width: this.calculateColWidth(vel_can_cell_ch_width) },
+          { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) },
+          { width: this.calculateColWidth(tramo_cell_ch_width) },
+          { width: this.calculateColWidth(pc_cell_ch_width) },
+          { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        );
+
         exportFileEx.push({
           freezePane: {
-              rowSplit: 2
+              rowSplit: this.headerRowSpan
             },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
+          columns: column_config,
           title: "Resultado",//data[0][1],
           rows: allRows
         });
@@ -3681,7 +5091,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelFatigaExtrema.xlsx"
+        fileName: "ReporteFatigaExtrema.xlsx"
       });
 
     } else {
@@ -3693,15 +5103,30 @@ export class ResultComponent implements OnDestroy, OnInit {
     // dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
+    var column_config: Columns[];
+    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = this.chkDateHour? 5: 4;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
 
     // var allRows = [
     var allRows: AllRows[] = [
-
-        {}, {
+        {
           cells: [
-            { value: "REPORTE ANTICOLISION FRONTAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE ANTICOLISION FRONTAL", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
 
@@ -3714,20 +5139,28 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // var rows = [
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE ANTICOLISION FRONTAL", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE ANTICOLISION FRONTAL", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
 
@@ -3736,23 +5169,24 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -3763,26 +5197,38 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -3793,22 +5239,23 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
           // data[1].forEach(function(item:any, index:any){
@@ -3816,26 +5263,38 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
 
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
 
             });
           });
@@ -3844,26 +5303,59 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
+            column_config = [
+              { width: this.w_item },
+            ];
+            if(this.chkDateHour){
+              column_config.push(
+                { width: this.w_date },
+                { width: this.w_hour },
+              );
+            } else {
+              column_config.push(
+                { width: this.w_date_and_hour },
+              );
+            }
+            column_config.push(
+              { width: this.calculateColWidth(codigo_cell_ch_width) },
+              { width: this.calculateColWidth(placa_cell_ch_width) },
+              { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+              { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+              { width: this.calculateColWidth(conductor_cell_ch_width) },
+              { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+              { width: this.calculateColWidth(vel_can_cell_ch_width) },
+              { width: this.calculateColWidth(tramo_cell_ch_width) },
+              { width: this.calculateColWidth(pc_cell_ch_width) },
+              { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+            );
+
             exportFileEx.push({
               freezePane: {
-                  rowSplit: 6
+                  rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
                 },
-              columns: [
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-              ],
+              columns: column_config,
               title: data[0][1],
               rows: rows
             });
+
+            codigo_cell_ch_width = "codigo".length;
+            placa_cell_ch_width = "placa".length;
+            tipo_unidad_cell_ch_width = "Tipo unidad".length;
+            id_conductor_cell_ch_width = "ID conductor".length;
+            conductor_cell_ch_width = "conductor".length;
+            vel_gps_cell_ch_width = "Vel. GPS".length;
+            vel_can_cell_ch_width = "Vel. CAN".length;
+            tramo_cell_ch_width = "tramo".length;
+            pc_cell_ch_width = "Punto Cercano".length;
+            ubicacion_cell_ch_width = "Ubicacion".length;
+
         }
         // //********************************************* excel version 1 *********************************
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-           rows.splice(1, 1);
+           rows.splice(0, this.headerRowSpan);
+           rows.push(...this.spaceBetweenTables);
            allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -3874,17 +5366,39 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+        allRows[0].cells![0].colSpan = table_width;
+
+        column_config = [
+          { width: this.w_item },
+        ];
+        if(this.chkDateHour){
+          column_config.push(
+            { width: this.w_date },
+            { width: this.w_hour },
+          );
+        } else {
+          column_config.push(
+            { width: this.w_date_and_hour },
+          );
+        }
+        column_config.push(
+          { width: this.calculateColWidth(codigo_cell_ch_width) },
+          { width: this.calculateColWidth(placa_cell_ch_width) },
+          { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+          { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+          { width: this.calculateColWidth(conductor_cell_ch_width) },
+          { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+          { width: this.calculateColWidth(vel_can_cell_ch_width) },
+          { width: this.calculateColWidth(tramo_cell_ch_width) },
+          { width: this.calculateColWidth(pc_cell_ch_width) },
+          { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        );
+
         exportFileEx.push({
           freezePane: {
-              rowSplit: 2
+              rowSplit: this.headerRowSpan
             },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
+          columns: column_config,
           title: "Resultado",//data[0][1],
           rows: allRows
         });
@@ -3900,7 +5414,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelAnticolisionFrontal.xlsx"
+        fileName: "ReporteAnticolisionFrontal.xlsx"
       });
 
     } else {
@@ -3912,13 +5426,30 @@ export class ResultComponent implements OnDestroy, OnInit {
     // this.dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
+    var column_config:Columns[];
+
+    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = this.chkDateHour? 5: 4;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
 
     var allRows: AllRows[] = [
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE COLISION CON PEATONES", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE COLISION CON PEATONES", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     this.data.forEach((data: any,idx:any) => {
@@ -3926,43 +5457,52 @@ export class ResultComponent implements OnDestroy, OnInit {
         bol_datos_ex = true;
 
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE COLISION CON PEATONES", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE COLISION CON PEATONES", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         if(this.chkDateHour) {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -3971,53 +5511,63 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
 
             rows.push({
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
-
-
 
         } else {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
           data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
@@ -4028,25 +5578,38 @@ export class ResultComponent implements OnDestroy, OnInit {
             // } else {
             // 	var acc = "Desactivado (" + item.di4x + ")";
             // }
+
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
 
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
 
             });
           });
@@ -4055,26 +5618,58 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
         if (vrs == 1) {
+            column_config = [
+              { width: this.w_item },
+            ];
+            if(this.chkDateHour){
+              column_config.push(
+                { width: this.w_date },
+                { width: this.w_hour },
+              );
+            } else {
+              column_config.push(
+                { width: this.w_date_and_hour },
+              );
+            }
+            column_config.push(
+              { width: this.calculateColWidth(codigo_cell_ch_width) },
+              { width: this.calculateColWidth(placa_cell_ch_width) },
+              { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+              { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+              { width: this.calculateColWidth(conductor_cell_ch_width) },
+              { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+              { width: this.calculateColWidth(vel_can_cell_ch_width) },
+              { width: this.calculateColWidth(tramo_cell_ch_width) },
+              { width: this.calculateColWidth(pc_cell_ch_width) },
+              { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+            );
+
             exportFileEx.push({
               freezePane: {
-                  rowSplit: 6
+                  rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
                 },
-              columns: [
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-                { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-              ],
+              columns: column_config,
               title: data[0][1],
               rows: rows
             });
+
+            codigo_cell_ch_width = "codigo".length;
+            placa_cell_ch_width = "placa".length;
+            tipo_unidad_cell_ch_width = "Tipo unidad".length;
+            id_conductor_cell_ch_width = "ID conductor".length;
+            conductor_cell_ch_width = "conductor".length;
+            vel_gps_cell_ch_width = "Vel. GPS".length;
+            vel_can_cell_ch_width = "Vel. CAN".length;
+            tramo_cell_ch_width = "tramo".length;
+            pc_cell_ch_width = "Punto Cercano".length;
+            ubicacion_cell_ch_width = "Ubicacion".length;
         }
         // //********************************************* excel version 1 *********************************
 
         // //********************************************* excel version 2 *********************************
         if (vrs == 2) {
-            rows.splice(1, 1);
+            rows.splice(0, this.headerRowSpan);
+            rows.push(...this.spaceBetweenTables);
             allRows = allRows.concat(rows);
         }
         // //********************************************* excel version 2 *********************************
@@ -4085,17 +5680,39 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+        allRows[0].cells![0].colSpan = table_width;
+
+        column_config = [
+          { width: this.w_item },
+        ];
+        if(this.chkDateHour){
+          column_config.push(
+            { width: this.w_date },
+            { width: this.w_hour },
+          );
+        } else {
+          column_config.push(
+            { width: this.w_date_and_hour },
+          );
+        }
+        column_config.push(
+          { width: this.calculateColWidth(codigo_cell_ch_width) },
+          { width: this.calculateColWidth(placa_cell_ch_width) },
+          { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+          { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+          { width: this.calculateColWidth(conductor_cell_ch_width) },
+          { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+          { width: this.calculateColWidth(vel_can_cell_ch_width) },
+          { width: this.calculateColWidth(tramo_cell_ch_width) },
+          { width: this.calculateColWidth(pc_cell_ch_width) },
+          { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        );
+
         exportFileEx.push({
           freezePane: {
-              rowSplit: 2
+              rowSplit: this.headerRowSpan
             },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
+          columns: column_config,
           title: "Resultado",//data[0][1],
           rows: allRows
         });
@@ -4111,7 +5728,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelColisionConPeatones.xlsx"
+        fileName: "ReporteColisionConPeatones.xlsx"
       });
 
     } else {
@@ -4124,14 +5741,32 @@ export class ResultComponent implements OnDestroy, OnInit {
     //vm.dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
+    var column_config:Columns[];
+    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = this.chkDateHour? 5: 4;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+
+
 
     // var allRows = [
     var allRows: AllRows[] = [
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE DESVIO DE CARRIL HACIA LA IZQUIERDA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE DESVIO DE CARRIL HACIA LA IZQUIERDA", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     this.data.forEach((data: any,idx:any) => {
@@ -4140,44 +5775,53 @@ export class ResultComponent implements OnDestroy, OnInit {
         bol_datos_ex = true;
 
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE DESVIO DE CARRIL HACIA LA IZQUIERDA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE DESVIO DE CARRIL HACIA LA IZQUIERDA", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         if(this.chkDateHour) {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
           data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
@@ -4185,27 +5829,39 @@ export class ResultComponent implements OnDestroy, OnInit {
             //var fh = item.fecha.split(" ");
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
 
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -4213,22 +5869,23 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -4240,25 +5897,39 @@ export class ResultComponent implements OnDestroy, OnInit {
             // } else {
             // 	var acc = "Desactivado (" + item.di4x + ")";
             // }
+
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+            
             rows.push({
 
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -4266,26 +5937,59 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
     if (vrs == 1) {
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
       freezePane: {
-        rowSplit: 6
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
         },
-      columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-      ],
+      columns: column_config,
       title: data[0][1],
       rows: rows
       });
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      tipo_unidad_cell_ch_width = "Tipo unidad".length;
+      id_conductor_cell_ch_width = "ID conductor".length;
+      conductor_cell_ch_width = "conductor".length;
+      vel_gps_cell_ch_width = "Vel. GPS".length;
+      vel_can_cell_ch_width = "Vel. CAN".length;
+      tramo_cell_ch_width = "tramo".length;
+      pc_cell_ch_width = "Punto Cercano".length;
+      ubicacion_cell_ch_width = "Ubicacion".length;
     }
     // //********************************************* excel version 1 *********************************
 
     // //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      rows.splice(1, 1);
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
       allRows = allRows.concat(rows);
     }
     // //********************************************* excel version 2 *********************************
@@ -4296,17 +6000,39 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
         freezePane: {
-          rowSplit: 2
+          rowSplit: this.headerRowSpan
         },
-        columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-        ],
+        columns: column_config,
         title: "Resultado",//data[0][1],
         rows: allRows
       });
@@ -4322,7 +6048,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelDesvioCarrilIzquierda.xlsx"
+        fileName: "ReporteDesvioCarrilIzquierda.xlsx"
       });
 
     } else {
@@ -4337,13 +6063,29 @@ export class ResultComponent implements OnDestroy, OnInit {
     //vm.dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
+    var column_config: Columns[];
+    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = this.chkDateHour? 5: 4;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
 
     var allRows: AllRows[] = [
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE DESVIO DE CARRIL HACIA LA DERECHA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE DESVIO DE CARRIL HACIA LA DERECHA", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     this.data.forEach((data: any,idx:any) => {
@@ -4351,20 +6093,28 @@ export class ResultComponent implements OnDestroy, OnInit {
         bol_datos_ex = true;
 
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE DESVIO DE CARRIL HACIA LA DERECHA", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE DESVIO DE CARRIL HACIA LA DERECHA", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         if(this.chkDateHour) {
@@ -4372,23 +6122,24 @@ export class ResultComponent implements OnDestroy, OnInit {
             cells: [
 
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -4397,26 +6148,38 @@ export class ResultComponent implements OnDestroy, OnInit {
             //var fh = item.fecha.split(" ");
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -4424,46 +6187,59 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-            ]
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+            ],
+            height: this.colsHeaderHeight
           });
 
           data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
 
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -4471,26 +6247,59 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
     if (vrs == 1) {
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
       freezePane: {
-        rowSplit: 6
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
         },
-      columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-      ],
+      columns: column_config,
       title: data[0][1],
       rows: rows
       });
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      tipo_unidad_cell_ch_width = "Tipo unidad".length;
+      id_conductor_cell_ch_width = "ID conductor".length;
+      conductor_cell_ch_width = "conductor".length;
+      vel_gps_cell_ch_width = "Vel. GPS".length;
+      vel_can_cell_ch_width = "Vel. CAN".length;
+      tramo_cell_ch_width = "tramo".length;
+      pc_cell_ch_width = "Punto Cercano".length;
+      ubicacion_cell_ch_width = "Ubicacion".length;
     }
     // //********************************************* excel version 1 *********************************
 
     // //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      rows.splice(1, 1);
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
       allRows = allRows.concat(rows);
     }
     // //********************************************* excel version 2 *********************************
@@ -4501,17 +6310,39 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
         freezePane: {
-          rowSplit: 2
+          rowSplit: this.headerRowSpan
         },
-        columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-        ],
+        columns: column_config,
         title: "Resultado",//data[0][1],
         rows: allRows
       });
@@ -4527,7 +6358,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelDesvioCarrilDerecha.xlsx"
+        fileName: "ReporteDesvioCarrilDerecha.xlsx"
       });
 
     } else {
@@ -4541,13 +6372,29 @@ export class ResultComponent implements OnDestroy, OnInit {
     //vm.dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
+    var column_config: Columns[];
+    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = this.chkDateHour? 5: 4;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
 
     var allRows: AllRows[] = [
-        {}, {
+        {
           cells: [
-            { value: "REPORTE DE BLOQUEO DE VISION DEL MOBILEYE", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE DE BLOQUEO DE VISION DEL MOBILEYE", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     this.data.forEach((data: any,idx:any) => {
@@ -4556,43 +6403,52 @@ export class ResultComponent implements OnDestroy, OnInit {
         bol_datos_ex = true;
 
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE DE BLOQUEO DE VISION DEL MOBILEYE", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE DE BLOQUEO DE VISION DEL MOBILEYE", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 4 },
-            ]
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         if(this.chkDateHour) {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -4601,26 +6457,38 @@ export class ResultComponent implements OnDestroy, OnInit {
             //var fh = item.fecha.split(" ");
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -4628,22 +6496,23 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.GPS", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Vel.CAN", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Punto Cercano", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: this.colsHeaderHeight
           });
 
 
@@ -4651,25 +6520,37 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
 
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_gps_speed+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.vel_can+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
 
-                { value: item.tramo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.PC, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -4677,26 +6558,59 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
     if (vrs == 1) {
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
       freezePane: {
-        rowSplit: 6
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
         },
-      columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-      ],
+      columns: column_config,
       title: data[0][1],
       rows: rows
       });
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      tipo_unidad_cell_ch_width = "Tipo unidad".length;
+      id_conductor_cell_ch_width = "ID conductor".length;
+      conductor_cell_ch_width = "conductor".length;
+      vel_gps_cell_ch_width = "Vel. GPS".length;
+      vel_can_cell_ch_width = "Vel. CAN".length;
+      tramo_cell_ch_width = "tramo".length;
+      pc_cell_ch_width = "Punto Cercano".length;
+      ubicacion_cell_ch_width = "Ubicacion".length;
     }
     // //********************************************* excel version 1 *********************************
 
     // //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      rows.splice(1, 1);
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
       allRows = allRows.concat(rows);
     }
     // //********************************************* excel version 2 *********************************
@@ -4707,17 +6621,39 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
         freezePane: {
-          rowSplit: 2
+          rowSplit: this.headerRowSpan
         },
-        columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-        ],
+        columns: column_config,
         title: "Resultado",//data[0][1],
         rows: allRows
       });
@@ -4733,7 +6669,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelBloqueoVisionMobileye.xlsx"
+        fileName: "ReporteBloqueoVisionMobileye.xlsx"
       });
 
     } else {
@@ -5440,23 +7376,23 @@ export class ResultComponent implements OnDestroy, OnInit {
           var tabla2 = [];
 
           tabla2.push([
-            { text: 'LONGITUD DE RUTA : ', bold: true, fontSize: 10, alignment: 'center' },
+            { text: 'Longitud de Ruta : ', bold: true, fontSize: 10, alignment: 'center' },
             { text: data[3][0], bold: true, fontSize: 6, alignment: 'center' }
             ]);
           tabla2.push([
-              { text: 'DURACIÓN DE MOVIMIENTO : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: 'Duración de Movimiento : ', bold: true, fontSize: 10, alignment: 'center' },
               { text: data[3][1], bold: true, fontSize: 6, alignment: 'center' }
             ]);
           tabla2.push([
-              { text: 'DURACIÓN DETENIDO : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: 'Duración Detenido : ', bold: true, fontSize: 10, alignment: 'center' },
               { text: data[3][2], bold: true, fontSize: 6, alignment: 'center' }
             ]);
           tabla2.push([
-              { text: 'VELOCIDAD MÁS ALTA : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: 'Velocidad más Alta : ', bold: true, fontSize: 10, alignment: 'center' },
               { text: data[3][3], bold: true, fontSize: 6, alignment: 'center' }
             ]);
           tabla2.push([
-              { text: 'VELOCIDAD PROMEDIO : ', bold: true, fontSize: 10, alignment: 'center' },
+              { text: 'Velocidad Promedio : ', bold: true, fontSize: 10, alignment: 'center' },
               { text: data[3][4], bold: true, fontSize: 6, alignment: 'center' }
           ]);
 
@@ -7850,12 +9786,30 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
 
+    var table_width = 10 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = 4 + (this.chkDateHour? 2: 1);
+    var column_config = [];
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var tramo_cell_ch_width = "tramo".length;
+    var limite_velocidad_cell_ch_width = "Limite de".length;
+    var exceso_velocidad_cell_ch_width = "Exceso de".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+
+    var header_two_lines = true;
+
     var allRows: AllRows[] = [
-        {}, {
+        {
           cells: [
-            { value: "REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-          ]
-        }
+            { value: "REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
     this.data.forEach((data: any,idx:any) => {
@@ -7864,42 +9818,51 @@ export class ResultComponent implements OnDestroy, OnInit {
         bol_datos_ex = true;
 
         var rows:AllRows[] = [
-          {},
           {
             cells: [
-              { value: "REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)", bold: true, vAlign: "center", hAlign: "center", fontSize: this.t1, colSpan: 6 }
-            ]
+              { value: "REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
           },
-          {},
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
               // { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
-              { value: "PERIODO : " + this.period, color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 6 },
-            ]
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width },
+            ],
+            height: this.subHeaderHeight
           },
-          {}
+          {
+            cells: [
+              //{ value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
         ];
 
         if(this.chkDateHour) {
           rows.push({
             cells: [
 
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Hora", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Límite de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Exceso de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Límite de Velocidad", ...this.colHeaderConfig },
+              { value: "Exceso de Velocidad", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: header_two_lines? this.colsHeaderHeightTwoLine: this.colsHeaderHeight,
           });
 
 
@@ -7909,25 +9872,36 @@ export class ResultComponent implements OnDestroy, OnInit {
             //var fh = item.fecha.split(" ");
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max( codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max( placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max( tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max( id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max( conductor_cell_ch_width, (item.conductor??'').toString().length);
+            tramo_cell_ch_width = Math.max( tramo_cell_ch_width, (item.nombre_zona??'').toString().length);
+            limite_velocidad_cell_ch_width = Math.max( limite_velocidad_cell_ch_width, (item.v0??'').toString().length);
+            exceso_velocidad_cell_ch_width = Math.max( exceso_velocidad_cell_ch_width, (item.velocidad??'').toString().length);
+            ubicacion_cell_ch_width = Math.max( ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
               cells: [
 
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha_inicio), format: "yyyy/mm/dd", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChs(item.fecha_inicio), format: "hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_inicio), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha_inicio), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
 
-                { value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.v0+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velocidad+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.nombre_zona, ...this.bodyRowsConfig },
+                { value: item.v0+" Km/h", ...this.bodyRowsConfig },
+                { value: item.velocidad+" Km/h", ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight
             });
           });
 
@@ -7935,21 +9909,22 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
             cells: [
-              { value: "Item", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Fecha", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Código", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Placa", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Tipo de Unidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
 
-              { value: "Id Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Conductor", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
 
-              { value: "Tramo", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Límite de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Exceso de Velocidad", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
-              { value: "Ubicación", bold: false, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Límite de Velocidad", ...this.colHeaderConfig },
+              { value: "Exceso de Velocidad", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
 
-            ]
+            ],
+            height: header_two_lines? this.colsHeaderHeightTwoLine: this.colsHeaderHeight,
           });
 
 
@@ -7957,24 +9932,35 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
+            codigo_cell_ch_width = Math.max( codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max( placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max( tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            id_conductor_cell_ch_width = Math.max( id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max( conductor_cell_ch_width, (item.conductor??'').toString().length);
+            tramo_cell_ch_width = Math.max( tramo_cell_ch_width, (item.nombre_zona??'').toString().length);
+            limite_velocidad_cell_ch_width = Math.max( limite_velocidad_cell_ch_width, (item.v0??'').toString().length);
+            exceso_velocidad_cell_ch_width = Math.max( exceso_velocidad_cell_ch_width, (item.velocidad??'').toString().length);
+            ubicacion_cell_ch_width = Math.max( ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
             rows.push({
 
               cells: [
-                { value: (index + 1), vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: this.isChe(item.fecha_inicio), format: "yyyy/mm/dd hh:mm:ss", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.codigo, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.placa, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.tipo_unidad, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_inicio), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
 
-                { value: item.idConductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.conductor, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
 
-                { value: item.nombre_zona, vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.v0+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: item.velocidad+" Km/h", vAlign: "center", hAlign: "center", fontSize: this.c1 },
-                { value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 },
+                { value: item.nombre_zona, ...this.bodyRowsConfig },
+                { value: item.v0+" Km/h", ...this.bodyRowsConfig },
+                { value: item.velocidad+" Km/h", ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
 
-              ]
+              ],
+              height: this.bodyRowsHeight,
             });
           });
 
@@ -7982,26 +9968,56 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         // //********************************************* excel version 1 *********************************
     if (vrs == 1) {
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(limite_velocidad_cell_ch_width) },
+        { width: this.calculateColWidth(exceso_velocidad_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
       freezePane: {
-        rowSplit: 6
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
         },
-      columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-      ],
+      columns: column_config,
       title: "Resultado",//data[0][1],
       rows: rows
       });
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      tipo_unidad_cell_ch_width = "Tipo unidad".length;
+      id_conductor_cell_ch_width = "ID conductor".length;
+      conductor_cell_ch_width = "conductor".length;
+      tramo_cell_ch_width = "tramo".length;
+      limite_velocidad_cell_ch_width = "Limite de".length;
+      exceso_velocidad_cell_ch_width = "Exceso de".length;
+      ubicacion_cell_ch_width = "Ubicacion".length;
     }
     // //********************************************* excel version 1 *********************************
 
     // //********************************************* excel version 2 *********************************
     if (vrs == 2) {
-      rows.splice(1, 1);
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
       allRows = allRows.concat(rows);
     }
     // //********************************************* excel version 2 *********************************
@@ -8012,17 +10028,38 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //********************************************* excel version 2 *********************************
     if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(limite_velocidad_cell_ch_width) },
+        { width: this.calculateColWidth(exceso_velocidad_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
       exportFileEx.push({
         freezePane: {
-          rowSplit: 2
+          rowSplit: this.headerRowSpan
         },
-        columns: [
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-        { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-        ],
+        columns: column_config,
         title: "Resultado",//data[0][1],
         rows: allRows
       });
@@ -8038,7 +10075,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "exportExcelExcesosVelocidadFormatoExtendido.xlsx"
+        fileName: "ReporteExcesosVelocidadFormatoExtendido.xlsx"
       });
 
     } else {

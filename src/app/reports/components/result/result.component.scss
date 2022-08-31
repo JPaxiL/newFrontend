@@ -107,7 +107,9 @@ p{
 .export-container{
     padding-top: 0.8rem; /* Mismo que el padding bottom del main div */
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2.5rem;
     align-items: center;
 }
 

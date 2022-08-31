@@ -95,10 +95,8 @@ export class HistorialService {
       // hora_hasta  : '00',//{id: '00', name:'00'},
       // min_hasta   : '00',//{id: '00', name:'00'},
 
-
-
       pngFechaIni: new Date(moment( Date.now() ).format('YYYY-MM-DDTHH:mm')),
-      pngFechaFin: new Date(moment( Date.now() ).format('YYYY-MM-DDTHH:mm')),
+      pngFechaFin: new Date(moment( Date.now() ).add(1, 'days').format('YYYY-MM-DDTHH:mm')),
       // pngHoraIni2: 0,
       // pngMinIni: 0,
       // pngHoraFin2: 0,

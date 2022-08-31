@@ -22,7 +22,6 @@ export class FormComponent implements OnInit {
   reports: any=[];
   selectedReport: any={};
   vehicles: any=[];
-  selectedVehicle: any={};
   selectedVehicles: any=[];
   convoys: any=[];
   selectedConvoy: any={};
@@ -36,17 +35,11 @@ export class FormComponent implements OnInit {
   /* checkboxParada: boolean = true; //Renamed to chkStops
   checkboxMovimiento: boolean = true; */ //Renamed to chkMovements
   // checkboxDuracion: boolean = false; //Renamed to chkDuracion
-  checkboxLimitVelocidad: boolean = false;
   dateInit!: Date;
   dateEnd!: Date;
   timeInit!: Date;
   timeEnd!: Date;
 
-  selectedValues: string[] = [];
-
-  //vehiclesArray = [];
-	vehiclesArrayOrderByConvoy: any=[];
-	vehiclesArrayOrderByGroup: any=[];
 	zones: any=[];
 	/* changedReport = changedReport();
 	onGenerate = onGenerate();
@@ -91,6 +84,8 @@ export class FormComponent implements OnInit {
   formSpinnerMsg: string = 'Cargando';
   fullScreenSpinnerMsg: string = '';
 
+  strYearRange: string = '';
+
   //Popup
   popupIconSrc='./assets/images/popup-icon-chrome.svg';
   popupDialogPosition: string = 'top-right';
@@ -122,7 +117,6 @@ export class FormComponent implements OnInit {
   //Reporte 1 - Exceso de Vel
   showExcVelOpt: boolean = false;
   checkboxDuration: boolean = false;
-  excesoVelocidad: string = 'limVel';
   minimDur = 15;
   limitSpeed = 90;
 
@@ -223,19 +217,21 @@ export class FormComponent implements OnInit {
 	chkFatigaDistraccion = true;
 
   chkTrans1min = false;
-	chkForGroup = false;
 
 	spinnerOptions = false;
 
   newWindow = false;
 
   isFormFilled = false;
+  areDatesValid = true;
 
   //Removido del formulario
   chkDateHour = true; //False muestra fecha y h juntas. true separadas
 	arrayUsers = [ 472, 204, 483, 467, 360, 394, 364, 445, 489, 491, 503, 504, 515, 522, 537, 554, 552, 555, 573, 587, 529, 590, 591, 595, 613, 620, 621, 734];
   fog = "1";
 	userId = 0;
+
+  workingOnReport: boolean = false;
 
   constructor(
     private browserDetectorService: BrowserDetectorService,
@@ -292,6 +288,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.strYearRange = '2000:' + new Date().getFullYear();
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
     // console.log(this.selectedReport.keys().length);
@@ -364,12 +361,6 @@ export class FormComponent implements OnInit {
 
   }
 
-  showExcVel(){
-    console.log(this.excesoVelocidad);
-    console.log(this.excesoVelocidad == 'limVel');
-    console.log(this.excesoVelocidad == 'durExc');
-  }
-
   selectAllVehicles(){
     this.selectedVehicles = this.chkAllVehicles? this.vehicles: [];
     this.onSelectedVehiclesChange();
@@ -405,6 +396,7 @@ export class FormComponent implements OnInit {
 
   reportar(new_tab?: any){
     console.log(new_tab !== undefined);
+    this.workingOnReport = true;
 
 
     var repSubtitle = '';
@@ -568,6 +560,7 @@ export class FormComponent implements OnInit {
             });
           }
         }
+        this.workingOnReport = false;
       }
     });
   }
@@ -698,6 +691,47 @@ export class FormComponent implements OnInit {
     console.log('date end', this.dateEnd);
     console.log('time init', moment(new Date(this.timeInit)).format("HH:mm"));
     console.log('time end', this.timeEnd);
+    this.areDatesValid = this.dateInit != null && this.dateEnd != null && this.timeInit <= this.timeEnd;
+  }
+
+  onChkAllEvents(){
+    this.eV = {
+      GPSbateriaBaja:this.eV.OtroTodos,
+      GPSbateriaDesconectada:this.eV.OtroTodos,
+      GPSaceleracionBrusca:this.eV.OtroTodos,
+      GPSfrenadaBrusca:this.eV.OtroTodos,
+      GPSbloqueoTransmision:this.eV.OtroTodos,
+      GPSsos:this.eV.OtroTodos,
+      GPSremolque:this.eV.OtroTodos,
+      GPSparada: this.eV.OtroTodos, // --- NEW
+      GPSmotorEncendido: this.eV.OtroTodos, // --- NEW
+      GPSmotorApagado: this.eV.OtroTodos, // --- NEW
+
+      evEntrada:this.eV.OtroTodos,
+      evSalida:this.eV.OtroTodos,
+      evEstadia:this.eV.OtroTodos,   // --- NEW
+      evParada:this.eV.OtroTodos,
+      evMovSinProgramacion:this.eV.OtroTodos,  //  NEW
+      evInfraccion:this.eV.OtroTodos,
+      evAnticolisionFrontal:this.eV.OtroTodos,
+      evColisionConPeatones:this.eV.OtroTodos,
+
+      evNoRostro:this.eV.OtroTodos,
+      evFatigaExtrema:this.eV.OtroTodos,
+      evDesvioCarrilIzquierda:this.eV.OtroTodos,
+      evDesvioCarrilDerecha:this.eV.OtroTodos,
+      evBloqueoVisionMobileye:this.eV.OtroTodos,
+
+
+      AccFatiga:this.eV.OtroTodos, // DESACTIVADO
+      AccAlcoholemia:this.eV.OtroTodos,
+      AccIButton: this.eV.OtroTodos,  // --- DESACTIVADO
+      AccSomnolencia: this.eV.OtroTodos,
+      AccDistraccion: this.eV.OtroTodos,
+
+      OtroTodos:this.eV.OtroTodos,
+      OtroExVelocidad:this.eV.OtroTodos,
+    };
   }
 
   validateForm(){
@@ -706,6 +740,7 @@ export class FormComponent implements OnInit {
 
     this.isFormFilled =
       (JSON.stringify(this.selectedReport) != '{}') &&
+      this.areDatesValid &&
       (
         (this.selectedReport == 0 && is_vehicle_selected && (this.chkStops || this.chkMovements))
         ||
@@ -746,4 +781,120 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 20 && is_vehicle_selected)
       );
   }
+
+  resetAllFields(){
+    this.selectedVehicles =[];
+    this.chkAllVehicles = false;
+    this.selectedConvoy ={};
+    this.selectedGroup ={};
+    this.checkboxGroup  = false;
+
+    this.chkOdomVirtual = false;
+    this.chkStops = false;
+    this.chkMovements = false;
+    this.chkFrenada = false;
+    this.chkAceleracion = false;
+
+    //0. Paradas y Movimientos
+    this.chkStops = true;
+	  this.chkMovements = true;
+
+    //1. Exceso de velocidad
+    this.checkboxDuration = false;
+    this.minimDur = 15;
+    this.limitSpeed = 90;
+
+    //2. Entrada y Salida
+    this.selectedZones = [];
+    this.chkAllZones = false;
+
+    //3. Combustible
+    this.chkOdomVirtual = false;
+    this.odometroVirtual = 0;
+
+    //4. Frenada y Acel Brusca
+    this.chkFrenada = true;
+	  this.chkAceleracion = true;
+
+    //5. General
+    this.oG = {
+      DUOT2state:false, // --- NEW2
+      RPMAlta:false,
+      RxM:false,
+      aBrusca:false,
+      alcoholemia:false,
+      altitud:false,
+      angulo:false,
+      cMotor:false,
+      cRestante: false, // --- NEW
+      fBrusca:false,
+      fExBrusca:false,
+      fServidor:false,   // --- NEW
+      fatiga:false,
+      cNivel:false,  //  NEW
+      odometro:false,
+      onOff:false,
+      pCercano:false,
+      parametros: false,  // --- NEW
+      recFacial:false,
+      referencia:false,
+      ubicacion:false,
+      velCAN:false,
+      velECO:false,
+      velGPS:false,
+      velGPS_speed:false,
+    };
+
+    //6. Eventos
+    this.eV = {
+      GPSbateriaBaja:false,
+      GPSbateriaDesconectada:false,
+      GPSaceleracionBrusca:false,
+      GPSfrenadaBrusca:false,
+      GPSbloqueoTransmision:false,
+      GPSsos:false,
+      GPSremolque:false,
+      GPSparada: false, // --- NEW
+      GPSmotorEncendido: false, // --- NEW
+      GPSmotorApagado: false, // --- NEW
+
+      evEntrada:false,
+      evSalida:false,
+      evEstadia:false,   // --- NEW
+      evParada:false,
+      evMovSinProgramacion:false,  //  NEW
+      evInfraccion:false,
+      evAnticolisionFrontal:false,
+      evColisionConPeatones:false,
+
+      evNoRostro:false,
+      evFatigaExtrema:false,
+      evDesvioCarrilIzquierda:false,
+      evDesvioCarrilDerecha:false,
+      evBloqueoVisionMobileye:false,
+
+
+      AccFatiga:false, // DESACTIVADO
+      AccAlcoholemia:false,
+      AccIButton: false,  // --- DESACTIVADO
+      AccSomnolencia: false,
+      AccDistraccion: false,
+
+      OtroTodos:false,
+      OtroExVelocidad:false,
+    };
+
+    //Reporte 10
+    this.chkFatigaSomnolencia = true;
+	  this.chkFatigaDistraccion = true;
+
+    this.areDatesValid = true;
+
+    this.dateInit = new Date(moment(Date.now()).format("MM/DD/YYYY"));
+    this.dateEnd = this.dateInit;
+    console.log('time',new Date('12/03/2018'));
+    this.timeInit = new Date('12/03/2018 00:00');
+    this.timeEnd = new Date('12/03/2018 23:59');
+  }
+
 }

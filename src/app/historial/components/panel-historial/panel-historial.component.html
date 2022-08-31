@@ -12,7 +12,8 @@
 
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorial" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Cargando Historial... </p></ngx-spinner>
 
-  <div id="panel_historial" class="modal-body p-fluid p-0 overflow-auto">
+  <div id="panel_historial" class="modal-body p-fluid p-0 overflow-auto" style="position: relative;">
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorialForm" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Cargando información... </p></ngx-spinner>
 
     <div class="panel-izq-container h-100">
       <div class="panel-izq-form">

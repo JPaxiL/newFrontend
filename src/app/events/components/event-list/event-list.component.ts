@@ -91,6 +91,9 @@ export class EventListComponent implements OnInit {
     this.panelNotifKey = 0;
     //this.ess.count = 0;
     //Falta condicional para resetear las notificaciones solo si se abrió el panel
+    if(this.eventService.activeEvent){
+      this.hideEvent(this.eventService.activeEvent);
+    }
     setTimeout(()=> {
       if(this.clearNotifCounterOnClose){
         this.ess.new_notif_stack = [];
@@ -132,6 +135,11 @@ export class EventListComponent implements OnInit {
     } );
     this.eventService.activeEvent = event;
     event.layer.addTo(this.mapService.map).openPopup();
+
+    //Actualizar el estado de visto del evento
+    /* if(!event.leido){
+      this.markEventAsRead(this.event);
+    } */
   }
 
   public hideEvent(event:any){
@@ -170,6 +178,10 @@ export class EventListComponent implements OnInit {
         return event.tipo == this.selectedEvent
       });
     }
+  }
+
+  private markEventAsRead(){
+    //Actualizar el estado de visto del evento
   }
 
   public searchByPlate(){

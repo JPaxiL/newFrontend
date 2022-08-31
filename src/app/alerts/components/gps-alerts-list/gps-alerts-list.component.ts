@@ -18,17 +18,30 @@ export class GpsAlertsListComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
+  strSearched: string = '';
+  options = new Array(
+    { id:'ALERTS', name:"Alertas"},
+    { id:'ALERTS-GPS', name:"Alertas GPS"},
+    { id:'ALERTS-GPS-CREATE', name:"Alertas GPS"},
+  );
+
   constructor(
     private AlertService: AlertService,
-    private panelService: PanelService,
+    public panelService: PanelService,
     private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+    this.spinner.show('loadingGPSAlertsSpinner');
     this.loadData();
   }
 
+  ngOnDestoy(){
+    this.AlertService.clearDataByType();
+  }
+
   public async loadData(){
+    this.spinner.show('loadingGPSAlertsSpinner'); //En caso de ser llamado por delete
     this.alerts = await this.AlertService.getAlertsByType('gps');
     this.spinner.hide('loadingGPSAlertsSpinner');
   }
@@ -40,6 +53,27 @@ export class GpsAlertsListComponent implements OnInit {
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = "ALERTS-GPS-EDIT";
     this.panelService.nombreCabecera = "Alertas GPS";
+  }
+
+  clickShowPanel( nomComponent:string ): void {
+
+    $("#panelMonitoreo").show( "slow" );
+    this.panelService.nombreComponente = nomComponent;
+
+    const item = this.options.filter((item)=> item.id == nomComponent);
+    this.panelService.nombreCabecera =   item[0].name;
+
+  }
+
+  public onSearch(){
+    if(this.strSearched == ''){
+      this.alerts = this.AlertService.getDataByType();
+    }else {
+      this.alerts = this.AlertService.getDataByType().filter( (alert:any)  => {
+        return (alert.nombre??'').toLowerCase().match(this.strSearched.toLowerCase()) 
+          || (alert.tipo??'').toLowerCase().match(this.strSearched.toLowerCase());
+      });
+    }
   }
 
 }

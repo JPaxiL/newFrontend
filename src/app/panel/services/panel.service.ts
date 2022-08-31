@@ -19,6 +19,9 @@ export class PanelService {
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'EVENT-USER', name:'Eventos'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
+    { id:'DASHBOARD', name: 'Dashboard'},
+    { id:'AUDITORIA', name: 'Auditoría'},
+    { id:'SUBCUENTAS', name: 'Subcuentas'},
   );
 
   nombreComponente: string = '';
@@ -36,7 +39,7 @@ export class PanelService {
       this.nombreComponente = nomComponent;
       this.clasePanelActivo = this.activePanelClass();
       console.log(this.nombreComponente);
-  
+
       const item = this.options.filter((item)=> item.id == nomComponent);
       this.nombreCabecera = item[0].name;
     }
@@ -50,23 +53,29 @@ export class PanelService {
 
   activePanelClass(){
     switch(this.nombreComponente){
-      case "VEHICLES": 
+      case "VEHICLES":
         return 'vehiculos';
-      case "ALERTS": 
-      case "ALERTS-GPS": 
-      case "ALERTS-PLATFORMS": 
-      case "ALERTS-ACCESSORIES": 
+      case "ALERTS":
+      case "ALERTS-GPS":
+      case "ALERTS-PLATFORMS":
+      case "ALERTS-ACCESSORIES":
         return 'alertas';
-      case "GEOFENCES": 
+      case "GEOFENCES":
         return 'geocercas';
-      case "GEOPOINTS": 
+      case "GEOPOINTS":
         return 'geopuntos';
-      case "HISTORIAL": 
+      case "HISTORIAL":
         return 'historial';
-      case "EVENT-USER": 
+      case "EVENT-USER":
         return 'notificaciones';
-      case "USER-CONFIG": 
+      case "USER-CONFIG":
         return 'configuracion';
+      case "DASHBOARD":
+        return 'dashboard';
+      case "AUDITORIA":
+        return 'auditoria';
+      case "SUBCUENTAS":
+        return 'subcuentas';
       default:
         return '';
     }

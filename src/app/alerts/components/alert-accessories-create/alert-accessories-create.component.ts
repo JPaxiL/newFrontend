@@ -45,26 +45,6 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     { id: 10, ruta: '', label: 'Sin Sonido' },
   ];
 
-  tipoAlerta: string = '';
-  chkEventoActivado: boolean = true;
-  chkCorreo: boolean = true;
-  chkSonido: boolean = true;
-  notificationSoundPath: string = '';
-  nombreAlerta: string = '';
-  listaEmails: any;
-  fechaDesde: any;
-  fechaHasta: any;
-  emailInput: string = '';
-  eventType: string = 'platform';
-  chkCaducidad: boolean = false;
-  duracionParada = 0;
-  duracionFormatoParada: string = 'S';
-  idAlert: number = -1 ;
-  chkFijarTiempo: boolean = false;
-  chkFijarLimiteVelocidad: boolean = false;
-  tiempoLimiteInfraccion: number = 10;
-  velocidadLimiteInfraccion: number = 0;
-
   loadingAlertDropdownReady: boolean = false;
   loadingVehicleMultiselectReady: boolean = false;
 
@@ -136,8 +116,8 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
   playAudio() {}
 
-  changeDisabled($event: any) {
-    if ($event.target.checked) {
+  changeDisabled() {
+    if (this.alertForm.value.chkSonido) {
       this.alertForm.controls['sonido'].enable();
     } else {
       this.alertForm.controls['sonido'].disable();
@@ -154,6 +134,13 @@ export class AlertAccessoriesCreateComponent implements OnInit {
           )
         ) {
           this.alertForm.value.lista_emails.push(this.alertForm.value.email);
+          this.alertForm.controls.email.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El email ingresado ya existe.',
+            icon: 'warning',
+          });
         }
       } else {
         Swal.fire('Error', 'Debe ingresar un email válido.', 'warning');
@@ -175,8 +162,8 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     return array.indexOf(value) > -1;
   }
 
-  changeDisabledEmail($event: any) {
-    if ($event.target.checked) {
+  chkEmailHandler() {
+    if (this.alertForm.value.chkCorreo) {
       this.alertForm.controls['email'].enable();
     } else {
       this.alertForm.controls['email'].disable();
@@ -196,11 +183,12 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
     if (this.alertForm.value.vehicles.length != 0) {
       Swal.fire({
-        title: 'Desea guardar los cambios?',
-        text: 'Espere un momento...',
+        title: '¿Desea guardar los cambios?',
+        //text: 'Espere un momento...',
         icon: 'warning',
         showLoaderOnConfirm: true,
         showCancelButton: true,
+        allowOutsideClick: false,
         confirmButtonText: 'Guardar',
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {

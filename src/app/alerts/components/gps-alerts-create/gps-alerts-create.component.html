@@ -9,13 +9,13 @@
 
         <div class="panel-izq-container h-100">
 
-            <form [formGroup]="alertForm" (submit)="onSubmit($event)">
+            <form [formGroup]="alertForm" (submit)="onSubmit($event)" (keydown.enter)="$event.preventDefault()">
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>ALERTA:</label>
                     </div>
                     <div class="col-12">
-                        <p-dropdown [options]="events" [(ngModel)]="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="name" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                        <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="name" [appendTo]="'body'"></p-dropdown>
                         <!-- <div class="row">
                             <div class="col-1 text-end d-flex flex-column justify-content-center" *ngIf="loadingEventSelectInput">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -40,7 +40,7 @@
                         <label>NOMBRE:</label>
                     </div>
                     <div class="col-12">
-                        <input type="text" placeholder="Nombre de la alerta" pInputText [(ngModel)]="nombreAlerta" [ngModelOptions]="{standalone: true}"/>
+                        <input type="text" placeholder="Nombre de la alerta" pInputText formControlName="nombre"/>
                         <!-- <div class="text">
                             <input class="form-control" placeholder="Nombre de la alerta..." aria-label="Nombre de la alerta" formControlName="nombre" type="text" />
                         </div> -->
@@ -58,7 +58,8 @@
                             optionLabel="label"
                             optionValue="value"
                             formControlName="vehicles"
-                            defaultLabel="Seleccione un vehículo..."
+                            defaultLabel="0 vehiculos seleccionados"
+                            [appendTo]="'body'"
                             [maxSelectedLabels]="3"
                             [selectedItemsLabel]="'{0} vehiculos seleccionados'"
                             ></p-multiSelect>
@@ -74,7 +75,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <p-dropdown [options]="booleanOptions" [(ngModel)]="chkEventoActivado"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                                    <p-dropdown [options]="booleanOptions" formControlName="chkEventoActivado" optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +85,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <p-dropdown [options]="booleanOptions" [(ngModel)]="chkSonido"  optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}" (onChange)="changeDisabled($event)"></p-dropdown>
+                                    <p-dropdown [options]="booleanOptions" formControlName="chkSonido" optionLabel="label" optionValue="value" [appendTo]="'body'" (onChange)="changeDisabled()"></p-dropdown>
                                 </div>
                             </div>
                         </div>
@@ -99,11 +100,11 @@
                         <div class="p-field">
                             <p-dropdown
                             [options]="listaSonidos"
+                            [appendTo]="'body'"
                             optionLabel="label"
                             optionValue="ruta"
-                            [(ngModel)]="notificationSoundPath"
+                            formControlName="sonido"
                             defaultLabel="Selecciona un sonido..."
-                            [ngModelOptions]="{standalone: true}"
                             ></p-dropdown>
                         </div>
                     </div>
@@ -160,7 +161,7 @@
                             <span class="col-9 form-check-label">Agregar Correo:</span>
                             <div class="col-2 d-flex flex-column justify-content-center">
                                 <div class="form-check">
-                                    <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkCorreo" [ngModelOptions]="{standalone: true}"></p-checkbox>
+                                    <p-checkbox name="groupname" [binary]="true" formControlName="chkCorreo" (onChange)="chkEmailHandler()"></p-checkbox>
                                     <!-- <input class="form-check-input" type="checkbox" formControlName="chkCorreo" (change)="changeDisabledEmail($event)" /> -->
                                 </div>
                             </div>
@@ -173,12 +174,12 @@
     
                 <div class="form-group row">
                     <div class="col-12 d-flex">
-                        <input type="text" placeholder="ejemplo@mail.com" class="flex-grow-1" pInputText [(ngModel)]="emailInput" [disabled]="!chkCorreo" [ngModelOptions]="{standalone: true}"/>
+                        <input type="text" placeholder="ejemplo@mail.com" class="flex-grow-1" pInputText formControlName="email" (keydown.enter)='addEmail()'/>
                         <!-- <div class="text">
                             <input  class="form-control" placeholder="ejemplo@mail.com" formControlName="email" type="text" />
                         </div> -->
-                        <button class="btn-gl-clear flex-none ms-2" [disabled]="!chkCorreo">
-                            <i class="fa fa-plus-circle fa-2x icon-gl-blue" (click)="addEmail()" data-placement="bottom" aria-hidden="true"></i>
+                        <button type="button" class="btn-gl-clear flex-none ms-2" [disabled]="!alertForm.value.chkCorreo">
+                            <i class="fa fa-plus-circle fa-2x icon-gl-blue" type="button" (click)="addEmail()" data-placement="bottom" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
