@@ -829,7 +829,7 @@
           </div>
         </div>
 
-        <div class="row mt-2" style="overflow-y: auto;">
+        <div class="row mt-2" style="overflow-y: auto;" *ngIf="isHistorialTableLoaded">
           <!-- <div style="height: calc(100vh - 470px); overflow-y: auto;"> -->
     
           <table id="tbl_fechas" style="width:100%">
@@ -838,21 +838,19 @@
               <col width="50%" />
               <col width="30%" />
             </colgroup>
-            <!-- <thead>
+            <thead>
                 <tr>
-                    <td>Id</td>
-                    <td>Title</td>
-                    <td>Amount</td>
+                    <td></td>
+                    <td>Fecha y Hora</td>
+                    <td>Duración</td>
                 </tr>
-            </thead> -->
+            </thead>
             <tbody style="">
-    
-    
-    
+
                 <tr *ngFor="let transfer of transfers;let indice=index"  (click)="clickLocate(transfer)"  >
     
                     <td class="text-center" style="padding: 1px !important;" >
-                      <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
+                      <div [title]="transfer.tooltip" data-bs-toggle="tooltip" data-bs-placement="top" >
                         <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
                       </div>
                     </td>
