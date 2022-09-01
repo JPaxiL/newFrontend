@@ -2359,7 +2359,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCampos.push({ value: "Placa", ...this.colHeaderConfig });
 
           cellsCampos.push({ value: "Vel. Límite", ...this.colHeaderConfig });
-          cellsCampos.push({ value: "Exceso Vel. Maxima", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Exceso Vel. Maxima", ...this.colHeaderConfig, wrap: true });
 
           if(this.chkDateHour) {
               cellsCampos.push({ value: "Fecha de Inicio", ...this.colHeaderConfig });
@@ -2382,7 +2382,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
               cells: cellsCampos,
-              height: this.colsHeaderHeight
+              height: this.colsHeaderHeightTwoLine
           });
 
           //====================  CUERPO =============================
