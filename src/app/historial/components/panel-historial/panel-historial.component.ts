@@ -1135,6 +1135,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   clickEliminarHistorial() {
 
     if (this.conHistorial) {
+
+      $("#btnStopConsola").trigger("click");
+
       var dH =  this.historialService.tramasHistorial; // Data Historial
 
       this.mapService.map.removeLayer(dH[0].layer0);
