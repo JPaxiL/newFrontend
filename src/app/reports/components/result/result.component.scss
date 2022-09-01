@@ -142,7 +142,7 @@ p{
 }
 
 .singletable-container{
-    padding: 0.8rem;
+    padding: 1.125rem 0.8rem;
     height: auto;
     overflow-y: auto;
     margin-top: 0.25rem;
@@ -196,16 +196,17 @@ table.dataTable[datatable]{
         }
     }
     tbody td{
-        border-bottom: 1px solid #000;
-        border-right: 1px solid #000;
+        border-bottom: 1px solid var(--gl-underline-table-row);
+        border-right: 1px solid var(--gl-underline-table-row);
         &:first-child{
-            border-left: 1px solid #000;
+            border-left: 1px solid var(--gl-underline-table-row);
         }
     }
 }
 
 :host ::ng-deep{
     .dataTables_wrapper .dataTables_paginate .paginate_button{
+        padding: 0.125rem 0.25rem;
        &:hover, &:active{
            border-color: #fff;
            background: #fff;
@@ -223,8 +224,16 @@ table.dataTable[datatable]{
     margin-top: 0.5rem;
    }
 
-   .dataTables_filter, .dataTables_length{
+   .dataTables_length, .dataTables_filter{
     margin-bottom: 0.5rem;
+   }
+
+   .dataTables_info, .dataTables_length{
+    padding-left: 0.85rem;
+   }
+
+   .dataTables_paginate.paging_full_numbers, .dataTables_filter{
+    padding-right: 0.85rem;
    }
 
    table.dataTable.no-footer{
