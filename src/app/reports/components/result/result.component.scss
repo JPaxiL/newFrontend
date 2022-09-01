@@ -185,10 +185,22 @@ p{
 }
 
 table.dataTable[datatable]{
+    thead th, tbody td{
+        border: none;
+    }
     thead th{
         background-color: var(--gl-blue-dark);
         color: #fff;
-        border-color: #fff;
+        &:not(:last-child){
+            border-right: 1px solid #fff;
+        }
+    }
+    tbody td{
+        border-bottom: 1px solid #000;
+        border-right: 1px solid #000;
+        &:first-child{
+            border-left: 1px solid #000;
+        }
     }
 }
 
