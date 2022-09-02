@@ -231,13 +231,11 @@ export class FormComponent implements OnInit {
   fog = "1";
 	userId = 0;
 
-  workingOnReport: boolean = false;
-
   constructor(
     private browserDetectorService: BrowserDetectorService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
-    private reportService: ReportService,
+    public reportService: ReportService,
     private vehicleService: VehicleService,
     private confirmationService: ConfirmationService,
     private http: HttpClient,
@@ -396,7 +394,7 @@ export class FormComponent implements OnInit {
 
   reportar(new_tab?: any){
     console.log(new_tab !== undefined);
-    this.workingOnReport = true;
+    this.reportService.workingOnReport = true;
 
 
     var repSubtitle = '';
@@ -545,6 +543,7 @@ export class FormComponent implements OnInit {
         } else {
           //Report in new tab
           this.spinner.hide("fullScreenSpinner");
+          this.reportService.workingOnReport = false;
           this.isFormFilled = true;
           console.log('Se abrió una nueva pestaña');
           localStorage.setItem("report_data", JSON.stringify(report_data));
@@ -560,7 +559,6 @@ export class FormComponent implements OnInit {
             });
           }
         }
-        this.workingOnReport = false;
       }
     });
   }

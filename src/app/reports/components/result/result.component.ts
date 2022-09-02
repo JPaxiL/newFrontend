@@ -369,7 +369,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
-    private reportService:ReportService,
+    public reportService:ReportService,
     private titleService:Title,
     private toastr:ToastrService,
     private confirmationService:ConfirmationService,
@@ -411,6 +411,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           this.table_hide = '';
           if(!isIndependentWindow){
             this.spinner.hide("reportSpinner");
+            this.reportService.workingOnReport = false;
           }
         }
         if (this.num_rep == 19) {
