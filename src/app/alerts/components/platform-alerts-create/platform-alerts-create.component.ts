@@ -223,6 +223,11 @@ export class PlatformAlertsCreateComponent implements OnInit {
       this.alertForm.value.velocidad_limite_infraccion = 0;
     }
 
+    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+      Swal.fire('Error', 'Debe ingresar un correo', 'warning');
+      return
+    }
+
     if (this.alertForm.value.vehiculos.length != 0) {
 
       Swal.fire({
@@ -366,7 +371,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){ 
+    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){
       this.spinner.hide('loadingAlertData');
     }
   }
