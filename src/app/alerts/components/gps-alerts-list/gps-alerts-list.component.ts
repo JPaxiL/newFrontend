@@ -19,6 +19,8 @@ export class GpsAlertsListComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   strSearched: string = '';
+  noResults: boolean = false;
+
   options = new Array(
     { id:'ALERTS', name:"Alertas"},
     { id:'ALERTS-GPS', name:"Alertas GPS"},
@@ -68,11 +70,13 @@ export class GpsAlertsListComponent implements OnInit {
   public onSearch(){
     if(this.strSearched == ''){
       this.alerts = this.AlertService.getDataByType();
+      this.noResults = false;
     }else {
       this.alerts = this.AlertService.getDataByType().filter( (alert:any)  => {
         return (alert.nombre??'').toLowerCase().match(this.strSearched.toLowerCase()) 
           || (alert.tipo??'').toLowerCase().match(this.strSearched.toLowerCase());
       });
+      this.noResults = this.alerts.length == 0;
     }
   }
 

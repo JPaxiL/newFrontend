@@ -67,18 +67,7 @@ export class HistorialService {
 
   }
 
-
-  public initialize (){
-
-
-    //console.log('INICIALIZAR SERVICIO DEL HISTORIAL');
-    let dateCurrent = {
-      "year": moment().year(),
-      "month": moment().month()  + 1,
-      "day": moment().date()
-    };
-
-
+  public initializeForm(){
     this.dataFormulario = {
       inicio : true,
 
@@ -169,6 +158,20 @@ export class HistorialService {
        // vm.form.eventos.evEstadia
        // vm.form.eventos.evParada
     }
+  }
+
+
+  public initialize (){
+
+
+    //console.log('INICIALIZAR SERVICIO DEL HISTORIAL');
+    let dateCurrent = {
+      "year": moment().year(),
+      "month": moment().month()  + 1,
+      "day": moment().date()
+    };
+
+    this.initializeForm();
 
   }
 

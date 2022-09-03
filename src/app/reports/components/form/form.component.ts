@@ -231,13 +231,11 @@ export class FormComponent implements OnInit {
   fog = "1";
 	userId = 0;
 
-  workingOnReport: boolean = false;
-
   constructor(
     private browserDetectorService: BrowserDetectorService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
-    private reportService: ReportService,
+    public reportService: ReportService,
     private vehicleService: VehicleService,
     private confirmationService: ConfirmationService,
     private http: HttpClient,
@@ -396,7 +394,7 @@ export class FormComponent implements OnInit {
 
   reportar(new_tab?: any){
     console.log(new_tab !== undefined);
-    this.workingOnReport = true;
+    this.reportService.workingOnReport = true;
 
 
     var repSubtitle = '';
@@ -545,6 +543,7 @@ export class FormComponent implements OnInit {
         } else {
           //Report in new tab
           this.spinner.hide("fullScreenSpinner");
+          this.reportService.workingOnReport = false;
           this.isFormFilled = true;
           console.log('Se abrió una nueva pestaña');
           localStorage.setItem("report_data", JSON.stringify(report_data));
@@ -560,7 +559,6 @@ export class FormComponent implements OnInit {
             });
           }
         }
-        this.workingOnReport = false;
       }
     });
   }
@@ -732,6 +730,33 @@ export class FormComponent implements OnInit {
       OtroTodos:this.eV.OtroTodos,
       OtroExVelocidad:this.eV.OtroTodos,
     };
+  }
+
+  onChangeChkEvents(){
+    if(!this.eV.GPSbateriaDesconectada) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSaceleracionBrusca) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSfrenadaBrusca) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSsos) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSmotorEncendido) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.GPSmotorApagado) { this.eV.OtroTodos = false; return; }
+
+    if(!this.eV.evEntrada) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evSalida) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evEstadia) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evParada) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evInfraccion) { this.eV.OtroTodos = false; return; }
+    
+    if(!this.eV.evNoRostro) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evFatigaExtrema) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.AccFatiga) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.AccDistraccion) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evAnticolisionFrontal) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evColisionConPeatones) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDesvioCarrilIzquierda) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDesvioCarrilDerecha) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evBloqueoVisionMobileye) { this.eV.OtroTodos = false; return; }
+    
+    this.eV.OtroTodos = true;
   }
 
   validateForm(){

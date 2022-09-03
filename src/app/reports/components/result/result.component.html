@@ -59,8 +59,8 @@
     <img src="./assets/images/fondo-svg-reporte.svg" alt="fondo-reporte-logo">
   </div>
   <div [ngClass]="table_hide" class="container grand-container">
-    <div *ngIf="num_rep >= 0 && num_rep <= 20 " class="table-title" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
-    <div class="table-subtitle" style="margin-bottom: 0.25rem;">{{ rep_subtitle }}</div>
+    <div *ngIf="num_rep >= 0 && num_rep <= 20 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
+    <div class="table-subtitle p-card" style="margin-bottom: 0.25rem;">{{ rep_subtitle }}</div>
   </div>
   <ng-container>
 
@@ -69,9 +69,15 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 0">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -198,9 +204,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 1">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered && !chkDuracion">
@@ -291,9 +308,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 2">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -340,9 +368,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 3">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -418,9 +457,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 4">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -501,9 +551,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 5">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -655,9 +716,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 6">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -759,9 +831,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 10">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -821,9 +904,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 11">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -896,9 +990,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 12">
       <div *ngFor="let v_table of data;  let ii = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1040,9 +1145,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 13">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1111,9 +1227,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 14">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1179,9 +1306,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 15">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1247,9 +1385,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 16">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1316,9 +1465,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 17">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1384,9 +1544,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 18">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1452,9 +1623,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 19">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;" [hidden]="true">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
           <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">
@@ -1666,9 +1848,20 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 20">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <div class="subtable-title" style="margin-bottom: 0.25rem;">
+        <!-- <div class="subtable-title mb-2"> -->
           <!-- <div>VEHÍCULO: {{v_table[0][1]}}</div> -->
-          <div>PERIODO: {{period}}</div>
+          <!-- <div>PERIODO: {{period}}</div>
+        </div> -->
+
+        <div class="subtable-title mb-3">
+          <!-- <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div> -->
+          <div style="width: 100%; min-width: 100%;">
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
         </div>
 
         <ng-container *ngIf="dtRendered">

@@ -199,6 +199,11 @@ export class AlertGpsEditComponent implements OnInit {
       this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
     }
 
+    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+      Swal.fire('Error', 'Debe ingresar un correo', 'warning');
+      return
+    }
+
     if (this.alertForm.value.vehicles.length != 0) {
 
       Swal.fire({
@@ -243,7 +248,7 @@ export class AlertGpsEditComponent implements OnInit {
   }
 
   hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){ 
+    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){
       this.spinner.hide('loadingAlertData');
     }
   }

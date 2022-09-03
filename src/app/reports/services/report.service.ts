@@ -11,6 +11,7 @@ export class ReportService {
 
   params:any;
   modalActive:boolean = false;
+  workingOnReport: boolean = false;
   objGeneral :any = {};
 
   setParams(values:any) {

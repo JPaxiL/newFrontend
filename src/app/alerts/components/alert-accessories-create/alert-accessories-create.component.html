@@ -18,7 +18,7 @@
                         <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="name" [appendTo]="'body'"></p-dropdown>
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>NOMBRE:</label>
@@ -27,7 +27,7 @@
                         <input type="text" placeholder="Nombre de la alerta" pInputText formControlName="nombre"/>
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>VEHÍCULOS:</label>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="gl-middleline gl-row-underline">
                     <div class="row">
                         <div class="col p-field">
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline mb-3">
                     <div class="col-12">
                         <label>TIPO DE SONIDO:</label>
@@ -90,8 +90,8 @@
                         </div>
                     </div>
                 </div>
-    
-    
+
+
                 <div class="row d-flex justify-content-center">
                     <div class="col-5">
                         <label class="row">
@@ -105,18 +105,18 @@
                     </div>
                     <div class="col-5"></div>
                 </div>
-    
+
                 <div class="row"></div>
-    
+
                 <div class="form-group row">
                     <div class="col-12 d-flex">
-                        <input type="text" placeholder="ejemplo@mail.com" class="flex-grow-1" pInputText formControlName="email" (keydown.enter)='addEmail()'/>
+                        <input type="text" placeholder="ejemplo@mail.com" class="flex-grow-1" pInputText formControlName="email" name="email" (keydown.enter)='addEmail()'/>
                         <button type="button"  class="btn-gl-clear flex-none ms-2" (click)="addEmail()" [disabled]="!alertForm.value.chkCorreo">
                             <i class="fa fa-plus-circle fa-2x icon-gl-blue" data-placement="bottom" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
-    
+
                 <div class="form-group row">
                     <div class="col-9">
                         <div class="text">
@@ -138,10 +138,10 @@
                         <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>
                     </div>
                 </div>
-    
+
             </form>
         </div>
-     
+
     </div>
 
     <!-- <div class="modal-body panel-izq-container p-fluid" style="height: calc(100vh - 9.125rem); max-height: calc(100vh - 9.125rem);">

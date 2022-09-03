@@ -200,6 +200,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   pngVelFecha: boolean = true;
   pngGrafico: boolean = false;
 
+  isHistorialTableLoaded: boolean = false;
 
   constructor(
     public mapService: MapServicesService,
@@ -245,6 +246,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       let vehicles = this.VehicleService.getVehiclesData();
       this.getCars(vehicles);
     }
+
+    this.historialService.initializeForm();
 
     // const hoy = Date.now();
     // this.pngFechaIni = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
@@ -354,13 +357,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
     ////console.log('me destruire gaaa');
 
+    this.clickEliminarHistorial();
+
     this.historialService.conHistorial = this.conHistorial;
 
     this.historialService.dataFormulario = this.form;
 
     this.VehicleService.dataCompleted.unsubscribe;
-
-
 
   }
 
@@ -1099,7 +1102,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             // this.panelService.nombreCabecera =   item[0].name;
 
 
-
+                this.isHistorialTableLoaded = true;
             this.spinner.hide('loadingHistorial');
           } else {
             this.spinner.hide('loadingHistorial');
@@ -1132,6 +1135,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   clickEliminarHistorial() {
 
     if (this.conHistorial) {
+
+      $("#btnStopConsola").trigger("click");
+
       var dH =  this.historialService.tramasHistorial; // Data Historial
 
       this.mapService.map.removeLayer(dH[0].layer0);
@@ -1163,6 +1169,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       $("#graficohistorial").css("display", "none");
 
     }
+
+    this.isHistorialTableLoaded = false;
 
 
 
@@ -1221,15 +1229,15 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
             this.transfers = [];
-            this.transfers.push({icono:"assets/images/start.png", trama:dH[0],icono_width:"13px",icono_height:"13px",dt_tracker:dH[0].dt_tracker});
+            this.transfers.push({icono:"assets/images/start.png", tooltip: "Inicio",trama:dH[0],icono_width:"13px",icono_height:"13px",dt_tracker:dH[0].dt_tracker});
             for (let i = 0; i < iH.length; i++) {
               if (dH[iH[i]].marker == "PARADA") {
                 if (this.form.chckParada ) {
-                  this.transfers.push({icono:"assets/images/stop.png",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
+                  this.transfers.push({icono:"assets/images/stop.png", tooltip: "Parada",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
                 }
               }
               else {
-                this.transfers.push({icono:"assets/images/drive.png",trama:dH[iH[i]],icono_width:"13px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
+                this.transfers.push({icono:"assets/images/drive.png", tooltip: "Movimiento",trama:dH[iH[i]],icono_width:"13px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
               }
             }
 
@@ -1382,7 +1390,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             // }
 
 
-            this.transfers.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px",dt_tracker:dH[dH.length-1].dt_tracker});
+            this.transfers.push({icono:"assets/images/end.png", tooltip: "Fin", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px",dt_tracker:dH[dH.length-1].dt_tracker});
 
       }
   }

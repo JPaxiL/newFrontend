@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Select2Data } from 'ng-select2-component';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
@@ -54,6 +54,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     public panelService: PanelService,
     private spinner: NgxSpinnerService,
+    private el: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +85,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
       eventType: ['accessories'],
     });
 
-    
+
 
 
     this.loading = false;
@@ -173,6 +174,11 @@ export class AlertAccessoriesCreateComponent implements OnInit {
   onSubmit(event: any) {
     event.preventDefault();
 
+    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+      Swal.fire('Error', 'Debe ingresar un correo', 'warning');
+      return
+    }
+
     this.alertForm.value.vehiculos = JSON.stringify(
       this.alertForm.value.vehicles
     );
@@ -218,7 +224,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
   }
 
   hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){ 
+    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){
       this.spinner.hide('loadingAlertData');
     }
   }

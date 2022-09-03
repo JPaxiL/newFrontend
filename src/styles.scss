@@ -66,6 +66,8 @@
 
   --gl-gray-border: #b0afb5;
 
+  --gl-underline-table-row: #9c9ba0;
+
   --gl-reporte-header-background: #fff;
   --gl-reporte-header-color: var(--gl-blue-dark);
   --gl-reporte-subheader-background: #a6a6a6;
@@ -754,7 +756,7 @@ p-inputswitch{
         margin: 0 0.465rem;
         height: 1px;
         //background-color: #e9ecef; //Same color as Treetable border bottom
-        background-color: #9c9ba0; //Same color as Treetable border bottom
+        background-color: var(--gl-underline-table-row); //Same color as Treetable border bottom
       }
       &:hover{
         background-color: var(--gl-light-blue-alpha);

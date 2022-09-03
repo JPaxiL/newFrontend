@@ -165,7 +165,8 @@
     }
     
     //740px para rem=16px
-    @media (max-width: 655px) {
+    //655 causaba overflow, asi que se puso a 725px
+    @media (max-width: 725px) {
       .leaflet-top.leaflet-right {
         top: var(--navbar-height);
       }

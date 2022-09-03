@@ -115,6 +115,9 @@
           ></app-actions-alert>
         </td>
       </tr>
+      <tr *ngIf="noResults">
+        <td colspan="6" class="text-center">Sin coinicidencias</td>
+      </tr>
     </tbody>
   </table>
   </div>

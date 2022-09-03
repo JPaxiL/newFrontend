@@ -60,6 +60,9 @@
             </td> -->
           </tr>
         </ng-container>
+        <tr *ngIf="noResults">
+          <td colspan="4" class="text-center">Sin coinicidencias</td>
+        </tr>
         
       </tbody>
     </table>

@@ -369,7 +369,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
-    private reportService:ReportService,
+    public reportService:ReportService,
     private titleService:Title,
     private toastr:ToastrService,
     private confirmationService:ConfirmationService,
@@ -411,6 +411,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           this.table_hide = '';
           if(!isIndependentWindow){
             this.spinner.hide("reportSpinner");
+            this.reportService.workingOnReport = false;
           }
         }
         if (this.num_rep == 19) {
@@ -2359,7 +2360,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCampos.push({ value: "Placa", ...this.colHeaderConfig });
 
           cellsCampos.push({ value: "Vel. Límite", ...this.colHeaderConfig });
-          cellsCampos.push({ value: "Exceso Vel. Maxima", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Exceso Vel. Maxima", ...this.colHeaderConfig, wrap: true });
 
           if(this.chkDateHour) {
               cellsCampos.push({ value: "Fecha de Inicio", ...this.colHeaderConfig });
@@ -2382,7 +2383,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           rows.push({
               cells: cellsCampos,
-              height: this.colsHeaderHeight
+              height: this.colsHeaderHeightTwoLine
           });
 
           //====================  CUERPO =============================

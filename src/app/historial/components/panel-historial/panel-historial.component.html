@@ -12,7 +12,7 @@
 
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorial" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Cargando Historial... </p></ngx-spinner>
 
-  <div id="panel_historial" class="modal-body p-fluid p-0 overflow-auto" style="position: relative;">
+  <div id="panel_historial" class="modal-body p-fluid p-0 overflow-auto" style="position: relative;" *ngIf="!isHistorialTableLoaded">
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorialForm" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Cargando información... </p></ngx-spinner>
 
     <div class="panel-izq-container h-100">
@@ -821,15 +821,17 @@
         </div>
 
         <div class="row justify-content-center mt-4 panel-izq-container-footer">
-          <div class="col-6">
+          <!-- <div class="col-6">
             <button type="submit" class="btn-gl-cancel btn-dark-hover w-100" (click)="clickEliminarHistorial()" [disabled]="form.selectedCar == null">Ocultar</button>
-          </div>
+          </div> -->
           <div class="col-6">
               <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="clickCargarHistorial()" [disabled]="form.selectedCar == null">Mostrar</button>
           </div>
         </div>
 
       </div>
+
+      
 
 
 
@@ -937,8 +939,39 @@
 
     <!-- <legend></legend> -->
 
-    <div style="overflow-y: auto;">
-      <!-- <div style="height: calc(100vh - 470px); overflow-y: auto;"> -->
+    
+
+
+
+  </div>
+
+  <div class="table-content-component-panel-monitoreo" *ngIf="isHistorialTableLoaded">
+
+    <div class="panel-izq-container p-fluid overflow-visible">
+      <div class="panel-izq-form">
+        <div class="gl-row-underline">
+          <div class="row">
+            <div class="col-12">
+              <label>VEHÍCULO:</label>
+            </div>
+            <div class="col-12">
+              <p-dropdown
+              [filter]="true"
+              [options]="cars"
+              optionLabel="nombre"
+              optionValue="imei"
+              [(ngModel)]="form.selectedCar"
+              [dropdownIcon]="'none'"
+              [disabled]="true"></p-dropdown>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="panel-izq-table-container mt-2" style="overflow-y: auto;">
 
       <table id="tbl_fechas" style="width:100%">
         <colgroup>
@@ -946,38 +979,41 @@
           <col width="50%" />
           <col width="30%" />
         </colgroup>
-        <!-- <thead>
+        <thead class="visible-on-scroll">
             <tr>
-                <td>Id</td>
-                <td>Title</td>
-                <td>Amount</td>
+                <th></th>
+                <th class="text-start">Fecha y Hora</th>
+                <th class="text-center">Duración</th>
             </tr>
-        </thead> -->
+        </thead>
         <tbody style="">
-
-
 
             <tr *ngFor="let transfer of transfers;let indice=index"  (click)="clickLocate(transfer)"  >
 
-                <td class="text-center" style="padding: 1px !important;" >
-                  <div title="Localizar"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
+                <td class="text-center">
+                  <div [title]="transfer.tooltip" data-bs-toggle="tooltip" data-bs-placement="top" >
                     <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
                   </div>
                 </td>
 
                 <td>{{transfer.trama.dt_tracker}}</td>
 
-                <td *ngIf="indice==0">x</td>
-                <td *ngIf="indice!=0 && indice!=transfers.length-1">{{transfer.trama.temp}}</td>
-                <td *ngIf="indice!=0 && indice==transfers.length-1">x</td>
+                <td *ngIf="indice==0" class="text-center">x</td>
+                <td *ngIf="indice!=0 && indice!=transfers.length-1" class="text-center">{{transfer.trama.temp}}</td>
+                <td *ngIf="indice!=0 && indice==transfers.length-1" class="text-center">x</td>
 
             </tr>
         </tbody>
       </table>
     </div>
 
-
-
+    <div class="panel-izq-container overflow-visible">
+      <div class="panel-izq-container-footer d-flex justify-content-center mt-2">
+        <div class="col-6">
+          <button type="submit" class="btn-gl-cancel btn-dark-hover w-100" (click)="clickEliminarHistorial()" [disabled]="form.selectedCar == null">Volver</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 

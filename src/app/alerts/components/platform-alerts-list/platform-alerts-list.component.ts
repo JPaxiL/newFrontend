@@ -19,6 +19,7 @@ export class PlatformAlertsListComponent implements OnInit {
     { id:'ALERTS-PLATFORM-CREATE', name:"Alertas Plataforma"},
   );
   strSearched: string = '';
+  noResults: boolean = false;
 
   constructor(
     private AlertService: AlertService,
@@ -63,11 +64,13 @@ export class PlatformAlertsListComponent implements OnInit {
   public onSearch(){
     if(this.strSearched == ''){
       this.alerts = this.AlertService.getDataByType();
+      this.noResults = false;
     }else {
       this.alerts = this.AlertService.getDataByType().filter( (alert:any)  => {
         return (alert.nombre??'').toLowerCase().match(this.strSearched.toLowerCase()) 
           || (alert.tipo??'').toLowerCase().match(this.strSearched.toLowerCase());
       });
+      this.noResults = this.alerts.length == 0;
     }
   }
 

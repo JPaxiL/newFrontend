@@ -99,6 +99,7 @@ a {
     background-color: var(--gl-blue-dark);
     color: #fff;
     border-radius: 50%;
+    text-transform: uppercase;
 }
 
 .text-unselectable {
@@ -431,7 +432,8 @@ i.fa + span {
 
 //850px para rem=16px
 //Deberia ser 744, pero causa overflow, asi que se cambio a 766px
-@media (max-width: 766px) {
+//Deberia ser 766, pero causa overflow, asi que se cambio a 820px
+@media (max-width: 820px) {
     li.nav-item{
         padding: 0 0.125rem;
     }
@@ -439,7 +441,8 @@ i.fa + span {
 
 //740px para rem=16px
 //Deberia ser 648px, pero causa overflow asi que ira 655px
-@media (max-width: 655px) {
+//Deberia ser 655px, pero causa overflow asi que ira 725px
+@media (max-width: 725px) {
     .navbar{
         background: none;
     }
