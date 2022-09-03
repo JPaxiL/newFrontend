@@ -123,7 +123,7 @@ export class VehicleService {
     return this.http.get(this.URL_LIST);
   }
   public queryTimeStop(params: any): Observable<any>{
-    return this.http.get(this.URL_TIME_STOP+'?fecha_i='+params.fecha_i+'&fecha_f='+params.fecha_f+'&imei='+params.imei+'&lat='+params.latitud+'&lng='+params.longitud);
+    return this.http.get(this.URL_TIME_STOP+'?fecha_i='+params.fecha_i+'&vel='+params.speed+'&fecha_f='+params.fecha_f+'&imei='+params.imei+'&lat='+params.latitud+'&lng='+params.longitud);
   }
   public postTimeStop(data: any){
     // console.log("function time stop datos de envio",data);
@@ -211,6 +211,9 @@ export class VehicleService {
     return items
   }
   public formatVehicle(vehicle: any): any{
+    if (vehicle.speed >6) {
+      vehicle.paradaDesde = false;
+    }
     const today = moment();
     // const date = moment(vehicle.dt_tracker).subtract(5, 'hours');
     const date = moment(vehicle.dt_tracker);
@@ -243,6 +246,7 @@ export class VehicleService {
   }
   private addPointColorUser445(vehicle : any){
     // id = 445
+    // console.log("color user 445 vehicle = ",vehicle);
     if( vehicle.c_01 >= 7200 ) {
         //mayor a 2 horas //==>4
         // img_url = "/images/objects/arrow-4-black.svg"; //==>4 Sin transmisión
@@ -285,21 +289,29 @@ export class VehicleService {
   }
 
   private addPointColorUser(vehicle : any){
+    // console.log("color init user vehicle = ",vehicle);
+    // if(vehicle.IMEI=='868324028888902'){
+    //   // console.log('vehicle color = ',vehicle);
+    //   // console.log('vehicle color = ',vehicle);
+    //   console.log('vehicle color init = ',vehicle);
+    //   console.log("point_color ",vehicle.point_color);
+    // }
 
     if ( vehicle.parametrosGet["sat"] == 0 || ( vehicle.v_vel > 3 && (vehicle.v_on == 0 || vehicle.v_ac < 5) ) )
     {
-        vehicle.point_color = 60; //grey
+        vehicle.point_color = 60; //grey GPS sin señal
     }
     else if ( vehicle.v_on == 0 )
     {
         if( vehicle.c_01 >= 7200 ) {
             //mayor a 2 horas //==>4
             // img_url = "/images/objects/arrow-4-black.svg"; //==>4 Sin transmisión
-            vehicle.point_color = 40; //grey
+            vehicle.point_color = 40; //grey Sin transmisión
         } else if (vehicle.v_vel <= 3) {
             //menor a 2 horas //==>3
             // img_url = "/images/objects/arrow-3-purple.svg"; //==>3 Parada (Apagado)
-            vehicle.point_color = 30; //grey
+            vehicle.point_color = 30; //grey Detenido apagado
+            
         }
     }
     else {
@@ -368,6 +380,12 @@ export class VehicleService {
         }, (7200 - vehicle.c_01)*1000 );
 
     }
+    // if(vehicle.IMEI=='860640057379283'){
+    //   // console.log('vehicle color = ',vehicle);
+    //   // console.log('vehicle color = ',vehicle);
+    //   console.log('vehicle color = ',vehicle);
+    //   console.log("point_color ",vehicle.point_color);
+    // }
     return vehicle;
   }
 
@@ -379,6 +397,9 @@ export class VehicleService {
     vehicle.v_sat = Number(vehicle.parametrosGet["sat"]);
     const v_di1 = vehicle.parametrosGet["di1"];
     const v_di4 = vehicle.parametrosGet["di4"];
+    if(v_di4=='undefined'){
+      const v_di4 = vehicle.parametrosGet["Custom_ign"];
+    }
     const v_acv = vehicle.parametrosGet["acv"];
     const v_accv = vehicle.parametrosGet["accv"];
     // const v_status = item.parametrosGet["GPRS Status"];
@@ -386,6 +407,16 @@ export class VehicleService {
     const a_01 = moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") ));
     const b_01 = moment(new Date());
     const c_01 = b_01.diff(a_01, 'seconds');
+    // if(vehicle.IMEI=='868324028888902'){
+    //   console.log("vehicle.name",vehicle.name);
+    //   console.log("vehicle.dt_tracker",vehicle.dt_tracker);
+    //   console.log("a_01",a_01);
+    //   console.log("b_01",b_01);
+    //   console.log("vehicle c_01 = ",c_01);
+    //   console.log("v_di4",v_di4);
+    //   console.log("v_di1",v_di1);
+    //   console.log("vehicle.tipoGps",vehicle.tipoGps);
+    // }
 
     vehicle.c_01=c_01;
     vehicle.v_vel = v_gps;

@@ -55,7 +55,7 @@ export class TreeTableComponent implements OnInit {
     40:"#000",
     50:"#ffb300",
     60:"#cc1013",
-    100:"#45e845",
+    100:"#ABABAB",
   };
 
   hint: any = {
@@ -65,7 +65,7 @@ export class TreeTableComponent implements OnInit {
     40: 'Sin transmisión',
     50: 'Sin cobertura',
     60: 'GPS sin señal',
-    100: 'En movimiento',
+    100: 'No definido',
   };
 
   public column: number = 9;

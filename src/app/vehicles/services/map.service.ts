@@ -87,7 +87,7 @@ export class MapService {
       this.tagClick(res);
     });
     this.vehicleService.calcTimeStop.subscribe(data=>{
-      console.log("event time stop res = ",data);
+      // console.log("event time stop res = ",data);
 
       let tiempoParada = "";
       //
@@ -379,15 +379,18 @@ export class MapService {
         vehicles[index].speed = data.Velocidad;
 
         vehicles[index].dt_server = data.fecha_server;
-        vehicles[index].dt_tracker = data.fecha_tracker;
+        // vehicles[index].dt_tracker = data.fecha_tracker;
+        vehicles[index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
         vehicles[index].altitud = data.Altitud;
         vehicles[index].señal_gps = data.señal_gps;
         vehicles[index].señal_gsm = data.señal_gsm;
         vehicles[index].parametros = data.Parametros;
+
+        // const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
+
+
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
 
-        const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
-        vehicles[index].dt_tracker = date.format('YYYY-MM-DD HH:mm:ss');
 
         if(this.imeiPopup==data.IMEI.toString()){
           let options = {

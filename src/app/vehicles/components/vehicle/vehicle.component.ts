@@ -40,14 +40,14 @@ export class VehicleComponent implements OnInit {
       this.nameColor = "#cc1013";
       this.tooltipText = 'GPS sin señal';
     }else if(params.value.point_color == 100){
-      this.nameColor = "#45e845";
-      this.tooltipText = 'En movimiento';
+      this.nameColor = "#ABABAB";
+      this.tooltipText = 'No definido';
     }else{
       this.nameColor = "#000";
       this.tooltipText = 'Sin transmisión';
     }
   }
-  onClickIcon(){    
+  onClickIcon(){
     console.log(this.params);
     this.vehicleService.onClickIcon(this.params.value.IMEI);
   }
