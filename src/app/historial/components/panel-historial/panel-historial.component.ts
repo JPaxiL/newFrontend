@@ -1103,6 +1103,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
                 this.isHistorialTableLoaded = true;
+                /* $('#tbl_fechas').floatThead({
+                  scrollContainer: () => {
+                    return $('.panel-izq-table-container');
+                  },
+                }); */
             this.spinner.hide('loadingHistorial');
           } else {
             this.spinner.hide('loadingHistorial');
