@@ -366,6 +366,16 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   spaceBetweenTables:any = [];
 
+  //Web Report
+  reportTableVehicleDropdownOptions: any = [];
+  reportTableVehicleSelected = {
+    name: '',
+    dataSize: '',
+    index: -1,
+  };
+  reportTableDropdownData: any = [];
+  singleTableReportIDs = [7];
+
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
@@ -438,6 +448,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.chkDuracion = data.chkDuracion;
         this.chkOdomV = data.chkOdomV;
         this.period = data.period;
+        this.prepareVehicleDropdown();
 
         //Check if this is the first time loading
         if(this.dtElement !== undefined && "dtInstance" in this.dtElement){
@@ -476,6 +487,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.chkDuracion = report_data.chkDuracion;
       this.chkOdomV = report_data.chkOdomV;
       this.period = report_data.period;
+      this.prepareVehicleDropdown();
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
       document.querySelector('body')!.style.padding = '0.8rem';
       this.titleService.setTitle(this.rep_title);
@@ -506,6 +518,54 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.isChrome = false;
     }
 
+  }
+
+  prepareVehicleDropdown(){
+    if(this.singleTableReportIDs.indexOf(this.num_rep) < 0 ){
+      this.reportTableVehicleDropdownOptions = [];
+      for(let i = 0; i < this.data.length; i++){
+        if( this.data[i][1].length == 0 ){
+          //Si la tabla del vehiculo no tiene filas
+          this.reportTableVehicleDropdownOptions.push({
+            name: this.data[i][0][1],
+            dataSize: ' (Sin registros)',
+            index: i,
+          });
+        } else {
+          //Si la tabla del vehiculo SÍ tiene filas
+          this.reportTableVehicleDropdownOptions.push({
+            name: this.data[i][0][1],
+            dataSize: (this.data[i][1].length == 1? ' (1 registro)': (' (' + this.data[i][1].length +' registros)')),
+            index: i,
+          });
+        }
+      }
+      if(this.reportTableVehicleDropdownOptions.length > 0){
+        this.reportTableVehicleSelected = this.reportTableVehicleDropdownOptions[0];
+        console.log(this.reportTableVehicleDropdownOptions);
+        this.renderDataTable();
+      } else {
+        console.log('Sin resultados que mostrar');
+      }
+    }
+    
+  }
+
+  renderDataTable(){
+    if(this.reportTableVehicleSelected.index > -1){
+      this.reportTableDropdownData = this.data[this.reportTableVehicleSelected.index];
+      console.log(this.reportTableDropdownData);
+      if(this.dtElement !== undefined && "dtInstance" in this.dtElement){
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destroy the table first
+          dtInstance.destroy();
+          this.dtTrigger.next();
+          this.wrapElements(document.querySelectorAll('table[datatable]'));
+        });
+      }
+    }
+    
+    //this.dtRendered = true;
   }
 
   generateEmptyRowsForRowSpan(rowSpan: number, rowHeight: number){
