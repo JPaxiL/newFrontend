@@ -13,6 +13,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserDetectorService } from '../../services/browser-detector.service';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -517,9 +519,9 @@ export class FormComponent implements OnInit {
     console.log(param);
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
-        console.log(this.selectedConvoy.length);
-        console.log(this.selectedGroup.length);
-        console.log(this.selectedVehicles.length);
+        //console.log(this.selectedConvoy.length);
+        //console.log(this.selectedGroup.length);
+        //console.log(this.selectedVehicles.length);
         console.log(typeof data);
         console.log(data);
         this.reportService.setParams(param);
@@ -677,6 +679,10 @@ export class FormComponent implements OnInit {
     this.selectedVehicles = [];
     this.selectedConvoy = {};
     this.chkAllVehicles = false;
+  }
+
+  onSelectedGeofenceschange(){
+    this.chkAllZones = this.zones.length == this.selectedZones.length;
   }
 
   onChkDateHourChange(){

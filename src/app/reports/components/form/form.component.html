@@ -80,7 +80,7 @@
         </div>
         <div class="col-6">
           <div class="p-field">
-            <p-dropdown [options]="pDropdownGroup" [(ngModel)]="checkboxGroup" [showClear]="false" optionLabe="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'" [disabled]="reportService.workingOnReport"></p-dropdown>
+            <p-dropdown [options]="pDropdownGroup" [(ngModel)]="checkboxGroup" [showClear]="false" optionLabel="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'" [disabled]="reportService.workingOnReport"></p-dropdown>
             <p-dropdown *ngIf="!checkboxGroup" [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione convoy..." (onChange)="onSelectedConvoyChange(); validateForm();" [disabled]="reportService.workingOnReport"></p-dropdown>
             <p-dropdown *ngIf="checkboxGroup" [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione grupo..." (onChange)="onSelectedGroupChange(); validateForm();" [disabled]="reportService.workingOnReport"></p-dropdown>
           </div>
@@ -292,7 +292,7 @@
       <div class="row" *ngIf="showZones">
         <div class="p-field">
           <label class="bg-subtitle" id="zone_label">Geocercas :</label>
-          <p-multiSelect [options]="zones" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();" [disabled]="reportService.workingOnReport"></p-multiSelect>
+          <p-multiSelect [options]="zones" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)="onSelectedGeofenceschange(); validateForm();" [disabled]="reportService.workingOnReport"></p-multiSelect>
           <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
             <label>
               <p-checkbox [(ngModel)]="chkAllZones" [binary]="true" inputId="binary" (onChange)="selectAllZones(); validateForm();" [disabled]="!areZonesLoaded || reportService.workingOnReport"></p-checkbox>
