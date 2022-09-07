@@ -76,6 +76,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   is_new_tab: boolean = false;
   dt_completed = 0;
 
+  reportOption = 0;
 
   dtRendered = localStorage.getItem("report_data") !== null;
 
@@ -692,14 +693,23 @@ export class ResultComponent implements OnDestroy, OnInit {
       key: 'showSelectExcelConfirmation',
       //message: 'Are you sure that you want to perform this action?',
       reject: () => {
-        console.log("Reporte de Excel Unido (cascada)");
-        this[fn_name as keyof ResultComponent](2);
+        console.log('Confirm Dialog rejected');
       },
       accept: () => {
-        console.log("Reporte de Excel por separado (hojas)");
-        this[fn_name as keyof ResultComponent](1);
+        this[fn_name as keyof ResultComponent](this.reportOption);
+        this.reportOption = 0;
       }
     });
+  }
+
+  configReporteSeparado(){
+    console.log("Reporte de Excel por separado (hojas)");
+    this.reportOption = 1;
+  }
+
+  configReporteUnido(){
+    console.log("Reporte de Excel por separado (hojas)");
+    this.reportOption = 2;
   }
 
   puntuacion(idx:number){

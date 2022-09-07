@@ -37,6 +37,8 @@ export class VehicleService {
 
   public listTable = -1; // 0 general, 1 = group
 
+  public vehicleLoadingError: boolean = false;
+
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() dataTreeCompleted = new EventEmitter<any>();
 
@@ -96,7 +98,13 @@ export class VehicleService {
           }
         }
         this.allEyes.state = this.countOpenEyes > 0;
-      });
+      },
+      () => {
+        console.log('Error al obtener los vehículos')
+        this.vehicleLoadingError = true;
+        this.dataCompleted.emit(false);
+      }
+      );
     }
 
   }

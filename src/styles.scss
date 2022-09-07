@@ -352,6 +352,14 @@ p-confirmdialog{
         font-weight: bold;
         margin: 0;
       }
+      .p-dialog-header-icons button{
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        &:not(:hover){
+          color: #000 !important;
+        }
+      }
     }
     .p-dialog-content{
       font-size: 1.125rem;

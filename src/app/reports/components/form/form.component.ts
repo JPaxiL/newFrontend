@@ -3,7 +3,6 @@ import { VehicleService } from '../../../vehicles/services/vehicle.service';
 
 import * as moment from 'moment';
 import {ConfirmationService} from 'primeng-lts/api';
-import { BehaviorSubject, forkJoin } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import * as _ from 'lodash';
@@ -110,6 +109,8 @@ export class FormComponent implements OnInit {
   showLimitTime = false;
   areVehiclesLoaded = false;
   areZonesLoaded = false;
+  isUserIdLoaded = false;
+  errorFlag = 0;
 
   //Reporte 0 - Paradas y Movi
 	chkStops: boolean = true;
@@ -247,16 +248,22 @@ export class FormComponent implements OnInit {
       this.titleService.setTitle('Reportes');
       // this.vehicles=this.vehicleService.vehicles;
       this.vehicleService.dataCompleted.subscribe(vehicles=>{
-        this.vehicles = vehicles;
-        console.log('Vehicles: ',vehicles);
-        this.convoys = _.uniqBy(this.vehicles, 'convoy');
-        this.groups = _.uniqBy(this.vehicles, 'grupo');
-        this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
-        this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
-        this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
-        console.log('Convoys: ',this.convoys);
-        console.log('Groups: ',this.groups);
-        this.areVehiclesLoaded = true;
+        if(vehicles){
+          this.vehicles = vehicles;
+          console.log('Vehicles: ',vehicles);
+          this.convoys = _.uniqBy(this.vehicles, 'convoy');
+          this.groups = _.uniqBy(this.vehicles, 'grupo');
+          this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
+          this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
+          this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
+          console.log('Convoys: ',this.convoys);
+          console.log('Groups: ',this.groups);
+          this.areVehiclesLoaded = true;
+        } else {
+          console.log('Fallo al obtener vehiculos');
+          this.errorFlag++;
+        }
+        this.endInit();
       });
 
       this.reports = [
@@ -307,25 +314,33 @@ export class FormComponent implements OnInit {
 		console.log(this.reportType);
 		this.spinnerOptions = true;
 
-    forkJoin([
-      // this.http.get(environment.apiUrl + '/api/tracker'),
-      this.http.get(environment.apiUrl + '/api/zone'),
-      this.http.get(environment.apiUrl + '/api/userId')
-    ]).subscribe((results: {data?: any}[]) => {
-      // this.vehicles = results[0];
-      this.zones = results[0].data;
-      this.userId = parseInt(JSON.stringify(results[1]));
+    this.http.get(environment.apiUrl + '/api/zone').subscribe({
+      next: data => {
+        this.zones = data;
+        console.log("zonas", this.zones);
+        this.areZonesLoaded = true;
+        this.endInit();
+      },
+      error: () => {
+        console.log('Fallo al obtener zonas');
+        this.errorFlag++;
+        this.endInit();
+      }
+    });
 
-      // console.log("vehicles", this.vehicles);
-      console.log("zonas", this.zones);
-      console.log("user ID", this.userId);
-
-      /* this.spinnerOptions = false; */
-
-      this.areZonesLoaded = true;
-      this.spinner.hide("fullScreenSpinner");
-      this.fullScreenSpinnerMsg = '';
-    })
+    this.http.get(environment.apiUrl + '/api/userId').subscribe({
+      next: data => {
+        this.userId = parseInt(JSON.stringify(data));
+        console.log("user ID", this.userId);
+        this.isUserIdLoaded = true;
+        this.endInit();
+      },
+      error: () => {
+        console.log('Fallo al obtener userId');
+        this.errorFlag++;
+        this.endInit();
+      }
+    });
 
     if(this.browserDetectorService.isChromium()){
       if(this.browserDetectorService.isOpera()){
@@ -359,6 +374,30 @@ export class FormComponent implements OnInit {
     console.log("Es firefox ? " + this.isFirefox);
     console.log("Es safari ? " + this.isSafari);
 
+  }
+
+  endInit(){
+    if(this.errorFlag == 1){
+      this.spinner.hide("fullScreenSpinner");
+      console.log('Hubo un error al obtener los datos');
+      Swal.fire({
+        title: 'Error',
+        text: `Hubo un error al obtener la información. Por favor, actualiza la página`,
+        icon: 'error',
+        allowOutsideClick: false,
+        confirmButtonText: 'Actualizar Página',
+      }).then((data) => {
+        if (data.isConfirmed) {
+          this.spinner.show('reloadSpinner');
+          window.location.reload();
+        }
+      });
+      return;
+    }
+    if(this.errorFlag == 0 && this.areVehiclesLoaded && this.areZonesLoaded && this.isUserIdLoaded){
+      this.spinner.hide("fullScreenSpinner");
+      this.fullScreenSpinnerMsg = '';
+    }
   }
 
   selectAllVehicles(){
@@ -561,6 +600,23 @@ export class FormComponent implements OnInit {
             });
           }
         }
+      },
+      error: () => {
+        //console.log('Hubo un error al procesar la solicitud');
+        this.spinner.hide("reportSpinner");
+        Swal.fire({
+          title: 'Error',
+          text: `Hubo un error al generar el reporte. 
+          Por favor, actualiza la página`,
+          icon: 'error',
+          allowOutsideClick: false,
+          confirmButtonText: 'Actualizar Página',
+        }).then((data) => {
+          if (data.isConfirmed) {
+            this.spinner.show('reloadSpinner');
+            window.location.reload();
+          }
+        });
       }
     });
   }
