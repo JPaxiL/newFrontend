@@ -314,9 +314,9 @@ export class FormComponent implements OnInit {
 		console.log(this.reportType);
 		this.spinnerOptions = true;
 
-    this.http.get(environment.apiUrl + '/api/zone').subscribe({
+    this.http.get<any>(environment.apiUrl + '/api/zone').subscribe({
       next: data => {
-        this.zones = data;
+        this.zones = data.data;
         console.log("zonas", this.zones);
         this.areZonesLoaded = true;
         this.endInit();
