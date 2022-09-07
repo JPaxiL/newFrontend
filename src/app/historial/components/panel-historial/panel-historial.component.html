@@ -44,7 +44,6 @@
                     <label>COLOR DE RUTA:</label>
                   </div>
                   <div class="col-12 d-flex">
-                    <!-- <input type="color" class="form-control form-control-color" id="chckGrafico" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color" [disabled]="!form.chckGrafico"> -->
                     <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" id="colorRuta" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color">
                     <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="colorRuta">
                       <span class="p-dropdown-trigger-icon pi pi-chevron-down"></span>
@@ -70,103 +69,6 @@
                   (onChange)="changeRangoFechas()"></p-dropdown>
           </div>
         </div>
-
-        <!-- <div class="gl-row-underline">
-          <div class="col-12">
-              <label>FECHA INICIAL:</label>
-          </div>
-          <div class="col-12">
-            <p-calendar
-                  [(ngModel)]="form.pngFechaIni"
-                  dateFormat="yy-mm-dd"
-                  [appendTo]="'body'"
-                  [monthNavigator]="true"
-                  [yearNavigator]="true"
-                  yearRange="2000:2040"
-                  [showIcon]="true"
-                  [maxDate]="form.pngFechaFin"
-                  ></p-calendar>
-          </div>
-        </div>
-
-        <div class="gl-row-underline">
-          <div class="col-12">
-              <label>HORA INICIAL:</label>
-          </div>
-          <div class="col-12">
-            <div class="row gl-middleline">
-              <div class="col-6 p-field">
-                <p-dropdown
-                  [options]="hourPicker"
-                  optionLabel="label"
-                  optionValue="value"
-                  [(ngModel)]="form.pngHoraIni2"
-                  [showClear]="false"
-                  [appendTo]="'body'"
-                  ></p-dropdown>
-              </div>
-              <div class="col-6 p-field">
-                <p-dropdown
-                [options]="minPicker"
-                optionLabel="label"
-                optionValue="value"
-                [(ngModel)]="form.pngMinIni"
-                [showClear]="false"
-                [appendTo]="'body'"
-                ></p-dropdown>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- <div class="gl-row-underline">
-          <div class="col-12">
-              <label>FECHA FINAL:</label>
-          </div>
-          <div class="col-12">
-            <p-calendar
-                  [(ngModel)]="form.pngFechaFin"
-                  dateFormat="yy-mm-dd"
-                  [appendTo]="'body'"
-                  [monthNavigator]="true"
-                  [yearNavigator]="true"
-                  yearRange="2000:2040"
-                  [showIcon]="true"
-                  [minDate]="form.pngFechaIni"
-                  ></p-calendar>
-          </div>
-        </div>
-
-        <div class="gl-row-underline">
-          <div class="col-12">
-              <label>HORA FINAL:</label>
-          </div>
-          <div class="col-12">
-            <div class="row gl-middleline">
-              <div class="col-6 p-field">
-                <p-dropdown
-                  [options]="hourPicker"
-                  optionLabel="label"
-                  optionValue="value"
-                  [(ngModel)]="form.pngHoraFin2"
-                  [showClear]="false"
-                  [appendTo]="'body'"
-                  ></p-dropdown>
-              </div>
-              <div class="col-6 p-field">
-                <p-dropdown
-                [options]="minPicker"
-                optionLabel="label"
-                optionValue="value"
-                [(ngModel)]="form.pngMinFin"
-                [showClear]="false"
-                [appendTo]="'body'"
-                ></p-dropdown>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
 
         <div class="gl-middleline gl-row-underline">
           <div class="row">
@@ -228,24 +130,6 @@
           </div>
         </div>
 
-        <!-- <div class="gl-row-underline">
-          <div class="col-12">
-              <label>PARADAS:</label>
-          </div>
-          <div class="col-12">
-            <p-dropdown
-                  [options]="availableOptionsTempoParada"
-                  optionLabel="name"
-                  optionValue="id"
-                  [(ngModel)]="form.duracionParada"
-                  [showClear]="false"
-                  [appendTo]="'body'"
-                  [disabled]="pngChkParadas">
-                </p-dropdown>
-          </div>
-        </div> -->
-
-
         <div class="gl-middleline gl-row-underline">
           <div class="row">
             <div class="col-6 p-field">
@@ -253,8 +137,6 @@
                   <label>PARADAS:</label>
               </div>
               <div class="col-12">
-                <!-- <input class="form-check-input"  (change)="changeShowingTramas()" type="checkbox" id="chckTrama" [(ngModel)]="form.chckTrama"> -->
-                <!-- <p-dropdown [options]="booleanOptions" [(ngModel)]="pngChkTrama"  (onChange)="changeShowingTramas1($event)"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown> -->
                 <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckParada"  (onChange)="changeShowingParadasHistorial()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
               </div>
             </div>
@@ -285,10 +167,7 @@
                   <label>TRAMA:</label>
               </div>
               <div class="col-12">
-
-                <!-- <input class="form-check-input"  (change)="changeShowingTramas()" type="checkbox" id="chckTrama" [(ngModel)]="form.chckTrama"> -->
-                <!-- <p-dropdown [options]="booleanOptions" [(ngModel)]="pngChkTrama"  (onChange)="changeShowingTramas1($event)"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown> -->
-                <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckTrama"  (onChange)="changeShowingTramas()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+                <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckTrama"  (onChange)="changeShowingTramas(); changeShowingTramasFechaVelocidad();"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
               </div>
             </div>
             <div class="col-6 p-field">
@@ -341,182 +220,9 @@
               <label>GRÁFICO:</label>
           </div>
           <div class="col-12">
-            <!-- <input class="form-check-input" (change)="changeShowingGrafico()" type="checkbox" id="chckGrafico" [(ngModel)]="form.chckGrafico"> -->
             <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckGrafico" (onChange)="changeShowingGrafico()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
           </div>
         </div>
-
-
-
-        <!-- <div class="gl-row-underline">
-          <div class="col-12">
-              <label>EVENTOS:</label>
-          </div>
-          <div class="col-12">
-            <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckEvento" (onChange)="changeShowingEventos()"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
-          </div>
-        </div> -->
-
-        <!-- ================================================================================================================================================================================================================ -->
-               <!-- ================================================================================================================================================================================================================ -->
-
-                       <!-- ================================================================================================================================================================================================================ -->
-      <!--
-        <div class="row">
-          <legend class="col-12">Datos Vehículo</legend>
-          <div class="col-12">
-            <label class="row d-flex align-items-center">
-              <div class="col-4 text-end">Vehículo</div>
-              <div class="col-8">
-                <ng-select class="custom" id="selectVehiculo"
-                  [items]="cars"
-                  bindLabel="nombre"
-                  bindValue="imei"
-                  placeholder="Selecciona el Vehículo"
-                  [(ngModel)]="form.selectedCar"
-                  [searchFn]="customSearch"
-                  >
-                </ng-select>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="row"></div>
-
-        <div class="row">
-          <legend class="col-12">Fecha</legend>
-          <div class="col-12 mb-2">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Filtrar por:</div>
-              <div class="col-8">
-                <p-dropdown
-                  [options]="availableOptionsDay"
-                  optionLabel="name"
-                  optionValue="id"
-                  [(ngModel)]="form.selectedRango"
-                  [showClear]="false"
-                  [appendTo]="'body'"
-                  (onChange)="changeRangoFechas()"></p-dropdown>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 mb-2">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Fecha inicial:</div>
-              <div class="col-8">
-                <p-calendar
-                  [(ngModel)]="pngFechaIni"
-                  dateFormat="yy-mm-dd"
-                  [appendTo]="'body'"
-                  [monthNavigator]="true"
-                  [yearNavigator]="true"
-                  yearRange="2000:2040"
-                  [showIcon]="true"
-                  ></p-calendar>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 mb-2">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Hora inicial:</div>
-              <div class="col-8">
-                <div class="row">
-                  <p-calendar [(ngModel)]="pngHoraIni" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'"></p-calendar>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 mb-2">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Fecha final:</div>
-              <div class="col-8">
-                <p-calendar
-                  [(ngModel)]="pngFechaFin"
-                  dateFormat="yy-mm-dd"
-                  [appendTo]="'body'"
-                  [monthNavigator]="true"
-                  [yearNavigator]="true"
-                  yearRange="2000:2040"
-                  [showIcon]="true"
-                  ></p-calendar>
-
-              </div>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Hora final:</div>
-              <div class="col-8">
-                <div class="row">
-                  <p-calendar [(ngModel)]="pngHoraFin" [timeOnly]="true" [readonlyInput]="true" [appendTo]="'body'"></p-calendar>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row"></div>
-
-        <div class="row">
-          <legend>Opciones</legend>
-          <div class="col-12 mb-2">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Paradas:</div>
-              <div class="col-1">
-                <div class="form-check">
-                  <input class="form-check-input"  (change)="changeShowingParadasHistorial()" type="checkbox" id="chckParada" [(ngModel)]="form.chckParada">
-                </div>
-              </div>
-              <div class="col-7">
-                <p-dropdown
-                  [options]="availableOptionsTempoParada"
-                  optionLabel="name"
-                  optionValue="id"
-                  [(ngModel)]="form.duracionParada"
-                  [showClear]="false"
-                  [appendTo]="'body'" [disabled]="!form.chckParada"></p-dropdown>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 mb-2">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Tramas:</div>
-              <div class="col-1">
-                <div class="form-check">
-                  <input class="form-check-input"  (change)="changeShowingTramas()" type="checkbox" id="chckTrama" [(ngModel)]="form.chckTrama">
-                </div>
-              </div>
-              <div class="col-7"></div>
-            </div>
-          </div>
-          <div class="col-12 mb-2">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Gráfico:</div>
-              <div class="col-1">
-                <div class="form-check">
-                  <input class="form-check-input" (change)="changeShowingGrafico()" type="checkbox" id="chckGrafico" [(ngModel)]="form.chckGrafico">
-                </div>
-              </div>
-              <div class="col-7">
-                <input type="color" class="form-control form-control-color" id="chckGrafico" [(ngModel)]="form.colorHistorial" (change)="changeColorHistorial()" title="Elige un color" [disabled]="!form.chckGrafico">
-              </div>
-            </div>
-          </div>
-          <div class="col-12 mb-3">
-            <div class="row d-flex align-items-center">
-              <div class="col-4 text-end">Eventos:</div>
-              <div class="col-1">
-                <div class="form-check">
-                  <input class="form-check-input" (change)="changeShowingEventos()" type="checkbox" id="chckEvento" [(ngModel)]="form.chckEvento">
-                </div>
-              </div>
-              <div class="col-7">
-                <button type="button" (click)="showEventos = !showEventos" class="btn btn-outline-secondary btn-xs-gl">Elegir</button>
-              </div>
-            </div>
-          </div>
-        -->
 
         <div class="row">
 

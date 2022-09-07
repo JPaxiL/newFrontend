@@ -1101,7 +1101,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             // this.panelService.nombreCabecera =   item[0].name;
 
-
+                this.changeShowingTramas();
+                this.changeShowingTramasFechaVelocidad();
                 this.isHistorialTableLoaded = true;
                 /* $('#tbl_fechas').floatThead({
                   scrollContainer: () => {
@@ -1156,6 +1157,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       for (let i = 0; i < dH.length; i++) {
         if (dH[i].layer != null) {
           this.mapService.map.removeLayer(dH[i].layer);
+        }
+        if(dH[i]._trama_fecha_velocidad != null){
+          this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
         }
         this.mapService.map.removeLayer(dH[i]._trama);
       }
