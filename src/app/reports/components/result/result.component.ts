@@ -112,7 +112,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   //Width de col en px = (ancho de caracter * nro de letras) + 5
   //char_to_px = 9; // Ancho de un caracter en pixeles, considerando M como la letra más ancha, y tamaño de fuente 9
-  char_to_px = 9; // Ancho de un caracter en pixeles 
+  char_to_px = 9; // Ancho de un caracter en pixeles
 
   isChromium = window.chrome? true:false;
 	winNav = window.navigator;
@@ -180,187 +180,187 @@ export class ResultComponent implements OnDestroy, OnInit {
   colsHeaderHeightTwoLine = this.colsHeaderHeight * 2 + 2.5;
   bodyRowsHeight = 12;
   overviewRowsHeight = this.bodyRowsHeight;
-  
+
   excelUnitstoPxRatio = 4/3;
 
   headerCellConfig = {
-    bold: this.headerBold, 
-    color: this.headerTextColor, 
-    background: this.headerBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
-    fontSize: this.t1, 
+    bold: this.headerBold,
+    color: this.headerTextColor,
+    background: this.headerBackground,
+    vAlign: "center",
+    hAlign: "center",
+    fontSize: this.t1,
     rowSpan: this.headerRowSpan,
     wrap: true,
   };
 
   subHeaderVehicleHeaderConfig = {
-    bold: this.vehicleHeaderBold, 
-    color: this.vehicleHeaderTextColor, 
-    background: this.vehicleHeaderBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.vehicleHeaderBold,
+    color: this.vehicleHeaderTextColor,
+    background: this.vehicleHeaderBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.t2,
-    borderRight: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
-    }, 
-    borderLeft: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderRight: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
-    borderTop: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderLeft: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
+    },
+    borderTop: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
   };
   subHeaderPeriodHeaderConfig = {
-    bold: this.periodHeaderBold, 
-    color: this.periodHeaderTextColor, 
-    background: this.periodHeaderBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.periodHeaderBold,
+    color: this.periodHeaderTextColor,
+    background: this.periodHeaderBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.t2,
-    borderRight: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
-    }, 
-    borderLeft: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderRight: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
-    borderTop: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderLeft: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
+    },
+    borderTop: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
   };
   subHeaderRutaHeaderConfig = {
-    bold: this.rutaHeaderBold, 
-    color: this.rutaHeaderTextColor, 
-    background: this.rutaHeaderBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.rutaHeaderBold,
+    color: this.rutaHeaderTextColor,
+    background: this.rutaHeaderBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.t2,
-    borderRight: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
-    }, 
-    borderLeft: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderRight: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
-    borderTop: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderLeft: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
+    },
+    borderTop: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
   };
 
   subHeaderVehicleContentConfig = {
-    bold: this.vehicleContentBold, 
-    color: this.vehicleContentTextColor, 
-    background: this.vehicleContentBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.vehicleContentBold,
+    color: this.vehicleContentTextColor,
+    background: this.vehicleContentBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.t2,
     rowSpan: this.subHeaderContentRowSpan,
-    borderRight: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
-    }, 
-    borderLeft: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderRight: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
-    borderTop: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderLeft: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
+    },
+    borderTop: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
   };
   subHeaderPeriodContentConfig = {
-    bold: this.periodContentBold, 
-    color: this.periodContentTextColor, 
-    background: this.periodContentBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.periodContentBold,
+    color: this.periodContentTextColor,
+    background: this.periodContentBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.t2,
     rowSpan: this.subHeaderContentRowSpan,
-    borderRight: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
-    }, 
-    borderLeft: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderRight: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
-    borderTop: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderLeft: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
+    },
+    borderTop: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
   };
   subHeaderRutaContentConfig = {
-    bold: this.rutaContentBold, 
-    color: this.rutaContentTextColor, 
-    background: this.rutaContentBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.rutaContentBold,
+    color: this.rutaContentTextColor,
+    background: this.rutaContentBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.t2,
     rowSpan: this.subHeaderContentRowSpan,
-    borderRight: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
-    }, 
-    borderLeft: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderRight: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
-    borderTop: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderLeft: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
+    },
+    borderTop: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
   };
-  
+
   colHeaderConfig = {
-    bold: this.colsHeaderBold, 
-    color: this.colsHeaderTextColor, 
-    background: this.colsHeaderBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
-    fontSize: this.t3, 
-    borderRight: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
-    }, 
-    borderLeft: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    bold: this.colsHeaderBold,
+    color: this.colsHeaderTextColor,
+    background: this.colsHeaderBackground,
+    vAlign: "center",
+    hAlign: "center",
+    fontSize: this.t3,
+    borderRight: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
-    borderTop: { 
-      color: this.headersBorderColor, 
-      size: this.headersBorderSize 
+    borderLeft: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
+    },
+    borderTop: {
+      color: this.headersBorderColor,
+      size: this.headersBorderSize
     },
   };
 
   bodyRowsConfig = {
-    vAlign: "center", 
-    hAlign: "center", 
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.c1
   };
 
   overviewLeftConfig = {
-    bold: this.overviewTotalLeftBold, 
-    color: this.overviewTotalLeftTextColor, 
-    background: this.overviewTotalLeftBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.overviewTotalLeftBold,
+    color: this.overviewTotalLeftTextColor,
+    background: this.overviewTotalLeftBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.r1,
     colSpan: 3,
   }
   overviewRightConfig = {
-    bold: this.overviewTotalRightBold, 
-    color: this.overviewTotalRightTextColor, 
-    background: this.overviewTotalRightBackground, 
-    vAlign: "center", 
-    hAlign: "center", 
+    bold: this.overviewTotalRightBold,
+    color: this.overviewTotalRightTextColor,
+    background: this.overviewTotalRightBackground,
+    vAlign: "center",
+    hAlign: "center",
     fontSize: this.r1,
     colSpan: 2,
   }
@@ -549,7 +549,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         console.log('Sin resultados que mostrar');
       }
     }
-    
+
   }
 
   renderDataTable(){
@@ -565,7 +565,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         });
       }
     }
-    
+
     //this.dtRendered = true;
   }
 
@@ -1409,10 +1409,10 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     var table_width = this.chkDuracion? (1 + (this.chkDateHour? 4:2) + 8): (2 + (this.chkDateHour? 2:1) + 3);
     var vehiculo_width = this.chkDuracion? ((this.chkDateHour? 6:4)): (this.chkDateHour? 4:3);
-    
+
     var nom_inf = "REPORTE DE EXCESOS DE VELOCIDAD";
 
-    var allRows: AllRows[] = [        
+    var allRows: AllRows[] = [
         {
           cells: [
             { value: nom_inf, ...this.headerCellConfig, colSpan: table_width }
@@ -1422,7 +1422,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
-    
+
 
     this.data.forEach((table_data: any) => {
       if(table_data[1].length > 0){
@@ -1688,7 +1688,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           zc_cell_ch_width = "Zona Cercana".length;
           ubicacion_cell_ch_width = "Ubicacion".length;
           max_vel_cell_ch_width = "Maxima velocidad".length;
-          
+
         }
         // //********************************************* excel version 1 *********************************
 
@@ -1826,7 +1826,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         var nom_vehi = table_data[0][1];
 
-        
+
 
 
         /* Table Header */
@@ -2466,7 +2466,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             //=================CABECERA =================
             var cellsCuerpo :any = [];
-            
+
             vel_limite_comb_cell_ch_width = Math.max(vel_limite_comb_cell_ch_width, (item.v0??'').toString().length);
             codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
             placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.tracto??'').toString().length);
@@ -2877,7 +2877,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
             vel_eco_cell_ch_width = Math.max(vel_eco_cell_ch_width, (item.velECO??'').toString().length);
             vel_gps_speed_cell_ch_width = Math.max(vel_gps_speed_cell_ch_width, (item.velGPS_speed??'').toString().length);
-            
+
             altitud_cell_ch_width = Math.max(altitud_cell_ch_width, (item.altitud??'').toString().length);
             angulo_cell_ch_width = Math.max(angulo_cell_ch_width, (item.angulo??'').toString().length);
             fatiga_cell_ch_width = Math.max(fatiga_cell_ch_width, (item.fatiga??'').toString().length);
@@ -2969,21 +2969,21 @@ export class ResultComponent implements OnDestroy, OnInit {
           {
             cells:[
               { value: "TOTAL de Excesos de Velocidad(GPS) : ", ...this.overviewLeftConfig },
-              { value: data[3][0], ...this.overviewRightConfig, colSpan: 1 }  
+              { value: data[3][0], ...this.overviewRightConfig, colSpan: 1 }
             ],
             height: this.overviewRowsHeight
           },
           {
             cells:[
               { value: "TOTAL de Excesos de Velocidad(ECO) : ", ...this.overviewLeftConfig },
-              { value: data[3][1], ...this.overviewRightConfig, colSpan: 1 }  
+              { value: data[3][1], ...this.overviewRightConfig, colSpan: 1 }
             ],
             height: this.overviewRowsHeight
           },
           {
             cells:[
               { value: "TOTAL de Excesos de Velocidad(CAN) : ", ...this.overviewLeftConfig },
-              { value: data[3][2], ...this.overviewRightConfig, colSpan: 1 }  
+              { value: data[3][2], ...this.overviewRightConfig, colSpan: 1 }
             ],
             height: this.overviewRowsHeight
           },
@@ -2994,7 +2994,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             {
               cells:[
                 { value: "TOTAL de Fatigas : ", ...this.overviewLeftConfig },
-                { value: data[3][3], ...this.overviewRightConfig, colSpan: 1 }   
+                { value: data[3][3], ...this.overviewRightConfig, colSpan: 1 }
               ],
               height: this.overviewRowsHeight
             }
@@ -3004,8 +3004,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL de Frenada Extremadamente Brusca : ", ...this.overviewLeftConfig },        
-                { value: data[3][4], ...this.overviewRightConfig, colSpan: 1 }   
+                { value: "TOTAL de Frenada Extremadamente Brusca : ", ...this.overviewLeftConfig },
+                { value: data[3][4], ...this.overviewRightConfig, colSpan: 1 }
               ],
               height: this.overviewRowsHeight
             }
@@ -3015,8 +3015,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL de Frenada Brusca : ", ...this.overviewLeftConfig },        
-                { value: data[3][5], ...this.overviewRightConfig, colSpan: 1 }   
+                { value: "TOTAL de Frenada Brusca : ", ...this.overviewLeftConfig },
+                { value: data[3][5], ...this.overviewRightConfig, colSpan: 1 }
               ],
               height: this.overviewRowsHeight
             }
@@ -3026,8 +3026,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL RPM Alta : ", ...this.overviewLeftConfig },        
-                { value: data[3][6], ...this.overviewRightConfig, colSpan: 1 }   
+                { value: "TOTAL RPM Alta : ", ...this.overviewLeftConfig },
+                { value: data[3][6], ...this.overviewRightConfig, colSpan: 1 }
               ],
               height: this.overviewRowsHeight
             }
@@ -3037,8 +3037,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows.push(
             {
               cells:[
-                { value: "TOTAL de alerta de alcohol en la sangre : ", ...this.overviewLeftConfig },        
-                { value: data[3][7], ...this.overviewRightConfig, colSpan: 1 }   
+                { value: "TOTAL de alerta de alcohol en la sangre : ", ...this.overviewLeftConfig },
+                { value: data[3][7], ...this.overviewRightConfig, colSpan: 1 }
               ],
               height: this.overviewRowsHeight
             }
@@ -3058,27 +3058,27 @@ export class ResultComponent implements OnDestroy, OnInit {
               column_config.push(
                 //{ width: this.w_date },
                 //{ width: this.w_hour },
-                { width: 120 }, 
-                { width: 85 }, 
+                { width: 120 },
+                { width: 85 },
               )
             } else {
               column_config.push(
                 //{ width: this.w_date },
                 //{ width: this.w_hour },
-                { width: 105 }, 
-                { width: 75 }, 
+                { width: 105 },
+                { width: 75 },
               )
             }
           } else {
             if(data[2].fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
               column_config.push(
                 //{ width: this.w_date_and_hour },
-                { width: 205 }, 
+                { width: 205 },
               )
             } else {
               column_config.push(
                 //{ width: this.w_date_and_hour },
-                { width: 180 }, 
+                { width: 180 },
               )
             }
           }
@@ -3185,27 +3185,27 @@ export class ResultComponent implements OnDestroy, OnInit {
           column_config.push(
             //{ width: this.w_date },
             //{ width: this.w_hour },
-            { width: 120 }, 
-            { width: 85 }, 
+            { width: 120 },
+            { width: 85 },
           )
         } else {
           column_config.push(
             //{ width: this.w_date },
             //{ width: this.w_hour },
-            { width: 105 }, 
-            { width: 75 }, 
+            { width: 105 },
+            { width: 75 },
           )
         }
       } else {
         if(bool_col_fExBrusca){ // Con el objetivo que el resumen pueda contener el texto de TOTALES en 3 columnas
           column_config.push(
             //{ width: this.w_date_and_hour },
-            { width: 205 }, 
+            { width: 205 },
           )
         } else {
           column_config.push(
             //{ width: this.w_date_and_hour },
-            { width: 180 }, 
+            { width: 180 },
           )
         }
       }
@@ -3247,7 +3247,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (bool_col_pCercano) { column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) } )}
       if (bool_col_referencia) { column_config.push( { width: this.calculateColWidth(referencia_cell_ch_width) } )}
       if (bool_col_DUOT2state) { column_config.push( { width: this.calculateColWidth(duot2_state_cell_ch_width) } )}
-      
+
       exportFileEx.push({
         freezePane: {
           rowSplit: this.headerRowSpan
@@ -5175,7 +5175,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
     var column_config: Columns[];
-    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var table_width = 12 + (this.chkDateHour? 2: 1);
     var vehiculo_width = this.chkDateHour? 5: 4;
 
     var codigo_cell_ch_width = "codigo".length;
@@ -5188,6 +5188,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     var tramo_cell_ch_width = "tramo".length;
     var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
+    var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
 
     // var allRows = [
     var allRows: AllRows[] = [
@@ -5255,6 +5257,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
 
             ],
             height: this.colsHeaderHeight
@@ -5264,7 +5267,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           // data[1].forEach(function(item:any, index:any){
 
 
-          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
@@ -5278,6 +5281,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
+
 
             rows.push({
               cells: [
@@ -5297,6 +5302,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
+
 
               ],
               height: this.bodyRowsHeight
@@ -5324,13 +5331,14 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
 
             ],
             height: this.colsHeaderHeight
           });
 
           // data[1].forEach(function(item:any, index:any){
-            data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+            data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
@@ -5344,6 +5352,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
 
             rows.push({
 
@@ -5363,6 +5372,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
+
 
               ],
               height: this.bodyRowsHeight
@@ -5398,6 +5409,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               { width: this.calculateColWidth(tramo_cell_ch_width) },
               { width: this.calculateColWidth(pc_cell_ch_width) },
               { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+              { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
             );
 
             exportFileEx.push({
@@ -5419,6 +5432,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = "tramo".length;
             pc_cell_ch_width = "Punto Cercano".length;
             ubicacion_cell_ch_width = "Ubicacion".length;
+            sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
 
         }
         // //********************************************* excel version 1 *********************************
@@ -5463,6 +5478,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           { width: this.calculateColWidth(tramo_cell_ch_width) },
           { width: this.calculateColWidth(pc_cell_ch_width) },
           { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+          { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
         );
 
         exportFileEx.push({
@@ -5499,7 +5516,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bol_datos_ex = false;
     var column_config:Columns[];
 
-    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var table_width = 12 + (this.chkDateHour? 2: 1);
     var vehiculo_width = this.chkDateHour? 5: 4;
 
     var codigo_cell_ch_width = "codigo".length;
@@ -5512,6 +5529,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     var tramo_cell_ch_width = "tramo".length;
     var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
+    var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
 
     var allRows: AllRows[] = [
         {
@@ -5571,6 +5590,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
 
             ],
             height: this.colsHeaderHeight
@@ -5578,7 +5598,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
           //data[1].forEach(function(item, index){
-          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
@@ -5592,6 +5612,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
 
             rows.push({
               cells: [
@@ -5612,6 +5633,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
 
               ],
               height: this.bodyRowsHeight
@@ -5636,12 +5658,14 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
+
 
             ],
             height: this.colsHeaderHeight
           });
 
-          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
             // if (item.di4x > 0) {
@@ -5660,6 +5684,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
 
             rows.push({
 
@@ -5678,6 +5703,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
 
               ],
               height: this.bodyRowsHeight
@@ -5713,6 +5739,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               { width: this.calculateColWidth(tramo_cell_ch_width) },
               { width: this.calculateColWidth(pc_cell_ch_width) },
               { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+              { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
             );
 
             exportFileEx.push({
@@ -5734,6 +5762,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = "tramo".length;
             pc_cell_ch_width = "Punto Cercano".length;
             ubicacion_cell_ch_width = "Ubicacion".length;
+            sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
         }
         // //********************************************* excel version 1 *********************************
 
@@ -5777,6 +5807,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           { width: this.calculateColWidth(tramo_cell_ch_width) },
           { width: this.calculateColWidth(pc_cell_ch_width) },
           { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+          { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
         );
 
         exportFileEx.push({
@@ -5813,7 +5845,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
     var column_config:Columns[];
-    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var table_width = 12 + (this.chkDateHour? 2: 1);
     var vehiculo_width = this.chkDateHour? 5: 4;
 
     var codigo_cell_ch_width = "codigo".length;
@@ -5826,7 +5858,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var tramo_cell_ch_width = "tramo".length;
     var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
-
+    var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
 
 
     // var allRows = [
@@ -5889,13 +5921,15 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
-
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
 
             ],
             height: this.colsHeaderHeight
           });
 
-          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+
+
 
             //var fh = item.fecha.split(" ");
             var ubicacion = item.latitud + "," + item.longitud;
@@ -5910,6 +5944,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
 
             rows.push({
               cells: [
@@ -5930,6 +5965,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
 
               ],
               height: this.bodyRowsHeight
@@ -5954,13 +5990,15 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
+
 
             ],
             height: this.colsHeaderHeight
           });
 
 
-          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
             // if (item.di4x > 0) {
@@ -5979,8 +6017,9 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
 
-            
+
             rows.push({
 
               cells: [
@@ -5998,6 +6037,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
 
               ],
               height: this.bodyRowsHeight
@@ -6033,6 +6073,8 @@ export class ResultComponent implements OnDestroy, OnInit {
         { width: this.calculateColWidth(tramo_cell_ch_width) },
         { width: this.calculateColWidth(pc_cell_ch_width) },
         { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
       );
 
       exportFileEx.push({
@@ -6054,6 +6096,8 @@ export class ResultComponent implements OnDestroy, OnInit {
       tramo_cell_ch_width = "tramo".length;
       pc_cell_ch_width = "Punto Cercano".length;
       ubicacion_cell_ch_width = "Ubicacion".length;
+      sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
     }
     // //********************************************* excel version 1 *********************************
 
@@ -6097,6 +6141,8 @@ export class ResultComponent implements OnDestroy, OnInit {
         { width: this.calculateColWidth(tramo_cell_ch_width) },
         { width: this.calculateColWidth(pc_cell_ch_width) },
         { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
       );
 
       exportFileEx.push({
@@ -6135,7 +6181,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
     var column_config: Columns[];
-    var table_width = 11 + (this.chkDateHour? 2: 1);
+    var table_width = 12 + (this.chkDateHour? 2: 1);
     var vehiculo_width = this.chkDateHour? 5: 4;
 
     var codigo_cell_ch_width = "codigo".length;
@@ -6148,6 +6194,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     var tramo_cell_ch_width = "tramo".length;
     var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
+    var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
 
     var allRows: AllRows[] = [
         {
@@ -6208,13 +6256,14 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
 
             ],
             height: this.colsHeaderHeight
           });
 
 
-          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             //var fh = item.fecha.split(" ");
             var ubicacion = item.latitud + "," + item.longitud;
@@ -6229,6 +6278,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
+
 
             rows.push({
               cells: [
@@ -6248,6 +6299,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
 
               ],
               height: this.bodyRowsHeight
@@ -6272,11 +6324,13 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Sonido en Cabina", ...this.colHeaderConfig },
+
             ],
             height: this.colsHeaderHeight
           });
 
-          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;}, index: number) => {
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
 
@@ -6290,6 +6344,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            sonido_en_cabina_cell_ch_width = Math.max(sonido_en_cabina_cell_ch_width, (item.sonidoEnCabina??'').toString().length);
+
 
             rows.push({
 
@@ -6308,6 +6364,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
+                { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
 
               ],
               height: this.bodyRowsHeight
@@ -6343,6 +6400,8 @@ export class ResultComponent implements OnDestroy, OnInit {
         { width: this.calculateColWidth(tramo_cell_ch_width) },
         { width: this.calculateColWidth(pc_cell_ch_width) },
         { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
       );
 
       exportFileEx.push({
@@ -6364,6 +6423,8 @@ export class ResultComponent implements OnDestroy, OnInit {
       tramo_cell_ch_width = "tramo".length;
       pc_cell_ch_width = "Punto Cercano".length;
       ubicacion_cell_ch_width = "Ubicacion".length;
+      sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
     }
     // //********************************************* excel version 1 *********************************
 
@@ -6407,6 +6468,8 @@ export class ResultComponent implements OnDestroy, OnInit {
         { width: this.calculateColWidth(tramo_cell_ch_width) },
         { width: this.calculateColWidth(pc_cell_ch_width) },
         { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(sonido_en_cabina_cell_ch_width) },
+
       );
 
       exportFileEx.push({
@@ -8428,6 +8491,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 
 						]);
 
@@ -8472,6 +8536,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
 
 							]);
 						});
@@ -8493,6 +8558,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 
 
 
@@ -8522,6 +8588,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
 
 							]);
 						});
@@ -8666,6 +8733,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 
 						]);
 
@@ -8711,6 +8779,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
 
 							]);
 						});
@@ -8732,6 +8801,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
 
 						]);
 
@@ -8759,6 +8830,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
 
 							]);
 						});
@@ -8902,6 +8974,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 
 						]);
 
@@ -8946,6 +9019,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
 
 							]);
 						});
@@ -8967,7 +9041,9 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
-						]);
+              { text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+            ]);
 
 						data[1].forEach((item:any, index2:any) => {
 							var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
@@ -8992,6 +9068,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
 
 							]);
 						});
@@ -9135,6 +9212,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
 						]);
 
 
@@ -9178,6 +9257,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
+
 
 							]);
 						});
@@ -9200,6 +9281,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 							{ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
 							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Sonido en Cabina', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
 
 						]);
 
@@ -9226,6 +9309,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
 								{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.sonidoEnCabina, bold: true, fontSize: 6, alignment: 'center' },
+
 
 							]);
 						});
