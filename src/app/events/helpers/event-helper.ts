@@ -13,7 +13,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/entrada_zona.svg'
     );
-    
+
   } else if (event.tipo == 'Zona de salida') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
@@ -28,7 +28,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/salida_zona.svg'
     );
-   
+
   } else if (event.tipo == 'Tiempo de estadia en zona') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
@@ -158,7 +158,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       'assets/images/events-icons/exceso_velocidad.svg',
     );
 
-  } else if (event.tipo == 'Infraccion') { 
+  } else if (event.tipo == 'Infraccion') {
     if (event.nombre_zona == '') {
       return render_leaflet_tootlip(
         {
@@ -255,7 +255,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         fecha_tracker: event.fecha_tracker,
-      }, 
+      },
       'assets/images/events-icons/motor.svg'
     );
 
@@ -412,6 +412,19 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/fatiga.svg',
     );
+  } else if (event.tipo == 'No Rostro') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: d,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
   }
 
   return '';
@@ -476,6 +489,6 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
           ${(typeof event_content.geocerca !== 'undefined')? `<tr><td>GEOCERCA:</td><td>${event_content.geocerca}</td></tr>`:''}
           ${(typeof event_content.fecha_tracker !== 'undefined')? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>`:''}
         </tbody>
-      </table>  
+      </table>
     </div>`;
 }
