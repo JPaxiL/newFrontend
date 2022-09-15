@@ -64,7 +64,7 @@
     <img src="./assets/images/fondo-svg-reporte.svg" alt="fondo-reporte-logo">
   </div>
   <div [ngClass]="table_hide" class="container grand-container">
-    <div *ngIf="num_rep >= 0 && num_rep <= 20 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
+    <div *ngIf="num_rep >= 0 && num_rep <= 21 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
     <div class="table-subtitle p-card" style="margin-bottom: 0.25rem;">{{ rep_subtitle }}</div>
   </div>
   <ng-container>
@@ -1079,7 +1079,7 @@
     </div>
 
     <!-- 11. REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 11">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 11 || num_rep == 21">
       <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
@@ -2221,7 +2221,7 @@
       <button *ngIf="num_rep == 6" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 7" class="btn btn-gl btn-success btn-dark-hover" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 10" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 11" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 11 || num_rep == 21" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 12" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 13" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 14" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>

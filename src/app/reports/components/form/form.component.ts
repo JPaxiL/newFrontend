@@ -287,7 +287,9 @@ export class FormComponent implements OnInit {
         {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA', url: '/api/reports/desvio_carril_derecha'},
         {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'},
         {id : 19, value : 'REPORTE GERENCIAL (Cuenta cruzdelsur)', url: '/api/reports/gerencial_grafico_distraccion_fatiga'},
-        {id : 20, value : 'REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)', url: '/api/reports/exceso_velocidad_zona_formato_extendido'}
+        {id : 20, value : 'REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)', url: '/api/reports/exceso_velocidad_zona_formato_extendido'},
+        {id : 21, value : 'REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT', url: '/api/reports/somnolencia_proloint'}
+
       ];
 
 
@@ -606,7 +608,7 @@ export class FormComponent implements OnInit {
         this.spinner.hide("reportSpinner");
         Swal.fire({
           title: 'Error',
-          text: `Hubo un error al generar el reporte. 
+          text: `Hubo un error al generar el reporte.
           Por favor, actualiza la página`,
           icon: 'error',
           allowOutsideClick: false,
@@ -695,6 +697,7 @@ export class FormComponent implements OnInit {
       case 18:
       case 19:
       case 20:
+      case 21:
           this.showLimitTime = true;
 				break;
       default: break;
@@ -807,7 +810,7 @@ export class FormComponent implements OnInit {
     if(!this.eV.evEstadia) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evParada) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evInfraccion) { this.eV.OtroTodos = false; return; }
-    
+
     if(!this.eV.evNoRostro) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evFatigaExtrema) { this.eV.OtroTodos = false; return; }
     if(!this.eV.AccFatiga) { this.eV.OtroTodos = false; return; }
@@ -817,7 +820,7 @@ export class FormComponent implements OnInit {
     if(!this.eV.evDesvioCarrilIzquierda) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evDesvioCarrilDerecha) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evBloqueoVisionMobileye) { this.eV.OtroTodos = false; return; }
-    
+
     this.eV.OtroTodos = true;
   }
 
@@ -866,6 +869,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 19 && is_vehicle_selected)
         ||
         (this.selectedReport == 20 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 21 && is_vehicle_selected)
       );
   }
 

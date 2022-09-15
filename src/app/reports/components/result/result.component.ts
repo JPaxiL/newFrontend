@@ -70,6 +70,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   chkDateHour: any;
   chkDuracion: any;
   chkOdomV: any;
+  repTitle: any;
   Math = Math;
 
   //@Output() localStorageReportData = new EventEmitter();
@@ -448,6 +449,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.chkDateHour = data.chkDateHour;
         this.chkDuracion = data.chkDuracion;
         this.chkOdomV = data.chkOdomV;
+        this.repTitle = data.repTitle;
         this.period = data.period;
         this.prepareVehicleDropdown();
 
@@ -487,6 +489,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.chkDateHour = report_data.chkDateHour;
       this.chkDuracion = report_data.chkDuracion;
       this.chkOdomV = report_data.chkOdomV;
+      this.repTitle = report_data.repTitle;
       this.period = report_data.period;
       this.prepareVehicleDropdown();
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
@@ -4088,6 +4091,15 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   exportExcelDistraccionPosibleFatiga(vrs: number) {
     // dateHour();
+    var nom_excel: string = '';
+
+    // console.log(this.repTitle);
+    if (this.num_rep == 11) {
+       nom_excel = "ReporteDistraccionPosibleFatiga.xlsx";
+    } else if (this.num_rep == 21) {
+       nom_excel = "ReporteSomnolenciaDistraccionProloint.xlsx";
+    }
+
     var exportFileEx = [];
     var bol_datos_ex = false;
 
@@ -4112,7 +4124,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var allRows: AllRows[] = [
         {
           cells: [
-            { value: "REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA", ...this.headerCellConfig, colSpan: table_width }
+            { value: this.repTitle, ...this.headerCellConfig, colSpan: table_width }
           ],
           height: this.headerRowsHeight
         },
@@ -4131,7 +4143,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         var rows:AllRows[] = [
           {
             cells: [
-              { value: "REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA", ...this.headerCellConfig, colSpan: table_width }
+              { value: this.repTitle, ...this.headerCellConfig, colSpan: table_width }
             ],
             height: this.headerRowsHeight
           },
@@ -4433,7 +4445,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "ReporteDistraccionPosibleFatiga.xlsx"
+        fileName: nom_excel
       });
 
     } else {
