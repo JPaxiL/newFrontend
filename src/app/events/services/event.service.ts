@@ -128,6 +128,7 @@ export class EventService {
       { tipo: 'Colisión delantera', clase: 'colision-delantera' },
       { tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
       { tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
+      { tipo: 'No Rostro', clase: 'no-rostro' },
     ];
 
 
