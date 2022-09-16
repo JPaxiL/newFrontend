@@ -288,7 +288,8 @@ export class FormComponent implements OnInit {
         {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'},
         {id : 19, value : 'REPORTE GERENCIAL (Cuenta cruzdelsur)', url: '/api/reports/gerencial_grafico_distraccion_fatiga'},
         {id : 20, value : 'REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)', url: '/api/reports/exceso_velocidad_zona_formato_extendido'},
-        {id : 21, value : 'REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT', url: '/api/reports/somnolencia_proloint'}
+        {id : 21, value : 'REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT', url: '/api/reports/somnolencia_proloint'},
+        {id : 22, value : 'REPORTE DE MANTENIMIENTO FISICO', url: '/api/reports/mantenimiento_fisico'},
 
       ];
 
@@ -698,6 +699,7 @@ export class FormComponent implements OnInit {
       case 19:
       case 20:
       case 21:
+      case 22:
           this.showLimitTime = true;
 				break;
       default: break;
@@ -871,6 +873,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 20 && is_vehicle_selected)
         ||
         (this.selectedReport == 21 && is_vehicle_selected)
+        ||
+        (this.selectedReport == 22 && is_vehicle_selected)
       );
   }
 

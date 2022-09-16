@@ -6824,6 +6824,348 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
 
+  exportExcelMantenimientoFisico(vrs: number) {
+    // dateHour();
+    var nom_excel: string = 'ReporteMantenimientoFisico.xlsx';
+
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var column_config:Columns[];
+    var table_width = 12 + (this.chkDateHour? 2: 1);
+    var vehiculo_width = (this.chkDateHour? 5: 4);
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo de Unidad".length;
+    var tipo_mantenimiento_cell_ch_width = "Tipo Mantenimiento".length;
+
+    var id_conductor_cell_ch_width = "ID conductor".length;
+    var conductor_cell_ch_width = "conductor".length;
+    var vel_gps_cell_ch_width = "Vel. GPS".length;
+    var vel_can_cell_ch_width = "Vel. CAN".length;
+
+    var tramo_cell_ch_width = "tramo".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+        {
+          cells: [
+            { value: this.repTitle, ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+    ];
+
+
+    //this.data.forEach((table_data: any) => {
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        // var rows = [
+        var rows:AllRows[] = [
+          {
+            cells: [
+              { value: this.repTitle, ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+          {
+            cells: [
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
+          },
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
+        ];
+
+
+        if(this.chkDateHour) {
+
+
+          rows.push({
+            cells: [
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Hora", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
+              { value: "Tipo de Mantenimiento", ...this.colHeaderConfig },
+
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
+
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+
+            ],
+            height: this.colsHeaderHeight
+          });
+
+
+          // data[1].forEach(function(item:any, index:any){
+
+
+          data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; descripcion: string; ai1x: number; tramo: string; PC: any; tipo_mantenimiento: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            tipo_mantenimiento_cell_ch_width = Math.max(tipo_mantenimiento_cell_ch_width, (item.descripcion??'').toString().length);
+
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+            rows.push({
+              cells: [
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
+                { value: item.tipo_mantenimiento, ...this.bodyRowsConfig },
+
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
+
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
+
+              ],
+              height: this.bodyRowsHeight
+            });
+          });
+
+
+        } else {
+
+          rows.push({
+            cells: [
+
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Fecha", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
+              { value: "Tipo de Mantenimiento", ...this.colHeaderConfig },
+
+              { value: "Id Conductor", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+              { value: "Vel.GPS", ...this.colHeaderConfig },
+              { value: "Vel.CAN", ...this.colHeaderConfig },
+
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+
+            ],
+            height: this.colsHeaderHeight
+          });
+
+
+
+          // data[1].forEach(function(item:any, index:any){
+            data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; descripcion: string; ai1x: number; tramo: string; PC: any;tipo_mantenimiento: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            tipo_mantenimiento_cell_ch_width = Math.max(tipo_mantenimiento_cell_ch_width, (item.descripcion??'').toString().length);
+
+            id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+            vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+            rows.push({
+
+              cells: [
+
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
+                { value: item.tipo_mantenimiento, ...this.bodyRowsConfig },
+
+                { value: item.idConductor, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
+                { value: item.vel_gps_speed+" Km/h", ...this.bodyRowsConfig },
+                { value: item.vel_can+" Km/h", ...this.bodyRowsConfig },
+
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
+
+              ],
+              height: this.bodyRowsHeight
+
+            });
+          });
+
+        }
+
+
+        // //********************************************* excel version 1 *********************************
+        if (vrs == 1) {
+          column_config = [
+            { width: this.w_item },
+          ];
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+            );
+          }
+          column_config.push(
+            { width: this.calculateColWidth(codigo_cell_ch_width) },
+            { width: this.calculateColWidth(placa_cell_ch_width) },
+            { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+            { width: this.calculateColWidth(tipo_mantenimiento_cell_ch_width) },
+
+            { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+            { width: this.calculateColWidth(conductor_cell_ch_width) },
+            { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+            { width: this.calculateColWidth(vel_can_cell_ch_width) },
+            { width: this.calculateColWidth(tramo_cell_ch_width) },
+            { width: this.calculateColWidth(pc_cell_ch_width) },
+            { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+          );
+
+          exportFileEx.push({
+            freezePane: {
+                rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+              },
+            columns: column_config,
+            title: data[0][1],
+            rows: rows
+          });
+
+          codigo_cell_ch_width = "codigo".length;
+          placa_cell_ch_width = "placa".length;
+          tipo_unidad_cell_ch_width = "Tipo unidad".length;
+          tipo_mantenimiento_cell_ch_width = "Tipo Mantenimiento".length;
+
+          id_conductor_cell_ch_width = "ID conductor".length;
+          conductor_cell_ch_width = "conductor".length;
+          vel_gps_cell_ch_width = "Vel. GPS".length;
+          vel_can_cell_ch_width = "Vel. CAN".length;
+          tramo_cell_ch_width = "tramo".length;
+          pc_cell_ch_width = "Punto Cercano".length;
+          ubicacion_cell_ch_width = "Ubicacion".length;
+        }
+        // //********************************************* excel version 1 *********************************
+
+        // //********************************************* excel version 2 *********************************
+        if (vrs == 2) {
+           rows.splice(0, this.headerRowSpan);
+           rows.push(...this.spaceBetweenTables);
+           allRows = allRows.concat(rows);
+        }
+        // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_mantenimiento_cell_ch_width) },
+
+        { width: this.calculateColWidth(id_conductor_cell_ch_width) },
+        { width: this.calculateColWidth(conductor_cell_ch_width) },
+        { width: this.calculateColWidth(vel_gps_cell_ch_width) },
+        { width: this.calculateColWidth(vel_can_cell_ch_width) },
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+      );
+
+      exportFileEx.push({
+        freezePane: {
+            rowSplit: this.headerRowSpan
+          },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: nom_excel
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
 
 
 
