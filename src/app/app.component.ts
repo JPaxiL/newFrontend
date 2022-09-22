@@ -11,6 +11,8 @@ export class AppComponent {
   constructor(
     private eventSocketService: EventSocketService
   ){
-    this.eventSocketService.listen();
+    if(localStorage.getItem('user_id') != null){
+      this.eventSocketService.listen();
+    }
   }
 }
