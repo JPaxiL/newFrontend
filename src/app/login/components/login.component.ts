@@ -5,6 +5,7 @@ import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngxs/store';
 import { SignIn } from 'src/app/core/store/auth.actions';
 import { UsersService } from 'src/app/dashboard/service/users.service';
+import { EventSocketService } from 'src/app/events/services/event-socket.service';
 
 export interface User {
   name: string;
@@ -36,7 +37,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     config: NgbCarouselConfig,
     private fb: FormBuilder,
-    public userService: UsersService) {
+    public userService: UsersService,
+    private eventSocketService: EventSocketService) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
     config.showNavigationIndicators = true;
@@ -72,14 +74,15 @@ export class LoginComponent implements OnInit {
         this.validCredentials = 1;
         //console.log('Inicio de sesión exitoso');
         //console.log(data);
-        this.userService.setUserInLocalStorage();
-
+        this.startSession();
+        /* this.userService.setUserInLocalStorage();
         this.router.navigate(['/panel'], {
           state: {
             //flag para mostrar toast de bienvenida
             recentLogIn: true,
           }
         });
+        this.eventSocketService.listen(); */
       },
       error => {
         // if(error.status == 400){
@@ -99,5 +102,17 @@ export class LoginComponent implements OnInit {
     }else{
 
     }
+  }
+
+  async startSession(){
+    await this.userService.setUserInLocalStorage();
+    this.router.navigate(['/panel'], {
+      state: {
+        //flag para mostrar toast de bienvenida
+        recentLogIn: true,
+      }
+    });
+    this.eventSocketService.user_id = localStorage.getItem('user_id');
+    this.eventSocketService.listen();
   }
 }

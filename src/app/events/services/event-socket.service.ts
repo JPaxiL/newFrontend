@@ -35,6 +35,8 @@ export class EventSocketService extends Socket {
   }
 
   public listen() {
+    console.log('Is Listening');
+    //console.log(this.user_id);
 
     this.ioSocket.on('events', (event: any) => {
       let even = JSON.parse(event);
