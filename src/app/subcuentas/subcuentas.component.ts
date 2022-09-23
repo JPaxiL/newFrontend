@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./subcuentas.component.scss']
 })
 export class SubcuentasComponent implements OnInit {
-  isUnderConstruction: boolean = true;
+  isUnderConstruction: boolean = false;
 
   constructor() { }
 

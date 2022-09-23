@@ -34,6 +34,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
       next: data => {
+        this.panelService.userData = data[0];
         this.userName = data[0].nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
         this.userEmail = data[0].email;
         this.userDataInitialized = true;
