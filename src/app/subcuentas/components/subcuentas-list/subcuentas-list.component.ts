@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PanelService } from '../../../panel/services/panel.service';
 
+import { SubcuentasService } from '../../services/subcuentas.service';
+
 
 @Component({
   selector: 'app-subcuentas-list',
@@ -14,12 +16,23 @@ export class SubcuentasListComponent implements OnInit {
 
   constructor(
     public panelService: PanelService,
+    public subcuentasService: SubcuentasService,
+
   ) { }
 
   ngOnInit(): void {
     console.log("=================USER");
     console.log(this.panelService.userData);
+
+    if(!this.subcuentasService.initializingSubUser){
+      this.subcuentasService.spinner.show('loadingSubcuentas');
+    }
+
+
     this.userData = this.panelService.userData;
+
+
+    this.subcuentasService.initialize();
 
 
   }

@@ -43,12 +43,26 @@
           </thead>
           <tbody style="border-top: inherit;">
 
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+              <tr *ngFor="let sub of subcuentasService.tblDataSubUser;let indice=index">
+                <td>{{indice+1}} </td>
+                <td>{{sub.trama.nombre_usuario}} </td>
+                <td>{{sub.trama.email}}</td>
+
+                <td class="inline-png-checkbox text-center">
+                  <p-checkbox [(ngModel)]="sub.trama.activo" [binary]="true"></p-checkbox>
+                </td>
+
+
+                <td>
+                  <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+
+                    <i class="fa fa-pencil" ngbDropdownToggle></i>
+                    <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                      <div ngbDropdownItem ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                      <div ngbDropdownItem ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                    </div>
+                  </div>
+                </td>
               </tr>
 
               <!-- <tr *ngFor="let geo of geopointsService.tblDataGeo;let indice=index" >
@@ -88,11 +102,15 @@
 
 
 
-      Hola Mundo
-      {{userData.nombre_usuario}}
+      <!-- {{userData.nombre_usuario}} -->
 
 
+      <div class="row justify-content-center mt-4 panel-izq-container-footer">
 
+        <div class="col-6">
+            <button type="button" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
+        </div>
+      </div>
 
 
 
