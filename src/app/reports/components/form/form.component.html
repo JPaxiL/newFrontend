@@ -212,11 +212,11 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha inicio:
-                  <p-calendar 
-                    [(ngModel)]="dateInit" 
-                    dateFormat="dd/mm/yy" 
-                    [maxDate]="dateEnd" 
-                    [appendTo]="'body'" 
+                  <p-calendar
+                    [(ngModel)]="dateInit"
+                    dateFormat="dd/mm/yy"
+                    [maxDate]="dateEnd"
+                    [appendTo]="'body'"
                     [monthNavigator]="true"
                     [yearNavigator]="true"
                     yearRange="{{strYearRange}}"
@@ -232,12 +232,12 @@
             <div class="row">
               <div class="p-field">
                 <label>Hora inicio:
-                  <p-calendar 
-                    [(ngModel)]="timeInit" 
-                    [timeOnly]="true" 
-                    [readonlyInput]="true" 
-                    [appendTo]="'body'"  
-                    [maxDate]="timeEnd" 
+                  <p-calendar
+                    [(ngModel)]="timeInit"
+                    [timeOnly]="true"
+                    [readonlyInput]="true"
+                    [appendTo]="'body'"
+                    [maxDate]="timeEnd"
                     (onSelect)="onTimeChange(); validateForm();"
                     (onBlur)="onTimeChange(); validateForm();"
                     (onInput)="onTimeChange(); validateForm();"
@@ -252,11 +252,11 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha final:
-                  <p-calendar 
-                    [(ngModel)]="dateEnd" 
-                    dateFormat="dd/mm/yy" 
-                    [minDate]="dateInit" 
-                    [appendTo]="'body'" 
+                  <p-calendar
+                    [(ngModel)]="dateEnd"
+                    dateFormat="dd/mm/yy"
+                    [minDate]="dateInit"
+                    [appendTo]="'body'"
                     [monthNavigator]="true"
                     [yearNavigator]="true"
                     yearRange="{{strYearRange}}"
@@ -272,12 +272,12 @@
             <div class="row">
               <div class="p-field">
                 <label>Hora final:
-                  <p-calendar 
-                    [(ngModel)]="timeEnd" 
-                    [timeOnly]="true" 
-                    [readonlyInput]="true" 
-                    [appendTo]="'body'" 
-                    [minDate]="timeInit" 
+                  <p-calendar
+                    [(ngModel)]="timeEnd"
+                    [timeOnly]="true"
+                    [readonlyInput]="true"
+                    [appendTo]="'body'"
+                    [minDate]="timeInit"
                     (onSelect)="onTimeChange(); validateForm();"
                     (onBlur)="onTimeChange(); validateForm();"
                     (onInput)="onTimeChange(); validateForm();"
@@ -329,7 +329,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -346,7 +346,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -363,7 +363,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -380,7 +380,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -397,7 +397,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -414,7 +414,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -431,7 +431,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -448,7 +448,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -465,7 +465,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -482,7 +482,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -499,7 +499,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -527,13 +527,13 @@
         </div>
 
         <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
-        
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light">Eventos GPS</label>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -550,7 +550,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -584,13 +584,13 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Plataforma</label>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -607,7 +607,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -624,13 +624,13 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
-                <!-- <label>
-                  <p-checkbox [(ngModel)]="eV.evMovSinProgramacion" [binary]="true" inputId="binary"></p-checkbox>
-                  Vehículo sin programación</label> -->
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evExcesoDeVelocidad" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()"></p-checkbox>
+                  Exceso de Velocidad</label>
               </div>
             </div>
             <div class="col-6">
@@ -641,10 +641,10 @@
               </div>
             </div>
           </div>
-  
-          
-  
-  
+
+
+
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Seguridad Vehicular</label>
@@ -739,13 +739,13 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Otros</label>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -769,7 +769,7 @@
 
         </div>
 
-        
+
 
       </div>
 

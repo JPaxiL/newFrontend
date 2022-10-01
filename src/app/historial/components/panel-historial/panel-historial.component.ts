@@ -133,6 +133,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         { name: 'Parad en Zona no Autorizada', value: false },
         { name: 'Vehículo en movimiento sin programación', value: false },
         { name: 'Infracción', value: false },
+        { name: 'Exceso de Velocidad', value: false },
         // { name: 'Anticolisión frontal', value: false },
         // { name: 'Colisión con Peatones', value: false },
         // { name: 'No Rostro', value: false },
@@ -1253,15 +1254,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             // console.log("this.eventList : mostrar tabla eventos");
 
             // console.log(this.eventList);
-
+            // console.log(this.EventService.eventsHistorial);
 
             // if (this.form.chckEvento) {
                 for (let index = 0; index < this.EventService.eventsHistorial.length; index++) {
 
-
                   const item = this.EventService.eventsHistorial[index];
                   var activar = false;
-
 
                   for (let j = 0; j < this.selectedEvents.length; j++) {
                     const opEve = this.selectedEvents[j];
@@ -1277,16 +1276,20 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                     if (opEve.name == 'Motor Apagado' && item.evento == 'Motor apagado') { activar = true; }
                     if (opEve.name == 'Motor Encendido' && item.evento == 'Motor encendido') { activar = true; }
 
+
                     if (opEve.name == 'Zona de Entrada' && item.evento == 'Zona de entrada') { activar = true; }
                     if (opEve.name == 'Zona de Salida' && item.evento == 'Zona de salida') { activar = true; }
                     if (opEve.name == 'Tiempo de Estadía en Zona' && item.evento == 'Tiempo de estadia en zona') { activar = true; }
                     if (opEve.name == 'Parada en Zona no Autorizada' && item.evento == 'Parada en zona no autorizada') { activar = true; }
                     if (opEve.name == 'Vehículo en movimiento sin programación' && item.evento == 'Vehiculo sin programacion') { activar = true; }
                     if (opEve.name == 'Infracción' && item.evento == 'Infraccion') { activar = true; }
+                    if (opEve.name == 'Exceso de Velocidad' && item.evento == 'Exceso de Velocidad') { activar = true; }
+
 
                     if (opEve.name == 'Ausencia de rostro' && item.evento == 'No Rostro') { activar = true; }
                     if (opEve.name == 'Fatiga Extrema' && item.evento == 'Fatiga Extrema') { activar = true; }
                     if (opEve.name == 'Posible Fatiga' && item.evento == 'Somnolencia') { activar = true; }
+                    if (opEve.name == 'Distracción' && item.evento == 'Distracción') { activar = true; }
                     if (opEve.name == 'Distracción' && item.evento == 'Distraccion') { activar = true; }
                     if (opEve.name == 'Detección de alcohol' && item.evento == 'Alcoholemia') { activar = true; }
                     if (opEve.name == 'Anticolisión frontal' && item.evento == 'Anticolision frontal') { activar = true; }
@@ -1381,7 +1384,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                     item.lat = parseFloat(item.latitud);
                     item.lng = parseFloat(item.longitud);
                     item.dt_tracker = item.fecha_tracker.replace(/\//g, "-");
-                    this.transfers.push({icono: item.layer.options.icon.options.iconUrl, trama:item,icono_width:"17px",icono_height:"18px",dt_tracker:item.dt_tracker});
+                    this.transfers.push({icono: item.layer.options.icon.options.iconUrl, tooltip: item.evento, trama:item,icono_width:"17px",icono_height:"18px",dt_tracker:item.dt_tracker});
 
                   } else {
                     this.mapService.map.removeLayer(item.layer);

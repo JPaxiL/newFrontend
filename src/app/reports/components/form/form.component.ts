@@ -191,6 +191,7 @@ export class FormComponent implements OnInit {
       evParada:false,
       evMovSinProgramacion:false,  //  NEW
       evInfraccion:false,
+      evExcesoDeVelocidad:false,
       evAnticolisionFrontal:false,
       evColisionConPeatones:false,
 
@@ -778,6 +779,7 @@ export class FormComponent implements OnInit {
       evParada:this.eV.OtroTodos,
       evMovSinProgramacion:this.eV.OtroTodos,  //  NEW
       evInfraccion:this.eV.OtroTodos,
+      evExcesoDeVelocidad:this.eV.OtroTodos,
       evAnticolisionFrontal:this.eV.OtroTodos,
       evColisionConPeatones:this.eV.OtroTodos,
 
@@ -812,6 +814,8 @@ export class FormComponent implements OnInit {
     if(!this.eV.evEstadia) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evParada) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evInfraccion) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evExcesoDeVelocidad) { this.eV.OtroTodos = false; return; }
+
 
     if(!this.eV.evNoRostro) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evFatigaExtrema) { this.eV.OtroTodos = false; return; }
@@ -960,6 +964,7 @@ export class FormComponent implements OnInit {
       evParada:false,
       evMovSinProgramacion:false,  //  NEW
       evInfraccion:false,
+      evExcesoDeVelocidad:false,
       evAnticolisionFrontal:false,
       evColisionConPeatones:false,
 
