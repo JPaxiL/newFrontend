@@ -5,6 +5,7 @@ import { EventSocketService } from './../../../events/services/event-socket.serv
 
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { EventService } from 'src/app/events/services/event.service';
 
 declare var $: any;
 
@@ -26,6 +27,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private router: Router,
+    public eventService: EventService,
     public eventSocketService : EventSocketService,
     public panelService: PanelService,
     private http: HttpClient,

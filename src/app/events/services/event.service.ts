@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 export class EventService {
   componentKey = new Subject<Number>();
   public events: any[] = [];
+  public eventsFiltered: any[] = [];
   public nombreComponente: string = 'EVENT-USER';
   public img_icon: string = 'assets/images/eventos/pin_point.svg';
   public img_iconSize: any = [30, 30];
@@ -25,10 +26,19 @@ export class EventService {
 
   public eventsHistorial: any = []; //==> Usado en el modulo historial
 
-  public panelNotifKey: Number = 0;
+  public hasEventPanelBeenOpened: boolean = false;
   public classFilterArray: any = [];
   public openEventIdOnMap: Number = 0;
   public activeEvent: any = false;
+
+  public eventsLoaded: boolean = false;
+  public filterLoaded: boolean = false;
+  public unreadCount: number = 0;
+  public strUnreadCount: string = '0';
+  public socketEvents: any[] = [];
+  public enableSocketEvents: boolean = true;
+
+  new_notif_stack: number[] = [];
 
   constructor(
     private http: HttpClient,
@@ -46,10 +56,12 @@ export class EventService {
     show_in_page: number = 15,
     page: number = 1
   ) {
+    console.log('Cargando eventos...');
     await this.http
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
       .then((response) => {
+        console.log(response.data);
         this.events = response.data.map((event: any) => {
           let icon = L.icon({
             iconUrl: this.img_icon,
@@ -66,19 +78,56 @@ export class EventService {
           // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
           event.fecha_tracker = moment(event.fecha_tracker, 'YYYY/MM/DD hh:mm:ss').subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
           //console.log('Evento de tabla: ', event);
+          if(!event.viewed){
+            this.unreadCount++;
+          }
           return event;
         });
+        this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
+        this.eventsLoaded = true;
+        while(this.socketEvents.length > 0){
+          let last_event = this.socketEvents.pop();
+          if(this.events.findIndex(event => event.id == last_event.id) == -1){
+            this.events.unshift(last_event);
+            this.increaseUnreadCounter();
+          } else {
+            console.log('Evento duplicado: ', last_event);
+          }
+        }
+        this.enableSocketEvents = false;
+        this.showEventPanel();
       });
       return this.events;
+  }
+
+  public async getUnreadCount(){
+    /* await this.http.get<any>(environment.apiUrl + '/api/event-user/get-unread-count').subscribe({
+      next: data => {
+        console.log(data);
+        this.unreadCount = data;
+        this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
+      },
+      error: () => {
+        console.log('Fallo al obtener conteo de no leídos');
+      }
+    }); */
   }
 
   public getData() {
     return this.events;
   }
+  
+  public getFilters() {
+    return this.classFilterArray;
+  }
 
   public addNewEvent(event:any){
-    this.events.unshift(event);
-    this.attachClassesToEvents();
+    if(!this.eventsLoaded || this.enableSocketEvents){
+      this.socketEvents.unshift(event);
+    } else {
+      this.events.unshift(event);
+      this.attachClassesToEvents();
+    }
   }
 
   public async getAllEventsForTheFilter() {
@@ -174,8 +223,9 @@ export class EventService {
         });
     }
 
-    public attachClassesToEvents(){
-      this.events.forEach(event => {
+    public attachClassesToEvents(single_event?: any){
+      let events = typeof single_event == 'undefined'? this.events: single_event;
+      events.forEach((event: any) => {
         //console.log(event.evento);
         //console.log(this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ));
 
@@ -207,5 +257,64 @@ export class EventService {
 
       return response.data;
     }
+
+    increaseUnreadCounter(){
+      this.unreadCount++;
+      this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
+    }
+  
+    decreaseUnreadCounter(){
+      this.unreadCount--;
+      this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
+    }
+
+    showEventPanel(){
+      if(this.filterLoaded && this.eventsLoaded){
+        this.sortEventsTableData(); //Initial sort
+        this.attachClassesToEvents();
+        this.eventsFiltered = this.getData();
+        this.spinner.hide('loadingEventList');
+        console.log('Ocultar Spinner');
+      } else {
+        console.log('Failed attempt');
+      }
+    }
+
+
+  //Sort called from event-list.component
+  sortEventsTableData(){
+    this.events.sort((a,b) => {
+      if(this.new_notif_stack.indexOf(a.id) > -1 ){
+        if(this.new_notif_stack.indexOf(b.id) > -1){
+          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) { 
+            return -1; 
+          } 
+          return 1;
+        } 
+        return -1;
+      } else {
+        if(this.new_notif_stack.indexOf(b.id) > -1){
+          return 1;
+        }
+        if(a.fecha_tracker > b.fecha_tracker){
+          return -1;
+        }
+        return 1;
+      }
+    });
+    //console.log('Data Sorted', this.events);
+  }
+
+  checkDuplicates(){
+    for(let i=0; i < this.events.length; i++){
+      let currEvent = this.events[i];
+      let auxArr = this.events.filter(event => {
+        event.id == currEvent.id;
+      });
+      if(auxArr.length > 1){
+        console.log('EVENTO DUPLICADO DETECTADO!', currEvent.id);
+      }
+    }
+  }
 
 }

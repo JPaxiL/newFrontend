@@ -47,7 +47,7 @@
             <input formControlName="password" type="password" placeholder="Contraseña">
             <button 
               type="submit"
-              [disabled]="loginForm.pristine || loginForm.invalid || isLoggingIn" 
+              [disabled]="loginForm.invalid || isLoggingIn" 
               class="btn btn-success w-100" 
               (click)="save()">
               <div *ngIf="!isLoggingIn">Iniciar Sesión</div>

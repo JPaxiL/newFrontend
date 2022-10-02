@@ -14,7 +14,6 @@ export class EventSocketService extends Socket {
   img_iconSize: any;
   img_iconAnchor: any;
   count : string = '0';
-  new_notif_stack: number[] = [];
   user_id: any;
 
   private sendEventSuject = new Subject<any>();
@@ -30,7 +29,6 @@ export class EventSocketService extends Socket {
 
     this.user_id = localStorage.getItem('user_id');
 
-    this.eventService.panelNotifKey = + new Date();
     //console.log('Panel notif first key on service', this.eventService.panelNotifKey); 
   }
 
@@ -43,21 +41,30 @@ export class EventSocketService extends Socket {
       if(this.user_id == even.usuario_id){
         //this.count = this.count + 1;
 
-        even.evento = even.descripcion_evento;
-        even.tipo = even.descripcion_evento;
-        if( event.descripcion_evento !='Infraccion' || event.descripcion_evento != 'Infracción'){
-          even.fecha_tracker = moment(even.fecha_tracker).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
-          even.fecha_minuto = moment(even.fecha_minuto).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
-          even.fecha_servidor = moment(even.fecha_servidor).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+        if(this.eventService.events.findIndex(event => event.id == even.id) == -1 &&
+          this.eventService.socketEvents.findIndex(event => event.id == even.id) == -1){
+          //Si el evento no existe previamente
+          even.evento = even.descripcion_evento;
+          even.tipo = even.descripcion_evento;
+          if( event.descripcion_evento !='Infraccion' || event.descripcion_evento != 'Infracción'){
+            even.fecha_tracker = moment(even.fecha_tracker).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+            even.fecha_minuto = moment(even.fecha_minuto).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+            even.fecha_servidor = moment(even.fecha_servidor).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+          }
+
+          even.imei = even.tracker_imei;
+
+          let newEvent = this.setLayer(even);
+          this.eventService.addNewEvent(newEvent);
+
+          this.eventService.new_notif_stack.push(even.id);
+          console.log('Nuevo evento: ', even);
+        } else {
+          console.log('Evento duplicado: ', even);
         }
-
-        even.imei = even.tracker_imei;
-
-        let newEvent = this.setLayer(even);
-        this.eventService.addNewEvent(newEvent);
-
-        this.new_notif_stack.push(even.id);
-        this.updateNotifCounter();
+        
+        this.eventService.checkDuplicates();
+        
         //console.log('new notification stack', this.new_notif_stack);
         //console.log('new notification stack counter', this.new_notif_stack.length);
         //console.log('new notification Event Content en Socket', even);
@@ -84,34 +91,6 @@ export class EventSocketService extends Socket {
     event.layer._myType = 'evento';
     event.layer._myId = event.id;
     return event;
-  }
-
-  updateNotifCounter(){
-    this.count = this.new_notif_stack.length > 99? '99+': this.new_notif_stack.length.toString();
-  }
-
-  //Sort called from event-list.component
-  sortEventsTableData(){
-    this.eventService.events.sort((a,b) => {
-      if(this.new_notif_stack.indexOf(a.id) > -1 ){
-        if(this.new_notif_stack.indexOf(b.id) > -1){
-          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) { 
-            return -1; 
-          } 
-          return 1;
-        } 
-        return -1;
-      } else {
-        if(this.new_notif_stack.indexOf(b.id) > -1){
-          return 1;
-        }
-        if(a.fecha_tracker > b.fecha_tracker){
-          return -1;
-        }
-        return 1;
-      }
-    });
-    console.log('Data Sorted', this.eventService.events);
   }
 
 }
