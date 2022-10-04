@@ -175,7 +175,7 @@
                   <label>VELOCIDAD Y FECHA:</label>
               </div>
               <div class="col-12">
-                <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckTramaFechaVelocidad" (onChange)="changeShowingTramasFechaVelocidad()"   optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+                <p-dropdown [options]="booleanOptions" [(ngModel)]="form.chckTramaFechaVelocidad" [disabled]="!form.chckTrama" (onChange)="changeShowingTramasFechaVelocidad()"   optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
               </div>
             </div>
           </div>
@@ -537,7 +537,7 @@
 
       </div>
 
-      
+
 
 
 
@@ -646,9 +646,9 @@
     <!-- <legend></legend> -->
 
     <div class="table-content-component-panel-monitoreo h-auto" *ngIf="isHistorialTableLoaded">
-  
+
       <div class="panel-izq-table-container mt-2" style="overflow-y: auto;">
-  
+
         <table id="tbl_fechas" style="width:100%">
           <colgroup>
             <col width="20%" />
@@ -663,26 +663,26 @@
               </tr>
           </thead>
           <tbody>
-  
+
               <tr *ngFor="let transfer of transfers;let indice=index"  (click)="clickLocate(transfer)"  >
-  
+
                   <td class="text-center">
                     <div [title]="transfer.tooltip" data-bs-toggle="tooltip" data-bs-placement="top" >
                       <img class="icon-car" [src]="transfer.icono" [style.height]="transfer.icono_height" [style.width]="transfer.icono_width"  />
                     </div>
                   </td>
-  
+
                   <td>{{transfer.trama.dt_tracker}}</td>
-  
+
                   <td *ngIf="indice==0" class="text-center">x</td>
                   <td *ngIf="indice!=0 && indice!=transfers.length-1" class="text-center">{{transfer.trama.temp}}</td>
                   <td *ngIf="indice!=0 && indice==transfers.length-1" class="text-center">x</td>
-  
+
               </tr>
           </tbody>
         </table>
       </div>
-  
+
       <!-- <div class="panel-izq-container overflow-visible">
         <div class="panel-izq-container-footer d-flex justify-content-center mt-2">
           <div class="col-6">
@@ -696,7 +696,7 @@
 
   </div>
 
-  
+
 
 
   <!-- <td class="text-center" style="padding: 1px !important;">
