@@ -231,7 +231,12 @@ export class VehicleService {
   }
 
   private addPointColor(vehicle : any){
+    // console.log(vehicle.IMEI+" vehicle.point_color antes = ",vehicle.point_color);
+    if(vehicle.point_color==undefined)
+    {
     vehicle.point_color = 100; //grey
+
+    }
 
     if (vehicle.user_id != 445) {
       vehicle = this.addPointColorUser(vehicle);
@@ -241,7 +246,7 @@ export class VehicleService {
 
 
 
-
+    // console.log("vehicle.point_color des = ",vehicle.point_color);
     return vehicle;
   }
   private addPointColorUser445(vehicle : any){
@@ -290,7 +295,9 @@ export class VehicleService {
 
   private addPointColorUser(vehicle : any){
     // console.log("color init user vehicle = ",vehicle);
+    //860640057372346
     // if(vehicle.IMEI=='868324028888902'){
+    // if(vehicle.IMEI=='860640057372346'){
     //   // console.log('vehicle color = ',vehicle);
     //   // console.log('vehicle color = ',vehicle);
     //   console.log('vehicle color init = ',vehicle);
@@ -311,7 +318,7 @@ export class VehicleService {
             //menor a 2 horas //==>3
             // img_url = "/images/objects/arrow-3-purple.svg"; //==>3 Parada (Apagado)
             vehicle.point_color = 30; //grey Detenido apagado
-            
+
         }
     }
     else {
@@ -380,7 +387,17 @@ export class VehicleService {
         }, (7200 - vehicle.c_01)*1000 );
 
     }
-    // if(vehicle.IMEI=='860640057379283'){
+
+    // if(vehicle.IMEI=='860640057372346'){
+    //   // console.log('vehicle color = ',vehicle);
+    //   // console.log('vehicle color = ',vehicle);
+    //   console.log('vehicle color init = ',vehicle);
+    //   console.log("point_color ",vehicle.point_color);
+    // }860640057372346
+    //D0F-931   864200050813881
+    // BNE-700  864200050774257 no tiene di4 ni ign
+    //AHF-784 867604055672126
+    // if(vehicle.IMEI=='867604055672126'){
     //   // console.log('vehicle color = ',vehicle);
     //   // console.log('vehicle color = ',vehicle);
     //   console.log('vehicle color = ',vehicle);
@@ -396,9 +413,14 @@ export class VehicleService {
     const v_gps = vehicle.speed;
     vehicle.v_sat = Number(vehicle.parametrosGet["sat"]);
     const v_di1 = vehicle.parametrosGet["di1"];
-    const v_di4 = vehicle.parametrosGet["di4"];
-    if(v_di4=='undefined'){
-      const v_di4 = vehicle.parametrosGet["Custom_ign"];
+    let v_di4 = vehicle.parametrosGet["di4"];
+    // if(vehicle.IMEI=='867604055672126'){
+    //   console.log(vehicle);
+    // }
+    if(v_di4==undefined){
+      v_di4 = vehicle.parametrosGet["Custom_ign"];
+      // console.log("caso v_di4 undefined",vehicle.IMEI);
+      // console.log("vehicle.parametrosGetCustom_ign",vehicle.parametrosGet["Custom_ign"]);
     }
     const v_acv = vehicle.parametrosGet["acv"];
     const v_accv = vehicle.parametrosGet["accv"];
@@ -426,11 +448,11 @@ export class VehicleService {
         var v_spd = vehicle.parametrosGet["GPS speed"];
         var v_eco = vehicle.parametrosGet["ECO_max_speed"];
 
-        if ( typeof v_can !== 'undefined' && v_can > 10 ) {
+        if ( typeof v_can !== undefined && v_can > 10 ) {
             vehicle.v_vel = v_can;
-        } else if (typeof v_spd !== 'undefined') {
+        } else if (typeof v_spd !== undefined) {
             vehicle.v_vel = v_spd;
-        } else if (typeof v_eco !== 'undefined' && v_eco < 110 && (v_gps-10 < v_eco && v_gps+10 > v_eco  )) {
+        } else if (typeof v_eco !== undefined && v_eco < 110 && (v_gps-10 < v_eco && v_gps+10 > v_eco  )) {
             vehicle.v_vel = v_eco;
         } else {
             vehicle.v_vel = v_gps;

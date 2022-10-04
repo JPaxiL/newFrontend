@@ -21,7 +21,10 @@ export class SocketWebService extends Socket {
 
   listen = ()=>{
     this.ioSocket.on('envio', (res:string, data: any) => {
-      // console.log('envio',data);
+      // if(data.IMEI=='860640057372346'){
+      //   console.log('envio ====>',data);
+      //
+      // }
       this.callback.emit(data)
     });
   }
