@@ -104,6 +104,7 @@ import { AuditoriaComponent } from './auditoria/auditoria.component';
 import { SubcuentasComponent } from './subcuentas/subcuentas.component';
 import { SubcuentasListComponent } from './subcuentas/components/subcuentas-list/subcuentas-list.component';
 import { SubcuentasPanelComponent } from './subcuentas/components/subcuentas-panel/subcuentas-panel.component';
+import { SubcuentasModalComponent } from './subcuentas/components/subcuentas-modal/subcuentas-modal.component';
 
 @NgModule({
   declarations: [
@@ -161,6 +162,7 @@ import { SubcuentasPanelComponent } from './subcuentas/components/subcuentas-pan
     SubcuentasComponent,
     SubcuentasListComponent,
     SubcuentasPanelComponent,
+    SubcuentasModalComponent,
 
   ],
   imports: [

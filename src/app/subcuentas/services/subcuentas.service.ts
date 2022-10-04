@@ -20,6 +20,7 @@ export class SubcuentasService {
   tblDataSubUser: any = [];
   initializingSubUser: boolean = false;
 
+  modalActive:boolean = false;
 
 
   constructor(

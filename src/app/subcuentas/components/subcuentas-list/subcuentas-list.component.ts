@@ -37,4 +37,13 @@ export class SubcuentasListComponent implements OnInit {
 
   }
 
+
+
+  // this.reportService.modalActive = true;
+  sss() {
+    console.log(this.subcuentasService.modalActive);
+
+  }
+
+
 }

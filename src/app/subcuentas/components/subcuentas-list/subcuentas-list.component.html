@@ -108,10 +108,11 @@
       <div class="row justify-content-center mt-4 panel-izq-container-footer">
 
         <div class="col-6">
-            <button type="button" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
-        </div>
-      </div>
+            <button type="button" (click)="subcuentasService.modalActive=true" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
+            <button type="button" (click)="sss()" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
 
+          </div>
+      </div>
 
 
       <!-- <div class="panel-izq-container h-100" *ngIf="!isUnderConstruction"> -->
@@ -119,6 +120,9 @@
           <!-- </div> -->
       <!-- </div> -->
 
+      <div *ngIf="(subcuentasService.modalActive)">
+        <app-subcuentas-modal></app-subcuentas-modal>
+      </div>
 
 
 
