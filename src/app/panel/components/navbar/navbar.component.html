@@ -316,7 +316,7 @@
 
         <li class="nav-item" [ngClass]="panelService.nombreComponente == 'EVENT-USER'? 'active': ''" (click)="panelService.clickShowPanel('EVENT-USER');">
           <div class="d-flex justify-content-center">
-            <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventSocketService.count">
+            <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventService.strUnreadCount">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                 width="20px" height="20px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M15.401,7.091c0.146-0.606-0.367-1.325-1.017-1.372
@@ -383,7 +383,7 @@
                   c-0.357,0.548-0.229,0.474-0.38,0.726c-0.289,0.48-0.114-0.028-0.343,0.766c-0.095,0.337-0.265,0.41-0.348,0.771
                   c-0.082,0.368-0.086,0.569-0.201,0.952C11.992,17.608,11.759,22.31,11.896,23.41z"/>
               </svg>
-              <!-- <i class="fa fa-bell notif-counter" [attr.notif-count]="eventSocketService.count" aria-hidden="true"></i> -->
+              <!-- <i class="fa fa-bell notif-counter" [attr.notif-count]="eventService.strUnreadCount" aria-hidden="true"></i> -->
             </button>
           </div>
           <span>Eventos</span>
@@ -717,7 +717,7 @@
 
         <li class="nav-item" [ngClass]="panelService.nombreComponente == 'EVENT-USER'? 'active': ''" (click)="panelService.clickShowPanel('EVENT-USER');" title="Eventos" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="this.blur();">
           <div class="d-flex justify-content-center">
-            <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventSocketService.count">
+            <button class="btn btn-navbar notif-counter" [attr.notif-count]="eventService.strUnreadCount">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                 width="20px" height="20px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M15.401,7.091c0.146-0.606-0.367-1.325-1.017-1.372
@@ -784,7 +784,7 @@
                   c-0.357,0.548-0.229,0.474-0.38,0.726c-0.289,0.48-0.114-0.028-0.343,0.766c-0.095,0.337-0.265,0.41-0.348,0.771
                   c-0.082,0.368-0.086,0.569-0.201,0.952C11.992,17.608,11.759,22.31,11.896,23.41z"/>
               </svg>
-              <!-- <i class="fa fa-bell notif-counter" [attr.notif-count]="eventSocketService.count" aria-hidden="true"></i> -->
+              <!-- <i class="fa fa-bell notif-counter" [attr.notif-count]="eventService.strUnreadCount" aria-hidden="true"></i> -->
             </button>
           </div>
         </li>
@@ -1164,7 +1164,7 @@
                 </svg>
               </div>
               <!-- <i class="fa fa-bolt" aria-hidden="true"></i> -->
-              <span>{{eventSocketService.count == '0'? '': '(' + eventSocketService.count + ')'}} Eventos</span>
+              <span>{{eventService.strUnreadCount == '0'? '': '(' + eventService.strUnreadCount + ')'}} Eventos</span>
             </button>
             <div class="dropdown-divider"></div>
           </div>

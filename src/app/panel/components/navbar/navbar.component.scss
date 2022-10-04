@@ -191,7 +191,7 @@ a {
         line-height: calc(var(--font-size) * 4 / 3);
         border-radius: calc(var(--font-size) * 16 / 21);
         padding: 0 calc(var(--font-size) * 8 / 21);
-        font-family: Titillium-Regular, Verdana, sans-serif;
+        font-family: var(--general-font-family);
         white-space: nowrap;
     }
 }

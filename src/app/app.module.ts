@@ -102,6 +102,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard/panal-dashboard.component';
 import { AuditoriaComponent } from './auditoria/auditoria.component';
 import { SubcuentasComponent } from './subcuentas/subcuentas.component';
+import { SubcuentasListComponent } from './subcuentas/components/subcuentas-list/subcuentas-list.component';
+import { SubcuentasPanelComponent } from './subcuentas/components/subcuentas-panel/subcuentas-panel.component';
 
 @NgModule({
   declarations: [
@@ -157,6 +159,8 @@ import { SubcuentasComponent } from './subcuentas/subcuentas.component';
     PanalDashboardComponent,
     AuditoriaComponent,
     SubcuentasComponent,
+    SubcuentasListComponent,
+    SubcuentasPanelComponent,
 
   ],
   imports: [

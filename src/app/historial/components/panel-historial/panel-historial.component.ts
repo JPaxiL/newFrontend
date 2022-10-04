@@ -133,6 +133,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         { name: 'Parad en Zona no Autorizada', value: false },
         { name: 'Vehículo en movimiento sin programación', value: false },
         { name: 'Infracción', value: false },
+        { name: 'Exceso de Velocidad', value: false },
         // { name: 'Anticolisión frontal', value: false },
         // { name: 'Colisión con Peatones', value: false },
         // { name: 'No Rostro', value: false },
@@ -1101,8 +1102,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             // this.panelService.nombreCabecera =   item[0].name;
 
-
+                this.changeShowingTramas();
+                this.changeShowingTramasFechaVelocidad();
                 this.isHistorialTableLoaded = true;
+                /* $('#tbl_fechas').floatThead({
+                  scrollContainer: () => {
+                    return $('.panel-izq-table-container');
+                  },
+                }); */
             this.spinner.hide('loadingHistorial');
           } else {
             this.spinner.hide('loadingHistorial');
@@ -1151,6 +1158,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       for (let i = 0; i < dH.length; i++) {
         if (dH[i].layer != null) {
           this.mapService.map.removeLayer(dH[i].layer);
+        }
+        if(dH[i]._trama_fecha_velocidad != null){
+          this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
         }
         this.mapService.map.removeLayer(dH[i]._trama);
       }
@@ -1243,16 +1253,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             // console.log("this.eventList : mostrar tabla eventos");
 
-            // console.log(this.eventList);
-
+            console.log(this.eventList);
+            console.log(this.EventService.eventsHistorial);
 
             // if (this.form.chckEvento) {
                 for (let index = 0; index < this.EventService.eventsHistorial.length; index++) {
 
-
                   const item = this.EventService.eventsHistorial[index];
                   var activar = false;
-
 
                   for (let j = 0; j < this.selectedEvents.length; j++) {
                     const opEve = this.selectedEvents[j];
@@ -1261,32 +1269,124 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
                     //Nombres de eventos que cambiaron
 
-                    if (opEve.name == 'Batería desconectada' && item.evento == 'Bateria desconectada') { activar = true; }
-                    if (opEve.name == 'Aceleración brusca' && item.evento == 'Aceleracion brusca') { activar = true; }
-                    if (opEve.name == 'Frenada brusca' && item.evento == 'Frenada brusca') { activar = true; }
-                    if (opEve.name == 'SOS' && item.evento == 'SOS') { activar = true; }
-                    if (opEve.name == 'Motor Apagado' && item.evento == 'Motor apagado') { activar = true; }
-                    if (opEve.name == 'Motor Encendido' && item.evento == 'Motor encendido') { activar = true; }
+                    if (opEve.name == 'Batería desconectada' && item.evento.toUpperCase() == 'BATERIA DESCONECTADA') { activar = true; }
+                    if (opEve.name == 'Batería desconectada' && item.evento.toUpperCase() == 'BATERÍA DESCONECTADA') { activar = true; }
+                    if (opEve.name == 'Aceleración brusca' && item.evento.toUpperCase()  == 'ACELERACION BRUSCA') { activar = true; }
+                    if (opEve.name == 'Aceleración brusca' && item.evento.toUpperCase()  == 'ACELERACIÓN BRUSCA') { activar = true; }
+                    if (opEve.name == 'Frenada brusca' && item.evento.toUpperCase() == 'FRENADA BRUSCA') { activar = true; }
+                    if (opEve.name == 'SOS' && item.evento.toUpperCase() == 'SOS') { activar = true; }
+                    if (opEve.name == 'Motor Apagado' && item.evento.toUpperCase() == 'MOTOR APAGADO') { activar = true; }
+                    if (opEve.name == 'Motor Encendido' && item.evento.toUpperCase() == 'MOTOR ENCENDIDO') { activar = true; }
 
-                    if (opEve.name == 'Zona de Entrada' && item.evento == 'Zona de entrada') { activar = true; }
-                    if (opEve.name == 'Zona de Salida' && item.evento == 'Zona de salida') { activar = true; }
-                    if (opEve.name == 'Tiempo de Estadía en Zona' && item.evento == 'Tiempo de estadia en zona') { activar = true; }
-                    if (opEve.name == 'Parada en Zona no Autorizada' && item.evento == 'Parada en zona no autorizada') { activar = true; }
-                    if (opEve.name == 'Vehículo en movimiento sin programación' && item.evento == 'Vehiculo sin programacion') { activar = true; }
-                    if (opEve.name == 'Infracción' && item.evento == 'Infraccion') { activar = true; }
 
-                    if (opEve.name == 'Ausencia de rostro' && item.evento == 'No Rostro') { activar = true; }
-                    if (opEve.name == 'Fatiga Extrema' && item.evento == 'Fatiga Extrema') { activar = true; }
-                    if (opEve.name == 'Posible Fatiga' && item.evento == 'Somnolencia') { activar = true; }
-                    if (opEve.name == 'Distracción' && item.evento == 'Distraccion') { activar = true; }
-                    if (opEve.name == 'Detección de alcohol' && item.evento == 'Alcoholemia') { activar = true; }
-                    if (opEve.name == 'Anticolisión frontal' && item.evento == 'Anticolision frontal') { activar = true; }
-                    if (opEve.name == 'Colisión con Peatones' && item.evento == 'Colision con peatones') { activar = true; }
-                    if (opEve.name == 'Desvío de carril hacia la izquierda' && item.evento == 'Desvio de carril hacia la izquierda') { activar = true; }
-                    if (opEve.name == 'Desvío de carril hacia la derecha' && item.evento == 'Desvio de carril hacia la derecha') { activar = true; }
-                    if (opEve.name == 'Bloqueo de visión del Mobileye' && item.evento == 'Bloqueo de vision del mobileye') { activar = true; }
+                    if (opEve.name == 'Zona de Entrada' && item.evento.toUpperCase() == 'ZONA DE ENTRADA') { activar = true; }
+                    if (opEve.name == 'Zona de Salida' && item.evento.toUpperCase() == 'ZONA DE SALIDA') { activar = true; }
+                    if (opEve.name == 'Tiempo de Estadía en Zona' && item.evento.toUpperCase() == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
+                    if (opEve.name == 'Tiempo de Estadía en Zona' && item.evento.toUpperCase() == 'TIEMPO DE ESTADÍA EN ZONA') { activar = true; }
+
+                    if (opEve.name == 'Parada en Zona no Autorizada' && item.evento.toUpperCase() == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
+                    if (opEve.name == 'Vehículo en movimiento sin programación' && item.evento.toUpperCase() == 'VEHICULO SIN PROGRAMACION') { activar = true; }
+                    if (opEve.name == 'Vehículo en movimiento sin programación' && item.evento.toUpperCase() == 'VEHÍCULO SIN PROGRAMACIÓN') { activar = true; }
+                    if (opEve.name == 'Infracción' && item.evento.toUpperCase() == 'INFRACCION') { activar = true; }
+                    if (opEve.name == 'Infracción' && item.evento.toUpperCase() == 'INFRACCIÓN') { activar = true; }
+                    if (opEve.name == 'Exceso de Velocidad' && item.evento.toUpperCase() == 'EXCESO DE VELOCIDAD') { activar = true; }
+
+
+                    if (opEve.name == 'Ausencia de rostro' && item.evento.toUpperCase() == 'NO ROSTRO') { activar = true; }
+                    if (opEve.name == 'Fatiga Extrema' && item.evento.toUpperCase() == 'FATIGA EXTREMA') { activar = true; }
+                    if (opEve.name == 'Posible Fatiga' && item.evento.toUpperCase() == 'SOMNOLENCIA') { activar = true; }
+                    if (opEve.name == 'Posible Fatiga' && item.evento.toUpperCase() == 'POSIBLE FATIGA') { activar = true; }
+
+                    if (opEve.name == 'Distracción' && item.evento.toUpperCase() == 'DISTRACCIÓN') { activar = true; }
+                    if (opEve.name == 'Distracción' && item.evento.toUpperCase() == 'DISTRACCION') { activar = true; }
+
+                    if (opEve.name == 'Detección de alcohol' && item.evento.toUpperCase() == 'ALCOHOLEMIA') { activar = true; }
+                    if (opEve.name == 'Anticolisión frontal' && item.evento.toUpperCase() == 'ANTICOLISION FRONTAL') { activar = true; }
+                    if (opEve.name == 'Anticolisión frontal' && item.evento.toUpperCase() == 'ANTICOLISION FRONTAL') { activar = true; }
+
+
+                    if (opEve.name == 'Colisión con Peatones' && item.evento.toUpperCase() == 'COLISION CON PEATONES') { activar = true; }
+                    if (opEve.name == 'Colisión con Peatones' && item.evento.toUpperCase() == 'COLISIÓN CON PEATONES') { activar = true; }
+
+                    if (opEve.name == 'Desvío de carril hacia la izquierda' && item.evento.toUpperCase() == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
+                    if (opEve.name == 'Desvío de carril hacia la izquierda' && item.evento.toUpperCase() == 'DESVÍO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
+
+                    if (opEve.name == 'Desvío de carril hacia la derecha' && item.evento.toUpperCase() == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
+                    if (opEve.name == 'Desvío de carril hacia la derecha' && item.evento.toUpperCase() == 'DESVÍO DE CARRIL HACIA LA DERECHA') { activar = true; }
+
+                    if (opEve.name == 'Bloqueo de visión del Mobileye' && item.evento.toUpperCase() == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
+                    if (opEve.name == 'Bloqueo de visión del Mobileye' && item.evento.toUpperCase() == 'BLOQUEO DE VISIÓN DEL MOBILEYE') { activar = true; }
 
                   }
+
+                  // eventsClassList = [
+                  //   { tipo: 'Zona de entrada', clase: 'zona-entrada' },
+                  //   { tipo: 'Zona de salida', clase: 'zona-salida' },
+                  //   { tipo: 'Tiempo de estadia en zona', clase: 'tiempo-estadia-zona' },
+                  //   { tipo: 'Parada en zona no autorizada', clase: 'parada-zona-no-autorizada' },
+                  //   { tipo: 'Mantenimiento correctivo', clase: 'mantenimiento-correctivo' },
+                  //   { tipo: 'Mantenimiento preventivo', clase: 'mantenimiento-preventivo' },
+                  //   { tipo: 'Mantenimiento correctivo realizado', clase: 'mantenimiento-correctivo-realizado' },
+                  //   { tipo: 'Mantenimiento preventivo realizado', clase: 'mantenimiento-preventivo-realizado' },
+                  //   { tipo: 'SOS', clase: 'sos-event' },
+                  //   { tipo: 'Exceso de Velocidad', clase: 'exceso-velocidad' },
+                  //   { tipo: 'Infraccion', clase: 'infraccion' },
+                  //   { tipo: 'Vehiculo sin programacion', clase: 'vehiculo-sin-programacion' },
+                  //   { tipo: 'Frenada brusca', clase: 'frenada-brusca' },
+                  //   { tipo: 'Aceleracion brusca', clase: 'aceleracion-brusca' },
+                  //   { tipo: 'Bateria desconectada', clase: 'bateria-desconectada' },
+                  //   { tipo: 'Motor encendido', clase: 'motor-encendido' },
+                  //   { tipo: 'Motor apagado', clase: 'motor-apagado' },
+                  //   { tipo: 'Fatiga', clase: 'fatiga' },
+                  //   { tipo: 'Somnolencia', clase: 'somnolencia' },
+                  //   { tipo: 'Distraccion', clase: 'distraccion' },
+                  //   { tipo: 'Distracción', clase: 'distraccion' },
+                  //   { tipo: 'Desvío de carril hacia la izquierda', clase: 'desvio-carril-izq' },
+                  //   { tipo: 'Desvío de carril hacia la derecha', clase: 'desvio-carril-der' },
+                  //   { tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
+                  //   { tipo: 'Colisión con peatones', clase: 'colision-peatones' },
+                  //   { tipo: 'Colisión delantera', clase: 'colision-delantera' },
+                  //   { tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
+                  //   { tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
+                  //   { tipo: 'No Rostro', clase: 'no-rostro' },
+                  // ];
+
+
+                        // this.tipoEvento = [
+                        //   { id: 0, option: 'Todos los Eventos', tipo: '' },
+                        //   { id: 1, option: 'Alcoholemia', tipo: '' },
+                        //   { id: 2, option: 'Somnolencia', tipo: 'Somnolencia', clase: 'somnolencia' },
+                        //   { id: 3, option: 'Distracción', tipo: 'Distraccion', clase: 'distraccion' },
+                        //   { id: 4, option: 'Batería Desconectada', tipo: 'Bateria desconectada', clase: 'bateria-desconectada' },
+                        //   { id: 5, option: 'Aceleración Brusca', tipo: 'Aceleracion brusca', clase: 'aceleracion-brusca' },
+                        //   { id: 6, option: 'Frenada Brusca', tipo: 'Frenada brusca', clase: 'frenada-brusca' },
+                        //   { id: 7, option: 'S.O.S.', tipo: 'SOS', clase: 'sos-event' },
+                        //   { id: 8, option: 'Zona de Entrada', tipo: 'Zona de entrada', clase: 'zona-entrada' },
+                        //   { id: 9, option: 'Zona de Salida', tipo: 'Zona de salida', clase: 'zona-salida' },
+                        //   { id: 10, option: 'Tiempo de estadía en zona', tipo: 'Tiempo de estadia en zona', clase: 'tiempo-estadia-zona' },
+                        //   { id: 11, option: 'Parada en zona no autorizada', tipo: 'Parada en zona no autorizada', clase: 'parada-zona-no-autorizada' },
+                        //   { id: 12, option: 'Exceso de velocidad', tipo: 'Exceso de Velocidad', clase: 'exceso-velocidad' },
+                        //   { id: 13, option: 'Transgresión', tipo: '' },
+                        //   { id: 14, option: 'Infracción', tipo: 'Infraccion', clase: 'infraccion' },
+                        //   { id: 15, option: 'Vehículo sin programación', tipo: 'Vehiculo sin programacion', clase: 'vehiculo-sin-programacion' },
+                        //   { id: 16, option: 'Mantenimiento preventivo', tipo: 'Mantenimiento preventivo', clase: 'mantenimiento-preventivo' },
+                        //   { id: 16, option: 'Mantenimiento preventivo realizado', tipo: 'Mantenimiento preventivo realizado', clase: 'mantenimiento-preventivo-realizado' },
+                        //   { id: 17, option: 'Mantenimiento correctivo', tipo: 'Mantenimiento correctivo', clase: 'mantenimiento-correctivo' },
+                        //   { id: 18, option: 'Mantenimiento correctivo realizado', tipo: 'Mantenimiento correctivo realizado', clase: 'mantenimiento-correctivo-realizado' },
+                        //   { id: 19, option: 'Motor apagado', tipo: 'Motor apagado', clase: 'motor-apagado' },
+                        //   { id: 20, option: 'Motor encendido', tipo: 'Motor encendido', clase: 'motor-encendido' },
+
+                        //   { id: 21, option: 'Fatiga', tipo: 'Fatiga', clase: 'fatiga' },
+                        //   { id: 22, option: 'Posible Fatiga', tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
+                        //   { id: 23, option: 'Fatiga Extrema', tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
+                        //   { id: 24, option: 'Desvío de carril hacia la izquierda', tipo: 'Desvío de carril hacia la izquierda', clase: 'desvio-carril-izq' },
+                        //   { id: 25, option: 'Desvío de carril hacia la derecha', tipo: 'Desvío de carril hacia la derecha', clase: 'desvio-carril-der' },
+                        //   { id: 26, option: 'Bloqueo de visión del Mobileye', tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
+                        //   { id: 27, option: 'Colisión con peatones', tipo: 'Colisión con peatones', clase: 'colision-peatones' },
+                        //   { id: 28, option: 'Colisión con delantera', tipo: 'Colisión delantera', clase: 'colision-delantera' },
+                        //   { id: 29, option: 'Bloqueo de visión del mobileye', tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
+                        // ];
+
 
                   // for (let j = 0; j < this.eventList.length; j++) {
                   //   const items = this.eventList[j].items;
@@ -1372,7 +1472,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                     item.lat = parseFloat(item.latitud);
                     item.lng = parseFloat(item.longitud);
                     item.dt_tracker = item.fecha_tracker.replace(/\//g, "-");
-                    this.transfers.push({icono: item.layer.options.icon.options.iconUrl, trama:item,icono_width:"17px",icono_height:"18px",dt_tracker:item.dt_tracker});
+                    this.transfers.push({icono: item.layer.options.icon.options.iconUrl, tooltip: item.evento, trama:item,icono_width:"17px",icono_height:"18px",dt_tracker:item.dt_tracker});
 
                   } else {
                     this.mapService.map.removeLayer(item.layer);

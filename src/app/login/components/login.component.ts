@@ -5,6 +5,8 @@ import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngxs/store';
 import { SignIn } from 'src/app/core/store/auth.actions';
 import { UsersService } from 'src/app/dashboard/service/users.service';
+import { EventSocketService } from 'src/app/events/services/event-socket.service';
+import { EventService } from 'src/app/events/services/event.service';
 
 export interface User {
   name: string;
@@ -29,14 +31,15 @@ export class LoginComponent implements OnInit {
   validCredentials = 0; //-1 es credenciales fallidas, 0 es estado inicial, 1 es login exitoso
   isLoggingIn = false;
   errMsg = '';
-  backgroundImage = '';
 
   constructor(
     private store: Store,
     private router: Router,
     config: NgbCarouselConfig,
     private fb: FormBuilder,
-    public userService: UsersService) {
+    public userService: UsersService,
+    public eventService: EventService,
+    private eventSocketService: EventSocketService) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
     config.showNavigationIndicators = true;
@@ -46,15 +49,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.loginForm = this.fb.group({
       name: ['', Validators.required  ],
       password: ['', Validators.required ]
     });
-    //Muestra un background distinto dependiendo de la hora del día
-    //fondo1 es tarde. fondo2 es mañana
-    this.backgroundImage = this.images[(new Date().getHours() < 17)? 1:0];
-
   }
 
   resetLoginAlert(): void {
@@ -72,14 +70,15 @@ export class LoginComponent implements OnInit {
         this.validCredentials = 1;
         //console.log('Inicio de sesión exitoso');
         //console.log(data);
-        this.userService.setUserInLocalStorage();
-
+        this.startSession();
+        /* this.userService.setUserInLocalStorage();
         this.router.navigate(['/panel'], {
           state: {
             //flag para mostrar toast de bienvenida
             recentLogIn: true,
           }
         });
+        this.eventSocketService.listen(); */
       },
       error => {
         // if(error.status == 400){
@@ -99,5 +98,19 @@ export class LoginComponent implements OnInit {
     }else{
 
     }
+  }
+
+  async startSession(){
+    await this.userService.setUserInLocalStorage();
+    this.router.navigate(['/panel'], {
+      state: {
+        //flag para mostrar toast de bienvenida
+        recentLogIn: true,
+      }
+    });
+    this.eventSocketService.user_id = localStorage.getItem('user_id');
+    this.eventService.getAll();
+    this.eventService.getUnreadCount();
+    this.eventSocketService.listen();
   }
 }

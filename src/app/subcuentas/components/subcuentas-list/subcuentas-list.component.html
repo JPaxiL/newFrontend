@@ -1,0 +1,128 @@
+<div class="d-flex" style="height: 100%; overflow:auto;">
+
+  <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
+      <div
+          class="d-flex flex-column justify-content-center align-items-center"
+          style="position: absolute;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.8);
+          z-index: 999999;"
+          *ngIf="isUnderConstruction">
+          <img
+              src="./assets/images/en_construccion.png"
+              alt="under_construction"
+              style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
+          <span style="color: #fff;">Panel en construcción</span>
+      </div>
+
+      <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingSubcuentas" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
+
+      <div class="panel-izq-table-container">
+        <table id="tbl_geos">
+          <colgroup>
+            <col width="26%" />
+            <col width="9%" />
+            <col width="31%" />
+            <col width="17%" />
+            <col width="17%" />
+
+          </colgroup>
+          <thead class="visible-on-scroll">
+              <tr>
+                  <th>Nº</th>
+                  <!-- <td></td> -->
+                  <th>Nombre</th>
+                  <th>E-mail</th>
+                  <th>Activo</th>
+                  <!-- <th><i class="fa fa-id-card fa-lg"></i></th> -->
+                  <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
+                  <th><i class="fa fa-pencil fa-lg"></i></th>
+
+              </tr>
+          </thead>
+          <tbody style="border-top: inherit;">
+
+              <tr *ngFor="let sub of subcuentasService.tblDataSubUser;let indice=index">
+                <td>{{indice+1}} </td>
+                <td>{{sub.trama.nombre_usuario}} </td>
+                <td>{{sub.trama.email}}</td>
+
+                <td class="inline-png-checkbox text-center">
+                  <p-checkbox [(ngModel)]="sub.trama.activo" [binary]="true"></p-checkbox>
+                </td>
+
+
+                <td>
+                  <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+
+                    <i class="fa fa-pencil" ngbDropdownToggle></i>
+                    <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                      <div ngbDropdownItem ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                      <div ngbDropdownItem ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- <tr *ngFor="let geo of geopointsService.tblDataGeo;let indice=index" >
+                  <td >
+                    <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShow(geo.trama.geopunto_id)">
+                      <i [ngClass]="{'fas fa-eye': geo.trama.geopunto_visible === 'true', 'far fa-eye-slash' : geo.trama.geopunto_visible === 'false'}"></i>
+                    </button>
+                  </td>
+
+                  <td class="text-center">
+                    <i [ngStyle]="{'color': geo.trama.geopunto_color}" (click)="clickLocate(geo.trama.geopunto_id)" class="fa fa-map-marker geopoint-marker"></i>
+                  </td>
+
+                  <td><span class="d-flex text-start">{{geo.trama.geopunto_name}}</span></td>
+
+                  <td class="inline-png-checkbox text-center">
+                    <p-checkbox [(ngModel)]="geo.trama.geopunto_nombre_visible_bol" (onChange)="clickShowNameGeocerca(geo.trama.geopunto_id)" [binary]="true"></p-checkbox>
+                  </td>
+
+
+                  <td>
+                    <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+
+                      <i class="fa fa-pencil" ngbDropdownToggle></i>
+                      <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                        <div ngbDropdownItem (click)="clickConfigurarGeopunto(geo.trama.geopunto_id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                        <div ngbDropdownItem (click)="clickEliminarGeopunto($event, geo.trama.geopunto_id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                      </div>
+                    </div>
+                  </td>
+              </tr> -->
+
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+      <!-- {{userData.nombre_usuario}} -->
+
+
+      <div class="row justify-content-center mt-4 panel-izq-container-footer">
+
+        <div class="col-6">
+            <button type="button" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
+        </div>
+      </div>
+
+
+
+      <!-- <div class="panel-izq-container h-100" *ngIf="!isUnderConstruction"> -->
+          <!-- <div class="panel-izq-form"> -->
+          <!-- </div> -->
+      <!-- </div> -->
+
+
+
+
+
+  </div>
+
+</div>

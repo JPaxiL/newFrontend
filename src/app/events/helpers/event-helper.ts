@@ -7,13 +7,13 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/entrada_zona.svg'
     );
-    
+
   } else if (event.tipo == 'Zona de salida') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
@@ -22,13 +22,13 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/salida_zona.svg'
     );
-   
+
   } else if (event.tipo == 'Tiempo de estadia en zona') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
@@ -38,7 +38,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         tiempo_estadia: event.tiempo_limite,
-        referencia: d,
+        referencia: event.referencia,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
@@ -53,7 +53,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         tiempo_tolerancia: event.tiempo_limite,
-        referencia: d,
+        referencia: event.referencia,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
@@ -76,6 +76,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         int_mant_horas_transcurridas: event.int_mant_horas_transcurridas,
         int_mant_horas_restantes: event.int_mant_horas_restantes,
         int_mant_odometro: event.int_mant_odometro,
+        referencia: event.referencia,
       },
       'assets/images/events-icons/mant_correctivo.svg',
     );
@@ -96,6 +97,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         int_mant_horas_transcurridas: event.int_mant_horas_transcurridas,
         int_mant_horas_restantes: event.int_mant_horas_restantes,
         int_mant_odometro: event.int_mant_odometro,
+        referencia: event.referencia,
       },
       'assets/images/events-icons/mant_preventivo.svg',
     );
@@ -112,6 +114,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         int_mant_ultimo_mantenimiento: event.int_mant_odometro,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/mant_correctivo_realizado.svg',
@@ -125,6 +128,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         ultimo_mantenimiento: event.int_mant_odometro,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/mant_preventivo_realizado.svg',
@@ -137,7 +141,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/sos.svg',
@@ -152,13 +156,14 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         velocidad_limite: event.velocidad_limite,
-        referencia: d,
+        referencia: event.referencia,
+        geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/exceso_velocidad.svg',
     );
 
-  } else if (event.tipo == 'Infraccion') { 
+  } else if (event.tipo == 'Infraccion') {
     if (event.nombre_zona == '') {
       return render_leaflet_tootlip(
         {
@@ -168,7 +173,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
           longitud: event.longitud,
           velocidad: event.velocidad,
           velocidad_limite: event.velocidad_limite,
-          referencia: d,
+          referencia: event.referencia,
           fecha_tracker: event.fecha_tracker,
         },
         'assets/images/events-icons/infraccion.svg',
@@ -184,7 +189,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
           velocidad_unidad: event.velocidad,
           velocidad_limite: event.velocidad_limite,
           tiempo_limite_infraccion: event.tiempo_limite_infraccion,
-          referencia: d,
+          referencia: event.referencia,
           geocerca: event.nombre_zona,
           fecha_tracker: event.fecha_tracker,
         },
@@ -200,7 +205,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
@@ -215,6 +220,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/frenada_brusca.svg',
@@ -228,6 +234,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/aceleracion_brusca.svg',
@@ -241,6 +248,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         voltaje: event.voltaje,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/bateria_desconectada.svg',
@@ -254,8 +262,9 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
-      }, 
+      },
       'assets/images/events-icons/motor.svg'
     );
 
@@ -267,6 +276,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/fatiga.svg',
@@ -280,7 +290,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/somnolenciaWhite.svg',
@@ -294,7 +304,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/distraccionWhite.svg',
@@ -308,7 +318,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/distraccionWhite.svg',
@@ -322,7 +332,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/desvio_izquierda.svg',
@@ -336,7 +346,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/desvio_derecha.svg',
@@ -350,7 +360,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/bloqueo_mobileye.svg',
@@ -364,7 +374,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/colision_peaton.svg',
@@ -379,7 +389,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/colision_delantera.svg',
@@ -393,7 +403,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/fatiga.svg',
@@ -407,10 +417,23 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
-        referencia: d,
+        referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
       'assets/images/events-icons/fatiga.svg',
+    );
+  } else if (event.tipo == 'No Rostro') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/no-rostro.svg',
     );
   }
 
@@ -476,6 +499,6 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
           ${(typeof event_content.geocerca !== 'undefined')? `<tr><td>GEOCERCA:</td><td>${event_content.geocerca}</td></tr>`:''}
           ${(typeof event_content.fecha_tracker !== 'undefined')? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>`:''}
         </tbody>
-      </table>  
+      </table>
     </div>`;
 }

@@ -1,14 +1,19 @@
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reportSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Generando Reporte... </p></ngx-spinner>
-<p-confirmDialog #cdExport [style]="{width: '30rem'}" [breakpoints]="{'960px': '50vw', '640px': '75vw'}" class="gl-confirm-dialog" key="showSelectExcelConfirmation">
+<p-confirmDialog #cdExport [style]="{width: '30rem'}" [closeOnEscape]="true" [breakpoints]="{'960px': '50vw', '640px': '75vw'}" class="gl-confirm-dialog " key="showSelectExcelConfirmation">
   <ng-template pTemplate="header">
       <h4>Elija un formato para exportar</h4>
+      <div class="p-dialog-header-icons confirm-dialog-close-button">
+        <button type="button" class="p-dialog-header-icon p-dialog-header-close p-link" (click)="cdExport.close($event)">
+          <span class="pi pi-times"></span>
+        </button>
+      </div>
   </ng-template>
   <ng-template pTemplate="footer">
     <div class="col-4">
-      <button type="button" class="btn-gl-neutral btn-neutral-hover btn-sm w-100" (click)="cdExport.reject()">Unido</button>
+      <button type="button" class="btn-gl-neutral btn-neutral-hover btn-sm w-100" (click)="configReporteUnido(); cdExport.accept()">Unido</button>
     </div>
     <div class="col-4">
-      <button type="button" class="btn-gl-neutral btn-neutral-hover btn-sm w-100" (click)="cdExport.accept()">Separado</button>
+      <button type="button" class="btn-gl-neutral btn-neutral-hover btn-sm w-100" (click)="configReporteSeparado(); cdExport.accept()">Separado</button>
     </div>
   </ng-template>
 </p-confirmDialog>
@@ -59,7 +64,7 @@
     <img src="./assets/images/fondo-svg-reporte.svg" alt="fondo-reporte-logo">
   </div>
   <div [ngClass]="table_hide" class="container grand-container">
-    <div *ngIf="num_rep >= 0 && num_rep <= 20 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
+    <div *ngIf="num_rep >= 0 && num_rep <= 22 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
     <div class="table-subtitle p-card" style="margin-bottom: 0.25rem;">{{ rep_subtitle }}</div>
   </div>
   <ng-container>
@@ -67,12 +72,30 @@
     <!-- 0. REPORTE DE PARADAS Y MOVIMIENTOS -->
 
     <div class="container grand-container multitable-container" *ngIf="num_rep == 0">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+      <div class="p-card" style="padding: 0.8rem;">
+      <!-- <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;"> -->
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <!-- <div>{{v_table[0][1]}}</div> -->
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -93,20 +116,30 @@
                 <th *ngIf="chkDateHour">Fecha de Fin</th>
                 <th *ngIf="chkDateHour">Hora de Fin</th>
                 <th>Duración</th>
-                <th *ngIf="v_table[2].Paradas">Posición detenida</th>
+                <th *ngIf="reportTableDropdownData[2].Paradas">Posición detenida</th>
+                <th *ngIf="reportTableDropdownData[2].Movimientos">Recorrido</th>
+                <th *ngIf="reportTableDropdownData[2].Movimientos">Velocidad Máxima</th>
+                <th *ngIf="reportTableDropdownData[2].Movimientos">Vel. máx. CAN</th>
+                <th *ngIf="reportTableDropdownData[2].Paradas">Punto cercano</th>
+                <th *ngIf="reportTableDropdownData[2].Movimientos">Velocidad Promedio</th>
+                <th *ngIf="reportTableDropdownData[2].Movimientos">Vel. prom. CAN</th>
+                <th *ngIf="reportTableDropdownData[2].Paradas">Referencia</th>
+                <!-- <th *ngIf="v_table[2].Paradas">Posición detenida</th>
                 <th *ngIf="v_table[2].Movimientos">Recorrido</th>
                 <th *ngIf="v_table[2].Movimientos">Velocidad Máxima</th>
                 <th *ngIf="v_table[2].Movimientos">Vel. máx. CAN</th>
                 <th *ngIf="v_table[2].Paradas">Punto cercano</th>
                 <th *ngIf="v_table[2].Movimientos">Velocidad Promedio</th>
                 <th *ngIf="v_table[2].Movimientos">Vel. prom. CAN</th>
-                <th *ngIf="v_table[2].Paradas">Referencia</th>
+                <th *ngIf="v_table[2].Paradas">Referencia</th> -->
               </tr>
             </thead>
 
             <!-- PARADAS Y MOVIMIENTOS -->
-            <tbody *ngIf="v_table[2].Paradas && v_table[2].Movimientos">
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+            <tbody *ngIf="reportTableDropdownData[2].Paradas && reportTableDropdownData[2].Movimientos">
+            <!-- <tbody *ngIf="v_table[2].Paradas && v_table[2].Movimientos"> -->
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+              <!-- <tr *ngFor="let row of v_table[1];  let i = index;"> -->
                 <td>{{i+1}}</td>
                 <td>{{row.estado}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -132,8 +165,10 @@
             </tbody>
 
             <!-- SOLO MOVIMIENTOS -->
-            <tbody *ngIf="!v_table[2].Paradas && v_table[2].Movimientos">
-              <tr *ngFor="let row of filterMovimientos(v_table[1]);  let i = index;">
+            <tbody *ngIf="!reportTableDropdownData[2].Paradas && reportTableDropdownData[2].Movimientos">
+            <!-- <tbody *ngIf="!v_table[2].Paradas && v_table[2].Movimientos"> -->
+              <tr *ngFor="let row of filterMovimientos(reportTableDropdownData[1]);  let i = index;">
+              <!-- <tr *ngFor="let row of filterMovimientos(v_table[1]);  let i = index;"> -->
                 <td>{{i+1}}</td>
                 <td>{{row.estado}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -154,8 +189,10 @@
             </tbody>
 
             <!-- SOLO PARADAS -->
-            <tbody *ngIf="v_table[2].Paradas && !v_table[2].Movimientos">
-              <tr *ngFor="let row of filterParadas(v_table[1]);  let i = index;">
+            <tbody *ngIf="reportTableDropdownData[2].Paradas && !reportTableDropdownData[2].Movimientos">
+            <!-- <tbody *ngIf="v_table[2].Paradas && !v_table[2].Movimientos"> -->
+              <tr *ngFor="let row of filterParadas(reportTableDropdownData[1]);  let i = index;">
+              <!-- <tr *ngFor="let row of filterParadas(v_table[1]);  let i = index;"> -->
                 <td>{{i+1}}</td>
                 <td>{{row.estado}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -176,17 +213,25 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <!-- <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;"> -->
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
-        <div *ngIf="v_table[1].length != 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length != 0" class="p-card text-left" style="padding: 1rem;">
+        <!-- <div *ngIf="v_table[1].length != 0" class="p-card text-left" style="padding: 1rem;"> -->
           <h6>RESUMEN DE TOTALES</h6>
-          <p>Longitud de ruta       : <span>{{v_table[3][0]}}</span></p>
+          <p>Longitud de ruta       : <span>{{reportTableDropdownData[3][0]}}</span></p>
+          <p>Duración de movimiento : <span>{{reportTableDropdownData[3][1]}}</span></p>
+          <p>Duración de detenido   : <span>{{reportTableDropdownData[3][2]}}</span></p>
+          <p>Velocidad más alta     : <span>{{reportTableDropdownData[3][3]}}</span></p>
+          <p>Velocidad promedio     : <span>{{reportTableDropdownData[3][4]}}</span></p>
+          <!-- <p>Longitud de ruta       : <span>{{v_table[3][0]}}</span></p>
           <p>Duración de movimiento : <span>{{v_table[3][1]}}</span></p>
           <p>Duración de detenido   : <span>{{v_table[3][2]}}</span></p>
           <p>Velocidad más alta     : <span>{{v_table[3][3]}}</span></p>
-          <p>Velocidad promedio     : <span>{{v_table[3][4]}}</span></p>
+          <p>Velocidad promedio     : <span>{{v_table[3][4]}}</span></p> -->
+
           <!-- <p ng-if="res.optionUser() == 445">Horas Trabajadas en el Periodo : <span>{{v_table[3][5]}}</span></p>
           <p ng-if="res.optionUser() == 445">Total de Horas Trabajadas : <span>{{v_table[3][6]}}</span></p>
 
@@ -202,17 +247,30 @@
     <!-- 1. REPORTE DE EXCESO DE VELOCIDAD -->
 
     <div class="container grand-container multitable-container" *ngIf="num_rep == 1">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 0.8rem;">
+      <!-- <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;"> -->
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <!-- <div>{{v_table[0][1]}}</div> -->
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                        <div class="country-item">
+                            <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                        </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -236,7 +294,8 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+              <!-- <tr *ngFor="let row of v_table[1];  let i = index;"> -->
                 <td>{{i+1}}</td>
                 <td>{{row.nombre}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -276,7 +335,8 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+              <!-- <tr *ngFor="let row of v_table[1];  let i = index;"> -->
                 <td>{{i+1}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha_inicial}}</td>
                 <td *ngIf="chkDateHour">{{row.fecha_inicial.split(' ')[0]}}</td>
@@ -306,7 +366,8 @@
     <!-- 2. REPORTE DE ENTRADA Y SALIDA -->
 
     <div class="container grand-container multitable-container" *ngIf="num_rep == 2">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+      <div class="p-card" style="padding: 0.8rem;">
+      <!-- <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;"> -->
 
         <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
@@ -316,7 +377,24 @@
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <!-- <div>{{v_table[0][1]}}</div> -->
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -341,7 +419,8 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+              <!-- <tr *ngFor="let row of v_table[1];  let i = index;"> -->
                 <td>{{i+1}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha}}</td>
                 <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
@@ -366,7 +445,8 @@
     <!-- 3. REPORTE DE COMBUSTIBLE -->
 
     <div class="container grand-container multitable-container" *ngIf="num_rep == 3">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+      <div class="p-card" style="padding: 0.8rem;">
+      <!-- <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;"> -->
 
         <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
@@ -376,7 +456,24 @@
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <!-- <div>{{v_table[0][1]}}</div> -->
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -409,7 +506,8 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+              <!-- <tr *ngFor="let row of v_table[1];  let i = index;"> -->
                 <td>{{i+1}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha}}</td>
                 <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
@@ -437,16 +535,22 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <!-- <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;"> -->
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
-        <div *ngIf="v_table[1].length != 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length != 0" class="p-card text-left" style="padding: 1rem;">
+        <!-- <div *ngIf="v_table[1].length != 0" class="p-card text-left" style="padding: 1rem;"> -->
           <h6>RESUMEN DE TOTALES</h6>
-          <p>Total de distancia recorrida           : <span>{{v_table[2][0]}}</span></p>
+          <p>Total de distancia recorrida           : <span>{{reportTableDropdownData[2][0]}}</span></p>
+          <p>Total de combustible consumido         : <span>{{reportTableDropdownData[2][1]}}</span></p>
+          <p>Total de combustible HRFC consumido    : <span>{{reportTableDropdownData[2][2]}}</span></p>
+          <p>Rendimiento por galón                  : <span>{{reportTableDropdownData[2][3]}}</span></p>
+          <!-- <p>Total de distancia recorrida           : <span>{{v_table[2][0]}}</span></p>
           <p>Total de combustible consumido         : <span>{{v_table[2][1]}}</span></p>
           <p>Total de combustible HRFC consumido    : <span>{{v_table[2][2]}}</span></p>
-          <p>Rendimiento por galón                  : <span>{{v_table[2][3]}}</span></p>
+          <p>Rendimiento por galón                  : <span>{{v_table[2][3]}}</span></p> -->
         </div>
 
       </div>
@@ -455,7 +559,8 @@
 
     <!-- 4. REPORTE DE EXCESOS EN ZONA-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 4">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+      <div class="p-card" style="padding: 1rem;">
+      <!-- <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;"> -->
 
         <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
@@ -465,7 +570,24 @@
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <!-- <div>{{v_table[0][1]}}</div> -->
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -503,7 +625,8 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+              <!-- <tr *ngFor="let row of v_table[1];  let i = index;"> -->
 
                   <td>{{i + 1}}</td>
                   <td>{{row.convoy}}</td>
@@ -537,7 +660,8 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <!-- <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;"> -->
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -549,7 +673,8 @@
 
     <!-- 5. REPORTE GENERAL-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 5">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+      <div class="p-card" style="padding: 1rem;">
+      <!-- <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;"> -->
 
         <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
@@ -559,7 +684,24 @@
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <!-- <div>{{v_table[0][1]}}</div> -->
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -576,86 +718,90 @@
                   <th *ngIf="chkDateHour">Fecha</th>
                   <th *ngIf="chkDateHour">Hora</th>
 
-                  <th *ngIf="v_table[2].fServidor && !chkDateHour">Fecha/Hora Servidor</th>
-                  <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
-                  <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
+                  <th *ngIf="reportTableDropdownData[2].fServidor && !chkDateHour">Fecha/Hora Servidor</th>
+                  <th *ngIf="reportTableDropdownData[2].fServidor && chkDateHour">Fecha Servidor</th>
+                  <th *ngIf="reportTableDropdownData[2].fServidor && chkDateHour">Fecha Servidor</th>
 
-                  <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
-                  <th *ngIf="v_table[2].velGPS" >Velocidad GPS</th>
-                  <th *ngIf="v_table[2].velECO" >Velocidad ECO</th>
-                  <th *ngIf="v_table[2].velGPS_speed" >Velocidad GPS speed</th>
+                  <th *ngIf="reportTableDropdownData[2].ubicacion" >Ubicación</th>
+                  <th *ngIf="reportTableDropdownData[2].velGPS" >Velocidad GPS</th>
+                  <th *ngIf="reportTableDropdownData[2].velECO" >Velocidad ECO</th>
+                  <th *ngIf="reportTableDropdownData[2].velGPS_speed" >Velocidad GPS speed</th>
 
-                  <th *ngIf="v_table[2].altitud" >Altitud</th>
-                  <th *ngIf="v_table[2].angulo" >Angulo</th>
-                  <th *ngIf="v_table[2].fatiga" >Fatiga</th>
+                  <th *ngIf="reportTableDropdownData[2].altitud" >Altitud</th>
+                  <th *ngIf="reportTableDropdownData[2].angulo" >Angulo</th>
+                  <th *ngIf="reportTableDropdownData[2].fatiga" >Fatiga</th>
                   <!-- <th *ngIf="v_table[2].fExBrusca" >Frenada Extrema Brusca</th> -->
-                  <th *ngIf="v_table[2].fBrusca" >Frenada Brusca</th>
-                  <th *ngIf="v_table[2].aBrusca" >Aceleración Brusca</th>
-                  <th *ngIf="v_table[2].RPMAlta" >RPM Alta</th>
+                  <th *ngIf="reportTableDropdownData[2].fBrusca" >Frenada Brusca</th>
+                  <th *ngIf="reportTableDropdownData[2].aBrusca" >Aceleración Brusca</th>
+                  <th *ngIf="reportTableDropdownData[2].RPMAlta" >RPM Alta</th>
 
-                  <th *ngIf="v_table[2].alcoholemia" >Alcoholemia</th>
-                  <th *ngIf="v_table[2].parametros" >Parámetros</th>
-                  <th *ngIf="v_table[2].cNivel" >Nivel de Combustible</th>
-                  <th *ngIf="v_table[2].cRestante" >C.Restante</th>
-                  <th *ngIf="v_table[2].cMotor" >C.Motor</th>
-                  <th *ngIf="v_table[2].odometro" >Odómetro</th>
-                  <th *ngIf="v_table[2].onOff" >On/Off</th>
-                  <th *ngIf="v_table[2].RxM" >Rev.X Min.</th>
-                  <th *ngIf="v_table[2].recFacial" >Reconocimiento Facial</th>
-                  <th *ngIf="v_table[2].velCAN" >Velocidad CAN</th>
-                  <th *ngIf="v_table[2].pCercano" >Punto Cercano</th>
-                  <th *ngIf="v_table[2].referencia" >Referencia</th>
+                  <th *ngIf="reportTableDropdownData[2].alcoholemia" >Alcoholemia</th>
+                  <th *ngIf="reportTableDropdownData[2].parametros" >Parámetros</th>
+                  <th *ngIf="reportTableDropdownData[2].cNivel" >Nivel de Combustible</th>
+                  <th *ngIf="reportTableDropdownData[2].cRestante" >C.Restante</th>
+                  <th *ngIf="reportTableDropdownData[2].cMotor" >C.Motor</th>
+                  <th *ngIf="reportTableDropdownData[2].odometro" >Odómetro</th>
+                  <th *ngIf="reportTableDropdownData[2].onOff" >On/Off</th>
+                  <th *ngIf="reportTableDropdownData[2].RxM" >Rev.X Min.</th>
+                  <th *ngIf="reportTableDropdownData[2].recFacial" >Reconocimiento Facial</th>
+                  <th *ngIf="reportTableDropdownData[2].velCAN" >Velocidad CAN</th>
+                  <th *ngIf="reportTableDropdownData[2].pCercano" >Punto Cercano</th>
+                  <th *ngIf="reportTableDropdownData[2].referencia" >Referencia</th>
 
-                  <th *ngIf="v_table[2].DUOT2state" >DUOT2 state</th>
+                  <th *ngIf="reportTableDropdownData[2].DUOT2state" >DUOT2 state</th>
 
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+              <!-- <tr *ngFor="let row of v_table[1];  let i = index;"> -->
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
                   <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
                   <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
 
-                  <td *ngIf="v_table[2].fServidor && !chkDateHour">{{row.fServidor}}</td>
+                  <td *ngIf="reportTableDropdownData[2].fServidor && !chkDateHour">{{row.fServidor}}</td>
+                  <td *ngIf="reportTableDropdownData[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
+                  <td *ngIf="reportTableDropdownData[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
+                  <!-- <td *ngIf="v_table[2].fServidor && !chkDateHour">{{row.fServidor}}</td>
                   <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
-                  <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
+                  <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td> -->
 
 
-                  <td *ngIf="v_table[2].ubicacion">
+                  <td *ngIf="reportTableDropdownData[2].ubicacion">
+                  <!-- <td *ngIf="v_table[2].ubicacion"> -->
                     <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
                   </td>
-                  <td *ngIf="v_table[2].velGPS" [ngStyle]="{'background-color': row.velGPS > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
-                  <td *ngIf="v_table[2].velECO" [ngStyle]="{'background-color': row.velECO > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
-                  <td *ngIf="v_table[2].velGPS_speed" >{{row.velGPS_speed}}</td>
+                  <td *ngIf="reportTableDropdownData[2].velGPS" [ngStyle]="{'background-color': row.velGPS > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
+                  <td *ngIf="reportTableDropdownData[2].velECO" [ngStyle]="{'background-color': row.velECO > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
+                  <td *ngIf="reportTableDropdownData[2].velGPS_speed" >{{row.velGPS_speed}}</td>
 
-                  <td *ngIf="v_table[2].altitud" >{{row.altitud}}</td>
-                  <td *ngIf="v_table[2].angulo" >{{row.angulo}}</td>
-                  <td *ngIf="v_table[2].fatiga" [ngStyle]="{'background-color': row.fatiga == 'si' ? 'rgb(28, 243, 9)' : {} }">{{row.fatiga}}</td>
-                  <!-- <td ng-if="dato[2].fExBrusca" >{{dat.fExBrusca}}</td> -->
-                  <td *ngIf="v_table[2].fBrusca" >{{row.fBrusca}}</td>
-                  <td *ngIf="v_table[2].aBrusca" >{{row.aBrusca}}</td>
-                  <td *ngIf="v_table[2].RPMAlta" >{{row.RPMAlta}}</td>
+                  <td *ngIf="reportTableDropdownData[2].altitud" >{{row.altitud}}</td>
+                  <td *ngIf="reportTableDropdownData[2].angulo" >{{row.angulo}}</td>
+                  <td *ngIf="reportTableDropdownData[2].fatiga" [ngStyle]="{'background-color': row.fatiga == 'si' ? 'rgb(28, 243, 9)' : {} }">{{row.fatiga}}</td>
+                  <td *ngIf="reportTableDropdownData[2].fBrusca" >{{row.fBrusca}}</td>
+                  <td *ngIf="reportTableDropdownData[2].aBrusca" >{{row.aBrusca}}</td>
+                  <td *ngIf="reportTableDropdownData[2].RPMAlta" >{{row.RPMAlta}}</td>
 
-                  <td *ngIf="v_table[2].alcoholemia && row.alcohol_state == 4" [ngStyle]="{'background-color': 'rgb(28, 243, 9)'}">{{row.alcohol_nombre}}</td>
-                  <td *ngIf="v_table[2].alcoholemia && row.alcohol_state == 5" [ngStyle]="{'background-color': 'rgb(255,  0, 0)'}">{{row.alcohol_nombre}}</td>
-                  <td *ngIf="v_table[2].alcoholemia && row.alcohol_state != 4 && row.alcohol_state != 5" >{{row.alcohol_nombre}}</td>
+                  <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state == 4" [ngStyle]="{'background-color': 'rgb(28, 243, 9)'}">{{row.alcohol_nombre}}</td>
+                  <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state == 5" [ngStyle]="{'background-color': 'rgb(255,  0, 0)'}">{{row.alcohol_nombre}}</td>
+                  <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state != 4 && row.alcohol_state != 5" >{{row.alcohol_nombre}}</td>
 
-                  <td *ngIf="v_table[2].parametros" >{{row.parametros}}</td>
-                  <td *ngIf="v_table[2].cNivel" >{{row.cNivel}}</td>
-                  <td *ngIf="v_table[2].cRestante" >{{row.cRestante}}</td>
-                  <td *ngIf="v_table[2].cMotor" >{{row.cMotor}}</td>
-                  <td *ngIf="v_table[2].odometro" >{{row.odometro}}</td>
-                  <td *ngIf="v_table[2].onOff" >{{row.onOff}}</td>
-                  <td *ngIf="v_table[2].RxM" >{{row.RxM}}</td>
-                  <td *ngIf="v_table[2].recFacial" >{{row.recFacial}}</td>
-                  <td *ngIf="v_table[2].velCAN" [ngStyle]="{'background-color': row.velCAN > v_table[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
-                  <td *ngIf="v_table[2].pCercano" >{{row.pCercano}}</td>
-                  <td *ngIf="v_table[2].referencia" >{{row.referencia}}</td>
+                  <td *ngIf="reportTableDropdownData[2].parametros" >{{row.parametros}}</td>
+                  <td *ngIf="reportTableDropdownData[2].cNivel" >{{row.cNivel}}</td>
+                  <td *ngIf="reportTableDropdownData[2].cRestante" >{{row.cRestante}}</td>
+                  <td *ngIf="reportTableDropdownData[2].cMotor" >{{row.cMotor}}</td>
+                  <td *ngIf="reportTableDropdownData[2].odometro" >{{row.odometro}}</td>
+                  <td *ngIf="reportTableDropdownData[2].onOff" >{{row.onOff}}</td>
+                  <td *ngIf="reportTableDropdownData[2].RxM" >{{row.RxM}}</td>
+                  <td *ngIf="reportTableDropdownData[2].recFacial" >{{row.recFacial}}</td>
+                  <td *ngIf="reportTableDropdownData[2].velCAN" [ngStyle]="{'background-color': row.velCAN > reportTableDropdownData[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
+                  <td *ngIf="reportTableDropdownData[2].pCercano" >{{row.pCercano}}</td>
+                  <td *ngIf="reportTableDropdownData[2].referencia" >{{row.referencia}}</td>
 
-                  <td *ngIf="v_table[2].DUOT2state" >{{row.DUOT2state}}</td>
+                  <td *ngIf="reportTableDropdownData[2].DUOT2state" >{{row.DUOT2state}}</td>
 
 
 
@@ -664,22 +810,22 @@
 
           </table>
 
-          <ng-container *ngIf="v_table[1].length > 0" >
+          <ng-container *ngIf="reportTableDropdownData[1].length > 0" >
 
               <h6>RESUMEN DE TOTALES</h6>
-              <p>TOTAL de Excesos de Velocidad(GPS) : <span>{{v_table[3][0]}}</span></p>
-              <p>TOTAL de Excesos de Velocidad(ECO) : <span>{{v_table[3][1]}}</span></p>
-              <p>TOTAL de Excesos de Velocidad(CAN) : <span>{{v_table[3][2]}}</span></p>
+              <p>TOTAL de Excesos de Velocidad(GPS) : <span>{{reportTableDropdownData[3][0]}}</span></p>
+              <p>TOTAL de Excesos de Velocidad(ECO) : <span>{{reportTableDropdownData[3][1]}}</span></p>
+              <p>TOTAL de Excesos de Velocidad(CAN) : <span>{{reportTableDropdownData[3][2]}}</span></p>
 
-              <p *ngIf="v_table[2].fatiga" >TOTAL de Fatigas : <span>{{v_table[3][3]}}</span></p>
+              <p *ngIf="reportTableDropdownData[2].fatiga" >TOTAL de Fatigas : <span>{{reportTableDropdownData[3][3]}}</span></p>
               <!-- <p ng-if="dato[2].fExBrusca" >TOTAL de Frenada Extremadamente Brusca : <span>{{dato[3][4]}}</span></p> -->
-              <p *ngIf="v_table[2].fBrusca" >TOTAL de Frenada Brusca : <span>{{v_table[3][5]}}</span></p>
-              <p *ngIf="v_table[2].RPMAlta" >TOTAL RPM Alta : <span>{{v_table[3][6]}}</span></p>
-              <p *ngIf="v_table[2].alcoholemia" >TOTAL de alerta de alcohol en la sangre : <span>{{v_table[3][7]}}</span></p>
+              <p *ngIf="reportTableDropdownData[2].fBrusca" >TOTAL de Frenada Brusca : <span>{{reportTableDropdownData[3][5]}}</span></p>
+              <p *ngIf="reportTableDropdownData[2].RPMAlta" >TOTAL RPM Alta : <span>{{reportTableDropdownData[3][6]}}</span></p>
+              <p *ngIf="reportTableDropdownData[2].alcoholemia" >TOTAL de alerta de alcohol en la sangre : <span>{{reportTableDropdownData[3][7]}}</span></p>
 
           </ng-container>
 
-            <ng-container *ngIf="v_table[1].length > 0">
+            <ng-container *ngIf="reportTableDropdownData[1].length > 0">
 
                 <div class="row">
                   <div class="col">
@@ -690,7 +836,7 @@
                   </div>
                   <div class="col">
                     <div class="col-md-auto">
-                      <button class="btn btn-success" (click)="verTodos(period, v_table[0][0], chkDateHour, v_table[0][1]);">Ver Todos</button>
+                      <button class="btn btn-success" (click)="verTodos(period, reportTableDropdownData[0][0], chkDateHour, reportTableDropdownData[0][1]);">Ver Todos</button>
                     </div>
                   </div>
                 </div>
@@ -701,7 +847,7 @@
 
 
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -714,7 +860,7 @@
 
     <!-- 6. REPORTE DE EVENTOS-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 6">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+      <div class="p-card" style="padding: 1rem;">
 
         <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
@@ -724,7 +870,23 @@
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -751,7 +913,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                 <td>{{i + 1}}</td>
                 <td>{{row.nombre_objeto}}</td>
@@ -775,7 +937,7 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -829,7 +991,7 @@
     <!-- 10. REPORTE DE FRENADA Y ACELERACION BRUSCA -->
 
     <div class="container grand-container multitable-container" *ngIf="num_rep == 10">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+      <div class="p-card" style="padding: 0.8rem;">
 
         <!-- <div class="subtable-title mb-2">
           <div>VEHÍCULO: {{v_table[0][1]}}</div>
@@ -839,7 +1001,23 @@
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -872,7 +1050,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
                 <td>{{i+1}}</td>
                 <td *ngIf="!chkDateHour">{{row.fecha_final}}</td>
                 <td *ngIf="chkDateHour">{{row.fecha_final.split(' ')[0]}}</td>
@@ -901,18 +1079,29 @@
     </div>
 
     <!-- 11. REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 11">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 11 || num_rep == 21">
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -947,7 +1136,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -977,7 +1166,7 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -988,17 +1177,28 @@
 
     <!-- 12. REPORTE DE CALIFICACION DE MANEJO-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 12">
-      <div *ngFor="let v_table of data;  let ii = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1043,7 +1243,7 @@
 
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -1059,47 +1259,47 @@
                   <td>{{row.tipo_unidad}}</td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C01" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;">
+                    <input *ngIf="true" [(ngModel)]="row.C01" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;">
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C02" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C02" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C03" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C03" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C04" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C04" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C05" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C05" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C06" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C06" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C07" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C07" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C08" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C08" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C09" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C09" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C10" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C10" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>
-                    <input *ngIf="true" [(ngModel)]="row.C11" (change)="puntuacion(ii);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
+                    <input *ngIf="true" [(ngModel)]="row.C11" (change)="puntuacion(reportTableVehicleDropdownOptions.index);" type="number" style="width: 50px; border: none; padding: 2px 0 2px 4px;" >
                   </td>
 
                   <td>{{row.puntuacion}}</td>
@@ -1110,7 +1310,7 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1143,17 +1343,28 @@
 
     <!-- 13. REPORTE DE FATIGA EXTREMA-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 13">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1187,7 +1398,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -1216,7 +1427,7 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1225,17 +1436,28 @@
 
     <!-- 14. REPORTE DE ANTICOLISION FRONTAL-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 14">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1263,12 +1485,14 @@
                   <th>Tramo</th>
                   <th>Punto Cercano</th>
                   <th>Ubicación</th>
+                  <th>Sonido en Cabina</th>
+
 
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -1288,13 +1512,15 @@
                   <td>
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
+                  <td>{{row.sonidoEnCabina}}</td>
+
               </tr>
             </tbody>
 
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1304,17 +1530,28 @@
 
     <!-- 15. REPORTE DE COLISIÓN CON PEATONES-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 15">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1342,12 +1579,14 @@
                   <th>Tramo</th>
                   <th>Punto Cercano</th>
                   <th>Ubicación</th>
+                  <th>Sonido en Cabina</th>
+
 
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -1367,13 +1606,15 @@
                   <td>
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
+                  <td>{{row.sonidoEnCabina}}</td>
+
               </tr>
             </tbody>
 
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1383,17 +1624,28 @@
 
     <!-- 16. REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 16">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1421,12 +1673,13 @@
                   <th>Tramo</th>
                   <th>Punto Cercano</th>
                   <th>Ubicación</th>
+                  <th>Sonido en Cabina</th>
 
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -1446,13 +1699,15 @@
                   <td>
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
+                  <td>{{row.sonidoEnCabina}}</td>
+
               </tr>
             </tbody>
 
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1463,17 +1718,28 @@
 
     <!-- 17.REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 17">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1501,12 +1767,14 @@
                   <th>Tramo</th>
                   <th>Punto Cercano</th>
                   <th>Ubicación</th>
+                  <th>Sonido en Cabina</th>
+
 
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -1526,13 +1794,15 @@
                   <td>
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
+                  <td>{{row.sonidoEnCabina}}</td>
+
               </tr>
             </tbody>
 
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1542,17 +1812,28 @@
 
     <!-- 18. REPORTE DE BLOQUEO DE VISIÓN DEL MOBILEYE-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 18">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1585,7 +1866,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha}}</td>
@@ -1611,7 +1892,7 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1621,17 +1902,28 @@
 
     <!-- 19. REPORTE GERENCIAL (Cuenta cruzdelsur)-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 19">
-      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;" [hidden]="true">
-
-        <!-- <div class="subtable-title mb-2">
-          <div>VEHÍCULO: {{v_table[0][1]}}</div>
-          <div>PERIODO: {{period}}</div>
-        </div> -->
+      <div class="p-card" style="padding: 1rem;" [hidden]="true">
 
         <div class="subtable-title mb-3">
           <div>
             <div>VEHÍCULO</div>
-            <div>{{v_table[0][1]}}</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
           </div>
           <div>
             <div>PERIODO</div>
@@ -1657,7 +1949,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let row of v_table[1];  let i = index;">
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
                   <td *ngIf="!chkDateHour">{{(row.fecha || '')}}</td>
@@ -1673,7 +1965,7 @@
           </table>
         </ng-container>
 
-        <div *ngIf="v_table[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
         </div>
 
@@ -1848,11 +2140,6 @@
     <div class="container grand-container multitable-container" *ngIf="num_rep == 20">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
-        <!-- <div class="subtable-title mb-2"> -->
-          <!-- <div>VEHÍCULO: {{v_table[0][1]}}</div> -->
-          <!-- <div>PERIODO: {{period}}</div>
-        </div> -->
-
         <div class="subtable-title mb-3">
           <!-- <div>
             <div>VEHÍCULO</div>
@@ -1923,6 +2210,102 @@
     </div>
 
 
+    <!-- 22. REPORTE DE MANTENIMIENTOS FISICOS -->
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 22">
+      <div class="p-card" style="padding: 1rem;">
+
+        <div class="subtable-title mb-3">
+          <div>
+            <div>VEHÍCULO</div>
+            <div>
+              <div class="gl-row-underline vehicle-dropdown border-0">
+                <p-dropdown
+                      [filter]="true"
+                      [options]="reportTableVehicleDropdownOptions"
+                      optionLabel="name"
+                      [(ngModel)]="reportTableVehicleSelected"
+                      [appendTo]="'body'"
+                      (onChange)="renderDataTable()">
+                      <ng-template let-vehicle pTemplate="item">
+                          <div class="country-item">
+                              <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                          </div>
+                      </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="dtRendered">
+          <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+            <thead>
+              <tr>
+                  <th>Item</th>
+                  <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                  <th *ngIf="chkDateHour">Fecha</th>
+                  <th *ngIf="chkDateHour">Hora</th>
+                  <th>Código</th>
+                  <th>Placa</th>
+                  <th>Tipo de Unidad</th>
+                  <th>Tipo de Mantenimiento</th>
+
+                  <th>Id Conductor</th>
+                  <th>Conductor</th>
+                  <th>Vel.GPS</th>
+                  <th>Vel.CAN</th>
+
+                  <th>Tramo</th>
+                  <th>Punto Cercano</th>
+                  <th>Ubicación</th>
+
+
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+                  <td>{{row.codigo}}</td>
+                  <td>{{row.placa}}</td>
+                  <td>{{row.tipo_unidad}}</td>
+                  <td>{{row.tipo_mantenimiento}}</td>
+
+
+                  <td>{{row.idConductor}}</td>
+                  <td>{{row.conductor}}</td>
+                  <td>{{row.vel_gps_speed}} Km/h</td>
+                  <td>{{row.vel_can}} Km/h</td>
+
+                  <td>{{row.tramo}}</td>
+                  <td>{{row.PC}}</td>
+                  <td>
+                    <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                  </td>
+
+              </tr>
+            </tbody>
+
+          </table>
+        </ng-container>
+
+        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+          <p>Ningún dato encontrado en su consulta.</p>
+        </div>
+
+
+      </div>
+    </div>
+
+
 
     <div *ngIf="dtRendered" class="export-container">
       <button *ngIf="num_rep == 0" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
@@ -1934,7 +2317,7 @@
       <button *ngIf="num_rep == 6" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 7" class="btn btn-gl btn-success btn-dark-hover" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 10" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 11" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 11 || num_rep == 21" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 12" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 13" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 14" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>
@@ -1943,6 +2326,7 @@
       <button *ngIf="num_rep == 17" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 18" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR EXCEL</button>
       <button *ngIf="num_rep == 20" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 22" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelMantenimientoFisico');">EXPORTAR EXCEL</button>
 
       <!-- <div style="display: flex; flex-direction: row; justify-content: center; gap: 4rem; margin: 0; padding: 0;">
         <button class="btn btn-success" (click)="exportExcelParadasMovimientos(1)">EXPORTAR EXCEL SEPARADO</button>

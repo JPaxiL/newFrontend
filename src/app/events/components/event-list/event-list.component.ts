@@ -7,6 +7,9 @@ import { forEachChild } from 'typescript';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PanelService } from 'src/app/panel/services/panel.service';
 
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
@@ -19,12 +22,6 @@ export class EventListComponent implements OnInit {
   selectedEvent: any = {};
   activeEvent: any = false;
 
-  panelNotifKey: Number = 0;
-  panelNotifKeyBeforeOpening: Number = 0;
-  filterLoaded: boolean = false;
-  eventsLoaded: boolean = false;
-  clearNotifCounterOnClose: boolean = false;
-
   noResults: boolean = false;
 
   public events:any[] = [];
@@ -35,6 +32,7 @@ export class EventListComponent implements OnInit {
     public mapService: MapServicesService,
     public ess:EventSocketService,
     private spinner: NgxSpinnerService,
+    private http:HttpClient,
     ) {
       // this.tipoEvento = [
       //   { id: 0, option: 'Todos los Eventos', tipo: '' },
@@ -73,52 +71,32 @@ export class EventListComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.filterLoaded = false;
-    this.eventsLoaded = false;
-    this.panelNotifKeyBeforeOpening = this.eventService.panelNotifKey;
-    //console.log('Panel notif key before opening', this.panelNotifKeyBeforeOpening);
-    this.panelNotifKey = + new Date();
-    this.eventService.panelNotifKey = this.panelNotifKey;
-
     this.selectedEvent = null;
-    this.spinner.show('loadingEventList');
-
-    //this.events = this.eventService.getData();
-    this.loadEventTableData();
+    if(!this.eventService.eventsLoaded || !this.eventService.filterLoaded){
+      this.spinner.show('loadingEventList');
+    }
     this.loadFilterData();
-    
   }
 
   ngOnDestroy(){
-    this.panelNotifKey = 0;
-    //this.ess.count = 0;
-    //Falta condicional para resetear las notificaciones solo si se abrió el panel
     if(this.eventService.activeEvent){
       this.hideEvent(this.eventService.activeEvent);
     }
-    setTimeout(()=> {
-      if(this.clearNotifCounterOnClose){
-        this.ess.new_notif_stack = [];
-        this.ess.updateNotifCounter();
-      }
-      this.clearNotifCounterOnClose = false;
-    }, 0);
   }
 
   async loadFilterData(){
-    this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
-    this.filterLoaded = true;
-    //console.log('Filtros cargados');
-    this.showEventPanel(this.panelNotifKey == this.eventService.panelNotifKey, this.filterLoaded, this.eventsLoaded);
+    if(!this.eventService.hasEventPanelBeenOpened){
+      this.eventService.hasEventPanelBeenOpened = true;
+      console.log('Cargando Filtros...');
+      //this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
+      await this.eventService.getAllEventsForTheFilter();
+      this.eventService.filterLoaded = true;
+      console.log('Filtros cargados');
+    }
+    this.tipoEvento = this.eventService.getFilters();
+    this.eventService.showEventPanel();
     
     /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
-  }
-
-  async loadEventTableData(){
-    this.events = await this.eventService.getAll();
-    this.eventsLoaded = true;
-    //console.log('Tabla cargada');
-    this.showEventPanel(this.panelNotifKey == this.eventService.panelNotifKey, this.filterLoaded, this.eventsLoaded);
   }
 
   public showEvent(event:any){
@@ -126,6 +104,12 @@ export class EventListComponent implements OnInit {
       this.hideEvent(this.eventService.activeEvent);
       //console.log('Ocultar evento previo');
     }
+
+    if(!event.viewed){
+      event.viewed = true;
+      this.markAsRead(event.id);
+    }
+
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
 
@@ -137,16 +121,24 @@ export class EventListComponent implements OnInit {
     } );
     this.eventService.activeEvent = event;
     event.layer.addTo(this.mapService.map).openPopup();
-
-    //Actualizar el estado de visto del evento
-    /* if(!event.leido){
-      this.markEventAsRead(this.event);
-    } */
   }
 
   public hideEvent(event:any){
     this.mapService.map.removeLayer(event.layer);
     this.eventService.activeEvent = false;
+  }
+
+  private markAsRead(event_id: any){
+    console.log('Marking ' + event_id + ' as read...');
+    this.eventService.decreaseUnreadCounter();
+    this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
+      next: data => {
+        console.log('Mark ' + event_id + ' as read Success? : ', data.success);
+      },
+      error: () => {
+        console.log(event_id + ': Hubo un error al marcar como leído');
+      }
+    });
   }
 
   public switchEventOnMap(event: any, currentRow: HTMLElement){
@@ -156,14 +148,6 @@ export class EventListComponent implements OnInit {
       currentRow.classList.add('watched-event');
       //console.log('Mostrando evento con ID: ', event.id);
       this.showEvent(event); 
-
-      //Si el evento clickeado es una de las nuevas notificaciones, sacarlo del array de nuevas notificaciones
-      const index = this.ess.new_notif_stack.indexOf(event.id);
-      if(index > -1){
-        this.ess.new_notif_stack.splice(index, 1);
-        this.ess.updateNotifCounter();
-      }
-      //console.log('Stack counter: ', this.ess.new_notif_stack.length);
     }
   }
 
@@ -174,51 +158,28 @@ export class EventListComponent implements OnInit {
   public changeTypeEvent(){
     /* if(this.selectedEvent == ''){ */
     if(this.selectedEvent === null){
-      this.events = this.eventService.getData();
+      this.eventService.eventsFiltered = this.eventService.getData();
       this.noResults = false;
     }else{
-      this.events = this.eventService.getData().filter( (event:any)  => {
+      this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
         return event.tipo == this.selectedEvent
       });
-      this.noResults = this.events.length == 0;
+      this.noResults = this.eventService.eventsFiltered.length == 0;
     }
-  }
-
-  private markEventAsRead(){
-    //Actualizar el estado de visto del evento
   }
 
   public searchByPlate(){
     if(this.placa == ''){
-      this.events = this.eventService.getData();
+      this.eventService.eventsFiltered = this.eventService.getData();
       this.noResults = false;
     }else {
-      this.events =  this.eventService.getData().filter( (event:any)  => {
+      this.eventService.eventsFiltered =  this.eventService.getData().filter( (event:any)  => {
         return event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase())
       });
-      this.noResults = this.events.length == 0;
+      this.noResults = this.eventService.eventsFiltered.length == 0;
     }
-    console.log(this.events);
-    console.log(this.noResults);
-  }
-
-  isNewEvent(id: string){
-    return this.ess.new_notif_stack.indexOf(parseInt(id)) > -1;
-  }
-
-  showEventPanel(keyComparison: boolean, filterLoaded: boolean, eventsLoaded: boolean){
-    if(keyComparison && filterLoaded && eventsLoaded){
-      //Initial sort
-      this.ess.sortEventsTableData();
-      this.eventService.attachClassesToEvents();
-      this.spinner.hide('loadingEventList');
-      //console.log(this.panelNotifKey);
-      //console.log(this.eventService.panelNotifKey);
-      this.clearNotifCounterOnClose = true;
-      //console.log('Ocultar Spinner');
-    } else {
-      //console.log('Failed attempt');
-    }
+    //console.log(this.eventService.eventsFiltered);
+    //console.log(this.noResults);
   }
 
 }

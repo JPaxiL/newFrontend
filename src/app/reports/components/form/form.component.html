@@ -6,6 +6,8 @@
   <p *ngIf="areVehiclesLoaded && areZonesLoaded" style="color: #ffffff" > {{ fullScreenSpinnerMsg }} </p>
 </ngx-spinner>
 
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reloadSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Recargando página... </p></ngx-spinner>
+
 <p-dialog [position]="popupDialogPosition" [(visible)]="showBlockedTabDialog" key="blockedTabDialog" [style]="popupDialogInlineStyle" [closable]="false" [draggable]="false" [modal]="true" id="dialogTest" styleClass="allow-popup-dialog">
   <ng-template pTemplate="header" *ngIf="popupDialogPosition != 'center' || unknownBrowser">
     <div class="pointer-arrows-container">
@@ -80,7 +82,7 @@
         </div>
         <div class="col-6">
           <div class="p-field">
-            <p-dropdown [options]="pDropdownGroup" [(ngModel)]="checkboxGroup" [showClear]="false" optionLabe="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'" [disabled]="reportService.workingOnReport"></p-dropdown>
+            <p-dropdown [options]="pDropdownGroup" [(ngModel)]="checkboxGroup" [showClear]="false" optionLabel="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'" [disabled]="reportService.workingOnReport"></p-dropdown>
             <p-dropdown *ngIf="!checkboxGroup" [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione convoy..." (onChange)="onSelectedConvoyChange(); validateForm();" [disabled]="reportService.workingOnReport"></p-dropdown>
             <p-dropdown *ngIf="checkboxGroup" [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione grupo..." (onChange)="onSelectedGroupChange(); validateForm();" [disabled]="reportService.workingOnReport"></p-dropdown>
           </div>
@@ -210,11 +212,11 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha inicio:
-                  <p-calendar 
-                    [(ngModel)]="dateInit" 
-                    dateFormat="dd/mm/yy" 
-                    [maxDate]="dateEnd" 
-                    [appendTo]="'body'" 
+                  <p-calendar
+                    [(ngModel)]="dateInit"
+                    dateFormat="dd/mm/yy"
+                    [maxDate]="dateEnd"
+                    [appendTo]="'body'"
                     [monthNavigator]="true"
                     [yearNavigator]="true"
                     yearRange="{{strYearRange}}"
@@ -230,12 +232,12 @@
             <div class="row">
               <div class="p-field">
                 <label>Hora inicio:
-                  <p-calendar 
-                    [(ngModel)]="timeInit" 
-                    [timeOnly]="true" 
-                    [readonlyInput]="true" 
-                    [appendTo]="'body'"  
-                    [maxDate]="timeEnd" 
+                  <p-calendar
+                    [(ngModel)]="timeInit"
+                    [timeOnly]="true"
+                    [readonlyInput]="true"
+                    [appendTo]="'body'"
+                    [maxDate]="timeEnd"
                     (onSelect)="onTimeChange(); validateForm();"
                     (onBlur)="onTimeChange(); validateForm();"
                     (onInput)="onTimeChange(); validateForm();"
@@ -250,11 +252,11 @@
             <div class="row">
               <div class="p-field">
                 <label>Fecha final:
-                  <p-calendar 
-                    [(ngModel)]="dateEnd" 
-                    dateFormat="dd/mm/yy" 
-                    [minDate]="dateInit" 
-                    [appendTo]="'body'" 
+                  <p-calendar
+                    [(ngModel)]="dateEnd"
+                    dateFormat="dd/mm/yy"
+                    [minDate]="dateInit"
+                    [appendTo]="'body'"
                     [monthNavigator]="true"
                     [yearNavigator]="true"
                     yearRange="{{strYearRange}}"
@@ -270,12 +272,12 @@
             <div class="row">
               <div class="p-field">
                 <label>Hora final:
-                  <p-calendar 
-                    [(ngModel)]="timeEnd" 
-                    [timeOnly]="true" 
-                    [readonlyInput]="true" 
-                    [appendTo]="'body'" 
-                    [minDate]="timeInit" 
+                  <p-calendar
+                    [(ngModel)]="timeEnd"
+                    [timeOnly]="true"
+                    [readonlyInput]="true"
+                    [appendTo]="'body'"
+                    [minDate]="timeInit"
                     (onSelect)="onTimeChange(); validateForm();"
                     (onBlur)="onTimeChange(); validateForm();"
                     (onInput)="onTimeChange(); validateForm();"
@@ -292,7 +294,7 @@
       <div class="row" *ngIf="showZones">
         <div class="p-field">
           <label class="bg-subtitle" id="zone_label">Geocercas :</label>
-          <p-multiSelect [options]="zones" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)=" validateForm();" [disabled]="reportService.workingOnReport"></p-multiSelect>
+          <p-multiSelect [options]="zones" [(ngModel)]="selectedZones" optionLabel="zone_name" optionValue="id" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione la(s) geocerca(s)" (onChange)="onSelectedGeofenceschange(); validateForm();" [disabled]="reportService.workingOnReport"></p-multiSelect>
           <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
             <label>
               <p-checkbox [(ngModel)]="chkAllZones" [binary]="true" inputId="binary" (onChange)="selectAllZones(); validateForm();" [disabled]="!areZonesLoaded || reportService.workingOnReport"></p-checkbox>
@@ -327,7 +329,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -344,7 +346,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -361,7 +363,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -378,7 +380,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -395,7 +397,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -412,7 +414,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -429,7 +431,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -446,7 +448,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -463,7 +465,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -480,7 +482,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -497,7 +499,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -525,13 +527,13 @@
         </div>
 
         <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
-        
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light">Eventos GPS</label>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -548,7 +550,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -582,13 +584,13 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Plataforma</label>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -605,7 +607,7 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -622,13 +624,13 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
-                <!-- <label>
-                  <p-checkbox [(ngModel)]="eV.evMovSinProgramacion" [binary]="true" inputId="binary"></p-checkbox>
-                  Vehículo sin programación</label> -->
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evExcesoDeVelocidad" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()"></p-checkbox>
+                  Exceso de Velocidad</label>
               </div>
             </div>
             <div class="col-6">
@@ -639,10 +641,10 @@
               </div>
             </div>
           </div>
-  
-          
-  
-  
+
+
+
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Seguridad Vehicular</label>
@@ -737,13 +739,13 @@
               </div>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Otros</label>
             </div>
           </div>
-  
+
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -767,7 +769,7 @@
 
         </div>
 
-        
+
 
       </div>
 

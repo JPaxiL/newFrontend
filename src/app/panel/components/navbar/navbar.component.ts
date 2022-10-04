@@ -5,6 +5,7 @@ import { EventSocketService } from './../../../events/services/event-socket.serv
 
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { EventService } from 'src/app/events/services/event.service';
 
 declare var $: any;
 
@@ -26,6 +27,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private router: Router,
+    public eventService: EventService,
     public eventSocketService : EventSocketService,
     public panelService: PanelService,
     private http: HttpClient,
@@ -34,7 +36,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
       next: data => {
-        this.userName = data[0].nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑ0-9 ]+/g, '').replace(/  +/g, ' ').trim();
+        this.panelService.userData = data[0];
+        this.userName = data[0].nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
         this.userEmail = data[0].email;
         this.userDataInitialized = true;
       },

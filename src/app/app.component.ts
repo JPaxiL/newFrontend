@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { EventSocketService } from './events/services/event-socket.service';
+import { EventService } from './events/services/event.service';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,13 @@ import { EventSocketService } from './events/services/event-socket.service';
 export class AppComponent {
   title = 'my-app';
   constructor(
-    private eventSocketService: EventSocketService
+    private eventService: EventService,
+    private eventSocketService: EventSocketService,
   ){
-    this.eventSocketService.listen();
+    if(localStorage.getItem('user_id') != null){
+      this.eventService.getAll();
+      this.eventService.getUnreadCount();
+      this.eventSocketService.listen();
+    }
   }
 }

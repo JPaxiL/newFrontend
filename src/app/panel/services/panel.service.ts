@@ -28,6 +28,8 @@ export class PanelService {
   nombreCabecera: string = '';
   clasePanelActivo: string = '';
 
+  userData: any; //Informacion del usuario
+
   constructor() { }
 
   clickShowPanel( nomComponent:string ){

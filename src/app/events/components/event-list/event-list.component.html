@@ -11,7 +11,7 @@
           [(ngModel)]="placa"
           class="form-control"
           placeholder="Buscar por placa"
-          (keyup)="searchByPlate()"
+          (keyup)="searchByPlate();"
         />
       </div>
       <div class="col-sm-6">
@@ -22,7 +22,7 @@
           class="form-control"
           placeholder="Tipo de Evento"
         /> -->
-        <p-dropdown [options]="tipoEvento" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="true" [filter]="true" filterBy="option" placeholder="Todos los Eventos" (ngModelChange)="changeTypeEvent()"></p-dropdown>
+        <p-dropdown [options]="eventService.classFilterArray" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="true" [filter]="true" filterBy="option" placeholder="Todos los Eventos" (ngModelChange)="changeTypeEvent()"></p-dropdown>
       </div>
     </div>
   </div>
@@ -40,9 +40,9 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let event of events">
+        <ng-container *ngFor="let event of eventService.eventsFiltered">
         <!-- <ng-container *ngFor="let event of eventService.events"> -->
-          <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="{ 'new-event': isNewEvent(event.id), 'tr-selected': event.id == eventService.activeEvent.id }" [class]="event.clase">
+          <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.id == eventService.activeEvent.id }" [class]="event.clase">
           <!-- <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="eventDataToClass(event.evento, event.id)"> -->
             <td>
               <div class="event-column">
