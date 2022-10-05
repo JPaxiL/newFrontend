@@ -376,7 +376,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     index: -1,
   };
   reportTableDropdownData: any = [];
-  singleTableReportIDs = [7];
+  singleTableReportIDs = [7, 19, 20];
+  chkTableDropdown: boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -417,7 +418,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       }],
       initComplete: () => {
         this.dt_completed++;
-        console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
+        //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
         if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
           this.wrapElements(document.querySelectorAll('table[datatable]'));
           this.table_hide = '';
@@ -451,6 +452,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.chkOdomV = data.chkOdomV;
         this.repTitle = data.repTitle;
         this.period = data.period;
+        this.chkTableDropdown = data.chkTableDropdown;
         this.prepareVehicleDropdown();
 
         //Check if this is the first time loading
@@ -491,6 +493,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.chkOdomV = report_data.chkOdomV;
       this.repTitle = report_data.repTitle;
       this.period = report_data.period;
+      this.chkTableDropdown = report_data.chkTableDropdown;
       this.prepareVehicleDropdown();
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
       document.querySelector('body')!.style.padding = '0.8rem';
@@ -649,8 +652,10 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   // Se ejecuta DESPUES de que todas las tablas hayan cargado
   wrapElements(elements: any){
+    console.log('Wrapping Elements...', elements);
     const htmlWrapper = `<div style="display: block; overflow: auto; width:100%;"></div>`;
     for(let element of elements){
+      console.log('Wrapping 1 element: ', element);
       let auxEl = document.createElement('div');
       auxEl.innerHTML = htmlWrapper.trim();
       let wrapperEl = auxEl.firstElementChild;
