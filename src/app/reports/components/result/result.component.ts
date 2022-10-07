@@ -652,10 +652,10 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   // Se ejecuta DESPUES de que todas las tablas hayan cargado
   wrapElements(elements: any){
-    console.log('Wrapping Elements...', elements);
+    //console.log('Wrapping Elements...', elements);
     const htmlWrapper = `<div style="display: block; overflow: auto; width:100%;"></div>`;
     for(let element of elements){
-      console.log('Wrapping 1 element: ', element);
+      //console.log('Wrapping 1 element: ', element);
       let auxEl = document.createElement('div');
       auxEl.innerHTML = htmlWrapper.trim();
       let wrapperEl = auxEl.firstElementChild;

@@ -15,7 +15,6 @@ export class AppComponent {
   ){
     if(localStorage.getItem('user_id') != null){
       this.eventService.getAll();
-      this.eventService.getUnreadCount();
       this.eventSocketService.listen();
     }
   }

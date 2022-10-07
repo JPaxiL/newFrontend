@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { EventService } from './event.service';
 import { UsersService } from 'src/app/dashboard/service/users.service';
+import { AlertService } from 'src/app/alerts/service/alert.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,7 +20,10 @@ export class EventSocketService extends Socket {
   private sendEventSuject = new Subject<any>();
   public sendEventObservable = this.sendEventSuject.asObservable();
 
-  constructor(public eventService : EventService, private userService : UsersService) {
+  constructor(
+    public eventService : EventService, 
+    private userService : UsersService,
+    private AlertService: AlertService,) {
     super({
       url: 'https://socketprueba.glmonitoreo.com/',
       // options: {
@@ -33,6 +37,7 @@ export class EventSocketService extends Socket {
   }
 
   public listen() {
+    this.AlertService.getAll();
     console.log('Is Listening');
     //console.log(this.user_id);
 
@@ -53,14 +58,28 @@ export class EventSocketService extends Socket {
           }
 
           even.imei = even.tracker_imei;
+          
+          //Si las alertas ya cargaron
+          if(this.AlertService.alertsForEventSocket.length > 0){
+            //console.log(this.AlertService.alertsForEventSocket);
+            let alert_data = this.AlertService.alertsForEventSocket.find(alert => alert.evento_id == even.evento_id);
+            if(typeof alert_data != 'undefined'){
+              even['sonido_sistema_bol'] = alert_data.sonido_sistema_bol;
+              even['ruta_sonido'] = alert_data.ruta_sonido;
+            } else {
+              //Sonido por defecto de evento que no corresponde a una alerta
+              even['sonido_sistema_bol'] = true;
+              even['ruta_sonido'] = 'WhatsappSound9.mp3';
+            }
+          }
 
           let newEvent = this.setLayer(even);
           this.eventService.addNewEvent(newEvent);
 
           this.eventService.new_notif_stack.push(even.id);
-          console.log('Nuevo evento: ', even);
+          console.log('Nuevo evento ' + new Date() + ': ', even);
         } else {
-          console.log('Evento duplicado: ', even);
+          console.log('Evento duplicado ' + new Date() + ': ', even);
         }
         
         this.eventService.checkDuplicates();

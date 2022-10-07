@@ -35,15 +35,11 @@
           <th>Nombre</th>
           <th>Placa</th>
           <th>Fecha</th>
-          <!-- <td><span class="fas fa-eye"></span></td> -->
-          <!-- <td><span class="fa fa-eye-slash"></span></td> -->
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let event of eventService.eventsFiltered">
-        <!-- <ng-container *ngFor="let event of eventService.events"> -->
           <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.id == eventService.activeEvent.id }" [class]="event.clase">
-          <!-- <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="eventDataToClass(event.evento, event.id)"> -->
             <td>
               <div class="event-column">
                 <span>{{ event.evento }}</span>
@@ -52,12 +48,6 @@
             <td>{{ event.nombre }}</td>
             <td>{{ event.nombre_objeto }}</td>
             <td>{{ event.fecha_tracker }}</td>
-            <!-- <td width="10%" (click)="showEvent(event)">
-              <a href="" (click)="$event.preventDefault()">Ver</a>
-            </td> -->
-            <!-- <td width="10%"(click)="hideEvent(event)" >
-              <a href="" (click)="$event.preventDefault()">Ocultar</a>
-            </td> -->
           </tr>
         </ng-container>
         <tr *ngIf="noResults">

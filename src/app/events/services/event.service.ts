@@ -100,19 +100,6 @@ export class EventService {
       return this.events;
   }
 
-  public async getUnreadCount(){
-    /* await this.http.get<any>(environment.apiUrl + '/api/event-user/get-unread-count').subscribe({
-      next: data => {
-        console.log(data);
-        this.unreadCount = data;
-        this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
-      },
-      error: () => {
-        console.log('Fallo al obtener conteo de no leídos');
-      }
-    }); */
-  }
-
   public getData() {
     return this.events;
   }
@@ -126,7 +113,17 @@ export class EventService {
       this.socketEvents.unshift(event);
     } else {
       this.events.unshift(event);
+      if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
+        this.playNotificationSound(event.ruta_sonido);
+      }
       this.attachClassesToEvents();
+    }
+  }
+
+  playNotificationSound(path: string){
+    if(typeof path != 'undefined' && path != ''){
+      let audio = new Audio('assets/sonidos/' + path);
+      audio.play();
     }
   }
 
