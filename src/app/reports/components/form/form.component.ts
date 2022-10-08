@@ -82,8 +82,7 @@ export class FormComponent implements OnInit {
 	initialMinute = "00";
 	finishedHour = "23";
 	finishedMinute = "59";
-  formSpinnerMsg: string = 'Cargando';
-  fullScreenSpinnerMsg: string = '';
+  fullScreenSpinnerMsg: string = 'Finalizando carga...';
 
   strYearRange: string = '';
 
@@ -229,11 +228,17 @@ export class FormComponent implements OnInit {
   isFormFilled = false;
   areDatesValid = true;
 
+  chkSimultaneousTables: boolean = true;
+  showChkSimultaneousTables: boolean = false;
+  singleTableReportIDs = [7, 19, 20];
+
   //Removido del formulario
   chkDateHour = true; //False muestra fecha y h juntas. true separadas
 	arrayUsers = [ 472, 204, 483, 467, 360, 394, 364, 445, 489, 491, 503, 504, 515, 522, 537, 554, 552, 555, 573, 587, 529, 590, 591, 595, 613, 620, 621, 734];
   fog = "1";
 	userId = 0;
+
+  isEverythingLoaded: boolean = false;
 
   constructor(
     private browserDetectorService: BrowserDetectorService,
@@ -399,6 +404,7 @@ export class FormComponent implements OnInit {
       return;
     }
     if(this.errorFlag == 0 && this.areVehiclesLoaded && this.areZonesLoaded && this.isUserIdLoaded){
+      this.isEverythingLoaded = true;
       this.spinner.hide("fullScreenSpinner");
       this.fullScreenSpinnerMsg = '';
     }
@@ -527,7 +533,7 @@ export class FormComponent implements OnInit {
 				chkFrenada: this.chkFrenada,
 				chkAceleracion: this.chkAceleracion,
 				limit : true,
-				numRep: this.reports[this.selectedReport].id
+				numRep: this.reports[this.selectedReport].id,
       }
     } else {
       var param = {
@@ -553,7 +559,7 @@ export class FormComponent implements OnInit {
         chkAceleracion: this.chkAceleracion,
 
         limit : true,
-        numRep: this.reports[this.selectedReport].id
+        numRep: this.reports[this.selectedReport].id,
       };
     }
 
@@ -580,6 +586,7 @@ export class FormComponent implements OnInit {
           repTitle: this.reports[param.numRep].value,
           period: M1_t + ' - ' + M2_t,
           isVehicleReport: !cv,
+          chkTableDropdown: !this.chkSimultaneousTables,
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
@@ -729,18 +736,25 @@ export class FormComponent implements OnInit {
     this.selectedConvoy = {};
     this.selectedGroup = {};
     this.chkAllVehicles = this.selectedVehicles.length == this.vehicles.length;
+    this.showChkSimultaneousTables = this.selectedVehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1;
   }
 
   onSelectedConvoyChange(){
     this.selectedVehicles = [];
     this.selectedGroup = {};
     this.chkAllVehicles = false;
+
+    let aux_vehicles = this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy);
+    this.showChkSimultaneousTables = aux_vehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1;
   }
 
   onSelectedGroupChange(){
     this.selectedVehicles = [];
     this.selectedConvoy = {};
     this.chkAllVehicles = false;
+
+    let aux_vehicles = this.vehicles.filter((vehicle: { grupo: any; }) => vehicle.grupo == this.selectedGroup);
+    this.showChkSimultaneousTables = aux_vehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1;
   }
 
   onSelectedGeofenceschange(){
@@ -996,6 +1010,10 @@ export class FormComponent implements OnInit {
     console.log('time',new Date('12/03/2018'));
     this.timeInit = new Date('12/03/2018 00:00');
     this.timeEnd = new Date('12/03/2018 23:59');
+  }
+
+  logDropState(){
+    console.log(this.chkSimultaneousTables);
   }
 
 }

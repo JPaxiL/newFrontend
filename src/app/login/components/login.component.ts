@@ -110,7 +110,6 @@ export class LoginComponent implements OnInit {
     });
     this.eventSocketService.user_id = localStorage.getItem('user_id');
     this.eventService.getAll();
-    this.eventService.getUnreadCount();
     this.eventSocketService.listen();
   }
 }
