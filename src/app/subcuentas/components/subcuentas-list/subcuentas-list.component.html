@@ -49,7 +49,7 @@
                 <td>{{sub.trama.email}}</td>
 
                 <td class="inline-png-checkbox text-center">
-                  <p-checkbox [(ngModel)]="sub.trama.activo" [binary]="true"></p-checkbox>
+                  <p-checkbox [(ngModel)]="sub.trama.activo" [disabled]="true" [binary]="true"></p-checkbox>
                 </td>
 
 
@@ -58,8 +58,9 @@
 
                     <i class="fa fa-pencil" ngbDropdownToggle></i>
                     <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
-                      <div ngbDropdownItem ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                      <div ngbDropdownItem ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                      <div ngbDropdownItem (click)="clickActivarSubusuario(sub.trama.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Activar/Desactivar</div>
+                      <div ngbDropdownItem (click)="clickConfigurarSubusuario(sub.trama.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                      <div ngbDropdownItem (click)="clickEliminarSubusuario($event, sub.trama.id)" ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
                     </div>
                   </div>
                 </td>
@@ -108,7 +109,7 @@
       <div class="row justify-content-center mt-4 panel-izq-container-footer">
 
         <div class="col-6">
-            <button type="button" (click)="subcuentasService.modalActive=true" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
+            <button type="button" (click)="clickAgregarSubusuario()" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
             <!-- <button type="button" (click)="sss()" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button> -->
 
           </div>

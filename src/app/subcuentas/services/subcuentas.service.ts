@@ -116,4 +116,28 @@ export class SubcuentasService {
 
   }
 
+  public async create(subuser: any) {
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/subUser/create`,subuser).toPromise();
+    console.log(response);
+
+    return response;
+  }
+
+  public async delete(subuser: any) {
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/subUser/delete`,subuser).toPromise();
+    console.log(response);
+    return response;//[1,0]
+  }
+
+  public async activar(subuser: any) {
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/subUser/activate`,subuser).toPromise();
+    console.log(response);
+    return response;//[json,0]
+  }
+    // Route::post('/subUser/create', [SubUserController::class, 'crateSubUser']);
+
+    // Route::post('/subUser/delete', [SubUserController::class, 'deleteSubUser']);
+
+    // Route::post('/subUser/activate', [SubUserController::class, 'activateSubUser']);
+
 }

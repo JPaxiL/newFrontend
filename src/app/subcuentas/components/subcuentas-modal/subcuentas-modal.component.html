@@ -3,7 +3,7 @@
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
       <i class="fa fa-user me-2" aria-hidden="true"></i>
-      <strong>Crear nueva Subcuenta:</strong>
+      <strong [innerHTML]="this.subcuentasService.action == 'edit' ? 'Configurar Subcuenta' : 'Crear nueva Subcuenta' " ></strong>
     </div>
   </ng-template>
 
@@ -12,281 +12,170 @@
   <!-- <div class="container grand-container"> -->
   <!-- </div> -->
 
+  <form [formGroup]="subcuentasForm" (submit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
 
-  <div class="dialog-body-container">
+    <div class="dialog-body-container">
 
-    <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
-      <div class="" *ngIf="true">
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      </div>
-      <div class="dialog-form-container gl-middleline" >
-
-        <div class="row">
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="firstname">Nombre</label>
-              </div>
-              <div class="col-7">
-                <input #name id="firstname" type="text" value="yyyy"  pInputText class="p-inputtext-sm" placeholder="">
-              </div>
-            </label>
-          </div>
-          <div class="col p-field">
-            <div class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="lastname">Contraseña</label>
-              </div>
-              <div class="col-7">
-                <input id="lastname" type="text" value="xxx" pInputText class="p-inputtext-sm" placeholder="" disabled>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <br>
-      <br>
-      <div class="dialog-form-container" >
-
-        <div class="row">
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="tipo-unidad">Vehículos :</label>
-              </div>
-              <div class="col-7">
-                <p-dropdown inputId="tipo-unidad"  placeholder="Select" optionLabel="name" [appendTo]="'body'">
-                  <ng-template pTemplate="selectedItem">
-                    <div class="type-item type-item-value" >
-                      <div>aaaaaa</div>
-                    </div>
-                  </ng-template>
-                  <ng-template let-type pTemplate="item">
-                    <div class="type-item">
-                      <div>bbb</div>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <br>
-
-        <div class="row">
-
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="tipo-unidad">Geocercas :</label>
-              </div>
-              <div class="col-7">
-                <p-dropdown inputId="tipo-unidad"  placeholder="Select" optionLabel="name" [appendTo]="'body'">
-                  <ng-template pTemplate="selectedItem">
-                    <div class="type-item type-item-value" >
-                      <div>aaaaaa</div>
-                    </div>
-                  </ng-template>
-                  <ng-template let-type pTemplate="item">
-                    <div class="type-item">
-                      <div>bbb</div>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-              </div>
-            </label>
-          </div>
-
-        </div>
-
-        <br>
-
-        <div class="row">
-
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="tipo-unidad">Geopuntos :</label>
-              </div>
-              <div class="col-7">
-                <p-dropdown inputId="tipo-unidad"  placeholder="Select" optionLabel="name" [appendTo]="'body'">
-                  <ng-template pTemplate="selectedItem">
-                    <div class="type-item type-item-value" >
-                      <div>aaaaaa</div>
-                    </div>
-                  </ng-template>
-                  <ng-template let-type pTemplate="item">
-                    <div class="type-item">
-                      <div>bbb</div>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-              </div>
-            </label>
-          </div>
-
-        </div>
-
-
-<!--
-        <div class="row">
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="sim">Número SIM:</label>
-              </div>
-              <div class="col-7">
-                <input #sim id="sim" type="text" value="{{config.sim_number}}" pInputText class="p-inputtext-sm" placeholder="">
-              </div>
-            </label>
-          </div>
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="placa">Placa:</label>
-              </div>
-              <div class="col-7">
-                <input #placa id="placa" type="text" value="{{config.plate_number}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="tolva">Cisterna / Tolva:</label>
-              </div>
-              <div class="col-7">
-                <input #tolva id="tolva" type="text" value="{{config.tolva}}" pInputText class="p-inputtext-sm" placeholder="">
-              </div>
-            </label>
-          </div>
-          <div class="col p-field">
-            <div class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="conductor">Conductor:</label>
-              </div>
-              <div class="col-7">
-                <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col p-field">
-            <label class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="empresa">Empresa:</label>
-              </div>
-              <div class="col-7">
-                <input #empresa id="empresa" type="text" value="{{config.empresa}}" pInputText class="p-inputtext-sm" placeholder="">
-              </div>
-            </label>
-          </div>
-          <div class="col p-field">
-            <div class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label>Grupo:</label>
-              </div>
-              <div class="col-7">
-                <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col p-field">
-            <div class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="state">Icono:</label>
-              </div>
-              <div class="col-7">
-                <p-dropdown inputId="state" [options]="icons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name">
-                  <ng-template pTemplate="selectedItem">
-                    <div class="icon-item icon-item-value"  *ngIf="selectedIcon">
-                      <label for="">
-                        {{selectedIcon.code}} .-
-                      </label>
-                      <img src="assets/images/objects/nuevo/{{selectedIcon.name}}" [class]="'flag flag-' + selectedIcon.code.toLowerCase()" />
-                    </div>
-                  </ng-template>
-                  <ng-template let-icon pTemplate="item">
-                    <div class="icon-item">
-                      <label for="">
-                        {{icon.code}}
-                      </label> .-
-                      <img src="assets/images/objects/nuevo/{{icon.name}}"  [class]="'flag flag-' + icon.code.toLowerCase()" />
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-              </div>
-            </div>
-          </div>
-          <div class="col p-field">
-            <div class="row gl-row-underline">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label for="tipo-unidad">Tipo de Unidad :</label>
-              </div>
-              <div class="col-7">
-                <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'">
-                  <ng-template pTemplate="selectedItem">
-                    <div class="type-item type-item-value"  *ngIf="selectedType">
-                      <div>{{selectedType.name}}</div>
-                    </div>
-                  </ng-template>
-                  <ng-template let-type pTemplate="item">
-                    <div class="type-item">
-                      <div>{{type.name}}</div>
-                    </div>
-                  </ng-template>
-                </p-dropdown>
-              </div>
-            </div>
-          </div>
+      <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+        <!-- <div class="" *ngIf="true">
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         </div> -->
 
-        <!-- <div class="row d-flex justify-content-center">
-          <div class="col-sm-12 col-md-10 align-self-center p-field">
-            <div class="row">
-              <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
-                <label>Capacidad del Tanque:</label>
-              </div>
-              <div class="col-8">
-                <input id="cap-tanque" type="text" value="{{config.capacidad_tanque_text}}"  pInputText class="p-inputtext-sm" placeholder="" disabled>
+        <div class="dialog-form-container" >
+
+          <div class="row">
+
+            <div class="col p-field">
+              <label class="row d-flex justify-content-center mt-3">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="tipo-unidad">Cuenta activada</label>
+                </div>
+                <div class="col-7">
+                  <p-checkbox [binary]="true" formControlName="chkSubUserActivado" ></p-checkbox>
+                </div>
+              </label>
+            </div>
+
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="dialog-form-container gl-middleline" >
+
+          <div class="row">
+            <div class="col p-field">
+              <label class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label >Nombre</label>
+                </div>
+                <div class="col-7">
+                  <input type="text" pInputText class="p-inputtext-sm" placeholder="nombre" formControlName="nombre">
+                </div>
+              </label>
+            </div>
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="contrasena">Contraseña</label>
+                </div>
+                <div class="col-7">
+                  <input id="contrasena" type="text" pInputText class="p-inputtext-sm" placeholder="contraseña" formControlName="contrasena">
+                </div>
               </div>
             </div>
           </div>
-        </div> -->
 
+        </div>
+        <br>
+        <br>
+        <div class="dialog-form-container" >
+
+
+          <div class="row">
+            <div class="col p-field">
+              <label class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="tipo-unidad">Vehículos :</label>
+                </div>
+                <div class="col-7">
+
+                  <div class="p-field">
+                    <p-multiSelect
+                    [options]="vehiculos"
+                    optionLabel="label"
+                    optionValue="value"
+                    formControlName="vehiculos"
+                    defaultLabel="0 vehiculos seleccionados"
+                    [appendTo]="'body'"
+                    [maxSelectedLabels]="3"
+                    [selectedItemsLabel]="'{0} vehiculos seleccionados'"
+                    ></p-multiSelect>
+                  </div>
+
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+
+            <div class="col p-field">
+              <label class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="tipo-unidad">Geocercas :</label>
+                </div>
+                <div class="col-7">
+
+                  <div class="p-field">
+                    <p-multiSelect
+                    [options]="geocercas"
+                    optionLabel="label"
+                    optionValue="value"
+                    formControlName="geocercas"
+                    defaultLabel="0 geocercas seleccionados"
+                    [appendTo]="'body'"
+                    [maxSelectedLabels]="3"
+                    [selectedItemsLabel]="'{0} geocercas seleccionados'"
+                    ></p-multiSelect>
+                  </div>
+
+                </div>
+              </label>
+            </div>
+
+          </div>
+
+          <br>
+
+          <div class="row">
+
+            <div class="col p-field">
+              <label class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="tipo-unidad">Geopuntos :</label>
+                </div>
+                <div class="col-7">
+
+                  <div class="p-field">
+                    <p-multiSelect
+                    [options]="geopuntos"
+                    optionLabel="label"
+                    optionValue="value"
+                    formControlName="geopuntos"
+                    defaultLabel="0 geopuntos seleccionados"
+                    [appendTo]="'body'"
+                    [maxSelectedLabels]="3"
+                    [selectedItemsLabel]="'{0} geopuntos seleccionados'"
+                    ></p-multiSelect>
+                  </div>
+
+                </div>
+              </label>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
+    <br>
+    <!-- <ng-template pTemplate="footer" style="width: 60vw;"> -->
+        <div class="row justify-content-center mt-4 panel-izq-container-footer">
+          <div class="col-6">
+              <button type="button" class="btn-gl-cancel btn-dark-hover w-100" (click)="subcuentasService.modalActive=false">Cancelar</button>
+          </div>
+          <div class="col-6">
+              <button type="submit" class="btn-gl-save btn-dark-hover w-100" >Guardar</button>
+          </div>
+        </div>
+    <!-- </ng-template> -->
 
-  </div>
 
-
-
+  </form>
 
   <ng-template pTemplate="footer" style="width: 60vw;">
-
-      <div class="row justify-content-center mt-4 panel-izq-container-footer">
-        <div class="col-6">
-            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelar(1)">Cancelar</button>
-        </div>
-        <div class="col-6">
-            <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickGuardar(2)">Guardar</button>
-        </div>
-      </div>
-
   </ng-template>
-
-
-
 
 
 </p-dialog>
