@@ -49,17 +49,8 @@ export class PlatformAlertsEditComponent implements OnInit {
     { label: 'No', value: false },
   ];
 
-  listaSonidos = [
-    { ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
-    { ruta: 'sonidos/alarm2.mp3', label: 'Sonido 2' },
-    { ruta: 'sonidos/CartoonBullets3.mp3', label: 'Sonido 3' },
-    { ruta: 'sonidos/DjStop4.mp3', label: 'Sonido 4' },
-    { ruta: 'sonidos/messenger5.mp3', label: 'Sonido 5' },
-    { ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
-    { ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
-    { ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
-    { ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
-  ];
+  listaSonidos:any = [];
+  audio = new Audio();
 
   loadingAlertDropdownReady: boolean = false;
   loadingVehicleMultiselectReady: boolean = false;
@@ -87,6 +78,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     private geofencesService: GeofencesService,
     private spinner: NgxSpinnerService,
   ) {
+    this.listaSonidos = this.AlertService.listaSonidos;
     this.loadData();
   }
 
@@ -241,7 +233,25 @@ export class PlatformAlertsEditComponent implements OnInit {
     }
   }
 
-  playAudio() {}
+  playAudio(path: string) {
+    if(typeof path != 'undefined' && path != ''){
+      if(this.audio.currentSrc != '' && !this.audio.ended){
+        this.audio.pause();
+      }
+      this.audio = new Audio('assets/' + path);
+      let audioPromise = this.audio.play();
+
+      if (audioPromise !== undefined) {
+        audioPromise.then(() => {
+          //console.log('Playing notification sound')
+        })
+        .catch((error: any) => {
+          //console.log(error);
+          // Auto-play was prevented
+        });
+      }
+    }
+  }
 
   onSubmit(event: any) {
 

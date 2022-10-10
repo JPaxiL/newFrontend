@@ -19,6 +19,19 @@ export class AlertService {
 
   public alertsForEventSocket: any[] = [];
 
+  public listaSonidos = [
+    { id: 1, ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
+    { id: 2, ruta: 'sonidos/alarm2.mp3', label: 'Sonido 2' },
+    { id: 3, ruta: 'sonidos/CartoonBullets3.mp3', label: 'Sonido 3' },
+    { id: 4, ruta: 'sonidos/DjStop4.mp3', label: 'Sonido 4' },
+    { id: 5, ruta: 'sonidos/messenger5.mp3', label: 'Sonido 5' },
+    { id: 6, ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
+    { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
+    { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
+    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
+    { id: 10, ruta: '', label: 'Sin Sonido' },
+  ];
+
   constructor(private http: HttpClient) { }
 
   public async get(id:string):Promise <Alert[]> {
@@ -78,6 +91,20 @@ export class AlertService {
   public async getAlertsByType(type:string){
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts/${type}`).toPromise();
     this.alertsByType = response.data;
+
+    response.data.forEach((alert: any) => {
+      //Cada vez que se cargan las listas de alerta por tipo, aprovechar en actualizar el sonido de la alerta.
+      let i = this.alertsForEventSocket.findIndex(alert_for_socket => alert_for_socket.evento_id == alert.id);
+      if(i != -1){
+        let sistema_notificacion = alert?.sistema_notificacion?.split(",");
+        this.alertsForEventSocket[i].sonido_sistema_bol = alert.sonido_sistema_bol;
+        this.alertsForEventSocket[i].ruta_sonido = sistema_notificacion[3];
+      } else {
+        console.log('Alerts For Events Socket could be empty, or the alert deleted: ', this.alertsForEventSocket);
+      }
+    });
+
+    //console.log(response.data);
     return this.alertsByType;
   }
 

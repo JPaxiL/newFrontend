@@ -45,18 +45,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
     { label: 'No', value: false },
   ];
 
-  listaSonidos = [
-    { id: 1, ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
-    { id: 2, ruta: 'sonidos/alarm2.mp3', label: 'Sonido 2' },
-    { id: 3, ruta: 'sonidos/CartoonBullets3.mp3', label: 'Sonido 3' },
-    { id: 4, ruta: 'sonidos/DjStop4.mp3', label: 'Sonido 4' },
-    { id: 5, ruta: 'sonidos/messenger5.mp3', label: 'Sonido 5' },
-    { id: 6, ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
-    { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
-    { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
-    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
-    { id: 10, ruta: '', label: 'Sin Sonido' },
-  ];
+  listaSonidos:any = [];
+  audio = new Audio();
 
   loadingAlertDropdownReady: boolean = false;
   loadingVehicleMultiselectReady: boolean = false;
@@ -82,7 +72,9 @@ export class PlatformAlertsCreateComponent implements OnInit {
     public panelService: PanelService,
     private geofencesService: GeofencesService,
     private spinner: NgxSpinnerService,
-  ) {}
+  ) {
+    this.listaSonidos = this.AlertService.listaSonidos;
+  }
 
   ngOnInit(): void {
     this.spinner.show('loadingAlertData');
@@ -187,7 +179,25 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
   }
 
-  playAudio() {}
+  playAudio(path: string) {
+    if(typeof path != 'undefined' && path != ''){
+      if(this.audio.currentSrc != '' && !this.audio.ended){
+        this.audio.pause();
+      }
+      this.audio = new Audio('assets/' + path);
+      let audioPromise = this.audio.play();
+
+      if (audioPromise !== undefined) {
+        audioPromise.then(() => {
+          //console.log('Playing notification sound')
+        })
+        .catch((error: any) => {
+          //console.log(error);
+          // Auto-play was prevented
+        });
+      }
+    }
+  }
 
   onSubmit(event: any) {
     event.preventDefault();

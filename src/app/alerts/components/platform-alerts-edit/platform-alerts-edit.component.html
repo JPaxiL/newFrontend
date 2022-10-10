@@ -174,7 +174,7 @@
                             optionValue="ruta"
                             formControlName="sonido"
                             defaultLabel="Selecciona un sonido..."
-                            (onChange)="playAudio"
+                            (onChange)="playAudio(alertForm.value.sonido);"
                             ></p-dropdown>
                         </div>
                     </div>
