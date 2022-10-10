@@ -38,6 +38,8 @@ export class EventService {
   public socketEvents: any[] = [];
   public enableSocketEvents: boolean = true;
 
+  audio = new Audio();
+
   new_notif_stack: number[] = [];
 
   constructor(
@@ -122,8 +124,21 @@ export class EventService {
 
   playNotificationSound(path: string){
     if(typeof path != 'undefined' && path != ''){
-      let audio = new Audio('assets/sonidos/' + path);
-      audio.play();
+      if(this.audio.currentSrc != '' && !this.audio.ended){
+        this.audio.pause();
+      }
+      this.audio = new Audio('assets/sonidos/' + path);
+      let audioPromise = this.audio.play();
+
+      if (audioPromise !== undefined) {
+        audioPromise.then(() => {
+          //console.log('Playing notification sound')
+        })
+        .catch((error: any) => {
+          //console.log(error);
+          // Auto-play was prevented
+        });
+      }
     }
   }
 
