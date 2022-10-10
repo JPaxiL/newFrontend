@@ -1,7 +1,6 @@
-<div class="d-flex" style="height: 100%; overflow:auto;">
+<div class="table-content-component-panel-monitoreo" style="position: relative;">
 
-  <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
-      <div
+  <div
           class="d-flex flex-column justify-content-center align-items-center"
           style="position: absolute;
           width: 100%;
@@ -15,10 +14,10 @@
               style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
           <span style="color: #fff;">Panel en construcción</span>
       </div>
-
+  
       <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingSubcuentas" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
 
-      <div class="panel-izq-table-container">
+      <div class="panel-izq-table-container" style="flex-grow: 0;">
         <table id="tbl_geos">
           <colgroup>
             <col width="26%" />
@@ -32,8 +31,8 @@
               <tr>
                   <th>Nº</th>
                   <!-- <td></td> -->
-                  <th>Nombre</th>
-                  <th>E-mail</th>
+                  <th class="text-start">Nombre</th>
+                  <th class="text-start">E-mail</th>
                   <th>Activo</th>
                   <!-- <th><i class="fa fa-id-card fa-lg"></i></th> -->
                   <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
@@ -44,7 +43,7 @@
           <tbody style="border-top: inherit;">
 
               <tr *ngFor="let sub of subcuentasService.tblDataSubUser;let indice=index">
-                <td>{{indice+1}} </td>
+                <td class="text-center">{{indice+1}} </td>
                 <td>{{sub.trama.nombre_usuario}} </td>
                 <td>{{sub.trama.email}}</td>
 
@@ -106,15 +105,12 @@
       <!-- {{userData.nombre_usuario}} -->
 
 
-      <div class="row justify-content-center mt-4 panel-izq-container-footer">
-
+      <div class="d-flex justify-content-center my-4 panel-izq-container-footer">
         <div class="col-6">
             <button type="button" (click)="clickAgregarSubusuario()" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button>
             <!-- <button type="button" (click)="sss()" class="btn-gl-save btn-dark-hover w-100" ui-sref="alertas-accesorios" >Crear nueva Subcuenta</button> -->
-
-          </div>
+        </div>
       </div>
-
 
       <!-- <div class="panel-izq-container h-100" *ngIf="!isUnderConstruction"> -->
           <!-- <div class="panel-izq-form"> -->
@@ -127,7 +123,13 @@
 
 
 
+  <!-- <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
+      
 
-  </div>
+      
+
+
+
+  </div> -->
 
 </div>
