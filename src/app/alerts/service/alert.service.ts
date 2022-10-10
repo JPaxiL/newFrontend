@@ -45,7 +45,6 @@ export class AlertService {
     let i = 1;
     let alerts_for_events_socket: any[] = [];
     this.alerts = response.data.map((data: Alert): Alert => {
-
       let sistema_notificacion = data?.sistema_notificacion?.split(",");
       data.sonido_sistema_bol = (sistema_notificacion[2] == 'true');
       data.activo_bol = (data.activo == 'true');
@@ -64,7 +63,7 @@ export class AlertService {
     });
     this.alertsForEventSocket = alerts_for_events_socket;
     console.log('Alertas obtenidas');
-
+    console.log(this.alertsForEventSocket);
     return this.alerts;
   }
 
@@ -97,13 +96,13 @@ export class AlertService {
       let i = this.alertsForEventSocket.findIndex(alert_for_socket => alert_for_socket.evento_id == alert.id);
       if(i != -1){
         let sistema_notificacion = alert?.sistema_notificacion?.split(",");
-        this.alertsForEventSocket[i].sonido_sistema_bol = alert.sonido_sistema_bol;
+        this.alertsForEventSocket[i].sonido_sistema_bol =(sistema_notificacion[2] == 'true');
         this.alertsForEventSocket[i].ruta_sonido = sistema_notificacion[3];
       } else {
         console.log('Alerts For Events Socket could be empty, or the alert deleted: ', this.alertsForEventSocket);
       }
     });
-
+    console.log(this.alertsForEventSocket);
     //console.log(response.data);
     return this.alertsByType;
   }
