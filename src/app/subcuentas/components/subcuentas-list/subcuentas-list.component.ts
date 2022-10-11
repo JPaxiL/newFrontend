@@ -48,6 +48,7 @@ export class SubcuentasListComponent implements OnInit {
 
       Swal.fire({
         //title: '¿Está seguro que desea '+ str_activo.toUpperCase() +' '+sub.nombre_usuario+'?',
+        title: '¿Está seguro?',
         text: '¿Está seguro que desea '+ str_activo.toUpperCase() +' '+sub.nombre_usuario+'?', //'Espere un momento...',
         icon: 'warning',
         showLoaderOnConfirm: true,
