@@ -1,5 +1,5 @@
 <div id="panel_dashboard" class="modal-body p-fluid p-0 overflow-auto" style="position: relative; height: 100%;">
-    <div 
+    <!-- <div
         class="d-flex flex-column justify-content-center align-items-center"
         style="position: absolute;
         width: 100%;
@@ -7,16 +7,16 @@
         background-color: rgba(0, 0, 0, 0.8);
         z-index: 999999;"
         *ngIf="isUnderConstruction">
-        <img 
-            src="./assets/images/en_construccion.png" 
+        <img
+            src="./assets/images/en_construccion.png"
             alt="under_construction"
             style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
         <span style="color: #fff;">Panel en construcción</span>
-    </div>
+    </div> -->
 
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboard" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white"> Cargando información... </p></ngx-spinner>
 
-    <div class="panel-izq-container h-100" *ngIf="!isUnderConstruction">
+    <div class="panel-izq-container h-100" *ngIf="isUnderConstruction">
         <div class="panel-izq-form">
             <div class="gl-middleline gl-row-underline">
                 <div class="row">
@@ -69,7 +69,7 @@
                   <button type="button" class="btn-gl-cancel btn-dark-hover w-100" >Ocultar</button>
                 </div> -->
                 <div class="col-6">
-                    <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="windowAccess.open('/dashboard');" [disabled]="!isConvoySelected">Mostrar</button>
+                    <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="send()" [disabled]="!isGroupSelected">Mostrar</button>
                 </div>
               </div>
         </div>

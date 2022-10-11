@@ -14,7 +14,7 @@
 
 <div class="container-fluid dashboard-wrapper" style="position: relative;" *ngIf="!isUnderConstruction">
 
-    <div class="row header-padding"></div>
+    <!-- <div class="row header-padding"></div> -->
     <div class="row dashboard-content p-3 overflow-auto justify-content-center" >
         <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboardSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "true"><p style="color: white" class="text-center"> Cargando Dashboard... </p></ngx-spinner>
 
@@ -123,5 +123,86 @@
 
             </div>
 
-    </div>
+
+        </div>
+        <div class="row p-card p-2 mb-3 rounded">
+            <div class="col-4">
+                <h4>Vehículos que cometieron infracción</h4>
+                <hr>
+                <table class="table">
+                    <thead>
+                        <tr class="table-active">
+                            <th scope="col">Vehículo</th>
+                            <th scope="col">No de Infracciones</th>
+                            <th scope="col">Infracción mas Grave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let vehicle of infraction">
+                            <td>{{vehicle.name}}</td>
+                            <td>{{vehicle.amount}}</td>
+                            <td>{{vehicle.higher_speed}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-4">
+                <h4>Vehículos que generaron alertas GPS</h4>
+                <hr>
+
+                <table  style="width:80%;">
+                    <tr>
+                        <td>Batería desconectada</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.bateria_desconectada"
+                                [max]="gpsEvents.length"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td>{{countgpsEvents.bateria_desconectada}}</td>
+                    </tr>
+                    <tr>
+                        <td>Frenada Brusca</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.frenada_brusca"
+                                [max]="gpsEvents.length"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.frenada_brusca}}</td>
+                    </tr>
+                </table><br> <br> <br>
+
+                <table class="table">
+                    <thead>
+                        <tr class="table-active">
+                            <th scope="col">Vehículo</th>
+                            <th scope="col">No de Infracciones</th>
+                            <th scope="col">Infracción mas Grave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngFor="let vehicle of infraction">
+                            <td>{{vehicle.name}}</td>
+                            <td>{{vehicle.amount}}</td>
+                            <td>{{vehicle.higher_speed}}</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="col-4">
+                <h4>Vehículos que generaron alertas Seg. vehicular</h4>
+                <hr>
+
+            </div>
+        </div>
 </div>

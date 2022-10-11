@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'https://apiprueba.glmonitoreo.com',
-  idClient: '9',
-  secretClient: '9IG3ZVQkE0JjGhCZA9JeQN5hlwKP673TeWDjwAU6',
-  socketUrl: 'https://escucha.glmonitoreo.com/'
+  idClient: '84',
+  secretClient: 'LUTj1k8Tley9SvQ1Jwmrha1HPHJs87ShfiQVB18S',
+  socketUrl: 'http://escucha.glmonitoreo.com/'
 };
