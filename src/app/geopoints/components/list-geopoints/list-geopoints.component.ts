@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { GeopointsService } from '../../services/geopoints.service';
 import { MapServicesService } from '../../../map/services/map-services.service';
 
+import { PanelService } from '../../../panel/services/panel.service';
+
 import Swal from 'sweetalert2';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -17,13 +19,31 @@ export class ListGeopointsComponent implements OnInit {
   datosCargados = false;
   NomBusqueda = "";
 
+  userData: any; //Informacion del usuario
+  showBtnAdd = true;
+  showBtnEdit = true;
+
   constructor(
     public geopointsService: GeopointsService,
     public mapService: MapServicesService,
+    public panelService: PanelService,
 
   ) {}
 
   ngOnInit(): void {
+
+    this.userData = this.panelService.userData;
+    console.log(this.userData);
+    if (this.userData.privilegios == "subusuario") {
+        // console.log("es sub usuario");
+        this.showBtnAdd = false;
+        this.showBtnEdit = false;
+    } else {
+        // console.log("es un usuario normal");
+        // this.showBtnAdd = true;
+
+    }
+
     if(!this.geopointsService.initializingGeopoints){
       this.geopointsService.spinner.show('loadingGeopointsSpinner');
     }

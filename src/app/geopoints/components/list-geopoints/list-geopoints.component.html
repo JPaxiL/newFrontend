@@ -11,7 +11,7 @@
         </span>
       </div>
 
-      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeopunto()" title="Crear geocerca">
+      <button type="button" *ngIf="showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeopunto()" title="Crear geocerca">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
     </div>
@@ -45,9 +45,13 @@
         <col width="26%" />
         <col width="9%" />
         <col width="31%" />
-        <col width="17%" />
-        <col width="17%" />
-  
+        <!-- <col width="17%" />
+        <col width="17%" /> -->
+
+        <col *ngIf="showBtnEdit" width="17%" />
+        <col *ngIf="showBtnEdit" width="17%" />
+        <col *ngIf="!showBtnEdit" width="34%" />
+
       </colgroup>
       <thead class="visible-on-scroll">
           <tr>
@@ -59,38 +63,38 @@
               <th colspan="2">Geopunto</th>
               <th><i class="fa fa-id-card fa-lg"></i></th>
               <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
-              <th><i class="fa fa-pencil fa-lg"></i></th>
-  
+              <th *ngIf="showBtnEdit"><i class="fa fa-pencil fa-lg"></i></th>
+
           </tr>
       </thead>
       <tbody style="border-top: inherit;">
-  
+
           <!-- <tr *ngFor="let geo of tblDataGeo;let indice=index" > -->
           <tr *ngFor="let geo of geopointsService.tblDataGeo;let indice=index" >
-  
+
               <td >
                 <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShow(geo.trama.geopunto_id)">
                   <i [ngClass]="{'fas fa-eye': geo.trama.geopunto_visible === 'true', 'far fa-eye-slash' : geo.trama.geopunto_visible === 'false'}"></i>
                 </button>
               </td>
-  
+
               <td class="text-center">
                 <i [ngStyle]="{'color': geo.trama.geopunto_color}" (click)="clickLocate(geo.trama.geopunto_id)" class="fa fa-map-marker geopoint-marker"></i>
                 <!-- <button class="btn btn-xs btn-link p-n geopoint-color" (click)="clickLocate(geo.trama.geopunto_id)" >
                   <i [ngStyle]="{'background-color': geo.trama.geopunto_color}" class=" fa fa-map-marker"></i>
                 </button> -->
               </td>
-  
+
               <td><span class="d-flex text-start">{{geo.trama.geopunto_name}}</span></td>
-  
+
               <td class="inline-png-checkbox text-center">
                 <!-- <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.geopunto_id)"  [(ngModel)]="geo.trama.geopunto_nombre_visible_bol"> -->
                 <p-checkbox [(ngModel)]="geo.trama.geopunto_nombre_visible_bol" (onChange)="clickShowNameGeocerca(geo.trama.geopunto_id)" [binary]="true"></p-checkbox>
               </td>
-  
+
               <!-- <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td> -->
-  
-              <td>
+
+              <td *ngIf="showBtnEdit">
                 <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
                   <!-- <button class="btn btn-xs btn-link edit-column" ngbDropdownToggle>
                     <i class="fa fa-pencil fa-lg"></i>
@@ -102,8 +106,8 @@
                   </div>
                 </div>
               </td>
-  
-  
+
+
           </tr>
       </tbody>
     </table>

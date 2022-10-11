@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { GeofencesService } from '../../services/geofences.service';
 
+import { PanelService } from '../../../panel/services/panel.service';
+
 import Swal from 'sweetalert2';
 
 import { MapServicesService } from '../../../map/services/map-services.service';
@@ -22,13 +24,32 @@ export class GeocercaListsComponent implements OnInit {
   datosCargados = false;
   NomBusqueda = "";
 
+  userData: any; //Informacion del usuario
+  showBtnAdd = true;
+  showBtnEdit = true;
+
+
   constructor(
     public geofencesService: GeofencesService,
     public mapService: MapServicesService,
+    public panelService: PanelService,
 
   ) { }
 
   ngOnInit(): void {
+
+    this.userData = this.panelService.userData;
+    // console.log(this.userData);
+    if (this.userData.privilegios == "subusuario") {
+        // console.log("es sub usuario");
+        this.showBtnAdd = false;
+        this.showBtnEdit = false;
+    } else {
+        // console.log("es un usuario normal");
+        // this.showBtnAdd = true;
+
+    }
+
 
     if(!this.geofencesService.initializingGeofences){
       this.geofencesService.spinner.show('loadingGeofencesSpinner');
