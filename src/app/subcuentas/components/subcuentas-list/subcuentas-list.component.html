@@ -20,11 +20,11 @@
       <div class="panel-izq-table-container" style="flex-grow: 0;">
         <table id="tbl_geos">
           <colgroup>
-            <col width="26%" />
-            <col width="9%" />
-            <col width="31%" />
-            <col width="17%" />
-            <col width="17%" />
+            <col width="15%" />
+            <col width="25%" />
+            <col width="30%" />
+            <col width="15%" />
+            <col width="15%" />
 
           </colgroup>
           <thead class="visible-on-scroll">
@@ -63,6 +63,9 @@
                     </div>
                   </div>
                 </td>
+              </tr>
+              <tr *ngIf="subcuentasService.isRowDataEmpty">
+                <td colspan="6" class="text-center">No hay subcuentas configuradas</td>
               </tr>
 
               <!-- <tr *ngFor="let geo of geopointsService.tblDataGeo;let indice=index" >
