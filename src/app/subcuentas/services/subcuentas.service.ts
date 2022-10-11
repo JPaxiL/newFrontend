@@ -21,6 +21,7 @@ export class SubcuentasService {
   initializingSubUser: boolean = false;
 
   modalActive:boolean = false;
+  isRowDataEmpty: boolean = false;
 
 
   constructor(
@@ -109,6 +110,7 @@ export class SubcuentasService {
       // }
       this.tblDataSubUser.push({trama:this.subUsers[i]});
     }
+    this.isRowDataEmpty = this.tblDataSubUser.length == 0;
     this.spinner.hide('loadingSubcuentas');
 
     // this.spinner.hide('loadingGeofencesSpinner');

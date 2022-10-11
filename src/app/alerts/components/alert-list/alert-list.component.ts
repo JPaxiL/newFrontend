@@ -24,6 +24,7 @@ export class AlertListComponent implements OnInit {
   public defaultColDef:any = [];
   public strSearched: string = '';
   public noResults: boolean = false;
+  public isRowDataEmpty: boolean = false;
 
   panelAlertKey: Number = 0;
   panelAlertBeforeOpening: Number = 0;
@@ -59,6 +60,7 @@ export class AlertListComponent implements OnInit {
 
   public async loadData(){
     this.alerts = await this.AlertService.getAll();
+    this.isRowDataEmpty = this.alerts.length == 0; 
     if(this.AlertService.panelAlertKey == this.panelAlertKey){
       this.spinner.hide('loadingAlertsSpinner');
     }

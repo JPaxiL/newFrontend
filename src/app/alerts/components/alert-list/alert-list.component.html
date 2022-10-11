@@ -91,6 +91,9 @@
         <tr *ngIf="noResults">
           <td colspan="6" class="text-center">Sin coinicidencias</td>
         </tr>
+        <tr *ngIf="isRowDataEmpty">
+          <td colspan="6" class="text-center">No hay alertas configuradas</td>
+        </tr>
       </tbody>
     </table>  
   </div>
