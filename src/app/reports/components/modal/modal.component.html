@@ -42,7 +42,7 @@
 
                   <th *ngIf="v_table[2].fServidor && !chkDateHour">Fecha/Hora Servidor</th>
                   <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
-                  <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
+                  <th *ngIf="v_table[2].fServidor && chkDateHour">Hora Servidor</th>
 
                   <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
                   <th *ngIf="v_table[2].velGPS" >Velocidad GPS</th>
@@ -85,7 +85,7 @@
 
                   <td *ngIf="v_table[2].fServidor && !chkDateHour">{{row.fServidor}}</td>
                   <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
-                  <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
+                  <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[1]}}</td>
 
 
                   <td *ngIf="v_table[2].ubicacion">

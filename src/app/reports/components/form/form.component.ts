@@ -342,6 +342,17 @@ export class FormComponent implements OnInit {
         this.userId = parseInt(JSON.stringify(data));
         console.log("user ID", this.userId);
         this.isUserIdLoaded = true;
+
+        // ================= CAMPO PARA COLOCAR LOS REPORTES =========================
+        // this.reports = [
+        //   {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
+        //   {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},
+        // ];
+
+
+
+        // ================= CAMPO PARA COLOCAR LOS REPORTES =========================
+
         this.endInit();
       },
       error: () => {

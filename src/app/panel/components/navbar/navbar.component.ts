@@ -40,22 +40,7 @@ export class NavbarComponent implements OnInit {
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
       next: data => {
         this.userData = this.panelService.userData = data[0];
-        // console.log(this.userData);
-
-        // if (this.userData.privilegios == "subusuario") {
-        //     this.showBtnSubcuentas = false;
-        // }
-
-        if (this.userData.privilegios == "subusuario") {
-          // console.log("es sub usuario");
-          this.showBtnSubcuentas = false;
-
-        } else {
-          // console.log("es un usuario normal");
-          // this.showBtnAdd = true;
-        }
-
-
+        this.showBtnSubcuentas = this.userData.privilegios == "subusuario"? false: true;
 
         this.userName = data[0].nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
         this.userEmail = data[0].email;
