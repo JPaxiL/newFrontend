@@ -14,7 +14,7 @@ import { DashboardService } from './../service/dashboard.service';
 })
 export class AreagraphsComponent implements OnInit {
 
-  isUnderConstruction: boolean = true;
+  isUnderConstruction: boolean = false;
 
   public vehicles:any = [];
   group: any = [];
@@ -54,7 +54,7 @@ export class AreagraphsComponent implements OnInit {
   };
 
   colorSchemeHorizontalChart = {
-    domain: ['blue', 'gray'],
+    domain: ['#0d6efd', '#e9ecef'],
   };
 
   colorSchemeVehiclesOnRoute = {
@@ -182,7 +182,7 @@ export class AreagraphsComponent implements OnInit {
 
     this.setHorizontalChart();
 
-    this.spinner.hide('loadingDashboardSpinner');
+
   }
 
   setHorizontalChart() {
@@ -263,10 +263,10 @@ export class AreagraphsComponent implements OnInit {
 
     this.countgpsEvents = collect(this.gpsEvents).countBy((event:any) => event.tipo_evento.toLowerCase().replace(/ /g, "_")).all();
 
-    console.log("this.vehicleSafetyEvents  =========> ", this.vehicleSafetyEvents);
-    console.log("this.gpsEvents  =========> ", this.gpsEvents,this.countgpsEvents);
+    // console.log("this.vehicleSafetyEvents  =========> ", this.vehicleSafetyEvents);
+    console.log("this.gpsEvents  =========> ",this.countgpsEvents, this.gpsEvents);
 
-    console.log("const counted = collection.countBy(email => email.split('@')[1]);",this.rangeDates);
+    this.spinner.hide('loadingDashboardSpinner');
 
   }
 

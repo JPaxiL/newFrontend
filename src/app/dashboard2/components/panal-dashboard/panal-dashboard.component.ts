@@ -12,7 +12,7 @@ import * as _ from 'lodash';
   styleUrls: ['./panal-dashboard.component.scss']
 })
 export class PanalDashboardComponent implements OnInit {
-  loadingDashboard: boolean = false;
+  loadingDashboard: boolean = true;
   public vehicles:any = [];
   group: any = [];
   convoy:any = [];
@@ -32,7 +32,7 @@ export class PanalDashboardComponent implements OnInit {
     private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
-    if(!this.isUnderConstruction){
+    if(this.isUnderConstruction){
 
       if(!this.vehicleService.statusDataVehicle){
         this.spinner.show('loadingDashboard');
@@ -56,7 +56,7 @@ export class PanalDashboardComponent implements OnInit {
 
   getGroups(group: any){
     group.each( (items:any, index:any) => {
-      console.log("items:any, index:any", items, index)
+
       this.group.push({
         value:index,
         label:index,
@@ -68,11 +68,16 @@ export class PanalDashboardComponent implements OnInit {
 
     this.convoy = _.uniqBy(this.getVehicles(), 'convoy');
     this.convoy = this.convoy.map((convoy:any) => {
-      return { value:convoy.idconvoy, label:convoy.convoy, groupName: convoy.grupo}
+      return { value:convoy.idconvoy, label:convoy.convoy, groupName: convoy.grupo,  groupId: convoy.idgrupo}
     })
     .filter( (convoy:any) => {
       return convoy.label != "Unidades Sin Convoy" && convoy.groupName == this.selectedGroup
     });
+
+    this.imeis = this.getVehicles()
+    .filter( (vehicle:any) => vehicle.grupo == this.selectedGroup )
+    .map( (item:any) => {return item.IMEI} );
+
     this.selectedConvoy = null;
     this.isConvoySelected = false;
     this.isGroupSelected = this.selectedGroup == null? false: true;
@@ -89,14 +94,14 @@ export class PanalDashboardComponent implements OnInit {
 
   send(){
 
-    if(this.selectedConvoy == null){
+    if(this.imeis.length > 0 ){
+      console.log(" this.selectedGroup ====> ", this.selectedGroup);
+      console.log(" this.selectedConvoy ====> ", this.selectedConvoy);
+      console.log("this.imeis ======> ", this.imeis);
 
+      localStorage.setItem('vahivles-dashboard',JSON.stringify(this.imeis));
+      window.open('/dashboard');
     }
-    console.log(" this.selectedConvoy ====> ", this.selectedConvoy);
-    console.log("this.imeis ======> ", this.imeis);
-
-    localStorage.setItem('vahivles-dashboard',JSON.stringify(this.imeis));
   }
-
 
 }
