@@ -95,10 +95,6 @@ export class PanalDashboardComponent implements OnInit {
   send(){
 
     if(this.imeis.length > 0 ){
-      console.log(" this.selectedGroup ====> ", this.selectedGroup);
-      console.log(" this.selectedConvoy ====> ", this.selectedConvoy);
-      console.log("this.imeis ======> ", this.imeis);
-
       localStorage.setItem('vahivles-dashboard',JSON.stringify(this.imeis));
       window.open('/dashboard');
     }
