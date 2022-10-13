@@ -18,7 +18,7 @@ export class AreagraphsComponent implements OnInit {
   public vehicles: any = [];
   group: any = [];
   convoy: any = [];
-  rangeDates: Date[] = [new Date(), new Date()];
+  rangeDates: Date[] = [];
   imeis: any = [];
   public totalVehicle: number = 0;
   green: number = 0;
@@ -214,7 +214,9 @@ export class AreagraphsComponent implements OnInit {
   }
 
   async getEvents(imeis: any) {
-    this.dataEvents = await this.eventService.getEventsByImeis(imeis);
+    let to = moment().add(8, 'hours').format('YYYY-MM-DD H:mm:ss.000');
+    let from = moment().subtract(24, 'hours').format('YYYY-MM-DD H:mm:ss.000');
+    this.dataEvents = await this.eventService.getEventsByImeis(imeis,to,from);
 
     this.dataEvents.forEach((event: any) => {
       if (

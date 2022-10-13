@@ -105,7 +105,7 @@ export class EventService {
   public getData() {
     return this.events;
   }
-  
+
   public getFilters() {
     return this.classFilterArray;
   }
@@ -262,9 +262,13 @@ export class EventService {
       return str.normalize('NFKD').replace(/[^\w ]/g, '').toLowerCase();
     }
 
-    async getEventsByImeis(imeis:any){
+    async getEventsByImeis(imeis:any,to:any,from:any){
       const response:ResponseInterface = await this.http
-      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {imeis:imeis})
+      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {
+        imeis:imeis,
+        to:to,
+        from:from
+      })
       .toPromise();
 
       return response.data;
@@ -274,7 +278,7 @@ export class EventService {
       this.unreadCount++;
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
     }
-  
+
     decreaseUnreadCounter(){
       this.unreadCount--;
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
@@ -298,11 +302,11 @@ export class EventService {
     this.events.sort((a,b) => {
       if(this.new_notif_stack.indexOf(a.id) > -1 ){
         if(this.new_notif_stack.indexOf(b.id) > -1){
-          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) { 
-            return -1; 
-          } 
+          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) {
+            return -1;
+          }
           return 1;
-        } 
+        }
         return -1;
       } else {
         if(this.new_notif_stack.indexOf(b.id) > -1){
