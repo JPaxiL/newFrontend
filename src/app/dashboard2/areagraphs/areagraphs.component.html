@@ -158,7 +158,7 @@
                             <ngb-progressbar
                                 type="primary"
                                 [value]="countgpsEvents.bateria_desconectada"
-                                [max]="gpsEvents.length"
+                                [max]="gpsEventsTotal"
                                 [height]="'20px'"
                             ></ngb-progressbar>
 
@@ -166,17 +166,69 @@
                         <td>{{countgpsEvents.bateria_desconectada}}</td>
                     </tr>
                     <tr>
+                        <td>Aceleración brusca</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.aceleracion_brusca"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.aceleracion_brusca}}</td>
+                    </tr>
+                    <tr>
                         <td>Frenada Brusca</td>
                         <td style="width: 50%;">
                             <ngb-progressbar
                                 type="primary"
                                 [value]="countgpsEvents.frenada_brusca"
-                                [max]="gpsEvents.length"
+                                [max]="gpsEventsTotal"
                                 [height]="'20px'"
                             ></ngb-progressbar>
 
                         </td>
                         <td style="text-align: center;">{{countgpsEvents.frenada_brusca}}</td>
+                    </tr>
+                    <tr>
+                        <td>SOS</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.sos"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.sos}}</td>
+                    </tr>
+                    <tr>
+                        <td>Motor apagado</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.motor_apagado"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.motor_apagado}}</td>
+                    </tr>
+                    <tr>
+                        <td>Motor encendido</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.motor_encendido"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.motor_encendido}}</td>
                     </tr>
                 </table><br> <br> <br>
 
@@ -184,16 +236,19 @@
                     <thead>
                         <tr class="table-active">
                             <th scope="col">Vehículo</th>
-                            <th scope="col">No de Infracciones</th>
-                            <th scope="col">Infracción mas Grave</th>
+                            <th scope="col">Alerta</th>
+                            <th scope="col">Incidencias</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr *ngFor="let vehicle of infraction">
-                            <td>{{vehicle.name}}</td>
-                            <td>{{vehicle.amount}}</td>
-                            <td>{{vehicle.higher_speed}}</td>
-                        </tr> -->
+
+                            <tr *ngFor="let event of gpsEvents">
+                                <td>{{event.vehicle}}</td>
+                                <td>{{event.event}}</td>
+                                <td>{{event.amount}}</td>
+                            </tr>
+
+
                     </tbody>
                 </table>
 

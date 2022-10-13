@@ -10,29 +10,28 @@ import { DashboardService } from './../service/dashboard.service';
 @Component({
   selector: 'app-areagraphs',
   templateUrl: './areagraphs.component.html',
-  styleUrls: ['./areagraphs.component.scss']
+  styleUrls: ['./areagraphs.component.scss'],
 })
 export class AreagraphsComponent implements OnInit {
-
   isUnderConstruction: boolean = false;
 
-  public vehicles:any = [];
+  public vehicles: any = [];
   group: any = [];
-  convoy:any = [];
-  rangeDates:Date[] = [new Date(), new Date()];
-  imeis:any = [];
-  public totalVehicle:number = 0;
-  green:number=0;
-  imeiGreen:any = [];
-  blue:number=0;
-  imeiBlue:any= [];
-  purple:number=0;
-  black:number=0;
-  imeiBlack:any = [];
-  orange:number=0;
-  imeiOrange:any = [];
-  red:number=0;
-  imeiRed:any = [];
+  convoy: any = [];
+  rangeDates: Date[] = [new Date(), new Date()];
+  imeis: any = [];
+  public totalVehicle: number = 0;
+  green: number = 0;
+  imeiGreen: any = [];
+  blue: number = 0;
+  imeiBlue: any = [];
+  purple: number = 0;
+  black: number = 0;
+  imeiBlack: any = [];
+  orange: number = 0;
+  imeiOrange: any = [];
+  red: number = 0;
+  imeiRed: any = [];
 
   horizontalChart: any = [];
   viewHorizontalChart = [700, 100];
@@ -50,7 +49,7 @@ export class AreagraphsComponent implements OnInit {
   legendPosition: string = 'below';
 
   colorScheme = {
-    domain: ['green', 'blue', 'orange', 'black','red']
+    domain: ['green', 'blue', 'orange', 'black', 'red'],
   };
 
   colorSchemeHorizontalChart = {
@@ -58,30 +57,27 @@ export class AreagraphsComponent implements OnInit {
   };
 
   colorSchemeVehiclesOnRoute = {
-    domain: ['green', 'blue']
+    domain: ['green', 'blue'],
   };
 
-  data:any = [];
-  vehiclesOnRoute:any = [];
-  dataEvents:any = [];
+  data: any = [];
+  vehiclesOnRoute: any = [];
+  dataEvents: any = [];
 
-  infraction:any = [];
-  gpsEvents:any = [];
-  countgpsEvents:any = {};
-  vehicleSafetyEvents:any = [];
-
+  infraction: any = [];
+  gpsEvents: any = [];
+  gpsEventsTotal: number = 0;
+  countgpsEvents: any = {};
+  vehicleSafetyEvents: any = [];
 
   constructor(
-    private vehicleService : VehicleService,
+    private vehicleService: VehicleService,
     private spinner: NgxSpinnerService,
     private eventService: EventService,
     private dashboardService: DashboardService
-  ) {
+  ) {}
 
-  }
-
-
-    /*
+  /*
   sistema de color
   red = corte de transmision por problemas del gps, ... (soporte)
   yellow = vehiculo perdidó transmision,
@@ -99,10 +95,9 @@ export class AreagraphsComponent implements OnInit {
   10 = green -> en movimiento
   */
 
-
-  ngOnInit():void {
-    if(!this.isUnderConstruction){
-      this.spinner.show("loadingDashboardSpinner");
+  ngOnInit(): void {
+    if (!this.isUnderConstruction) {
+      this.spinner.show('loadingDashboardSpinner');
       this.load();
     }
     // setInterval(() => {
@@ -113,7 +108,7 @@ export class AreagraphsComponent implements OnInit {
     // this.load();
   }
 
-  load(){
+  load() {
     let imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
 
     this.getEvents(imeis);
@@ -127,7 +122,7 @@ export class AreagraphsComponent implements OnInit {
     });
   }
 
-  setGraphData(vehicles:any){
+  setGraphData(vehicles: any) {
     this.totalVehicle = vehicles.length;
 
     vehicles.forEach((vehicle: any) => {
@@ -181,8 +176,6 @@ export class AreagraphsComponent implements OnInit {
     ];
 
     this.setHorizontalChart();
-
-
   }
 
   setHorizontalChart() {
@@ -218,56 +211,60 @@ export class AreagraphsComponent implements OnInit {
     ];
   }
 
-  async getEvents(imeis: any){
+  async getEvents(imeis: any) {
+    this.dataEvents = await this.eventService.getEventsByImeis(imeis);
 
-    this.dataEvents =  await this.eventService.getEventsByImeis(imeis);
-
-    this.dataEvents.forEach((event:any) => {
-      if(event.descripcion_evento === "Infracción" || event.descripcion_evento === "Infraccion"){
+    this.dataEvents.forEach((event: any) => {
+      if (
+        event.descripcion_evento === 'Infracción' ||
+        event.descripcion_evento === 'Infraccion'
+      ) {
         this.infraction.push(event);
       }
 
-      if(event.tipo_alerta === 'gps'){
+      if (event.tipo_alerta === 'gps') {
         this.gpsEvents.push(event);
       }
 
-      if(event.tipo_alerta === 'accessories'){
+      if (event.tipo_alerta === 'accessories') {
         this.vehicleSafetyEvents.push(event);
       }
-
     });
-
 
     this.infraction = collect(this.infraction)
-    .groupBy('nombre_objeto')
-    .map( (items:any, index:any) => {
-      return {
-        'name':index,
-        'amount':items.items.length,
-        'higher_speed': collect(items.items).max('velocidad')
-      };
-    })
-    .toArray();
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return {
+          name: index,
+          amount: items.items.length,
+          higher_speed: collect(items.items).max('velocidad'),
+        };
+      })
+      .toArray();
 
-    this.gpsEvents.forEach( (event:any) => {
-        if(event.tipo_evento == 'Bateria desconectada'){
-          this.countgpsEvents.batteryDisconnected += 1;
-        }
+    this.gpsEventsTotal = this.gpsEvents.length;
+    this.countgpsEvents = collect(this.gpsEvents)
+      .countBy((event: any) =>
+        event.tipo_evento.toLowerCase().replace(/ /g, '_')
+      )
+      .all();
 
-        if(event.tipo_evento == 'Motor apagado'){
-          this.countgpsEvents.engineoff += 1;
-        }
-
-    });
-
-
-    this.countgpsEvents = collect(this.gpsEvents).countBy((event:any) => event.tipo_evento.toLowerCase().replace(/ /g, "_")).all();
+    this.gpsEvents = collect(this.gpsEvents)
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return items
+          .groupBy('tipo_evento')
+          .map((ite: any, evn_tipe: any) => {
+            return { amount: ite.count(), vehicle: index, event: evn_tipe };
+          })
+          .toArray();
+      })
+      .flatten(1)
+      .toArray();
 
     // console.log("this.vehicleSafetyEvents  =========> ", this.vehicleSafetyEvents);
-    console.log("this.gpsEvents  =========> ",this.countgpsEvents, this.gpsEvents);
+    console.log('this.gpsEvents  =========> ', this.gpsEvents);
 
     this.spinner.hide('loadingDashboardSpinner');
-
   }
-
 }
