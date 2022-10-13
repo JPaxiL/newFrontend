@@ -69,6 +69,8 @@ export class AreagraphsComponent implements OnInit {
   gpsEventsTotal: number = 0;
   countgpsEvents: any = {};
   vehicleSafetyEvents: any = [];
+  countVehicleSafetyEvents: any = [];
+  safetyEventsTotal: number = 0;
 
   constructor(
     private vehicleService: VehicleService,
@@ -245,7 +247,7 @@ export class AreagraphsComponent implements OnInit {
     this.gpsEventsTotal = this.gpsEvents.length;
     this.countgpsEvents = collect(this.gpsEvents)
       .countBy((event: any) =>
-        event.tipo_evento.toLowerCase().replace(/ /g, '_')
+        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
       )
       .all();
 
@@ -262,9 +264,29 @@ export class AreagraphsComponent implements OnInit {
       .flatten(1)
       .toArray();
 
-    // console.log("this.vehicleSafetyEvents  =========> ", this.vehicleSafetyEvents);
-    console.log('this.gpsEvents  =========> ', this.gpsEvents);
+    this.safetyEventsTotal = this.vehicleSafetyEvents.length;
+    this.countVehicleSafetyEvents = collect(this.vehicleSafetyEvents)
+      .countBy((event: any) =>
+        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
+      )
+      .all();
 
+    this.vehicleSafetyEvents = collect(this.vehicleSafetyEvents)
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return items
+          .groupBy('tipo_evento')
+          .map((ite: any, evn_tipe: any) => {
+            return { amount: ite.count(), vehicle: index, event: evn_tipe };
+          })
+          .toArray();
+      })
+      .flatten(1)
+      .toArray();
     this.spinner.hide('loadingDashboardSpinner');
+  }
+
+  removeAccents(str: string) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 }

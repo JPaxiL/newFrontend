@@ -258,6 +258,148 @@
                 <h4>Vehículos que generaron alertas Seg. vehicular</h4>
                 <hr>
 
+                <br><br>
+                <table  style="width:80%;">
+                    <tr>
+                        <td>Ausencia de rostro</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.no_rostro"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.no_rostro}}</td>
+                    </tr>
+                    <tr>
+                        <td>Fatiga extrema</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.fatiga_extrema"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.fatiga_extrema}}</td>
+                    </tr>
+                    <tr>
+                        <td>Posible fatiga</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.posible_fatiga"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.posible_fatiga}}</td>
+                    </tr>
+                    <tr>
+                        <td>Distracción</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.distraccion"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.distraccion}}</td>
+                    </tr>
+                    <tr>
+                        <td>Anticolisión frontal</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.colision_delantera"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.colision_delantera}}</td>
+                    </tr>
+                    <tr>
+                        <td>Colisión con peatones</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.colision_con_peatones"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.colision_con_peatones}}</td>
+                    </tr>
+                    <tr>
+                        <td>Desvío de carril izquierda</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.desvio_de_carril_hacia_la_izquierda"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.desvio_de_carril_hacia_la_izquierda}}</td>
+                    </tr>
+                    <tr>
+                        <td>Desvío de carril derecha</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.desvio_de_carril_hacia_la_derecha"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.desvio_de_carril_hacia_la_derecha}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bloq. de visión de Mobileye</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.bloqueo_de_vision_del_mobileye"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.bloqueo_de_vision_del_mobileye}}</td>
+                    </tr>
+                </table>
+
+                <br> <br> <br>
+
+                <table class="table">
+                    <thead>
+                        <tr class="table-active">
+                            <th scope="col">Vehículo</th>
+                            <th scope="col">Alerta</th>
+                            <th scope="col">Incidencias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                            <tr *ngFor="let event of vehicleSafetyEvents">
+                                <td>{{event.vehicle}}</td>
+                                <td>{{event.event}}</td>
+                                <td>{{event.amount}}</td>
+                            </tr>
+
+
+                    </tbody>
+                </table>
             </div>
         </div>
 </div>
