@@ -22,6 +22,7 @@ export class ListGeopointsComponent implements OnInit {
   userData: any; //Informacion del usuario
   showBtnAdd = true;
   showBtnEdit = true;
+  noResults: boolean = false;
 
   constructor(
     public geopointsService: GeopointsService,
@@ -201,21 +202,14 @@ export class ListGeopointsComponent implements OnInit {
   }
 
   onBusqueda(gaaa:any) {
-    //console.log(gaaa);
-    //console.log(this.NomBusqueda);
-
-    let geos = this.geopointsService.getData();
-    console.log(geos);
-
-    this.geopointsService.tblDataGeo = [];
-
-    for (let i = 0; i < geos.length; i++) {
-
-        if ( geos[i].geopunto_name.toUpperCase().includes(this.NomBusqueda.toUpperCase()) ) {
-            geos[i].geopunto_nombre_visible_bol = (geos[i].geopunto_nombre_visible_bol === 'true');
-            this.geopointsService.tblDataGeo.push({trama:geos[i]});
-        }
-
+    if(this.NomBusqueda == ''){
+      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTabledata();
+      this.noResults = false;
+    } else {
+      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTabledata().filter( (geopunto: any) => {
+        return geopunto.geopunto_name != null && geopunto.geopunto_name.toUpperCase().includes(this.NomBusqueda.toUpperCase());
+      });
+      this.noResults = this.geopointsService.tblDataGeoFiltered.length == 0;
     }
   }
 

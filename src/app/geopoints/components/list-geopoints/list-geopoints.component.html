@@ -70,7 +70,7 @@
       <tbody style="border-top: inherit;">
 
           <!-- <tr *ngFor="let geo of tblDataGeo;let indice=index" > -->
-          <tr *ngFor="let geo of geopointsService.tblDataGeo;let indice=index" >
+          <tr *ngFor="let geo of geopointsService.tblDataGeoFiltered;let indice=index" >
 
               <td >
                 <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShow(geo.trama.geopunto_id)">
@@ -108,6 +108,9 @@
               </td>
 
 
+          </tr>
+          <tr *ngIf="noResults">
+            <td colspan="5" class="text-center">Sin coinicidencias</td>
           </tr>
       </tbody>
     </table>
