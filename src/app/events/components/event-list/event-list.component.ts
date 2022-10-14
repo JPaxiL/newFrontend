@@ -130,7 +130,8 @@ export class EventListComponent implements OnInit {
 
   private markAsRead(event_id: any){
     console.log('Marking ' + event_id + ' as read...');
-    this.eventService.decreaseUnreadCounter();
+    //this.eventService.decreaseUnreadCounter();
+    this.eventService.updateUnreadCounter();
     this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
       next: data => {
         console.log('Mark ' + event_id + ' as read Success? : ', data.success);

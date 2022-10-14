@@ -91,11 +91,12 @@ export class EventService {
           let last_event = this.socketEvents.pop();
           if(this.events.findIndex(event => event.id == last_event.id) == -1){
             this.events.unshift(last_event);
-            this.increaseUnreadCounter();
+            //this.increaseUnreadCounter();
           } else {
             console.log('Evento duplicado: ', last_event);
           }
         }
+        this.updateUnreadCounter();
         this.enableSocketEvents = false;
         this.showEventPanel();
       });
@@ -115,6 +116,7 @@ export class EventService {
       this.socketEvents.unshift(event);
     } else {
       this.events.unshift(event);
+      this.updateUnreadCounter();
       if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
         this.playNotificationSound(event.ruta_sonido);
       }
@@ -281,6 +283,17 @@ export class EventService {
 
     decreaseUnreadCounter(){
       this.unreadCount--;
+      this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
+    }
+
+    updateUnreadCounter(){
+      let counter = 0;
+      this.events.forEach(event => {
+        if(event.viewed == false){
+          counter++;
+        }
+      });
+      this.unreadCount = counter; 
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
     }
 
