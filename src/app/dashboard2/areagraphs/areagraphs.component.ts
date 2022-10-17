@@ -65,10 +65,13 @@ export class AreagraphsComponent implements OnInit {
   dataEvents: any = [];
 
   infraction: any = [];
+  date_infraction: string = '';
   gpsEvents: any = [];
+  date_gps: string = '';
   gpsEventsTotal: number = 0;
   countgpsEvents: any = {};
   vehicleSafetyEvents: any = [];
+  date_safety: string = '';
   countVehicleSafetyEvents: any = [];
   safetyEventsTotal: number = 0;
 
@@ -111,13 +114,13 @@ export class AreagraphsComponent implements OnInit {
   }
 
   load() {
-    let imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
+    this.imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
 
-    this.getEvents(imeis);
+    this.getEvents(this.imeis);
 
     this.vehicleService.dataCompleted.subscribe((vehicles) => {
       this.vehicles = vehicles.filter((vehicle: any) => {
-        return imeis.includes(vehicle.IMEI);
+        return this.imeis.includes(vehicle.IMEI);
       });
 
       this.setGraphData(this.vehicles);
@@ -216,7 +219,7 @@ export class AreagraphsComponent implements OnInit {
   async getEvents(imeis: any) {
     let to = moment().add(8, 'hours').format('YYYY-MM-DD H:mm:ss.000');
     let from = moment().subtract(24, 'hours').format('YYYY-MM-DD H:mm:ss.000');
-    this.dataEvents = await this.eventService.getEventsByImeis(imeis,to,from);
+    this.dataEvents = await this.eventService.getEventsByImeis(imeis, to, from);
 
     this.dataEvents.forEach((event: any) => {
       if (
@@ -235,7 +238,53 @@ export class AreagraphsComponent implements OnInit {
       }
     });
 
-    this.infraction = collect(this.infraction)
+    this.setInfraction(this.infraction);
+
+    this.setGpsEvents(this.gpsEvents);
+
+    this.setVehicleSafetyEvents(this.vehicleSafetyEvents);
+
+    this.spinner.hide('loadingDashboardSpinner');
+  }
+
+  removeAccents(str: string) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  async getInfraction() {
+
+    if (this.date_infraction != '') {
+      this.spinner.show('loadingInfractionSpinner');
+      let to = moment(this.date_infraction)
+        .endOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let from = moment(this.date_infraction)
+        .startOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let envent_type = ['Infracción', 'Infraccion'];
+      let dataEvents = await this.eventService.getEventsByImeisAndEventType(
+        this.imeis,
+        to,
+        from,
+        envent_type
+      );
+
+      if (dataEvents.length > 0) {
+        this.setInfraction(dataEvents);
+      } else {
+        this.infraction = [];
+      }
+
+      this.spinner.hide('loadingInfractionSpinner');
+    } else {
+      alert('debe elegir una fecha');
+    }
+  }
+
+  setInfraction(infractions: any) {
+    this.infraction = collect(infractions)
       .groupBy('nombre_objeto')
       .map((items: any, index: any) => {
         return {
@@ -245,50 +294,156 @@ export class AreagraphsComponent implements OnInit {
         };
       })
       .toArray();
-
-    this.gpsEventsTotal = this.gpsEvents.length;
-    this.countgpsEvents = collect(this.gpsEvents)
-      .countBy((event: any) =>
-        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
-      )
-      .all();
-
-    this.gpsEvents = collect(this.gpsEvents)
-      .groupBy('nombre_objeto')
-      .map((items: any, index: any) => {
-        return items
-          .groupBy('tipo_evento')
-          .map((ite: any, evn_tipe: any) => {
-            return { amount: ite.count(), vehicle: index, event: evn_tipe };
-          })
-          .toArray();
-      })
-      .flatten(1)
-      .toArray();
-
-    this.safetyEventsTotal = this.vehicleSafetyEvents.length;
-    this.countVehicleSafetyEvents = collect(this.vehicleSafetyEvents)
-      .countBy((event: any) =>
-        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
-      )
-      .all();
-
-    this.vehicleSafetyEvents = collect(this.vehicleSafetyEvents)
-      .groupBy('nombre_objeto')
-      .map((items: any, index: any) => {
-        return items
-          .groupBy('tipo_evento')
-          .map((ite: any, evn_tipe: any) => {
-            return { amount: ite.count(), vehicle: index, event: evn_tipe };
-          })
-          .toArray();
-      })
-      .flatten(1)
-      .toArray();
-    this.spinner.hide('loadingDashboardSpinner');
   }
 
-  removeAccents(str: string) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  async getEventGps() {
+    if (this.date_gps != '') {
+      this.spinner.show('loadingGpsSpinner');
+      let to = moment(this.date_gps)
+        .endOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let from = moment(this.date_gps)
+        .startOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let envent_type = [
+        'Bateria desconectada',
+        'Aceleracion brusca',
+        'SOS',
+        'Frenada brusca',
+        'Motor apagado',
+        'Motor encendido',
+      ];
+      let dataEvents = await this.eventService.getEventsByImeisAndEventType(
+        this.imeis,
+        to,
+        from,
+        envent_type
+      );
+
+      if (dataEvents.length > 0) {
+        this.setGpsEvents(dataEvents);
+      } else {
+        this.setCountgpsEvents();
+      }
+      this.spinner.hide('loadingGpsSpinner');
+    } else {
+      alert('debe elegir una fecha');
+    }
+  }
+
+  setGpsEvents(dataEvents: any) {
+    this.gpsEventsTotal = dataEvents.length;
+    this.countgpsEvents = collect(dataEvents)
+      .countBy((event: any) =>
+        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
+      )
+      .all();
+
+    this.gpsEvents = collect(dataEvents)
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return items
+          .groupBy('tipo_evento')
+          .map((ite: any, evn_tipe: any) => {
+            return { amount: ite.count(), vehicle: index, event: evn_tipe };
+          })
+          .toArray();
+      })
+      .flatten(1)
+      .toArray();
+  }
+
+  setCountgpsEvents() {
+    this.countgpsEvents = {
+      bateria_desconectada: 0,
+      aceleracion_brusca: 0,
+      frenada_brusca: 0,
+      sos: 0,
+      motor_apagado: 0,
+      motor_encendido: 0,
+    };
+    this.gpsEventsTotal = 100;
+    this.gpsEvents = [];
+  }
+
+  async getVehicleSafety() {
+    if (this.date_safety != '') {
+      this.spinner.show('loadingSegSpinner');
+      let to = moment(this.date_safety)
+        .endOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let from = moment(this.date_safety)
+        .startOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let envent_type = [
+        'No Rostro',
+        'Fatiga Extrema',
+        'Posible Fatiga',
+        'Distraccion',
+        'Distracción',
+        'Colisión delantera',
+        'Colisión con peatones',
+        'Desvío de carril hacia la izquierda',
+        'Desvío de carril hacia la derecha',
+        'Bloqueo de visión del mobileye',
+      ];
+      let dataEvents = await this.eventService.getEventsByImeisAndEventType(
+        this.imeis,
+        to,
+        from,
+        envent_type
+      );
+
+      if (dataEvents.length > 0) {
+        this.setVehicleSafetyEvents(dataEvents);
+      } else {
+        this.setCountVehicleSafetyEvents();
+      }
+      this.spinner.hide('loadingSegSpinner');
+    } else {
+      alert('debe elegir una fecha');
+    }
+  }
+
+  setVehicleSafetyEvents(dataEvents: any) {
+    this.safetyEventsTotal = dataEvents.length;
+    this.countVehicleSafetyEvents = collect(dataEvents)
+      .countBy((event: any) =>
+        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
+      )
+      .all();
+
+    this.vehicleSafetyEvents = collect(dataEvents)
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return items
+          .groupBy('tipo_evento')
+          .map((ite: any, evn_tipe: any) => {
+            return { amount: ite.count(), vehicle: index, event: evn_tipe };
+          })
+          .toArray();
+      })
+      .flatten(1)
+      .toArray();
+  }
+
+  setCountVehicleSafetyEvents() {
+    this.countVehicleSafetyEvents = {
+      no_rostro: 0,
+      fatiga_extrema: 0,
+      posible_fatiga: 0,
+      distraccion: 0,
+      colision_delantera: 0,
+      colision_con_peatones: 0,
+      desvio_de_carril_hacia_la_izquierda: 0,
+      desvio_de_carril_hacia_la_derecha: 0,
+      bloqueo_de_vision_del_mobileye: 0,
+    };
+    this.safetyEventsTotal = 100;
+    this.vehicleSafetyEvents = [];
   }
 }
