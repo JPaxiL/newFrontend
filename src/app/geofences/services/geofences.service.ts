@@ -20,6 +20,7 @@ export class GeofencesService {
   public action:string = "add"; //[add,edit,delete]
 
   tblDataGeo: any = [];
+  tblDataGeoFiltered: any = [];
   initializingGeofences: boolean = false;
   eyeInputSwitch: boolean = true;
   geofenceCounters: any = {
@@ -111,11 +112,13 @@ export class GeofencesService {
     return this.geofences;
   }
 
+  public getTableData(){
+    return this.tblDataGeo;
+  }
+
   initializeTable(newGeofenceId?: number) {
     this.tblDataGeo = [];
-    console.log('Geocercas: ', this.geofences);
-
-    for (let i = 0; i < this.geofences.length; i++) {
+    for(let i = 0; i < this.geofences.length; i++){
       if(this.geofences[i].id != newGeofenceId){
         this.geofences[i].zone_name_visible_bol = (this.geofences[i].zone_name_visible === 'true');
       } else {
@@ -123,6 +126,8 @@ export class GeofencesService {
       }
       this.tblDataGeo.push({trama:this.geofences[i]});
     }
+    this.tblDataGeoFiltered = this.getTableData();
+
     this.spinner.hide('loadingGeofencesSpinner');
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
 

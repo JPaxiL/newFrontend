@@ -161,7 +161,7 @@
       </thead>
       <tbody style="border-top: inherit;">
 
-          <tr *ngFor="let geo of geofencesService.tblDataGeo;let indice=index" class="">
+          <tr *ngFor="let geo of geofencesService.tblDataGeoFiltered ;let indice=index" class="">
 
               <!-- <td>{{geo.trama.zone_visible}}</td> -->
               <td>
@@ -204,6 +204,9 @@
               </td>
 
 
+          </tr>
+          <tr *ngIf="noResults">
+            <td colspan="5" class="text-center">Sin coinicidencias</td>
           </tr>
       </tbody>
     </table>

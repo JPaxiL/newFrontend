@@ -28,6 +28,7 @@ export class GeocercaListsComponent implements OnInit {
   showBtnAdd = true;
   showBtnEdit = true;
 
+  noResults: boolean = false;
 
   constructor(
     public geofencesService: GeofencesService,
@@ -200,20 +201,14 @@ export class GeocercaListsComponent implements OnInit {
 
   onBusqueda(gaaa:any) {
     //console.log(gaaa);
-    //console.log(this.NomBusqueda);
-
-    let geos = this.geofencesService.getData();
-    //console.log(geos);
-
-    this.geofencesService.tblDataGeo = [];
-
-    for (let i = 0; i < geos.length; i++) {
-
-        if ( geos[i].orden.toUpperCase().includes(this.NomBusqueda.toUpperCase()) ) {
-            geos[i].zone_name_visible_bol = (geos[i].zone_name_visible === 'true');
-            this.geofencesService.tblDataGeo.push({trama:geos[i]});
-        }
-
+    if(this.NomBusqueda == ''){
+      this.geofencesService.tblDataGeoFiltered = this.geofencesService.getTableData();
+      this.noResults = false;
+    } else {
+      this.geofencesService.tblDataGeoFiltered = this.geofencesService.getTableData().filter( (geocerca: any) => {
+        return geocerca.trama.orden != null && geocerca.trama.orden.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase().includes(this.NomBusqueda.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase());
+      });
+      this.noResults = this.geofencesService.tblDataGeoFiltered.length == 0;
     }
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
   }
