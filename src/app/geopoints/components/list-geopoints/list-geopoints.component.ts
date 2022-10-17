@@ -97,10 +97,20 @@ export class ListGeopointsComponent implements OnInit {
 
       geo.geopunto_visible  = "false";
       this.mapService.map.removeLayer(geo.geo_elemento);
+
+      if(geo.geopunto_nombre_visible_bol){
+        geo.geopunto_nombre_visible_bol = false;
+        this.clickShowNameGeocerca(id);
+      }
     } else {
 
       geo.geopunto_visible  = "true";
       geo.geo_elemento.addTo(this.mapService.map);
+
+      if(!geo.geopunto_nombre_visible_bol){
+        geo.geopunto_nombre_visible_bol = true;
+        this.clickShowNameGeocerca(id);
+      }
     }
 
     this.geopointsService.updateGeoCounters();
@@ -207,7 +217,7 @@ export class ListGeopointsComponent implements OnInit {
       this.noResults = false;
     } else {
       this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTabledata().filter( (geopunto: any) => {
-        return geopunto.geopunto_name != null && geopunto.geopunto_name.toUpperCase().includes(this.NomBusqueda.toUpperCase());
+        return geopunto.trama.geopunto_name != null && geopunto.trama.geopunto_name.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase().includes(this.NomBusqueda.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase());
       });
       this.noResults = this.geopointsService.tblDataGeoFiltered.length == 0;
     }
