@@ -127,8 +127,18 @@
         </div>
         <div class="row p-card p-2 mb-3 rounded">
             <div class="col-4">
+                <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingInfractionSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Infracciones... </p></ngx-spinner>
                 <h4>Vehículos que cometieron infracción</h4>
                 <hr>
+                <br>
+                <p-calendar
+                    [(ngModel)]="date_infraction"
+                    [dateFormat] = "'dd/mm/yy'"
+                    [readonlyInput]="true"
+                inputId="range">
+                </p-calendar>
+                <button btn btn-secondary (click)="getInfraction()">Ir</button>
+                <br>
                 <table class="table">
                     <thead>
                         <tr class="table-active">
@@ -148,9 +158,19 @@
             </div>
 
             <div class="col-4">
+                <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGpsSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Gps... </p></ngx-spinner>
                 <h4>Vehículos que generaron alertas GPS</h4>
                 <hr>
-
+                <br>
+                <p-calendar
+                    [(ngModel)]="date_gps"
+                    [dateFormat] = "'dd/mm/yy'"
+                    [readonlyInput]="true"
+                    inputId="range"
+                >
+                </p-calendar>
+                <button btn btn-secondary (click)="getEventGps()">Ir</button>
+                <br>
                 <table  style="width:80%;">
                     <tr>
                         <td>Batería desconectada</td>
@@ -189,7 +209,7 @@
                             ></ngb-progressbar>
 
                         </td>
-                        <td style="text-align: center;">{{countgpsEvents.frenada_brusca}}</td>
+                        <td style="text-align: center;">{{countgpsEvents.frenada_brusca }}</td>
                     </tr>
                     <tr>
                         <td>SOS</td>
@@ -255,9 +275,18 @@
             </div>
 
             <div class="col-4">
+                <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingSegSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Seg. vehicular... </p></ngx-spinner>
                 <h4>Vehículos que generaron alertas Seg. vehicular</h4>
                 <hr>
-
+                <br>
+                <p-calendar
+                    [(ngModel)]="date_safety"
+                    [dateFormat] = "'dd/mm/yy'"
+                    [readonlyInput]="true"
+                    inputId="range">
+                </p-calendar>
+                <button btn btn-secondary (click)="getVehicleSafety()">Ir</button>
+                <br>
                 <br><br>
                 <table  style="width:80%;">
                     <tr>

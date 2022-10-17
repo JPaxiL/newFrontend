@@ -276,6 +276,19 @@ export class EventService {
       return response.data;
     }
 
+    async getEventsByImeisAndEventType(imeis:any,to:any,from:any, event_type:any){
+      const response:ResponseInterface = await this.http
+      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {
+        imeis:imeis,
+        to:to,
+        from:from,
+        event_type:event_type
+      })
+      .toPromise();
+
+      return response.data;
+    }
+
     increaseUnreadCounter(){
       this.unreadCount++;
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
