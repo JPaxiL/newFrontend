@@ -213,10 +213,10 @@ export class ListGeopointsComponent implements OnInit {
 
   onBusqueda(gaaa:any) {
     if(this.NomBusqueda == ''){
-      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTabledata();
+      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTableData();
       this.noResults = false;
     } else {
-      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTabledata().filter( (geopunto: any) => {
+      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTableData().filter( (geopunto: any) => {
         return geopunto.trama.geopunto_name != null && geopunto.trama.geopunto_name.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase().includes(this.NomBusqueda.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase());
       });
       this.noResults = this.geopointsService.tblDataGeoFiltered.length == 0;

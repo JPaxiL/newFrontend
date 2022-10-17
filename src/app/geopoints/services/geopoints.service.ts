@@ -220,7 +220,7 @@ export class GeopointsService {
     return this.geopoints;
   }
 
-  public getTabledata(){
+  public getTableData(){
     return this.tblDataGeo;
   }
 
@@ -232,7 +232,7 @@ export class GeopointsService {
 
       this.tblDataGeo.push({trama:this.geopoints[i]});
     }
-    this.tblDataGeoFiltered = this.getTabledata();
+    this.tblDataGeoFiltered = this.getTableData();
     this.spinner.hide('loadingGeopointsSpinner');
   }
 
