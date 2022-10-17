@@ -34,10 +34,10 @@ export class VehicleConfigComponent implements OnInit {
   vehicle: any = {};
 
   types: any = [
-    {name: 'NO ASIGNADO', id: '0'},
-    {name: 'CAMIONETA PASAJEROS', id: '1'},
-    {name: 'BUS DE PASAJEROS', id: '2'},
-    {name: 'CAMIONETA CONCENTRADO', id: '3'},
+    {name: 'BUS', id: '0'},
+    {name: 'MINIBUS', id: '1'},
+    {name: 'VAN', id: '2'},
+    {name: 'CAMIONETA', id: '3'},
     {name: 'CONCENTRADO', id: '4'}
   ];
   /*
