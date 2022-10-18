@@ -233,10 +233,9 @@
                 <label>Hora inicio:
                   <p-calendar
                     [(ngModel)]="timeInit"
+                    [ngClass]="{'invalid-input': !areHoursValid}"
                     [timeOnly]="true"
-                    [readonlyInput]="true"
                     [appendTo]="'body'"
-                    [maxDate]="timeEnd"
                     (onSelect)="onTimeChange(); validateForm();"
                     (onBlur)="onTimeChange(); validateForm();"
                     (onInput)="onTimeChange(); validateForm();"
@@ -273,10 +272,9 @@
                 <label>Hora final:
                   <p-calendar
                     [(ngModel)]="timeEnd"
+                    [ngClass]="{'invalid-input': !areHoursValid}"
                     [timeOnly]="true"
-                    [readonlyInput]="true"
                     [appendTo]="'body'"
-                    [minDate]="timeInit"
                     (onSelect)="onTimeChange(); validateForm();"
                     (onBlur)="onTimeChange(); validateForm();"
                     (onInput)="onTimeChange(); validateForm();"
@@ -288,6 +286,9 @@
             </div>
           </div>
 
+        </div>
+        <div class="row justify-content-end fw-bold" *ngIf="!areHoursValid">
+          *La hora de inicio no puede ser mayor a la hora final
         </div>
       </div>
       <div class="row" *ngIf="showZones">
