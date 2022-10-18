@@ -175,12 +175,20 @@ export class SubcuentasModalComponent implements OnInit {
     console.log(this.subcuentasForm.value.contrasena);
     console.log(this.subcuentasForm.value.nombre);
     if (this.subcuentasForm.value.nombre == '') {
-      Swal.fire('', 'Ingrese el nombre de la cuenta', 'warning');
+      Swal.fire({
+        title: 'Error',
+        text: 'Ingrese el nombre de la cuenta',
+        icon: 'error',
+      });
       return ;
     }
 
     if (this.subcuentasForm.value.contrasena == '') {
-      Swal.fire('', 'Ingrese una contraseña', 'warning');
+      Swal.fire({
+        title: 'Error',
+        text: 'Ingrese una contraseña',
+        icon: 'error',
+      });
       return ;
     }
 

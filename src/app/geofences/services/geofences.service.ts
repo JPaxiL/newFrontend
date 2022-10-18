@@ -20,9 +20,15 @@ export class GeofencesService {
   public action:string = "add"; //[add,edit,delete]
 
   tblDataGeo: any = [];
+  tblDataGeoFiltered: any = [];
   initializingGeofences: boolean = false;
   eyeInputSwitch: boolean = true;
+  tagNamesEyeState: boolean = true;
   geofenceCounters: any = {
+    visible: 0,
+    hidden: 0,
+  }
+  geofenceTagCounters: any = {
     visible: 0,
     hidden: 0,
   }
@@ -100,9 +106,12 @@ export class GeofencesService {
         // this.geofences.geo_elemento.setLabel("NOMBRE");
       }
       this.updateGeoCounters();
+      this.updateGeoTagCounters();
       this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+      this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
       console.log('Geocercas Cargadas');
       this.initializingGeofences = true;
+      console.log(this.geofences);
 
     });
   }
@@ -111,11 +120,13 @@ export class GeofencesService {
     return this.geofences;
   }
 
+  public getTableData(){
+    return this.tblDataGeo;
+  }
+
   initializeTable(newGeofenceId?: number) {
     this.tblDataGeo = [];
-    console.log('Geocercas: ', this.geofences);
-
-    for (let i = 0; i < this.geofences.length; i++) {
+    for(let i = 0; i < this.geofences.length; i++){
       if(this.geofences[i].id != newGeofenceId){
         this.geofences[i].zone_name_visible_bol = (this.geofences[i].zone_name_visible === 'true');
       } else {
@@ -123,6 +134,8 @@ export class GeofencesService {
       }
       this.tblDataGeo.push({trama:this.geofences[i]});
     }
+    this.tblDataGeoFiltered = this.getTableData();
+
     this.spinner.hide('loadingGeofencesSpinner');
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
 
@@ -159,6 +172,11 @@ export class GeofencesService {
     this.geofenceCounters.hidden = this.geofences.length - this.geofenceCounters.visible;
     //console.log('Visibles:', this.geofenceCounters.visible);
     //console.log('Ocultos:', this.geofenceCounters.hidden);
+  }
+
+  public updateGeoTagCounters(){
+    this.geofenceTagCounters.visible = this.geofences.filter( (geofence: { zone_name_visible_bol: boolean; }) => geofence.zone_name_visible_bol == true).length;
+    this.geofenceTagCounters.hidden = this.geofences.length - this.geofenceTagCounters.visible;
   }
 
 }

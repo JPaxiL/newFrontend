@@ -11,7 +11,7 @@
         </span>
       </div>
 
-      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocerca()" title="Crear geocerca">
+      <button type="button" *ngIf="showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocerca()" title="Crear geocerca">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
     </div>
@@ -24,9 +24,15 @@
         <col width="8%" />
         <col width="28%" />
         <col width="13%" />
-        <col width="13%" />
-        <col width="13%" />
-  
+        <!-- <col width="13%" />
+        <col width="13%" /> -->
+
+        <col *ngIf="showBtnEdit" width="13%" />
+        <col *ngIf="showBtnEdit" width="13%" />
+        <col *ngIf="!showBtnEdit" width="26%" />
+
+
+
       </colgroup>
       <thead class="visible-on-scroll">
           <tr>
@@ -36,7 +42,14 @@
               </th>
               <!-- <td></td> -->
               <th colspan="2">Geocerca</th>
-              <th><i class="fa fa-id-card fa-lg"></i></th>
+              <th>
+                <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEye()">
+                <div>
+                  <i *ngIf="geofencesService.tagNamesEyeState" class="fas fa-eye mini-eye"></i>
+                  <i *ngIf="!geofencesService.tagNamesEyeState" class="far fa-eye-slash mini-eye"></i>
+                </div>
+                </i>
+              </th>
               <th>
                 <!-- <i class="fa fa-car fa-lg"></i> -->
                 <svg class="ag-grid-header-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -149,42 +162,42 @@
                   </g>
                 </svg>
               </th>
-              <th><i class="fa fa-pencil fa-lg"></i></th>
-  
+              <th *ngIf="showBtnEdit" ><i class="fa fa-pencil fa-lg"></i></th>
+
           </tr>
       </thead>
       <tbody style="border-top: inherit;">
-  
-          <tr *ngFor="let geo of geofencesService.tblDataGeo;let indice=index" class="">
-  
+
+          <tr *ngFor="let geo of geofencesService.tblDataGeoFiltered ;let indice=index" class="">
+
               <!-- <td>{{geo.trama.zone_visible}}</td> -->
               <td>
                 <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShow(geo.trama.id)">
                   <i [ngClass]="{'fas fa-eye': geo.trama.zone_visible === 'true', 'far fa-eye-slash' : geo.trama.zone_visible === 'false'}"></i>
                 </button>
               </td>
-  
+
               <!-- <td>{{geo.trama.zone_color}}</td> -->
               <td class="text-center">
                 <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.id)" >
                   <div [ngStyle]="{'background-color': geo.trama.zone_color}" class="geofence-color" ></div>
                 </button>
               </td>
-  
+
               <td><span class="d-flex text-start">{{geo.trama.zone_name}}</span></td>
-  
+
               <!-- <td>{{geo.trama.zone_name_visible}}</td> -->
-  
+
               <td class="inline-png-checkbox">
-  
+
                 <!-- <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.id)"  [(ngModel)]="geo.trama.zone_name_visible_bol"> -->
                 <p-checkbox [(ngModel)]="geo.trama.zone_name_visible_bol" [binary]="true" (onChange)="clickShowNameGeocerca(geo.trama.id)"></p-checkbox>
               </td>
-  
+
               <td>{{ geo.trama.vel_max>0? geo.trama.vel_max + ' km/h': '&mdash;'}}</td>
-  
-  
-              <td>
+
+
+              <td *ngIf="showBtnEdit">
                 <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
                   <!-- <button class="btn btn-xs btn-link" ngbDropdownToggle>
                     <i class="fa fa-pencil fa-lg" style="font-size: 14px;"></i>
@@ -196,8 +209,11 @@
                   </div>
                 </div>
               </td>
-  
-  
+
+
+          </tr>
+          <tr *ngIf="noResults">
+            <td colspan="6" class="text-center">Sin coinicidencias</td>
           </tr>
       </tbody>
     </table>

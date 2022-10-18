@@ -48,6 +48,7 @@ export class SubcuentasListComponent implements OnInit {
 
       Swal.fire({
         //title: '¿Está seguro que desea '+ str_activo.toUpperCase() +' '+sub.nombre_usuario+'?',
+        title: '¿Está seguro?',
         text: '¿Está seguro que desea '+ str_activo.toUpperCase() +' '+sub.nombre_usuario+'?', //'Espere un momento...',
         icon: 'warning',
         showLoaderOnConfirm: true,
@@ -57,30 +58,32 @@ export class SubcuentasListComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
 
-        sub.activo = (sub.activo) ? false : true;
-        const res = await this.subcuentasService.activar(sub)
+          sub.activo = (sub.activo) ? false : true;
+          const res = await this.subcuentasService.activar(sub)
 
-        var str2 = (str_activo == "Activar") ? "activo" : "desactivo";
-        console.log(res);
-          if (res != 1) {
-              Swal.fire(
-                '',
-                'Subusuario se '+str2+' correctamente',
-                'success'
-              );
-          } else {
-              Swal.fire(
-                '',
-                'Subusuario no se '+str2+' correctamente',
-                'error'
-              );
-            //icon: 'error',
-          }
+          var str2 = (str_activo == "Activar") ? "activo" : "desactivo";
+          console.log(res);
+            if (res != 1) {
+                Swal.fire(
+                  '',
+                  'Subusuario se '+str2+' correctamente',
+                  'success'
+                );
+            } else {
+                Swal.fire(
+                  '',
+                  'Subusuario no se '+str2+' correctamente',
+                  'error'
+                );
+              //icon: 'error',
+            }
 
         },
       }).then((data) => {
-        this.subcuentasService.spinner.show('loadingSubcuentas');
-        this.subcuentasService.initialize();
+        if(data.isConfirmed){
+          this.subcuentasService.spinner.show('loadingSubcuentas');
+          this.subcuentasService.initialize();
+        }
       });
     // } else {
     //   Swal.fire('Error', 'Debe seleccionar un vehículo', 'warning');
@@ -102,6 +105,7 @@ export class SubcuentasListComponent implements OnInit {
 
     Swal.fire({
       //title: '¿Está seguro que desea '+ str_activo.toUpperCase() +' '+sub.nombre_usuario+'?',
+      title: '¿Está seguro?',
       text: '¿Está seguro que desea eliminar '+sub.nombre_usuario+'?', //'Espere un momento...',
       icon: 'warning',
       showLoaderOnConfirm: true,
@@ -133,9 +137,10 @@ export class SubcuentasListComponent implements OnInit {
     }).then((data) => {
       // console.log("data-------");
       // console.log(data);
-      this.subcuentasService.spinner.show('loadingSubcuentas');
-      this.subcuentasService.initialize();
-
+      if(data.isConfirmed){
+        this.subcuentasService.spinner.show('loadingSubcuentas');
+        this.subcuentasService.initialize();
+      }
     });
 
 
@@ -146,7 +151,7 @@ export class SubcuentasListComponent implements OnInit {
   clickAgregarSubusuario() {
     // console.log(this.subcuentasService.subUsers.length);
 
-    if ( this.subcuentasService.subUsers.length > 100 ) {
+    if ( this.subcuentasService.subUsers.length > 5 ) {
       Swal.fire(
         '',
         'El límite de Subusuarios es 5.',

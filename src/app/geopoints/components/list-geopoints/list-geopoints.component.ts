@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { GeopointsService } from '../../services/geopoints.service';
 import { MapServicesService } from '../../../map/services/map-services.service';
 
+import { PanelService } from '../../../panel/services/panel.service';
+
 import Swal from 'sweetalert2';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -17,13 +19,32 @@ export class ListGeopointsComponent implements OnInit {
   datosCargados = false;
   NomBusqueda = "";
 
+  userData: any; //Informacion del usuario
+  showBtnAdd = true;
+  showBtnEdit = true;
+  noResults: boolean = false;
+
   constructor(
     public geopointsService: GeopointsService,
     public mapService: MapServicesService,
+    public panelService: PanelService,
 
   ) {}
 
   ngOnInit(): void {
+
+    this.userData = this.panelService.userData;
+    console.log(this.userData);
+    if (this.userData.privilegios == "subusuario") {
+        // console.log("es sub usuario");
+        this.showBtnAdd = false;
+        this.showBtnEdit = false;
+    } else {
+        // console.log("es un usuario normal");
+        // this.showBtnAdd = true;
+
+    }
+
     if(!this.geopointsService.initializingGeopoints){
       this.geopointsService.spinner.show('loadingGeopointsSpinner');
     }
@@ -76,10 +97,18 @@ export class ListGeopointsComponent implements OnInit {
 
       geo.geopunto_visible  = "false";
       this.mapService.map.removeLayer(geo.geo_elemento);
+
+      if(geo.geopunto_nombre_visible == 'true'){
+        this.clickShowNameGeocerca(id);
+      }
     } else {
 
       geo.geopunto_visible  = "true";
       geo.geo_elemento.addTo(this.mapService.map);
+
+      if(geo.geopunto_nombre_visible == 'false'){
+        this.clickShowNameGeocerca(id);
+      }
     }
 
     this.geopointsService.updateGeoCounters();
@@ -181,21 +210,14 @@ export class ListGeopointsComponent implements OnInit {
   }
 
   onBusqueda(gaaa:any) {
-    //console.log(gaaa);
-    //console.log(this.NomBusqueda);
-
-    let geos = this.geopointsService.getData();
-    console.log(geos);
-
-    this.geopointsService.tblDataGeo = [];
-
-    for (let i = 0; i < geos.length; i++) {
-
-        if ( geos[i].geopunto_name.toUpperCase().includes(this.NomBusqueda.toUpperCase()) ) {
-            geos[i].geopunto_nombre_visible_bol = (geos[i].geopunto_nombre_visible_bol === 'true');
-            this.geopointsService.tblDataGeo.push({trama:geos[i]});
-        }
-
+    if(this.NomBusqueda == ''){
+      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTableData();
+      this.noResults = false;
+    } else {
+      this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTableData().filter( (geopunto: any) => {
+        return geopunto.trama.geopunto_name != null && geopunto.trama.geopunto_name.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase().includes(this.NomBusqueda.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').toUpperCase());
+      });
+      this.noResults = this.geopointsService.tblDataGeoFiltered.length == 0;
     }
   }
 

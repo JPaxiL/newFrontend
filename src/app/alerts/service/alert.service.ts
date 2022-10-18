@@ -63,7 +63,7 @@ export class AlertService {
     });
     this.alertsForEventSocket = alerts_for_events_socket;
     console.log('Alertas obtenidas');
-    console.log(this.alertsForEventSocket);
+    //console.log(this.alertsForEventSocket);
     return this.alerts;
   }
 
@@ -102,7 +102,7 @@ export class AlertService {
         console.log('Alerts For Events Socket could be empty, or the alert deleted: ', this.alertsForEventSocket);
       }
     });
-    console.log(this.alertsForEventSocket);
+    //console.log(this.alertsForEventSocket);
     //console.log(response.data);
     return this.alertsByType;
   }

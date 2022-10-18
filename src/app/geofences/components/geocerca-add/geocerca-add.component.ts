@@ -1,7 +1,7 @@
 import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-
+import Swal from 'sweetalert2';
 import { GeofencesService } from '../../services/geofences.service';
 // import { MeasureDrawService } from '../../services/measure-draw.service';
 
@@ -488,6 +488,15 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   }
 
   clickGuardar(id:number){
+    if(this.form.nombre == null  || this.form.nombre.trim() == '' || this.form.nombre.trim().length == 0){
+      Swal.fire({
+        title: 'Error',
+        text: 'El nombre de la geocerca no puede quedar vacío.',
+        icon: 'warning',
+      });
+      return;
+    }
+
     //console.log("---clickGuardar");
     this.spinner.show('spinnerLoading');
 
@@ -651,7 +660,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         this.spinner.hide('spinnerLoading');
         this.geofencesService.initializeTable(geo.id);
         this.geofencesService.updateGeoCounters();
+        this.geofencesService.updateGeoTagCounters();
         this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
+        this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
 
       });
     }

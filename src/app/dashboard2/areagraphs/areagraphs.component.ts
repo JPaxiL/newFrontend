@@ -10,29 +10,28 @@ import { DashboardService } from './../service/dashboard.service';
 @Component({
   selector: 'app-areagraphs',
   templateUrl: './areagraphs.component.html',
-  styleUrls: ['./areagraphs.component.scss']
+  styleUrls: ['./areagraphs.component.scss'],
 })
 export class AreagraphsComponent implements OnInit {
+  isUnderConstruction: boolean = false;
 
-  isUnderConstruction: boolean = true;
-
-  public vehicles:any = [];
+  public vehicles: any = [];
   group: any = [];
-  convoy:any = [];
-  rangeDates:Date[] = [new Date(), new Date()];
-  imeis:any = [];
-  public totalVehicle:number = 0;
-  green:number=0;
-  imeiGreen:any = [];
-  blue:number=0;
-  imeiBlue:any= [];
-  purple:number=0;
-  black:number=0;
-  imeiBlack:any = [];
-  orange:number=0;
-  imeiOrange:any = [];
-  red:number=0;
-  imeiRed:any = [];
+  convoy: any = [];
+  rangeDates: Date[] = [];
+  imeis: any = [];
+  public totalVehicle: number = 0;
+  green: number = 0;
+  imeiGreen: any = [];
+  blue: number = 0;
+  imeiBlue: any = [];
+  purple: number = 0;
+  black: number = 0;
+  imeiBlack: any = [];
+  orange: number = 0;
+  imeiOrange: any = [];
+  red: number = 0;
+  imeiRed: any = [];
 
   horizontalChart: any = [];
   viewHorizontalChart = [700, 100];
@@ -50,38 +49,40 @@ export class AreagraphsComponent implements OnInit {
   legendPosition: string = 'below';
 
   colorScheme = {
-    domain: ['green', 'blue', 'orange', 'black','red']
+    domain: ['green', 'blue', 'orange', 'black', 'red'],
   };
 
   colorSchemeHorizontalChart = {
-    domain: ['blue', 'gray'],
+    domain: ['#0d6efd', '#e9ecef'],
   };
 
   colorSchemeVehiclesOnRoute = {
-    domain: ['green', 'blue']
+    domain: ['green', 'blue'],
   };
 
-  data:any = [];
-  vehiclesOnRoute:any = [];
-  dataEvents:any = [];
+  data: any = [];
+  vehiclesOnRoute: any = [];
+  dataEvents: any = [];
 
-  infraction:any = [];
-  gpsEvents:any = [];
-  countgpsEvents:any = {};
-  vehicleSafetyEvents:any = [];
-
+  infraction: any = [];
+  date_infraction: string = '';
+  gpsEvents: any = [];
+  date_gps: string = '';
+  gpsEventsTotal: number = 0;
+  countgpsEvents: any = {};
+  vehicleSafetyEvents: any = [];
+  date_safety: string = '';
+  countVehicleSafetyEvents: any = [];
+  safetyEventsTotal: number = 0;
 
   constructor(
-    private vehicleService : VehicleService,
+    private vehicleService: VehicleService,
     private spinner: NgxSpinnerService,
     private eventService: EventService,
     private dashboardService: DashboardService
-  ) {
+  ) {}
 
-  }
-
-
-    /*
+  /*
   sistema de color
   red = corte de transmision por problemas del gps, ... (soporte)
   yellow = vehiculo perdidó transmision,
@@ -99,10 +100,9 @@ export class AreagraphsComponent implements OnInit {
   10 = green -> en movimiento
   */
 
-
-  ngOnInit():void {
-    if(!this.isUnderConstruction){
-      this.spinner.show("loadingDashboardSpinner");
+  ngOnInit(): void {
+    if (!this.isUnderConstruction) {
+      this.spinner.show('loadingDashboardSpinner');
       this.load();
     }
     // setInterval(() => {
@@ -113,21 +113,21 @@ export class AreagraphsComponent implements OnInit {
     // this.load();
   }
 
-  load(){
-    let imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
+  load() {
+    this.imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
 
-    this.getEvents(imeis);
+    this.getEvents(this.imeis);
 
     this.vehicleService.dataCompleted.subscribe((vehicles) => {
       this.vehicles = vehicles.filter((vehicle: any) => {
-        return imeis.includes(vehicle.IMEI);
+        return this.imeis.includes(vehicle.IMEI);
       });
 
       this.setGraphData(this.vehicles);
     });
   }
 
-  setGraphData(vehicles:any){
+  setGraphData(vehicles: any) {
     this.totalVehicle = vehicles.length;
 
     vehicles.forEach((vehicle: any) => {
@@ -181,8 +181,6 @@ export class AreagraphsComponent implements OnInit {
     ];
 
     this.setHorizontalChart();
-
-    this.spinner.hide('loadingDashboardSpinner');
   }
 
   setHorizontalChart() {
@@ -218,56 +216,234 @@ export class AreagraphsComponent implements OnInit {
     ];
   }
 
-  async getEvents(imeis: any){
+  async getEvents(imeis: any) {
+    let to = moment().add(8, 'hours').format('YYYY-MM-DD H:mm:ss.000');
+    let from = moment().subtract(24, 'hours').format('YYYY-MM-DD H:mm:ss.000');
+    this.dataEvents = await this.eventService.getEventsByImeis(imeis, to, from);
 
-    this.dataEvents =  await this.eventService.getEventsByImeis(imeis);
-
-    this.dataEvents.forEach((event:any) => {
-      if(event.descripcion_evento === "Infracción" || event.descripcion_evento === "Infraccion"){
+    this.dataEvents.forEach((event: any) => {
+      if (
+        event.descripcion_evento === 'Infracción' ||
+        event.descripcion_evento === 'Infraccion'
+      ) {
         this.infraction.push(event);
       }
 
-      if(event.tipo_alerta === 'gps'){
+      if (event.tipo_alerta === 'gps') {
         this.gpsEvents.push(event);
       }
 
-      if(event.tipo_alerta === 'accessories'){
+      if (event.tipo_alerta === 'accessories') {
         this.vehicleSafetyEvents.push(event);
       }
-
     });
 
+    this.setInfraction(this.infraction);
 
-    this.infraction = collect(this.infraction)
-    .groupBy('nombre_objeto')
-    .map( (items:any, index:any) => {
-      return {
-        'name':index,
-        'amount':items.items.length,
-        'higher_speed': collect(items.items).max('velocidad')
-      };
-    })
-    .toArray();
+    this.setGpsEvents(this.gpsEvents);
 
-    this.gpsEvents.forEach( (event:any) => {
-        if(event.tipo_evento == 'Bateria desconectada'){
-          this.countgpsEvents.batteryDisconnected += 1;
-        }
+    this.setVehicleSafetyEvents(this.vehicleSafetyEvents);
 
-        if(event.tipo_evento == 'Motor apagado'){
-          this.countgpsEvents.engineoff += 1;
-        }
-
-    });
-
-
-    this.countgpsEvents = collect(this.gpsEvents).countBy((event:any) => event.tipo_evento.toLowerCase().replace(/ /g, "_")).all();
-
-    console.log("this.vehicleSafetyEvents  =========> ", this.vehicleSafetyEvents);
-    console.log("this.gpsEvents  =========> ", this.gpsEvents,this.countgpsEvents);
-
-    console.log("const counted = collection.countBy(email => email.split('@')[1]);",this.rangeDates);
-
+    this.spinner.hide('loadingDashboardSpinner');
   }
 
+  removeAccents(str: string) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  async getInfraction() {
+
+    if (this.date_infraction != '') {
+      this.spinner.show('loadingInfractionSpinner');
+      let to = moment(this.date_infraction)
+        .endOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let from = moment(this.date_infraction)
+        .startOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let envent_type = ['Infracción', 'Infraccion'];
+      let dataEvents = await this.eventService.getEventsByImeisAndEventType(
+        this.imeis,
+        to,
+        from,
+        envent_type
+      );
+
+      if (dataEvents.length > 0) {
+        this.setInfraction(dataEvents);
+      } else {
+        this.infraction = [];
+      }
+
+      this.spinner.hide('loadingInfractionSpinner');
+    } else {
+      alert('debe elegir una fecha');
+    }
+  }
+
+  setInfraction(infractions: any) {
+    this.infraction = collect(infractions)
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return {
+          name: index,
+          amount: items.items.length,
+          higher_speed: collect(items.items).max('velocidad'),
+        };
+      })
+      .toArray();
+  }
+
+  async getEventGps() {
+    if (this.date_gps != '') {
+      this.spinner.show('loadingGpsSpinner');
+      let to = moment(this.date_gps)
+        .endOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let from = moment(this.date_gps)
+        .startOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let envent_type = [
+        'Bateria desconectada',
+        'Aceleracion brusca',
+        'SOS',
+        'Frenada brusca',
+        'Motor apagado',
+        'Motor encendido',
+      ];
+      let dataEvents = await this.eventService.getEventsByImeisAndEventType(
+        this.imeis,
+        to,
+        from,
+        envent_type
+      );
+
+      if (dataEvents.length > 0) {
+        this.setGpsEvents(dataEvents);
+      } else {
+        this.setCountgpsEvents();
+      }
+      this.spinner.hide('loadingGpsSpinner');
+    } else {
+      alert('debe elegir una fecha');
+    }
+  }
+
+  setGpsEvents(dataEvents: any) {
+    this.gpsEventsTotal = dataEvents.length;
+    this.countgpsEvents = collect(dataEvents)
+      .countBy((event: any) =>
+        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
+      )
+      .all();
+
+    this.gpsEvents = collect(dataEvents)
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return items
+          .groupBy('tipo_evento')
+          .map((ite: any, evn_tipe: any) => {
+            return { amount: ite.count(), vehicle: index, event: evn_tipe };
+          })
+          .toArray();
+      })
+      .flatten(1)
+      .toArray();
+  }
+
+  setCountgpsEvents() {
+    this.countgpsEvents = {
+      bateria_desconectada: 0,
+      aceleracion_brusca: 0,
+      frenada_brusca: 0,
+      sos: 0,
+      motor_apagado: 0,
+      motor_encendido: 0,
+    };
+    this.gpsEventsTotal = 100;
+    this.gpsEvents = [];
+  }
+
+  async getVehicleSafety() {
+    if (this.date_safety != '') {
+      this.spinner.show('loadingSegSpinner');
+      let to = moment(this.date_safety)
+        .endOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let from = moment(this.date_safety)
+        .startOf('day')
+        .add(5, 'hours')
+        .format('YYYY-MM-DD H:mm:ss.000');
+      let envent_type = [
+        'No Rostro',
+        'Fatiga Extrema',
+        'Posible Fatiga',
+        'Distraccion',
+        'Distracción',
+        'Colisión delantera',
+        'Colisión con peatones',
+        'Desvío de carril hacia la izquierda',
+        'Desvío de carril hacia la derecha',
+        'Bloqueo de visión del mobileye',
+      ];
+      let dataEvents = await this.eventService.getEventsByImeisAndEventType(
+        this.imeis,
+        to,
+        from,
+        envent_type
+      );
+
+      if (dataEvents.length > 0) {
+        this.setVehicleSafetyEvents(dataEvents);
+      } else {
+        this.setCountVehicleSafetyEvents();
+      }
+      this.spinner.hide('loadingSegSpinner');
+    } else {
+      alert('debe elegir una fecha');
+    }
+  }
+
+  setVehicleSafetyEvents(dataEvents: any) {
+    this.safetyEventsTotal = dataEvents.length;
+    this.countVehicleSafetyEvents = collect(dataEvents)
+      .countBy((event: any) =>
+        this.removeAccents(event.tipo_evento.toLowerCase().replace(/ /g, '_'))
+      )
+      .all();
+
+    this.vehicleSafetyEvents = collect(dataEvents)
+      .groupBy('nombre_objeto')
+      .map((items: any, index: any) => {
+        return items
+          .groupBy('tipo_evento')
+          .map((ite: any, evn_tipe: any) => {
+            return { amount: ite.count(), vehicle: index, event: evn_tipe };
+          })
+          .toArray();
+      })
+      .flatten(1)
+      .toArray();
+  }
+
+  setCountVehicleSafetyEvents() {
+    this.countVehicleSafetyEvents = {
+      no_rostro: 0,
+      fatiga_extrema: 0,
+      posible_fatiga: 0,
+      distraccion: 0,
+      colision_delantera: 0,
+      colision_con_peatones: 0,
+      desvio_de_carril_hacia_la_izquierda: 0,
+      desvio_de_carril_hacia_la_derecha: 0,
+      bloqueo_de_vision_del_mobileye: 0,
+    };
+    this.safetyEventsTotal = 100;
+    this.vehicleSafetyEvents = [];
+  }
 }

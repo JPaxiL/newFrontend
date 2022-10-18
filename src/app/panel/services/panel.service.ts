@@ -21,7 +21,7 @@ export class PanelService {
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
     { id:'DASHBOARD', name: 'Dashboard'},
     { id:'AUDITORIA', name: 'Auditoría'},
-    { id:'SUBCUENTAS', name: 'Subcuentas'},
+    { id:'SUBCUENTAS', name: 'Relación de Subcuentas'},
   );
 
   nombreComponente: string = '';

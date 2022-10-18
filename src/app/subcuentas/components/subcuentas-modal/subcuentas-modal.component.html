@@ -27,15 +27,12 @@
 
             <div class="col p-field">
               <label class="row d-flex justify-content-center mt-3">
-                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="tipo-unidad">Cuenta activada</label>
-                </div>
-                <div class="col-7">
-                  <p-checkbox [binary]="true" formControlName="chkSubUserActivado" ></p-checkbox>
+                <div class="d-flex gap-3 justify-content-center fw-bold">
+                  <span>Cuenta activada</span>
+                  <p-checkbox [binary]="true" formControlName="chkSubUserActivado"></p-checkbox>
                 </div>
               </label>
             </div>
-
           </div>
         </div>
         <br>
@@ -46,10 +43,10 @@
             <div class="col p-field">
               <label class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label >Nombre</label>
+                  <label for="name">Nombre</label>
                 </div>
                 <div class="col-7">
-                  <input type="text" pInputText class="p-inputtext-sm" placeholder="nombre" formControlName="nombre">
+                  <input id="name" type="text" pInputText class="p-inputtext-sm" formControlName="nombre">
                 </div>
               </label>
             </div>
@@ -59,7 +56,7 @@
                   <label for="contrasena">Contraseña</label>
                 </div>
                 <div class="col-7">
-                  <input id="contrasena" type="text" pInputText class="p-inputtext-sm" placeholder="contraseña" formControlName="contrasena">
+                  <input id="contrasena" type="text" pInputText class="p-inputtext-sm" formControlName="contrasena">
                 </div>
               </div>
             </div>
@@ -85,7 +82,7 @@
                     optionLabel="label"
                     optionValue="value"
                     formControlName="vehiculos"
-                    defaultLabel="0 vehiculos seleccionados"
+                    defaultLabel="0 vehículos seleccionados"
                     [appendTo]="'body'"
                     [maxSelectedLabels]="3"
                     [selectedItemsLabel]="'{0} vehiculos seleccionados'"
