@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
+import Swal from 'sweetalert2';
 import { GeopointsService } from '../../services/geopoints.service';
 import { MapServicesService } from '../../../map/services/map-services.service';
 
@@ -227,6 +228,15 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
   }
 
   clickGuardar(id:number){
+    if(this.form.geopunto_name == null  || this.form.geopunto_name.trim() == '' || this.form.geopunto_name.trim().length == 0){
+      Swal.fire({
+        title: 'Error',
+        text: 'El nombre del geopunto no puede quedar vacío.',
+        icon: 'warning',
+      });
+      return;
+    }
+
     console.log("---clickGuardar");
     console.log(this.geopointsService.action);
     this.spinner.show('spinnerLoading');

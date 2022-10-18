@@ -251,6 +251,28 @@
         font-size: 1.125rem;
       }
     }
+
+    .mini-eye-container{
+      position: relative;
+      cursor: pointer;
+      > div {
+        position: absolute;
+        overflow: visible;
+        bottom: -0.625rem;
+        right: -0.75rem;
+        border-radius: 50%;
+        background-color: #fff;
+        width: 1.125rem;
+        height: 1.125rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i.mini-eye{
+          font-size: 0.75rem;
+        }
+      }
+    }
   }
 
   tbody.p-treetable-tbody {

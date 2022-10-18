@@ -127,8 +127,18 @@
         </div>
         <div class="row p-card p-2 mb-3 rounded">
             <div class="col-4">
+                <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingInfractionSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Infracciones... </p></ngx-spinner>
                 <h4>Vehículos que cometieron infracción</h4>
                 <hr>
+                <br>
+                <p-calendar
+                    [(ngModel)]="date_infraction"
+                    [dateFormat] = "'dd/mm/yy'"
+                    [readonlyInput]="true"
+                inputId="range">
+                </p-calendar>
+                <button btn btn-secondary (click)="getInfraction()">Ir</button>
+                <br>
                 <table class="table">
                     <thead>
                         <tr class="table-active">
@@ -148,9 +158,19 @@
             </div>
 
             <div class="col-4">
+                <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGpsSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Gps... </p></ngx-spinner>
                 <h4>Vehículos que generaron alertas GPS</h4>
                 <hr>
-
+                <br>
+                <p-calendar
+                    [(ngModel)]="date_gps"
+                    [dateFormat] = "'dd/mm/yy'"
+                    [readonlyInput]="true"
+                    inputId="range"
+                >
+                </p-calendar>
+                <button btn btn-secondary (click)="getEventGps()">Ir</button>
+                <br>
                 <table  style="width:80%;">
                     <tr>
                         <td>Batería desconectada</td>
@@ -158,7 +178,7 @@
                             <ngb-progressbar
                                 type="primary"
                                 [value]="countgpsEvents.bateria_desconectada"
-                                [max]="gpsEvents.length"
+                                [max]="gpsEventsTotal"
                                 [height]="'20px'"
                             ></ngb-progressbar>
 
@@ -166,17 +186,69 @@
                         <td>{{countgpsEvents.bateria_desconectada}}</td>
                     </tr>
                     <tr>
+                        <td>Aceleración brusca</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.aceleracion_brusca"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.aceleracion_brusca}}</td>
+                    </tr>
+                    <tr>
                         <td>Frenada Brusca</td>
                         <td style="width: 50%;">
                             <ngb-progressbar
                                 type="primary"
                                 [value]="countgpsEvents.frenada_brusca"
-                                [max]="gpsEvents.length"
+                                [max]="gpsEventsTotal"
                                 [height]="'20px'"
                             ></ngb-progressbar>
 
                         </td>
-                        <td style="text-align: center;">{{countgpsEvents.frenada_brusca}}</td>
+                        <td style="text-align: center;">{{countgpsEvents.frenada_brusca }}</td>
+                    </tr>
+                    <tr>
+                        <td>SOS</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.sos"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.sos}}</td>
+                    </tr>
+                    <tr>
+                        <td>Motor apagado</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.motor_apagado"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.motor_apagado}}</td>
+                    </tr>
+                    <tr>
+                        <td>Motor encendido</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countgpsEvents.motor_encendido"
+                                [max]="gpsEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countgpsEvents.motor_encendido}}</td>
                     </tr>
                 </table><br> <br> <br>
 
@@ -184,25 +256,179 @@
                     <thead>
                         <tr class="table-active">
                             <th scope="col">Vehículo</th>
-                            <th scope="col">No de Infracciones</th>
-                            <th scope="col">Infracción mas Grave</th>
+                            <th scope="col">Alerta</th>
+                            <th scope="col">Incidencias</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr *ngFor="let vehicle of infraction">
-                            <td>{{vehicle.name}}</td>
-                            <td>{{vehicle.amount}}</td>
-                            <td>{{vehicle.higher_speed}}</td>
-                        </tr> -->
+
+                            <tr *ngFor="let event of gpsEvents">
+                                <td>{{event.vehicle}}</td>
+                                <td>{{event.event}}</td>
+                                <td>{{event.amount}}</td>
+                            </tr>
+
+
                     </tbody>
                 </table>
 
             </div>
 
             <div class="col-4">
+                <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingSegSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Seg. vehicular... </p></ngx-spinner>
                 <h4>Vehículos que generaron alertas Seg. vehicular</h4>
                 <hr>
+                <br>
+                <p-calendar
+                    [(ngModel)]="date_safety"
+                    [dateFormat] = "'dd/mm/yy'"
+                    [readonlyInput]="true"
+                    inputId="range">
+                </p-calendar>
+                <button btn btn-secondary (click)="getVehicleSafety()">Ir</button>
+                <br>
+                <br><br>
+                <table  style="width:80%;">
+                    <tr>
+                        <td>Ausencia de rostro</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.no_rostro"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
 
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.no_rostro}}</td>
+                    </tr>
+                    <tr>
+                        <td>Fatiga extrema</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.fatiga_extrema"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.fatiga_extrema}}</td>
+                    </tr>
+                    <tr>
+                        <td>Posible fatiga</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.posible_fatiga"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.posible_fatiga}}</td>
+                    </tr>
+                    <tr>
+                        <td>Distracción</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.distraccion"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.distraccion}}</td>
+                    </tr>
+                    <tr>
+                        <td>Anticolisión frontal</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.colision_delantera"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.colision_delantera}}</td>
+                    </tr>
+                    <tr>
+                        <td>Colisión con peatones</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.colision_con_peatones"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.colision_con_peatones}}</td>
+                    </tr>
+                    <tr>
+                        <td>Desvío de carril izquierda</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.desvio_de_carril_hacia_la_izquierda"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.desvio_de_carril_hacia_la_izquierda}}</td>
+                    </tr>
+                    <tr>
+                        <td>Desvío de carril derecha</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.desvio_de_carril_hacia_la_derecha"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.desvio_de_carril_hacia_la_derecha}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bloq. de visión de Mobileye</td>
+                        <td style="width: 50%;">
+                            <ngb-progressbar
+                                type="primary"
+                                [value]="countVehicleSafetyEvents.bloqueo_de_vision_del_mobileye"
+                                [max]="safetyEventsTotal"
+                                [height]="'20px'"
+                            ></ngb-progressbar>
+
+                        </td>
+                        <td style="text-align: center;">{{countVehicleSafetyEvents.bloqueo_de_vision_del_mobileye}}</td>
+                    </tr>
+                </table>
+
+                <br> <br> <br>
+
+                <table class="table">
+                    <thead>
+                        <tr class="table-active">
+                            <th scope="col">Vehículo</th>
+                            <th scope="col">Alerta</th>
+                            <th scope="col">Incidencias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                            <tr *ngFor="let event of vehicleSafetyEvents">
+                                <td>{{event.vehicle}}</td>
+                                <td>{{event.event}}</td>
+                                <td>{{event.amount}}</td>
+                            </tr>
+
+
+                    </tbody>
+                </table>
             </div>
         </div>
 </div>

@@ -87,50 +87,24 @@ export class VehicleGroupComponent implements OnInit {
       this.selectedGroup = {};
       console.log('es convoy');
       let aux = [];
+      let aux2 =[];
       let vehicles = this.vehicleService.vehicles;
-      console.log('vehicles = ',vehicles);
-      for (const key in vehicles) {
-        let status = true;
-        console.log("vehicles[key]['grupo'] / ",vehicles[key]['grupo']);
-        // if(true){
-        console.log('key ============= ',key);
-        // if(vehicles[key]['grupo']=='Unidades Sin Grupo'){
-        //         status=false;
-        // }
-        if(aux.length>0){
-          for (const j in aux) {
-            if(aux[j]['grupo']!=vehicles[key]['grupo']&&vehicles[key]['grupo']!='Unidades Sin Grupo'){
-                aux.push(vehicles[key]);
-            }
-          }
-        }else{
-          if(vehicles[key]['grupo']!='Unidades Sin Grupo'){
-            aux.push(vehicles[key]);
-          }
+      //console.log('vehicles = ',vehicles);
+
+      for (const key in vehicles){
+      //console.log("search = ",aux2.indexOf(vehicles[key]['grupo']));
+        if(aux2.indexOf(vehicles[key]['grupo'])==-1&&vehicles[key]['grupo']!='Unidades Sin Grupo'){
+          aux2.push(vehicles[key]['grupo']);
+          aux.push(vehicles[key]);
         }
-        // if(aux.length>0){
-        //   for (const j in aux) {
-        //     console.log("aux[j]['grupo'] / ",aux[j]['grupo']);
-        //     // if(aux[j]['grupo']==vehicles[key]['grupo']){ // caso crear convoys en unidades sin grupo
-        //     if(aux[j]['grupo']==vehicles[key]['grupo']||vehicles[key]['grupo']=='Unidades Sin Grupo'){
-        //
-        //       status=false;
-        //       console.log("status = ", status);
-        //     }
-        //   }
-        // }
-        // if(status){
-        //   console.log("primer bucle -> status = ", status);
-        //   aux.push(vehicles[key]);
-        //   console.log('aux = ',aux);
-        // }
+        //console.log("key",key);
+        //console.log("vehicles[key]['grupo'] / ",vehicles[key]['grupo']);
+        
+        
       }
-      // //console.log('resultado',aux);
+      //console.log(aux2);
       this.groups = aux;
-     //  this.groups = [
-     //   { name: "Grupo", id: 0 },
-     //   { name: "Convoy", id: 1 }
-     // ];
+
       this.list1 = [];
     }
   }

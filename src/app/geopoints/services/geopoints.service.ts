@@ -17,6 +17,7 @@ export class GeopointsService {
 
   initializingGeopoints: boolean = false;
   tblDataGeo = new Array();
+  tblDataGeoFiltered: any[] = [];
 
   eyeInputSwitch: boolean = true;
   geopointCounters: any = {
@@ -55,8 +56,7 @@ export class GeopointsService {
         // //const element = this.geofences[i];
 
         this.geopoints[i].geopunto_nombre_visible_bol = (this.geopoints[i].geopunto_nombre_visible === 'true');
-        this.geopoints[i].geopunto_visible_bol    = (this.geopoints[i].geopunto_visible === 'true');
-
+        this.geopoints[i].geopunto_visible_bol = (this.geopoints[i].geopunto_visible === 'true');
 
         // const myCustomColour = this.geopoints[i].geopunto_color;//'#583470'
 
@@ -220,6 +220,10 @@ export class GeopointsService {
     return this.geopoints;
   }
 
+  public getTableData(){
+    return this.tblDataGeo;
+  }
+
   public initializeTable(newGeopointId?: number){
     this.tblDataGeo = [];
     for (let i = 0; i < this.geopoints.length; i++) {
@@ -228,6 +232,7 @@ export class GeopointsService {
 
       this.tblDataGeo.push({trama:this.geopoints[i]});
     }
+    this.tblDataGeoFiltered = this.getTableData();
     this.spinner.hide('loadingGeopointsSpinner');
   }
 

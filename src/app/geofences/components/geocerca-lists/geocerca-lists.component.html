@@ -42,7 +42,14 @@
               </th>
               <!-- <td></td> -->
               <th colspan="2">Geocerca</th>
-              <th><i class="fa fa-id-card fa-lg"></i></th>
+              <th>
+                <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEye()">
+                <div>
+                  <i *ngIf="geofencesService.tagNamesEyeState" class="fas fa-eye mini-eye"></i>
+                  <i *ngIf="!geofencesService.tagNamesEyeState" class="far fa-eye-slash mini-eye"></i>
+                </div>
+                </i>
+              </th>
               <th>
                 <!-- <i class="fa fa-car fa-lg"></i> -->
                 <svg class="ag-grid-header-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -161,7 +168,7 @@
       </thead>
       <tbody style="border-top: inherit;">
 
-          <tr *ngFor="let geo of geofencesService.tblDataGeo;let indice=index" class="">
+          <tr *ngFor="let geo of geofencesService.tblDataGeoFiltered ;let indice=index" class="">
 
               <!-- <td>{{geo.trama.zone_visible}}</td> -->
               <td>
@@ -204,6 +211,9 @@
               </td>
 
 
+          </tr>
+          <tr *ngIf="noResults">
+            <td colspan="6" class="text-center">Sin coinicidencias</td>
           </tr>
       </tbody>
     </table>

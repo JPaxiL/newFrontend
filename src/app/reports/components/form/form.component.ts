@@ -227,6 +227,7 @@ export class FormComponent implements OnInit {
 
   isFormFilled = false;
   areDatesValid = true;
+  areHoursValid = true;
 
   chkSimultaneousTables: boolean = true;
   showChkSimultaneousTables: boolean = false;
@@ -778,11 +779,33 @@ export class FormComponent implements OnInit {
   }
 
   onTimeChange(){
-    console.log('date init', this.dateInit);
+    let date_init = parseInt(moment(this.dateInit).format('YYYYMMDD'));
+    let date_end = parseInt(moment(this.dateEnd).format('YYYYMMDD'));
+    let time_init = parseInt(moment(this.timeInit).format('HHmm'));
+    let time_end = parseInt(moment(this.timeEnd).format('HHmm'));
+    console.log('date init', parseInt(moment(this.dateInit).format('YYYYMMDD')));
     console.log('date end', this.dateEnd);
     console.log('time init', moment(new Date(this.timeInit)).format("HH:mm"));
     console.log('time end', this.timeEnd);
-    this.areDatesValid = this.dateInit != null && this.dateEnd != null && this.timeInit <= this.timeEnd;
+    if(this.dateInit != null && this.dateEnd != null && this.timeInit != null && this.timeEnd != null){
+      console.log(date_init, date_end);
+      console.log(time_init, time_end);
+      if(date_init < date_end){
+        this.areHoursValid = true;
+        this.areDatesValid = true;
+      } else if(date_init == date_end) {
+        this.areHoursValid = time_init <= time_end;
+        this.areDatesValid = this.areHoursValid;
+      } else {
+        this.areHoursValid = false;
+        this.areDatesValid = false;
+      }
+    } else {
+      this.areHoursValid = true;
+      this.areDatesValid = false;
+    }
+    console.log(this.areHoursValid);
+    console.log(this.areDatesValid);
   }
 
   onChkAllEvents(){
@@ -1014,13 +1037,11 @@ export class FormComponent implements OnInit {
     this.chkFatigaSomnolencia = true;
 	  this.chkFatigaDistraccion = true;
 
-    this.areDatesValid = true;
-
     this.dateInit = new Date(moment(Date.now()).format("MM/DD/YYYY"));
     this.dateEnd = this.dateInit;
-    console.log('time',new Date('12/03/2018'));
     this.timeInit = new Date('12/03/2018 00:00');
     this.timeEnd = new Date('12/03/2018 23:59');
+    this.onTimeChange();
   }
 
   logDropState(){

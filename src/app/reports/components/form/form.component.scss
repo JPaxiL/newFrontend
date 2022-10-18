@@ -84,6 +84,12 @@
         flex-direction: row-reverse;
     }
 
+    p-calendar.invalid-input{
+        input.p-inputtext{
+          border-color: var(--gl-danger-red);
+        }
+    }
+
     .allow-popup-dialog{
         .p-dialog-header{
             padding: 2rem 1.5rem;

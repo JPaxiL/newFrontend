@@ -91,11 +91,12 @@ export class EventService {
           let last_event = this.socketEvents.pop();
           if(this.events.findIndex(event => event.id == last_event.id) == -1){
             this.events.unshift(last_event);
-            this.increaseUnreadCounter();
+            //this.increaseUnreadCounter();
           } else {
             console.log('Evento duplicado: ', last_event);
           }
         }
+        this.updateUnreadCounter();
         this.enableSocketEvents = false;
         this.showEventPanel();
       });
@@ -105,7 +106,7 @@ export class EventService {
   public getData() {
     return this.events;
   }
-  
+
   public getFilters() {
     return this.classFilterArray;
   }
@@ -115,6 +116,7 @@ export class EventService {
       this.socketEvents.unshift(event);
     } else {
       this.events.unshift(event);
+      this.updateUnreadCounter();
       if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
         this.playNotificationSound(event.ruta_sonido);
       }
@@ -262,9 +264,26 @@ export class EventService {
       return str.normalize('NFKD').replace(/[^\w ]/g, '').toLowerCase();
     }
 
-    async getEventsByImeis(imeis:any){
+    async getEventsByImeis(imeis:any,to:any,from:any){
       const response:ResponseInterface = await this.http
-      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {imeis:imeis})
+      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {
+        imeis:imeis,
+        to:to,
+        from:from
+      })
+      .toPromise();
+
+      return response.data;
+    }
+
+    async getEventsByImeisAndEventType(imeis:any,to:any,from:any, event_type:any){
+      const response:ResponseInterface = await this.http
+      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {
+        imeis:imeis,
+        to:to,
+        from:from,
+        event_type:event_type
+      })
       .toPromise();
 
       return response.data;
@@ -274,9 +293,20 @@ export class EventService {
       this.unreadCount++;
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
     }
-  
+
     decreaseUnreadCounter(){
       this.unreadCount--;
+      this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
+    }
+
+    updateUnreadCounter(){
+      let counter = 0;
+      this.events.forEach(event => {
+        if(event.viewed == false){
+          counter++;
+        }
+      });
+      this.unreadCount = counter; 
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
     }
 
@@ -298,11 +328,11 @@ export class EventService {
     this.events.sort((a,b) => {
       if(this.new_notif_stack.indexOf(a.id) > -1 ){
         if(this.new_notif_stack.indexOf(b.id) > -1){
-          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) { 
-            return -1; 
-          } 
+          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) {
+            return -1;
+          }
           return 1;
-        } 
+        }
         return -1;
       } else {
         if(this.new_notif_stack.indexOf(b.id) > -1){

@@ -105,6 +105,7 @@ export class SubcuentasListComponent implements OnInit {
 
     Swal.fire({
       //title: '¿Está seguro que desea '+ str_activo.toUpperCase() +' '+sub.nombre_usuario+'?',
+      title: '¿Está seguro?',
       text: '¿Está seguro que desea eliminar '+sub.nombre_usuario+'?', //'Espere un momento...',
       icon: 'warning',
       showLoaderOnConfirm: true,
@@ -136,9 +137,10 @@ export class SubcuentasListComponent implements OnInit {
     }).then((data) => {
       // console.log("data-------");
       // console.log(data);
-      this.subcuentasService.spinner.show('loadingSubcuentas');
-      this.subcuentasService.initialize();
-
+      if(data.isConfirmed){
+        this.subcuentasService.spinner.show('loadingSubcuentas');
+        this.subcuentasService.initialize();
+      }
     });
 
 
