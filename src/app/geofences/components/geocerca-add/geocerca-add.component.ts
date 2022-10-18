@@ -660,7 +660,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         this.spinner.hide('spinnerLoading');
         this.geofencesService.initializeTable(geo.id);
         this.geofencesService.updateGeoCounters();
+        this.geofencesService.updateGeoTagCounters();
         this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
+        this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
 
       });
     }

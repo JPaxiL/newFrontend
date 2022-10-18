@@ -98,8 +98,7 @@ export class ListGeopointsComponent implements OnInit {
       geo.geopunto_visible  = "false";
       this.mapService.map.removeLayer(geo.geo_elemento);
 
-      if(geo.geopunto_nombre_visible_bol){
-        geo.geopunto_nombre_visible_bol = false;
+      if(geo.geopunto_nombre_visible == 'true'){
         this.clickShowNameGeocerca(id);
       }
     } else {
@@ -107,8 +106,7 @@ export class ListGeopointsComponent implements OnInit {
       geo.geopunto_visible  = "true";
       geo.geo_elemento.addTo(this.mapService.map);
 
-      if(!geo.geopunto_nombre_visible_bol){
-        geo.geopunto_nombre_visible_bol = true;
+      if(geo.geopunto_nombre_visible == 'false'){
         this.clickShowNameGeocerca(id);
       }
     }

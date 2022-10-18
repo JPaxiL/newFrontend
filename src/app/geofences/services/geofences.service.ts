@@ -23,7 +23,12 @@ export class GeofencesService {
   tblDataGeoFiltered: any = [];
   initializingGeofences: boolean = false;
   eyeInputSwitch: boolean = true;
+  tagNamesEyeState: boolean = true;
   geofenceCounters: any = {
+    visible: 0,
+    hidden: 0,
+  }
+  geofenceTagCounters: any = {
     visible: 0,
     hidden: 0,
   }
@@ -101,9 +106,12 @@ export class GeofencesService {
         // this.geofences.geo_elemento.setLabel("NOMBRE");
       }
       this.updateGeoCounters();
+      this.updateGeoTagCounters();
       this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+      this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
       console.log('Geocercas Cargadas');
       this.initializingGeofences = true;
+      console.log(this.geofences);
 
     });
   }
@@ -164,6 +172,11 @@ export class GeofencesService {
     this.geofenceCounters.hidden = this.geofences.length - this.geofenceCounters.visible;
     //console.log('Visibles:', this.geofenceCounters.visible);
     //console.log('Ocultos:', this.geofenceCounters.hidden);
+  }
+
+  public updateGeoTagCounters(){
+    this.geofenceTagCounters.visible = this.geofences.filter( (geofence: { zone_name_visible_bol: boolean; }) => geofence.zone_name_visible_bol == true).length;
+    this.geofenceTagCounters.hidden = this.geofences.length - this.geofenceTagCounters.visible;
   }
 
 }

@@ -95,13 +95,22 @@ export class GeocercaListsComponent implements OnInit {
 
       geo.zone_visible  = "false";
       this.mapService.map.removeLayer(geo.geo_elemento);
+
+      if(geo.zone_name_visible == 'true'){
+        this.clickShowNameGeocerca(id);
+      }
     } else {
 
       geo.zone_visible  = "true";
       geo.geo_elemento.addTo(this.mapService.map);
+
+      if(geo.zone_name_visible == 'false'){
+        this.clickShowNameGeocerca(id);
+      }
     }
 
     this.geofencesService.updateGeoCounters();
+    this.geofencesService.updateGeoTagCounters();
 
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
       this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
@@ -109,7 +118,7 @@ export class GeocercaListsComponent implements OnInit {
 
   }
 
-  clickShowNameGeocerca(id:number){
+  clickShowNameGeocerca(id:number, comesFromInputSwitch?: boolean){
     //console.log("Mostrar/Ocultar nombre");
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
 
@@ -127,6 +136,12 @@ export class GeocercaListsComponent implements OnInit {
       geo.zone_name_visible_bol = true;
 
       geo.marker_name.addTo(this.mapService.map);
+    }
+
+    this.geofencesService.updateGeoTagCounters();
+
+    if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
+      this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
     }
 
 
@@ -177,7 +192,9 @@ export class GeocercaListsComponent implements OnInit {
           //this.mostrar_tabla();
           this.geofencesService.initializeTable();
           this.geofencesService.updateGeoCounters();
+          this.geofencesService.updateGeoTagCounters();
           this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
+          this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
 
         }
     }).then(data => {
@@ -219,6 +236,17 @@ export class GeocercaListsComponent implements OnInit {
     geofencesList.forEach((geofence: { id: number, visible: string }) => {
       if((geofence.visible == 'true') != this.geofencesService.eyeInputSwitch){
         this.clickShow(geofence.id, true);
+      }
+    });
+  }
+
+  onClickTagNamesEye(){
+    this.geofencesService.tagNamesEyeState = !this.geofencesService.tagNamesEyeState;
+    var geofencesList = this.geofencesService.geofences.map( (geofence: { id: number, zone_name_visible: string }) =>
+      { return { id: geofence.id, tag_visible: geofence.zone_name_visible}; } );
+    geofencesList.forEach((geofence: { id: number, tag_visible: string }) => {
+      if((geofence.tag_visible == 'true') != this.geofencesService.tagNamesEyeState){
+        this.clickShowNameGeocerca(geofence.id, true);
       }
     });
   }
