@@ -1,4 +1,4 @@
-<p-dialog [(visible)]="subcuentasService.modalActive" >
+<p-dialog [(visible)]="subcuentasService.modalActive" [style]="{'width':'640px'}" >
 
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
@@ -37,16 +37,19 @@
         </div>
         <br>
         <br>
-        <div class="dialog-form-container gl-middleline" >
+        <div class="dialog-form-container gl-middleline" *ngIf="subcuentasService.action == 'add'">
 
           <div class="row">
+
+
+
             <div class="col p-field">
               <label class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="name">Nombre</label>
                 </div>
                 <div class="col-7">
-                  <input id="name" type="text" pInputText class="p-inputtext-sm" formControlName="nombre">
+                  <input id="name" type="text" pInputText class="p-inputtext-sm" formControlName="nombre" >
                 </div>
               </label>
             </div>
@@ -67,6 +70,69 @@
         <br>
         <div class="dialog-form-container" >
 
+          <div *ngIf="subcuentasService.action == 'edit'">
+
+              <div class="row">
+                <div class="col p-field">
+                  <label class="row gl-row-underline">
+                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                      <label>Nombre :</label>
+                    </div>
+                    <div class="col-7">
+                      <label>{{getControlLabel('nombre')}}</label>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <br>
+
+              <div class="row">
+                <div class="col p-field">
+                  <label class="row gl-row-underline">
+                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                      <label for="tipo-unidad">Anterior Contraseña:</label>
+                    </div>
+                    <div class="col-7">
+                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasena">
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <br>
+
+              <div class="row">
+                <div class="col p-field">
+                  <label class="row gl-row-underline">
+                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                      <label for="tipo-unidad">Nueva Contraseña:</label>
+                    </div>
+                    <div class="col-7">
+                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew">
+
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <br>
+
+              <div class="row">
+                <div class="col p-field">
+                  <label class="row gl-row-underline">
+                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                      <label for="tipo-unidad">Repita Nueva Contraseña:</label>
+                    </div>
+                    <div class="col-7">
+                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew2">
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <br>
+          </div>
 
           <div class="row">
             <div class="col p-field">

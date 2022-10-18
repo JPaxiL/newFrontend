@@ -14,7 +14,7 @@
               style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
           <span style="color: #fff;">Panel en construcción</span>
       </div>
-  
+
       <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingSubcuentas" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
 
       <div class="panel-izq-table-container" style="flex-grow: 0;">
@@ -58,7 +58,7 @@
                     <i class="fa fa-pencil" ngbDropdownToggle></i>
                     <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                       <div ngbDropdownItem (click)="clickActivarSubusuario(sub.trama.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Activar/Desactivar</div>
-                      <!-- <div ngbDropdownItem (click)="clickConfigurarSubusuario(sub.trama.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div> -->
+                      <div ngbDropdownItem (click)="clickConfigurarSubusuario(sub.trama.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
                       <div ngbDropdownItem (click)="clickEliminarSubusuario($event, sub.trama.id)" ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
                     </div>
                   </div>
@@ -127,9 +127,9 @@
 
 
   <!-- <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
-      
 
-      
+
+
 
 
 

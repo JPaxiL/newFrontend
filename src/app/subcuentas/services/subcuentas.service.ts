@@ -121,7 +121,12 @@ export class SubcuentasService {
   public async create(subuser: any) {
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/subUser/create`,subuser).toPromise();
     console.log(response);
+    return response;
+  }
 
+  public async edit(subuser: any) {
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/subUser/edit`,subuser).toPromise();
+    console.log(response);
     return response;
   }
 

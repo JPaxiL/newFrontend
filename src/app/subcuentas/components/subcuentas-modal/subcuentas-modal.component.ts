@@ -8,6 +8,9 @@ import { GeopointsService } from 'src/app/geopoints/services/geopoints.service';
 
 import { SubcuentasService } from '../../services/subcuentas.service';
 import Swal from 'sweetalert2';
+// import * as _ from 'lodash';
+import {Md5} from 'ts-md5';
+
 
 
 @Component({
@@ -30,7 +33,9 @@ export class SubcuentasModalComponent implements OnInit {
     private geopointsService: GeopointsService,
     private fb: FormBuilder,
 
-  ) { }
+  ) {
+    this.loadData();
+  }
 
   ngOnInit(): void {
 
@@ -41,30 +46,50 @@ export class SubcuentasModalComponent implements OnInit {
 
       var sub = this.subcuentasService.subUsers.filter((item:any)=> item.id == this.subcuentasService.idSubUserEdit)[0];
       console.log(sub);
-      this.subcuentasForm = this.fb.group({
-        chkSubUserActivado: [sub.activo],
-        nombre: [sub.nombre_usuario],
-        contrasena: [''],
-        vehiculos: [[]],
-        geocercas: [[]],
-        geopuntos: [[]],
+      console.log(JSON.parse(sub.array_zonas));
 
-      });
+      // this.subcuentasForm = this.fb.group({
+      //   chkSubUserActivado: [sub.activo],
+      //   nombre: [sub.nombre_usuario],
+      //   contrasena: [''],
+      //   vehiculos: [[]],
+      //   geocercas: [[]],//[JSON.parse(sub.array_zonas)], //[[]],
+      //   geopuntos: [[]]//[JSON.parse(sub.array_puntos)],
+
+      // });
+
+      // this.subcuentasForm = this.initForm();
+
+      this.subcuentasForm = this.fb.group({
+              id:[sub.id],
+              chkSubUserActivado: [sub.activo],
+              nombre: [sub.nombre_usuario],
+              contrasena: [''],
+              contrasenaNew : [''],
+              contrasenaNew2 : [''],
+              vehiculos: [JSON.parse(sub.array_trackers)],//[['867688036621526']],
+              geocercas: [JSON.parse(sub.array_zonas)],//[JSON.parse(sub.array_zonas)], //[[]],
+              geopuntos: [JSON.parse(sub.array_puntos)]//[JSON.parse(sub.array_puntos)],
+
+            });
+
+
+
+
+      this.subcuentasForm.value.geocercas = [JSON.parse(sub.array_zonas)];
 
     } else {
-      //this.nuevo_formulario();
-      this.subcuentasForm = this.initForm();
-      this.loadData();
 
+        //this.nuevo_formulario();
+        this.subcuentasForm = this.initForm();
 
     }
-
-
 
   }
 
   initForm(): FormGroup {
     return this.fb.group({
+      id:[''],
       chkSubUserActivado: [true],
       nombre: [''],
       contrasena: [''],
@@ -137,20 +162,19 @@ export class SubcuentasModalComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+
+
+
     var nro = this.subcuentasForm.value.vehiculos.length;
     console.log('Form ->', this.subcuentasForm.value);
-
     console.log(this.subcuentasForm.value.contrasena);
     console.log(this.subcuentasForm.value.nombre);
-
-
     console.log(JSON.stringify( this.subcuentasForm.value.vehiculos ));
-
     console.log(JSON.stringify( this.subcuentasForm.value.geocercas ));
-
     console.log(JSON.stringify( this.subcuentasForm.value.geopuntos ));
 
-
+    // ["868324027652143","868324028803208"]
     // Route::post('/subUser/create', [SubUserController::class, 'crateSubUser']);
 
 
@@ -159,11 +183,9 @@ export class SubcuentasModalComponent implements OnInit {
     // );
 
     console.log('Form ->', this.subcuentasForm.value);
-
     this.subcuentasForm.value.vehiculos = JSON.stringify(
       this.subcuentasForm.value.vehiculos
     );
-
     this.subcuentasForm.value.geocercas = JSON.stringify(
       this.subcuentasForm.value.geocercas
     );
@@ -171,9 +193,8 @@ export class SubcuentasModalComponent implements OnInit {
       this.subcuentasForm.value.geopuntos
     );
 
-
-    console.log(this.subcuentasForm.value.contrasena);
-    console.log(this.subcuentasForm.value.nombre);
+    // console.log(this.subcuentasForm.value.contrasena);
+    // console.log(this.subcuentasForm.value.nombre);
     if (this.subcuentasForm.value.nombre == '') {
       Swal.fire({
         title: 'Error',
@@ -183,14 +204,7 @@ export class SubcuentasModalComponent implements OnInit {
       return ;
     }
 
-    if (this.subcuentasForm.value.contrasena == '') {
-      Swal.fire({
-        title: 'Error',
-        text: 'Ingrese una contraseña',
-        icon: 'error',
-      });
-      return ;
-    }
+
 
     if (nro != 0) {
 
@@ -204,18 +218,80 @@ export class SubcuentasModalComponent implements OnInit {
         confirmButtonText: 'Guardar',
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
-          const res = await this.subcuentasService.create(this.subcuentasForm.value);
-          // this.clickShowPanel('ALERTS-PLATFORMS');
-          console.log(res);
-          console.log(res.success);
-          var ff:any = res;
-          if (ff.text == 'repetido') {
+
+          var res:any;
+          if ( this.subcuentasService.action == "edit" ) {
+
+
+            var sub = this.subcuentasService.subUsers.filter((item:any)=> item.id == this.subcuentasService.idSubUserEdit)[0];
+            console.log(sub);
+            console.log(this.subcuentasForm.value.contrasena+" -O- "+sub.contrasena);
+
+            // console.log(md5.createHash(this.subcuentasForm.value.contrasena));
+            const md5 = new Md5();
+            var oldpass = md5.appendStr(this.subcuentasForm.value.contrasena).end();
+
+            console.log(md5.appendStr(this.subcuentasForm.value.contrasena).end());
+            console.log(oldpass);
+
+
+            if (this.subcuentasForm.value.contrasena != "" || this.subcuentasForm.value.contrasenaNew != "" || this.subcuentasForm.value.contrasenaNew2 != "") {
+
+              console.log(oldpass+' - '+sub.contrasena);
+              if (oldpass != sub.contrasena) {
+                Swal.fire(
+                  '',//'Error',
+                  'La contraseña anterior es incorrecta!!',
+                  'error'
+                );
+                return ;
+              }
+
+              console.log(this.subcuentasForm.value.contrasenaNew+' - '+this.subcuentasForm.value.contrasenaNew2);
+              if (this.subcuentasForm.value.contrasenaNew == "" || this.subcuentasForm.value.contrasenaNew2 == "") {
+                Swal.fire(
+                  '',//'Error',
+                  'Complete los campos de la contraseña',
+                  'error'
+                );
+                return ;
+              }
+
+              if (this.subcuentasForm.value.contrasenaNew != this.subcuentasForm.value.contrasenaNew2) {
+                Swal.fire(
+                  '',//'Error',
+                  'La nueva contraseña debe coincidir!!',
+                  'error'
+                );
+                return ;
+              }
+
+              // res = await this.subcuentasService.edit(this.subcuentasForm.value);
+            }
+            res = await this.subcuentasService.edit(this.subcuentasForm.value);
+
+
+          } else {
+
+            if (this.subcuentasForm.value.contrasena == '') {
+              Swal.fire({
+                title: 'Error',
+                text: 'Ingrese una contraseña',
+                icon: 'error',
+              });
+              return ;
+            }
+
+            res = await this.subcuentasService.create(this.subcuentasForm.value);
+          }
+
+          if (res.text == 'repetido') {
               Swal.fire(
                 '',
                 'Nombre de usuario ya existe!. Ingrese otro nombre.',
                 'warning'
               );
-          } else if(ff.text == 'Insert') {
+          } else if(res.text == 'Insert') {
               Swal.fire(
                 '',
                 'Subusuario se registro correctamente.',
@@ -224,6 +300,17 @@ export class SubcuentasModalComponent implements OnInit {
               this.subcuentasService.modalActive = false;
               this.subcuentasService.spinner.show('loadingSubcuentas');
               this.subcuentasService.initialize();
+
+          } else if(res.text == 'editado') {
+            Swal.fire(
+              '',
+              'Subusuario se edito correctamente.',
+              'success'
+            );
+            this.subcuentasService.modalActive = false;
+            this.subcuentasService.spinner.show('loadingSubcuentas');
+            this.subcuentasService.initialize();
+
           } else if(true){
             console.log('------------');
           }
@@ -261,5 +348,9 @@ export class SubcuentasModalComponent implements OnInit {
     console.log('clickguardas');
 
   }
+
+  getControlLabel(type: string){
+    return this.subcuentasForm.controls[type].value;
+   }
 
 }

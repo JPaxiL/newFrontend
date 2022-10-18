@@ -149,7 +149,7 @@ export class SubcuentasListComponent implements OnInit {
   clickAgregarSubusuario() {
     // console.log(this.subcuentasService.subUsers.length);
 
-    if ( this.subcuentasService.subUsers.length > 5 ) {
+    if ( this.subcuentasService.subUsers.length > 1000 ) {
       Swal.fire(
         '',
         'El límite de Subusuarios es 5.',
