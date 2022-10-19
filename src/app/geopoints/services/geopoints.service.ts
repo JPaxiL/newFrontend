@@ -20,7 +20,12 @@ export class GeopointsService {
   tblDataGeoFiltered: any[] = [];
 
   eyeInputSwitch: boolean = true;
+  tagNamesEyeState: boolean = true;
   geopointCounters: any = {
+    visible: 0,
+    hidden: 0,
+  }
+  geopointTagCounters: any = {
     visible: 0,
     hidden: 0,
   }
@@ -209,8 +214,11 @@ export class GeopointsService {
       }
 
       this.updateGeoCounters();
+      this.updateGeoTagCounters();
       this.eyeInputSwitch = this.geopointCounters.visible != 0;
+      this.tagNamesEyeState = this.geopointTagCounters.visible != 0;
       console.log('Geopuntos Cargados');
+      console.log('Geopuntos:', this.geopoints);
       this.initializingGeopoints = true;
 
     });
@@ -262,8 +270,13 @@ export class GeopointsService {
     //console.log('Geopuntos update: ', this.geopoints);
     //console.log('Geopuntos update: ', this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
     //console.log('Geopuntos update: ', this.tblDataGeo.length - this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
-    this.geopointCounters.visible = this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length;
-    this.geopointCounters.hidden = this.tblDataGeo.length - this.geopointCounters.visible;
+    this.geopointCounters.visible = this.geopoints.filter( (geopoint: { geopunto_visible: string; }) => geopoint.geopunto_visible == 'true').length;
+    this.geopointCounters.hidden = this.geopoints.length - this.geopointCounters.visible;
+  }
+
+  public updateGeoTagCounters(){
+    this.geopointTagCounters.visible = this.geopoints.filter( (geopoint: { geopunto_nombre_visible_bol: boolean; }) => geopoint.geopunto_nombre_visible_bol == true).length;
+    this.geopointTagCounters.hidden = this.geopoints.length - this.geopointTagCounters.visible;
   }
 
 }

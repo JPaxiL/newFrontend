@@ -61,7 +61,14 @@
               </th>
               <!-- <td></td> -->
               <th colspan="2">Geopunto</th>
-              <th><i class="fa fa-id-card fa-lg"></i></th>
+              <th>
+                <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEye()">
+                <div>
+                  <i *ngIf="geopointsService.tagNamesEyeState" class="fas fa-eye mini-eye"></i>
+                  <i *ngIf="!geopointsService.tagNamesEyeState" class="far fa-eye-slash mini-eye"></i>
+                </div>
+                </i>
+              </th>
               <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
               <th *ngIf="showBtnEdit"><i class="fa fa-pencil fa-lg"></i></th>
 

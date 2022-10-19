@@ -144,8 +144,6 @@ export class GeocercaListsComponent implements OnInit {
       this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
     }
 
-
-
   }
 
   clickConfigurarGeocerca(id:number) {
