@@ -33,6 +33,11 @@ export class GeofencesService {
     hidden: 0,
   }
 
+  tooltipBackgroundTransparent: boolean = true;
+  defaultTagNameFontSize = 10;
+  defaultTagNameColor = '#000000';
+  defaultTagNameBackground = 'inherit'
+
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -71,6 +76,10 @@ export class GeofencesService {
 
         //console.log(centerPoligon);
 
+        let bg_color = this.tooltipBackgroundTransparent? this.defaultTagNameBackground: this.mapService.hexToRGBA(this.geofences[i].zone_color);
+        let txt_color = this.tooltipBackgroundTransparent? (this.geofences[i].tag_name_color == ''? this.defaultTagNameColor: this.geofences[i].tag_name_color): this.mapService.hexToRGBA(this.geofences[i].zone_color);
+        let font_size = (this.geofences[i].tag_name_font_size == 0? this.defaultTagNameFontSize: this.geofences[i].tag_name_font_size) + 'px';
+
         //this.geofences[i].marker_name = L.marker(centerPoligon).addTo(this.mapService.map);
         this.geofences[i].marker_name = L.circleMarker(centerPoligon, {
           // pane: 'markers1',
@@ -84,7 +93,7 @@ export class GeofencesService {
         }).bindTooltip(
             // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
             // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
-            '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geofences[i].zone_color) +'; color : '+ this.mapService.getContrastYIQ(this.geofences[i].zone_color) +';">'+this.geofences[i].zone_name+'</b>',
+            '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+this.geofences[i].zone_name+'</b>',
             { permanent: true,
               // offset: [-100, 0],
               direction: 'center',

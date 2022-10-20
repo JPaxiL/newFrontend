@@ -60,15 +60,21 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     { label: 'No', value: false },
   ];
 
-  formPerimetro: number= 0;
-  formArea: number= 0;
-  formColor: string = '#ff0000';
-  formChkVelocidad: boolean = true;
-
-  formLimiteVelocidad: number = 0;
-  formTolerable: number = 0;
-  formGrave: number = 0;
-  formMuyGrave: number = 0;
+  fontSizeOptions = [
+    { label: '8px', value: 8 },
+    { label: '9px', value: 9 },
+    { label: '10px', value: 10 },
+    { label: '11px', value: 11 },
+    { label: '12px', value: 12 },
+    { label: '13px', value: 13 },
+    { label: '14px', value: 14 },
+    { label: '15px', value: 15 },
+    { label: '16px', value: 16 },
+    { label: '17px', value: 17 },
+    { label: '18px', value: 18 },
+    { label: '19px', value: 19 },
+    { label: '20px', value: 20 },
+  ]
 
   constructor(
     public geofencesService: GeofencesService,
@@ -369,6 +375,14 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.visible_zona         = geo.zone_visible;
     this.form.nombre_visible_zona  = geo.zone_name_visible;
     this.form.geo_geometry          = geo.zone_vertices;
+
+    this.form.tag_name_color = /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(geo.tag_name_color)? geo.tag_name_color : this.geofencesService.defaultTagNameColor;
+    this.form.tag_name_font_size = this.geofencesService.defaultTagNameFontSize; //px
+    for(let i = 0; i< this.fontSizeOptions.length; i++){
+      if(this.fontSizeOptions[i].value == geo.tag_name_font_size){
+        this.form.tag_name_font_size = geo.tag_name_font_size;
+      }
+    }
     // if(!L.GeometryUtil){
     //   import('leaflet-geometryutil')
     //      .then( GeometryUtil => {
@@ -405,6 +419,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.categoria = 0;
 
     this.form.checkVelocidad = false;
+
+    this.form.tag_name_color = this.geofencesService.defaultTagNameColor;
+    this.form.tag_name_font_size = this.geofencesService.defaultTagNameFontSize; //px
 
     this.form.limite_velocidad = 0;
     this.form.limite_tolerable = 0;
@@ -533,6 +550,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.zone_name_visible = gEdit.nombre_visible_zona;
         geo.zone_name_visible_bol = (geo.zone_name_visible === 'true');
         geo.zone_visible = gEdit.visible_zona;
+        geo.tag_name_color = gEdit.tag_name_color;
+        geo.tag_name_font_size = gEdit.tag_name_font_size;
 
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
 
@@ -553,6 +572,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         //================= nombre de la geocerca
         var centerPoligon = geo.geo_elemento.getBounds().getCenter();
 
+        let bg_color = this.geofencesService.tooltipBackgroundTransparent? this.geofencesService.defaultTagNameBackground: this.mapService.hexToRGBA(geo.zone_color);
+        let txt_color = this.geofencesService.tooltipBackgroundTransparent? (geo.tag_name_color == ''? this.geofencesService.defaultTagNameColor: geo.tag_name_color): this.mapService.hexToRGBA(geo.zone_color);
+        let font_size = (geo.tag_name_font_size == 0? this.geofencesService.defaultTagNameFontSize: geo.tag_name_font_size) + 'px';
+
         geo.marker_name = L.circleMarker(centerPoligon, {
           // pane: 'markers1',
           "radius": 0,
@@ -565,7 +588,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         }).bindTooltip(
             // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
             // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.zone_color+';">'+geo.zone_name+'</b>',
-            '<b class="" style="background-color: '+ this.mapService.hexToRGBA(geo.zone_color) +'; color : '+ this.mapService.getContrastYIQ(geo.zone_color) +';">'+geo.zone_name+'</b>',
+            '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+geo.zone_name+'</b>',
             { permanent: true,
               // offset: [-100, 0],
               direction: 'center',
@@ -622,6 +645,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
         geo.zone_visible = gNew.visible_zona;
 
+        geo.tag_name_color = gNew.tag_name_color;
+        geo.tag_name_font_size = gNew.tag_name_font_size;
+
         geo.geo_coordenadas = gNew2.geo_coordenadas;
 
         //console.log(geo);
@@ -635,6 +661,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
         var centerPoligon = geo.geo_elemento.getBounds().getCenter();
 
+        let bg_color = this.geofencesService.tooltipBackgroundTransparent? this.geofencesService.defaultTagNameBackground: this.mapService.hexToRGBA(geo.zone_color);
+        let txt_color = this.geofencesService.tooltipBackgroundTransparent? (geo.tag_name_color == ''? this.geofencesService.defaultTagNameColor: geo.tag_name_color): this.mapService.hexToRGBA(geo.zone_color);
+        let font_size = (geo.tag_name_font_size == 0? this.geofencesService.defaultTagNameFontSize: geo.tag_name_font_size) + 'px';
+
         geo.marker_name = L.circleMarker(centerPoligon, {
           // pane: 'markers1',
           "radius": 0,
@@ -647,7 +677,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         }).bindTooltip(
             // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
             // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
-            '<b class="" style="background-color: '+ this.mapService.hexToRGBA(geo.zone_color) +'; color : '+ this.mapService.getContrastYIQ(geo.zone_color) +';">'+geo.zone_name+'</b>',
+            '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: '+ font_size  +'">'+geo.zone_name+'</b>',
             { permanent: true,
               // offset: [-100, 0],
               direction: 'center',
