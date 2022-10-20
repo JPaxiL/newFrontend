@@ -196,6 +196,7 @@ export class ListGeopointsComponent implements OnInit {
           this.geopointsService.updateGeoTagCounters(); 
           this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
           this.geopointsService.tagNamesEyeState = this.geopointsService.geopointTagCounters.visible != 0;
+          this.onBusqueda();
 
         }
     }).then(data => {
@@ -217,7 +218,7 @@ export class ListGeopointsComponent implements OnInit {
 
   }
 
-  onBusqueda(gaaa:any) {
+  onBusqueda(gaaa?:any) {
     if(this.NomBusqueda == ''){
       this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTableData();
       this.noResults = false;

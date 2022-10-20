@@ -193,7 +193,7 @@ export class GeocercaListsComponent implements OnInit {
           this.geofencesService.updateGeoTagCounters();
           this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
           this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
-
+          this.onBusqueda();
         }
     }).then(data => {
       if(data.isConfirmed){
@@ -214,7 +214,7 @@ export class GeocercaListsComponent implements OnInit {
 
   }
 
-  onBusqueda(gaaa:any) {
+  onBusqueda(gaaa?:any) {
     //console.log(gaaa);
     if(this.NomBusqueda == ''){
       this.geofencesService.tblDataGeoFiltered = this.geofencesService.getTableData();
