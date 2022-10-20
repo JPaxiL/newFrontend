@@ -1,0 +1,19 @@
+<div class="container-fluid" style="background-color: var(--gl-body-background-color);">
+    <div class="row">
+      <div class="col-4" style="overflow: auto; height: 100vh; max-height: 100vh; padding: 0.8rem; position: relative;">
+        <app-auditform (selectedPlanEvent)="onPlanSelection($event)"></app-auditform>
+
+        <app-auditmap #subscritionIp [ip]="ip_address"></app-auditmap>
+  
+      </div>
+      <div class="col-8" style="overflow: auto; max-height: 100vh; padding: 0.8rem; position: relative;">
+        <app-auditresult #subscritionDetails (eventDisplayGroup)="eventDisplayGroup($event)" (selectedActivityEvent)="onActivitySelection($event)"></app-auditresult>
+      </div>
+  
+  
+    </div>
+
+    <app-auditdetail (onHideEvent)="onHideDisplayGroup($event)" [display]="displayGroup" [properties]="properties"></app-auditdetail>
+  
+  </div>
+  

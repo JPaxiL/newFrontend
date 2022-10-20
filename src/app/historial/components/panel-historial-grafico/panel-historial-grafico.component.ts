@@ -576,7 +576,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
       this.icoGclick.setPopupContent( this.getContentHis(item, this.historialService.nombreUnidad ) );
       this.icoGclick.openPopup();
 
-      this.mapService.map.setView([item.lat, item.lng]);
+      this.mapService.map.setView([item.lat, item.lng],13);
 
   }
 
@@ -1144,7 +1144,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
               this.icoGplay.setPopupContent( this.getContentSimu(dH[pos]) );
               this.icoGplay.openPopup();
 
-              this.mapService.map.setView([dH[pos].lat, dH[pos].lng]);
+              this.mapService.map.setView([dH[pos].lat, dH[pos].lng],13);
 
               // this.mapService.map._onResize();
 

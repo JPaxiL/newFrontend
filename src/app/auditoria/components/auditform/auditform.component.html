@@ -1,0 +1,113 @@
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="fullScreenSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true">
+  <p style="color: #ffffff" > Cargando actividades... </p>
+</ngx-spinner>
+
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reloadSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Recargando página... </p></ngx-spinner>
+
+  <p-card>
+    <ng-template pTemplate="header">
+      <span class="d-block p-2 text-white">
+        <i class="fas fa-chart-bar"></i>Panel de Auditorías</span>
+    </ng-template>
+      <div class="p-fluid y-form-container" style="font-size: 0.9rem;">
+
+        <div class="row">
+            <div class="p-field">
+              <label class="bg-subtitle">Registros :</label>
+              <p-dropdown [options]="registros" [(ngModel)]="selectedReport" optionLabel="value" optionValue="id" [appendTo]="'body'" [showClear]="false" placeholder="Seleccione el registro..." ></p-dropdown>
+            </div>
+          </div>
+        
+        <div class="row">
+            <div class="col-12">
+              <label class="bg-subtitle">Límite de tiempo:</label>
+            </div>
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="row">
+                  <div class="p-field">
+                    <label>Fecha inicio:
+                      <p-calendar
+                        [(ngModel)]="dateInit"
+                        dateFormat="dd/mm/yy"
+                        [maxDate]="dateEnd"
+                        [appendTo]="'body'"
+                        [monthNavigator]="true"
+                        [yearNavigator]="true"
+                        yearRange="{{strYearRange}}"
+                        (onSelect)="onTimeChange();"
+                        (onBlur)="onTimeChange();"
+                        (onInput)="onTimeChange();"
+                        (onClickOutside)="onTimeChange();"
+                        ></p-calendar>
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="p-field">
+                    <label>Hora inicio:
+                      <p-calendar
+                        [(ngModel)]="timeInit"
+                        [timeOnly]="true"
+                        [readonlyInput]="true"
+                        [appendTo]="'body'"
+                        [maxDate]="timeEnd"
+                        (onSelect)="onTimeChange();"
+                        (onBlur)="onTimeChange();"
+                        (onInput)="onTimeChange();"
+                        (onClickOutside)="onTimeChange();"
+                        ></p-calendar>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row">
+                  <div class="p-field">
+                    <label>Fecha final:
+                      <p-calendar
+                        [(ngModel)]="dateEnd"
+                        dateFormat="dd/mm/yy"
+                        [minDate]="dateInit"
+                        [appendTo]="'body'"
+                        [monthNavigator]="true"
+                        [yearNavigator]="true"
+                        yearRange="{{strYearRange}}"
+                        (onSelect)="onTimeChange();"
+                        (onBlur)="onTimeChange();"
+                        (onInput)="onTimeChange();"
+                        (onClickOutside)="onTimeChange();"
+                        ></p-calendar>
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="p-field">
+                    <label>Hora final:
+                      <p-calendar
+                        [(ngModel)]="timeEnd"
+                        [timeOnly]="true"
+                        [readonlyInput]="true"
+                        [appendTo]="'body'"
+                        [minDate]="timeInit"
+                        (onSelect)="onTimeChange();"
+                        (onBlur)="onTimeChange();"
+                        (onInput)="onTimeChange();"
+                        (onClickOutside)="onTimeChange();"
+                        ></p-calendar>
+                    </label>
+                  </div>
+                </div>
+              </div>
+    
+            </div>
+          </div>
+
+      </div>
+  
+    <ng-template pTemplate="footer">
+      <button class="btn-gl-save btn-dark-hover" style="width: 10rem; border: none;" (click)="generate();">Generar</button>
+      
+    </ng-template>
+  </p-card>
+  

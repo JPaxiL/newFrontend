@@ -11,6 +11,8 @@ import { ReportComponent } from './reports/components/report/report.component';
 import { ResultComponent } from './reports/components/result/result.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Dashboard2Component } from './dashboard2/dashboard2.component';
+import { AuditComponent } from './auditoria/components/audit/audit.component';
+import { AuditresultComponent } from './auditoria/components/auditresult/auditresult.component';
 
 // import { AuthGuard } from './vehicles/services/auth.guard';
 
@@ -44,6 +46,11 @@ const routes: Routes = [
   {
     path: 'reports/result',
     component: ResultComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'audit',
+    component: AuditComponent,
     canActivate: [AuthGuard]
   },
   {
