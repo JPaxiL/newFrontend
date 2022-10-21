@@ -100,11 +100,16 @@ import { UserConfigComponent } from './profile-config/user-config/user-config.co
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard/panal-dashboard.component';
-import { AuditoriaComponent } from './auditoria/auditoria.component';
+import { AuditComponent } from './auditoria/components/audit/audit.component';
+import { AuditformComponent } from './auditoria/components/auditform/auditform.component';
+import { AuditresultComponent } from './auditoria/components/auditresult/auditresult.component';
+
 import { SubcuentasComponent } from './subcuentas/subcuentas.component';
 import { SubcuentasListComponent } from './subcuentas/components/subcuentas-list/subcuentas-list.component';
 import { SubcuentasPanelComponent } from './subcuentas/components/subcuentas-panel/subcuentas-panel.component';
 import { SubcuentasModalComponent } from './subcuentas/components/subcuentas-modal/subcuentas-modal.component';
+import { AuditdetailComponent } from './auditoria/components/auditdetail/auditdetail.component';
+import { AuditmapComponent } from './auditoria/components/auditmap/auditmap.component';
 
 @NgModule({
   declarations: [
@@ -158,11 +163,17 @@ import { SubcuentasModalComponent } from './subcuentas/components/subcuentas-mod
     Dashboard2Component,
     AreagraphsComponent,
     PanalDashboardComponent,
-    AuditoriaComponent,
+    AuditComponent,
+    AuditresultComponent,
+    AuditformComponent,
     SubcuentasComponent,
     SubcuentasListComponent,
     SubcuentasPanelComponent,
     SubcuentasModalComponent,
+    AuditformComponent,
+    AuditresultComponent,
+    AuditdetailComponent,
+    AuditmapComponent,
 
   ],
   imports: [

@@ -86,8 +86,8 @@ export class ListGeopointsComponent implements OnInit {
 
 
   clickShow(id:number, comesFromInputSwitch?: boolean){
-    console.log("localizar una geo punto");
-    console.log(id);
+    //console.log("localizar una geo punto");
+    //console.log(id);
 
     var geo = this.geopointsService.geopoints.filter((item:any)=> item.geopunto_id == id)[0];
 
@@ -112,6 +112,7 @@ export class ListGeopointsComponent implements OnInit {
     }
 
     this.geopointsService.updateGeoCounters();
+    this.geopointsService.updateGeoTagCounters();
 
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
       this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
@@ -119,11 +120,11 @@ export class ListGeopointsComponent implements OnInit {
 
   }
 
-  clickShowNameGeocerca(id:number){
-    console.log("Mostrar/Ocultar nombre");
+  clickShowNameGeocerca(id:number, comesFromInputSwitch?: boolean){
+    //console.log("Mostrar/Ocultar nombre");
     var geo = this.geopointsService.geopoints.filter((item:any)=> item.geopunto_id == id)[0];
 
-    console.log(geo);
+    //console.log(geo);
 
     if (geo.geopunto_nombre_visible == "true") {
 
@@ -139,7 +140,12 @@ export class ListGeopointsComponent implements OnInit {
       geo.marker_name.addTo(this.mapService.map);
     }
 
+    this.geopointsService.updateGeoTagCounters();
 
+    if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
+      this.geopointsService.tagNamesEyeState = this.geopointsService.geopointTagCounters.visible != 0;
+      console.log(this.geopointsService.geopointTagCounters);
+    }
 
   }
 
@@ -186,8 +192,11 @@ export class ListGeopointsComponent implements OnInit {
           }
           //this.mostrar_tabla();
           this.geopointsService.initializeTable();
-          this.geopointsService.updateGeoCounters();
+          this.geopointsService.updateGeoCounters(); 
+          this.geopointsService.updateGeoTagCounters(); 
           this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
+          this.geopointsService.tagNamesEyeState = this.geopointsService.geopointTagCounters.visible != 0;
+          this.onBusqueda();
 
         }
     }).then(data => {
@@ -209,7 +218,7 @@ export class ListGeopointsComponent implements OnInit {
 
   }
 
-  onBusqueda(gaaa:any) {
+  onBusqueda(gaaa?:any) {
     if(this.NomBusqueda == ''){
       this.geopointsService.tblDataGeoFiltered = this.geopointsService.getTableData();
       this.noResults = false;
@@ -227,6 +236,17 @@ export class ListGeopointsComponent implements OnInit {
     geopointsList.forEach((geopoint: { id: number, visible: string }) => {
       if((geopoint.visible == 'true') != this.geopointsService.eyeInputSwitch){
         this.clickShow(geopoint.id, true);
+      }
+    });
+  }
+
+  onClickTagNamesEye(){
+    this.geopointsService.tagNamesEyeState = !this.geopointsService.tagNamesEyeState;
+    var geopointsList = this.geopointsService.geopoints.map( (geopoint: { geopunto_id: number, geopunto_nombre_visible: string }) =>
+      { return { id: geopoint.geopunto_id, tag_visible: geopoint.geopunto_nombre_visible}; } );
+    geopointsList.forEach((geopoint: { id: number, tag_visible: string }) => {
+      if((geopoint.tag_visible == 'true') != this.geopointsService.tagNamesEyeState){
+        this.clickShowNameGeocerca(geopoint.id, true);
       }
     });
   }

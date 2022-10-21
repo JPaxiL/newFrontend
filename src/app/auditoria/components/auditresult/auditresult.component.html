@@ -1,0 +1,56 @@
+
+<div style="font-size: 0.8rem; background-color: white;" class="px-4">
+
+  <div style="width: 100%;">
+    <span class="p-input-icon-right me-2" style="width: 100%; margin-top: 1rem; margin-bottom: 0.5rem;">
+      <i class="fa fa-search" aria-hidden="true"></i>
+      <input  placeholder="Item name..." [(ngModel)] = "searchTerm" (ngModelChange) = "refreshActivity()" type="text" placeholder="Buscar" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+    </span>
+  </div>
+
+    <div>
+
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Descripción</th>
+                <th scope="col" style="text-align: center;">Detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let activity of activities; index as i;">
+                <th scope="row">{{ tableCount + i + 1}}</th>
+                <td [innerHTML]="activity.description"></td>
+                <td style="text-align: center;">
+                  <button class="btn btn-primary btn-sm" *ngIf="activity.properties != '[]'" (click)="onClickGroup(activity.ip_address, activity.properties)">Visualizar cambios</button>
+                  <button class="btn btn-info btn-sm" style="color: white;" [ngClass]="{'ml-4': activity.properties != '[]'}" ng *ngIf="activity.ip_address != '127.0.0.1' && activity.ip_address" (click)="onShowLocation(activity.ip_address)">Mostrar en el mapa</button>
+
+                </td>
+              </tr>
+              <tr *ngIf="collectionSize==0 || !loadActivities">
+                No se encontro ningún registro
+                </tr>
+            </tbody>
+          </table>  
+        
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+                [collectionSize]="collectionSize"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                (pageChange)="refreshActivity()"
+                [maxSize]="10"
+            >
+            </ngb-pagination>
+        
+            <select class="form-select" style="width: auto; font-size: 0.8rem;" [(ngModel)]="pageSize" (ngModelChange)="refreshActivity()">
+                <option [ngValue]="25">25 registros por página</option>
+                <option [ngValue]="50">50 registros por página</option>
+                <option [ngValue]="100">100 registros por página</option>
+            </select>
+        </div>
+    </div>
+
+
+</div>

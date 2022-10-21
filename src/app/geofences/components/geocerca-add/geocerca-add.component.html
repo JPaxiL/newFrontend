@@ -64,7 +64,7 @@
         <div class="row">
             <div class="col-6 p-field">
                 <div class="col-12">
-                    <label>COLOR:</label>
+                    <label>COLOR DE GEOCERCA:</label>
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex">
@@ -82,6 +82,34 @@
                 <div class="row">
                     <div class="col-12">
                       <p-dropdown [options]="booleanOptions" [(ngModel)]="form.checkVelocidad" optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="gl-middleline gl-row-underline">
+        <div class="row">
+            <div class="col-6 p-field">
+                <div class="col-12">
+                    <label>COLOR DE TEXTO:</label>
+                </div>
+                <div class="row">
+                    <div class="col-12 d-flex">
+                      <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" [(ngModel)]="form.tag_name_color" id="text_color_picker" title="Elige un color">
+                      <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="text_color_picker">
+                        <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 p-field">
+                <div class="col-12">
+                    <label>TAMAÑO DE TEXTO:</label>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                      <p-dropdown [options]="fontSizeOptions" [(ngModel)]="form.tag_name_font_size" optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}"></p-dropdown>
                     </div>
                 </div>
             </div>

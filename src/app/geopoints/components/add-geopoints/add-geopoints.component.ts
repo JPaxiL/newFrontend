@@ -333,7 +333,9 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
 
         this.spinner.hide('spinnerLoading');
         this.geopointsService.updateGeoCounters();
+        this.geopointsService.updateGeoTagCounters();
         this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
+        this.geopointsService.tagNamesEyeState = this.geopointsService.geopointTagCounters.visible != 0;
 
       });
 
@@ -426,7 +428,9 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
         this.spinner.hide('spinnerLoading');
         this.geopointsService.initializeTable();
         this.geopointsService.updateGeoCounters();
+        this.geopointsService.updateGeoTagCounters();
         this.geopointsService.eyeInputSwitch = this.geopointsService.geopointCounters.visible != 0;
+        this.geopointsService.tagNamesEyeState = this.geopointsService.geopointTagCounters.visible != 0;
         
         
         

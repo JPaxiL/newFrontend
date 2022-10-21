@@ -1,3 +1,18 @@
 .p-dialog .p-dialog-header {
   background: #335375;
 }
+
+.type-dropdown-child{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  .dropdown-icon-container{
+    width: 5rem;
+    display: flex;
+    justify-content: center;
+    img{
+      max-height: 2rem;
+      max-width: 5rem;
+    }
+  }
+}
