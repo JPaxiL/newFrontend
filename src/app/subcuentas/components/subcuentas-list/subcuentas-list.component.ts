@@ -32,8 +32,13 @@ export class SubcuentasListComponent implements OnInit {
 
     this.userData = this.panelService.userData;
 
+    if (this.subcuentasService.reportesAll.length > 0) {
+      this.subcuentasService.getAll();
 
-    this.subcuentasService.initialize();
+    } else {
+      this.subcuentasService.initialize();
+
+    }
 
 
   }
@@ -82,7 +87,7 @@ export class SubcuentasListComponent implements OnInit {
       }).then((data) => {
         if(data.isConfirmed){
           this.subcuentasService.spinner.show('loadingSubcuentas');
-          this.subcuentasService.initialize();
+          this.subcuentasService.getAll();
         }
       });
     // } else {
@@ -139,7 +144,7 @@ export class SubcuentasListComponent implements OnInit {
       // console.log(data);
       if(data.isConfirmed){
         this.subcuentasService.spinner.show('loadingSubcuentas');
-        this.subcuentasService.initialize();
+        this.subcuentasService.getAll();
       }
     });
 

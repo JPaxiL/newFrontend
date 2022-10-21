@@ -65,9 +65,11 @@
             </div>
           </div>
 
+          <br>
+          <br>
+
         </div>
-        <br>
-        <br>
+
         <div class="dialog-form-container" >
 
           <div *ngIf="subcuentasService.action == 'edit'">
@@ -219,6 +221,37 @@
             </div>
 
           </div>
+
+          <br>
+
+          <div class="row">
+
+            <div class="col p-field">
+              <label class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="tipo-unidad">Reportes :</label>
+                </div>
+                <div class="col-7">
+
+                  <div class="p-field">
+                    <p-multiSelect
+                    [options]="reportes"
+                    optionLabel="label"
+                    optionValue="value"
+                    formControlName="reportes"
+                    defaultLabel="0 reportes seleccionados"
+                    [appendTo]="'body'"
+                    [maxSelectedLabels]="3"
+                    [selectedItemsLabel]="'{0} reportes seleccionados'"
+                    ></p-multiSelect>
+                  </div>
+
+                </div>
+              </label>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </div>

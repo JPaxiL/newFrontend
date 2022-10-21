@@ -273,6 +273,24 @@ export class FormComponent implements OnInit {
         this.endInit();
       });
 
+
+
+
+
+
+      // this.http.post(environment.apiUrl + '/api/getReports', {}).subscribe({
+      //   next: data => {
+      //     // console.log(this.selectedConvoy.length);
+      //     // console.log("----------------data");
+      //     // console.log(data);
+      //     this.reports = data;
+      //   },
+      //   error: () => {
+      //     console.log('Hubo un error al procesar la solicitud');
+      //   }
+      // });
+
+
       this.reports = [
         {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
         {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},

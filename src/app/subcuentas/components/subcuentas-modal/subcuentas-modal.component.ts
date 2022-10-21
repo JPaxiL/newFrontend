@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Select2Data } from 'ng-select2-component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { GeofencesService } from 'src/app/geofences/services/geofences.service';
@@ -25,6 +27,8 @@ export class SubcuentasModalComponent implements OnInit {
   public geocercas: Select2Data = [];
   public geocircles: Select2Data = [];
   public geopuntos: Select2Data = [];
+  public reportes: Select2Data = [];
+
 
   constructor(
     public subcuentasService:SubcuentasService,
@@ -32,9 +36,29 @@ export class SubcuentasModalComponent implements OnInit {
     private geofencesService: GeofencesService,
     private geopointsService: GeopointsService,
     private fb: FormBuilder,
+    private http: HttpClient,
+
 
   ) {
     this.loadData();
+
+    // this.http.post(environment.apiUrl + '/api/getReports', {}).subscribe({
+    //   next: data => {
+    //     // console.log("----------------data");
+    //     // console.log(data);
+    //     var reps:any = data;
+    //     this.reportes = reps.map((reporte: any) => {
+    //       return {
+    //         value: reporte.codigo,
+    //         label: reporte.value,
+    //       };
+    //     });
+
+    //   },
+    //   error: () => {
+    //     console.log('Hubo un error al procesar la solicitud');
+    //   }
+    // });
   }
 
   ngOnInit(): void {
@@ -69,7 +93,9 @@ export class SubcuentasModalComponent implements OnInit {
               contrasenaNew2 : [''],
               vehiculos: [JSON.parse(sub.array_trackers)],//[['867688036621526']],
               geocercas: [JSON.parse(sub.array_zonas)],//[JSON.parse(sub.array_zonas)], //[[]],
-              geopuntos: [JSON.parse(sub.array_puntos)]//[JSON.parse(sub.array_puntos)],
+              geopuntos: [JSON.parse(sub.array_puntos)],//[JSON.parse(sub.array_puntos)],
+              reportes: [JSON.parse(sub.array_reportes)]//[JSON.parse(sub.array_puntos)],
+
 
             });
 
@@ -96,6 +122,7 @@ export class SubcuentasModalComponent implements OnInit {
       vehiculos: [[]],
       geocercas: [[]],
       geopuntos: [[]],
+      reportes: [[]],
 
     })
   }
@@ -114,6 +141,7 @@ export class SubcuentasModalComponent implements OnInit {
     this.setDataVehicles();
     this.setDataGeofences();
     this.setDataGeopoints();
+    this.setDataReportes();
 
     // this.loadingAlertDropdownReady = true;
     // this.hideLoadingSpinner();
@@ -161,6 +189,21 @@ export class SubcuentasModalComponent implements OnInit {
     // this.hideLoadingSpinner();
   }
 
+  setDataReportes() {
+    let reportes = this.subcuentasService.getDataReportesAll();
+
+    this.reportes = reportes.map((reporte: any) => {
+      return {
+        value: reporte.codigo,
+        label: reporte.value,
+      };
+    });
+
+    // this.loadingGeofencesMultiselectReady = true;
+    // this.hideLoadingSpinner();
+  }
+
+
   onSubmit(): void {
 
 
@@ -191,6 +234,9 @@ export class SubcuentasModalComponent implements OnInit {
     );
     this.subcuentasForm.value.geopuntos = JSON.stringify(
       this.subcuentasForm.value.geopuntos
+    );
+    this.subcuentasForm.value.reportes = JSON.stringify(
+      this.subcuentasForm.value.reportes
     );
 
     // console.log(this.subcuentasForm.value.contrasena);

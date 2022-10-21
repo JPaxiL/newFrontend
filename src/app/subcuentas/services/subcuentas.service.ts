@@ -12,6 +12,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class SubcuentasService {
 
   public subUsers:any = [];
+  public reportesAll:any = [];
+
   public nombreComponente:string = "LISTAR";
 
   public idSubUserEdit:number = 0;
@@ -31,10 +33,11 @@ export class SubcuentasService {
 
 
   public async initialize() {
+    await this.getReportes();
     await this.getAll();
   }
 
-  public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){
+  public async getAll(key: string = '', show_in_page: number = 15, page: number = 1) {
 
     // Route::post('/subUsersData', [SubUserController::class, 'getSubUsers']); // Datos de Sub usuarios usuario en Cpanel.
 
@@ -46,56 +49,23 @@ export class SubcuentasService {
       this.subUsers = response;
       this.initializeTable();
 
-      // for (let i = 0; i < this.geofences.length; i++) {
-      //   //const element = this.geofences[i];
-
-      //   this.geofences[i].geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(this.geofences[i].geo_coordenadas).coordinates[0] ), {
-      //     weight: 3,
-      //     fill: true,
-      //     color: this.geofences[i].zone_color //'#000000'
-      //   });
-
-      //   if (this.geofences[i].zone_visible == "true") {
-      //     this.geofences[i].geo_elemento.addTo(this.mapService.map);
-      //   }
-
-      //   var centerPoligon = this.geofences[i].geo_elemento.getBounds().getCenter();
-
-
-        // this.geofences[i].marker_name = L.circleMarker(centerPoligon, {
-        //   // pane: 'markers1',
-        //   "radius": 0,
-        //   "fillColor": "#000",//color,
-        //   "fillOpacity": 1,
-        //   "color": "#000",//color,
-        //   "weight": 1,
-        //   "opacity": 1
-
-        // }).bindTooltip(
-        //     '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geofences[i].zone_color) +'; color : '+ this.mapService.getContrastYIQ(this.geofences[i].zone_color) +';">'+this.geofences[i].zone_name+'</b>',
-        //     { permanent: true,
-        //       // offset: [-100, 0],
-        //       direction: 'center',
-        //       className: 'leaflet-tooltip-own',
-        //     });
-
-        // if (this.geofences[i].zone_name_visible == "true") {
-        //   this.geofences[i].marker_name.addTo(this.mapService.map);
-        // }
-
-
-
-
-      // }
-      // this.updateGeoCounters();
-      // this.eyeInputSwitch = this.geofenceCounters.visible != 0;
-      // console.log('Geocercas Cargadas');
-      // this.initializingGeofences = true;
-
       console.log('Sub cuentas Cargadas');
       this.initializingSubUser = true;
 
     });
+  }
+
+  public async getReportes(){
+    await this.http.post<ResponseInterface>(environment.apiUrl + '/api/getReports', {}).toPromise()
+    .then(response => {
+        console.log("reporte ===== response");
+        console.log(response);
+        this.reportesAll = response;
+    });
+  }
+
+  public getDataReportesAll() {
+    return this.reportesAll;
   }
 
   initializeTable(newGeofenceId?: number) {
