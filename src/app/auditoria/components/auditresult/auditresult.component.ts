@@ -46,14 +46,14 @@ export class AuditresultComponent implements OnInit {
     this.activities = this.ACTIVITIES;
     this.collectionSize = this.ACTIVITIES.length;
 
-    this.refreshCountries();
+    this.refreshActivity();
 
     this.loadActivities = true;
   }
 
-  refreshCountries() {
+  refreshActivity() {
 
-    let term = this.searchTerm;
+    let term = this.searchTerm.toLocaleLowerCase();
     this.activities = this.ACTIVITIES.filter(function(tag) {
         return tag.description.toLocaleLowerCase().indexOf(term) >= 0;
     });
@@ -66,9 +66,6 @@ export class AuditresultComponent implements OnInit {
 			(this.page - 1) * this.pageSize + this.pageSize,
 		);
 
-    
-    
-    
 	}
 
   onClickGroup(ip_address: string, properties: string){

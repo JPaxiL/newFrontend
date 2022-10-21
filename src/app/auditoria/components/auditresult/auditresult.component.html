@@ -4,7 +4,7 @@
   <div style="width: 100%;">
     <span class="p-input-icon-right me-2" style="width: 100%; margin-top: 1rem; margin-bottom: 0.5rem;">
       <i class="fa fa-search" aria-hidden="true"></i>
-      <input  placeholder="Item name..." [(ngModel)] = "searchTerm" (ngModelChange) = "refreshCountries()" type="text" placeholder="Buscar" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+      <input  placeholder="Item name..." [(ngModel)] = "searchTerm" (ngModelChange) = "refreshActivity()" type="text" placeholder="Buscar" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
     </span>
   </div>
 
@@ -23,8 +23,9 @@
                 <th scope="row">{{ tableCount + i + 1}}</th>
                 <td [innerHTML]="activity.description"></td>
                 <td style="text-align: center;">
-                  <button class="btn btn-primary btn-sm" style="margin-right: 1rem;" *ngIf="activity.properties != '[]'" (click)="onClickGroup(activity.ip_address, activity.properties)">Visualizar cambios</button>
-                  <button class="btn btn-info btn-sm" style="color: white;" *ngIf="activity.ip_address != '127.0.0.1'" (click)="onShowLocation(activity.ip_address)">Mostrar en el mapa</button>
+                  <button class="btn btn-primary btn-sm" *ngIf="activity.properties != '[]'" (click)="onClickGroup(activity.ip_address, activity.properties)">Visualizar cambios</button>
+                  <button class="btn btn-info btn-sm" style="color: white;" [ngClass]="{'ml-4': activity.properties != '[]'}" ng *ngIf="activity.ip_address != '127.0.0.1' && activity.ip_address" (click)="onShowLocation(activity.ip_address)">Mostrar en el mapa</button>
+
                 </td>
               </tr>
               <tr *ngIf="collectionSize==0 || !loadActivities">
@@ -38,12 +39,12 @@
                 [collectionSize]="collectionSize"
                 [(page)]="page"
                 [pageSize]="pageSize"
-                (pageChange)="refreshCountries()"
+                (pageChange)="refreshActivity()"
                 [maxSize]="10"
             >
             </ngb-pagination>
         
-            <select class="form-select" style="width: auto; font-size: 0.8rem;" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+            <select class="form-select" style="width: auto; font-size: 0.8rem;" [(ngModel)]="pageSize" (ngModelChange)="refreshActivity()">
                 <option [ngValue]="25">25 registros por página</option>
                 <option [ngValue]="50">50 registros por página</option>
                 <option [ngValue]="100">100 registros por página</option>
