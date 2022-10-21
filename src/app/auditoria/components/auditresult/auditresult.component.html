@@ -23,8 +23,8 @@
                 <th scope="row">{{ tableCount + i + 1}}</th>
                 <td [innerHTML]="activity.description"></td>
                 <td style="text-align: center;">
-                  <button class="btn btn-primary btn-sm" style="margin-right: 1rem;" *ngIf="activity.properties != '[]'" (click)="onClickGroup(activity.ip_address, activity.properties)">Visualizar cambios</button>
-                  <button class="btn btn-info btn-sm" style="color: white;" *ngIf="activity.ip_address != '127.0.0.1'" (click)="onShowLocation(activity.ip_address)">Mostrar en el mapa</button>
+                  <button class="btn btn-primary btn-sm" *ngIf="activity.properties != '[]'" (click)="onClickGroup(activity.ip_address, activity.properties)">Visualizar cambios</button>
+                  <button class="btn btn-info btn-sm" style="color: white;" [ngClass]="{'ml-4': activity.properties != '[]'}" ng *ngIf="activity.ip_address != '127.0.0.1' && activity.ip_address" (click)="onShowLocation(activity.ip_address)">Mostrar en el mapa</button>
                 </td>
               </tr>
               <tr *ngIf="collectionSize==0 || !loadActivities">

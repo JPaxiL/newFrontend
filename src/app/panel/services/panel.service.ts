@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +33,7 @@ export class PanelService {
 
   userData: any; //Informacion del usuario
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   clickShowPanel( nomComponent:string ){
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
@@ -81,5 +84,10 @@ export class PanelService {
       default:
         return '';
     }
+  }
+
+  public async activity_logout(user: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/logout`,user).toPromise();
+    return response.data;
   }
 }

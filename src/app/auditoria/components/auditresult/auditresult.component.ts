@@ -53,7 +53,7 @@ export class AuditresultComponent implements OnInit {
 
   refreshCountries() {
 
-    let term = this.searchTerm;
+    let term = this.searchTerm.toLocaleLowerCase();
     this.activities = this.ACTIVITIES.filter(function(tag) {
         return tag.description.toLocaleLowerCase().indexOf(term) >= 0;
     });

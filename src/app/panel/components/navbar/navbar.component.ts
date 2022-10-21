@@ -67,6 +67,11 @@ export class NavbarComponent implements OnInit {
   }
 
   logOut(): void {
+    
+
+    this.panelService.activity_logout({id:'477'}).then(()=>{
+      console.log('cerrar sesion');
+    });
     localStorage.clear();
     /* this.router.navigate(['']); */
     window.location.reload();
