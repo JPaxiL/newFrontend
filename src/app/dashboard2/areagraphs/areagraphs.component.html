@@ -135,7 +135,9 @@
                     [(ngModel)]="date_infraction"
                     [dateFormat] = "'dd/mm/yy'"
                     [readonlyInput]="true"
-                inputId="range">
+                    inputId="range"
+                    selectionMode="range"
+                >
                 </p-calendar>
                 <button btn btn-secondary (click)="getInfraction()">Ir</button>
                 <br>
@@ -167,6 +169,7 @@
                     [dateFormat] = "'dd/mm/yy'"
                     [readonlyInput]="true"
                     inputId="range"
+                    selectionMode="range"
                 >
                 </p-calendar>
                 <button btn btn-secondary (click)="getEventGps()">Ir</button>
@@ -283,7 +286,9 @@
                     [(ngModel)]="date_safety"
                     [dateFormat] = "'dd/mm/yy'"
                     [readonlyInput]="true"
-                    inputId="range">
+                    inputId="range"
+                    selectionMode="range"
+                >
                 </p-calendar>
                 <button btn btn-secondary (click)="getVehicleSafety()">Ir</button>
                 <br>

@@ -255,11 +255,11 @@ export class AreagraphsComponent implements OnInit {
 
     if (this.date_infraction != '') {
       this.spinner.show('loadingInfractionSpinner');
-      let to = moment(this.date_infraction)
+      let to = moment(this.date_infraction[1])
         .endOf('day')
         .add(5, 'hours')
         .format('YYYY-MM-DD H:mm:ss.000');
-      let from = moment(this.date_infraction)
+      let from = moment(this.date_infraction[0])
         .startOf('day')
         .add(5, 'hours')
         .format('YYYY-MM-DD H:mm:ss.000');
@@ -299,11 +299,11 @@ export class AreagraphsComponent implements OnInit {
   async getEventGps() {
     if (this.date_gps != '') {
       this.spinner.show('loadingGpsSpinner');
-      let to = moment(this.date_gps)
+      let to = moment(this.date_gps[1])
         .endOf('day')
         .add(5, 'hours')
         .format('YYYY-MM-DD H:mm:ss.000');
-      let from = moment(this.date_gps)
+      let from = moment(this.date_gps[0])
         .startOf('day')
         .add(5, 'hours')
         .format('YYYY-MM-DD H:mm:ss.000');
@@ -371,11 +371,11 @@ export class AreagraphsComponent implements OnInit {
   async getVehicleSafety() {
     if (this.date_safety != '') {
       this.spinner.show('loadingSegSpinner');
-      let to = moment(this.date_safety)
+      let to = moment(this.date_safety[1])
         .endOf('day')
         .add(5, 'hours')
         .format('YYYY-MM-DD H:mm:ss.000');
-      let from = moment(this.date_safety)
+      let from = moment(this.date_safety[0])
         .startOf('day')
         .add(5, 'hours')
         .format('YYYY-MM-DD H:mm:ss.000');
