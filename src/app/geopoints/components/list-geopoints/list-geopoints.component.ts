@@ -106,9 +106,9 @@ export class ListGeopointsComponent implements OnInit {
       geo.geopunto_visible  = "true";
       geo.geo_elemento.addTo(this.mapService.map);
 
-      if(geo.geopunto_nombre_visible == 'false'){
+      /* if(geo.geopunto_nombre_visible == 'false'){
         this.clickShowNameGeocerca(id);
-      }
+      } */
     }
 
     this.geopointsService.updateGeoCounters();

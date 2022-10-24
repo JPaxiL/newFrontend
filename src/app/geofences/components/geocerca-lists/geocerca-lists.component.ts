@@ -104,9 +104,9 @@ export class GeocercaListsComponent implements OnInit {
       geo.zone_visible  = "true";
       geo.geo_elemento.addTo(this.mapService.map);
 
-      if(geo.zone_name_visible == 'false'){
+      /* if(geo.zone_name_visible == 'false'){
         this.clickShowNameGeocerca(id);
-      }
+      } */
     }
 
     this.geofencesService.updateGeoCounters();
