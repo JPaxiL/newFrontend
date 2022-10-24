@@ -14,10 +14,11 @@
 
 <div class="container-fluid dashboard-wrapper" style="position: relative;" *ngIf="!isUnderConstruction">
 
-    <!-- <div class="row header-padding"></div> -->
-    <div class="row dashboard-content p-3 overflow-auto justify-content-center" >
-        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboardSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "true"><p style="color: white" class="text-center"> Cargando Dashboard... </p></ngx-spinner>
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDashboardSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "true"><p style="color: white" class="text-center"> Cargando Dashboard... </p></ngx-spinner>
 
+    <div class="row header-padding"></div>
+    <div class="row dashboard-content p-3 overflow-auto justify-content-center">
+        
         <div class="row p-card p-2 mb-3">
             <div class="col-12">
                 <h3>Dash Board</h3>
@@ -27,11 +28,11 @@
 
         <br>
         <div class="row p-card p-2 mb-3 rounded">
-            <div class="col-12">
+            <div class="col-12 mb-3">
                 <h4>Estatus general de la Flota Vehicular</h4>
                 <hr>
             </div>
-            <div class="col-12 d-flex">
+            <div class="col-12">
                 <div class="row">
                     <div class="col-6">
                         <ngx-charts-pie-chart
@@ -45,49 +46,51 @@
                     </div>
                     <div class="col-6">
                         <div class="col-sm table-responsive">
-                            <label>Relación de Vehículos</label>
-                            <button type="button" class="btn btn-success">cc</button>
+                            <div class="d-flex gap-2 mb-3">
+                                <div class="flex-grow-1 general-status-header">Relación de Vehículos</div>
+                                <button type="button" class="btn btn-success">cc</button>
+                            </div>
 
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr class="table-active">
-                                            <th>En movimiento</th>
-                                            <th>Detenidos</th>
-                                            <th>Sin cobertura</th>
-                                            <th>Sin transmision</th>
-                                            <th>Corte de transmision</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiGreen">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiBlue">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiOrange">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiBlack">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiRed">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>En movimiento</th>
+                                        <th>Detenidos</th>
+                                        <th>Sin cobertura</th>
+                                        <th>Sin transmision</th>
+                                        <th>Corte de transmision</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <ul class="list-unstyled">
+                                                <li *ngFor="let imei of imeiGreen">{{ imei }}</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul class="list-unstyled">
+                                                <li *ngFor="let imei of imeiBlue">{{ imei }}</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul class="list-unstyled">
+                                                <li *ngFor="let imei of imeiOrange">{{ imei }}</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul class="list-unstyled">
+                                                <li *ngFor="let imei of imeiBlack">{{ imei }}</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul class="list-unstyled">
+                                                <li *ngFor="let imei of imeiRed">{{ imei }}</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

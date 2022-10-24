@@ -1,5 +1,7 @@
 .dashboard-wrapper {
   --dashboard-top-padding: 2rem;
+  --table-border-color: #d4d4d7;
+  --table-header-bg: #ededed;
 
   hr:not([size]){
     background-color: #000;
@@ -15,6 +17,36 @@
     height: calc(100vh - var(--dashboard-top-padding));
     overflow: auto;
     background-color: var(--gl-body-background-color);
+    align-content: start;
+  }
+
+  .general-status-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px var(--table-border-color) solid;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  table{
+    width: 100%;
+    vertical-align: middle;
+    
+    thead th{
+      background-color: var(--table-header-bg);
+      --bs-table-accent-bg: none;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 400;
+      padding: 0.5rem 0.25rem;
+      line-height: 0.625rem;
+    }
+    th, td{
+      border: 1px var(--table-border-color) solid;
+    }
   }
 
 
