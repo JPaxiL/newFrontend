@@ -34,11 +34,11 @@ export class VehicleConfigComponent implements OnInit {
   vehicle: any = {};
 
   types: any = [
-    {id: '0', name: 'BUS', icon_src: 'bus.png'},
-    {id: '1', name: 'MINIBUS', icon_src: 'minibus.png'},
-    {id: '2', name: 'VAN', icon_src: 'van.png'},
-    {id: '3', name: 'CAMIONETA', icon_src: 'camioneta.png'},
-    {id: '4', name: 'CONCENTRADO', icon_src: 'concentrado.png'}
+    {id: '0', name: 'BUS'},
+    {id: '1', name: 'MINIBUS'},
+    {id: '2', name: 'VAN'},
+    {id: '3', name: 'CAMIONETA'},
+    {id: '4', name: 'CONCENTRADO'}
   ];
   /*
 
@@ -108,8 +108,7 @@ export class VehicleConfigComponent implements OnInit {
     }
     this.selectedType = {
       name: this.types[this.config.tipo]['name'],
-      icon_src: this.types[this.config.tipo]['icon_src'],
-      id: this.config.tipo
+      id: this.config.tipo,
     };
 
   }

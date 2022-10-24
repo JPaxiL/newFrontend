@@ -155,18 +155,12 @@
                 <div class="col-7">
                   <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'">
                     <ng-template pTemplate="selectedItem">
-                      <div class="type-item type-item-value type-dropdown-child"  *ngIf="selectedType">
-                        <div class="dropdown-icon-container">
-                          <img src="assets/images/objects/tipo-unidad/{{selectedType.icon_src}}"/>
-                        </div>
+                      <div class="type-item type-item-value" *ngIf="selectedType">
                         <div>{{selectedType.name}}</div>
                       </div>
                     </ng-template>
                     <ng-template let-type pTemplate="item">
-                      <div class="type-item type-dropdown-child">
-                        <div class="dropdown-icon-container">
-                          <img src="assets/images/objects/tipo-unidad/{{type.icon_src}}"/>
-                        </div>
+                      <div class="type-item">
                         <div>{{type.name}}</div>
                       </div>
                     </ng-template>
