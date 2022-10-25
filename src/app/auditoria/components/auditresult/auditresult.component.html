@@ -1,11 +1,13 @@
 
 <div style="font-size: 0.8rem; background-color: white;" class="px-4">
 
-  <div style="width: 100%;">
-    <span class="p-input-icon-right me-2" style="width: 100%; margin-top: 1rem; margin-bottom: 0.5rem;">
+  <div style="width: 100%; display:flex; padding-top: 1rem; padding-bottom:0.5rem;" >
+    <span class="p-input-icon-right me-2" style="flex: 1 1 0%; align-items: center;">
       <i class="fa fa-search" aria-hidden="true"></i>
       <input  placeholder="Item name..." [(ngModel)] = "searchTerm" (ngModelChange) = "refreshActivity()" type="text" placeholder="Buscar" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
     </span>
+
+    <button class="btn btn-secondary" (click)="exportexcel()" style="flex:none; height: 3rem;">Exportar a Excel</button>
   </div>
 
     <div>
@@ -20,7 +22,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let activity of activities; index as i;">
-                <th scope="row">{{ tableCount + i + 1}}</th>
+                <td scope="row">{{ tableCount + i + 1}}</td>
                 <td [innerHTML]="activity.description"></td>
                 <td style="text-align: center;">
                   <button class="btn btn-primary btn-sm" *ngIf="activity.properties != '[]'" (click)="onClickGroup(activity.ip_address, activity.properties)">Visualizar cambios</button>
@@ -32,7 +34,18 @@
                 No se encontro ningún registro
                 </tr>
             </tbody>
-          </table>  
+          </table>
+
+          <table id="excel-table" style="display:none">
+            <tr>
+              <th>#</th>
+              <th>Descripción</th>
+            </tr>
+            <tr *ngFor="let activity_excel of activities_excel; index as i;">
+              <td>{{i+1}}</td>
+              <td>{{activity_excel.description}}</td>
+            </tr>
+          </table>
         
           <div class="d-flex justify-content-between p-2">
             <ngb-pagination
