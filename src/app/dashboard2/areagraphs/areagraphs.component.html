@@ -34,7 +34,7 @@
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-6 col-12" style="height: 20rem;">
                         <ngx-charts-pie-chart
                         [scheme]="colorScheme"
                         [results]="data"
@@ -44,7 +44,7 @@
                         >
                         </ngx-charts-pie-chart>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md col-12">
                         <div class="col-sm table-responsive">
                             <div class="d-flex gap-2 mb-3">
                                 <div class="flex-grow-1 general-status-header">Relación de Vehículos</div>
@@ -99,71 +99,68 @@
 
         </div>
 
-        <div class="row p-0 gap-3 mb-3">
-            <div class="col-md-7">
-                <div class="row p-card p-2 mb-3 rounded">
-                    <div class="col-12 mb-3">
-                        <h4>Unidades en servicio y sin programación</h4>
-                        <hr>
+        <div class="row p-card p-2 mb-3 rounded">
+            <div class="col-12 mb-3">
+                <h4>Unidades en servicio y sin programación</h4>
+                <hr>
+            </div>
+            <div class="col-12 mb-3">
+                <div class="row">
+                    <div class="col d-flex justify-content-center align-items-center text-center">
+                        <span>
+                            En servicio
+                            <br>{{in_service}}/{{in_service_percentage}}%
+                        </span>
                     </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col d-flex justify-content-center align-items-center text-center">
-                                <span>
-                                    En servicio
-                                    <br>{{in_service}}/{{in_service_percentage}}%
-                                </span>
-                            </div>
-                            <div class="col-7">
-                                <ngx-charts-bar-horizontal-stacked
-                                    *ngIf="'bar-horizontal-stacked' === 'bar-horizontal-stacked'"
-                                    class="chart-container"
-                                    [gradient]="true"
-                                    [scheme]="colorSchemeHorizontalChart"
-                                    [results]="horizontalChart"
-                                ></ngx-charts-bar-horizontal-stacked>
-                                <!-- <ngx-charts-bar-horizontal-stacked
-                                    *ngIf="'bar-horizontal-stacked' === 'bar-horizontal-stacked'"
-                                    class="chart-container"
-                                    [view]="[700,100]"
-                                    [gradient]="true"
-                                    [scheme]="colorSchemeHorizontalChart"
-                                    [results]="horizontalChart"
-                                ></ngx-charts-bar-horizontal-stacked> -->
-                            </div>
-                            <div class="col d-flex justify-content-center align-items-center text-center">
-                                <span>
-                                    Sin programación
-                                    <br>{{without_programming}}/{{without_programming_percentage}}%
-                                </span>
-                            </div>
-                        </div>
+                    <div class="col-7" style="height: 6rem;">
+                        <ngx-charts-bar-horizontal-stacked
+                            *ngIf="'bar-horizontal-stacked' === 'bar-horizontal-stacked'"
+                            class="chart-container"
+                            [gradient]="true"
+                            [scheme]="colorSchemeHorizontalChart"
+                            [results]="horizontalChart"
+                        ></ngx-charts-bar-horizontal-stacked>
+                        <!-- <ngx-charts-bar-horizontal-stacked
+                            *ngIf="'bar-horizontal-stacked' === 'bar-horizontal-stacked'"
+                            class="chart-container"
+                            [view]="[700,100]"
+                            [gradient]="true"
+                            [scheme]="colorSchemeHorizontalChart"
+                            [results]="horizontalChart"
+                        ></ngx-charts-bar-horizontal-stacked> -->
                     </div>
-                </div>
-                <div class="row p-card p-2 rounded">
-                    <div class="col-12 mb-3">
-                        <h4>Consumo de combustible de la flota vehicular</h4>
-                        <hr>
-                    </div>
-                    <div class="col-12">
+                    <div class="col d-flex justify-content-center align-items-center text-center">
+                        <span>
+                            Sin programación
+                            <br>{{without_programming}}/{{without_programming_percentage}}%
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="col">
+        </div>
+
+        <div class="row flex-row-reverse p-0 gap-3 mb-3">
+            <div class="col-md col-12">
                 <div class="row p-card p-2 rounded h-100">
                     <div class="col-12 mb-3">
                         <h4>Lugar donde se ubican las unidades</h4>
                         <hr>
                     </div>
                     <div class="col-12">
+                        <ngx-charts-pie-chart
+                        [view]="[1,1]"
+                        [scheme]="colorScheme"
+                        [results]="data"
+                        [legend]="showLegend"
+                        [legendPosition]="'left'"
+                        [legendTitle]="''"
+                        >
+                        </ngx-charts-pie-chart>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row p-0 gap-3">
             <div class="col-md col-12">
-                <div class="row p-card p-2 rounded h-100 align-content-start" style="position: relative;">
+                <div class="row p-card p-2 rounded h-100 align-content-start">
 
                     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingInfractionSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Infracciones... </p></ngx-spinner>
                     <h4>Vehículos que cometieron infracción</h4>
@@ -198,9 +195,11 @@
 
                 </div>
             </div>
+        </div>
 
+        <div class="row p-0 gap-3">
             <div class="col-md col-12">
-                <div class="row p-card p-2 rounded h-100 align-content-start" style="position: relative;">
+                <div class="row p-card p-2 rounded h-100 align-content-start">
                 
                     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGpsSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Gps... </p></ngx-spinner>
                     <h4>Vehículos que generaron alertas GPS</h4>
@@ -321,7 +320,7 @@
             </div>
 
             <div class="col-md col-12">
-                <div class="row p-card p-2 rounded h-100 align-content-start" style="position: relative;">
+                <div class="row p-card p-2 rounded h-100 align-content-start">
                 
                     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingSegSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Seg. vehicular... </p></ngx-spinner>
                     <h4>Vehículos que generaron alertas Seg. vehicular</h4>
