@@ -34,17 +34,19 @@
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-md-6 col-12" style="height: 20rem;">
-                        <ngx-charts-pie-chart
-                        [scheme]="colorScheme"
-                        [results]="data"
-                        [legend]="showLegend"
-                        [legendPosition]="'left'"
-                        [legendTitle]="''"
-                        >
-                        </ngx-charts-pie-chart>
+                    <div class="col-lg-6 col-12 d-flex justify-content-center">
+                        <div class="pie-chart-container">
+                            <ngx-charts-pie-chart
+                            [scheme]="colorScheme"
+                            [results]="data"
+                            [legend]="showLegend"
+                            [legendPosition]="'left'"
+                            [legendTitle]="''"
+                            >
+                            </ngx-charts-pie-chart>
+                        </div>
                     </div>
-                    <div class="col-md col-12">
+                    <div class="col-lg col-12">
                         <div class="col-sm table-responsive">
                             <div class="d-flex gap-2 mb-3">
                                 <div class="flex-grow-1 general-status-header">Relación de Vehículos</div>
@@ -147,15 +149,7 @@
                         <hr>
                     </div>
                     <div class="col-12">
-                        <ngx-charts-pie-chart
-                        [view]="[1,1]"
-                        [scheme]="colorScheme"
-                        [results]="data"
-                        [legend]="showLegend"
-                        [legendPosition]="'left'"
-                        [legendTitle]="''"
-                        >
-                        </ngx-charts-pie-chart>
+                        
                     </div>
                 </div>
             </div>

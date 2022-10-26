@@ -49,7 +49,36 @@
     }
   }
 
+  .pie-chart-container{
+    height: 20rem;
+    width: 20rem;
+  }
 
+}
+
+:host ::ng-deep{
+  .dashboard-wrapper{
+    .pie-chart-container .ngx-charts-outer{
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      align-items: center;
+      ngx-charts-legend > div{
+        width: 13rem !important;
+        .legend-label{
+          margin: 1rem 0.5rem;
+          ngx-charts-legend-entry > span {
+            display: flex;
+            flex-direction: row-reverse;
+            span.legend-label-text{
+              text-align: end;
+              margin-right: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
 }
   
 
