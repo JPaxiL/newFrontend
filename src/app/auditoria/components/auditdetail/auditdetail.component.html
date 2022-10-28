@@ -12,18 +12,28 @@
             <div style="width: 100%; max-width: 100%; margin-bottom: 1.5rem;">
 
               <div class="row">
-                <div class="col-6" *ngIf="attributes" [ngClass]="{'d-none': !display_new, 'd-block': display_new}">
-                  <b>Nuevo</b>
-                </div>
-                <div class="col-6" *ngIf="old" [ngClass]="{'d-none': !display_old, 'd-block': display_old}">
+                <div *ngIf="old" [ngClass]="{'d-none': !display_old, 'd-block': display_old,'col-0': !old, 'col-5': old}">
                   <b>Antiguo</b>
                 </div>
-                <hr *ngIf="attributes || old" [ngClass]="{'d-none': !display_new, 'd-block': display_new}">
-                <div [ngClass]="{'col-12': !old, 'col-6': old}">
-                  <div *ngFor="let item of attributes | keyvalue" style="word-wrap: break-word;"><b style="color:green;">{{item.key}}</b>: {{(item.value !== null) ? (item.value) : "-"}}</div>
+                <div *ngIf="old" [ngClass]="{'d-none': !display_old, 'd-flex': display_old, 'col-0': !old, 'col-2': old}">
+                  
                 </div>
-                <div class="col-6" *ngIf="old" [ngClass]="{'d-none': !display_old, 'd-block': display_old}">
-                  <div *ngFor="let item of old | keyvalue" style="word-wrap: break-word;"><b style="color:red;">{{item.key}}</b>: {{(item.value !== null) ? (item.value) : "-"}}</div>
+                <div *ngIf="attributes" [ngClass]="{'d-none': !display_new, 'd-block': display_new, 'col-12': !old, 'col-5': old}">
+                  <b>Nuevo</b>
+                </div>
+                <hr *ngIf="attributes || old" [ngClass]="{'d-none': !display_new, 'd-block': display_new}">
+                <div *ngIf="old" [ngClass]="{'d-none': !display_old, 'd-block': display_old, 'col-0': !old, 'col-5': old}">
+                  
+                  <app-audit-info-activity [properties]="old" [subject_type]="subject_type" [color]="'red'"></app-audit-info-activity>
+                  
+                </div>
+                <div *ngIf="old" [ngClass]="{'d-none': !display_old, 'd-flex align-items-center': display_old, 'col-0': !old, 'col-2': old}">
+                  <i class="fas fa-arrow-right m-auto"></i>
+                </div>
+                <div [ngClass]="{'col-12': !old, 'col-5': old}">
+
+                  <app-audit-info-activity [properties]="attributes" [subject_type]="subject_type" [color]="'green'"></app-audit-info-activity>
+                
                 </div>
               </div>
             </div>

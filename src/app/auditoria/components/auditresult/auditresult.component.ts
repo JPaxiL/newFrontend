@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { replace } from 'lodash';
 import * as XLSX from 'xlsx';
 
 interface Activity {
@@ -6,11 +7,13 @@ interface Activity {
 	description: string;
   ip_address: string;
   properties: string;
+  subject_type: string;
 }
 interface Data {
 	show: boolean;
   ip_address: string;
   properties: string;
+  subject_type: string;
 }
 
 @Component({
@@ -81,9 +84,15 @@ export class AuditresultComponent implements OnInit {
 
 	}
 
-  onClickGroup(ip_address: string, properties: string){
+  onClickGroup(ip_address: string, properties: string, subject_type: string){
 
-    this.eventDisplayGroup.emit({show: true, ip_address, properties});
+    if(subject_type){
+
+      let subject_type_split = subject_type.split(/[\\]/g);
+      this.eventDisplayGroup.emit({show: true, ip_address, properties, subject_type: subject_type_split[subject_type_split.length - 1]});
+    }else{
+      this.eventDisplayGroup.emit({show: true, ip_address, properties, subject_type: ''});
+    }
   }
 
   onShowLocation(ip_address: string){
