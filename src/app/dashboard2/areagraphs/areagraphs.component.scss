@@ -46,6 +46,10 @@
     }
     th, td{
       border: 1px var(--table-border-color) solid;
+      ul{
+        height: 100%;
+        padding: 0.75rem 0.5rem;
+      }
     }
   }
 
@@ -65,17 +69,42 @@
       align-items: center;
       ngx-charts-legend > div{
         width: 13rem !important;
-        .legend-label{
-          margin: 1rem 0.5rem;
-          ngx-charts-legend-entry > span {
-            display: flex;
-            flex-direction: row-reverse;
-            span.legend-label-text{
-              text-align: end;
-              margin-right: 0.5rem;
+
+        .legend-labels{
+          background: inherit;
+
+          .legend-label{
+            margin: 1rem 0.5rem;
+            ngx-charts-legend-entry > span {
+              display: flex;
+              flex-direction: row-reverse;
+              align-items: center;
+              color: #000;
+  
+              &.active{
+                font-weight: bold;
+              }
+  
+              span.legend-label-color{
+                color: #fff;
+                display: flex;
+                justify-content: center;
+                font-weight: bold;
+                padding: 1rem;
+                align-items: center;
+              }
+              
+              span.legend-label-text{
+                text-align: end;
+                margin-right: 0.5rem;
+              }
             }
           }
-        }
+        } 
+      }
+
+      svg.ngx-charts > g.pie-chart text {
+        font-weight: bold;
       }
     }
   }

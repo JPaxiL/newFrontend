@@ -60,7 +60,6 @@ export class AreagraphsComponent implements OnInit {
     domain: ['green', 'blue'],
   };
 
-  pieChartValueLabels: any = [];
   //Colores de transmision
   pieColorScheme: any = {
     10:"#45e845",
@@ -192,6 +191,11 @@ export class AreagraphsComponent implements OnInit {
         value: this.red,
       },
     ];
+
+    setTimeout(() => {
+      this.drawOnPieChart();
+      this.drawOnPieLegend();
+    }, 0);
 
     this.setHorizontalChart();
   }
@@ -467,7 +471,6 @@ export class AreagraphsComponent implements OnInit {
     while(node.nextElementSibling != null){
       node.parentNode!.removeChild(node.nextElementSibling);
     }
-    this.pieChartValueLabels = [];
 
     const slices: HTMLCollection = node.children;
     //console.log(slices);
@@ -500,7 +503,6 @@ export class AreagraphsComponent implements OnInit {
       }
       if (percent >= 2) {
         const text = this.generateText(percent, maxX - minX, startingValue, this.data[i].value);
-        this.pieChartValueLabels.push(text);
         node.parentNode!.append(text);
       }
     }
@@ -511,8 +513,8 @@ export class AreagraphsComponent implements OnInit {
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     const r = Math.round(diagonal / 3); //2.5 is too far
     //angle = suma de angulos de los slices previos + la mitad del slice actual - 90 grados (0.5) (desde el punto mas alto del circulo)
-    //0.5275 para ajustar posicion del texto
-    const angle = ((startingValue * 2 + percent) / 100 - 0.5275) * Math.PI;
+    //0.4955 para ajustar posicion del texto
+    const angle = ((startingValue * 2 + percent) / 100 - 0.4955) * Math.PI;
     const x = r * Math.cos(angle);
     const y = r * Math.sin(angle) + 5;
 
@@ -522,5 +524,16 @@ export class AreagraphsComponent implements OnInit {
     text.textContent = labelValue + '';
     text.setAttribute('text-anchor', 'middle');
     return text;
+  }
+
+  public drawOnPieLegend(){
+    console.log('Insertando frecuencias en Leyenda de Chart');
+    let spanLegends = document.querySelectorAll('ngx-charts-legend-entry > span span.legend-label-color');
+    //Clear previous labels if any
+    console.log(spanLegends);
+    for(let i = 0; i < this.data.length; i++){
+      //let span = spanLegends[i] as HTMLElement;
+      spanLegends[i].innerHTML = this.data[i].value;
+    }
   }
 }
