@@ -6,6 +6,7 @@ interface Data {
 	show: boolean;
   ip_address: string;
   properties: string;
+  subject_type: string;
 }
 
 @Component({
@@ -27,6 +28,7 @@ export class AuditComponent implements OnInit {
   displayGroup: boolean = false;
   ip_address: string = "";
   properties: string = "";
+  subject_type: string = "";
   constructor() { }
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class AuditComponent implements OnInit {
     this.displayGroup = event.show;
     this.ip_address = event.ip_address;
     this.properties = event.properties;
+    this.subject_type = event.subject_type;
   }
 
 }

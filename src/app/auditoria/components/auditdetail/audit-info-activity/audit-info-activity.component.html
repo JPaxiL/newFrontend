@@ -1,0 +1,198 @@
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.7)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando detalles... </p></ngx-spinner>
+
+<div *ngIf="subject_type == 'Point'">
+    <div class="d-flex">
+          <b>NOMBRE:</b><div style="margin-left: 0.5rem;">{{properties['nombre_punto']}}</div>
+    </div>
+
+    <div class="d-flex">
+          <b>COLOR:</b><div style="margin-left: 0.5rem;">
+            <svg width="20" height="20">
+            <rect width="20" height="20" style="stroke-width:3;" [ngStyle]="{'fill': properties['color_punto'], 'stroke':properties['color_punto']}"/>
+            </svg>
+          </div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">MOSTRAR GEOPUNTO:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="visible_punto" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">MOSTRAR NOMBRE:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="nombre_visible_punto" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="subject_type == 'Zone'" >
+    <div class="d-flex">
+          <b>NOMBRE:</b><div style="margin-left: 0.5rem;">{{properties['nombre_zona']}}</div>
+    </div>
+
+    <div class="d-flex">
+          <b>COLOR DE GEOCERCA:</b><div style="margin-left: 0.5rem;">
+            <svg width="20" height="20">
+            <rect width="20" height="20" style="stroke-width:3;" [ngStyle]="{'fill': properties['color_zona'], 'stroke':properties['color_zona']}"/>
+            </svg>
+          </div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">VELOCIDAD:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="vel_act_zona" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b>COLOR DE TEXTO:</b><div style="margin-left: 0.5rem;">
+          <svg width="20" height="20">
+          <rect width="20" height="20" style="stroke-width:3;" [ngStyle]="{'fill': properties['tag_name_color'], 'stroke':properties['tag_name_color']}"/>
+          </svg>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b>TAMAÑO DE TEXTO:</b><div style="margin-left: 0.5rem;">{{properties['tag_name_font_size']}}px</div>
+    </div>
+
+    <div class="d-flex">
+        <b>LÍMITE DE VELOCIDAD:</b><div style="margin-left: 0.5rem;">{{properties['vel_max']}} km/h</div>
+    </div>
+
+    <div class="d-flex">
+        <b>TOLERABLE:</b><div style="margin-left: 0.5rem;">{{properties['vel_zona']}} km/h</div>
+    </div>
+
+    <div class="d-flex">
+        <b>GRAVE:</b><div style="margin-left: 0.5rem;">{{properties['vel2_zona']}} km/h</div>
+    </div>
+
+    <div class="d-flex">
+        <b>MUY GRAVE:</b><div style="margin-left: 0.5rem;">{{properties['vel3_zona']}} km/h</div>
+    </div>
+
+</div>
+
+<div *ngIf="subject_type == 'EventUser'">
+    <div class="d-flex">
+          <b>NOMBRE:</b><div style="margin-left: 0.5rem;">{{properties['nombre']}}</div>
+    </div>
+
+    <div class="d-flex">
+        <b>ALERTA:</b><div style="margin-left: 0.5rem;">{{properties['tipo']}}</div>
+    </div>
+
+    <div class="d-flex" style="word-wrap: break-word;">
+        <b>VEHÍCULOS:</b><div style="margin-left: 0.5rem; word-wrap: break-word;">{{placas_vehiculos}}</div>
+    </div>
+
+    <div *ngIf="properties['array_geo']" class="d-flex" style="word-wrap: break-word;">
+        <b>GEOCERCAS:</b><div style="margin-left: 0.5rem; word-wrap: break-word;">{{nombres_geocercas}}</div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">EVENTO ACTIVADO:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="activo" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">ALERTA DEL SISTEMA:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="alerta_sistema" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b>TIEMPO LIMITE:</b><div style="margin-left: 0.5rem;">
+            {{properties['duracion_parada']}} 
+            <span *ngIf="properties['duracion_formato_parada'] == 'S'"> Segundos</span>
+            <span *ngIf="properties['duracion_formato_parada'] == 'M'"> Minutos</span>
+            <span *ngIf="properties['duracion_formato_parada'] == 'H'"> Horas</span>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">FIJAR TIEMPO:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="bol_fijar_tiempo" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div *ngIf="bol_fijar_tiempo && properties['tiempo_limite_infraccion']" class="d-flex" style="word-wrap: break-word;">
+        <b>FIJAR TIEMPO:</b><div style="margin-left: 0.5rem;">{{properties['tiempo_limite_infraccion']}} segundos</div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">FIJAR LIMITE DE VELOCIDAD:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="bol_fijar_velocidad" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div *ngIf="bol_fijar_velocidad && properties['velocidad_limite_infraccion']" class="d-flex" style="word-wrap: break-word;">
+        <b>FIJAR LIMITE DE VELOCIDAD:</b><div style="margin-left: 0.5rem;">{{properties['velocidad_limite_infraccion']}} km/h</div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">ENVIAR AL CORREO ELECTRÓNICO:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="notificacion_email" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="d-flex" *ngIf="notificacion_email">
+        <b>CORREO ELECTRÓNICO:</b><div style="margin-left: 0.5rem;">{{properties['notificacion_direcion_email']}}</div>
+    </div>
+
+
+</div>
+
+<div *ngIf="subject_type == 'UserConfig'">
+    <div class="d-flex">
+        <b>NOMBRE DE USUARIO:</b><div style="margin-left: 0.5rem;">{{properties['nombre_usuario']}}</div>
+    </div>
+
+    <div class="d-flex">
+        <b>PRIVILEGIOS:</b><div style="margin-left: 0.5rem;">{{properties['privilegios']}}</div>
+    </div>
+
+    <div class="d-flex">
+        <b>EMAIL:</b><div style="margin-left: 0.5rem;">{{properties['email']}}</div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">ACTIVO:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="activo" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="subject_type == 'UserDetail'">
+    
+    <div class="d-flex" style="word-wrap: break-word;">
+        <b>VEHÍCULOS:</b><div style="margin-left: 0.5rem; word-wrap: break-word;">{{placas_vehiculos}}</div>
+    </div>
+
+    <div *ngIf="properties['array_zonas']" class="d-flex" style="word-wrap: break-word;">
+        <b>GEOCERCAS:</b><div style="margin-left: 0.5rem; word-wrap: break-word;">{{nombres_geocercas}}</div>
+    </div>
+
+    <div *ngIf="properties['array_zonas']" class="d-flex" style="word-wrap: break-word;">
+        <b>PUNTOS:</b><div style="margin-left: 0.5rem; word-wrap: break-word;">{{nombres_puntos}}</div>
+    </div>
+
+</div>
+
+<div *ngIf="subject_type != 'Point' && subject_type != 'Zone' && subject_type != 'EventUser' && subject_type != 'UserConfig' && subject_type != 'UserDetail'">
+
+    <div *ngFor="let item of properties | keyvalue" style="word-wrap: break-word;"><b [ngStyle]="{'color': color}">{{item.key}}</b>: {{(item.value !== null) ? (item.value) : "-"}}</div>
+</div>
+
