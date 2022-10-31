@@ -49,7 +49,7 @@ export class AreagraphsComponent implements OnInit {
   legendPosition: string = 'below';
 
   colorScheme = {
-    domain: ['green', 'blue', 'orange', 'black', 'red'],
+    domain: ['#45e845', '#2cadf2', '#ffb300', '#000', 'red'],
   };
 
   colorSchemeHorizontalChart = {
@@ -58,6 +58,17 @@ export class AreagraphsComponent implements OnInit {
 
   colorSchemeVehiclesOnRoute = {
     domain: ['green', 'blue'],
+  };
+
+  //Colores de transmision
+  pieColorScheme: any = {
+    10:"#45e845",
+    20:"#2cadf2",
+    30:"#b23ccf",
+    40:"#000",
+    50:"#ffb300",
+    60:"#cc1013",
+    100:"#ABABAB",
   };
 
   data: any = [];
@@ -115,6 +126,7 @@ export class AreagraphsComponent implements OnInit {
 
   load() {
     this.imeis = JSON.parse(localStorage.getItem('vahivles-dashboard')!);
+    //localStorage.removeItem('vahivles-dashboard');
 
     this.getEvents(this.imeis);
 
@@ -179,6 +191,11 @@ export class AreagraphsComponent implements OnInit {
         value: this.red,
       },
     ];
+
+    setTimeout(() => {
+      this.drawOnPieChart();
+      this.drawOnPieLegend();
+    }, 0);
 
     this.setHorizontalChart();
   }
@@ -445,5 +462,77 @@ export class AreagraphsComponent implements OnInit {
     };
     this.safetyEventsTotal = 100;
     this.vehicleSafetyEvents = [];
+  }
+
+  public drawOnPieChart() {
+    console.log('Colocando etiquetas encima de pie chart');
+    let node = document.querySelector('.pie-chart-container g.pie-chart.chart > g')! as HTMLElement;
+    //Clear previous labels if any
+    while(node.nextElementSibling != null){
+      node.parentNode!.removeChild(node.nextElementSibling);
+    }
+
+    const slices: HTMLCollection = node.children;
+    //console.log(slices);
+    let minX = 0;
+    let maxX = 0;
+    for (let i = 0; i < slices.length; i++) {
+      const bbox = (<any>slices.item(i)).getBBox();
+      minX = Math.round((bbox.x < minX ? bbox.x : minX) * 10) / 10;
+      maxX =
+        Math.round(
+          (bbox.x + bbox.width > maxX ? bbox.x + bbox.width : maxX) * 10
+        ) / 10;
+    }
+
+    //Get sum of all values
+    let totalFreqChart = 0;
+    let percentageValues = [];
+    for(let i = 0; i < this.data.length; i++){
+      totalFreqChart += this.data[i].value;
+    }
+
+    for (let i = 0; i < slices.length; i++) {
+      //console.log(slices[i]);
+      const percent = Math.round(this.data[i].value * 100 / totalFreqChart);
+      //console.log(percent);
+      percentageValues.push(percent);
+      let startingValue = 0;
+      for (let j = 0; j < i; j++) {
+        startingValue += percentageValues[j];
+      }
+      if (percent >= 2) {
+        const text = this.generateText(percent, maxX - minX, startingValue, this.data[i].value);
+        node.parentNode!.append(text);
+      }
+    }
+  }
+
+  private generateText(percent: number, diagonal: number, startingValue: number, labelValue: number) {
+    //Create text element
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    const r = Math.round(diagonal / 3); //2.5 is too far
+    //angle = suma de angulos de los slices previos + la mitad del slice actual - 90 grados (0.5) (desde el punto mas alto del circulo)
+    //0.4955 para ajustar posicion del texto
+    const angle = ((startingValue * 2 + percent) / 100 - 0.4955) * Math.PI;
+    const x = r * Math.cos(angle);
+    const y = r * Math.sin(angle) + 5;
+
+    text.setAttribute('x', '' + x);
+    text.setAttribute('y', '' + y);
+    text.setAttribute('fill', 'white');
+    text.textContent = labelValue + '';
+    text.setAttribute('text-anchor', 'middle');
+    return text;
+  }
+
+  public drawOnPieLegend(){
+    console.log('Insertando frecuencias en Leyenda de Chart');
+    let spanLegends = document.querySelectorAll('ngx-charts-legend-entry > span span.legend-label-color');
+    //console.log(spanLegends);
+    for(let i = 0; i < this.data.length; i++){
+      //let span = spanLegends[i] as HTMLElement;
+      spanLegends[i].innerHTML = this.data[i].value;
+    }
   }
 }

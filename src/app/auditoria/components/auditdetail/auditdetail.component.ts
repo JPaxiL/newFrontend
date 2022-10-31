@@ -11,11 +11,12 @@ export class AuditdetailComponent implements AfterViewInit{
   @Input('display') display: boolean = false;
   @Input() ip: string = "";
   @Input() properties: string = "";
+  @Input() subject_type: string = "";
 
   @Output() onHideEvent = new EventEmitter<boolean>();
 
-  attributes = {};
-  old = {};
+  attributes:any = {};
+  old:any = {};
   display_old: boolean = false;
   display_new: boolean = false;
 
