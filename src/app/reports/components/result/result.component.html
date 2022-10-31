@@ -17,6 +17,9 @@
     </div>
   </ng-template>
 </p-confirmDialog>
+<div *ngIf="(reportService.modalActive)">
+  <app-modal></app-modal>
+</div>
 
 <p-dialog header="Detalle del Exceso" [(visible)]="modalDetalleRepExcesosEnZona"  [style]="{width: '50vw'}" >
   <ng-container >
@@ -64,14 +67,16 @@
     <img src="./assets/images/fondo-svg-reporte.svg" alt="fondo-reporte-logo">
   </div>
   <div [ngClass]="table_hide" class="container grand-container">
-    <div *ngIf="num_rep >= 0 && num_rep <= 22 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
+    <!-- <div *ngIf="num_rep >= 0 && num_rep <= 22 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div> -->
+    <div class="table-title p-card" style="margin-bottom: 0.25rem;">{{rep_title}}</div>
+
     <div class="table-subtitle p-card" style="margin-bottom: 0.25rem;">{{ rep_subtitle }}</div>
   </div>
   <ng-container>
 
     <!-- 0. REPORTE DE PARADAS Y MOVIMIENTOS -->
 
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 0">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R001'">
       <ng-container *ngIf="chkTableDropdown">
 
         <div class="p-card" style="padding: 0.8rem;">
@@ -387,7 +392,7 @@
 
     <!-- 1. REPORTE DE EXCESO DE VELOCIDAD -->
 
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 1">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R002'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -607,7 +612,7 @@
 
     <!-- 2. REPORTE DE ENTRADA Y SALIDA -->
 
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 2">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R003'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -740,7 +745,7 @@
 
     <!-- 3. REPORTE DE COMBUSTIBLE -->
 
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 3">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R004'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -944,7 +949,7 @@
 
 
     <!-- 4. REPORTE DE EXCESOS EN ZONA-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 4">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R005'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -1140,7 +1145,7 @@
 
 
     <!-- 5. REPORTE GENERAL-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 5">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R006'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -1305,7 +1310,9 @@
                       </div>
                       <div class="col">
                         <div class="col-md-auto">
-                          <button class="btn btn-success" (click)="verTodos(period, reportTableDropdownData[0][0], chkDateHour, reportTableDropdownData[0][1]);">Ver Todos</button>
+                          <button class="btn btn-success" (click)="verTodos(period, reportTableDropdownData[0][0], chkDateHour, reportTableDropdownData[0][1], params);">Ver Todos</button>
+                          <!-- <button class="btn btn-success" (click)="showModal();">Ver modal</button> -->
+
                         </div>
                       </div>
                     </div>
@@ -1456,7 +1463,8 @@
                       </div>
                       <div class="col">
                         <div class="col-md-auto">
-                          <button class="btn btn-success" (click)="verTodos(period, v_table[0][0], chkDateHour, v_table[0][1]);">Ver Todos</button>
+                          <button class="btn btn-success" (click)="verTodos(period, v_table[0][0], chkDateHour, v_table[0][1], params);">Ver Todos</button>
+                          <!-- <button class="btn btn-success" (click)="showModal();">Ver modal2</button> -->
                         </div>
                       </div>
                     </div>
@@ -1479,7 +1487,7 @@
 
 
     <!-- 6. REPORTE DE EVENTOS-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 6">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R007'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -1625,7 +1633,7 @@
 
     <!-- 7. REPORTE DE POSICIÓN -->
 
-    <div class="container p-card singletable-container" *ngIf="num_rep == 7">
+    <div class="container p-card singletable-container" *ngIf="num_rep == 'R008'">
       <table *ngIf="dtRendered" [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
         <thead>
           <tr>
@@ -1666,7 +1674,7 @@
 
     <!-- 10. REPORTE DE FRENADA Y ACELERACION BRUSCA -->
 
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 10">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R011'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -1830,7 +1838,8 @@
     </div>
 
     <!-- 11. REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 11 || num_rep == 21">
+    <!-- 21 -R022 REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT -->
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R012' || num_rep == 'R022'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -2004,7 +2013,7 @@
 
 
     <!-- 12. REPORTE DE CALIFICACION DE MANEJO-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 12">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R013'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -2306,7 +2315,7 @@
 
 
     <!-- 13. REPORTE DE FATIGA EXTREMA-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 13">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R014'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -2475,7 +2484,7 @@
     </div>
 
     <!-- 14. REPORTE DE ANTICOLISION FRONTAL-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 14">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R015'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -2644,7 +2653,7 @@
     </div>
 
     <!-- 15. REPORTE DE COLISIÓN CON PEATONES-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 15">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R016'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -2813,7 +2822,7 @@
     </div>
 
     <!-- 16. REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 16">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R017'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -2981,7 +2990,7 @@
 
 
     <!-- 17.REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 17">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R018'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -3146,7 +3155,7 @@
     </div>
 
     <!-- 18. REPORTE DE BLOQUEO DE VISIÓN DEL MOBILEYE-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 18">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R019'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -3307,7 +3316,7 @@
     </div>
 
     <!-- 19. REPORTE GERENCIAL (Cuenta cruzdelsur)-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 19">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R020'">
       <div class="p-card" style="padding: 1rem;" [hidden]="true">
 
         <div class="subtable-title mb-3">
@@ -3543,7 +3552,7 @@
 
 
     <!-- 20. REPORTE  DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)-->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 20">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R021'">
       <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
 
         <div class="subtable-title mb-3">
@@ -3612,7 +3621,7 @@
 
 
     <!-- 22. REPORTE DE MANTENIMIENTOS FISICOS -->
-    <div class="container grand-container multitable-container" *ngIf="num_rep == 22">
+    <div class="container grand-container multitable-container" *ngIf="num_rep == 'R023'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -3785,25 +3794,25 @@
 
 
     <div *ngIf="dtRendered" class="export-container">
-      <button *ngIf="num_rep == 0" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 1" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 2" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 3" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCombustible');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 4" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosEnZona');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 5" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 6" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 7" class="btn btn-gl btn-success btn-dark-hover" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 10" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 11 || num_rep == 21" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 12" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 13" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 14" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 15" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 16" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDesvioCarrilIzquierda');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 17" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 18" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 20" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR EXCEL</button>
-      <button *ngIf="num_rep == 22" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelMantenimientoFisico');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R001'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R002'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R003'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R004'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCombustible');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R005'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosEnZona');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R006'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R007'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R008'" class="btn btn-gl btn-success btn-dark-hover" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R011'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R012' || num_rep == 'R022'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R013'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R014'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFatigaExtrema');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R015'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelAnticolisionFrontal');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R016'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelColisionConPeatones');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R017'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDesvioCarrilIzquierda');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R018'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDesvioCarrilDerecha');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R019'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R021'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR EXCEL</button>
+      <button *ngIf="num_rep == 'R023'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelMantenimientoFisico');">EXPORTAR EXCEL</button>
 
       <!-- <div style="display: flex; flex-direction: row; justify-content: center; gap: 4rem; margin: 0; padding: 0;">
         <button class="btn btn-success" (click)="exportExcelParadasMovimientos(1)">EXPORTAR EXCEL SEPARADO</button>
@@ -3825,15 +3834,15 @@
         <button *ngIf="num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportPdfEventos');">EXPORTAR PDF</button>
         <button *ngIf="num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR PDF</button> -->
 
-        <button *ngIf="num_rep == 10" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfFrenadaAceleracionBrusca();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 11" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDistraccionPosibleFatiga();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 12" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfCalificacionManejo();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 13" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfFatigaExtrema();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 14" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfAnticolisionFrontal();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 15" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfColisionConPeatones();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 16" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDesvioCarrilIzquierda();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 17" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDesvioCarrilDerecha();">EXPORTAR PDF</button>
-        <button *ngIf="num_rep == 18" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfBloqueoVisionMobileye();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R011'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfFrenadaAceleracionBrusca();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R012'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDistraccionPosibleFatiga();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R013'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfCalificacionManejo();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R014'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfFatigaExtrema();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R015'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfAnticolisionFrontal();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R016'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfColisionConPeatones();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R017'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDesvioCarrilIzquierda();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R018'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDesvioCarrilDerecha();">EXPORTAR PDF</button>
+        <button *ngIf="num_rep == 'R019'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfBloqueoVisionMobileye();">EXPORTAR PDF</button>
         <!-- <button *ngIf="num_rep == 20" class="btn btn-success" (click)="exportPdfExcesosVelocidadFormatoExtendido();">EXPORTAR PDF</button> -->
 
     </div>

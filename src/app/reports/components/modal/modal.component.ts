@@ -129,6 +129,8 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log("====MODAAAAAAALL ABIERTOOOO=====");
+    console.log(this.reportService.objGeneral);
+    
     this.display = true;
 
     this.data = this.reportService.objGeneral.data;

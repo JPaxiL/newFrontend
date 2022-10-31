@@ -278,45 +278,79 @@ export class FormComponent implements OnInit {
 
 
 
-      // this.http.post(environment.apiUrl + '/api/getReports', {}).subscribe({
-      //   next: data => {
-      //     // console.log(this.selectedConvoy.length);
-      //     // console.log("----------------data");
-      //     // console.log(data);
-      //     this.reports = data;
-      //   },
-      //   error: () => {
-      //     console.log('Hubo un error al procesar la solicitud');
-      //   }
-      // });
+      this.http.post(environment.apiUrl + '/api/getReports', {}).subscribe({
+        next: data => {
+          // console.log(this.selectedConvoy.length);
+          console.log("----------------data");
+          console.log(data);
+          this.reports = data;
+        },
+        error: () => {
+          console.log('Hubo un error al procesar la solicitud');
+        }
+      });
+
+      // bol_eliminado: false
+      // codigo: "R008"
+      // descripcion: ""
+      // id: 3
+      // url: "/api/reports/posicion"
+      // value: "REPORTE DE POSICIÓN"
+
+      // this.reports = [
+      //   {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
+      //   {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},
+      //   {id : 2, value : 'REPORTE DE ENTRADA Y SALIDA', url: '/api/reports/entrada_salida'},
+      //   {id : 3, value : 'REPORTE DE COMBUSTIBLE', url: '/api/reports/combustible'},
+      //   {id : 4, value : 'REPORTE DE EXCESOS EN ZONA', url: '/api/reports/exceso_en_zona'},
+      //   {id : 5, value : 'REPORTE GENERAL', url: '/api/reports/general'},
+      //   {id : 6, value : 'REPORTE DE EVENTOS', url: '/api/reports/eventos'},
+      //   {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
+      //   {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
+      //   {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
+      //   {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)', url: '/api/reports/frenada_aceleracion_brusca'},
+      //   {id : 11, value : 'REPORTE DE DISTRACIÓN Y POSIBLE FATIGA', url: '/api/reports/distraccion_posible_fatiga'},
+      //   {id : 12, value : 'REPORTE DE CALIFICACION DE MANEJO', url: '/api/reports/calificacion_manejo'},
+      //   {id : 13, value : 'REPORTE DE FATIGA EXTREMA', url: '/api/reports/fatiga_extrema'},
+      //   {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL', url: '/api/reports/anticolision_frontal'},
+      //   {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES', url: '/api/reports/colision_peatones'},
+      //   {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA', url: '/api/reports/desvio_carril_izquierda'},
+      //   {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA', url: '/api/reports/desvio_carril_derecha'},
+      //   {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'},
+      //   {id : 19, value : 'REPORTE GERENCIAL (Cuenta cruzdelsur)', url: '/api/reports/gerencial_grafico_distraccion_fatiga'},
+      //   {id : 20, value : 'REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)', url: '/api/reports/exceso_velocidad_zona_formato_extendido'},
+      //   {id : 21, value : 'REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT', url: '/api/reports/somnolencia_proloint'},
+      //   {id : 22, value : 'REPORTE DE MANTENIMIENTO FISICO', url: '/api/reports/mantenimiento_fisico'},
+
+      // ];
 
 
-      this.reports = [
-        {id : 0, value : 'REPORTE DE PARADAS Y MOVIMIENTOS', url: '/api/reports/paradas_movimientos'},
-        {id : 1, value : 'REPORTE DE EXCESOS DE VELOCIDAD', url: '/api/reports/exceso_velocidad'},
-        {id : 2, value : 'REPORTE DE ENTRADA Y SALIDA', url: '/api/reports/entrada_salida'},
-        {id : 3, value : 'REPORTE DE COMBUSTIBLE', url: '/api/reports/combustible'},
-        {id : 4, value : 'REPORTE DE EXCESOS EN ZONA', url: '/api/reports/exceso_en_zona'},
-        {id : 5, value : 'REPORTE GENERAL', url: '/api/reports/general'},
-        {id : 6, value : 'REPORTE DE EVENTOS', url: '/api/reports/eventos'},
-        {id : 7, value : 'REPORTE DE POSICIÓN ', url: '/api/reports/posicion'},
-        {id : 8, value : 'REPORTE DE EXCESOS Y TRANSGRESIONES'},
-        {id : 9, value : 'REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL'},
-        {id : 10, value : 'REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)', url: '/api/reports/frenada_aceleracion_brusca'},
-        {id : 11, value : 'REPORTE DE DISTRACIÓN Y POSIBLE FATIGA', url: '/api/reports/distraccion_posible_fatiga'},
-        {id : 12, value : 'REPORTE DE CALIFICACION DE MANEJO', url: '/api/reports/calificacion_manejo'},
-        {id : 13, value : 'REPORTE DE FATIGA EXTREMA', url: '/api/reports/fatiga_extrema'},
-        {id : 14, value : 'REPORTE DE ANTICOLISIÓN FRONTAL', url: '/api/reports/anticolision_frontal'},
-        {id : 15, value : 'REPORTE DE COLISIÓN CON PEATONES', url: '/api/reports/colision_peatones'},
-        {id : 16, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA', url: '/api/reports/desvio_carril_izquierda'},
-        {id : 17, value : 'REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA', url: '/api/reports/desvio_carril_derecha'},
-        {id : 18, value : 'REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE', url: '/api/reports/bloqueo_vision_mobileye'},
-        {id : 19, value : 'REPORTE GERENCIAL (Cuenta cruzdelsur)', url: '/api/reports/gerencial_grafico_distraccion_fatiga'},
-        {id : 20, value : 'REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)', url: '/api/reports/exceso_velocidad_zona_formato_extendido'},
-        {id : 21, value : 'REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT', url: '/api/reports/somnolencia_proloint'},
-        {id : 22, value : 'REPORTE DE MANTENIMIENTO FISICO', url: '/api/reports/mantenimiento_fisico'},
+// 0 - R001	REPORTE DE PARADAS Y MOVIMIENTOS
+// 1 - R002	REPORTE DE EXCESOS DE VELOCIDAD
+// 2 - R003	REPORTE DE ENTRADA Y SALIDA
+// 3 - R004	REPORTE DE COMBUSTIBLE
+// 4 - R005	REPORTE DE EXCESOS EN ZONA
+// 5 - R006	REPORTE GENERAL
+// 6 - R007	REPORTE DE EVENTOS
+// 7 - R008	REPORTE DE POSICIÓN
+// 8 - R009	REPORTE DE EXCESOS Y TRANSGRESIONES
+// 9 - R010	REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL
+// 10 -R011	REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
+// 11 -R012	REPORTE DE DISTRACIÓN Y POSIBLE FATIGA
+// 12 -R013	REPORTE DE CALIFICACION DE MANEJO
+// 13 -R014	REPORTE DE FATIGA EXTREMA
+// 14 -R015	REPORTE DE ANTICOLISIÓN FRONTAL
+// 15 -R016	REPORTE DE COLISIÓN CON PEATONES
+// 16 -R017	REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA
+// 17 -R018	REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA
+// 18 -R019	REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE
+// 19 -R020	REPORTE GERENCIAL (Cuenta cruzdelsur)
+// 20 -R021	REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)
+// 21 -R022	REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT
+// 22 -R023	REPORTE DE MANTENIMIENTO FISICO
 
-      ];
+
+
 
 
     }
@@ -540,6 +574,9 @@ export class FormComponent implements OnInit {
 
     //var zonesArr: any=[];
 
+    let reportSelect = _.find(this.reports, (rep:any) => { if (rep.codigo == this.selectedReport) { return true;} else {return false} });  
+    console.log(reportSelect);
+    
     if(cv){
       //Convoy o grupo seleccionado
       var param = {
@@ -549,7 +586,7 @@ export class FormComponent implements OnInit {
 				vehiculos: JSON.stringify(convoyOrGroupArr),
         grupo:this.selectedConvoy,
         zonas:JSON.stringify(this.selectedZones),
-				url: this.reports[this.selectedReport].url,
+				url: reportSelect.url, //this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
@@ -563,7 +600,7 @@ export class FormComponent implements OnInit {
 				chkFrenada: this.chkFrenada,
 				chkAceleracion: this.chkAceleracion,
 				limit : true,
-				numRep: this.reports[this.selectedReport].id,
+				numRep: reportSelect.codigo,//this.reports[this.selectedReport].codigo,//this.reports[this.selectedReport].id,
       }
     } else {
       var param = {
@@ -574,7 +611,7 @@ export class FormComponent implements OnInit {
         vehiculos: JSON.stringify(this.selectedVehicles),
         grupo: this.selectedConvoy,
         zonas: JSON.stringify(this.selectedZones),
-        url: this.reports[this.selectedReport].url,
+        url: reportSelect.url, //this.reports[this.selectedReport].url,
         limitVel: !chkDuracion? this.limitSpeed: false,
         minimDur: chkDuracion? this.minimDur: false,
         chkOdomV: chkOdomV,
@@ -587,9 +624,8 @@ export class FormComponent implements OnInit {
         chkFatigaDistraccion: this.chkFatigaDistraccion,
         chkFrenada: this.chkFrenada,
         chkAceleracion: this.chkAceleracion,
-
         limit : true,
-        numRep: this.reports[this.selectedReport].id,
+        numRep: reportSelect.codigo, //this.reports[this.selectedReport].codigo,//this.reports[this.selectedReport].id,
       };
     }
 
@@ -608,15 +644,16 @@ export class FormComponent implements OnInit {
         // this.reportService.modalActive = true;
         var report_data = {
           data: data,
-          numRep: param.numRep,
+          numRep: param.numRep, // codigo
           repSubtitle: repSubtitle,
           chkDateHour: chkDateHour,
           chkDuracion: chkDuracion,
           chkOdomV: chkOdomV,
-          repTitle: this.reports[param.numRep].value,
+          repTitle: reportSelect.value, //this.reports[param.numRep].value,
           period: M1_t + ' - ' + M2_t,
           isVehicleReport: !cv,
           chkTableDropdown: !this.chkSimultaneousTables,
+          params : this.reportService.getParams(),
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
@@ -685,59 +722,60 @@ export class FormComponent implements OnInit {
 		/* this.showTimeLlegada = false;
 		this.showTimePeriodoDia = false; */
 
+
     switch(this.selectedReport){
-      case 0:
+      case 'R001': // 0 - R001	REPORTE DE PARADAS Y MOVIMIENTOS
         this.showMovStop = true;
         this.showLimitTime = true;
         break;
-      case 1:
+      case 'R002': // 1 - R002	REPORTE DE EXCESOS DE VELOCIDAD
         this.showExcVelOpt = true;
         this.showLimitTime = true;
         break;
-      case 2:
+      case 'R003': // 2 - R003	REPORTE DE ENTRADA Y SALIDA
         this.showZones = true;
         this.showLimitTime = true;
         break;
-      case 3:
+      case 'R004': // 3 - R004	REPORTE DE COMBUSTIBLE
         this.showLimitTime = true;
         this.showOdomOpt = true;
         break;
-      case 4:
+      case 'R005': // 4 - R005	REPORTE DE EXCESOS EN ZONA
         this.showLimitTime = true;
         break;
-      case 5:
+      case 'R006': // 5 - R006	REPORTE GENERAL
         this.showLimitTime = true;
         this.showCheckboxs = true;
         break;
-      case 6:
+      case 'R007': // 6 - R007	REPORTE DE EVENTOS
         this.showLimitTime = true;
         this.showEvents = true;
         break;
-      case 7:
+      case 'R008': // 7 - R008	REPORTE DE POSICIÓN
         break;
-      case 10:
+      case 'R011':  // 10 -R011	REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
         this.showLimitTime = true;
         this.showBrakeAccel = true;
         break;
-      case 11:
+      case 'R012': // 11 -R012	REPORTE DE DISTRACIÓN Y POSIBLE FATIGA
         this.showLimitTime = true;
         this.showFatigaDistraccion = true;
         break;
-      case 12:
+      case 'R013': // 12 -R013	REPORTE DE CALIFICACION DE MANEJO
         this.showLimitTime = true;
         break;
-      case 13:
+      case 'R014':  // 13 -R014	REPORTE DE FATIGA EXTREMA
         this.showLimitTime = true;
         break;
-      case 14:
-      case 15:
-      case 16:
-      case 17:
-      case 18:
-      case 19:
-      case 20:
-      case 21:
-      case 22:
+      case 'R015':  // 14 -R015	REPORTE DE ANTICOLISIÓN FRONTAL
+      case 'R016':  // 15 -R016	REPORTE DE COLISIÓN CON PEATONES
+      case 'R017':  // 16 -R017	REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA
+      case 'R018':  // 17 -R018	REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA
+      case 'R019':  // 18 -R019	REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE
+      case 'R020':  // 19 -R020	REPORTE GERENCIAL (Cuenta cruzdelsur)
+      case 'R021':  // 20 -R021	REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)
+      case 'R022':  // 21 -R022	REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT
+      case 'R023':  // 22 -R023	REPORTE DE MANTENIMIENTO FISICO
           this.showLimitTime = true;
 				break;
       default: break;
@@ -904,47 +942,47 @@ export class FormComponent implements OnInit {
       (JSON.stringify(this.selectedReport) != '{}') &&
       this.areDatesValid &&
       (
-        (this.selectedReport == 0 && is_vehicle_selected && (this.chkStops || this.chkMovements))
+        (this.selectedReport == 'R001' && is_vehicle_selected && (this.chkStops || this.chkMovements))
         ||
-        (this.selectedReport == 1 && is_vehicle_selected)
+        (this.selectedReport == 'R002' && is_vehicle_selected)
         ||
-        (this.selectedReport == 2 && is_vehicle_selected && is_zone_selected)
+        (this.selectedReport == 'R003' && is_vehicle_selected && is_zone_selected)
         ||
-        (this.selectedReport == 3 && is_vehicle_selected)
+        (this.selectedReport == 'R004' && is_vehicle_selected)
         ||
-        (this.selectedReport == 4 && is_vehicle_selected)
+        (this.selectedReport == 'R005' && is_vehicle_selected)
         ||
-        (this.selectedReport == 5 && is_vehicle_selected)
+        (this.selectedReport == 'R006' && is_vehicle_selected)
         ||
-        (this.selectedReport == 6 && is_vehicle_selected)
+        (this.selectedReport == 'R007' && is_vehicle_selected)
         ||
-        (this.selectedReport == 7 && is_vehicle_selected)
+        (this.selectedReport == 'R008' && is_vehicle_selected)
         ||
-        (this.selectedReport == 10 && is_vehicle_selected && (this.chkFrenada || this.chkAceleracion))
+        (this.selectedReport == 'R011' && is_vehicle_selected && (this.chkFrenada || this.chkAceleracion))
         ||
-        (this.selectedReport == 11 && is_vehicle_selected && (this.chkFatigaDistraccion || this.chkFatigaSomnolencia))
+        (this.selectedReport == 'R012' && is_vehicle_selected && (this.chkFatigaDistraccion || this.chkFatigaSomnolencia))
         ||
-        (this.selectedReport == 12 && is_vehicle_selected)
+        (this.selectedReport == 'R013' && is_vehicle_selected)
         ||
-        (this.selectedReport == 13 && is_vehicle_selected)
+        (this.selectedReport == 'R014' && is_vehicle_selected)
         ||
-        (this.selectedReport == 14 && is_vehicle_selected)
+        (this.selectedReport == 'R015' && is_vehicle_selected)
         ||
-        (this.selectedReport == 15 && is_vehicle_selected)
+        (this.selectedReport == 'R016' && is_vehicle_selected)
         ||
-        (this.selectedReport == 16 && is_vehicle_selected)
+        (this.selectedReport == 'R017' && is_vehicle_selected)
         ||
-        (this.selectedReport == 17 && is_vehicle_selected)
+        (this.selectedReport == 'R018' && is_vehicle_selected)
         ||
-        (this.selectedReport == 18 && is_vehicle_selected)
+        (this.selectedReport == 'R019' && is_vehicle_selected)
         ||
-        (this.selectedReport == 19 && is_vehicle_selected)
+        (this.selectedReport == 'R020' && is_vehicle_selected)
         ||
-        (this.selectedReport == 20 && is_vehicle_selected)
+        (this.selectedReport == 'R021' && is_vehicle_selected)
         ||
-        (this.selectedReport == 21 && is_vehicle_selected)
+        (this.selectedReport == 'R022' && is_vehicle_selected)
         ||
-        (this.selectedReport == 22 && is_vehicle_selected)
+        (this.selectedReport == 'R023' && is_vehicle_selected)
       );
   }
 

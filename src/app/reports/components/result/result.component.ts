@@ -70,6 +70,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   chkDateHour: any;
   chkDuracion: any;
   chkOdomV: any;
+  params:any;
   repTitle: any;
   Math = Math;
 
@@ -391,10 +392,15 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(){
+    // console.log("=======================================");
+    // console.log(this.reportService.getParams());
+    
     const isIndependentWindow = document.getElementById('vehicle_label') === null;
     if(isIndependentWindow){
       //Verificar si reporte es una ventana o componente
       var report_data = JSON.parse(localStorage.getItem('report_data')!);
+      // console.log(report_data);
+      
     }
     localStorage.removeItem('report_data');
 
@@ -453,6 +459,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.repTitle = data.repTitle;
         this.period = data.period;
         this.chkTableDropdown = data.chkTableDropdown;
+        this.params = data.params;
         this.prepareVehicleDropdown();
 
         //Check if this is the first time loading
@@ -494,6 +501,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.repTitle = report_data.repTitle;
       this.period = report_data.period;
       this.chkTableDropdown = report_data.chkTableDropdown;
+      this.params = report_data.params;
       this.prepareVehicleDropdown();
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
       document.querySelector('body')!.style.padding = '0.8rem';
@@ -750,21 +758,25 @@ export class ResultComponent implements OnDestroy, OnInit {
     this.display = true;
   }
 
-  verTodos(periodo:any, imei:any, dateHour:any, vehiculo:any) {
+  showModal() {
+    this.reportService.modalActive = true;
+
+  }
+  verTodos(periodo:any, imei:any, dateHour:any, vehiculo:any, dataParam:any) {
     console.log("===========================================");
     console.log(periodo);
     console.log(imei);
     console.log(dateHour);
     console.log(vehiculo);
+    console.log(dataParam);
 
 
     this.spinner.show("reportSpinner");
 
-    var dataParam = this.reportService.getParams();
-    console.log(dataParam);
+    // var dataParam = this.reportService.getParams();
     dataParam['limit'] = false;
     dataParam['findImei'] = imei;
-    console.log(dataParam);
+    // console.log(dataParam);
 
     // setTimeout(() => {
     //   /** spinner ends after 5 seconds */
@@ -778,17 +790,20 @@ export class ResultComponent implements OnDestroy, OnInit {
         // console.log(this.selectedVehicles.length);
         console.log(typeof data);
         console.log(data);
+        this.reportService.modalActive = true;
 
         this.reportService.objGeneral.data = data;
         this.reportService.objGeneral.periodo = periodo;//this.period;
         this.reportService.objGeneral.vehiculo = vehiculo;//this.period;
         this.reportService.objGeneral.dateHour = dateHour;//this.period;
 
+
+        console.log(this.reportService.objGeneral);
+        
         this.spinner.hide("reportSpinner");
 
         console.log("MODAL ACTIVATE");
 
-        this.reportService.modalActive = true;
 
         // var report_data = {
         //   data: data,
