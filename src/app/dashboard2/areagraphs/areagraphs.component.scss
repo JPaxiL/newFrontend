@@ -29,6 +29,15 @@
     height: 2.25rem;
   }
 
+  .p-calendar-row{
+    button{
+      width: 10%;
+      max-width: 4.5rem;
+      border: 1px var(--table-border-color) solid;
+      border-radius: 4px;
+    }
+  }
+
   table{
     width: 100%;
     vertical-align: middle;
@@ -47,7 +56,9 @@
       border: 1px var(--table-border-color) solid;
       ul{
         height: 100%;
-        padding: 0.75rem 0.5rem;
+        padding: 0.375rem 0.5rem;
+        margin: 0;
+        text-align: center;
       }
     }
     tbody tr{
@@ -109,6 +120,13 @@
         font-weight: bold;
       }
     }
+
+    .p-calendar-row{
+      p-calendar input.p-inputtext.p-component{
+        border-radius: 4px;
+      }
+    }
+
   }
 }
   
