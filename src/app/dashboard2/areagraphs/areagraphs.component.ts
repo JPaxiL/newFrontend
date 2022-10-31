@@ -26,6 +26,7 @@ export class AreagraphsComponent implements OnInit {
   blue: number = 0;
   imeiBlue: any = [];
   purple: number = 0;
+  imeiPurple: any = [];
   black: number = 0;
   imeiBlack: any = [];
   orange: number = 0;
@@ -49,7 +50,7 @@ export class AreagraphsComponent implements OnInit {
   legendPosition: string = 'below';
 
   colorScheme = {
-    domain: ['#45e845', '#2cadf2', '#ffb300', '#000', 'red'],
+    domain: ['#45e845', '#2cadf2', '#b46acf', '#000000', '#ffb300', '#cc1013'],
   };
 
   colorSchemeHorizontalChart = {
@@ -62,13 +63,13 @@ export class AreagraphsComponent implements OnInit {
 
   //Colores de transmision
   pieColorScheme: any = {
-    10:"#45e845",
-    20:"#2cadf2",
-    30:"#b23ccf",
-    40:"#000",
-    50:"#ffb300",
-    60:"#cc1013",
-    100:"#ABABAB",
+    10: '#45e845',
+    20: '#2cadf2',
+    30: '#b23ccf',
+    40: '#000',
+    50: '#ffb300',
+    60: '#cc1013',
+    100: '#ABABAB',
   };
 
   data: any = [];
@@ -151,6 +152,7 @@ export class AreagraphsComponent implements OnInit {
         this.imeiBlue.push(vehicle.name);
       } else if (vehicle.point_color == 30) {
         this.purple += 1;
+        this.imeiPurple.push(vehicle.name);
       } else if (vehicle.point_color == 40) {
         this.black += 1;
         this.imeiBlack.push(vehicle.name);
@@ -161,8 +163,9 @@ export class AreagraphsComponent implements OnInit {
         this.red += 1;
         this.imeiRed.push(vehicle.name);
       } else if (vehicle.point_color == 100) {
-        this.green += 1;
-        this.imeiGreen.push(vehicle.name);
+        //no definido
+        // this.green += 1;
+        // this.imeiGreen.push(vehicle.name);
       } else {
         this.black += 1;
         this.imeiBlack.push(vehicle.name);
@@ -175,19 +178,23 @@ export class AreagraphsComponent implements OnInit {
         value: this.green,
       },
       {
-        name: 'Detenidos',
+        name: 'Detenido encendido',
         value: this.blue,
       },
       {
-        name: 'Sin cobertura',
-        value: this.orange,
+        name: 'Detenido apagado',
+        value: this.purple,
       },
       {
         name: 'Sin transmision',
         value: this.black,
       },
       {
-        name: 'Corte de transmision',
+        name: 'Sin cobertura',
+        value: this.orange,
+      },
+      {
+        name: 'GPS Sin señal',
         value: this.red,
       },
     ];
@@ -269,7 +276,6 @@ export class AreagraphsComponent implements OnInit {
   }
 
   async getInfraction() {
-
     if (this.date_infraction != '') {
       this.spinner.show('loadingInfractionSpinner');
       let to = moment(this.date_infraction[1])
@@ -466,9 +472,11 @@ export class AreagraphsComponent implements OnInit {
 
   public drawOnPieChart() {
     console.log('Colocando etiquetas encima de pie chart');
-    let node = document.querySelector('.pie-chart-container g.pie-chart.chart > g')! as HTMLElement;
+    let node = document.querySelector(
+      '.pie-chart-container g.pie-chart.chart > g'
+    )! as HTMLElement;
     //Clear previous labels if any
-    while(node.nextElementSibling != null){
+    while (node.nextElementSibling != null) {
       node.parentNode!.removeChild(node.nextElementSibling);
     }
 
@@ -488,13 +496,13 @@ export class AreagraphsComponent implements OnInit {
     //Get sum of all values
     let totalFreqChart = 0;
     let percentageValues = [];
-    for(let i = 0; i < this.data.length; i++){
+    for (let i = 0; i < this.data.length; i++) {
       totalFreqChart += this.data[i].value;
     }
 
     for (let i = 0; i < slices.length; i++) {
       //console.log(slices[i]);
-      const percent = Math.round(this.data[i].value * 100 / totalFreqChart);
+      const percent = Math.round((this.data[i].value * 100) / totalFreqChart);
       //console.log(percent);
       percentageValues.push(percent);
       let startingValue = 0;
@@ -502,13 +510,23 @@ export class AreagraphsComponent implements OnInit {
         startingValue += percentageValues[j];
       }
       if (percent >= 2) {
-        const text = this.generateText(percent, maxX - minX, startingValue, this.data[i].value);
+        const text = this.generateText(
+          percent,
+          maxX - minX,
+          startingValue,
+          this.data[i].value
+        );
         node.parentNode!.append(text);
       }
     }
   }
 
-  private generateText(percent: number, diagonal: number, startingValue: number, labelValue: number) {
+  private generateText(
+    percent: number,
+    diagonal: number,
+    startingValue: number,
+    labelValue: number
+  ) {
     //Create text element
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     const r = Math.round(diagonal / 3); //2.5 is too far
@@ -526,11 +544,13 @@ export class AreagraphsComponent implements OnInit {
     return text;
   }
 
-  public drawOnPieLegend(){
+  public drawOnPieLegend() {
     console.log('Insertando frecuencias en Leyenda de Chart');
-    let spanLegends = document.querySelectorAll('ngx-charts-legend-entry > span span.legend-label-color');
+    let spanLegends = document.querySelectorAll(
+      'ngx-charts-legend-entry > span span.legend-label-color'
+    );
     //console.log(spanLegends);
-    for(let i = 0; i < this.data.length; i++){
+    for (let i = 0; i < this.data.length; i++) {
       //let span = spanLegends[i] as HTMLElement;
       spanLegends[i].innerHTML = this.data[i].value;
     }
