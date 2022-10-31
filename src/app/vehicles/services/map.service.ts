@@ -562,7 +562,7 @@ export class MapService {
       40:"black",
       50:"orange",
       60:"red",
-      100:"green"
+      100:"transm-color-not-defined"
     }
 
     this.markerClusterGroup.clearLayers();
