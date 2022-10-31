@@ -411,10 +411,7 @@ p-confirmdialog{
   }
 }
 
-.gl-row-underline{
-  border-bottom: 1px solid var(--gl-gray-border);
-  /* padding-bottom: 0.25rem; */
-
+.gl-input-container, .gl-row-underline{
   input:not(.p-multiselect-filter, [type="checkbox"]),
   select,
   p-multiselect > .p-multiselect.p-component,
@@ -438,6 +435,11 @@ p-confirmdialog{
   input:not([disabled]){
     text-shadow: 0 0 #000;
   }
+}
+
+.gl-row-underline{
+  border-bottom: 1px solid var(--gl-gray-border);
+  /* padding-bottom: 0.25rem; */
 }
 
 .gl-middleline{

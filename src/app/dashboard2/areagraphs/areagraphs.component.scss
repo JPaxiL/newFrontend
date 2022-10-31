@@ -122,9 +122,27 @@
     }
 
     .p-calendar-row{
-      p-calendar input.p-inputtext.p-component{
-        border-radius: 4px;
-      }
+      p-calendar{
+        span.p-calendar.p-calendar-w-btn{
+          border-radius: 4px;
+          border: 1px var(--table-border-color) solid;
+          &:hover{
+            border-color: #2196F3;
+          }
+
+          input.p-inputtext.p-component{
+            border-radius: 4px;
+          }
+  
+          button.p-datepicker-trigger{
+            order: -1;
+            border-radius: 4px 0px 0px 4px !important;
+            &:focus{
+              box-shadow: none;
+            }
+          }
+        }
+      }  
     }
 
   }

@@ -156,7 +156,7 @@
                         <hr>
                     </div>
                     <div class="col-12 mb-4">
-                        <div class="d-flex gap-2 p-fluid p-calendar-row">
+                        <div class="d-flex gap-2 p-fluid p-calendar-row gl-input-container">
                             <p-calendar
                                 [(ngModel)]="date_infraction"
                                 [dateFormat] = "'dd/mm/yy'"
@@ -164,6 +164,9 @@
                                 inputId="range"
                                 selectionMode="range"
                                 class="flex-grow-1"
+                                [appendTo]="'body'"
+                                [showIcon]="true"
+                                icon="pi pi-calendar"
                             >
                             </p-calendar>
                             <button btn btn-secondary (click)="getInfraction()">Ir</button>
@@ -224,13 +227,16 @@
                     </div>
                     
                     <div class="col-12 mb-4">
-                        <div class="d-flex gap-2 p-fluid p-calendar-row">
+                        <div class="d-flex gap-2 p-fluid p-calendar-row gl-input-container">
                             <p-calendar
                             [(ngModel)]="date_gps"
                             [dateFormat] = "'dd/mm/yy'"
                             [readonlyInput]="true"
                             inputId="range"
                             selectionMode="range"
+                            [appendTo]="'body'"
+                            [showIcon]="true"
+                            icon="pi pi-calendar"
                             class="flex-grow-1"
                             ></p-calendar>
                             <button btn btn-secondary (click)="getEventGps()">Ir</button>
@@ -381,13 +387,16 @@
                     </div>
 
                     <div class="col-12 mb-4">
-                        <div class="d-flex gap-2 p-fluid p-calendar-row">
+                        <div class="d-flex gap-2 p-fluid p-calendar-row gl-input-container">
                             <p-calendar
                             [(ngModel)]="date_safety"
                             [dateFormat] = "'dd/mm/yy'"
                             [readonlyInput]="true"
                             inputId="range"
                             selectionMode="range"
+                            [appendTo]="'body'"
+                            [showIcon]="true"
+                            icon="pi pi-calendar"
                             class="flex-grow-1"
                             ></p-calendar>
                             <button btn btn-secondary (click)="getVehicleSafety()">Ir</button>
