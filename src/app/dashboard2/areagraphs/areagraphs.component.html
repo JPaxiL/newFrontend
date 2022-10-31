@@ -18,7 +18,7 @@
 
     <div class="row header-padding"></div>
     <div class="row dashboard-content p-3 overflow-auto justify-content-center">
-        
+
         <div class="row p-card p-2 mb-3">
             <div class="col-12">
                 <h3>Dash Board</h3>
@@ -57,10 +57,11 @@
                                     <thead>
                                         <tr>
                                             <th>En movimiento</th>
-                                            <th>Detenidos</th>
-                                            <th>Sin cobertura</th>
+                                            <th>Detenidos encendidos</th>
+                                            <th>Detenidos apagados</th>
                                             <th>Sin transmision</th>
-                                            <th>Corte de transmision</th>
+                                            <th>Sin cobertura</th>
+                                            <th>GPS Sin señal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,7 +78,7 @@
                                             </td>
                                             <td>
                                                 <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiOrange">{{ imei }}</li>
+                                                    <li *ngFor="let imei of imeiPurple">{{ imei }}</li>
                                                 </ul>
                                             </td>
                                             <td>
@@ -87,6 +88,12 @@
                                             </td>
                                             <td>
                                                 <ul class="list-unstyled">
+                                                    <li *ngFor="let imei of imeiOrange">{{ imei }}</li>
+                                                </ul>
+                                            </td>
+
+                                            <td>
+                                                <ul class="list-unstyled">
                                                     <li *ngFor="let imei of imeiRed">{{ imei }}</li>
                                                 </ul>
                                             </td>
@@ -94,7 +101,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -198,7 +205,7 @@
                                             <li *ngFor="let vehicle of infraction">{{ vehicle.higher_speed }}</li>
                                         </ul>
                                     </td>
-                                </tr>  
+                                </tr>
                                 <!-- <tr *ngFor="let vehicle of infraction">
                                     <td>{{vehicle.name}}</td>
                                     <td>{{vehicle.amount}}</td>
@@ -207,7 +214,7 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
 
                 </div>
             </div>
@@ -216,13 +223,13 @@
         <div class="row p-0 gap-3">
             <div class="col-md col-12">
                 <div class="row p-card p-2 rounded h-100 flex-column">
-                
+
                     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGpsSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Gps... </p></ngx-spinner>
                     <div class="col-12 mb-3">
                         <h4>Vehículos que generaron alertas GPS</h4>
                         <hr>
                     </div>
-                    
+
                     <div class="col-12 mb-4">
                         <div class="d-flex gap-2 p-fluid p-calendar-row">
                             <p-calendar
@@ -363,17 +370,17 @@
                                             <li *ngFor="let event of gpsEvents">{{ event.amount }}</li>
                                         </ul>
                                     </td>
-                                </tr>      
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    
+
                 </div>
             </div>
 
             <div class="col-md col-12">
                 <div class="row p-card p-2 rounded h-100 flex-column">
-                
+
                     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingSegSpinner" size = "small" color = "#fff" type = "ball-pulse" ><p style="color: white" class="text-center"> Cargando Alertas Seg. vehicular... </p></ngx-spinner>
                     <div class="col-12 mb-3">
                         <h4>Vehículos que generaron alertas Seg. vehicular</h4>
@@ -411,7 +418,7 @@
                                 {{countVehicleSafetyEvents.no_rostro}}
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-5 text-end text-truncate">
                                 Fatiga extrema
@@ -569,12 +576,12 @@
                                             <li *ngFor="let event of vehicleSafetyEvents">{{ event.amount }}</li>
                                         </ul>
                                     </td>
-                                </tr>    
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-    
-                    
+
+
 
                 </div>
             </div>
