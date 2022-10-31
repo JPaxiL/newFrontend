@@ -529,8 +529,7 @@ export class AreagraphsComponent implements OnInit {
   public drawOnPieLegend(){
     console.log('Insertando frecuencias en Leyenda de Chart');
     let spanLegends = document.querySelectorAll('ngx-charts-legend-entry > span span.legend-label-color');
-    //Clear previous labels if any
-    console.log(spanLegends);
+    //console.log(spanLegends);
     for(let i = 0; i < this.data.length; i++){
       //let span = spanLegends[i] as HTMLElement;
       spanLegends[i].innerHTML = this.data[i].value;

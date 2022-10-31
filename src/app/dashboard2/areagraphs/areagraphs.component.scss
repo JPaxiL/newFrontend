@@ -26,14 +26,13 @@
     justify-content: center;
     border: 1px var(--table-border-color) solid;
     border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 2.25rem;
   }
 
   table{
     width: 100%;
     vertical-align: middle;
+    table-layout: fixed;
     
     thead th{
       background-color: var(--table-header-bg);
@@ -50,6 +49,9 @@
         height: 100%;
         padding: 0.75rem 0.5rem;
       }
+    }
+    tbody tr{
+      font-size: 0.875rem;
     }
   }
 
