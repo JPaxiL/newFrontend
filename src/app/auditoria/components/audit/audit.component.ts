@@ -22,7 +22,7 @@ export class AuditComponent implements OnInit {
 
   @ViewChild('subscritionIp')
   auditmapComponent!: AuditmapComponent;
-  onActivitySelection(ip_address: any): void{this.auditmapComponent.getIpForActivity(ip_address);}
+  onActivitySelection(data: any): void{this.auditmapComponent.getDataActivity(data);}
 
   isUnderConstruction: boolean = true;
   displayGroup: boolean = false;

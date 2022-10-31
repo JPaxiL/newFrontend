@@ -13,9 +13,12 @@ export class AuditInfoActivityComponent implements OnChanges {
   @Input() subject_type: string = "";
   @Input() color: string = "";
 
+  TIMER: number = 3000;
+
   dataResponse_vehicle:any;
   dataResponse_zone:any;
   dataResponse_point:any;
+  dataResponse_driver:any;
   nombre_visible_punto: boolean = false;
   visible_punto: boolean = false;
   vel_act_zona: boolean = false;
@@ -27,6 +30,16 @@ export class AuditInfoActivityComponent implements OnChanges {
   placas_vehiculos: string = '';
   nombres_geocercas: string = '';
   nombres_puntos:string = '';
+  tipoVehiculo:any ;
+  nombreConductor: string = '';
+
+  types: any = [
+    {id: '0', name: 'BUS'},
+    {id: '1', name: 'MINIBUS'},
+    {id: '2', name: 'VAN'},
+    {id: '3', name: 'CAMIONETA'},
+    {id: '4', name: 'CONCENTRADO'}
+  ];
 
   constructor(private activityService:InfoActivityService,
     private spinner: NgxSpinnerService) { 
@@ -37,12 +50,13 @@ export class AuditInfoActivityComponent implements OnChanges {
 
     this.placas_vehiculos = '';
     this.nombres_geocercas = '';
+    this.TIMER = 3000;
 
-    // this.spinner.show('loadingAlertData');
+    this.spinner.show('loadingAlertData');
 
     let resultado:any = this.properties;
 
-    console.log(resultado);
+    //console.log(resultado);
 
     if(resultado.visible_punto){
 
@@ -100,10 +114,13 @@ export class AuditInfoActivityComponent implements OnChanges {
 
           this.dataResponse_vehicle = response;
 
-          this.placas_vehiculos = this.placas_vehiculos + this.dataResponse_vehicle.data.nombre + ',';
+          this.placas_vehiculos = this.placas_vehiculos + this.dataResponse_vehicle.data.nombre + ', ';
+
         });
         
       }
+
+      this.TIMER += 3000;
     }
     
     if(resultado.array_geo || resultado.array_zonas){
@@ -128,10 +145,12 @@ export class AuditInfoActivityComponent implements OnChanges {
 
           this.dataResponse_zone = response;
 
-          this.nombres_geocercas = this.nombres_geocercas + this.dataResponse_zone.data.nombre_zona + ',';
+          this.nombres_geocercas = this.nombres_geocercas + this.dataResponse_zone.data.nombre_zona + ', ';
 
         });
       }
+
+      this.TIMER += 3000;
 
     }
 
@@ -146,13 +165,40 @@ export class AuditInfoActivityComponent implements OnChanges {
 
           this.dataResponse_point = response;
 
-          this.nombres_puntos = this.nombres_puntos + this.dataResponse_point.data.nombre_punto + ',';
+          this.nombres_puntos = this.nombres_puntos + this.dataResponse_point.data.nombre_punto + ', ';
 
         });
       }
 
+      this.TIMER += 3000;
+
+    }
+    
+    if(resultado.tipo){
+      this.tipoVehiculo = this.types.find((obj: { id: number; }) => {
+        return obj.id === resultado.tipo;
+      });
+
+      this.tipoVehiculo = Object.values(this.tipoVehiculo)[1];
+
     }
 
+    if(resultado.id_conductor){
+
+      this.activityService.getDataDriver(resultado.id_conductor).subscribe(response => {
+
+        this.dataResponse_driver = response;
+
+        this.nombreConductor = this.dataResponse_driver.data.nombre_conductor;
+
+      });
+
+      this.TIMER += 2000;
+    }
+
+    setTimeout(() => {
+      this.spinner.hide('loadingAlertData');
+    }, this.TIMER);
   }
 
 
