@@ -3,8 +3,9 @@ import * as L from 'leaflet';
 import { MapService } from '../../services/map.service';
 
 interface Data {
-	latitude: string;
-  longitude: string;
+  ip_address: string;
+  properties: string;
+  subject_type: string;
 }
 
 @Component({
@@ -19,6 +20,12 @@ export class AuditmapComponent implements AfterViewInit {
   private map :any;
   @Input() ip: string = "";
   dataResponse:any;
+
+  properties: any = {};
+
+  layerGroup: any;
+
+  latlngs: [number, number][] = [];
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -42,24 +49,108 @@ export class AuditmapComponent implements AfterViewInit {
     iconAnchor:   [18, 23], 
 });
 
+private Marker_old = L.icon({
+  iconUrl: '/assets/images/marker_old.png',
+
+  iconSize:     [18, 23], 
+  iconAnchor:   [18, 23], 
+});
+
+private Marker_new = L.icon({
+  iconUrl: '/assets/images/marker_new.png',
+
+  iconSize:     [18, 23], 
+  iconAnchor:   [18, 23], 
+});
+
   ngAfterViewInit(): void {
     this.initMap();
 
-    
+    this.layerGroup = L.layerGroup().addTo(this.map);
   }
 
-  getIpForActivity(ip_address:string){
+  getDataActivity(data:Data){
 
-    var layerGroup = L.layerGroup().addTo(this.map);
-
-    this.mapService.getInfoFromIp(ip_address)
-        .subscribe(response => {
-
-          this.dataResponse = response;
-          L.marker([this.dataResponse.latitude, this.dataResponse.longitude], {icon: this.Icon}).addTo(layerGroup);
-        });
+    this.layerGroup.clearLayers();
     
-        layerGroup.clearLayers();
+    if(data.ip_address != null && data.ip_address != '127.0.0.1' && data.ip_address != ''){
+
+      this.mapService.getInfoFromIp(data.ip_address)
+          .subscribe(response => {
+  
+            this.dataResponse = response;
+            L.marker([this.dataResponse.latitude, this.dataResponse.longitude], {icon: this.Icon}).addTo(this.layerGroup);
+          });
+      
+    }
+
+    if(data.subject_type == 'Point' ){
+
+      if(data.properties){
+  
+        this.properties = JSON.parse(data.properties);
+    
+        if(this.properties.attributes.coordenadas_punto){
+    
+          let coordenadas_punto = this.properties.attributes.coordenadas_punto.replace(/[&\/\\#+()$~%'":*?<>{}]/g,'');
+          coordenadas_punto = coordenadas_punto.split(',');
+          L.marker([parseFloat(coordenadas_punto[0]),parseFloat(coordenadas_punto[1])], {icon: this.Marker_new}).addTo(this.layerGroup);
+        }
+    
+        if(this.properties.old.coordenadas_punto){
+          let coordenadas_punto = this.properties.old.coordenadas_punto.replace(/[&\/\\#+()$~%'":*?<>{}]/g,'');
+          coordenadas_punto = coordenadas_punto.split(',');
+          L.marker([parseFloat(coordenadas_punto[0]),parseFloat(coordenadas_punto[1])], {icon: this.Marker_old}).addTo(this.layerGroup);
+        }
+      }
+    }
+
+    this.map.panTo(new L.LatLng(-12.105777,-76.4436729));
+
+    if(data.subject_type == 'Zone'){
+
+      this.latlngs = [];
+      
+      if(data.properties){
+        this.properties = JSON.parse(data.properties);
+        //console.log(this.properties);
+
+        if(this.properties.old){
+
+          let vertices_zona = this.properties.old.vertices_zona.replace(/[()]/g,'').trim().split(',');
+  
+          for (let i = 0; i < vertices_zona.length; i++) {
+            
+            let vertices = vertices_zona[i].trim().split(' ');
+            this.latlngs.push([parseFloat(vertices[0]),parseFloat(vertices[1])]);
+            
+          }
+  
+          var polygon = L.polygon(this.latlngs, {color: 'red'}).addTo(this.layerGroup);
+        }
+
+        this.latlngs = [];
+
+        if(this.properties.attributes){
+
+          let vertices_zona = this.properties.attributes.vertices_zona.replace(/[()]/g,'').trim().split(',');
+  
+          for (let i = 0; i < vertices_zona.length; i++) {
+            
+            let vertices = vertices_zona[i].trim().split(' ');
+            this.latlngs.push([parseFloat(vertices[0]),parseFloat(vertices[1])]);
+            
+          }
+  
+          var polygon = L.polygon(this.latlngs, {color: 'green'}).addTo(this.layerGroup);
+          this.map.fitBounds(polygon.getBounds());
+        }
+
+      
+    }
+  }
+
+
   }
 
 }

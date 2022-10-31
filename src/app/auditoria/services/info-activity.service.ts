@@ -27,4 +27,9 @@ export class InfoActivityService {
     let url = `${environment.apiUrl}/api/point/${id}`;
     return this.httpClient.get(url);
   }
+  getDataDriver(id: string){
+    
+    let url = `${environment.apiUrl}/api/driverData/${id}`;
+    return this.httpClient.get(url);
+  }
 }

@@ -90,14 +90,16 @@ export class AuditresultComponent implements OnInit {
 
       let subject_type_split = subject_type.split(/[\\]/g);
       this.eventDisplayGroup.emit({show: true, ip_address, properties, subject_type: subject_type_split[subject_type_split.length - 1]});
+      this.selectedActivityEvent.emit({ip_address, properties, subject_type: subject_type_split[subject_type_split.length - 1]});
     }else{
       this.eventDisplayGroup.emit({show: true, ip_address, properties, subject_type: ''});
+      this.selectedActivityEvent.emit({ip_address, properties, subject_type: ''});
     }
   }
 
   onShowLocation(ip_address: string){
 
-    this.selectedActivityEvent.emit(ip_address);
+    this.selectedActivityEvent.emit({ip_address});
   }
 
   exportexcel(): void
