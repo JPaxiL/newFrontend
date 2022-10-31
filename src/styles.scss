@@ -792,7 +792,7 @@ p-inputswitch{
     }
   }
 
-  .gl-middleline::after{
+  .gl-middleline:not(.gl-permanent-middleline)::after{
     display: none;
   }
   
