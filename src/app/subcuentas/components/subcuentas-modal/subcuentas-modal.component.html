@@ -21,7 +21,7 @@
           <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         </div> -->
 
-        <div class="dialog-form-container" >
+        <div class="dialog-form-container mb-4" >
 
           <div class="row">
 
@@ -35,14 +35,10 @@
             </div>
           </div>
         </div>
-        <br>
-        <br>
-        <div class="dialog-form-container gl-middleline" *ngIf="subcuentasService.action == 'add'">
+
+        <div class="dialog-form-container gl-middleline" *ngIf="subcuentasService.action == 'add'" style="margin-bottom: 0.75rem;">
 
           <div class="row">
-
-
-
             <div class="col p-field">
               <label class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
@@ -65,76 +61,66 @@
             </div>
           </div>
 
-          <br>
-          <br>
-
         </div>
 
-        <div class="dialog-form-container" >
+        <div class="dialog-form-container d-flex" >
 
-          <div *ngIf="subcuentasService.action == 'edit'">
-
-              <div class="row">
-                <div class="col p-field">
-                  <label class="row gl-row-underline">
-                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label>Nombre :</label>
-                    </div>
-                    <div class="col-7">
-                      <label>{{getControlLabel('nombre')}}</label>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              <br>
+          <ng-container *ngIf="subcuentasService.action == 'edit'">
 
               <div class="row">
                 <div class="col p-field">
                   <label class="row gl-row-underline">
                     <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label for="tipo-unidad">Anterior Contraseña:</label>
+                      <label for="name">Nombre :</label>
                     </div>
                     <div class="col-7">
-                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasena">
+                      <input id="name" type="text" value="{{getControlLabel('nombre')}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                     </div>
                   </label>
                 </div>
               </div>
-
-              <br>
 
               <div class="row">
                 <div class="col p-field">
                   <label class="row gl-row-underline">
                     <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label for="tipo-unidad">Nueva Contraseña:</label>
+                      <label for="prev_pass">Anterior Contraseña:</label>
                     </div>
                     <div class="col-7">
-                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew">
-
+                      <input id="prev_pass" type="text" pInputText class="p-inputtext-sm" formControlName="contrasena">
                     </div>
                   </label>
                 </div>
               </div>
-
-              <br>
 
               <div class="row">
                 <div class="col p-field">
                   <label class="row gl-row-underline">
                     <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label for="tipo-unidad">Repita Nueva Contraseña:</label>
+                      <label for="new_pass">Nueva Contraseña:</label>
                     </div>
                     <div class="col-7">
-                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew2">
+                      <input id="new_pass" type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew">
+
                     </div>
                   </label>
                 </div>
               </div>
 
-              <br>
-          </div>
+              <div class="row">
+                <div class="col p-field">
+                  <label class="row gl-row-underline">
+                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                      <label for="new_pass_2">Repita Nueva Contraseña:</label>
+                    </div>
+                    <div class="col-7">
+                      <input id="new_pass_2" type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew2">
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+          </ng-container>
 
           <div class="row">
             <div class="col p-field">
@@ -143,7 +129,6 @@
                   <label for="tipo-unidad">Vehículos :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="vehiculos"
@@ -156,13 +141,10 @@
                     [selectedItemsLabel]="'{0} vehiculos seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
           </div>
-
-          <br>
 
           <div class="row">
 
@@ -172,7 +154,6 @@
                   <label for="tipo-unidad">Geocercas :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="geocercas"
@@ -185,14 +166,11 @@
                     [selectedItemsLabel]="'{0} geocercas seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
 
           </div>
-
-          <br>
 
           <div class="row">
 
@@ -202,7 +180,6 @@
                   <label for="tipo-unidad">Geopuntos :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="geopuntos"
@@ -215,14 +192,11 @@
                     [selectedItemsLabel]="'{0} geopuntos seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
 
           </div>
-
-          <br>
 
           <div class="row">
 
@@ -232,7 +206,6 @@
                   <label for="tipo-unidad">Reportes :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="reportes"
@@ -245,7 +218,6 @@
                     [selectedItemsLabel]="'{0} reportes seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
@@ -255,13 +227,12 @@
         </div>
       </div>
     </div>
-    <br>
     <!-- <ng-template pTemplate="footer" style="width: 60vw;"> -->
-        <div class="row justify-content-center mt-4 panel-izq-container-footer">
-          <div class="col-6">
+        <div class="row justify-content-center mt-4 pt-2 panel-izq-container-footer">
+          <div class="col-4">
               <button type="button" class="btn-gl-cancel btn-dark-hover w-100" (click)="subcuentasService.modalActive=false">Cancelar</button>
           </div>
-          <div class="col-6">
+          <div class="col-4">
               <button type="submit" class="btn-gl-save btn-dark-hover w-100" >Guardar</button>
           </div>
         </div>
