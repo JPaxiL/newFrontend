@@ -122,7 +122,7 @@ private Marker_new = L.icon({
           for (let i = 0; i < vertices_zona.length; i++) {
             
             let vertices = vertices_zona[i].trim().split(' ');
-            this.latlngs.push([parseFloat(vertices[0]),parseFloat(vertices[1])]);
+            this.latlngs.push([parseFloat(vertices[1]),parseFloat(vertices[0])]);
             
           }
   
@@ -138,7 +138,7 @@ private Marker_new = L.icon({
           for (let i = 0; i < vertices_zona.length; i++) {
             
             let vertices = vertices_zona[i].trim().split(' ');
-            this.latlngs.push([parseFloat(vertices[0]),parseFloat(vertices[1])]);
+            this.latlngs.push([parseFloat(vertices[1]),parseFloat(vertices[0])]);
             
           }
   
