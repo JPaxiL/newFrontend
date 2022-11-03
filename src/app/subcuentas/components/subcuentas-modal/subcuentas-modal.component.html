@@ -1,4 +1,4 @@
-<p-dialog [(visible)]="subcuentasService.modalActive" [style]="{'width':'640px'}" >
+<p-dialog [(visible)]="subcuentasService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'640px'}" >
 
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
@@ -56,8 +56,8 @@
                 </div>
                 <div class="col-7">
                   <span class="p-input-icon-right">
-                    <i class="pi pi-eye" role="button" *ngIf="eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
-                    <i class="pi pi-eye-slash" role="button" *ngIf="!eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
+                    <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
+                    <i class="pi pi-eye" role="button" *ngIf="!eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
                     <input id="passCreate" type="password" pInputText class="p-inputtext-sm" formControlName="contrasena" autocomplete="no" readonly onfocus="$(this).removeAttr('readonly');">
                   </span>
                 </div>
@@ -92,8 +92,8 @@
                     </div>
                     <div class="col-7">
                       <span class="p-input-icon-right">
-                        <i class="pi pi-eye" role="button" *ngIf="eyeStateEditBefore" (click)="eyeStateEditBefore = !eyeStateEditBefore; togglePassEye();"></i>
-                        <i class="pi pi-eye-slash" role="button" *ngIf="!eyeStateEditBefore" (click)="eyeStateEditBefore = !eyeStateEditBefore; togglePassEye();"></i>
+                        <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateEditBefore" (click)="eyeStateEditBefore = !eyeStateEditBefore; togglePassEye();"></i>
+                        <i class="pi pi-eye" role="button" *ngIf="!eyeStateEditBefore" (click)="eyeStateEditBefore = !eyeStateEditBefore; togglePassEye();"></i>
                         <input id="passEditBefore" type="password" pInputText class="p-inputtext-sm" formControlName="contrasena" readonly onfocus="$(this).removeAttr('readonly');">
                       </span>
                     </div>
@@ -109,8 +109,8 @@
                     </div>
                     <div class="col-7">
                       <span class="p-input-icon-right">
-                        <i class="pi pi-eye" role="button" *ngIf="eyeStateEditAfter" (click)="eyeStateEditAfter = !eyeStateEditAfter; togglePassEye();"></i>
-                        <i class="pi pi-eye-slash" role="button" *ngIf="!eyeStateEditAfter" (click)="eyeStateEditAfter = !eyeStateEditAfter; togglePassEye();"></i>
+                        <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateEditAfter" (click)="eyeStateEditAfter = !eyeStateEditAfter; togglePassEye();"></i>
+                        <i class="pi pi-eye" role="button" *ngIf="!eyeStateEditAfter" (click)="eyeStateEditAfter = !eyeStateEditAfter; togglePassEye();"></i>
                         <input id="passEditAfter" type="password" pInputText class="p-inputtext-sm" formControlName="contrasenaNew" readonly onfocus="$(this).removeAttr('readonly');">
                       </span>
                     </div>
@@ -126,8 +126,8 @@
                     </div>
                     <div class="col-7">
                       <span class="p-input-icon-right">
-                        <i class="pi pi-eye" role="button" *ngIf="eyeStateEditAfter2" (click)="eyeStateEditAfter2 = !eyeStateEditAfter2; togglePassEye();"></i>
-                        <i class="pi pi-eye-slash" role="button" *ngIf="!eyeStateEditAfter2" (click)="eyeStateEditAfter2 = !eyeStateEditAfter2; togglePassEye();"></i>
+                        <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateEditAfter2" (click)="eyeStateEditAfter2 = !eyeStateEditAfter2; togglePassEye();"></i>
+                        <i class="pi pi-eye" role="button" *ngIf="!eyeStateEditAfter2" (click)="eyeStateEditAfter2 = !eyeStateEditAfter2; togglePassEye();"></i>
                         <input id="passEditAfter2" type="password" pInputText class="p-inputtext-sm" formControlName="contrasenaNew2" readonly onfocus="$(this).removeAttr('readonly');">
                       </span>
                     </div>
