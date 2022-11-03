@@ -11,7 +11,7 @@
       </div>
     </ng-template>
 </p-confirmDialog>
-<p-dialog [(visible)]="display" (onShow)="onShow()" [breakpoints]="{'1200px': '65vw', '960px': '75vw', '640px': '100vw'}" [style]="{width: '55vw'}">
+<p-dialog [(visible)]="display" (onShow)="onShow()" [breakpoints]="{'1200px': '65vw', '960px': '75vw', '640px': '100vw'}" [style]="{width: '55vw'}" [modal]="true" [resizable]="false">
     <ng-template class="p-dialog-title" pTemplate="header">
       <div>
         <i class="fa fa-pencil me-2" aria-hidden="true"></i>

@@ -1,6 +1,6 @@
 <app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
 
-<p-dialog icon="pi pi-info-circle" [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayDelete">
+<p-dialog icon="pi pi-info-circle" [modal]="true" [resizable]="false" [style]="{width: '50vw'}" [(visible)]="displayDelete">
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
       <i class="fa fa-exclamation-triangle me-2" aria-hidden="true"></i>
@@ -19,7 +19,7 @@
         </ng-template>
 </p-dialog>
 
-<p-dialog header="" icon="pi pi-info-circle" [style]="{width: '50vw'}" [(visible)]="displayEditGroup">
+<p-dialog header="" icon="pi pi-info-circle" [style]="{width: '50vw'}" [(visible)]="displayEditGroup" [modal]="true" [resizable]="false">
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
       <i class="fa fa-pencil me-2" aria-hidden="true"></i>
