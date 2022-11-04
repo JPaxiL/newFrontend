@@ -64,7 +64,7 @@ export class VehicleGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.onOption(this.option);
+    
   }
 
   onHide(){
@@ -72,7 +72,7 @@ export class VehicleGroupComponent implements OnInit {
     this.onHideEvent.emit(false);
   }
   onOption(e : string){
-    console.log("option XD");
+    //console.log("option XD");
 
     this.list1 = [];
     this.list2 = [];
@@ -333,9 +333,9 @@ export class VehicleGroupComponent implements OnInit {
 
   }
   onShow(){
-    // //console.log("on show");
     // this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
-
+    //console.log('Show New Grupo/Convoy Modal', this.vehicleService.vehicles);
+    this.onOption(this.option);
   }
   onConfirmGroup(){
     this.confirmationService.confirm({
