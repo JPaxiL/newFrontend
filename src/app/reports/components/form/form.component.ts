@@ -679,7 +679,8 @@ export class FormComponent implements OnInit {
           }
         }
       },
-      error: () => {
+      error: (err) => {
+        console.log(err);
         //console.log('Hubo un error al procesar la solicitud');
         this.spinner.hide("reportSpinner");
         Swal.fire({
