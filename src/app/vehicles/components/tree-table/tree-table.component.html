@@ -1,24 +1,5 @@
 <app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
 
-<p-dialog icon="pi pi-info-circle" [modal]="true" [resizable]="false" [style]="{width: '50vw'}" [(visible)]="displayDelete">
-  <ng-template class="p-dialog-title" pTemplate="header">
-    <div>
-      <i class="fa fa-exclamation-triangle me-2" aria-hidden="true"></i>
-      <strong>Descomponer</strong>
-    </div>
-  </ng-template>
-    ¿Está seguro de descomponer {{textDelete}}?
-      <div class="" *ngIf="loadingDelete">
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      </div>
-    <ng-template *ngIf="loadingDelete==false" pTemplate="footer">
-      <div [ngStyle]="{'display':buttonDisplay, 'margin-top':'-1rem'}">
-        <p-button icon="pi pi-check" (click)="onDelete()" label="Si" class="p-button-text"></p-button>
-        <p-button icon="pi pi-times" (click)="displayDelete=false" label="No"></p-button>
-      </div>
-        </ng-template>
-</p-dialog>
-
 <p-dialog header="" icon="pi pi-info-circle" [style]="{width: '50vw'}" [(visible)]="displayEditGroup" [modal]="true" [resizable]="false">
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
@@ -137,7 +118,7 @@
           <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Placa/Código" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
         </span>
 
-        <button (click)="onClickGroup()" type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2">
+        <button (click)="onClickGroup()" type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2" title="Nuevo Grupo/Convoy" data-bs-toggle="tooltip" data-bs-placement="auto" container="body" onclick="this.blur();">
           <i class="fa fa-plus" aria-hidden="true"></i>
         </button>
 
