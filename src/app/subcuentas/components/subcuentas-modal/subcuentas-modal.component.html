@@ -1,4 +1,4 @@
-<p-dialog [(visible)]="subcuentasService.modalActive" [style]="{'width':'640px'}" >
+<p-dialog [(visible)]="subcuentasService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'640px'}" >
 
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
@@ -12,7 +12,7 @@
   <!-- <div class="container grand-container"> -->
   <!-- </div> -->
 
-  <form [formGroup]="subcuentasForm" (submit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+  <form [formGroup]="subcuentasForm" (submit)="onSubmit()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
 
     <div class="dialog-body-container">
 
@@ -21,7 +21,7 @@
           <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         </div> -->
 
-        <div class="dialog-form-container" >
+        <div class="dialog-form-container mb-4" >
 
           <div class="row">
 
@@ -35,106 +35,107 @@
             </div>
           </div>
         </div>
-        <br>
-        <br>
-        <div class="dialog-form-container gl-middleline" *ngIf="subcuentasService.action == 'add'">
+
+        <div class="dialog-form-container gl-middleline" *ngIf="subcuentasService.action == 'add'" style="margin-bottom: 0.75rem;">
 
           <div class="row">
-
-
-
             <div class="col p-field">
               <label class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="name">Nombre</label>
+                  <label for="nameCreate">Nombre</label>
                 </div>
                 <div class="col-7">
-                  <input id="name" type="text" pInputText class="p-inputtext-sm" formControlName="nombre" >
+                  <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="nombre" autocomplete="no">
                 </div>
               </label>
             </div>
             <div class="col p-field">
               <div class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="contrasena">Contraseña</label>
+                  <label for="passCreate">Contraseña</label>
                 </div>
                 <div class="col-7">
-                  <input id="contrasena" type="text" pInputText class="p-inputtext-sm" formControlName="contrasena">
+                  <span class="p-input-icon-right">
+                    <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
+                    <i class="pi pi-eye" role="button" *ngIf="!eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
+                    <input id="passCreate" type="password" pInputText class="p-inputtext-sm" formControlName="contrasena" autocomplete="no" readonly onfocus="$(this).removeAttr('readonly');">
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <br>
-          <br>
-
         </div>
 
-        <div class="dialog-form-container" >
+        <div class="dialog-form-container d-flex" >
 
-          <div *ngIf="subcuentasService.action == 'edit'">
-
-              <div class="row">
-                <div class="col p-field">
-                  <label class="row gl-row-underline">
-                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label>Nombre :</label>
-                    </div>
-                    <div class="col-7">
-                      <label>{{getControlLabel('nombre')}}</label>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              <br>
+          <ng-container *ngIf="subcuentasService.action == 'edit'">
 
               <div class="row">
                 <div class="col p-field">
                   <label class="row gl-row-underline">
                     <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label for="tipo-unidad">Anterior Contraseña:</label>
+                      <label for="nameEdit">Nombre :</label>
                     </div>
                     <div class="col-7">
-                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasena">
+                      <input id="nameEdit" type="text" value="{{getControlLabel('nombre')}}" pInputText class="p-inputtext-sm" placeholder="" autocomplete="no" disabled>
                     </div>
                   </label>
                 </div>
               </div>
-
-              <br>
 
               <div class="row">
                 <div class="col p-field">
                   <label class="row gl-row-underline">
                     <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label for="tipo-unidad">Nueva Contraseña:</label>
+                      <label for="passEditBefore">Anterior Contraseña:</label>
                     </div>
                     <div class="col-7">
-                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew">
-
+                      <span class="p-input-icon-right">
+                        <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateEditBefore" (click)="eyeStateEditBefore = !eyeStateEditBefore; togglePassEye();"></i>
+                        <i class="pi pi-eye" role="button" *ngIf="!eyeStateEditBefore" (click)="eyeStateEditBefore = !eyeStateEditBefore; togglePassEye();"></i>
+                        <input id="passEditBefore" type="password" pInputText class="p-inputtext-sm" formControlName="contrasena" readonly onfocus="$(this).removeAttr('readonly');">
+                      </span>
                     </div>
                   </label>
                 </div>
               </div>
-
-              <br>
 
               <div class="row">
                 <div class="col p-field">
                   <label class="row gl-row-underline">
                     <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                      <label for="tipo-unidad">Repita Nueva Contraseña:</label>
+                      <label for="passEditAfter">Nueva Contraseña:</label>
                     </div>
                     <div class="col-7">
-                      <input type="text" pInputText class="p-inputtext-sm" formControlName="contrasenaNew2">
+                      <span class="p-input-icon-right">
+                        <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateEditAfter" (click)="eyeStateEditAfter = !eyeStateEditAfter; togglePassEye();"></i>
+                        <i class="pi pi-eye" role="button" *ngIf="!eyeStateEditAfter" (click)="eyeStateEditAfter = !eyeStateEditAfter; togglePassEye();"></i>
+                        <input id="passEditAfter" type="password" pInputText class="p-inputtext-sm" formControlName="contrasenaNew" readonly onfocus="$(this).removeAttr('readonly');">
+                      </span>
                     </div>
                   </label>
                 </div>
               </div>
 
-              <br>
-          </div>
+              <div class="row">
+                <div class="col p-field">
+                  <label class="row gl-row-underline">
+                    <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                      <label for="passEditAfter2">Repita Nueva Contraseña:</label>
+                    </div>
+                    <div class="col-7">
+                      <span class="p-input-icon-right">
+                        <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateEditAfter2" (click)="eyeStateEditAfter2 = !eyeStateEditAfter2; togglePassEye();"></i>
+                        <i class="pi pi-eye" role="button" *ngIf="!eyeStateEditAfter2" (click)="eyeStateEditAfter2 = !eyeStateEditAfter2; togglePassEye();"></i>
+                        <input id="passEditAfter2" type="password" pInputText class="p-inputtext-sm" formControlName="contrasenaNew2" readonly onfocus="$(this).removeAttr('readonly');">
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+          </ng-container>
 
           <div class="row">
             <div class="col p-field">
@@ -143,7 +144,6 @@
                   <label for="tipo-unidad">Vehículos :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="vehiculos"
@@ -156,13 +156,10 @@
                     [selectedItemsLabel]="'{0} vehiculos seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
           </div>
-
-          <br>
 
           <div class="row">
 
@@ -172,7 +169,6 @@
                   <label for="tipo-unidad">Geocercas :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="geocercas"
@@ -185,14 +181,11 @@
                     [selectedItemsLabel]="'{0} geocercas seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
 
           </div>
-
-          <br>
 
           <div class="row">
 
@@ -202,7 +195,6 @@
                   <label for="tipo-unidad">Geopuntos :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="geopuntos"
@@ -215,14 +207,11 @@
                     [selectedItemsLabel]="'{0} geopuntos seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
 
           </div>
-
-          <br>
 
           <div class="row">
 
@@ -232,7 +221,6 @@
                   <label for="tipo-unidad">Reportes :</label>
                 </div>
                 <div class="col-7">
-
                   <div class="p-field">
                     <p-multiSelect
                     [options]="reportes"
@@ -245,7 +233,6 @@
                     [selectedItemsLabel]="'{0} reportes seleccionados'"
                     ></p-multiSelect>
                   </div>
-
                 </div>
               </label>
             </div>
@@ -255,13 +242,12 @@
         </div>
       </div>
     </div>
-    <br>
     <!-- <ng-template pTemplate="footer" style="width: 60vw;"> -->
-        <div class="row justify-content-center mt-4 panel-izq-container-footer">
-          <div class="col-6">
+        <div class="row justify-content-center mt-4 pt-2 panel-izq-container-footer">
+          <div class="col-4">
               <button type="button" class="btn-gl-cancel btn-dark-hover w-100" (click)="subcuentasService.modalActive=false">Cancelar</button>
           </div>
-          <div class="col-6">
+          <div class="col-4">
               <button type="submit" class="btn-gl-save btn-dark-hover w-100" >Guardar</button>
           </div>
         </div>

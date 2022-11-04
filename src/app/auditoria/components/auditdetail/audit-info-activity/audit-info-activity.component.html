@@ -1,4 +1,6 @@
-<ngx-spinner bdColor = "rgba(0, 0, 0, 0.7)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando detalles... </p></ngx-spinner>
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertData" size = "small" color = "#fff" type = "ball-pulse" [fullScreen] = "true">
+    <p style="color: white" class="text-center">Cargando detalles...</p>
+</ngx-spinner>
 
 <div *ngIf="subject_type == 'Point'">
     <div class="d-flex">
@@ -186,12 +188,75 @@
     </div>
 
     <div *ngIf="properties['array_zonas']" class="d-flex" style="word-wrap: break-word;">
-        <b>PUNTOS:</b><div style="margin-left: 0.5rem; word-wrap: break-word;">{{nombres_puntos}}</div>
+        <b>GEOPUNTOS:</b><div style="margin-left: 0.5rem; word-wrap: break-word;">{{nombres_puntos}}</div>
     </div>
 
 </div>
 
-<div *ngIf="subject_type != 'Point' && subject_type != 'Zone' && subject_type != 'EventUser' && subject_type != 'UserConfig' && subject_type != 'UserDetail'">
+<div *ngIf="subject_type == 'GroupConvoy'">
+    <div class="d-flex">
+        <b>NOMBRE DEL CONVOY:</b><div style="margin-left: 0.5rem;">{{properties['nombre']}}</div>
+    </div>
+</div>
+
+<div *ngIf="subject_type == 'UserTracker'">
+    
+    <div class="d-flex" *ngIf="properties['vehiculos']">
+        <b>VEHÍCULOS:</b><div style="margin-left: 0.5rem;">{{properties['vehiculos']}}</div>
+    </div>
+
+    <div *ngIf="!properties['vehiculos']">
+        <div class="d-flex">
+            <b>NOMBRE / COD. INTERNO:</b><div style="margin-left: 0.5rem;">{{properties['nombre']}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>IMEI:</b><div style="margin-left: 0.5rem;">{{properties['tracker_imei']}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>NÚMERO SIM:</b><div style="margin-left: 0.5rem;">{{properties['numero_sim']}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>PLACA:</b><div style="margin-left: 0.5rem;">{{properties['numero_placa']}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>CISTERNA / TOLVA:</b><div style="margin-left: 0.5rem;">{{(properties['numero_tolva'] !== null) ? (properties['numero_tolva']) : "-"}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>CONDUCTOR:</b><div style="margin-left: 0.5rem;">{{(nombreConductor) ? (nombreConductor) : "-"}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>EMPRESA:</b><div style="margin-left: 0.5rem;">{{(properties['empresa'] !== null) ? (properties['empresa']) : "-"}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>GRUPO:</b><div style="margin-left: 0.5rem;">{{(properties['grupo_convoy_id'] !== null) ? (properties['nombre_grupo']) : "-"}}</div>
+        </div>
+
+        <div class="d-flex">
+            <b>TIPO DE UNIDAD:</b><div style="margin-left: 0.5rem;">{{tipoVehiculo}}</div>
+        </div>
+        
+        <div class="d-flex align-items-center" *ngIf="properties['icono']">
+            <b>ICONO:</b><img style="margin-left: 0.5rem;" src="assets/images/objects/nuevo/{{properties['icono']}}"/>
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="subject_type != 'Point' && 
+            subject_type != 'Zone' && 
+            subject_type != 'EventUser' && 
+            subject_type != 'UserConfig' && 
+            subject_type != 'UserDetail' &&
+            subject_type != 'GroupConvoy' &&
+            subject_type != 'UserTracker'
+            ">
 
     <div *ngFor="let item of properties | keyvalue" style="word-wrap: break-word;"><b [ngStyle]="{'color': color}">{{item.key}}</b>: {{(item.value !== null) ? (item.value) : "-"}}</div>
 </div>

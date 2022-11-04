@@ -29,6 +29,10 @@ export class SubcuentasModalComponent implements OnInit {
   public geopuntos: Select2Data = [];
   public reportes: Select2Data = [];
 
+  public eyeStateCreate: boolean = true;
+  public eyeStateEditBefore: boolean = true;
+  public eyeStateEditAfter: boolean = true;
+  public eyeStateEditAfter2: boolean = true;
 
   constructor(
     public subcuentasService:SubcuentasService,
@@ -397,6 +401,13 @@ export class SubcuentasModalComponent implements OnInit {
 
   getControlLabel(type: string){
     return this.subcuentasForm.controls[type].value;
-   }
+  }
+
+  togglePassEye(){
+    document.querySelector('#passCreate')?.setAttribute('type', this.eyeStateCreate? 'password': 'text');
+    document.querySelector('#passEditBefore')?.setAttribute('type', this.eyeStateEditBefore? 'password': 'text');
+    document.querySelector('#passEditAfter')?.setAttribute('type', this.eyeStateEditAfter? 'password': 'text');
+    document.querySelector('#passEditAfter2')?.setAttribute('type', this.eyeStateEditAfter2? 'password': 'text');
+  }
 
 }
