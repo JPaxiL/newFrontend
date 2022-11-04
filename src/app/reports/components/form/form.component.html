@@ -7,7 +7,7 @@
 
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reloadSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Recargando página... </p></ngx-spinner>
 
-<p-dialog [position]="popupDialogPosition" [(visible)]="showBlockedTabDialog" key="blockedTabDialog" [style]="popupDialogInlineStyle" [closable]="false" [draggable]="false" [modal]="true" id="dialogTest" styleClass="allow-popup-dialog">
+<p-dialog [position]="popupDialogPosition" [(visible)]="showBlockedTabDialog" key="blockedTabDialog" [style]="popupDialogInlineStyle" [closable]="false" [draggable]="false" [modal]="true" [resizable]="false" id="dialogTest" styleClass="allow-popup-dialog">
   <ng-template pTemplate="header" *ngIf="popupDialogPosition != 'center' || unknownBrowser">
     <div class="pointer-arrows-container">
       <i class="pi pi-angle-double-up" style="font-size: 2rem;"></i>
