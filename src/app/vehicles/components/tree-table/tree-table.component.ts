@@ -9,6 +9,7 @@ import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FollowService } from '../../services/follow.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tree-table',
@@ -315,10 +316,9 @@ export class TreeTableComponent implements OnInit {
 
 
   }
+  
   showDelete(data: any){
-    // //console.log("data",data);
     this.textDelete = data['type'];
-    this.displayDelete = true;
     if(data['id']==null){
       //console.log('no hay id');
     }else{
@@ -326,7 +326,31 @@ export class TreeTableComponent implements OnInit {
       this.idDelete = data['id'];
       this.typeDelete = data['type'];
     }
+
+
+    Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro de descomponer ' + this.textDelete + '?',
+      icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Descomponer',
+      cancelButtonText: 'Cancelar',
+      preConfirm: async () => {
+        await this.onDelete();
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Descomponer',
+          'Descomposición del grupo exitosa',
+          'success'
+        );
+      }
+    });
   }
+
   upList1(){
     // this.list1=this.selectedList2;
     // this.selectedList2=[];
@@ -399,7 +423,7 @@ export class TreeTableComponent implements OnInit {
     this.list1 = aux2;
     this.selectedList1=[];
   }
-  onDelete(){
+  async onDelete(){
     this.loadingDelete = true;
 
     const req = {
@@ -408,38 +432,37 @@ export class TreeTableComponent implements OnInit {
     };
     // //console.log('borrando ...');
     this.buttonDisplay="none";
-    this.vehicleConfigService.putGroupDelete(req).subscribe((info: any)=>{
-      //console.log('descomponer res = ',info);
-      this.loadingDelete = false;
-      this.buttonDisplay="block";
-      if(info.res){
-        let aux_vehicles = info.vehicles;
-        let aux_vehicles_tree = this.vehicleService.vehicles;
-        for (const key in aux_vehicles) {
-          for (const j in aux_vehicles_tree) {
-            if (aux_vehicles[key]['id']==aux_vehicles_tree[j]['id']) {
-              if(this.typeDelete=='grupo'){
-                aux_vehicles_tree[j]['idgrupo']=null;
-                aux_vehicles_tree[j]['grupo']='Unidades Sin Grupo';
-              }else{
-                aux_vehicles_tree[j]['idconvoy']=null;
-                aux_vehicles_tree[j]['convoy']='Unidades Sin Convoy';
-              }
 
+    let info = await this.vehicleConfigService.putGroupDelete(req).toPromise();
+
+    //console.log('descomponer res = ',info);
+    this.loadingDelete = false;
+    this.buttonDisplay="block";
+    if(info.res){
+      let aux_vehicles = info.vehicles;
+      let aux_vehicles_tree = this.vehicleService.vehicles;
+      for (const key in aux_vehicles) {
+        for (const j in aux_vehicles_tree) {
+          if (aux_vehicles[key]['id']==aux_vehicles_tree[j]['id']) {
+            if(this.typeDelete=='grupo'){
+              aux_vehicles_tree[j]['idgrupo']=null;
+              aux_vehicles_tree[j]['grupo']='Unidades Sin Grupo';
+            }else{
+              aux_vehicles_tree[j]['idconvoy']=null;
+              aux_vehicles_tree[j]['convoy']='Unidades Sin Convoy';
             }
+
           }
         }
-        this.vehicleService.vehicles = aux_vehicles_tree;
-        this.vehicleService.vehiclesTree = this.vehicleService.createNode(aux_vehicles_tree);
-        this.vehicleService.reloadTableTree.emit();
-        this.textDelete = info.message;
-        this.displayDelete = false;
-        this.idDelete=-1;
-        this.typeDelete='';
-      }else{
-
       }
-    });
+      this.vehicleService.vehicles = aux_vehicles_tree;
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(aux_vehicles_tree);
+      this.vehicleService.reloadTableTree.emit();
+      this.textDelete = info.message;
+      this.displayDelete = false;
+      this.idDelete=-1;
+      this.typeDelete='';
+    }
   }
   onUpdate(res :any){
     const vehicles = this.vehicleService.vehicles;
