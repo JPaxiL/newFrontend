@@ -231,7 +231,7 @@ export class FormComponent implements OnInit {
 
   chkSimultaneousTables: boolean = true;
   showChkSimultaneousTables: boolean = false;
-  singleTableReportIDs = [7, 19, 20];
+  singleTableReportIDs = ['R008', 'R020', 'R021'];
 
   //Removido del formulario
   chkDateHour = true; //False muestra fecha y h juntas. true separadas
@@ -497,7 +497,7 @@ export class FormComponent implements OnInit {
           this.reportar();
         },
         accept: () => {
-          this.fullScreenSpinnerMsg = 'Generando Reporte...'
+          this.fullScreenSpinnerMsg = 'Generando Reporte...';
           this.spinner.show("fullScreenSpinner");
             console.log("Se acepta una nueva hoja");
             console.log('Cargando...');
@@ -721,7 +721,7 @@ export class FormComponent implements OnInit {
     this.showFatigaDistraccion = false; //Configuracion Distraccion y posible fatiga
 		/* this.showTimeLlegada = false;
 		this.showTimePeriodoDia = false; */
-
+    this.showChkSimultaneousTables = false;
 
     switch(this.selectedReport){
       case 'R001': // 0 - R001	REPORTE DE PARADAS Y MOVIMIENTOS

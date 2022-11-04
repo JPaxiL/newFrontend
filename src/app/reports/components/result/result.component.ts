@@ -377,7 +377,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     index: -1,
   };
   reportTableDropdownData: any = [];
-  singleTableReportIDs = [7, 19, 20];
+  singleTableReportIDs = ['R008', 'R020', 'R021'];
   chkTableDropdown: boolean = false;
 
   constructor(
