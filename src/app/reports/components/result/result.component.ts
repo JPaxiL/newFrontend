@@ -760,8 +760,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   showModal() {
     this.reportService.modalActive = true;
-
   }
+  
   verTodos(periodo:any, imei:any, dateHour:any, vehiculo:any, dataParam:any) {
     console.log("===========================================");
     console.log(periodo);

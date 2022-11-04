@@ -27,6 +27,9 @@ import {MultiSelectModule} from 'primeng-lts/multiselect';
 import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
+import { TableModule } from 'primeng-lts/table';
+
+
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -205,6 +208,7 @@ import { AuditInfoActivityComponent } from './auditoria/components/auditdetail/a
     DialogModule,
     InputTextModule,
     InputSwitchModule,
+    TableModule,
     ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,
