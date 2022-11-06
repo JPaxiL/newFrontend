@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
+import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
+import { ToolbarMapService } from './toolbar-map.service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,8 +9,11 @@ import * as L from 'leaflet';
 export class MapServicesService {
   map!: L.Map; //guardara el mapa
   nombreMap: string = '001';
-
-  constructor() {}
+  display: boolean = false;
+  constructor(
+    private vehicleService: VehicleService,
+    public toolbarMapService: ToolbarMapService
+    ) {}
 
   setLayers(geofences:any, points:any) {
     const mainLayer = L.tileLayer(
@@ -81,6 +86,12 @@ export class MapServicesService {
 
     L.control.layers(baseLayers,overlays).addTo(this.map);
     this.map.zoomControl.setPosition('topright');
+
+    this.map.addControl(this.toolbarMapService.createToolbar(this.map));
+
+    this.toolbarMapService.change.subscribe(display => {
+      this.display = display;
+    });
   }
 
   getContrastYIQ(hex: string){
@@ -92,7 +103,7 @@ export class MapServicesService {
   }
 
   hexToRGBA(hex: string, alpha?: number){
-    if(typeof alpha === 'undefined'){ 
+    if(typeof alpha === 'undefined'){
       alpha = 0.8;
     }
     var c: any;
