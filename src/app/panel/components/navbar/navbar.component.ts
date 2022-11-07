@@ -6,6 +6,7 @@ import { EventSocketService } from './../../../events/services/event-socket.serv
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { EventService } from 'src/app/events/services/event.service';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 declare var $: any;
 
@@ -34,21 +35,24 @@ export class NavbarComponent implements OnInit {
     public eventSocketService : EventSocketService,
     public panelService: PanelService,
     private http: HttpClient,
-  ) { }
+    private userDataService: UserDataService,
+  ) { 
+
+  }
 
   ngOnInit(): void {
-    this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
-      next: data => {
-        this.userData = this.panelService.userData = data[0];
-        this.showBtnSubcuentas = this.userData.privilegios == "subusuario"? false: true;
-
-        this.userName = data[0].nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
-        this.userEmail = data[0].email;
-        this.userDataInitialized = true;
+    this.userDataService.userDataCompleted.subscribe({
+      next: (result: boolean) => {
+        if(result){
+          this.userName = this.userDataService.userData.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
+          this.userEmail = this.userDataService.userData.email;
+          this.userDataInitialized = true;
+        }
       },
-      error: () => {
-        console.log('No se pudo obtener datos del usuario');
-      }});
+      error: (errMsg: any) => {
+        console.log('(Navbar) Error al obtener userData: ', errMsg);
+      }
+    });
   }
 
   showHideSideBar(): void {
