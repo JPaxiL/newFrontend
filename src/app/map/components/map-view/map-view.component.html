@@ -1,3 +1,28 @@
 <div id="map">
 
 </div>
+<p-dialog header="Mostrar Punto" [(visible)]="mapServicesService.display" id="grebo">
+    <table cellspacing="0" border="0">
+        <tbody>
+          <tr>
+            <td>Latitud:</td>
+            <td align="right">
+              <input id="dialog_show_point_lat" type="text" />
+            </td>
+          </tr>
+          <tr>
+            <td>Longitud:</td>
+            <td align="right">
+              <input id="dialog_show_point_lng" type="text" value="" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p-footer>
+        <div class="row justify-content-center gap-3">
+          <button class="btn-gl-save btn-dark-hover fw-bold col-5" (click)="showCoordinate()">Mostrar</button>
+          <button class="btn-gl-red btn-dark-hover fw-bold col-5" (click)="hideCoordinate()">Cancelar</button>
+        </div>
+      </p-footer>
+</p-dialog>
+

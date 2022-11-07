@@ -7,7 +7,6 @@ import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
 import { GeopointsService } from '../../../geopoints/services/geopoints.service';
 
-
 declare var $: any;
 
 @Component({
@@ -22,8 +21,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     private mapService: MapService,
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
-    public geopointsService: GeopointsService,
-
+    public geopointsService: GeopointsService
   ) {}
   // constructor() { }
 
@@ -86,7 +84,59 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     // }
   }
 
-  setLayers(){
-    this.mapServicesService.setLayers(this.geofencesService.getData(),this.geopointsService.getData());
+  setLayers() {
+    this.mapServicesService.setLayers(
+      this.geofencesService.getData(),
+      this.geopointsService.getData()
+    );
+  }
+
+  showCoordinate() {
+    var lat = Number($('#dialog_show_point_lat').val());
+    var lng = Number($('#dialog_show_point_lng').val());
+
+    if (isNaN(lat)) {
+      lat = 0;
+    }
+    if (isNaN(lng)) {
+      lng = 0;
+    }
+
+    var marker = L.marker([0, 0], {
+      icon: L.icon({
+        iconUrl: '/assets/images/mm_20_red.png',
+        iconAnchor: [6, 20],
+      }),
+    })
+      .setLatLng([lat, lng])
+      .addTo(this.mapServicesService.map);
+
+    var tbl =
+      '<table style="font-size:11px"><tr><td width="57">Direcci&#243n</td><td id="IDaleatorioH2">: ...</td></tr><tr><td>P.Cercano</td><td>: </td></tr><tr><td>Posici&#243n:</td><td><a href="https://maps.google.com/maps?q=' +
+      lat +
+      ',' +
+      lng +
+      '&t=m" target="_blank">' +
+      Number(lat).toFixed(6) +
+      '&#160;&#176;,&#160;' +
+      Number(lng).toFixed(6) +
+      '&#160;&#176;</a></td></tr></table>';
+
+    var popup = L.popup({ offset: new L.Point(0, -10) })
+      .setLatLng([lat, lng])
+      .setContent(tbl)
+      .addTo(this.mapServicesService.map);
+
+    popup.on('remove', (e) => {
+      this.mapServicesService.map.removeLayer(marker);
+    });
+    this.mapServicesService.map.panTo([lat, lng]);
+    this.hideCoordinate();
+  }
+
+  hideCoordinate() {
+    $('#dialog_show_point_lat').val('');
+    $('#dialog_show_point_lng').val('');
+    this.mapServicesService.display = false;
   }
 }
