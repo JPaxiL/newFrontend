@@ -126,7 +126,7 @@
                   <label for="state">Icono:</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown inputId="state" [options]="icons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name">
+                  <p-dropdown inputId="state" [options]="dropdownIcons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name" placeholder="Selecciona un ícono">
                     <ng-template pTemplate="selectedItem">
                       <div class="icon-item icon-item-value"  *ngIf="selectedIcon">
                         <label for="">
@@ -153,7 +153,7 @@
                   <label for="tipo-unidad">Tipo de Unidad :</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'">
+                  <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'" (onChange)="updateIconsDropdown()" placeholder="Selecciona un tipo de unidad">
                     <ng-template pTemplate="selectedItem">
                       <div class="type-item type-item-value" *ngIf="selectedType">
                         <div>{{selectedType.name}}</div>

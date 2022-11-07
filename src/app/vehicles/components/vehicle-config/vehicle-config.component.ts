@@ -38,7 +38,8 @@ export class VehicleConfigComponent implements OnInit {
     {id: '1', name: 'MINIBUS'},
     {id: '2', name: 'VAN'},
     {id: '3', name: 'CAMIONETA'},
-    {id: '4', name: 'CONCENTRADO'}
+    {id: '4', name: 'CONCENTRADO'},
+    {id: '5', name: 'OTROS'},
   ];
   /*
 
@@ -57,39 +58,44 @@ export class VehicleConfigComponent implements OnInit {
 
   ];
   icons: any = [
-    { name: "1.png", code: "1" },
-    { name: "2.png", code: "2" },
-    { name: "3.png", code: "3" },
-    { name: "4.png", code: "4" },
-    { name: "5.png", code: "5" },
-    { name: "6.png", code: "6" },
-    { name: "7.png", code: "7" },
-    { name: "8.png", code: "8" },
-    { name: "9.png", code: "9" },
-    { name: "10.png", code: "10" },
-    { name: "11.png", code: "11" },
-    { name: "12.png", code: "12" },
-    { name: "13.png", code: "13" },
-    { name: "14.png", code: "14" },
-    { name: "15.png", code: "15" },
-    { name: "16.png", code: "16" },
-    { name: "17.png", code: "17" },
-    { name: "18.png", code: "18" },
-    { name: "19.png", code: "19" },
-    { name: "20.png", code: "20" },
-    { name: "26.png", code: "26" },
-    { name: "31.png", code: "31" },
-    { name: "33.png", code: "33" },
-    { name: "34.png", code: "34" },
-    { name: "41.png", code: "41" },
-    { name: "42.png", code: "42" },
-    { name: "43.png", code: "43" },
-    { name: "44.png", code: "44" },
-    { name: "45.png", code: "45" },
-    { name: "46.png", code: "46" },
-    { name: "47.png", code: "47" }
-
+    { name: "1.png", code: "1", type: "4" },
+    { name: "2.png", code: "2", type: "4" },
+    { name: "3.png", code: "3", type: "3" },
+    { name: "4.png", code: "4", type: "4" },
+    { name: "5.png", code: "5", type: "4" },
+    { name: "6.png", code: "6", type: "2" },
+    { name: "7.png", code: "7", type: "5" },
+    { name: "8.png", code: "8", type: "5" },
+    { name: "9.png", code: "9", type: "5" },
+    { name: "10.png", code: "10", type: "4" },
+    { name: "11.png", code: "11", type: "5" },
+    { name: "12.png", code: "12", type: "5" },
+    { name: "13.png", code: "13", type: "5" },
+    { name: "14.png", code: "14", type: "5" },
+    { name: "15.png", code: "15", type: "5" },
+    { name: "16.png", code: "16", type: "5" },
+    { name: "17.png", code: "17", type: "5" },
+    { name: "18.png", code: "18", type: "4" },
+    { name: "19.png", code: "19", type: "5" },
+    { name: "20.png", code: "20", type: "1" },
+    { name: "26.png", code: "26", type: "5" },
+    { name: "31.png", code: "31", type: "3" },
+    { name: "33.png", code: "33", type: "5" },
+    { name: "34.png", code: "34", type: "5" },
+    { name: "41.png", code: "41", type: "4" },
+    { name: "42.png", code: "42", type: "1" },
+    { name: "43.png", code: "43", type: "1" },
+    { name: "44.png", code: "44", type: "0" },
+    { name: "45.png", code: "45", type: "0" },
+    { name: "46.png", code: "46", type: "0" },
+    { name: "47.png", code: "47", type: "0" },
+    { name: "48.png", code: "48", type: "0" },
+    { name: "49.png", code: "49", type: "3" },
+    { name: "50.png", code: "50", type: "4" },
+    { name: "51.png", code: "51", type: "1" },
+    { name: "52.png", code: "52", type: "2" },
   ];
+  dropdownIcons: any = [];
 
   constructor(private configService: VehicleConfigService, private confirmationService: ConfirmationService) {}
 
@@ -102,14 +108,22 @@ export class VehicleConfigComponent implements OnInit {
       if (this.icons[key].name==this.config.icon) {
         this.selectedIcon = {
           name: this.icons[key].name,
-          code:this.icons[key].code
+          code: this.icons[key].code,
+          type: this.icons[key].type,
         }
       }
     }
-    this.selectedType = {
+    for(let i = 0; i < this.types.length; i++){
+      if(this.types[i].id == this.selectedIcon.type){
+        this.selectedType = this.types[i];
+        this.updateIconsDropdown();
+        i = this.types.length;
+      }
+    }
+    /* this.selectedType = {
       name: this.types[this.config.tipo]['name'],
       id: this.config.tipo,
-    };
+    }; */
 
   }
   onClickCancel(){
@@ -176,6 +190,22 @@ export class VehicleConfigComponent implements OnInit {
       return null;
     }else{
       return a;
+    }
+  }
+
+  updateIconsDropdown(){
+    let found = false;
+    this.dropdownIcons = this.icons.filter((icon: any) => {
+      return icon.type == this.selectedType.id;
+    });
+    for(let i = 0; i < this.dropdownIcons.length; i++){
+      if(this.dropdownIcons[i].code == this.selectedIcon.code){
+        this.selectedIcon = this.dropdownIcons[i];
+        found = true;
+      }
+    }
+    if(!found){
+      this.selectedIcon = this.selectedIcon = this.dropdownIcons[0];
     }
   }
 
