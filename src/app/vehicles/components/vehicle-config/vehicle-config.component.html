@@ -132,7 +132,7 @@
                         <label for="">
                           {{selectedIcon.code}} .-
                         </label>
-                        <img src="assets/images/objects/nuevo/{{selectedIcon.name}}" [class]="'flag flag-' + selectedIcon.code.toLowerCase()" />
+                        <img src="assets/images/objects/nuevo/{{selectedIcon.name}}" [class]="'vehicle-icon flag flag-' + selectedIcon.code.toLowerCase()" />
                       </div>
                     </ng-template>
                     <ng-template let-icon pTemplate="item">
@@ -140,7 +140,7 @@
                         <label for="">
                           {{icon.code}}
                         </label> .-
-                        <img src="assets/images/objects/nuevo/{{icon.name}}"  [class]="'flag flag-' + icon.code.toLowerCase()" />
+                        <img src="assets/images/objects/nuevo/{{icon.name}}"  [class]="'vehicle-icon flag flag-' + icon.code.toLowerCase()" />
                       </div>
                     </ng-template>
                   </p-dropdown>
