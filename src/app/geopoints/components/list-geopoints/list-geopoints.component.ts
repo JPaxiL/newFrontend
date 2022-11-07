@@ -19,9 +19,6 @@ export class ListGeopointsComponent implements OnInit {
   datosCargados = false;
   NomBusqueda = "";
 
-  userData: any; //Informacion del usuario
-  showBtnAdd = true;
-  showBtnEdit = true;
   noResults: boolean = false;
 
   constructor(
@@ -32,25 +29,10 @@ export class ListGeopointsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    this.userData = this.panelService.userData;
-    console.log(this.userData);
-    if (this.userData.privilegios == "subusuario") {
-        // console.log("es sub usuario");
-        this.showBtnAdd = false;
-        this.showBtnEdit = false;
-    } else {
-        // console.log("es un usuario normal");
-        // this.showBtnAdd = true;
-
-    }
-
-    if(!this.geopointsService.initializingGeopoints){
+    if(!this.geopointsService.initializingGeopoints || !this.geopointsService.initializingUserPrivleges){
       this.geopointsService.spinner.show('loadingGeopointsSpinner');
     }
-    console.log("DATOS DE GEOPUNTOS");
     //this.mostrar_tabla();
-
   }
 
   /* mostrar_tabla() {

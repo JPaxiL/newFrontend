@@ -8,6 +8,7 @@ import { MapServicesService } from '../../map/services/map-services.service';
 
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 
 @Injectable({
@@ -36,14 +37,22 @@ export class GeopointsService {
   public idGeopointEdit:number = 0;
   public action:string = "add"; //[add,edit,delete]
 
+  initializingUserPrivleges: boolean = false;
+  showBtnAdd = true;
+  showBtnEdit = true;
+
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
     public spinner: NgxSpinnerService,
+    private userDataService: UserDataService,
   ) { }
 
 
   public async initialize() {
+    //geopointsService SIEMPRE se inicia DESPUES de geofencesService.initialize
+    console.log('Geopoints Service initializing...');
+    this.getUserPrivileges();
     await this.getAll();
   }
 
@@ -220,6 +229,7 @@ export class GeopointsService {
       console.log('Geopuntos Cargados');
       console.log('Geopuntos:', this.geopoints);
       this.initializingGeopoints = true;
+      this.attemptToHideSpinner();
 
     });
   }
@@ -241,10 +251,53 @@ export class GeopointsService {
       this.tblDataGeo.push({trama:this.geopoints[i]});
     }
     this.tblDataGeoFiltered = this.getTableData();
-    this.spinner.hide('loadingGeopointsSpinner');
+    //this.spinner.hide('loadingGeopointsSpinner');
   }
 
+  getUserPrivileges(){
+    console.log('(Geopoints Service) Esperando privliegios...');
+    if(!this.userDataService.userDataInitialized){
+      console.log('(Geopoints Service) User Data no está listo. Subscribiendo para obtener privilegios...');
+      this.userDataService.geopointsPrivileges.subscribe({
+        next: (result: boolean) => {
+          if(result){
+            this.verifyPrivileges();
+          }
+        },
+        error: (errMsg: any) => {
+          console.log('(Geopoints Service) Error al obtener userData: ', errMsg);
+        }
+      });
+    } else {
+      console.log('(Geopoints Service) User Data está listo. Obteniendo privilegios...');
+      this.verifyPrivileges();
+    }
+    
+  }
 
+  attemptToHideSpinner(){
+    console.log('Attempt to hide Geopoints Spinner: ', { 
+      isTableReady: this.initializingGeopoints, 
+      isUserDataReady: this.initializingUserPrivleges } );
+    if(this.initializingGeopoints && this.initializingUserPrivleges){
+      this.spinner.hide('loadingGeopointsSpinner');
+    }
+  }
+
+  verifyPrivileges(){
+    if (this.userDataService.userData.privilegios == "subusuario") {
+      // console.log("es sub usuario");
+      this.showBtnAdd = false;
+      this.showBtnEdit = false;
+    } else {
+        // console.log("es un usuario normal");
+        // this.showBtnAdd = true;
+    }
+    this.initializingUserPrivleges = true;
+    this.attemptToHideSpinner();
+    console.log('(Geopoints Service) Privilegios obtenidos...');
+  }
+  
     //====================================
 
     public async edit(point: any){

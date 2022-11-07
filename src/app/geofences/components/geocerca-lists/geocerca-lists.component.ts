@@ -24,35 +24,17 @@ export class GeocercaListsComponent implements OnInit {
   datosCargados = false;
   NomBusqueda = "";
 
-  userData: any; //Informacion del usuario
-  showBtnAdd = true;
-  showBtnEdit = true;
-
   noResults: boolean = false;
 
   constructor(
     public geofencesService: GeofencesService,
     public mapService: MapServicesService,
     public panelService: PanelService,
-
   ) { }
 
   ngOnInit(): void {
 
-    this.userData = this.panelService.userData;
-    // console.log(this.userData);
-    if (this.userData.privilegios == "subusuario") {
-        // console.log("es sub usuario");
-        this.showBtnAdd = false;
-        this.showBtnEdit = false;
-    } else {
-        // console.log("es un usuario normal");
-        // this.showBtnAdd = true;
-
-    }
-
-
-    if(!this.geofencesService.initializingGeofences){
+    if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges){
       this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
     //console.log("DATOS DE GEOCERCAS");

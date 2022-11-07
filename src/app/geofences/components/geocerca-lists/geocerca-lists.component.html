@@ -11,7 +11,7 @@
         </span>
       </div>
 
-      <button type="button" *ngIf="showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocerca()" title="Crear geocerca">
+      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocerca()" title="Crear geocerca">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
     </div>
@@ -27,9 +27,9 @@
         <!-- <col width="13%" />
         <col width="13%" /> -->
 
-        <col *ngIf="showBtnEdit" width="13%" />
-        <col *ngIf="showBtnEdit" width="13%" />
-        <col *ngIf="!showBtnEdit" width="26%" />
+        <col *ngIf="geofencesService.showBtnEdit" width="13%" />
+        <col *ngIf="geofencesService.showBtnEdit" width="13%" />
+        <col *ngIf="!geofencesService.showBtnEdit" width="26%" />
 
 
 
@@ -162,7 +162,7 @@
                   </g>
                 </svg>
               </th>
-              <th *ngIf="showBtnEdit" ><i class="fa fa-pencil fa-lg"></i></th>
+              <th *ngIf="geofencesService.showBtnEdit" ><i class="fa fa-pencil fa-lg"></i></th>
 
           </tr>
       </thead>
@@ -197,7 +197,7 @@
               <td>{{ geo.trama.vel_max>0? geo.trama.vel_max + ' km/h': '&mdash;'}}</td>
 
 
-              <td *ngIf="showBtnEdit">
+              <td *ngIf="geofencesService.showBtnEdit">
                 <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
                   <!-- <button class="btn btn-xs btn-link" ngbDropdownToggle>
                     <i class="fa fa-pencil fa-lg" style="font-size: 14px;"></i>

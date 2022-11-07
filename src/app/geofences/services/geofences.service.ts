@@ -7,6 +7,7 @@ import { MapServicesService } from '../../map/services/map-services.service';
 
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,17 +39,22 @@ export class GeofencesService {
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
 
+  initializingUserPrivleges: boolean = false;
+  showBtnAdd = true;
+  showBtnEdit = true;
+
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
     public spinner: NgxSpinnerService,
-
+    private userDataService: UserDataService,
     ) {
     //this.getAll();
   }
 
   //Se llama desde /app/map/components/map-view/map-view.component.ts
   public async initialize() {
+    this.getUserPrivileges();
     await this.getAll();
   }
 
@@ -120,6 +126,7 @@ export class GeofencesService {
       this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
       console.log('Geocercas Cargadas');
       this.initializingGeofences = true;
+      this.attemptToHideSpinner();
       console.log(this.geofences);
 
     });
@@ -144,12 +151,54 @@ export class GeofencesService {
       this.tblDataGeo.push({trama:this.geofences[i]});
     }
     this.tblDataGeoFiltered = this.getTableData();
-
-    this.spinner.hide('loadingGeofencesSpinner');
+    
+    //this.spinner.hide('loadingGeofencesSpinner');
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
+  }
 
-}
+  getUserPrivileges(){
+    console.log('(Geofences Service) Esperando privliegios...');
+    if(!this.userDataService.userDataInitialized){
+      console.log('(Geofences Service) User Data no está listo. Subscribiendo para obtener privilegios...');
+      this.userDataService.geofencesPrivileges.subscribe({
+        next: (result: boolean) => {
+          if(result){
+            this.verifyPrivileges();
+          }
+        },
+        error: (errMsg: any) => {
+          console.log('(Geofences Service) Error al obtener userData: ', errMsg);
+        }
+      });
+    } else {
+      console.log('(Geofences Service) User Data está listo. Obteniendo privilegios...');
+      this.verifyPrivileges();
+    }
+    
+  }
 
+  attemptToHideSpinner(){
+    console.log('Attempt to hide Geofences Spinner: ', { 
+      isTableReady: this.initializingGeofences, 
+      isUserDataReady: this.initializingUserPrivleges } );
+    if(this.initializingGeofences && this.initializingUserPrivleges){
+      this.spinner.hide('loadingGeofencesSpinner');
+    }
+  }
+
+  verifyPrivileges(){
+    if (this.userDataService.userData.privilegios == "subusuario") {
+      // console.log("es sub usuario");
+      this.showBtnAdd = false;
+      this.showBtnEdit = false;
+    } else {
+        // console.log("es un usuario normal");
+        // this.showBtnAdd = true;
+    }
+    this.initializingUserPrivleges = true;
+    this.attemptToHideSpinner();
+    console.log('(Geofences Service) Privilegios obtenidos...');
+  }
 
   getCoordenadas(data:any){
     let coo = [];
