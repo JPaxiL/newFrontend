@@ -1,8 +1,11 @@
 
 
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import * as L from 'leaflet';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
+
+declare let L: any;
+import 'leaflet-measure';
+import 'leaflet-measure/dist/leaflet-measure.es';
 
 declare var $: any;
 @Injectable({
@@ -12,6 +15,22 @@ export class ToolbarMapService {
   map!: L.Map; //guardara el mapa
   toolbar: any;
   showDialog:boolean = false;
+
+
+  showDistance:boolean = false;
+
+  measureControl = new L.control.measure(
+    { position: 'topright',
+      primaryLengthUnit: 'kilometers',
+      secondaryLengthUnit: 'feet',
+      primaryAreaUnit: 'sqmeters',
+      secondaryAreaUnit: 'hectares',
+      localization: 'es',
+      activeColor: 'blue',
+      completedColor: '#9900ff',
+      captureZIndex: 10000
+   });
+
 
   container = L.DomUtil.create(
     'div',
@@ -33,6 +52,7 @@ export class ToolbarMapService {
         this.createGroupAndUngroup();
         this.createLocation();
         this.createCoordinate();
+        this.createDistance();
         return this.container;
       },
     };
@@ -47,7 +67,7 @@ export class ToolbarMapService {
     var iGroup = L.DomUtil.create('i', 'fa fa-crosshairs', group);
 
     group.onclick = () => {
-      //metodo
+
     };
   }
 
@@ -94,7 +114,7 @@ export class ToolbarMapService {
 
           var featureGroup = L.featureGroup([marker, circle]).addTo(this.map);
 
-          popup.on('remove', (e) => {
+          popup.on('remove', () => {
             this.map.removeLayer(featureGroup);
           });
 
@@ -113,6 +133,28 @@ export class ToolbarMapService {
     coordinate.onclick = () => {
       //metodo
       this.change.emit(true);
+    };
+  }
+
+  createDistance(){
+
+    var distance = L.DomUtil.create('a', 'leaflet-link', this.container);
+
+    distance.title = "Distancia";
+
+    var iDistance = L.DomUtil.create('i', 'fa fa-road', distance);
+
+    distance.onclick = () => {
+
+       if(this.showDistance == false){
+          this.measureControl.addTo(this.map);
+          $('.leaflet-control-measure').css("max-width", "400px");
+          this.showDistance = true;
+       }else {
+          this.map.removeControl(this.measureControl);
+          this.showDistance = false;
+       }
+
     };
   }
 }
