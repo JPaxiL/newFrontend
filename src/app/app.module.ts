@@ -114,7 +114,7 @@ import { SubcuentasModalComponent } from './subcuentas/components/subcuentas-mod
 import { AuditdetailComponent } from './auditoria/components/auditdetail/auditdetail.component';
 import { AuditmapComponent } from './auditoria/components/auditmap/auditmap.component';
 import { AuditInfoActivityComponent } from './auditoria/components/auditdetail/audit-info-activity/audit-info-activity.component';
-import { NotFoundComponent } from './panel/not-found/not-found/not-found.component';
+import { NotFoundComponent } from './panel/not-found/not-found.component';
 
 @NgModule({
   declarations: [
