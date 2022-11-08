@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { PanelService } from '../../services/panel.service';
 import { EventSocketService } from './../../../events/services/event-socket.service';
 
-import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
 import { EventService } from 'src/app/events/services/event.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
@@ -30,29 +27,38 @@ export class NavbarComponent implements OnInit {
   showBtnSubcuentas = true;
 
   constructor(
-    private router: Router,
     public eventService: EventService,
     public eventSocketService : EventSocketService,
     public panelService: PanelService,
-    private http: HttpClient,
     private userDataService: UserDataService,
   ) { 
 
   }
 
   ngOnInit(): void {
-    this.userDataService.userDataCompleted.subscribe({
-      next: (result: boolean) => {
-        if(result){
-          this.userName = this.userDataService.userData.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
-          this.userEmail = this.userDataService.userData.email;
-          this.userDataInitialized = true;
+    if(!this.userDataService.userDataInitialized){
+      console.log('(Navbar) User Data no está listo. Subscribiendo para obtener data...');
+      this.userDataService.userDataCompleted.subscribe({
+        next: (result: boolean) => {
+          if(result){
+            this.getUserData();
+          }
+        },
+        error: (errMsg: any) => {
+          console.log('(Navbar) Error al obtener userData: ', errMsg);
         }
-      },
-      error: (errMsg: any) => {
-        console.log('(Navbar) Error al obtener userData: ', errMsg);
-      }
-    });
+      });
+    } else {
+      console.log('(Navbar) User Data está listo. Subscribiendo para obtener data...');
+      this.getUserData();
+    }
+    
+  }
+
+  getUserData(){
+    this.userName = this.userDataService.userData.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
+    this.userEmail = this.userDataService.userData.email;
+    this.userDataInitialized = true;
   }
 
   showHideSideBar(): void {
