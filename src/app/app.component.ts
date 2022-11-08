@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { EventSocketService } from './events/services/event-socket.service';
 import { EventService } from './events/services/event.service';
 import { UserDataService } from './profile-config/services/user-data.service';
+import { VehicleService } from './vehicles/services/vehicle.service';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,10 @@ export class AppComponent {
     private eventService: EventService,
     private eventSocketService: EventSocketService,
     private userDataService: UserDataService,
+    private vehicleService: VehicleService,
   ){
     if(localStorage.getItem('user_id') != null){
+      this.vehicleService.initialize();
       this.eventService.getAll();
       this.eventSocketService.listen();
       this.userDataService.getUserData();

@@ -8,6 +8,7 @@ import { UsersService } from 'src/app/dashboard/service/users.service';
 import { EventSocketService } from 'src/app/events/services/event-socket.service';
 import { EventService } from 'src/app/events/services/event.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 
 export interface User {
   name: string;
@@ -42,6 +43,7 @@ export class LoginComponent implements OnInit {
     public eventService: EventService,
     private eventSocketService: EventSocketService,
     private userDataService: UserDataService,
+    private vehicleService: VehicleService,
     ) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
@@ -112,6 +114,7 @@ export class LoginComponent implements OnInit {
       }
     });
     this.eventSocketService.user_id = localStorage.getItem('user_id');
+    this.vehicleService.initialize();
     this.eventService.getAll();
     this.eventSocketService.listen();
     this.userDataService.getUserData();

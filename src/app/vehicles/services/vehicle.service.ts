@@ -53,14 +53,18 @@ export class VehicleService {
   @Output() clickListTable = new EventEmitter<any>();
   @Output() calcTimeStop = new EventEmitter<any>();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    ) {
+  }
+
+  public initialize(){
     /*
       procedimiento
         cargar data,
         emitir evento de carga a demas componentes
     */
-    // //console.log('vehicle service constructor ...');
-    //tiempo critico
+   console.log('Iniciando vehicleService');
     if(this.demo){
       setTimeout(()=>{
         // //console.log("carga de data");
@@ -106,8 +110,8 @@ export class VehicleService {
       }
       );
     }
-
   }
+
   /*tree table*/
   // public get
   /*end tree table*/
