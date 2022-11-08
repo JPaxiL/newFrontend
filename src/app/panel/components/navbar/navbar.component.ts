@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
   userDataInitialized: boolean = false;
 
   userData: any; //Informacion del usuario
-  showBtnSubcuentas = true;
+  showBtnSubcuentas = false;
 
   constructor(
     public eventService: EventService,
@@ -59,6 +59,13 @@ export class NavbarComponent implements OnInit {
     this.userName = this.userDataService.userData.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
     this.userEmail = this.userDataService.userData.email;
     this.userDataInitialized = true;
+    if(!this.isSubuser()){
+      this.showBtnSubcuentas = true;
+    }
+  }
+
+  isSubuser(){
+    return this.userDataService.userData.privilegios == "subusuario";
   }
 
   showHideSideBar(): void {
