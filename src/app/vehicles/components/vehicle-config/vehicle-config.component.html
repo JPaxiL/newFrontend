@@ -119,7 +119,30 @@
             </div>
           </div>
 
-          <div class="row">          
+          <div class="row">         
+            
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="tipo-unidad">Tipo de Unidad :</label>
+                </div>
+                <div class="col-7">
+                  <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'" (onChange)="updateIconsDropdown()" placeholder="Selecciona un tipo de unidad">
+                    <ng-template pTemplate="selectedItem">
+                      <div class="type-item type-item-value" *ngIf="selectedType">
+                        <div>{{selectedType.name}}</div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-type pTemplate="item">
+                      <div class="type-item">
+                        <div>{{type.name}}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+
             <div class="col p-field">
               <div class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
@@ -147,27 +170,7 @@
                 </div>
               </div>
             </div>
-            <div class="col p-field">
-              <div class="row gl-row-underline">
-                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="tipo-unidad">Tipo de Unidad :</label>
-                </div>
-                <div class="col-7">
-                  <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'" (onChange)="updateIconsDropdown()" placeholder="Selecciona un tipo de unidad">
-                    <ng-template pTemplate="selectedItem">
-                      <div class="type-item type-item-value" *ngIf="selectedType">
-                        <div>{{selectedType.name}}</div>
-                      </div>
-                    </ng-template>
-                    <ng-template let-type pTemplate="item">
-                      <div class="type-item">
-                        <div>{{type.name}}</div>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
-                </div>
-              </div>
-            </div>
+
           </div>
             
           <!-- <div class="row d-flex justify-content-center">
