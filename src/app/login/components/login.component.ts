@@ -7,6 +7,7 @@ import { SignIn } from 'src/app/core/store/auth.actions';
 import { UsersService } from 'src/app/dashboard/service/users.service';
 import { EventSocketService } from 'src/app/events/services/event-socket.service';
 import { EventService } from 'src/app/events/services/event.service';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 export interface User {
   name: string;
@@ -39,7 +40,9 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     public userService: UsersService,
     public eventService: EventService,
-    private eventSocketService: EventSocketService) {
+    private eventSocketService: EventSocketService,
+    private userDataService: UserDataService,
+    ) {
     // customize default values of carousels used by this component tree
     config.showNavigationArrows = true;
     config.showNavigationIndicators = true;
@@ -111,5 +114,6 @@ export class LoginComponent implements OnInit {
     this.eventSocketService.user_id = localStorage.getItem('user_id');
     this.eventService.getAll();
     this.eventSocketService.listen();
+    this.userDataService.getUserData();
   }
 }
