@@ -87,11 +87,15 @@ export class AreagraphsComponent implements OnInit {
   countVehicleSafetyEvents: any = [];
   safetyEventsTotal: number = 0;
 
+  mutationObserver: any;
+  mutationFlag: boolean = false;
+  mutationCounter: number = 0;
+
   constructor(
     private vehicleService: VehicleService,
     private spinner: NgxSpinnerService,
     private eventService: EventService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
   ) {}
 
   /*
@@ -132,12 +136,36 @@ export class AreagraphsComponent implements OnInit {
     this.getEvents(this.imeis);
 
     this.vehicleService.dataCompleted.subscribe((vehicles) => {
+
+    var observerTarget = document.querySelector('.pie-chart-container svg.ngx-charts > g.pie-chart.chart > g')!;
+    this.mutationObserver = new MutationObserver( mutationList => {
+      mutationList.forEach( mutation => {
+        //console.log('Mutación atrapada: ', mutation);
+        if (mutation.type === 'childList' && this.isLastMutation()) {
+          //console.log('Observer Target', observerTarget);
+          this.drawOnPieChart();
+          this.drawOnPieLegend();
+
+          //Desactivar mutationObserver, ya que solo se ejecutará 1 vez
+          this.mutationObserver.disconnect();
+        }
+      });
+    });
+    var config = { childList: true };
+    this.mutationObserver.observe(observerTarget, config);
+
       this.vehicles = vehicles.filter((vehicle: any) => {
         return this.imeis.includes(vehicle.IMEI);
       });
 
       this.setGraphData(this.vehicles);
     });
+  }
+
+  isLastMutation(){
+    //console.log('Mutation detected');
+    this.mutationCounter++;
+    return this,this.mutationCounter == this.data.length;
   }
 
   setGraphData(vehicles: any) {
@@ -198,11 +226,6 @@ export class AreagraphsComponent implements OnInit {
         value: this.red,
       },
     ];
-
-    setTimeout(() => {
-      this.drawOnPieChart();
-      this.drawOnPieLegend();
-    }, 0);
 
     this.setHorizontalChart();
   }
@@ -518,6 +541,7 @@ export class AreagraphsComponent implements OnInit {
         );
         node.parentNode!.append(text);
       }
+      //console.log({ percent: percentageValues, maxX: maxX, minX: minX, startingValue: startingValue });
     }
   }
 
@@ -535,6 +559,8 @@ export class AreagraphsComponent implements OnInit {
     const angle = ((startingValue * 2 + percent) / 100 - 0.4955) * Math.PI;
     const x = r * Math.cos(angle);
     const y = r * Math.sin(angle) + 5;
+
+    //console.log('Measures', {x: x, y: y, r: r});
 
     text.setAttribute('x', '' + x);
     text.setAttribute('y', '' + y);
