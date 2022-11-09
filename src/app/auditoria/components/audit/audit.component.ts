@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { TabService } from 'src/app/panel/services/tab.service';
 import { AuditmapComponent } from '../auditmap/auditmap.component';
 import { AuditresultComponent } from '../auditresult/auditresult.component';
 
@@ -29,7 +30,12 @@ export class AuditComponent implements OnInit {
   ip_address: string = "";
   properties: string = "";
   subject_type: string = "";
-  constructor() { }
+
+  constructor(
+    private tabService: TabService,
+  ) {
+    this.tabService.setCurrentTab('audit-tab');
+  }
 
   ngOnInit(): void {
   }

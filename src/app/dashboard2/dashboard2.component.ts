@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TabService } from '../panel/services/tab.service';
 
 @Component({
   selector: 'app-dashboard2',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Dashboard2Component implements OnInit {
 
-  constructor() { }
+  constructor(
+    private tabService: TabService,
+  ) {
+    this.tabService.setCurrentTab('dashboard-tab');
+  }
 
   ngOnInit(): void {
   }

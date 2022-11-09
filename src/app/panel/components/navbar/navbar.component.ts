@@ -4,6 +4,7 @@ import { EventSocketService } from './../../../events/services/event-socket.serv
 
 import { EventService } from 'src/app/events/services/event.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { TabService } from '../../services/tab.service';
 
 declare var $: any;
 
@@ -31,8 +32,9 @@ export class NavbarComponent implements OnInit {
     public eventSocketService : EventSocketService,
     public panelService: PanelService,
     private userDataService: UserDataService,
+    private tabService: TabService,
   ) { 
-
+    this.tabService.setCurrentTab('main-panel');
   }
 
   ngOnInit(): void {

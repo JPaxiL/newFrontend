@@ -11,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {DialogModule} from 'primeng-lts/dialog';
 
 import * as moment from 'moment';
+import { TabService } from 'src/app/panel/services/tab.service';
 // import { AnyARecord } from 'dns';
 // declare var $: any;
 declare var $j: any;
@@ -387,8 +388,11 @@ export class ResultComponent implements OnDestroy, OnInit {
     private titleService:Title,
     private toastr:ToastrService,
     private confirmationService:ConfirmationService,
+    private tabService: TabService,
   ){
-
+    if(this.tabService.currentTab == ''){
+      this.tabService.setCurrentTab('result-tab');
+    }
   }
 
   ngOnInit(){
