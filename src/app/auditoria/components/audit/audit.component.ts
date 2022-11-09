@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { TabService } from 'src/app/panel/services/tab.service';
 import { AuditmapComponent } from '../auditmap/auditmap.component';
 import { AuditresultComponent } from '../auditresult/auditresult.component';
@@ -33,8 +34,10 @@ export class AuditComponent implements OnInit {
 
   constructor(
     private tabService: TabService,
+    private titleService: Title,
   ) {
     this.tabService.setCurrentTab('audit-tab');
+    this.titleService.setTitle('Auditoría');
   }
 
   ngOnInit(): void {

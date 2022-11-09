@@ -493,7 +493,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       })
     } else {
-      console.log('Se abrirá una nueva pestaña')
+      console.log('Se abrirá una nueva pestaña');
       localStorage.removeItem('report_data');
       this.data = report_data.data;
       this.num_rep = report_data.numRep;
