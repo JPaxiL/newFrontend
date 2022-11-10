@@ -145,9 +145,8 @@ export class GeopointsService {
             "opacity": 1
 
           }).bindTooltip(
-              // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-              /* '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geopoints[i].geopunto_color+';">'+this.geopoints[i].geopunto_name+'</b>', */
-              '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geopoints[i].geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>',
+              /* '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geopoints[i].geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>', */
+              '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>',
               { permanent: true,
                 offset: [0, 20],
                 direction: 'center',
