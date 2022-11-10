@@ -9,9 +9,6 @@
     <div class="dialog-body-container">
 
       <div class="p-fluid p-formgrid p-grid">
-        <div class="" *ngIf="loading">
-          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-        </div>
   
         <div class="dialog-form-container">
 
@@ -39,7 +36,7 @@
                     <label for="gv_name">Nombre:</label>
                   </div>
                   <div class="col-7">
-                    <input (keyup)="onName($event)" #name id="gv_name" type="text" pInputText>
+                    <input (keyup)="onName($event)" #name id="gv_name" type="text" pInputText [disabled]="loading">
                   </div>
                 </label>
               </div>
@@ -64,7 +61,7 @@
                   <label>Seleccione Grupo:</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown (onChange)="onChangeGroup()" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="grupo" optionValue="idgrupo" placeholder="Seleccione grupo"></p-dropdown>
+                  <p-dropdown (onChange)="onChangeGroup()" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="grupo" optionValue="idgrupo" placeholder="Seleccione grupo" [disabled]="loading"></p-dropdown>
                 </div>
               </div>
             </div>
@@ -73,7 +70,7 @@
           <div class="flex-column mt-3">
             <div class="row gl-listbox-container">
                 <div class="col">
-                  <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
+                  <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
                     <ng-template let-car pTemplate="item">
                       <div class="car-item">
                         <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
@@ -85,7 +82,7 @@
                 <div class="col-1 d-flex flex-column justify-content-center align-items-center">
                   <div style="height: 1.5rem;"></div>
                   <div class="">
-                    <button (click)="upList2()" type="button" class="btn-gl-light-blue btn-circle" name="button">
+                    <button (click)="upList2()" type="button" class="btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
                       <span>
                         <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
                       </span>
@@ -93,7 +90,7 @@
                   </div>
                   <div style="height: 1rem;"></div>
                   <div class="">
-                    <button (click)="upList1()" type="button" class="btn-gl-light-blue btn-circle" name="button">
+                    <button (click)="upList1()" type="button" class="btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
                       <span>
                         <i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i>
                       </span>
@@ -101,7 +98,7 @@
                   </div>
                 </div>
                 <div class="col">
-                  <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
+                  <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
                     <ng-template let-car pTemplate="item">
                       <div class="car-item">
                         <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
@@ -119,16 +116,13 @@
     </div>
 
     <p-footer>
-      <div class="row d-flex justify-content-center" *ngIf="loading==false">
+      <div class="row d-flex justify-content-center">
         <div class="col-3">
-          <button (click)="onHide()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100">Cancelar</button>
+          <button (click)="onHide()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
         </div>
         <div class="col-3">
-          <button (click)="onConfirmGroup()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100">Guardar</button>
+          <button (click)="onConfirmGroup()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading">Guardar</button>
         </div>
-      </div>
-      <div class="" *ngIf="loading">
-
       </div>
     </p-footer>
 </p-dialog>

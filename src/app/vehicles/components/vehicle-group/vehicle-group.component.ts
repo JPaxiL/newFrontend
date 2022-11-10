@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import {ConfirmationService} from 'primeng-lts/api';
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-vehicle-group',
@@ -49,7 +49,6 @@ export class VehicleGroupComponent implements OnInit {
   constructor(
     private vehicleService: VehicleService,
     private configService: VehicleConfigService,
-    private confirmationService: ConfirmationService
   ) {
 
     this.stateOptions = [
@@ -198,7 +197,7 @@ export class VehicleGroupComponent implements OnInit {
     this.list1 = aux2;
     this.selectedList1=[];
   }
-  onSubmit(){
+  async onSubmit(){
     //this.name, this.description
     // const
     /*
@@ -237,7 +236,6 @@ export class VehicleGroupComponent implements OnInit {
     // //console.log("submit",req);
     // //console.log("dat enviada",req);
 
-    this.loading=true;
     if(this.vehicleService.demo){
       //console.log('demoo');
       const info = {
@@ -250,49 +248,50 @@ export class VehicleGroupComponent implements OnInit {
       this.addGroup(info);
       this.vehicleService.demo_id++;
     }else{
-      this.configService.postGroup(req).subscribe((info:any) => {
-        //console.log("post group res =",info);
-        if(info.res){
-          this.addGroup(info);
-          this.selectedGroup = {};
-          // const vehicles = this.vehicleService.vehicles;
-          // for (const key in this.list2) {
-          //   const index = vehicles.indexOf(this.list2[key])
-          //   // //console.log('index',index);
-          //   if(this.option=='convoy'){
-          //     vehicles[index].idconvoy=info.data['id'];
-          //     vehicles[index].convoy=info.data['nombre'];
-          //
-          //   }else{
-          //     vehicles[index].idgrupo=info.data['id'];
-          //     vehicles[index].grupo=info.data['nombre'];
-          //
-          //   }
-          //   // //console.log('vehicles index',vehicles[index])
-          // }
-          // this.vehicleService.vehicles = vehicles;
-          // // //console.log('new vehicles',vehicles);
-          // //reload talbe
-          // if(this.vehicleService.listTable==0){
-          //   this.vehicleService.reloadTable.emit();
-          // }else{
-          //   this.vehicleService.reloadTableTree.emit();
-          // }
-          // this.onHideEvent.emit(false);
-          // //update data local
-          // //mensaje de exito
-          // // this.eventUpdate.emit(this.vehicle);
-          // // this.eventDisplay.emit(false);
-          // this.loading=false;
-          // this.list2=[];
-        }else{
-          this.loading=false;
-          //mensaje de error
-        }
-      });
-
+      await this.configService.postGroup(req).toPromise()
+        .then(info => {
+          //console.log("post group res =",info);
+          if(info.res){
+            this.addGroup(info);
+            this.selectedGroup = {};
+            // const vehicles = this.vehicleService.vehicles;
+            // for (const key in this.list2) {
+            //   const index = vehicles.indexOf(this.list2[key])
+            //   // //console.log('index',index);
+            //   if(this.option=='convoy'){
+            //     vehicles[index].idconvoy=info.data['id'];
+            //     vehicles[index].convoy=info.data['nombre'];
+            //
+            //   }else{
+            //     vehicles[index].idgrupo=info.data['id'];
+            //     vehicles[index].grupo=info.data['nombre'];
+            //
+            //   }
+            //   // //console.log('vehicles index',vehicles[index])
+            // }
+            // this.vehicleService.vehicles = vehicles;
+            // // //console.log('new vehicles',vehicles);
+            // //reload talbe
+            // if(this.vehicleService.listTable==0){
+            //   this.vehicleService.reloadTable.emit();
+            // }else{
+            //   this.vehicleService.reloadTableTree.emit();
+            // }
+            // this.onHideEvent.emit(false);
+            // //update data local
+            // //mensaje de exito
+            // // this.eventUpdate.emit(this.vehicle);
+            // // this.eventDisplay.emit(false);
+            // this.list2=[];
+          }else{
+            //mensaje de error
+          }
+        }).catch(errorMsg => {
+          console.log(`(Vehicle Group) Hubo un error al crear el nuevo grupo/convoy (promise): `, errorMsg);
+        });
     }
   }
+
   addGroup(info: any){
     // //console.log('addgroup info =',info);
     const vehicles = this.vehicleService.vehicles;
@@ -324,12 +323,11 @@ export class VehicleGroupComponent implements OnInit {
     //mensaje de exito
     // this.eventUpdate.emit(this.vehicle);
     // this.eventDisplay.emit(false);
-    this.loading=false;
     this.list2=[];
     //this.option = "nada";
     this.option = "grupo";
     this.name.nativeElement.value = "";
-    this.description.nativeElement.value = "";
+    //this.description.nativeElement.value = "";
 
   }
   onShow(){
@@ -338,14 +336,39 @@ export class VehicleGroupComponent implements OnInit {
     this.onOption(this.option);
   }
   onConfirmGroup(){
-    this.confirmationService.confirm({
-             message: 'Se aplicarán los cambios',
-            accept: () => {
-                //Actual logic to perform a confirmation
-                // //console.log("aceptadoo ....");
-                this.onSubmit();
-            }
-        });
+    this.loading = true;
+    let currOption = this.option;
+    let currName = this.nameTarget;
+
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Se aplicarán los cambios',
+      //icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        await this.onSubmit();
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Éxito',
+          `El ${currOption} ${currName} se creó exitosamente`,
+          'success'
+        );
+      } else {
+        console.log(`(Vehicle Group) Hubo un error al crear el nuevo ${currOption}`);
+      }
+      this.loading=false;
+    });
   }
 
 }
