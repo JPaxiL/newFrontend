@@ -3,7 +3,6 @@ import { TreeNode } from 'primeng-lts/api';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import {DialogModule} from 'primeng-lts/dialog';
-import {ConfirmationService} from 'primeng-lts/api';
 
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
@@ -36,7 +35,6 @@ export class TreeTableComponent implements OnInit {
   loading: boolean=true;
   list1: any = [];
   list2: any = [];
-  formDisplay : string = 'block'
   selectedList1: any = [];
   selectedList2: any = [];
   private dataEdit : any = {
@@ -88,7 +86,6 @@ export class TreeTableComponent implements OnInit {
     private vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
-    private confirmationService: ConfirmationService,
     private spinner: NgxSpinnerService,
     private followService:FollowService,
   ) {
@@ -186,27 +183,47 @@ export class TreeTableComponent implements OnInit {
     this.display = res;
   }
   onConfirmationEdit(){
-    this.confirmationService.confirm({
-             message: 'Se aplicarán los cambios',
-            accept: () => {
-                //Actual logic to perform a confirmation
-                // //console.log("aceptadoo ....");
-                this.onSubmitEdit();
-            }
-        });
-  }
-  onSubmitEdit(){
-    // //console.log('eviando data para edicion');
     this.loading=true;
-    this.formDisplay = 'none';
+    //let currName = this.nameEdit.nativeElement.value;
+    let currType = this.dataEdit.type;
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Se aplicarán los cambios',
+      //icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        await this.onSubmitEdit();
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Éxito',
+          `El ${currType} se editó exitosamente`,
+          'success'
+        );
+      } else {
+        console.log(`(Vehicle Group) Hubo un error al editar el ${currType}`);
+      }
+      this.loading=false;
+    });
+  }
+  async onSubmitEdit(){
+    // //console.log('eviando data para edicion');
     if(this.vehicleService.demo){
       //console.log('modo demo, no se enviara info a la DB');
       this.updateGroup();
 
       this.vehicleService.reloadTableTree.emit();
       this.displayEditGroup = false;
-      this.loading=false;
-      this.formDisplay = 'block';
     }else{
       const req = {
         type : this.dataEdit.type,
@@ -215,19 +232,16 @@ export class TreeTableComponent implements OnInit {
         list2 : this.list2,
         name : this.nameEdit.nativeElement.value
       };
-      this.vehicleConfigService.putGroupUpdate(req).subscribe((info : any)=>{
-        // //console.log('result submit',info);
-        if(info.res){
-          this.updateGroup();
-          this.vehicleService.reloadTableTree.emit();
-          this.displayEditGroup = false;
-          this.loading=false;
-          this.formDisplay = 'block';
-        }else{
-
-        }
-      });
-
+      await this.vehicleConfigService.putGroupUpdate(req).toPromise()
+        .then(info => {
+          if(info.res){
+            this.updateGroup();
+            this.vehicleService.reloadTableTree.emit();
+            this.displayEditGroup = false;
+          }else{}
+        }).catch(errorMsg => {
+          console.log(errorMsg);
+        });
     }
   }
   updateGroup(){

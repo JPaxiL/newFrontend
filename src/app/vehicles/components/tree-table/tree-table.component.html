@@ -11,43 +11,26 @@
 
     <div class="p-fluid p-formgrid p-grid">
 
-      <div class="" *ngIf="loading">
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      </div>
-
-      <div class="dialog-form-container" [ngStyle]="{'display':formDisplay}">
+      <div class="dialog-form-container">
 
         <div class="row gl-out-middleline">
           <div class="col p-field p-0">
             <div class="row gl-row-underline m-0 w-100">
               <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                <label>Nombre:</label>
+                <label for="float-input">Nombre:</label>
               </div>
               <div class="col-7">
-                <input  #nameEdit id="float-input" type="text" pInputText class="p-inputtext-sm" placeholder="">
+                <input  #nameEdit id="float-input" type="text" pInputText class="p-inputtext-sm" placeholder="" [disabled]="loading">
               </div>
             </div>
           </div>
         </div>
 
-        <!-- <div class="row d-flex justify-content-center">
-          <div class="col-sm-12 col-md-10 align-self-center p-field">
-            <div class="row">
-              <div class="col-3 d-flex align-items-center justify-content-end text-end fw-bold">
-                <label>Nombre:</label>
-              </div>
-              <div class="col-8">
-                <input  #nameEdit id="float-input" type="text" pInputText class="p-inputtext-sm" placeholder="">
-              </div>
-            </div>
-          </div>
-        </div> -->
-
         <div class="flex-column mt-3">
           <div class="row gl-listbox-container">
             <div class="col">
 
-              <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
+              <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
                 <ng-template let-car pTemplate="item">
                     <div class="car-item">
                       <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
@@ -60,7 +43,7 @@
             <div class="col-1 d-flex flex-column justify-content-center align-items-center">
               <div style="height: 1.5rem;"></div>
               <div class="">
-                <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
+                <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
                   <span>
                     <i class="fa fa-arrow-right" aria-hidden="true"></i>
                   </span>
@@ -68,7 +51,7 @@
               </div>
               <div style="height: 1rem;"></div>
               <div class="">
-                <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button">
+                <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
                   <span>
                     <i class="fa fa-arrow-left" aria-hidden="true"></i>
                   </span>
@@ -77,7 +60,7 @@
             </div>
 
             <div class="col">
-              <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}">
+              <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
                 <ng-template let-car pTemplate="item">
                     <div class="car-item">
                       <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
@@ -96,10 +79,10 @@
   <p-footer>
     <div class="row d-flex justify-content-center">
       <div class="col-4">
-        <button (click)="displayEditGroup=false" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100">Cancelar</button>
+        <button (click)="displayEditGroup=false" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading"loading>Cancelar</button>
       </div>
       <div class="col-4">
-        <button (click)="onConfirmationEdit()" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100">Guardar</button>
+        <button (click)="onConfirmationEdit()" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading"loading>Guardar</button>
       </div>
     </div>
   </p-footer>
