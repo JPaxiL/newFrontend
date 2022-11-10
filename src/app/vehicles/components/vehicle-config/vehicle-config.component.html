@@ -22,9 +22,6 @@
     <div class="dialog-body-container">
 
       <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
-        <div class="" *ngIf="loading">
-          <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-        </div>
         <div class="dialog-form-container gl-middleline" [ngStyle]="{'display':formDisplay}">
 
           <div class="row">
@@ -193,12 +190,12 @@
 
 
     <p-footer>
-      <div class="row d-flex justify-content-center" *ngIf="loading==false">
+      <div class="row d-flex justify-content-center">
         <div class="col-4">
-          <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100">Cancelar</button>
+          <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
         </div>
         <div class="col-4">
-          <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100">Guardar</button>
+          <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading">Guardar</button>
         </div>
       </div>
       <div class="" *ngIf="loading">

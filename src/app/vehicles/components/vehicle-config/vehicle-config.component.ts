@@ -1,9 +1,8 @@
 import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import {ConfirmationService} from 'primeng-lts/api';
-
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-vehicle-config',
@@ -97,7 +96,9 @@ export class VehicleConfigComponent implements OnInit {
   ];
   dropdownIcons: any = [];
 
-  constructor(private configService: VehicleConfigService, private confirmationService: ConfirmationService) {}
+  constructor(
+    private configService: VehicleConfigService, 
+  ) {}
 
 
   ngOnInit(): void {
@@ -130,16 +131,39 @@ export class VehicleConfigComponent implements OnInit {
     this.eventDisplay.emit(false);
   }
   confirm(){
-    this.confirmationService.confirm({
-             message: 'Se aplicarán los cambios',
-            accept: () => {
-                //Actual logic to perform a confirmation
-                // //console.log("aceptadoo ....");
-                this.onSubmit();
-            }
-        });
+    this.loading=true;
+
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Se aplicarán los cambios',
+      //icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        await this.onSubmit();
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Éxito',
+          'Los cambios se guardaron exitosamente',
+          'success'
+        );
+      } else {
+        console.log('(Vehicle Config) Hubo un error al guardar los cambios');
+      }
+      this.loading=false;
+    });
   }
-  onSubmit(){
+  async onSubmit(){
 
     this.vehicle = {
       IMEI: this.config.IMEI,
@@ -166,24 +190,20 @@ export class VehicleConfigComponent implements OnInit {
     // //console.log("vehicle config = ",this.config);
     // //console.log("vehicle edit = ",this.vehicle);
     //procesando info
-    this.loading=true;
-    this.formDisplay = "none";
 
     //end procesando info
-    this.configService.putConfig(this.vehicle).subscribe((info:any) => {
-      // //console.log(info);
-      if(info.res){
-        //update data local
-        //mensaje de exito
-        this.eventUpdate.emit(this.vehicle);
-        this.eventDisplay.emit(false);
-        this.loading=false;
-        this.formDisplay = "flex";
-        /* this.formDisplay = "block"; */
-      }else{
-        //mensaje de error
-      }
-    });
+    //console.log('(Vehicle Config) Iniciando guardado de cambios: ');
+    await this.configService.putConfig(this.vehicle).toPromise()
+      .then( newConfig => {
+        if(newConfig.res){
+          //console.log(newConfig);
+          //console.log('(Vehicle Config) Recibido data de guardado de cambios: ');
+          this.eventUpdate.emit(this.vehicle);
+          this.eventDisplay.emit(false);
+        }
+      }).catch(errorMsg => {
+        console.log('(Vehicle Config) Error al guardar datos del vehiculo: ', errorMsg)
+      });
   }
   valueNull(a: string){
     if(a.length==0){
