@@ -28,14 +28,12 @@ export class TreeTableComponent implements OnInit {
   displayEditGroup: boolean = false;
   textDelete: string = "";
   textHeaderEdit: string = "";
-  loadingDelete: boolean = false;
   idDelete!: number;
   typeDelete!: string;
   config: any=[];
   vehicles: TreeNode[]=[];
   cols: any[]=[];
   loading: boolean=true;
-  buttonDisplay: string="block";
   list1: any = [];
   list2: any = [];
   formDisplay : string = 'block'
@@ -330,13 +328,18 @@ export class TreeTableComponent implements OnInit {
 
     Swal.fire({
       title: 'Confirmación',
-      text: '¿Está seguro de descomponer ' + this.textDelete + '?',
+      text: `¿Está seguro de descomponer el ${data.type} ${data.name}?`,
       icon: 'warning',
       showLoaderOnConfirm: true,
       showCancelButton: true,
       allowOutsideClick: false,
       confirmButtonText: 'Descomponer',
       cancelButtonText: 'Cancelar',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
       preConfirm: async () => {
         await this.onDelete();
       },
@@ -424,45 +427,44 @@ export class TreeTableComponent implements OnInit {
     this.selectedList1=[];
   }
   async onDelete(){
-    this.loadingDelete = true;
-
     const req = {
       id : this.idDelete,
       vehicles : null
     };
     // //console.log('borrando ...');
-    this.buttonDisplay="none";
 
-    let info = await this.vehicleConfigService.putGroupDelete(req).toPromise();
+    await this.vehicleConfigService.putGroupDelete(req).toPromise()
+      .then(info => {
+        if(info.res){
+          let aux_vehicles = info.vehicles;
+          let aux_vehicles_tree = this.vehicleService.vehicles;
+          for (const key in aux_vehicles) {
+            for (const j in aux_vehicles_tree) {
+              if (aux_vehicles[key]['id']==aux_vehicles_tree[j]['id']) {
+                if(this.typeDelete=='grupo'){
+                  aux_vehicles_tree[j]['idgrupo']=null;
+                  aux_vehicles_tree[j]['grupo']='Unidades Sin Grupo';
+                }else{
+                  aux_vehicles_tree[j]['idconvoy']=null;
+                  aux_vehicles_tree[j]['convoy']='Unidades Sin Convoy';
+                }
+    
+              }
+            }
+          }
+          this.vehicleService.vehicles = aux_vehicles_tree;
+          this.vehicleService.vehiclesTree = this.vehicleService.createNode(aux_vehicles_tree);
+          this.vehicleService.reloadTableTree.emit();
+          this.textDelete = info.message;
+          this.displayDelete = false;
+          this.idDelete=-1;
+          this.typeDelete='';
+        }
+      }).catch(errorMsg => {
+        console.log('Error al descomponer grupo/convoy: ', errorMsg);
+      });
 
     //console.log('descomponer res = ',info);
-    this.loadingDelete = false;
-    this.buttonDisplay="block";
-    if(info.res){
-      let aux_vehicles = info.vehicles;
-      let aux_vehicles_tree = this.vehicleService.vehicles;
-      for (const key in aux_vehicles) {
-        for (const j in aux_vehicles_tree) {
-          if (aux_vehicles[key]['id']==aux_vehicles_tree[j]['id']) {
-            if(this.typeDelete=='grupo'){
-              aux_vehicles_tree[j]['idgrupo']=null;
-              aux_vehicles_tree[j]['grupo']='Unidades Sin Grupo';
-            }else{
-              aux_vehicles_tree[j]['idconvoy']=null;
-              aux_vehicles_tree[j]['convoy']='Unidades Sin Convoy';
-            }
-
-          }
-        }
-      }
-      this.vehicleService.vehicles = aux_vehicles_tree;
-      this.vehicleService.vehiclesTree = this.vehicleService.createNode(aux_vehicles_tree);
-      this.vehicleService.reloadTableTree.emit();
-      this.textDelete = info.message;
-      this.displayDelete = false;
-      this.idDelete=-1;
-      this.typeDelete='';
-    }
   }
   onUpdate(res :any){
     const vehicles = this.vehicleService.vehicles;
