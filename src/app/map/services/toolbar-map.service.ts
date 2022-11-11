@@ -64,6 +64,8 @@ export class ToolbarMapService {
   createGroupAndUngroup() {
     var group = L.DomUtil.create('a', 'leaflet-link', this.container);
 
+    group.title = "Agrupar / Desagrupar";
+
     var iGroup = L.DomUtil.create('i', 'fa fa-crosshairs', group);
 
     group.onclick = () => {
@@ -73,6 +75,8 @@ export class ToolbarMapService {
 
   createLocation() {
     var location = L.DomUtil.create('a', 'leaflet-link', this.container);
+
+    location.title = "Mi ubicación";
 
     var iLocation = L.DomUtil.create('i', 'fa fa-map-marker btn1', location);
 
@@ -127,6 +131,8 @@ export class ToolbarMapService {
 
   createCoordinate(){
     var coordinate = L.DomUtil.create('a', 'leaflet-link', this.container);
+
+    coordinate.title = "Coordenadas";
 
     var iCoordinate = L.DomUtil.create('i', 'fa fa-arrows', coordinate);
 
