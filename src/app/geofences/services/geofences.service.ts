@@ -106,9 +106,12 @@ export class GeofencesService {
               className: 'leaflet-tooltip-own',
             });
 
+        this.bindMouseEvents(this.geofences[i]);
+
         if (this.geofences[i].zone_name_visible == "true") {
           this.geofences[i].marker_name.addTo(this.mapService.map);
         }
+        
 
 
 
@@ -129,6 +132,25 @@ export class GeofencesService {
       this.attemptToHideSpinner();
       console.log(this.geofences);
 
+    });
+  }
+
+  public bindMouseEvents(geofence: any){
+    geofence.geo_elemento.on('mouseover', () => {
+      //console.log(`Mouseover event on <<${geofence.zone_name}>>: `, { zonaNameState: geofence.zone_name_visible, geocerca: geofence });
+      if(geofence.zone_name_visible != 'true'){
+        //console.log('Mostrar tooltip');
+        geofence.marker_name.addTo(this.mapService.map);
+      }
+      //console.log(geofence.geo_elemento.getLatLngs());
+      //console.log(L.GeometryUtil.geodesicArea((geofence.geo_elemento.getLatLngs()[0])));
+    });
+    geofence.geo_elemento.on('mouseout', () => {
+      //console.log(`MouseOUT event on <<${geofence.zone_name}>>: `, { zonaNameState: geofence.zone_name_visible, geocerca: geofence });
+      if(geofence.zone_name_visible != 'true'){
+        //console.log('Eliminar tooltip');
+        this.mapService.map.removeLayer(geofence.marker_name);
+      }
     });
   }
 

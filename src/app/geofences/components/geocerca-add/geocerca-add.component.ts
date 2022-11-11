@@ -105,11 +105,21 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       //console.log(geo);
 
       if (geo.zone_visible == "true") {
-        // geo.geo_elemento.geo_elemento.addTo(this.mapService.map);
-      } else {
-        geo.geo_elemento.addTo(this.mapService.map);
-        // this.mapService.map.removeLayer(geo.geo_elemento);
+        //Si la geocerca era visible previamente, entonce remover la capa para eliminar 
+        //los eventos mouseover y mouseout
+        console.log('Eliminando geocerca porque era visible');
+        this.mapService.map.removeLayer(geo.geo_elemento);
+
       }
+      //Se crea un nuevo poligono para eliminar la referencia previa de geo_elemento, eliminando asi
+      //tambien los eventos vinculados (mouseover y mouseout)
+      geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ), {
+        weight: 3,
+        fill: true,
+        color: geo.zone_color,
+      });
+      geo.geo_elemento.addTo(this.mapService.map);
+      geo.geo_elemento.editing.enable();
 
     } else {
       this.nuevo_formulario();
@@ -258,6 +268,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
             color: geo.zone_color //'#000000'
           });//.addTo(this.mapService.map);
 
+          this.geofencesService.bindMouseEvents(geo);
+
           if (geo.zone_visible == "true") {
             geo.geo_elemento.addTo(this.mapService.map);
           }
@@ -319,7 +331,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     this.mapService.map.fitBounds(geo.geo_elemento.getBounds());
 
-    geo.geo_elemento.editing.enable();
+    //geo.geo_elemento.editing.enable();
 
             // updatePerimeterAndArea(vm.polygon.getLatLngs());
     // //console.log( "factorArea = "+factorArea );
@@ -490,6 +502,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           color: geo.zone_color //'#000000'
         });//.addTo(this.mapService.map);
 
+        this.geofencesService.bindMouseEvents(geo);
+
         if (geo.zone_visible == "true") {
           geo.geo_elemento.addTo(this.mapService.map);
         }
@@ -564,6 +578,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           color: geo.zone_color //'#000000'
         });//.addTo(this.mapService.map);
 
+        this.geofencesService.bindMouseEvents(geo);
 
         if (geo.zone_visible == "true") {
           geo.geo_elemento.addTo(this.mapService.map);
@@ -658,6 +673,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           fill: true,
           color: geo.zone_color //'#000000'
         }).addTo(this.mapService.map);
+
+        this.geofencesService.bindMouseEvents(geo);
 
         var centerPoligon = geo.geo_elemento.getBounds().getCenter();
 
