@@ -5,7 +5,8 @@ import { Vehicle } from '../models/vehicle';
 import RefData from '../data/refData';
 import * as L from 'leaflet';
 import * as moment from 'moment';
-// import 'leaflet.markercluster';
+import 'leaflet.markercluster';
+import 'leaflet.markercluster.freezable';
 
 import { SocketWebService } from './socket-web.service';
 import { VehicleService } from './vehicle.service';
@@ -38,6 +39,8 @@ export class MapService {
   private count= 0;
   private intervalStatus: boolean = false;
   private imeiPopup = "ninguno";
+
+  private clustering = true;
   // public mensaje: any = function(){
   //   console.log("lalalalal");
   // }
@@ -481,6 +484,8 @@ export class MapService {
             // console.log("object[key]['_tooltip']['_content']==vehicles[index].name==>"+object[key]['_tooltip']['_content']+"=="+vehicles[index].name)
             if (object[key]['_tooltip']['_content']=="<span>"+vehicles[index].name+"</span>") {
               cont++;
+              //let oldCoords = this.markerClusterGroup.getLayers()[key].getLatLng();
+              
               let coord = {
                 lat : vehicles[index].latitud,
                 lng : vehicles[index].longitud
@@ -499,6 +504,61 @@ export class MapService {
                 '</aside>';
               // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
+              /*
+              let dif = 0.00;
+              let dif_mayor = 0.00;
+              let direction = '';
+              if(coord.lat >= oldCoords.lat){
+                //arriba
+                dif = coord.lat-oldCoords.lat;
+                if(dif > dif_mayor){
+                  dif_mayor = dif;
+                  direction = 'up';
+                }
+              }else{
+                //abajo
+                dif = oldCoords.lat-coord.lat;
+                if(dif > dif_mayor){
+                  dif_mayor = dif;
+                  direction = 'down';
+                }
+              }
+
+              if(coord.lng >= oldCoords.lng){
+                //derecha
+                dif = coord.lng-oldCoords.lng;
+                if(dif > dif_mayor){
+                  dif_mayor = dif;
+                  direction = 'right';
+                }
+              }else{
+                //izquierda
+                dif = oldCoords.lng-coord.lng;
+                if(dif > dif_mayor){
+                  dif_mayor = dif;
+                  direction = 'left';
+                }
+              }
+
+              switch (direction) {
+                case 'up':
+                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=95;
+                  break;
+                case 'down':
+                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=250;
+                  break;
+                case 'right':
+                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=180;
+                  break;
+                case 'left':
+                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=0;
+                  break;
+                default:
+                  break;
+              }
+              
+
+              */
               this.markerClusterGroup.getLayers()[key].setLatLng(coord);
               let aux = this.markerClusterGroup.getLayers()[key];
               // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
@@ -588,7 +648,7 @@ export class MapService {
     this.dataFitBounds = [];
     //EVENTO cluster lista
     this.markerClusterGroup.on('clusterclick',function(a : any){
-      // //console.log('click cluster...........');
+      //console.log('click cluster...........');
       var coords = a.layer.getLatLng();
                       //console.log(a.layer.getAllChildMarkers());
                       var lista = '<table class="infovehiculos"><tbody>';
@@ -862,6 +922,16 @@ export class MapService {
     // this.map.addLayer(markers);
     // this.markerClusterGroup.addLayer(L.marker([lat, lng], {icon: iconMarker}));
     // map.addLayer(this.markerClusterGroup);
+  }
+
+  public changeClusteringVisibility(visibility: boolean){
+    
+    this.clustering = visibility;
+  }
+
+  public get getClustering(): boolean{
+
+    return this.clustering;
   }
 
 }
