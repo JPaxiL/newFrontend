@@ -6,6 +6,7 @@ import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 declare let L: any;
 import 'leaflet-measure';
 import 'leaflet-measure/dist/leaflet-measure.es';
+import { MapService } from 'src/app/vehicles/services/map.service';
 
 declare var $: any;
 @Injectable({
@@ -39,7 +40,8 @@ export class ToolbarMapService {
 
   @Output() change: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private vehicleService: VehicleService) {}
+  constructor(private vehicleService: VehicleService,
+              private mapService: MapService) {}
 
   createToolbar(map: L.Map) {
     this.map = map;
@@ -67,6 +69,16 @@ export class ToolbarMapService {
     var iGroup = L.DomUtil.create('i', 'fa fa-crosshairs', group);
 
     group.onclick = () => {
+
+      if(this.mapService.getClustering){
+
+        this.mapService.markerClusterGroup.disableClustering();
+      }else{
+        this.mapService.markerClusterGroup.enableClustering();
+      }
+
+      this.mapService.changeClusteringVisibility(!this.mapService.getClustering);
+
 
     };
   }
