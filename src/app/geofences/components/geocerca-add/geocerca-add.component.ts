@@ -281,6 +281,15 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       this.mapService.map.removeLayer(this.poligonAdd);
     }
 
+    for(let i = 0; i < this.geofencesService.geofences.length; i++){
+      this.geofencesService.clearDrawingsOfGeofence(this.geofencesService.geofences[i]);
+    }
+    this.geofencesService.sortGeofencesBySize();
+    for(let i = 0; i < this.geofencesService.geofences.length; i++){
+      this.geofencesService.showDrawingsOfGeofence(this.geofencesService.geofences[i]);
+    }
+
+
   }
 
   layerToPoints(figure:any, type:string) {

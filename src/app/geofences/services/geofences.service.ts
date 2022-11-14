@@ -63,66 +63,7 @@ export class GeofencesService {
     .then(response => {
       this.geofences = response.data;
       this.initializeTable();
-
-      for (let i = 0; i < this.geofences.length; i++) {
-        //const element = this.geofences[i];
-
-        this.geofences[i].geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(this.geofences[i].geo_coordenadas).coordinates[0] ), {
-          weight: 3,
-          fill: true,
-          color: this.geofences[i].zone_color //'#000000'
-        });
-
-        if (this.geofences[i].zone_visible == "true") {
-          this.geofences[i].geo_elemento.addTo(this.mapService.map);
-        }
-
-        var centerPoligon = this.geofences[i].geo_elemento.getBounds().getCenter();
-        //console.log("centro de = "+this.geofences[i].zone_name);
-
-        //console.log(centerPoligon);
-
-        let bg_color = this.tooltipBackgroundTransparent? this.defaultTagNameBackground: this.mapService.hexToRGBA(this.geofences[i].zone_color);
-        let txt_color = this.tooltipBackgroundTransparent? (this.geofences[i].tag_name_color == ''? this.defaultTagNameColor: this.geofences[i].tag_name_color): this.mapService.hexToRGBA(this.geofences[i].zone_color);
-        let font_size = (this.geofences[i].tag_name_font_size == 0? this.defaultTagNameFontSize: this.geofences[i].tag_name_font_size) + 'px';
-
-        //this.geofences[i].marker_name = L.marker(centerPoligon).addTo(this.mapService.map);
-        this.geofences[i].marker_name = L.circleMarker(centerPoligon, {
-          // pane: 'markers1',
-          "radius": 0,
-          "fillColor": "#000",//color,
-          "fillOpacity": 1,
-          "color": "#000",//color,
-          "weight": 1,
-          "opacity": 1
-
-        }).bindTooltip(
-            // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-            // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
-            '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+this.geofences[i].zone_name+'</b>',
-            { permanent: true,
-              // offset: [-100, 0],
-              direction: 'center',
-              className: 'leaflet-tooltip-own',
-            });
-
-        this.bindMouseEvents(this.geofences[i]);
-
-        if (this.geofences[i].zone_name_visible == "true") {
-          this.geofences[i].marker_name.addTo(this.mapService.map);
-        }
-        
-
-
-
-        // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
-        // // tempMarker.bindLabel("My Label");
-        // tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
-
-
-
-        // this.geofences.geo_elemento.setLabel("NOMBRE");
-      }
+      this.drawGeofencesOnMap();
       this.updateGeoCounters();
       this.updateGeoTagCounters();
       this.eyeInputSwitch = this.geofenceCounters.visible != 0;
@@ -131,12 +72,93 @@ export class GeofencesService {
       this.initializingGeofences = true;
       this.attemptToHideSpinner();
       console.log(this.geofences);
-
     });
+  }
+
+  public clearDrawingsOfGeofence(geofence: any){
+    if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
+      && geofence.zone_visible == "true" ){
+
+      //Si la geocerca ya existe y es visible, entonces remover la capa
+      //console.log('Geocerca visible, eliminar', geofence);
+      this.mapService.map.removeLayer(geofence.geo_elemento);
+    }
+    if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
+      && geofence.zone_name_visible == "true" ){
+
+      //Si el nombre de la geocerca ya existe y es visible, entonces removerla
+      //console.log('Nombre de geocerca visible, eliminar', geofence);
+      this.mapService.map.removeLayer(geofence.marker_name);
+    }
+  }
+
+  public showDrawingsOfGeofence(geofence: any){
+    if (geofence.zone_visible == "true") {
+      geofence.geo_elemento.addTo(this.mapService.map);
+    }
+
+    if (geofence.zone_name_visible == "true") {
+      geofence.marker_name.addTo(this.mapService.map);
+    }
+    
+    // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
+    // // tempMarker.bindLabel("My Label");
+    // tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
+
+    // this.geofences.geo_elemento.setLabel("NOMBRE");
+  }
+
+  public drawGeofencesOnMap(){
+    for (let i = 0; i < this.geofences.length; i++) {
+
+      this.geofences[i].geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(this.geofences[i].geo_coordenadas).coordinates[0] ), {
+        weight: 3,
+        fill: true,
+        color: this.geofences[i].zone_color,
+      });
+
+      //console.log("centro de = "+this.geofences[i].zone_name);
+      //console.log(centerPoligon);
+      var centerPoligon = this.geofences[i].geo_elemento.getBounds().getCenter();
+
+      let bg_color = this.tooltipBackgroundTransparent? this.defaultTagNameBackground: this.mapService.hexToRGBA(this.geofences[i].zone_color);
+      let txt_color = this.tooltipBackgroundTransparent? (this.geofences[i].tag_name_color == ''? this.defaultTagNameColor: this.geofences[i].tag_name_color): this.mapService.hexToRGBA(this.geofences[i].zone_color);
+      let font_size = (this.geofences[i].tag_name_font_size == 0? this.defaultTagNameFontSize: this.geofences[i].tag_name_font_size) + 'px';
+
+      //this.geofences[i].marker_name = L.marker(centerPoligon).addTo(this.mapService.map);
+      this.geofences[i].marker_name = L.circleMarker(centerPoligon, {
+        // pane: 'markers1',
+        "radius": 0,
+        "fillColor": "#000",//color,
+        "fillOpacity": 1,
+        "color": "#000",//color,
+        "weight": 1,
+        "opacity": 1
+
+      }).bindTooltip(
+          // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+          // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
+          '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+this.geofences[i].zone_name+'</b>',
+          { permanent: true,
+            // offset: [-100, 0],
+            direction: 'center',
+            className: 'leaflet-tooltip-own',
+          });
+
+      this.bindMouseEvents(this.geofences[i]);
+    }
+
+    this.sortGeofencesBySize();
+
+    for (let i = 0; i < this.geofences.length; i++) {
+      //const element = this.geofences[i];
+      this.showDrawingsOfGeofence(this.geofences[i]);
+    }
   }
 
   public bindMouseEvents(geofence: any){
     geofence.geo_elemento.on('mouseover', () => {
+      //this.sortGeofencesBySize(this.geofences);
       //console.log(`Mouseover event on <<${geofence.zone_name}>>: `, { zonaNameState: geofence.zone_name_visible, geocerca: geofence });
       if(geofence.zone_name_visible != 'true'){
         //console.log('Mostrar tooltip');
@@ -152,6 +174,23 @@ export class GeofencesService {
         this.mapService.map.removeLayer(geofence.marker_name);
       }
     });
+  }
+
+  public sortGeofencesBySize(){
+    //console.log('Sorting...');
+    this.geofences.sort((a: any, b: any) => {
+      if( L.GeometryUtil.geodesicArea((a.geo_elemento.getLatLngs()[0])) > L.GeometryUtil.geodesicArea((b.geo_elemento.getLatLngs()[0])) ){
+        return -1;
+      }
+      if( L.GeometryUtil.geodesicArea((a.geo_elemento.getLatLngs()[0])) < L.GeometryUtil.geodesicArea((b.geo_elemento.getLatLngs()[0])) ){
+        return 1;
+      }
+      return 0;
+    });
+    /* this.geofences.forEach((geofence:any) => {
+      console.log('Size de ' + geofence.zone_name, L.GeometryUtil.geodesicArea((geofence.geo_elemento.getLatLngs()[0])));
+    }); */
+    //console.log('Sorted geofences by size: ', this.geofences);
   }
 
   public getData() {

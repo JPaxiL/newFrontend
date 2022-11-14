@@ -95,7 +95,25 @@ export class GeocercaListsComponent implements OnInit {
     this.geofencesService.updateGeoTagCounters();
 
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
+      let auxIndex = -1;
       this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
+
+      if(geo.zone_visible == "true"){
+        console.log('Mostrar una geocerca' + id);
+        //Redraw geofences in correct order
+        for(let i = this.geofencesService.geofences.length - 1; i > -1; i--){
+          //Limpiar geocercas empezando desde la más pequeña, hasta la geocerca que se acaba de mandar show
+          this.geofencesService.clearDrawingsOfGeofence(this.geofencesService.geofences[i]);
+          if(this.geofencesService.geofences[i].id == id){
+            auxIndex = i;
+            i = -1;
+          }
+        }
+        //Redibujamos las geocercas empezando desde la que se debe mostrar, hasta la mas pequeña
+        for(let i = auxIndex; i < this.geofencesService.geofences.length; i++){
+          this.geofencesService.showDrawingsOfGeofence(this.geofencesService.geofences[i]);
+        }
+      }
     }
 
   }
@@ -218,6 +236,13 @@ export class GeocercaListsComponent implements OnInit {
         this.clickShow(geofence.id, true);
       }
     });
+
+    for(let i = 0; i < this.geofencesService.geofences.length; i++){
+      this.geofencesService.clearDrawingsOfGeofence(this.geofencesService.geofences[i]);
+    }
+    for(let i = 0; i < this.geofencesService.geofences.length; i++){
+      this.geofencesService.showDrawingsOfGeofence(this.geofencesService.geofences[i]);
+    }
   }
 
   onClickTagNamesEye(){
