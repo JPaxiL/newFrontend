@@ -41,6 +41,15 @@ export class MapService {
   private imeiPopup = "ninguno";
 
   private clustering = true;
+
+  dif_mayor = 0.00;
+  dif_divide = 0.00;
+  dif_X = 0.00;
+  dif_Y = 0.00;
+  direction = '';
+  final_direction = '';
+  direction_X = '';
+  direction_Y = '';
   // public mensaje: any = function(){
   //   console.log("lalalalal");
   // }
@@ -484,7 +493,7 @@ export class MapService {
             // console.log("object[key]['_tooltip']['_content']==vehicles[index].name==>"+object[key]['_tooltip']['_content']+"=="+vehicles[index].name)
             if (object[key]['_tooltip']['_content']=="<span>"+vehicles[index].name+"</span>") {
               cont++;
-              //let oldCoords = this.markerClusterGroup.getLayers()[key].getLatLng();
+              let oldCoords = this.markerClusterGroup.getLayers()[key].getLatLng();
               
               let coord = {
                 lat : vehicles[index].latitud,
@@ -504,61 +513,95 @@ export class MapService {
                 '</aside>';
               // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
-              /*
-              let dif = 0.00;
-              let dif_mayor = 0.00;
-              let direction = '';
-              if(coord.lat >= oldCoords.lat){
-                //arriba
-                dif = coord.lat-oldCoords.lat;
-                if(dif > dif_mayor){
-                  dif_mayor = dif;
-                  direction = 'up';
-                }
-              }else{
-                //abajo
-                dif = oldCoords.lat-coord.lat;
-                if(dif > dif_mayor){
-                  dif_mayor = dif;
-                  direction = 'down';
-                }
-              }
+              
+              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
+              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
 
-              if(coord.lng >= oldCoords.lng){
-                //derecha
-                dif = coord.lng-oldCoords.lng;
-                if(dif > dif_mayor){
-                  dif_mayor = dif;
-                  direction = 'right';
-                }
-              }else{
-                //izquierda
-                dif = oldCoords.lng-coord.lng;
-                if(dif > dif_mayor){
-                  dif_mayor = dif;
-                  direction = 'left';
-                }
-              }
-
-              switch (direction) {
-                case 'up':
-                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=95;
-                  break;
-                case 'down':
-                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=250;
-                  break;
-                case 'right':
-                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=180;
-                  break;
-                case 'left':
-                  this.markerClusterGroup.getLayers()[key]['options']['rotationAngle']=0;
-                  break;
-                default:
-                  break;
-              }
               
 
-              */
+              if(vehicles[index].speed != 0){
+
+                this.dif_mayor = 0.00;
+                this.dif_divide = 0.00;
+                this.dif_X = 0.00;
+                this.dif_Y = 0.00;
+                this.direction = '';
+                this.final_direction = '';
+                this.direction_X = '';
+                this.direction_Y = '';
+
+                if(coord.lat >= oldCoords.lat){
+                  //arriba
+                  this.direction_Y = 'up';
+                  this.dif_Y = coord.lat-oldCoords.lat;  
+                  if(this.dif_Y >= this.dif_mayor){
+                    this.dif_mayor = this.dif_Y; 
+                    this.direction = 'up';
+                    this.dif_divide = this.dif_Y/2; 
+                  }
+                }else{
+                  //abajo
+                  this.direction_Y = 'down';
+                  this.dif_Y = oldCoords.lat-coord.lat;
+                  if(this.dif_Y >= this.dif_mayor){
+                    this.dif_mayor = this.dif_Y;
+                    this.direction = 'down';
+                    this.dif_divide = this.dif_Y/2;
+                    
+                  }
+                }
+
+                if(coord.lng >= oldCoords.lng){
+                  //derecha
+                  this.direction_X = 'right';
+                  this.dif_X = coord.lng-oldCoords.lng; 
+                  if(this.dif_X >= this.dif_mayor){
+                    this.dif_mayor = this.dif_X;
+                    this.direction = 'right';
+                    this.dif_divide = this.dif_X/2;
+                  }
+                }else{
+                  //izquierda
+                  this.direction_X = 'left';
+                  this.dif_X = oldCoords.lng-coord.lng;
+                  if(this.dif_X >= this.dif_mayor){
+                    this.dif_mayor = this.dif_X;
+                    this.direction = 'left';
+                    this.dif_divide = this.dif_X/2;
+                  }
+                }
+
+                if(this.direction == 'up' || this.direction == 'down'){
+
+                  if(this.dif_X > this.dif_divide){ 
+
+                    this.final_direction = `${this.direction}-${this.direction_X}`;
+
+                  }else{
+
+                    this.final_direction = `${this.direction}`;
+                  }
+
+                }else{
+
+                  if(this.dif_Y > this.dif_divide){
+
+                    this.final_direction = `${this.direction_Y}-${this.direction}`;
+                  }else{
+
+                    this.final_direction = `${this.direction}`;
+                    
+                  }
+                }
+
+                
+                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.png`;
+
+
+              }else{
+                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+              }
+              
               this.markerClusterGroup.getLayers()[key].setLatLng(coord);
               let aux = this.markerClusterGroup.getLayers()[key];
               // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
