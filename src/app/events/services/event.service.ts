@@ -154,6 +154,12 @@ export class EventService {
       tipo:event.name,
       clase:event.slug
     }))
+    this.classFilterArray.push({
+      id: 999,
+      option: 'Exceso de Velocidad',
+      tipo: 'Exceso de Velocidad',
+      clase: 'exceso-velocidad',
+    });
 
     //console.log('Filtros cargados: ', this.classFilterArray);
     //console.log('Filtros de Eventos: ', events);
