@@ -312,9 +312,9 @@ export class EventService {
 
     showEventPanel(){
       if(this.filterLoaded && this.eventsLoaded){
-        this.sortEventsTableData(); //Initial sort
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
+        this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
         console.log('Ocultar Spinner');
       } else {
@@ -325,7 +325,13 @@ export class EventService {
 
   //Sort called from event-list.component
   sortEventsTableData(){
-    this.events.sort((a,b) => {
+    this.eventsFiltered.sort((a,b) => {
+      if(a.fecha_tracker > b.fecha_tracker){
+        return -1;
+      }
+      if(a.fecha_tracker < b.fecha_tracker){
+        return 1;
+      }
       if(this.new_notif_stack.indexOf(a.id) > -1 ){
         if(this.new_notif_stack.indexOf(b.id) > -1){
           if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) {
@@ -338,10 +344,7 @@ export class EventService {
         if(this.new_notif_stack.indexOf(b.id) > -1){
           return 1;
         }
-        if(a.fecha_tracker > b.fecha_tracker){
-          return -1;
-        }
-        return 1;
+        return -1;
       }
     });
     //console.log('Data Sorted', this.events);
