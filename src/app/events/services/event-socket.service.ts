@@ -78,6 +78,7 @@ export class EventSocketService extends Socket {
 
           this.eventService.new_notif_stack.push(even.id);
           console.log('Nuevo evento ' + new Date() + ': ', even);
+          this.eventService.sortEventsTableData();
         } else {
           console.log('Evento duplicado ' + new Date() + ': ', even);
         }

@@ -158,29 +158,34 @@ export class EventListComponent implements OnInit {
 
   public changeTypeEvent(){
     /* if(this.selectedEvent == ''){ */
-    if(this.selectedEvent === null){
+    if(this.selectedEvent === null && this.placa == ''){
       this.eventService.eventsFiltered = this.eventService.getData();
       this.noResults = false;
     }else{
       this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
-        return event.tipo == this.selectedEvent
+        return this.eventFilter(event);
       });
       this.noResults = this.eventService.eventsFiltered.length == 0;
     }
   }
 
   public searchByPlate(){
-    if(this.placa == ''){
+    if(this.selectedEvent === null && this.placa == ''){
       this.eventService.eventsFiltered = this.eventService.getData();
       this.noResults = false;
     }else {
       this.eventService.eventsFiltered =  this.eventService.getData().filter( (event:any)  => {
-        return event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase())
+        return this.eventFilter(event);
       });
       this.noResults = this.eventService.eventsFiltered.length == 0;
     }
     //console.log(this.eventService.eventsFiltered);
     //console.log(this.noResults);
+  }
+
+  private eventFilter(event: any){
+    return (event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase()) || this.placa == '')
+          && (event.tipo == this.selectedEvent || this.selectedEvent === null);
   }
 
 }
