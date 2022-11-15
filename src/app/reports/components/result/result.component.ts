@@ -3596,7 +3596,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bol_datos_ex = false;
     var column_config:Columns[] = [];
 
-    var table_width = this.chkDateHour? 11:10;
+    var table_width = this.chkDateHour? 12:11;
 
     var nom_inf = "REPORTE DE POSICIÓN";
     /* if (vm.optionUser() == 445 ) {
@@ -3617,6 +3617,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var codigo_cell_ch_width = "Codigo".length;
     var placa_cell_ch_width = "Placa".length;
     var status_cell_ch_width = "Status".length;
+    var conductor_cell_ch_width = "Conductor".length;
     var vel_gps_cell_ch_width = "Velocidad GPS".length;
     var vel_can_cell_ch_width = "Velocidad CAN".length;
     var odometro_cell_ch_width = "Odometro".length;
@@ -3656,6 +3657,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Hora", ...this.colHeaderConfig },
 
               { value: "Status", ...this.colHeaderConfig },
+              { value: "Conductor", ...this.colHeaderConfig },
+
               { value: "Velocidad GPS", ...this.colHeaderConfig },
               { value: "Velocidad CAN", ...this.colHeaderConfig },
               { value: "Odómetro", ...this.colHeaderConfig },
@@ -3667,13 +3670,14 @@ export class ResultComponent implements OnDestroy, OnInit {
             ],
             height: this.colsHeaderHeight,
           });
-          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
+          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
             //var fh = item.fecha_final.split(" ");
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
             codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
             placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
             status_cell_ch_width = Math.max(status_cell_ch_width, (item.estado??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
@@ -3693,6 +3697,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig },
 
                 { value: item.estado, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
                 { value: item.velocidad+" km/h", ...this.bodyRowsConfig },
                 { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
                 { value: item.odometro, ...this.bodyRowsConfig },
@@ -3719,6 +3724,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Fecha y Hora", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
 
               { value: "Status", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Conductor", ...this.colHeaderConfig },
               { value: "Velocidad GPS", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
               { value: "Velocidad CAN", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
               { value: "Odómetro", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
@@ -3728,13 +3734,14 @@ export class ResultComponent implements OnDestroy, OnInit {
             height: this.colsHeaderHeight,
           });
 
-          this.data.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
+          this.data.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
             var ubicacion = item.latitud + "," + item.longitud;
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
             codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
             placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
             status_cell_ch_width = Math.max(status_cell_ch_width, (item.estado??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.estado??'').toString().length);
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
@@ -3753,6 +3760,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
 
                 { value: item.estado, ...this.bodyRowsConfig },
+                { value: item.conductor, ...this.bodyRowsConfig },
                 { value: item.velocidad+" km/h", ...this.bodyRowsConfig },
                 { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
                 { value: item.odometro, ...this.bodyRowsConfig },
