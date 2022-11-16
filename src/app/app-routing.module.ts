@@ -60,8 +60,8 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: NotFoundComponent,
-    canActivate: [AuthGuard]
+    //component: NotFoundComponent,
+    redirectTo: '/'
   }
 ];
 
