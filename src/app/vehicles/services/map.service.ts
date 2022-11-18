@@ -530,73 +530,89 @@ export class MapService {
                 this.direction_X = '';
                 this.direction_Y = '';
 
-                if(coord.lat >= oldCoords.lat){
-                  //arriba
-                  this.direction_Y = 'up';
-                  this.dif_Y = coord.lat-oldCoords.lat;  
-                  if(this.dif_Y >= this.dif_mayor){
-                    this.dif_mayor = this.dif_Y; 
-                    this.direction = 'up';
-                    this.dif_divide = this.dif_Y/2; 
+                if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
+                {
+                  if(coord.lat > oldCoords.lat){
+                    //arriba
+                    this.direction_Y = 'up';
+                    this.dif_Y = coord.lat-oldCoords.lat;  
+                    if(this.dif_Y >= this.dif_mayor){
+                      this.dif_mayor = this.dif_Y; 
+                      this.direction = 'up';
+                      this.dif_divide = this.dif_Y/2; 
+                    }
+                  }else{
+                    //abajo
+                    this.direction_Y = 'down';
+                    this.dif_Y = oldCoords.lat-coord.lat;
+                    if(this.dif_Y >= this.dif_mayor){
+                      this.dif_mayor = this.dif_Y;
+                      this.direction = 'down';
+                      this.dif_divide = this.dif_Y/2;
+                      
+                    }
                   }
-                }else{
-                  //abajo
-                  this.direction_Y = 'down';
-                  this.dif_Y = oldCoords.lat-coord.lat;
-                  if(this.dif_Y >= this.dif_mayor){
-                    this.dif_mayor = this.dif_Y;
-                    this.direction = 'down';
-                    this.dif_divide = this.dif_Y/2;
+  
+                  if(coord.lng > oldCoords.lng){
+                    //derecha
+                    this.direction_X = 'right';
+                    this.dif_X = coord.lng-oldCoords.lng; 
+                    if(this.dif_X >= this.dif_mayor){
+                      this.dif_mayor = this.dif_X;
+                      this.direction = 'right';
+                      this.dif_divide = this.dif_X/2;
+                    }
+                  }else{
+                    //izquierda
+                    this.direction_X = 'left';
+                    this.dif_X = oldCoords.lng-coord.lng;
+                    if(this.dif_X >= this.dif_mayor){
+                      this.dif_mayor = this.dif_X;
+                      this.direction = 'left';
+                      this.dif_divide = this.dif_X/2;
+                    }
+                  }
+                  
+                  if(this.direction == 'up' || this.direction == 'down'){
+  
+                    if(this.dif_X >= this.dif_divide){ 
+  
+                      this.final_direction = `${this.direction}-${this.direction_X}`;
+  
+                    }else{
+  
+                      this.final_direction = `${this.direction}`;
+                      
+                    }
+  
+                  }else{
+  
+                    if(this.dif_Y >= this.dif_divide){
+  
+                      this.final_direction = `${this.direction_Y}-${this.direction}`;
+                    }else{
+  
+                      this.final_direction = `${this.direction}`;
+                      
+                    }
+                  }
+
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
+
+                }
+                else{
+                  if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+
+                    let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
                     
                   }
+                  else{
+
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                  }
+
                 }
-
-                if(coord.lng >= oldCoords.lng){
-                  //derecha
-                  this.direction_X = 'right';
-                  this.dif_X = coord.lng-oldCoords.lng; 
-                  if(this.dif_X >= this.dif_mayor){
-                    this.dif_mayor = this.dif_X;
-                    this.direction = 'right';
-                    this.dif_divide = this.dif_X/2;
-                  }
-                }else{
-                  //izquierda
-                  this.direction_X = 'left';
-                  this.dif_X = oldCoords.lng-coord.lng;
-                  if(this.dif_X >= this.dif_mayor){
-                    this.dif_mayor = this.dif_X;
-                    this.direction = 'left';
-                    this.dif_divide = this.dif_X/2;
-                  }
-                }
-
-                if(this.direction == 'up' || this.direction == 'down'){
-
-                  if(this.dif_X > this.dif_divide){ 
-
-                    this.final_direction = `${this.direction}-${this.direction_X}`;
-
-                  }else{
-
-                    this.final_direction = `${this.direction}`;
-                  }
-
-                }else{
-
-                  if(this.dif_Y > this.dif_divide){
-
-                    this.final_direction = `${this.direction_Y}-${this.direction}`;
-                  }else{
-
-                    this.final_direction = `${this.direction}`;
-                    
-                  }
-                }
-
-                
-                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-
 
               }else{
                 this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
