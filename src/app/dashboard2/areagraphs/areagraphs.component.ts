@@ -91,6 +91,9 @@ export class AreagraphsComponent implements OnInit {
   mutationFlag: boolean = false;
   mutationCounter: number = 0;
 
+  eventsLoaded: boolean = false;
+  vehicleDataLoaded: boolean = false;
+
   constructor(
     private vehicleService: VehicleService,
     private spinner: NgxSpinnerService,
@@ -136,29 +139,31 @@ export class AreagraphsComponent implements OnInit {
     this.getEvents(this.imeis);
 
     this.vehicleService.dataCompleted.subscribe((vehicles) => {
+      var observerTarget = document.querySelector('.pie-chart-container svg.ngx-charts > g.pie-chart.chart > g')!;
+      this.mutationObserver = new MutationObserver( mutationList => {
+        mutationList.forEach( mutation => {
+          //console.log('Mutación atrapada: ', mutation);
+          if (mutation.type === 'childList' && this.isLastMutation()) {
+            //console.log('Observer Target', observerTarget);
+            this.drawOnPieChart();
+            this.drawOnPieLegend();
 
-    var observerTarget = document.querySelector('.pie-chart-container svg.ngx-charts > g.pie-chart.chart > g')!;
-    this.mutationObserver = new MutationObserver( mutationList => {
-      mutationList.forEach( mutation => {
-        //console.log('Mutación atrapada: ', mutation);
-        if (mutation.type === 'childList' && this.isLastMutation()) {
-          //console.log('Observer Target', observerTarget);
-          this.drawOnPieChart();
-          this.drawOnPieLegend();
-
-          //Desactivar mutationObserver, ya que solo se ejecutará 1 vez
-          this.mutationObserver.disconnect();
-        }
+            //Desactivar mutationObserver, ya que solo se ejecutará 1 vez
+            this.mutationObserver.disconnect();
+          }
+        });
       });
-    });
-    var config = { childList: true };
-    this.mutationObserver.observe(observerTarget, config);
+      var config = { childList: true };
+      this.mutationObserver.observe(observerTarget, config);
 
       this.vehicles = vehicles.filter((vehicle: any) => {
         return this.imeis.includes(vehicle.IMEI);
       });
 
       this.setGraphData(this.vehicles);
+      
+      this.vehicleDataLoaded = true;
+      this.attemptToHideMainSpinner();
     });
   }
 
@@ -304,7 +309,14 @@ export class AreagraphsComponent implements OnInit {
 
     this.setVehicleSafetyEvents(this.vehicleSafetyEvents);
 
-    this.spinner.hide('loadingDashboardSpinner');
+    this.eventsLoaded = true;
+    this.attemptToHideMainSpinner();
+  }
+
+  attemptToHideMainSpinner(){
+    if(this.eventsLoaded && this.vehicleDataLoaded){
+      this.spinner.hide('loadingDashboardSpinner');
+    }
   }
 
   removeAccents(str: string) {
