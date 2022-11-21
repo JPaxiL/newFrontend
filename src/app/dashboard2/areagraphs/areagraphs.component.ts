@@ -200,6 +200,19 @@ export class AreagraphsComponent implements OnInit {
       }
     });
 
+    let amountOfRows = Math.max(this.imeiGreen.length, this.imeiBlue.length, this.imeiPurple.length, this.imeiBlack.length, this.imeiOrange.length, this.imeiRed.length);
+    console.log('Cantidad de filas: ', amountOfRows + 1);
+
+    //Rellenar las celdas faltantes de ''
+    for(let i = 0; i < amountOfRows; i++){
+      if(this.imeiGreen.length < i ){ this.imeiGreen[i] = ''; } 
+      if(this.imeiBlue.length < i ){ this.imeiBlue[i] = ''; } 
+      if(this.imeiPurple.length < i ){ this.imeiPurple[i] = ''; } 
+      if(this.imeiBlack.length < i ){ this.imeiBlack[i] = ''; } 
+      if(this.imeiOrange.length < i ){ this.imeiOrange[i] = ''; } 
+      if(this.imeiRed.length < i ){ this.imeiRed[i] = ''; } 
+    }
+
     this.data = [
       {
         name: 'En movimiento',

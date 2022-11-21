@@ -53,9 +53,9 @@
                                 <div class="flex-grow-1 general-status-header">Relación de Vehículos</div>
                                 <!-- <button type="button" class="btn btn-success">cc</button> -->
                             </div>
-                            <div class="flex-grow-1">
+                            <div class="flex-grow-1 pie-chart-table">
                                 <table class="h-100">
-                                    <thead>
+                                    <thead class="visible-on-scroll">
                                         <tr>
                                             <th>En movimiento</th>
                                             <th>Detenidos encendidos</th>
@@ -66,38 +66,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiGreen">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiBlue">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiPurple">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiBlack">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiOrange">{{ imei }}</li>
-                                                </ul>
-                                            </td>
-
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li *ngFor="let imei of imeiRed">{{ imei }}</li>
-                                                </ul>
-                                            </td>
+                                        <tr *ngIf="imeiGreen.length == 0">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr *ngFor="let imei of imeiGreen; let i = index;">
+                                            <td>{{ imeiGreen[i] }}</td>
+                                            <td>{{ imeiBlue[i] }}</td>
+                                            <td>{{ imeiPurple[i] }}</td>
+                                            <td>{{ imeiBlack[i] }}</td>
+                                            <td>{{ imeiOrange[i] }}</td>
+                                            <td>{{ imeiRed[i] }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -185,39 +165,34 @@
 
                     </div>
                     <div class="col-12 mb-3 px-lg-5 flex-grow-1">
-                        <table class="h-100">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Vehículo</th>
-                                    <th scope="col">No de Infracciones</th>
-                                    <th scope="col">Infracción mas Grave</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let vehicle of infraction">{{ vehicle.name }}</li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let vehicle of infraction">{{ vehicle.amount }}</li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let vehicle of infraction">{{ vehicle.higher_speed }}</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <!-- <tr *ngFor="let vehicle of infraction">
-                                    <td>{{vehicle.name}}</td>
-                                    <td>{{vehicle.amount}}</td>
-                                    <td>{{vehicle.higher_speed}}</td>
-                                </tr> -->
-                            </tbody>
-                        </table>
+                        <div class="infraccion-card-table">
+                            <table>
+                                <thead class="visible-on-scroll">
+                                    <tr>
+                                        <th scope="col">Vehículo</th>
+                                        <th scope="col">No de Infracciones</th>
+                                        <th scope="col">Infracción mas Grave</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="infraction.length == 0">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr *ngFor="let vehicle of infraction">
+                                        <td>{{ vehicle.name }}</td>
+                                        <td>{{ vehicle.amount }}</td>
+                                        <td>{{ vehicle.higher_speed }}</td>
+                                    </tr>
+                                    <!-- <tr *ngFor="let vehicle of infraction">
+                                        <td>{{vehicle.name}}</td>
+                                        <td>{{vehicle.amount}}</td>
+                                        <td>{{vehicle.higher_speed}}</td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
 
@@ -353,34 +328,29 @@
                     </div>
 
                     <div class="col-12 mb-3 px-lg-5 flex-grow-1">
-                        <table class="h-100">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Vehículo</th>
-                                    <th scope="col">Alerta</th>
-                                    <th scope="col">Incidencias</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let event of gpsEvents">{{ event.vehicle }}</li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let event of gpsEvents">{{ event.event }}</li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let event of gpsEvents">{{ event.amount }}</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="gps-alert-card-table">
+                            <table>
+                                <thead class="visible-on-scroll">
+                                    <tr>
+                                        <th scope="col">Vehículo</th>
+                                        <th scope="col">Alerta</th>
+                                        <th scope="col">Incidencias</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="gpsEvents.length == 0">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr *ngFor="let event of gpsEvents">
+                                        <td>{{event.vehicle}}</td>
+                                        <td>{{event.event}}</td>
+                                        <td>{{event.amount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
@@ -562,34 +532,29 @@
                     </div>
 
                     <div class="col-12 mb-3 px-lg-5 flex-grow-1">
-                        <table class="h-100">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Vehículo</th>
-                                    <th scope="col">Alerta</th>
-                                    <th scope="col">Incidencias</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let event of vehicleSafetyEvents">{{ event.vehicle }}</li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let event of vehicleSafetyEvents">{{ event.event }}</li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let event of vehicleSafetyEvents">{{ event.amount }}</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="seg-vehicular-card-table">
+                            <table>
+                                <thead class="visible-on-scroll">
+                                    <tr>
+                                        <th scope="col">Vehículo</th>
+                                        <th scope="col">Alerta</th>
+                                        <th scope="col">Incidencias</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="vehicleSafetyEvents.length == 0">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr *ngFor="let event of vehicleSafetyEvents">
+                                        <td>{{event.vehicle}}</td>
+                                        <td>{{event.event}}</td>
+                                        <td>{{event.amount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
 
