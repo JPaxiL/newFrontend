@@ -988,12 +988,13 @@ export class FormComponent implements OnInit {
   }
 
   resetAllFields(){
-    this.selectedVehicles =[];
+    //Se solicitó que los vehículos no se reseteen.
+    /* this.selectedVehicles =[];
     this.chkAllVehicles = false;
     this.selectedConvoy ={};
     this.selectedGroup ={};
     this.checkboxGroup  = false;
-
+ */
     this.chkOdomVirtual = false;
     this.chkStops = false;
     this.chkMovements = false;
@@ -1010,8 +1011,9 @@ export class FormComponent implements OnInit {
     this.limitSpeed = 90;
 
     //2. Entrada y Salida
-    this.selectedZones = [];
-    this.chkAllZones = false;
+    //Se solicitó que las geocercas no se reseteen.
+    /* this.selectedZones = [];
+    this.chkAllZones = false; */
 
     //3. Combustible
     this.chkOdomVirtual = false;
@@ -1094,11 +1096,12 @@ export class FormComponent implements OnInit {
     this.chkFatigaSomnolencia = true;
 	  this.chkFatigaDistraccion = true;
 
-    this.dateInit = new Date(moment(Date.now()).format("MM/DD/YYYY"));
+    //Se solicitó que las fechas no se reseteen.
+    /* this.dateInit = new Date(moment(Date.now()).format("MM/DD/YYYY"));
     this.dateEnd = this.dateInit;
     this.timeInit = new Date('12/03/2018 00:00');
     this.timeEnd = new Date('12/03/2018 23:59');
-    this.onTimeChange();
+    this.onTimeChange(); */
   }
 
   logDropState(){
