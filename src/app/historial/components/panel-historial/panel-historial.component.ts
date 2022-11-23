@@ -1213,6 +1213,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
+
   mostrar_tabla(dH:any, iH:any) {
       if (this.conHistorial) {
 
@@ -1268,54 +1269,42 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                     // if (opEve.name == item.evento) { activar = true; }
 
                     //Nombres de eventos que cambiaron
+                    var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
 
-                    if (opEve.name == 'Batería desconectada' && item.evento.toUpperCase() == 'BATERIA DESCONECTADA') { activar = true; }
-                    if (opEve.name == 'Batería desconectada' && item.evento.toUpperCase() == 'BATERÍA DESCONECTADA') { activar = true; }
-                    if (opEve.name == 'Aceleración brusca' && item.evento.toUpperCase()  == 'ACELERACION BRUSCA') { activar = true; }
-                    if (opEve.name == 'Aceleración brusca' && item.evento.toUpperCase()  == 'ACELERACIÓN BRUSCA') { activar = true; }
-                    if (opEve.name == 'Frenada brusca' && item.evento.toUpperCase() == 'FRENADA BRUSCA') { activar = true; }
-                    if (opEve.name == 'SOS' && item.evento.toUpperCase() == 'SOS') { activar = true; }
-                    if (opEve.name == 'Motor Apagado' && item.evento.toUpperCase() == 'MOTOR APAGADO') { activar = true; }
-                    if (opEve.name == 'Motor Encendido' && item.evento.toUpperCase() == 'MOTOR ENCENDIDO') { activar = true; }
+                    // if (opEve.name == 'Batería desconectada' && item.evento.toUpperCase() == 'BATERÍA DESCONECTADA') { activar = true; }
 
+                    if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
+                    if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
+                    if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
+                    if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
+                    if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
+                    if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
 
-                    if (opEve.name == 'Zona de Entrada' && item.evento.toUpperCase() == 'ZONA DE ENTRADA') { activar = true; }
-                    if (opEve.name == 'Zona de Salida' && item.evento.toUpperCase() == 'ZONA DE SALIDA') { activar = true; }
-                    if (opEve.name == 'Tiempo de Estadía en Zona' && item.evento.toUpperCase() == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
-                    if (opEve.name == 'Tiempo de Estadía en Zona' && item.evento.toUpperCase() == 'TIEMPO DE ESTADÍA EN ZONA') { activar = true; }
+                    if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
+                    if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
+                    if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
 
-                    if (opEve.name == 'Parada en Zona no Autorizada' && item.evento.toUpperCase() == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
-                    if (opEve.name == 'Vehículo en movimiento sin programación' && item.evento.toUpperCase() == 'VEHICULO SIN PROGRAMACION') { activar = true; }
-                    if (opEve.name == 'Vehículo en movimiento sin programación' && item.evento.toUpperCase() == 'VEHÍCULO SIN PROGRAMACIÓN') { activar = true; }
-                    if (opEve.name == 'Infracción' && item.evento.toUpperCase() == 'INFRACCION') { activar = true; }
-                    if (opEve.name == 'Infracción' && item.evento.toUpperCase() == 'INFRACCIÓN') { activar = true; }
-                    if (opEve.name == 'Exceso de Velocidad' && item.evento.toUpperCase() == 'EXCESO DE VELOCIDAD') { activar = true; }
+                    if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
+                    if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
+                    if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
+                    if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
 
+                    if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
+                    if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
+                    if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
+                    if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
 
-                    if (opEve.name == 'Ausencia de rostro' && item.evento.toUpperCase() == 'NO ROSTRO') { activar = true; }
-                    if (opEve.name == 'Fatiga Extrema' && item.evento.toUpperCase() == 'FATIGA EXTREMA') { activar = true; }
-                    if (opEve.name == 'Posible Fatiga' && item.evento.toUpperCase() == 'SOMNOLENCIA') { activar = true; }
-                    if (opEve.name == 'Posible Fatiga' && item.evento.toUpperCase() == 'POSIBLE FATIGA') { activar = true; }
+                    if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
 
-                    if (opEve.name == 'Distracción' && item.evento.toUpperCase() == 'DISTRACCIÓN') { activar = true; }
-                    if (opEve.name == 'Distracción' && item.evento.toUpperCase() == 'DISTRACCION') { activar = true; }
-
-                    if (opEve.name == 'Detección de alcohol' && item.evento.toUpperCase() == 'ALCOHOLEMIA') { activar = true; }
-                    if (opEve.name == 'Anticolisión frontal' && item.evento.toUpperCase() == 'ANTICOLISION FRONTAL') { activar = true; }
-                    if (opEve.name == 'Anticolisión frontal' && item.evento.toUpperCase() == 'ANTICOLISION FRONTAL') { activar = true; }
+                    if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
+                    if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
+                    if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
 
 
-                    if (opEve.name == 'Colisión con Peatones' && item.evento.toUpperCase() == 'COLISION CON PEATONES') { activar = true; }
-                    if (opEve.name == 'Colisión con Peatones' && item.evento.toUpperCase() == 'COLISIÓN CON PEATONES') { activar = true; }
-
-                    if (opEve.name == 'Desvío de carril hacia la izquierda' && item.evento.toUpperCase() == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
-                    if (opEve.name == 'Desvío de carril hacia la izquierda' && item.evento.toUpperCase() == 'DESVÍO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
-
-                    if (opEve.name == 'Desvío de carril hacia la derecha' && item.evento.toUpperCase() == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
-                    if (opEve.name == 'Desvío de carril hacia la derecha' && item.evento.toUpperCase() == 'DESVÍO DE CARRIL HACIA LA DERECHA') { activar = true; }
-
-                    if (opEve.name == 'Bloqueo de visión del Mobileye' && item.evento.toUpperCase() == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
-                    if (opEve.name == 'Bloqueo de visión del Mobileye' && item.evento.toUpperCase() == 'BLOQUEO DE VISIÓN DEL MOBILEYE') { activar = true; }
+                    if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
+                    if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
+                    if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
+                    if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
 
                   }
 
