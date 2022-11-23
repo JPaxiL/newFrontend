@@ -20,6 +20,7 @@ export class GpsAlertsListComponent implements OnInit {
 
   strSearched: string = '';
   noResults: boolean = false;
+  isRowDataEmpty: boolean = false;
 
   options = new Array(
     { id:'ALERTS', name:"Alertas"},
@@ -45,6 +46,7 @@ export class GpsAlertsListComponent implements OnInit {
   public async loadData(){
     this.spinner.show('loadingGPSAlertsSpinner'); //En caso de ser llamado por delete
     this.alerts = await this.AlertService.getAlertsByType('gps');
+    this.isRowDataEmpty = this.alerts.length == 0;
     this.spinner.hide('loadingGPSAlertsSpinner');
   }
 

@@ -53,38 +53,41 @@
       </thead>
 
       <tbody>
-      <tr *ngFor="let alert of alerts">
-          <!-- <td title="'Nº'" class="text-center" >
-            {{alert.nr}}
-          </td> -->
-          <td title="'NOMBRE'" class="text-start">
-            {{alert.nombre}}
-          </td>
-          <td title="'TIPO'" class="text-start">
-            {{alert.tipo}}
-          </td>
-          <td title="'ACTIVOS'" class="text-center">
-            <div data-imei="alert.imei" class="text-center">
-                <app-active-alert [alert]="alert"></app-active-alert>
-            </div>
-          </td>
-          <td title="'SISTEMA'" class="text-center">
-            <div data-imei="alert.imei" class="text-center">
-                <app-system-alert [alert]="alert"></app-system-alert>
-            </div>
-          </td>
-          <td title="'E-MAIL'" class="text-center">
-            <div data-imei="alert.imei" class="text-center">
-                <app-email-alert [alert]="alert"></app-email-alert>
-            </div>
-          </td>
-          <td class="text-center">
-            <app-actions-alert [alert]="alert" [nameComponent]="'ALERTS-ACCESSORIES'" (editAlert)="edit($event)" (deleteAlert)="loadData()"></app-actions-alert>
-          </td>
-      </tr>
-      <tr *ngIf="noResults">
-        <td colspan="6" class="text-center">Sin coinicidencias</td>
-      </tr>
+        <tr *ngFor="let alert of alerts">
+            <!-- <td title="'Nº'" class="text-center" >
+              {{alert.nr}}
+            </td> -->
+            <td title="'NOMBRE'" class="text-start">
+              {{alert.nombre}}
+            </td>
+            <td title="'TIPO'" class="text-start">
+              {{alert.tipo}}
+            </td>
+            <td title="'ACTIVOS'" class="text-center">
+              <div data-imei="alert.imei" class="text-center">
+                  <app-active-alert [alert]="alert"></app-active-alert>
+              </div>
+            </td>
+            <td title="'SISTEMA'" class="text-center">
+              <div data-imei="alert.imei" class="text-center">
+                  <app-system-alert [alert]="alert"></app-system-alert>
+              </div>
+            </td>
+            <td title="'E-MAIL'" class="text-center">
+              <div data-imei="alert.imei" class="text-center">
+                  <app-email-alert [alert]="alert"></app-email-alert>
+              </div>
+            </td>
+            <td class="text-center">
+              <app-actions-alert [alert]="alert" [nameComponent]="'ALERTS-ACCESSORIES'" (editAlert)="edit($event)" (deleteAlert)="loadData()"></app-actions-alert>
+            </td>
+        </tr>
+        <tr *ngIf="noResults">
+          <td colspan="6" class="text-center">Sin coinicidencias</td>
+        </tr>
+        <tr *ngIf="isRowDataEmpty">
+          <td colspan="6" class="text-center">No hay alertas configuradas</td>
+        </tr>
       </tbody>
     </table>
   </div>

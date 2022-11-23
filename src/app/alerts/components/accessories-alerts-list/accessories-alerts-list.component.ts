@@ -22,6 +22,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
   strSearched: string = '';
   noResults: boolean = false;
+  isRowDataEmpty: boolean = false;
 
   options = new Array(
     { id:'ALERTS', name:"Alertas"},
@@ -49,6 +50,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
   public async loadData(){
     this.spinner.show('loadingAccesoriesAlertsSpinner');
     this.alerts = await this.AlertService.getAlertsByType('accessories');
+    this.isRowDataEmpty = this.alerts.length == 0;
     this.spinner.hide('loadingAccesoriesAlertsSpinner');
     // this.dtTrigger.next();
   }
