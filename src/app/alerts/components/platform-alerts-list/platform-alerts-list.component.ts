@@ -20,6 +20,7 @@ export class PlatformAlertsListComponent implements OnInit {
   );
   strSearched: string = '';
   noResults: boolean = false;
+  isRowDataEmpty: boolean = false;
 
   constructor(
     private AlertService: AlertService,
@@ -49,6 +50,7 @@ export class PlatformAlertsListComponent implements OnInit {
   public async loadData(){
     this.spinner.show('loadingPlatformAlertsSpinner');
     this.alerts = await this.AlertService.getAlertsByType('platform');
+    this.isRowDataEmpty = this.alerts.length == 0;
     this.spinner.hide('loadingPlatformAlertsSpinner');
   }
 
