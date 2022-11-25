@@ -161,7 +161,7 @@ export class AreagraphsComponent implements OnInit {
       });
 
       this.setGraphData(this.vehicles);
-      
+
       this.vehicleDataLoaded = true;
       this.attemptToHideMainSpinner();
     });
@@ -210,12 +210,12 @@ export class AreagraphsComponent implements OnInit {
 
     //Rellenar las celdas faltantes de ''
     for(let i = 0; i < amountOfRows; i++){
-      if(this.imeiGreen.length < i ){ this.imeiGreen[i] = ''; } 
-      if(this.imeiBlue.length < i ){ this.imeiBlue[i] = ''; } 
-      if(this.imeiPurple.length < i ){ this.imeiPurple[i] = ''; } 
-      if(this.imeiBlack.length < i ){ this.imeiBlack[i] = ''; } 
-      if(this.imeiOrange.length < i ){ this.imeiOrange[i] = ''; } 
-      if(this.imeiRed.length < i ){ this.imeiRed[i] = ''; } 
+      if(this.imeiGreen.length < i ){ this.imeiGreen[i] = ''; }
+      if(this.imeiBlue.length < i ){ this.imeiBlue[i] = ''; }
+      if(this.imeiPurple.length < i ){ this.imeiPurple[i] = ''; }
+      if(this.imeiBlack.length < i ){ this.imeiBlack[i] = ''; }
+      if(this.imeiOrange.length < i ){ this.imeiOrange[i] = ''; }
+      if(this.imeiRed.length < i ){ this.imeiRed[i] = ''; }
     }
 
     this.data = [
@@ -457,6 +457,7 @@ export class AreagraphsComponent implements OnInit {
         'Distraccion',
         'Distracción',
         'Colisión delantera',
+        'Anticolisión frontal',
         'Colisión con peatones',
         'Desvío de carril hacia la izquierda',
         'Desvío de carril hacia la derecha',

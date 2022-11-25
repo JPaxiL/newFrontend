@@ -195,6 +195,7 @@ export class EventService {
       { tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
       { tipo: 'Colisión con peatones', clase: 'colision-peatones' },
       { tipo: 'Colisión delantera', clase: 'colision-delantera' },
+      { tipo: 'Anticolisión frontal', clase: 'colision-delantera' },
       { tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
       { tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
       { tipo: 'No Rostro', clase: 'no-rostro' },
@@ -312,7 +313,7 @@ export class EventService {
           counter++;
         }
       });
-      this.unreadCount = counter; 
+      this.unreadCount = counter;
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
     }
 
