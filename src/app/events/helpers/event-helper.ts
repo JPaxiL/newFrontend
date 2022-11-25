@@ -381,7 +381,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
     );
     /* Falta icono */
 
-  } else if (event.tipo == 'Colisión delantera') {
+  } else if (event.tipo == 'Colisión delantera' || event.tipo == 'Anticolisión frontal') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
