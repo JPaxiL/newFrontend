@@ -3320,10 +3320,17 @@
 
     <!-- 19. REPORTE GERENCIAL (Cuenta cruzdelsur)-->
     <div class="container grand-container multitable-container" *ngIf="num_rep == 'R020'">
+
+
+
+
+
+
+
       <div class="p-card" style="padding: 1rem;" [hidden]="true">
 
         <div class="subtable-title mb-3">
-          <div>
+          <!-- <div>
             <div>VEHÍCULO</div>
             <div>
               <div class="gl-row-underline vehicle-dropdown border-0">
@@ -3342,7 +3349,7 @@
                 </p-dropdown>
               </div>
             </div>
-          </div>
+          </div> -->
           <div>
             <div>PERIODO</div>
             <div>{{period}}</div>
@@ -3383,9 +3390,9 @@
           </table>
         </ng-container>
 
-        <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
+        <!-- <div *ngIf="reportTableDropdownData[1].length == 0" class="p-card text-left" style="padding: 1rem;">
           <p>Ningún dato encontrado en su consulta.</p>
-        </div>
+        </div> -->
 
       </div>
 
@@ -3394,6 +3401,274 @@
           <ng-container *ngIf="dtRendered">
 
               <!-- <button class="btn btn-success" (click)="runReportGerencial(1);">Ejecutar la creacion de graficos</button> -->
+              <!-- <div class="table-subtitle p-card" style="padding: 1rem;">
+                  <div class="mb-6">
+                    PERIODO: {{period}}
+                  </div>
+              </div> -->
+
+              <!-- subtable-title mb-3 -->
+
+
+
+
+              <div class="p-card">
+
+                <div class="subtable-title mb-2">
+                  <div style="width: 50%; min-width: 50%;">
+                    <div style="padding: 20px;">
+                      {{period}}
+                    </div>
+                  </div>
+                  <div >
+                    <div style="padding: 20px;">
+                      <button class="btn btn-gl btn-gl-light-blue btn-dark-hover" (click)="seeTableRepGerencial = !seeTableRepGerencial">VER DATOS </button>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="padding: 20px;">
+                      <button class="btn btn-gl btn-gl-light-blue btn-dark-hover" (click)="runReportGerencial(1);">EJECUTAR GRÁFICO</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div *ngIf="seeTableRepGerencial">
+
+
+                  <div class="table-subtitle p-card" style="padding: 1rem;">
+                    <div class="mb-6">
+                      DISTRACCIÓN
+                    </div>
+                  </div>
+
+                    
+                  <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+
+                    <div class="subtable-title mb-3">
+                      <div>
+                        <div>VEHÍCULO : {{v_table[0][1]}}</div>
+                      </div>
+                      <div style="width: 60%; min-width: 60%;">
+                        <div>PERIODO : {{period}}</div>
+                      </div>
+                    </div>
+            
+                    <ng-container *ngIf="dtRendered">
+                      <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+                       
+                        <thead>
+                          <tr>
+                              <th>Item</th>
+                              <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                              <th *ngIf="chkDateHour">Fecha</th>
+                              <th *ngIf="chkDateHour">Hora</th>
+                              <th>Código</th>
+                              <th>Placa</th>
+                              <th>Tipo de Unidad</th>
+                              <th>Descripción</th>
+                              <th>Ubicación</th>	
+                              <th>Geocerca</th>
+                              <th>Conductor</th>
+                              <th>-</th>
+                              <th>Activar/Desactivar</th>
+                          </tr>
+                        </thead>
+            
+                        <tbody>
+                          <ng-container *ngFor="let row of v_table[1];  let i = index;">  
+                            <tr *ngIf="row.descripcion_evento == 'Distraccion'">
+
+                              <td>{{row.nro_row + 1}}</td>
+                              <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
+                              <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
+                              <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
+                              <td>{{row.codigo}}</td>
+                              <td>{{row.placa}}</td>
+                              <td>{{row.tipo_unidad}}</td>
+                              <td>{{row.descripcion_evento}}</td>
+                              <td><a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a></td>
+                              <td><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.nombre_zona"></td>
+                              <td><input style="font-size: 12px;" size="40" type="text" [(ngModel)]="row.conductor"></td>
+                              <td *ngIf="row.mostrar == true"><b>Activo</b></td>
+                              <td *ngIf="row.mostrar == false"><b>Eliminado</b></td>
+                              <td>
+                                <!-- <md-button  class="md-raised md-primary" ng-click="res.repSensorFatigaBtnEliminar(dato[1],$index,dat)" >Activar/Desactivar</md-button> -->
+                                <button style="font-size: 12px;" (click)="repSensorFatigaBtnEliminar(row);">Activar/Desactivar</button>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+            
+                      </table>
+                    </ng-container>
+            
+                  </div>
+    
+              
+
+
+                  <div class="table-subtitle p-card" style="padding: 1rem;">
+                    <div class="mb-6">
+                      POSIBLE FATIGA
+                    </div>
+                  </div>
+
+                  <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+
+                    <div class="subtable-title mb-3">
+                      <div>
+                        <div>VEHÍCULO : {{v_table[0][1]}}</div>
+                      </div>
+                      <div style="width: 60%; min-width: 60%;">
+                        <div>PERIODO : {{period}}</div>
+                      </div>
+                    </div>
+            
+                    <ng-container *ngIf="dtRendered">
+                      <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+                       
+                        <thead>
+                          <tr>
+                              <th>Item</th>
+                              <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                              <th *ngIf="chkDateHour">Fecha</th>
+                              <th *ngIf="chkDateHour">Hora</th>
+                              <th>Código</th>
+                              <th>Placa</th>
+                              <th>Tipo de Unidad</th>
+                              <th>Descripción</th>
+                              <th>Ubicación</th>	
+                              <th>Geocerca</th>
+                              <th>Conductor</th>
+                              <th>-</th>
+                              <th>Activar/Desactivar</th>
+                          </tr>
+                        </thead>
+            
+                        <tbody>
+                          <ng-container *ngFor="let row of v_table[1];  let i = index;">  
+                            <tr *ngIf="row.descripcion_evento == 'Somnolencia'">
+
+                              <td>{{row.nro_row + 1}}</td>
+                              <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
+                              <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
+                              <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
+                              <td>{{row.codigo}}</td>
+                              <td>{{row.placa}}</td>
+                              <td>{{row.tipo_unidad}}</td>
+                              <td>{{row.descripcion_evento == 'Somnolencia' ? 'Posible Fatiga' : '?'}}</td>
+
+                              <td><a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a></td>
+                              <td><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.nombre_zona"></td>
+                              <td><input style="font-size: 12px;" size="40" type="text" [(ngModel)]="row.conductor"></td>
+                              <td *ngIf="row.mostrar == true"><b>Activo</b></td>
+                              <td *ngIf="row.mostrar == false"><b>Eliminado</b></td>
+                              <td>
+                                <!-- <md-button  class="md-raised md-primary" ng-click="res.repSensorFatigaBtnEliminar(dato[1],$index,dat)" >Activar/Desactivar</md-button> -->
+                                <button style="font-size: 12px;" (click)="repSensorFatigaBtnEliminar(row);">Activar/Desactivar</button>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+            
+                      </table>
+                    </ng-container>
+            
+                  </div>
+    
+
+                  <div class="table-subtitle p-card" style="padding: 1rem;">
+                    <div class="mb-6">
+                      FATIGA EXTREMA
+                    </div>
+                  </div>
+
+
+                  <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+
+                    <div class="subtable-title mb-3">
+                      <div>
+                        <div>VEHÍCULO : {{v_table[0][1]}}</div>
+                      </div>
+                      <div style="width: 60%; min-width: 60%;">
+                        <div>PERIODO : {{period}}</div>
+                      </div>
+                    </div>
+            
+                    <ng-container *ngIf="dtRendered">
+                      <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+                       
+                        <thead>
+                          <tr>
+                              <th>Item</th>
+                              <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                              <th *ngIf="chkDateHour">Fecha</th>
+                              <th *ngIf="chkDateHour">Hora</th>
+                              <th>Código</th>
+                              <th>Placa</th>
+                              <th>Tipo de Unidad</th>
+                              <th>Descripción</th>
+                              <th>Ubicación</th>	
+                              <th>Geocerca</th>
+                              <th>Conductor</th>
+                              <th>-</th>
+                              <th>Activar/Desactivar</th>
+                          </tr>
+                        </thead>
+            
+                        <tbody>
+                          <ng-container *ngFor="let row of v_table[1];  let i = index;">  
+                            <tr *ngIf="row.descripcion_evento == 'Fatiga Extrema'">
+
+                              <td>{{row.nro_row + 1}}</td>
+                              <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
+                              <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
+                              <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
+                              <td>{{row.codigo}}</td>
+                              <td>{{row.placa}}</td>
+                              <td>{{row.tipo_unidad}}</td>
+                              <td>{{row.descripcion_evento}}</td>
+                              <td><a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a></td>
+                              <td><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.nombre_zona"></td>
+                              <td><input style="font-size: 12px;" size="40" type="text" [(ngModel)]="row.conductor"></td>
+                              <td *ngIf="row.mostrar == true"><b>Activo</b></td>
+                              <td *ngIf="row.mostrar == false"><b>Eliminado</b></td>
+                              <td>
+                                <!-- <md-button  class="md-raised md-primary" ng-click="res.repSensorFatigaBtnEliminar(dato[1],$index,dat)" >Activar/Desactivar</md-button> -->
+                                <button style="font-size: 12px;" (click)="repSensorFatigaBtnEliminar(row);">Activar/Desactivar</button>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+            
+                      </table>
+                    </ng-container>
+            
+                  </div>
+    
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
 
               <ng-container>
                 <div class="row justify-content-md-center">
@@ -3405,16 +3680,13 @@
 
               <div  class="p-card" style="padding: 1rem;">
 
-                <div class="container">
-                  <div class="row justify-content-md-center">
-                    <div class="col-md-auto">
-                      <div class="h4">RESUMEN DE EVENTOS</div>
+                    <div class="container">
+                      <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                          <div class="h4">RESUMEN DE EVENTOS</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-
-
-
 
                     <table class="table table-sm" width="100%">
                       <thead class="table-light">

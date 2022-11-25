@@ -59,6 +59,9 @@ export class ResultComponent implements OnDestroy, OnInit {
   dtElement!: DataTableDirective;
 
   dtOptions: any = {};
+  dtOptions2: any = {};
+  seeTableRepGerencial: boolean = true;
+  indexTRG = 0;
   dtTrigger = new Subject<any>();
   data: any;
   table_hide = 'd-none';
@@ -437,12 +440,52 @@ export class ResultComponent implements OnDestroy, OnInit {
             this.reportService.workingOnReport = false;
           }
         }
-        if (this.num_rep == 19) {
-            this.runReportGerencial(1);
-            setTimeout(() => {
-              this.runReportGerencial(1);
-            }, 1000);
+        // console.log("======================= AKI");
+
+        // console.log(this.num_rep);
+        
+        // // if (this.num_rep == 19) {
+        // if (this.num_rep == 'R020') {
+        //     // this.runReportGerencial(1);
+        //     setTimeout(() => {
+        //       // this.runReportGerencial(1);
+        //     }, 1000);
+        // }
+      },
+      destroy: true
+    };
+
+    
+    this.dtOptions2 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+      language:{
+        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+      },
+      dom: 'lfrtip',
+      paging: false,
+      searching: false,
+      lengthChange: false,
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+      /* buttons: ['excel'], */
+      buttons: [{
+        extend: 'excel',
+        text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
+        className: 'btn btn-success'
+      }],
+      initComplete: () => {
+        this.dt_completed++;
+        //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
+        if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
+          this.wrapElements(document.querySelectorAll('table[datatable]'));
+          this.table_hide = '';
+          if(!isIndependentWindow){
+            this.spinner.hide("reportSpinner");
+            this.reportService.workingOnReport = false;
+          }
         }
+
       },
       destroy: true
     };
@@ -7221,6 +7264,11 @@ export class ResultComponent implements OnDestroy, OnInit {
   contador = 1;//reportServices.getNroGenReport();
 
 
+      repSensorFatigaBtnEliminar(obj:any) {
+        console.log('==============repSensorFatigaBtnEliminar2');
+        obj.mostrar = !obj.mostrar;
+      }
+
 
       runReportGerencial(contador:any) {
         console.log("a-- " + this.contador + "-- ");
@@ -7251,18 +7299,20 @@ export class ResultComponent implements OnDestroy, OnInit {
           for (let i = 0; i < this.data.length; i++) {
             const placa_unidad = this.data[i][0][1];
             for (let j = 0; j < this.data[i][1].length; j++) {
-                const descripcion = this.data[i][1][j].descripcion_evento;
-                // console.log(placa_unidad+" - "+descripcion+" - "+vm.datos[i][1][j].fecha_tracker+" - "+vm.datos[i][1][j].nombre_zona+" - "+vm.datos[i][1][j].conductor);
-                // console.log(vm.datos[i][1][j].velocidad_limite);
+              if (this.data[i][1][j].mostrar) {
 
-                if (descripcion == "Distraccion") {
-                  this.arrDataTabla.distraccion = this.arrDataTabla.distraccion + 1;
-                } else if (descripcion == "Somnolencia") { //posible_fatiga
-                  this.arrDataTabla.posible_fatiga = this.arrDataTabla.posible_fatiga+1;
-                } else if (descripcion == "Fatiga Extrema") {
-                  this.arrDataTabla.fatiga_extrema = this.arrDataTabla.fatiga_extrema+1;
-                }
+                  const descripcion = this.data[i][1][j].descripcion_evento;
+                  // console.log(placa_unidad+" - "+descripcion+" - "+vm.datos[i][1][j].fecha_tracker+" - "+vm.datos[i][1][j].nombre_zona+" - "+vm.datos[i][1][j].conductor);
+                  // console.log(vm.datos[i][1][j].velocidad_limite);
 
+                  if (descripcion == "Distraccion") {
+                    this.arrDataTabla.distraccion = this.arrDataTabla.distraccion + 1;
+                  } else if (descripcion == "Somnolencia") { //posible_fatiga
+                    this.arrDataTabla.posible_fatiga = this.arrDataTabla.posible_fatiga+1;
+                  } else if (descripcion == "Fatiga Extrema") {
+                    this.arrDataTabla.fatiga_extrema = this.arrDataTabla.fatiga_extrema+1;
+                  }
+              }
 
             }
           }
@@ -7355,7 +7405,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               // arrData[h].push([]);//[i][3] = [];
               for (let i = 0; i < this.data.length; i++) {
                 for (let j = 0; j < this.data[i][1].length; j++) {
-                  if (this.data[i][1][j].descripcion_evento == select_evento) {
+                  if (this.data[i][1][j].mostrar && this.data[i][1][j].descripcion_evento == select_evento) {
 
                     const nom_codigo = this.data[i][1][j].codigo;
                     var coinciden = false;
@@ -7431,7 +7481,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 // console.log(placa_unidad);
                 // var num_eventos = 0;
                 for (let j = 0; j < this.data[i][1].length; j++) {
-                  if (this.data[i][1][j].descripcion_evento == select_evento) {
+                  if ( this.data[i][1][j].mostrar && this.data[i][1][j].descripcion_evento == select_evento) {
 
                     var evento_dia = moment(this.data[i][1][j].fecha_tracker).startOf('day').format("YYYY-MM-DD");
                     for (let k = 0; k < array_dias.length; k++) {
@@ -7464,7 +7514,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               // arrData[h].push([]);//[i][2] = [];
               for (let i = 0; i < this.data.length; i++) {
                 for (let j = 0; j < this.data[i][1].length; j++) {
-                  if (this.data[i][1][j].descripcion_evento == select_evento) {
+                  if (this.data[i][1][j].mostrar && this.data[i][1][j].descripcion_evento == select_evento) {
 
                     const nom_geocerca = this.data[i][1][j].nombre_zona;
                     var coinciden = false;
@@ -7504,7 +7554,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               // arrData[h].push([]);//[i][3] = [];
               for (let i = 0; i < this.data.length; i++) {
                 for (let j = 0; j < this.data[i][1].length; j++) {
-                  if (this.data[i][1][j].descripcion_evento == select_evento) {
+                  if (this.data[i][1][j].mostrar && this.data[i][1][j].descripcion_evento == select_evento) {
 
                     const nom_conductor = this.data[i][1][j].conductor;
                     var coinciden = false;
