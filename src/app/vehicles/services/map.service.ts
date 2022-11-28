@@ -515,10 +515,7 @@ export class MapService {
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
               
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
-              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-
               
-
               if(vehicles[index].speed != 0){
 
                 this.dif_mayor = 0.00;
@@ -597,6 +594,8 @@ export class MapService {
                     }
                   }
 
+                  this.changePositionArrow(this.final_direction,key);
+
                   this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
 
                 }
@@ -604,18 +603,25 @@ export class MapService {
                   if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
 
                     let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                    
+                    this.changePositionArrow(old_direction[1],key);
+
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
                     
                   }
                   else{
 
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                    console.log('se borra la flecha');
+                    console.log(vehicles[index].name);
+
                   }
 
                 }
 
               }else{
                 this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                
               }
               
               this.markerClusterGroup.getLayers()[key].setLatLng(coord);
@@ -661,6 +667,35 @@ export class MapService {
   loadMap(map: any): void{
     // //console.log("loadMap");
     this.map = map;
+  }
+
+  changePositionArrow(direction: string, key: any){
+    switch(direction){
+      case 'up':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+        break;
+      case 'up-left':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,60];
+        break;
+      case 'up-right':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,60];
+        break;
+      case 'down':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,0];
+        break;
+      case 'down-left':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,30];
+        break;
+      case 'down-right':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,30];
+        break;
+      case 'left':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,30];
+        break;
+      case 'right':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,30]; 
+        break;
+    }
   }
 
   // deleteMarker(IMEI: string):void{
