@@ -48,6 +48,12 @@ export interface Columns{
   autoWidth?: boolean;
 }
 
+export interface ReportData{
+  num_rep: string,
+  rep_title: string,
+  rep_subtitle: string,
+}
+
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
@@ -63,11 +69,14 @@ export class ResultComponent implements OnDestroy, OnInit {
   seeTableRepGerencial: boolean = true;
   indexTRG = 0;
   dtTrigger = new Subject<any>();
-  data: any;
+  data: any; //holds the data to be rendered
+  sortedData: any; //holds the data to be exported
   table_hide = 'd-none';
-  num_rep: any;
-  rep_title: any;
-  rep_subtitle: any;
+  report_data: ReportData = {
+    num_rep: '',
+    rep_title: '',
+    rep_subtitle: '',
+  };
   period: string='';
   table_headers: any;
   table_data: any;
@@ -384,6 +393,17 @@ export class ResultComponent implements OnDestroy, OnInit {
   singleTableReportIDs = ['R008', 'R020', 'R021'];
   chkTableDropdown: boolean = false;
 
+  columnsConfig: any = [
+    { 
+      num_rep: 'R008',
+      headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
+      colDefs: [
+        { orderData: [ 3, 4 ], targets: [3] }, //fecha
+        { orderData: [ 4, 3 ], targets: [4] }, //hora
+      ],
+    },
+  ];
+
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
@@ -414,92 +434,21 @@ export class ResultComponent implements OnDestroy, OnInit {
     console.log('Iniciando result component');
     this.calculateRowHeights();
 
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      processing: true,
-      language:{
-        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-      },
-      dom: 'lfrtip',
-      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
-      /* buttons: ['excel'], */
-      buttons: [{
-        extend: 'excel',
-        text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
-        className: 'btn btn-success'
-      }],
-      initComplete: () => {
-        this.dt_completed++;
-        //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
-        if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
-          this.wrapElements(document.querySelectorAll('table[datatable]'));
-          this.table_hide = '';
-          if(!isIndependentWindow){
-            this.spinner.hide("reportSpinner");
-            this.reportService.workingOnReport = false;
-          }
-        }
-        // console.log("======================= AKI");
-
-        // console.log(this.num_rep);
-        
-        // // if (this.num_rep == 19) {
-        // if (this.num_rep == 'R020') {
-        //     // this.runReportGerencial(1);
-        //     setTimeout(() => {
-        //       // this.runReportGerencial(1);
-        //     }, 1000);
-        // }
-      },
-      destroy: true
-    };
-
-    
-    this.dtOptions2 = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      processing: true,
-      language:{
-        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-      },
-      dom: 'lfrtip',
-      paging: false,
-      searching: false,
-      lengthChange: false,
-      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
-      /* buttons: ['excel'], */
-      buttons: [{
-        extend: 'excel',
-        text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
-        className: 'btn btn-success'
-      }],
-      initComplete: () => {
-        this.dt_completed++;
-        //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
-        if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
-          this.wrapElements(document.querySelectorAll('table[datatable]'));
-          this.table_hide = '';
-          if(!isIndependentWindow){
-            this.spinner.hide("reportSpinner");
-            this.reportService.workingOnReport = false;
-          }
-        }
-
-      },
-      destroy: true
-    };
-
     if(!isIndependentWindow){
       this.reportService.showReport.subscribe(data => {
         console.log('Recibiendo data en result', data);
 
         this.dt_completed = 0;
 
+        this.report_data.num_rep = data.numRep;
+        this.report_data.rep_title = data.repTitle;
+        this.report_data.rep_subtitle = data.repSubtitle;
+
+        this.setDataTablesConfig(isIndependentWindow);
+
         this.data = data.data;
-        this.num_rep = data.numRep;
-        this.rep_title = data.repTitle;
-        this.rep_subtitle = data.repSubtitle;
+        this.sortedData = [...this.data];
+
         this.chkDateHour = data.chkDateHour;
         this.chkDuracion = data.chkDuracion;
         this.chkOdomV = data.chkOdomV;
@@ -538,10 +487,16 @@ export class ResultComponent implements OnDestroy, OnInit {
     } else {
       console.log('Se abrirá una nueva pestaña');
       localStorage.removeItem('report_data');
+
+      this.report_data.num_rep = report_data.numRep;
+      this.report_data.rep_title = report_data.repTitle;
+      this.report_data.rep_subtitle = report_data.repSubtitle;
+
+      this.setDataTablesConfig(isIndependentWindow);
+
       this.data = report_data.data;
-      this.num_rep = report_data.numRep;
-      this.rep_title = report_data.repTitle;
-      this.rep_subtitle = report_data.repSubtitle;
+      this.sortedData = [...this.data];
+      
       this.chkDateHour = report_data.chkDateHour;
       this.chkDuracion = report_data.chkDuracion;
       this.chkOdomV = report_data.chkOdomV;
@@ -552,7 +507,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.prepareVehicleDropdown();
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
       document.querySelector('body')!.style.padding = '0.8rem';
-      this.titleService.setTitle(this.rep_title);
+      this.titleService.setTitle(this.report_data.rep_title);
       //this.dtTrigger.next();
       setTimeout(() => {
         this.dtTrigger.next();
@@ -582,8 +537,174 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   }
 
+  setDataTablesConfig(isIndependentWindow: boolean){
+    let columnsConfig = this.columnsConfig.filter((report: any) => { return report.num_rep == this.report_data.num_rep })[0];
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+      language:{
+        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+      },
+      dom: 'lfrtip',
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+      buttons: [{
+        extend: 'excel',
+        text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
+        className: 'btn btn-success'
+      }],
+      initComplete: () => {
+        this.dt_completed++;
+        //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
+        if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
+          this.wrapElements(document.querySelectorAll('table[datatable]'));
+          this.table_hide = '';
+          if(!isIndependentWindow){
+            this.spinner.hide("reportSpinner");
+            this.reportService.workingOnReport = false;
+          }
+        }
+        // console.log("======================= AKI");
+
+        // console.log(this.num_rep);
+        
+        // // if (this.num_rep == 19) {
+        // if (this.num_rep == 'R020') {
+        //     // this.runReportGerencial(1);
+        //     setTimeout(() => {
+        //       // this.runReportGerencial(1);
+        //     }, 1000);
+        // }
+      },
+      destroy: true,
+      "orderMulti": false,
+      "fnDrawCallback": ( oSettings: any ) => {
+        //console.log( 'DataTables has redrawn the table', oSettings );
+        /* console.log( 'Reporte: ', this.report_data ); 
+        console.log( 'Reporte: ', this.sortedData ); 
+        console.log( 'DataTables has redrawn the table ', oSettings.aaSorting ); 
+        console.log( 'DataTables Sorting Column index ', oSettings.aaSorting[0]['0'] ); //index de columna
+        console.log( 'DataTables Sorting Order ', oSettings.aaSorting[0]['1'] ); //'asc' o 'desc'
+        console.log( 'DataTables Sorting Order *integer* ', oSettings.aaSorting[0]['_idx'] ); // 0 si es asc, 1 si es desc */
+        let sortingColIndex = oSettings.aaSorting[0]['0'];
+        let sortingOrder = oSettings.aaSorting[0]['1'];
+        
+        if(sortingColIndex > 0){
+          let columnName = columnsConfig.headers[sortingColIndex - 1];
+          switch(this.report_data.num_rep){
+            case 'R008': //Reporte de Posicion
+              if(columnName == 'fecha'){
+                this.sortedData.sort((a: any, b: any) => { 
+                  return this.dateComparison(a[columnName], b[columnName], sortingOrder);
+                });
+              }
+              if(columnName == 'hora'){
+                this.sortedData.sort((a: any, b: any) => { 
+                  return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                });
+              }
+              if(columnName == 'ubicacion'){
+                this.sortedData.sort((a: any, b: any) => { 
+                  return this.normalComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                });
+              } else {
+                this.sortedData.sort((a: any, b: any) => { 
+                  return this.normalComparison(a[columnName], b[columnName], sortingOrder);
+                });
+              }
+              console.log(this.sortedData);
+              break; 
+            default:
+              break;
+          }
+        }
+      },
+    };
+
+    if(this.isSingleTable()){
+      this.dtOptions.columnDefs = columnsConfig.colDefs;
+      //console.log('dtOptions: ', this.dtOptions);
+    }
+    
+    this.dtOptions2 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+      language:{
+        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+      },
+      dom: 'lfrtip',
+      paging: false,
+      searching: false,
+      lengthChange: false,
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+      buttons: [{
+        extend: 'excel',
+        text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
+        className: 'btn btn-success'
+      }],
+      initComplete: () => {
+        this.dt_completed++;
+        //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
+        if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
+          this.wrapElements(document.querySelectorAll('table[datatable]'));
+          this.table_hide = '';
+          if(!isIndependentWindow){
+            this.spinner.hide("reportSpinner");
+            this.reportService.workingOnReport = false;
+          }
+        }
+
+      },
+      destroy: true,
+    };
+  }
+
+  normalComparison(a: string, b: string, order: string){
+    if(order == 'asc'){
+      if(a < b){ return -1; };
+      if(a > b){ return 1; };
+      return 0;
+    }
+    if(order == 'desc'){
+      if(a < b){ return 1; };
+      if(a > b){ return -1; };
+      return 0;
+    }
+    console.log(`Expecting order asc or desc (normal), got: `, order);
+    return 0;
+  }
+
+  dateComparison(fecha1: string, fecha2: string, order: string){
+    let date1 = fecha1.split(' ')[0];
+    let hour1 = fecha1.split(' ')[1];
+    let date2 = fecha2.split(' ')[0];
+    let hour2 = fecha2.split(' ')[1];
+    if(order == 'asc'){
+      if(date1 < date2){ return -1; };
+      if(date1 > date2){ return 1; };
+      if(hour1 < hour2){ return -1; };
+      if(hour1 > hour2){ return 1; };
+      return 0;
+    }
+    if(order == 'desc'){
+      if(date1 < date2){ return 1; };
+      if(date1 > date2){ return -1; };
+      if(hour1 < hour2){ return 1; };
+      if(hour1 > hour2){ return -1; };
+      return 0;
+    }
+    console.log(`Expecting order asc or desc (date), got: `, order);
+    return 0;
+  }
+
+  isSingleTable(){
+    return this.singleTableReportIDs.indexOf(this.report_data.num_rep) >= 0;
+  }
+
   prepareVehicleDropdown(){
-    if(this.singleTableReportIDs.indexOf(this.num_rep) < 0 ){
+    if(!this.isSingleTable()){
       this.reportTableVehicleDropdownOptions = [];
       for(let i = 0; i < this.data.length; i++){
         if( this.data[i][1].length == 0 ){
@@ -3666,7 +3787,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var odometro_cell_ch_width = "Odometro".length;
     var referencia_cell_ch_width = "Referencia".length;
 
-    if(this.data.length > 0) {
+    if(this.sortedData.length > 0) {
         bol_datos_ex = true;
         var rows:AllRows[] = [
           {
@@ -3678,7 +3799,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
           {
             cells: [
-              { value: this.rep_subtitle , color: this.vehicleContentTextColor, background: this.vehicleContentBackground, vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width, borderBottom: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: this.report_data.rep_subtitle , color: this.vehicleContentTextColor, background: this.vehicleContentBackground, vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: table_width, borderBottom: { color: this.headersBorderColor, size: this.headersBorderSize } },
             ],
             height: this.subHeaderRepPosicionHeight,
           }
@@ -3713,7 +3834,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             ],
             height: this.colsHeaderHeight,
           });
-          this.data.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
+          this.sortedData.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
             //var fh = item.fecha_final.split(" ");
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
@@ -3777,7 +3898,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             height: this.colsHeaderHeight,
           });
 
-          this.data.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
+          this.sortedData.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
             var ubicacion = item.latitud + "," + item.longitud;
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
@@ -4169,9 +4290,9 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nom_excel: string = '';
 
     // console.log(this.repTitle);
-    if (this.num_rep == 11) {
+    if (this.report_data.num_rep == 'R012') {
        nom_excel = "ReporteDistraccionPosibleFatiga.xlsx";
-    } else if (this.num_rep == 21) {
+    } else if (this.report_data.num_rep == 'R022') {
        nom_excel = "ReporteSomnolenciaDistraccionProloint.xlsx";
     }
 
