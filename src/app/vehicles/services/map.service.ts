@@ -11,6 +11,7 @@ import 'leaflet.markercluster.freezable';
 import { SocketWebService } from './socket-web.service';
 import { VehicleService } from './vehicle.service';
 import { FollowService } from './follow.service';
+import { TabService } from 'src/app/panel/services/tab.service';
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/takeWhile';
@@ -62,6 +63,7 @@ export class MapService {
     private vehicleService:VehicleService,
     private followService:FollowService,
     private socketWebService: SocketWebService,
+    private tabService: TabService,
   ) {
     // this.interval = setInterval(function(this){
     //   // this.localStorage
@@ -77,7 +79,9 @@ export class MapService {
       this.onDrawIcon(this.map);
     });
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
-      this.onDrawIcon(this.map);
+      if(this.tabService.currentTab == 'main-panel'){
+        this.onDrawIcon(this.map);
+      }
     });
     this.socketWebService.callback.subscribe(res =>{
       this.monitor(res, this.map);
