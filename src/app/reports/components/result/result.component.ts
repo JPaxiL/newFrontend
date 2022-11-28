@@ -3909,7 +3909,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
-            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.zonaCercana??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
 
             rows.push({
               cells: [
@@ -3956,6 +3956,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           )
         }
         column_config.push({ width: this.calculateColWidth(status_cell_ch_width)});
+        column_config.push({ width: this.calculateColWidth(conductor_cell_ch_width)});
         column_config.push({ width: this.calculateColWidth(vel_gps_cell_ch_width)});
         column_config.push({ width: this.calculateColWidth(vel_can_cell_ch_width)});
         column_config.push({ width: this.calculateColWidth(odometro_cell_ch_width)});
