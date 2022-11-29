@@ -580,7 +580,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       destroy: true,
       "orderMulti": false,
       "fnDrawCallback": ( oSettings: any ) => {
-        //console.log( 'DataTables has redrawn the table', oSettings );
+        console.log( 'DataTables has redrawn the table', oSettings );
         /* console.log( 'Reporte: ', this.report_data ); 
         console.log( 'Reporte: ', this.sortedData ); 
         console.log( 'DataTables has redrawn the table ', oSettings.aaSorting ); 
@@ -589,8 +589,9 @@ export class ResultComponent implements OnDestroy, OnInit {
         console.log( 'DataTables Sorting Order *integer* ', oSettings.aaSorting[0]['_idx'] ); // 0 si es asc, 1 si es desc */
         let sortingColIndex = oSettings.aaSorting[0]['0'];
         let sortingOrder = oSettings.aaSorting[0]['1'];
+        let reportExistInConfig = columnsConfig != undefined;
         
-        if(sortingColIndex > 0){
+        if(sortingColIndex > 0 && reportExistInConfig){
           let columnName = columnsConfig.headers[sortingColIndex - 1];
           switch(this.report_data.num_rep){
             case 'R008': //Reporte de Posicion
