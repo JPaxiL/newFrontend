@@ -369,4 +369,18 @@ export class EventService {
     }
   }
 
+  async getReference(lat: any, lng: any){
+    const response:ResponseInterface = await this.http
+      .get<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-reference`, {
+        params:
+        {
+          latitud:lat,
+          longitud:lng
+        }
+      })
+      .toPromise();
+
+      return response.data;
+  }
+
 }
