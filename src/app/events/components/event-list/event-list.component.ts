@@ -95,7 +95,7 @@ export class EventListComponent implements OnInit {
     }
     this.tipoEvento = this.eventService.getFilters();
     this.eventService.showEventPanel();
-    
+
     /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
   }
 
@@ -142,13 +142,15 @@ export class EventListComponent implements OnInit {
     });
   }
 
-  public switchEventOnMap(event: any, currentRow: HTMLElement){
+  public async switchEventOnMap(event: any, currentRow: HTMLElement){
     if(event.id == this.eventService.activeEvent.id){
       this.hideEvent(this.eventService.activeEvent);
     } else {
       currentRow.classList.add('watched-event');
       //console.log('Mostrando evento con ID: ', event.id);
-      this.showEvent(event); 
+      let reference = await this.eventService.getReference(event.latitud, event.longitud);
+      event.referencia = reference.referencia;
+      this.showEvent(event);
     }
   }
 
