@@ -404,6 +404,9 @@ export class ResultComponent implements OnDestroy, OnInit {
     },
   ];
 
+  dataTableStartingIndex: number = -1;
+  dataTableEndingIndex: number = -1;
+
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
@@ -444,8 +447,21 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.report_data.rep_title = data.repTitle;
         this.report_data.rep_subtitle = data.repSubtitle;
 
-        this.setDataTablesConfig(isIndependentWindow);
+        this.chkTableDropdown = data.chkTableDropdown;
 
+        if(this.isSingleTableReport()){
+          this.setDataTablesConfig(isIndependentWindow, 1);
+        } else {
+          this.setDataTablesConfig(isIndependentWindow, data.data.length);
+        }
+
+        /* console.log('ES ARRAY?', data.data[0].constructor === Array);
+        if(data.data[0].constructor === Array){
+          console.log('MULTITABLA');
+        } else {
+          console.log('TABLA SINGULAR');
+        } */
+        
         this.data = data.data;
         this.sortedData = [...this.data];
 
@@ -454,9 +470,10 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.chkOdomV = data.chkOdomV;
         this.repTitle = data.repTitle;
         this.period = data.period;
-        this.chkTableDropdown = data.chkTableDropdown;
         this.params = data.params;
-        this.prepareVehicleDropdown();
+        if(this.chkTableDropdown && !this.isSingleTableReport()){
+          this.prepareVehicleDropdown();
+        }
 
         //Check if this is the first time loading
         if(this.dtElement !== undefined && "dtInstance" in this.dtElement){
@@ -492,7 +509,13 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.report_data.rep_title = report_data.repTitle;
       this.report_data.rep_subtitle = report_data.repSubtitle;
 
-      this.setDataTablesConfig(isIndependentWindow);
+      this.chkTableDropdown = report_data.chkTableDropdown;
+
+      if(this.isSingleTableReport()){
+        this.setDataTablesConfig(isIndependentWindow, 1);
+      } else {
+        this.setDataTablesConfig(isIndependentWindow, report_data.data.length);
+      }
 
       this.data = report_data.data;
       this.sortedData = [...this.data];
@@ -502,9 +525,12 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.chkOdomV = report_data.chkOdomV;
       this.repTitle = report_data.repTitle;
       this.period = report_data.period;
-      this.chkTableDropdown = report_data.chkTableDropdown;
       this.params = report_data.params;
-      this.prepareVehicleDropdown();
+      
+      if(this.chkTableDropdown && !this.isSingleTableReport()){
+        this.prepareVehicleDropdown();
+      }
+      
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
       document.querySelector('body')!.style.padding = '0.8rem';
       this.titleService.setTitle(this.report_data.rep_title);
@@ -537,8 +563,23 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   }
 
-  setDataTablesConfig(isIndependentWindow: boolean){
+  setDataTablesConfig(isIndependentWindow: boolean, numberOfTables: number){
     let columnsConfig = this.columnsConfig.filter((report: any) => { return report.num_rep == this.report_data.num_rep })[0];
+    if(!isIndependentWindow){
+      if(this.chkTableDropdown){
+        this.dataTableStartingIndex = this.dataTableEndingIndex + 1;
+        this.dataTableEndingIndex = this.dataTableStartingIndex;
+      } else {
+        this.dataTableStartingIndex = this.dataTableEndingIndex + 1;
+        this.dataTableEndingIndex = this.dataTableStartingIndex + numberOfTables - 1;
+      }
+      console.log('datatble Starging Index ', this.dataTableStartingIndex);
+      console.log('datatble Ending Index ', this.dataTableEndingIndex);
+    } else {
+      this.dataTableStartingIndex = 0;
+      this.dataTableEndingIndex = this.dataTableStartingIndex + numberOfTables - 1;
+      console.log('datatble Indexes reiniciados en nueva pestaña: ', [this.dataTableStartingIndex, this.dataTableEndingIndex]);
+    }
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -555,6 +596,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         className: 'btn btn-success'
       }],
       initComplete: () => {
+        //console.log('InitComplete');
         this.dt_completed++;
         //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
         if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
@@ -580,51 +622,87 @@ export class ResultComponent implements OnDestroy, OnInit {
       destroy: true,
       "orderMulti": false,
       "fnDrawCallback": ( oSettings: any ) => {
-        console.log( 'DataTables has redrawn the table', oSettings );
-        /* console.log( 'Reporte: ', this.report_data ); 
-        console.log( 'Reporte: ', this.sortedData ); 
-        console.log( 'DataTables has redrawn the table ', oSettings.aaSorting ); 
-        console.log( 'DataTables Sorting Column index ', oSettings.aaSorting[0]['0'] ); //index de columna
-        console.log( 'DataTables Sorting Order ', oSettings.aaSorting[0]['1'] ); //'asc' o 'desc'
-        console.log( 'DataTables Sorting Order *integer* ', oSettings.aaSorting[0]['_idx'] ); // 0 si es asc, 1 si es desc */
-        let sortingColIndex = oSettings.aaSorting[0]['0'];
-        let sortingOrder = oSettings.aaSorting[0]['1'];
-        let reportExistInConfig = columnsConfig != undefined;
-        
-        if(sortingColIndex > 0 && reportExistInConfig){
-          let columnName = columnsConfig.headers[sortingColIndex - 1];
-          switch(this.report_data.num_rep){
-            case 'R008': //Reporte de Posicion
-              if(columnName == 'fecha'){
-                this.sortedData.sort((a: any, b: any) => { 
-                  return this.dateComparison(a[columnName], b[columnName], sortingOrder);
-                });
-              }
-              if(columnName == 'hora'){
-                this.sortedData.sort((a: any, b: any) => { 
-                  return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
-                });
-              }
-              if(columnName == 'ubicacion'){
-                this.sortedData.sort((a: any, b: any) => { 
-                  return this.normalComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
-                });
-              } else {
-                this.sortedData.sort((a: any, b: any) => { 
-                  return this.normalComparison(a[columnName], b[columnName], sortingOrder);
-                });
-              }
-              console.log(this.sortedData);
-              break; 
-            default:
-              break;
+        const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+        if(   isIndependentWindow 
+          ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+          let sortedDataTableIndex = -1; 
+          //console.log( 'DataTables has redrawn the table', oSettings );
+          if(this.isSingleTableReport()){
+            console.log( 'DataTables has redrawn (Single Table). Table info: ', {
+              tableName: oSettings.sTableId,
+              amountOfRows: this.sortedData.length,
+              rowsOfSortedTable: this.sortedData,
+            } );
+          } else {
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+            console.log( 'DataTables has redrawn. Table info: ', {
+              tableName: oSettings.sTableId,
+              indexOfDataTable: sortedDataTableIndex,
+              amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+              rowsOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+              dataOfSortedTable: this.sortedData[sortedDataTableIndex],
+            } );
           }
+          /* console.log( 'Reporte: ', this.report_data ); 
+          console.log( 'Reporte: ', this.sortedData ); 
+          console.log( 'DataTables has redrawn the table ', oSettings.aaSorting ); 
+          console.log( 'DataTables Sorting Column index ', oSettings.aaSorting[0]['0'] ); //index de columna
+          console.log( 'DataTables Sorting Order ', oSettings.aaSorting[0]['1'] ); //'asc' o 'desc'
+          console.log( 'DataTables Sorting Order *integer* ', oSettings.aaSorting[0]['_idx'] ); // 0 si es asc, 1 si es desc */
+          let sortingColIndex = oSettings.aaSorting[0]['0'];
+          let sortingOrder = oSettings.aaSorting[0]['1'];
+          let reportExistInConfig = columnsConfig != undefined;
+          
+          if(sortingColIndex > 0 && reportExistInConfig){
+            let columnName = columnsConfig.headers[sortingColIndex - 1];
+            switch(this.report_data.num_rep){
+              case 'R008': //Reporte de Posicion
+                if(columnName == 'fecha'){
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.dateComparison(a[columnName], b[columnName], sortingOrder);
+                  });
+                }
+                if(columnName == 'hora'){
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                  });
+                }
+                if(columnName == 'ubicacion'){
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.normalComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                  });
+                } else {
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.normalComparison(a[columnName], b[columnName], sortingOrder);
+                  });
+                }
+                console.log(this.sortedData);
+                break; 
+              default:
+                break;
+            }
+          }
+
+        } else {
+          console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          /* console.log( 'DataTables has NOT BEEN redrawn. Table info: ', {
+            tableName: oSettings.sTableId,
+            tableNumber: dataTableIndex,
+            indexOfDataTable: sortedDataTableIndex,
+            amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+            rowsOfSortedTable: this.sortedData[sortedDataTableIndex],
+            dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+          } ); */
         }
+        
       },
     };
 
-    if(this.isSingleTable()){
-      this.dtOptions.columnDefs = columnsConfig.colDefs;
+    if(this.isSingleTableReport()){
+      //this.dtOptions.columnDefs = columnsConfig.colDefs;
+      if(this.report_data.num_rep == 'R008'){
+        this.dtOptions.columnDefs = columnsConfig.colDefs;
+      }
       //console.log('dtOptions: ', this.dtOptions);
     }
     
@@ -700,38 +778,37 @@ export class ResultComponent implements OnDestroy, OnInit {
     return 0;
   }
 
-  isSingleTable(){
+  isSingleTableReport(){
     return this.singleTableReportIDs.indexOf(this.report_data.num_rep) >= 0;
   }
 
   prepareVehicleDropdown(){
-    if(!this.isSingleTable()){
-      this.reportTableVehicleDropdownOptions = [];
-      for(let i = 0; i < this.data.length; i++){
-        if( this.data[i][1].length == 0 ){
-          //Si la tabla del vehiculo no tiene filas
-          this.reportTableVehicleDropdownOptions.push({
-            name: this.data[i][0][1],
-            dataSize: ' (Sin registros)',
-            index: i,
-          });
-        } else {
-          //Si la tabla del vehiculo SÍ tiene filas
-          this.reportTableVehicleDropdownOptions.push({
-            name: this.data[i][0][1],
-            dataSize: (this.data[i][1].length == 1? ' (1 registro)': (' (' + this.data[i][1].length +' registros)')),
-            index: i,
-          });
-        }
-      }
-      if(this.reportTableVehicleDropdownOptions.length > 0){
-        this.reportTableVehicleSelected = this.reportTableVehicleDropdownOptions[0];
-        console.log(this.reportTableVehicleDropdownOptions);
-        this.renderDataTable();
+    this.reportTableVehicleDropdownOptions = [];
+    for(let i = 0; i < this.data.length; i++){
+      if( this.data[i][1].length == 0 ){
+        //Si la tabla del vehiculo no tiene filas
+        this.reportTableVehicleDropdownOptions.push({
+          name: this.data[i][0][1],
+          dataSize: ' (Sin registros)',
+          index: i,
+        });
       } else {
-        console.log('Sin resultados que mostrar');
+        //Si la tabla del vehiculo SÍ tiene filas
+        this.reportTableVehicleDropdownOptions.push({
+          name: this.data[i][0][1],
+          dataSize: (this.data[i][1].length == 1? ' (1 registro)': (' (' + this.data[i][1].length +' registros)')),
+          index: i,
+        });
       }
     }
+    if(this.reportTableVehicleDropdownOptions.length > 0){
+      this.reportTableVehicleSelected = this.reportTableVehicleDropdownOptions[0];
+      console.log(this.reportTableVehicleDropdownOptions);
+      this.renderDataTable();
+    } else {
+      console.log('Sin resultados que mostrar');
+    }
+    console.log('Vehicle Dropdown Options Ready:', this.reportTableVehicleDropdownOptions);
 
   }
 
