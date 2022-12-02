@@ -1,5 +1,5 @@
 import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 
 import Swal from 'sweetalert2';
 import { GeofencesService } from '../../services/geofences.service';
@@ -9,6 +9,9 @@ import { GeofencesService } from '../../services/geofences.service';
 import { MapServicesService } from '../../../map/services/map-services.service';
 
 import * as L from 'leaflet';
+
+import 'leaflet-editable';
+import 'leaflet-path-drag';
 
 import 'leaflet-measure-path'
 import 'leaflet-measure-path/leaflet-measure-path.css';
@@ -173,13 +176,13 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
       //console.log(this.mapService.map.getCenter().lat);
 
-      var centro = [this.mapService.map.getCenter().lat , this.mapService.map.getCenter().lng];
+      // var centro = [this.mapService.map.getCenter().lat , this.mapService.map.getCenter().lng];
 
-      var ne = [this.mapService.map.getBounds().getNorthEast().lat, this.mapService.map.getBounds().getNorthEast().lng];
-      var no = [this.mapService.map.getBounds().getNorthWest().lat, this.mapService.map.getBounds().getNorthWest().lng];
+      // var ne = [this.mapService.map.getBounds().getNorthEast().lat, this.mapService.map.getBounds().getNorthEast().lng];
+      // var no = [this.mapService.map.getBounds().getNorthWest().lat, this.mapService.map.getBounds().getNorthWest().lng];
 
-      var se = [this.mapService.map.getBounds().getSouthEast().lat, this.mapService.map.getBounds().getSouthEast().lng];
-      var so = [this.mapService.map.getBounds().getSouthWest().lat, this.mapService.map.getBounds().getSouthWest().lng];
+      // var se = [this.mapService.map.getBounds().getSouthEast().lat, this.mapService.map.getBounds().getSouthEast().lng];
+      // var so = [this.mapService.map.getBounds().getSouthWest().lat, this.mapService.map.getBounds().getSouthWest().lng];
 
 
       //console.log(this.mapService.map.getBounds());
@@ -197,26 +200,32 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
       //console.log(this.getLatLngCenter([ [2,2] ,[5,5]]));
       //console.log(this.getLatLngCenter([ ne ,centro ]));
-      var ng1 = [this.getLatLngCenter([ ne ,centro ])[0] , this.getLatLngCenter([ ne ,centro ])[1]];
+      // var ng1 = [this.getLatLngCenter([ ne ,centro ])[0] , this.getLatLngCenter([ ne ,centro ])[1]];
       //console.log(ne);
       //console.log(centro);
 
-      this.poligonAdd = new L.Polygon( [
-        [this.getLatLngCenter([ ne ,centro ])[0],this.getLatLngCenter([ ne ,centro ])[1]],
-        [this.getLatLngCenter([ no ,centro ])[0],this.getLatLngCenter([ no ,centro ])[1]],
-        [this.getLatLngCenter([ so ,centro ])[0],this.getLatLngCenter([ so ,centro ])[1]],
-        [this.getLatLngCenter([ se ,centro ])[0],this.getLatLngCenter([ se ,centro ])[1]],
-      ], {
-        weight: 3,
-        fill: true,
-        color: '#000000'
-      }).addTo(this.mapService.map);
+      // this.poligonAdd = new L.Polygon( [
+      //   [this.getLatLngCenter([ ne ,centro ])[0],this.getLatLngCenter([ ne ,centro ])[1]],
+      //   [this.getLatLngCenter([ no ,centro ])[0],this.getLatLngCenter([ no ,centro ])[1]],
+      //   [this.getLatLngCenter([ so ,centro ])[0],this.getLatLngCenter([ so ,centro ])[1]],
+      //   [this.getLatLngCenter([ se ,centro ])[0],this.getLatLngCenter([ se ,centro ])[1]],
+      // ], {
+      //   weight: 3,
+      //   fill: true,
+      //   color: '#000000'
+      // }).addTo(this.mapService.map);
+
+      this.poligonAdd = this.mapService.map.editTools.startPolygon();
 
       this.changeGeoColor(this.form.id);
 
       this.poligonAdd.editing.enable();
 
     }
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    this.mapService.map.editTools.stopDrawing();
   }
 
   getLatLngCenter(latLngInDegr:any) {
@@ -636,91 +645,108 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     } else {
 
-      this.poligonAdd.editing.disable();
-      this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
+      if(this.poligonAdd._latlngs[0].length != 0){
 
-      this.geofencesService.store(this.form).then( (res1) => {
-        //console.log("---clickGuardar NUEVO----");
-        //console.log(res1);
+        this.poligonAdd.editing.disable();
+        this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
 
-        this.geofencesService.nombreComponente =  "LISTAR";
+        this.geofencesService.store(this.form).then( (res1) => {
+          //console.log("---clickGuardar NUEVO----");
+          //console.log(res1);
 
-        let gNew = res1[2];
-        let gNew2 = res1[3][0];
-        // var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
+          this.geofencesService.nombreComponente =  "LISTAR";
 
-        // geo.merge(res1[2]);
-        // geo = Object.assign(geo, res1[2]);
-        var geo:any = {};
-        geo.id = gNew.id;
+          let gNew = res1[2];
+          let gNew2 = res1[3][0];
+          // var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
 
-        geo.descripcion = gNew.descripcion;
-        geo.orden = gNew.nombre_zona;
-        geo.vel2_zona = gNew.vel2_zona;
-        geo.vel3_zona = gNew.vel3_zona;
-        geo.vel_act_zona = gNew.vel_act_zona;
-        geo.vel_max = gNew.vel_max;
-        geo.vel_zona = gNew.vel_zona;
-        geo.zone_cat = gNew.categoria_zona;
-        geo.zone_color = gNew.color_zona;
-        geo.zone_name = gNew.nombre_zona;
-        geo.zone_name_visible = gNew.nombre_visible_zona;
-        geo.zone_name_visible_bol = (geo.zone_name_visible === 'true');
-        // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
-        geo.zone_visible = gNew.visible_zona;
+          // geo.merge(res1[2]);
+          // geo = Object.assign(geo, res1[2]);
+          var geo:any = {};
+          geo.id = gNew.id;
 
-        geo.tag_name_color = gNew.tag_name_color;
-        geo.tag_name_font_size = gNew.tag_name_font_size;
+          geo.descripcion = gNew.descripcion;
+          geo.orden = gNew.nombre_zona;
+          geo.vel2_zona = gNew.vel2_zona;
+          geo.vel3_zona = gNew.vel3_zona;
+          geo.vel_act_zona = gNew.vel_act_zona;
+          geo.vel_max = gNew.vel_max;
+          geo.vel_zona = gNew.vel_zona;
+          geo.zone_cat = gNew.categoria_zona;
+          geo.zone_color = gNew.color_zona;
+          geo.zone_name = gNew.nombre_zona;
+          geo.zone_name_visible = gNew.nombre_visible_zona;
+          geo.zone_name_visible_bol = (geo.zone_name_visible === 'true');
+          // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
+          geo.zone_visible = gNew.visible_zona;
 
-        geo.geo_coordenadas = gNew2.geo_coordenadas;
+          geo.tag_name_color = gNew.tag_name_color;
+          geo.tag_name_font_size = gNew.tag_name_font_size;
 
-        //console.log(geo);
+          geo.geo_coordenadas = gNew2.geo_coordenadas;
 
-        this.mapService.map.removeLayer(this.poligonAdd);
-        geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(gNew2.geo_coordenadas).coordinates[0] ), {
-          weight: 3,
-          fill: true,
-          color: geo.zone_color //'#000000'
-        }).addTo(this.mapService.map);
+          //console.log(geo);
 
-        this.geofencesService.bindMouseEvents(geo);
+          this.mapService.map.removeLayer(this.poligonAdd);
+          geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(gNew2.geo_coordenadas).coordinates[0] ), {
+            weight: 3,
+            fill: true,
+            color: geo.zone_color //'#000000'
+          }).addTo(this.mapService.map);
 
-        var centerPoligon = geo.geo_elemento.getBounds().getCenter();
+          this.geofencesService.bindMouseEvents(geo);
 
-        let bg_color = this.geofencesService.tooltipBackgroundTransparent? this.geofencesService.defaultTagNameBackground: this.mapService.hexToRGBA(geo.zone_color);
-        let txt_color = this.geofencesService.tooltipBackgroundTransparent? (geo.tag_name_color == ''? this.geofencesService.defaultTagNameColor: geo.tag_name_color): this.mapService.hexToRGBA(geo.zone_color);
-        let font_size = (geo.tag_name_font_size == 0? this.geofencesService.defaultTagNameFontSize: geo.tag_name_font_size) + 'px';
+          var centerPoligon = geo.geo_elemento.getBounds().getCenter();
 
-        geo.marker_name = L.circleMarker(centerPoligon, {
-          // pane: 'markers1',
-          "radius": 0,
-          "fillColor": "#000",//color,
-          "fillOpacity": 1,
-          "color": "#000",//color,
-          "weight": 1,
-          "opacity": 1
+          let bg_color = this.geofencesService.tooltipBackgroundTransparent? this.geofencesService.defaultTagNameBackground: this.mapService.hexToRGBA(geo.zone_color);
+          let txt_color = this.geofencesService.tooltipBackgroundTransparent? (geo.tag_name_color == ''? this.geofencesService.defaultTagNameColor: geo.tag_name_color): this.mapService.hexToRGBA(geo.zone_color);
+          let font_size = (geo.tag_name_font_size == 0? this.geofencesService.defaultTagNameFontSize: geo.tag_name_font_size) + 'px';
 
-        }).bindTooltip(
-            // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-            // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
-            '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: '+ font_size  +'">'+geo.zone_name+'</b>',
-            { permanent: true,
-              // offset: [-100, 0],
-              direction: 'center',
-              className: 'leaflet-tooltip-own',
-            });
+          geo.marker_name = L.circleMarker(centerPoligon, {
+            // pane: 'markers1',
+            "radius": 0,
+            "fillColor": "#000",//color,
+            "fillOpacity": 1,
+            "color": "#000",//color,
+            "weight": 1,
+            "opacity": 1
 
-        geo.marker_name.addTo(this.mapService.map);
+          }).bindTooltip(
+              // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
+              // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
+              '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: '+ font_size  +'">'+geo.zone_name+'</b>',
+              { permanent: true,
+                // offset: [-100, 0],
+                direction: 'center',
+                className: 'leaflet-tooltip-own',
+              });
 
-        this.geofencesService.geofences.push(geo);
+          geo.marker_name.addTo(this.mapService.map);
+
+          this.geofencesService.geofences.push(geo);
+          this.spinner.hide('spinnerLoading');
+          this.geofencesService.initializeTable(geo.id);
+          this.geofencesService.updateGeoCounters();
+          this.geofencesService.updateGeoTagCounters();
+          this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
+          this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
+
+        });
+      }else{
+
         this.spinner.hide('spinnerLoading');
-        this.geofencesService.initializeTable(geo.id);
-        this.geofencesService.updateGeoCounters();
-        this.geofencesService.updateGeoTagCounters();
-        this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
-        this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
 
-      });
+        this.poligonAdd = this.mapService.map.editTools.startPolygon();
+        this.changeGeoColor(this.form.id);
+        this.poligonAdd.editing.enable();
+
+        Swal.fire({
+          title: 'Error',
+          text: 'La geocerca no puede quedar vacía.',
+          icon: 'warning',
+        });
+        return;
+      }
     }
 
     //Despues de agregar o editar, ordena el array de geocercas por el atributo orden(nombre de la geocerca en mayuscula)

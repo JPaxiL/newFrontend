@@ -1,11 +1,14 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
+import 'leaflet-editable';
+import 'leaflet-path-drag';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 import { MapService } from '../../../vehicles/services/map.service';
 import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
 import { GeopointsService } from '../../../geopoints/services/geopoints.service';
+import { CircularGeofencesService } from 'src/app/geofences/services/circular-geofences.service';
 
 declare var $: any;
 
@@ -21,6 +24,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private mapService: MapService,
+    private circularGeofencesService: CircularGeofencesService,
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService
@@ -34,6 +38,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     //$("#panelMonitoreo").hide( "slow" )
     await this.geofencesService.initialize();
     await this.geopointsService.initialize();
+    this.circularGeofencesService.initialize();
 
     this.setLayers();
 
@@ -79,6 +84,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
       center: [parcThabor.lat, parcThabor.lng],
       zoom: zoomLevel,
       maxZoom: 18,
+      editable: true
     });
 
     // if(mainLayer.addTo(this.map)){
@@ -89,7 +95,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   setLayers() {
     this.mapServicesService.setLayers(
       this.geofencesService.getData(),
-      this.geopointsService.getData()
+      this.geopointsService.getData(),
+      this.circularGeofencesService.getData()
     );
   }
 

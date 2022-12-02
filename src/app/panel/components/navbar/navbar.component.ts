@@ -54,8 +54,13 @@ export class NavbarComponent implements OnInit {
       console.log('(Navbar) User Data está listo. Subscribiendo para obtener data...');
       this.getUserData();
     }
+
+    $('[data-bs-toggle="tooltip"]').click(function(){
+      $('[data-bs-toggle="tooltip"]').tooltip('hide');
+    });
     
   }
+  
 
   getUserData(){
     this.userName = this.userDataService.userData.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();

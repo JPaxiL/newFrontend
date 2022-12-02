@@ -1,5 +1,6 @@
 import { Component, AfterViewInit,Input } from '@angular/core';
 import * as L from 'leaflet';
+import { CircularGeofencesService } from 'src/app/geofences/services/circular-geofences.service';
 import { MapService } from '../../services/map.service';
 
 interface Data {
@@ -15,7 +16,8 @@ interface Data {
 })
 export class AuditmapComponent implements AfterViewInit {
 
-  constructor(private mapService:MapService) { }
+  constructor(private mapService:MapService,
+              private circularGeofencesService: CircularGeofencesService) { }
 
   private map :any;
   @Input() ip: string = "";
@@ -47,21 +49,21 @@ export class AuditmapComponent implements AfterViewInit {
 
     iconSize:     [18, 23], 
     iconAnchor:   [18, 23], 
-});
+  });
 
-private Marker_old = L.icon({
-  iconUrl: '/assets/images/marker_old.png',
+  private Marker_old = L.icon({
+    iconUrl: '/assets/images/marker_old.png',
 
-  iconSize:     [18, 23], 
-  iconAnchor:   [18, 23], 
-});
+    iconSize:     [18, 23], 
+    iconAnchor:   [18, 23], 
+  });
 
-private Marker_new = L.icon({
-  iconUrl: '/assets/images/marker_new.png',
+  private Marker_new = L.icon({
+    iconUrl: '/assets/images/marker_new.png',
 
-  iconSize:     [18, 23], 
-  iconAnchor:   [18, 23], 
-});
+    iconSize:     [18, 23], 
+    iconAnchor:   [18, 23], 
+  });
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -144,13 +146,51 @@ private Marker_new = L.icon({
   
           var polygon = L.polygon(this.latlngs, {color: 'green'}).addTo(this.layerGroup);
           this.map.fitBounds(polygon.getBounds());
+
+        }
+
+      }
+    
+    }
+
+    if(data.subject_type == 'CircularZone'){
+
+      this.latlngs = [];
+      
+      if(data.properties){
+        this.properties = JSON.parse(data.properties);
+
+        console.log(this.properties);
+
+        if(this.properties.old){
+
+          var circle = new L.Circle( this.circularGeofencesService.getCoordenadas(this.properties.old.geo_coordenadas), {
+            radius: this.circularGeofencesService.getRadius(this.properties.old.geo_coordenadas),
+            weight: 3,
+            fill: this.properties.old.bol_sin_relleno,
+            color: 'red',
+          }).addTo(this.layerGroup);
+        }
+
+        this.latlngs = [];
+
+        if(this.properties.attributes){
+
+          var circle = new L.Circle( this.circularGeofencesService.getCoordenadas(this.properties.attributes.geo_coordenadas), {
+            radius: this.circularGeofencesService.getRadius(this.properties.attributes.geo_coordenadas),
+            weight: 3,
+            fill: this.properties.attributes.bol_sin_relleno,
+            color: 'green',
+          }).addTo(this.layerGroup);
+
+          this.map.panTo(new L.LatLng(circle.getLatLng().lat,circle.getLatLng().lng));
+          
         }
 
       
+      }
+    
     }
-  }
-
-
   }
 
 }
