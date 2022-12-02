@@ -21,6 +21,7 @@ export class PanelService {
     { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Seguridad Vehicular"},
     { id:'GEOFENCES', name:"Geocercas"},
+    { id:'CIRCULAR-GEOFENCE', name:"Circular Geofences"},
     { id:'EVENT-USER', name:'Eventos'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
     { id:'DASHBOARD', name: 'Dashboard'},
@@ -37,7 +38,12 @@ export class PanelService {
   constructor(private http: HttpClient) { }
 
   clickShowPanel( nomComponent:string ){
+    
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
+
+      console.log(nomComponent);
+      console.log(this.nombreComponente );
+      
       $("#panelMonitoreo").hide( "slow" );
       this.nombreComponente = '';
     } else {
@@ -68,6 +74,8 @@ export class PanelService {
         return 'alertas';
       case "GEOFENCES":
         return 'geocercas';
+      case "CIRCULAR-GEOFENCE":
+        return 'circular-geofences';
       case "GEOPOINTS":
         return 'geopuntos';
       case "HISTORIAL":

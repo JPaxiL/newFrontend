@@ -22,6 +22,8 @@ export class AuditInfoActivityComponent implements OnChanges {
   nombre_visible_punto: boolean = false;
   visible_punto: boolean = false;
   vel_act_zona: boolean = false;
+  bol_limite_velocidad_activo: boolean = false;
+  relleno: boolean = false;
   activo: boolean = false;
   notificacion_email: boolean = false;
   alerta_sistema: boolean = false;
@@ -45,8 +47,27 @@ export class AuditInfoActivityComponent implements OnChanges {
     private spinner: NgxSpinnerService) { 
       
     }
+  setValues() {
+
+    this.nombre_visible_punto = false;
+    this.visible_punto = false;
+    this.vel_act_zona = false;
+    this.bol_limite_velocidad_activo = false;
+    this.relleno = false;
+    this.activo = false;
+    this.notificacion_email = false;
+    this.alerta_sistema = false;
+    this.bol_fijar_tiempo = false;
+    this.bol_fijar_velocidad = false;
+    this.placas_vehiculos = '';
+    this.nombres_geocercas = '';
+    this.nombres_puntos = '';
+    this.nombreConductor = '';
+  }
 
   ngOnChanges() {
+
+    this.setValues();
 
     this.placas_vehiculos = '';
     this.nombres_geocercas = '';
@@ -69,6 +90,14 @@ export class AuditInfoActivityComponent implements OnChanges {
     if(resultado.vel_act_zona){
 
       this.vel_act_zona = (resultado.vel_act_zona.toString().trim() === 'true');
+    }
+    if(resultado.bol_limite_velocidad_activo){
+
+      this.bol_limite_velocidad_activo = (resultado.bol_limite_velocidad_activo.toString().trim() === 'true');
+    }
+    if(resultado.bol_sin_relleno){
+
+      this.relleno = (resultado.bol_sin_relleno.toString().trim() === 'true');
     }
     if(resultado.activo){
 
@@ -201,5 +230,6 @@ export class AuditInfoActivityComponent implements OnChanges {
     }, this.TIMER);
   }
 
+  
 
 }

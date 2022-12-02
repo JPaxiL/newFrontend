@@ -249,13 +249,79 @@
 
 </div>
 
+<div *ngIf="subject_type == 'CircularZone'" >
+    <div class="d-flex">
+          <b>NOMBRE:</b><div style="margin-left: 0.5rem;">{{properties['var_nombre']}}</div>
+    </div>
+
+    <div class="d-flex">
+        <b>AREA:</b><div style="margin-left: 0.5rem;">{{properties['dbl_area'] | number:'.0-2'}} km2</div>
+    </div>
+
+    <div class="d-flex">
+        <b>RADIO:</b><div style="margin-left: 0.5rem;">{{properties['dbl_radio'] | number:'.0-2'}} km</div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">RELLENO:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="relleno" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="d-flex">
+          <b>COLOR DE GEOCERCA:</b><div style="margin-left: 0.5rem;">
+            <svg width="20" height="20">
+            <rect width="20" height="20" style="stroke-width:3;" [ngStyle]="{'fill': properties['var_color'], 'stroke':properties['var_color']}"/>
+            </svg>
+          </div>
+    </div>
+
+    <div class="d-flex">
+        <b>COLOR DE TEXTO:</b><div style="margin-left: 0.5rem;">
+          <svg width="20" height="20">
+          <rect width="20" height="20" style="stroke-width:3;" [ngStyle]="{'fill': properties['tag_name_color'], 'stroke':properties['tag_name_color']}"/>
+          </svg>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b>TAMAÑO DE TEXTO:</b><div style="margin-left: 0.5rem;">{{properties['tag_name_font_size']}}px</div>
+    </div>
+
+    <div class="d-flex">
+        <b class="form-check-label">VELOCIDAD:</b>
+        <div style="margin-left: 0.5rem;">
+          <p-checkbox name="groupname" [binary]="true" [(ngModel)]="bol_limite_velocidad_activo" [readonly]="true"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <b>LÍMITE DE VELOCIDAD:</b><div style="margin-left: 0.5rem;">{{properties['int_limite_velocidad_0']}} km/h</div>
+    </div>
+
+    <div class="d-flex">
+        <b>TOLERABLE:</b><div style="margin-left: 0.5rem;">{{properties['int_limite_velocidad_1']}} km/h</div>
+    </div>
+
+    <div class="d-flex">
+        <b>GRAVE:</b><div style="margin-left: 0.5rem;">{{properties['int_limite_velocidad_2']}} km/h</div>
+    </div>
+
+    <div class="d-flex">
+        <b>MUY GRAVE:</b><div style="margin-left: 0.5rem;">{{properties['int_limite_velocidad_3']}} km/h</div>
+    </div>
+
+</div>
+
 <div *ngIf="subject_type != 'Point' && 
             subject_type != 'Zone' && 
             subject_type != 'EventUser' && 
             subject_type != 'UserConfig' && 
             subject_type != 'UserDetail' &&
             subject_type != 'GroupConvoy' &&
-            subject_type != 'UserTracker'
+            subject_type != 'UserTracker' &&
+            subject_type != 'CircularZone'
             ">
 
     <div *ngFor="let item of properties | keyvalue" style="word-wrap: break-word;"><b [ngStyle]="{'color': color}">{{item.key}}</b>: {{(item.value !== null) ? (item.value) : "-"}}</div>

@@ -133,6 +133,9 @@
   #panelMonitoreo.geocercas > .card > div.component-containers {
     height: calc(100% - var(--pm-geocercas-header-height));
   }
+  #panelMonitoreo.circular-geofences > .card > div.component-containers {
+    height: calc(100% - var(--pm-circular-geofences-header-height));
+  }
   #panelMonitoreo.geopuntos > .card > div.component-containers {
     height: calc(100% - var(--pm-geopuntos-header-height));
   }
