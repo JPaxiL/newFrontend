@@ -63,6 +63,8 @@ export interface ReportData{
 export class ResultComponent implements OnDestroy, OnInit {
   @ViewChild(DataTableDirective)
   dtElement!: DataTableDirective;
+  currentActiveTables: string[] = []; 
+  directSorting: boolean = true;
 
   dtOptions: any = {};
   dtOptions2: any = {};
@@ -577,6 +579,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
   setDataTablesConfig(isIndependentWindow: boolean, numberOfTables: number){
+    this.currentActiveTables = [];
     this.dtTableCurrentOrder = [[0, 'asc']];
     let columnsConfig = this.columnsConfig.filter((report: any) => { return report.num_rep == this.report_data.num_rep })[0];
 
@@ -613,8 +616,16 @@ export class ResultComponent implements OnDestroy, OnInit {
         text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
         className: 'btn btn-success'
       }],
-      initComplete: () => {
-        console.log('InitComplete', this.dtOptions.order);
+      initComplete: ( oSettings: any ) => {
+        if(this.chkTableDropdown){
+          console.log('InitComplete, with order: ', this.dtOptions.order);
+        } else {
+          console.log('InitComplete');
+        }
+        if(!this.chkTableDropdown && this.currentActiveTables.indexOf(oSettings.sTableId) < 0){
+          console.log('Adding sTableId to the array', oSettings.sTableId);
+          this.currentActiveTables.push(oSettings.sTableId);
+        }
         this.dt_completed++;
         //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
         if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
@@ -714,62 +725,142 @@ export class ResultComponent implements OnDestroy, OnInit {
                 console.log('Sorting Column...', columnName);
                 switch(columnName){
                   case 'fecha_ini':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
+                      });
+                    }
                     break;
                   case 'hora_ini':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                      });
+                    }
                     break;
                   case 'fecha_fin':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
+                      });
+                    }
                     break;
                   case 'hora_fin':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
+                      });
+                    }
                     break;
                   case 'duracion':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      return this.intervalComparison(a[columnName], b[columnName], sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                      });
+                    }
                     break;
                   case 'recorrido': 
                   case 'maxima_velocidad': 
                   case 'vel_max_can':
                   case 'vel_promedio':
                   case 'vel_prom_can':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
-                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
-                      return this.numericComparison(term1, term2, sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                          let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                          return this.numericComparison(term1, term2, sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
                     break;
                   case 'pCercano':
                   case 'referencia':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = a.esInt == 1? '---': a[columnName]; 
-                      let term2 = b.esInt == 1? '---': b[columnName]; 
-                      console.log('refs', [term1, term2]);
-                      console.log('refs result', this.textComparison(term1, term2, sortingOrder));
-                      return this.textComparison(term1, term2, sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          let term1 = a.esInt == 1? '---': a[columnName]; 
+                          let term2 = b.esInt == 1? '---': b[columnName]; 
+                          console.log('refs', [term1, term2]);
+                          console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                          return this.textComparison(term1, term2, sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': a[columnName]; 
+                        let term2 = b.esInt == 1? '---': b[columnName]; 
+                        console.log('refs', [term1, term2]);
+                        console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
                     break;
                   case 'ubicacion':
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
-                      let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
-                      return this.textComparison(term1, term2, sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                          let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                          return this.textComparison(term1, term2, sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
                     break;
                   default:
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
-                    });
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
                     break;
                 }
                 console.log(this.sortedData[sortedDataTableIndex][1]);
@@ -800,6 +891,19 @@ export class ResultComponent implements OnDestroy, OnInit {
               default:
                 break;
             }
+          }
+
+          if(this.directSorting){
+            this.directSorting = false;
+            for(let i = 0; i < this.currentActiveTables.length; i++){
+              if(this.currentActiveTables[i] != oSettings.sTableId){
+                if(!this.chkTableDropdown){
+                  console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                  $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                }
+              }
+            }
+            this.directSorting = true;
           }
 
         } else {
@@ -893,7 +997,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
       buttons: [{
         extend: 'excel',
-        text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
+        text: '<i class="fa fa-file-excel-o" aria-hidden="true"click></i> Exportar a Excel',
         className: 'btn btn-success'
       }],
       initComplete: () => {
@@ -968,24 +1072,6 @@ export class ResultComponent implements OnDestroy, OnInit {
       if(intervalArr[i + 1] == 's'){ intervalValue = intervalValue + parseInt(intervalArr[i]) }
     }
     return intervalValue;
-  }
-
-  intervalComparison(dur1: string, dur2: string, order: string){
-    let dur1Int = this.intervalToSeconds(dur1);
-    let dur2Int = this.intervalToSeconds(dur2);
-
-    if(order == 'asc'){
-      if(dur1Int < dur2Int){ return -1; };
-      if(dur1Int > dur2Int){ return 1; };
-      return 0;
-    }
-    if(order == 'desc'){
-      if(dur1Int < dur2Int){ return 1; };
-      if(dur1Int > dur2Int){ return -1; };
-      return 0;
-    }
-    console.log(`Expecting order asc or desc (date), got: `, order);
-    return 0;
   }
 
   numericComparison(num1: number, num2: number, order: string){
