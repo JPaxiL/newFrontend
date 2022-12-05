@@ -59,6 +59,9 @@ export class NavbarComponent implements OnInit {
       $('[data-bs-toggle="tooltip"]').tooltip('hide');
     });
     
+    $('.dropdown-menu li').hover(() =>{
+      $(".tooltip").css("display", "none");
+    });
   }
   
 

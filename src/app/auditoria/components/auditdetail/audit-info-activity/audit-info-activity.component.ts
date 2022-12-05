@@ -22,7 +22,7 @@ export class AuditInfoActivityComponent implements OnChanges {
   nombre_visible_punto: boolean = false;
   visible_punto: boolean = false;
   vel_act_zona: boolean = false;
-  bol_limite_velocidad_activo: boolean = false;
+  // bol_limite_velocidad_activo: boolean = false;
   relleno: boolean = false;
   activo: boolean = false;
   notificacion_email: boolean = false;
@@ -52,7 +52,7 @@ export class AuditInfoActivityComponent implements OnChanges {
     this.nombre_visible_punto = false;
     this.visible_punto = false;
     this.vel_act_zona = false;
-    this.bol_limite_velocidad_activo = false;
+    // this.bol_limite_velocidad_activo = false;
     this.relleno = false;
     this.activo = false;
     this.notificacion_email = false;
@@ -91,10 +91,10 @@ export class AuditInfoActivityComponent implements OnChanges {
 
       this.vel_act_zona = (resultado.vel_act_zona.toString().trim() === 'true');
     }
-    if(resultado.bol_limite_velocidad_activo){
+    // if(resultado.bol_limite_velocidad_activo){
 
-      this.bol_limite_velocidad_activo = (resultado.bol_limite_velocidad_activo.toString().trim() === 'true');
-    }
+    //   this.bol_limite_velocidad_activo = (resultado.bol_limite_velocidad_activo.toString().trim() === 'true');
+    // }
     if(resultado.bol_sin_relleno){
 
       this.relleno = (resultado.bol_sin_relleno.toString().trim() === 'true');
