@@ -650,7 +650,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       },
       destroy: true,
       "orderMulti": false,
-      "fnDrawCallback": ( oSettings: any ) => {
+      /* "fnDrawCallback": ( oSettings: any ) => {
         if(this.chkTableDropdown){
           this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
           this.dtOptions.order = this.dtTableCurrentOrder;
@@ -908,18 +908,351 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         } else {
           console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
-          /* console.log( 'DataTables has NOT BEEN redrawn. Table info: ', {
-            tableName: oSettings.sTableId,
-            tableNumber: dataTableIndex,
-            indexOfDataTable: sortedDataTableIndex,
-            amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
-            rowsOfSortedTable: this.sortedData[sortedDataTableIndex],
-            dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
-          } ); */
+          //console.log( 'DataTables has NOT BEEN redrawn. Table info: ', {
+          //  tableName: oSettings.sTableId,
+          //  tableNumber: dataTableIndex,
+          //  indexOfDataTable: sortedDataTableIndex,
+          //  amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+          //  rowsOfSortedTable: this.sortedData[sortedDataTableIndex],
+          //  dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+          //} );
         }
         
-      },
+      }, */
     };
+
+    //Config de drawCallback
+    switch(this.report_data.num_rep){
+      case 'R001': //REPORTE DE PARADAS Y MOVIMIENTOS
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+            //console.log( 'DataTables has redrawn the table', oSettings );
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            /* console.log( 'DataTables has redrawn. Table info: ', {
+              tableName: oSettings.sTableId,
+              indexOfDataTable: sortedDataTableIndex,
+              amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+              rowsOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+              dataOfSortedTable: this.sortedData[sortedDataTableIndex],
+            } ); */
+            /* console.log( 'DataTables Sorting: ', {
+              columnIndex: oSettings.aaSorting[0]['0'],
+              strAscDesc: oSettings.aaSorting[0]['1'],
+              intAscDesc: oSettings.aaSorting[0]['_idx'],
+              object: oSettings.aaSorting,
+            } );  */
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              if(this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
+                //Dejamos los headers tal cual
+              }
+              //Solo Movimientos
+              if(!this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
+                console.log('Eliminar Solo Movimientos');
+                for(let i = 0; i < tableHeaders.length; i++){
+                  if( tableHeaders[i] == 'ubicacion' || 
+                      tableHeaders[i] == 'pCercano' || 
+                      tableHeaders[i] == 'referencia'){
+                    tableHeaders.splice(i, 1);
+                    i--;
+                  }
+                }
+              }
+              //Solo Paradas
+              if(this.sortedData[sortedDataTableIndex][2].Paradas && !this.sortedData[sortedDataTableIndex][2].Movimientos){
+                console.log('Eliminar Solo Paradas');
+                for(let i = 0; i < tableHeaders.length; i++){
+                  if( tableHeaders[i] == 'recorrido' || 
+                      tableHeaders[i] == 'maxima_velocidad' || 
+                      tableHeaders[i] == 'vel_max_can' || 
+                      tableHeaders[i] == 'vel_promedio' || 
+                      tableHeaders[i] == 'vel_prom_can'){
+                    tableHeaders.splice(i, 1);
+                    i--;
+                  }
+                }
+              }
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              console.log('Headers List', tableHeaders);
+              console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'fecha_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                    });
+                  }
+                  break;
+                case 'fecha_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
+                    });
+                  }
+                  break;
+                case 'duracion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+                case 'recorrido': 
+                case 'maxima_velocidad': 
+                case 'vel_max_can':
+                case 'vel_promedio':
+                case 'vel_prom_can':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'pCercano':
+                case 'referencia':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': a[columnName]; 
+                        let term2 = b.esInt == 1? '---': b[columnName]; 
+                        console.log('refs', [term1, term2]);
+                        console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.esInt == 1? '---': a[columnName]; 
+                      let term2 = b.esInt == 1? '---': b[columnName]; 
+                      console.log('refs', [term1, term2]);
+                      console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                      return this.textComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                      let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                      return this.textComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+  
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+  
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+            /* console.log( 'DataTables has NOT BEEN redrawn. Table info: ', {
+              tableName: oSettings.sTableId,
+              tableNumber: dataTableIndex,
+              indexOfDataTable: sortedDataTableIndex,
+              amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+              rowsOfSortedTable: this.sortedData[sortedDataTableIndex],
+              dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+            } ); */
+          }
+        };
+        break;
+      case 'R002': //REPORTE DE EXCESOS DE VELOCIDAD
+        break;
+      case 'R003': //REPORTE DE ENTRADA Y SALIDA
+        break;
+      case 'R004': //REPORTE DE COMBUSTIBLE
+        break;
+      case 'R005': //REPORTE DE EXCESOS EN ZONA
+        break;
+      case 'R006': //REPORTE DE GENERAL
+        break;
+      case 'R007': //REPORTE DE EVENTOS
+        break;
+      case 'R008': //REPORTE DE POSICIÓN
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string = columnsConfig.headers[sortingColIndex - 1];
+              switch(columnName){
+                case 'fecha':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.dateComparison(a[columnName], b[columnName], sortingOrder);
+                  });
+                  break;
+                case 'hora':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                  });
+                  break;
+                case 'velocidad':
+                case 'velocidad_can':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                  });
+                  break;
+                case 'odometro':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    let term1 = a.odometro == '-'? -1: parseFloat(a.odometro);
+                    let term2 = b.odometro == '-'? -1: parseFloat(b.odometro);
+                    return this.numericComparison(term1, term2, sortingOrder);
+                  });
+                  break;
+                case 'ubicacion':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                  });
+                  break;
+                default:
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                  });
+                  break;
+              }
+              console.log(this.sortedData);
+            }
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+            /* console.log( 'DataTables has NOT BEEN redrawn. Table info: ', {
+              tableName: oSettings.sTableId,
+              tableNumber: dataTableIndex,
+              indexOfDataTable: sortedDataTableIndex,
+              amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+              rowsOfSortedTable: this.sortedData[sortedDataTableIndex],
+              dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+            } ); */
+          }
+        };
+        break;
+      case 'R009': //REPORTE DE EXCESOS Y TRANSGRESIONES
+        break;
+      case 'R010': //REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL
+        break;
+      case 'R011': //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
+        break;
+      case 'R012': //REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA
+        break;
+      case 'R013': //REPORTE DE CALIFICACIÓN DE MANEJO
+        break;
+      case 'R014': //REPORTE DE FATIGA EXTREMA
+        break;
+      case 'R015': //REPORTE DE ANTICOLISIÓN FRONTAL
+        break;
+      case 'R016': //REPORTE DE COLISIÓN CON PEATONES
+        break;
+    }
 
     if(this.chkTableDropdown){
       this.dtOptions.order = this.dtTableCurrentOrder;
@@ -933,9 +1266,9 @@ export class ResultComponent implements OnDestroy, OnInit {
     if(columnsConfig !== undefined && columnsConfig.colDefs !== undefined && columnsConfig.colDefs.length != 0){
       this.dtOptions.columnDefs = JSON.parse(JSON.stringify(columnsConfig.colDefs));
 
-      //Custom renders para sorting de las tablas
+      //Custom renders para sorting de las dataTables
       switch(this.report_data.num_rep){
-        case 'R001':
+        case 'R001': //REPORTE DE PARADAS Y MOVIMIENTOS
           this.dtOptions.columnDefs.push(
             { 
               targets: [6],
@@ -979,6 +1312,32 @@ export class ResultComponent implements OnDestroy, OnInit {
               },
             );
           }
+          break;
+        case 'R008': //REPORTE DE POSICIÓN
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [7, 8], //velocidad  y velocidad_can
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return parseFloat(data.split(' ')[0]);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [9], //odometro
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return data == '-'? -1: parseFloat(data);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
           break;
       }
     }
@@ -1083,6 +1442,29 @@ export class ResultComponent implements OnDestroy, OnInit {
     if(order == 'desc'){
       if(num1 < num2){ return 1; };
       if(num1 > num2){ return -1; };
+      return 0;
+    }
+    console.log(`Expecting order asc or desc (date), got: `, order);
+    return 0;
+  }
+
+  coordinatesComparison(coord1: string, coord2: string, order: string){
+    let lat1 = parseFloat(coord1.split(',')[0]);
+    let long1 = parseFloat(coord1.split(',')[1]);
+    let lat2 = parseFloat(coord2.split(',')[0]);
+    let long2 = parseFloat(coord2.split(',')[1]);
+    if(order == 'asc'){
+      if(lat1 < lat2){ return -1; };
+      if(lat1 > lat2){ return 1; };
+      if(long1 < long2){ return -1; };
+      if(long1 > long2){ return 1; };
+      return 0;
+    }
+    if(order == 'desc'){
+      if(lat1 < lat2){ return 1; };
+      if(lat1 > lat2){ return -1; };
+      if(long1 < long2){ return 1; };
+      if(long1 > long2){ return -1; };
       return 0;
     }
     console.log(`Expecting order asc or desc (date), got: `, order);
