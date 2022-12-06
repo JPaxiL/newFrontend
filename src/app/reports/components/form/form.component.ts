@@ -747,7 +747,14 @@ export class FormComponent implements OnInit {
     this.showFatigaDistraccion = false; //Configuracion Distraccion y posible fatiga
 		/* this.showTimeLlegada = false;
 		this.showTimePeriodoDia = false; */
-    this.showChkSimultaneousTables = false;
+    
+    let aux_convoy = this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy);
+    let aux_group = this.vehicles.filter((vehicle: { grupo: any; }) => vehicle.grupo == this.selectedGroup);
+
+    this.showChkSimultaneousTables = 
+      (this.selectedVehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1) || 
+      (aux_convoy.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1) ||
+      (aux_group.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1);
 
     switch(this.selectedReport){
       case 'R001': // 0 - R001	REPORTE DE PARADAS Y MOVIMIENTOS
