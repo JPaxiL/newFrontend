@@ -447,6 +447,14 @@ export class ResultComponent implements OnDestroy, OnInit {
           { orderData: [ 4, 3 ], targets: [4] }, //hora
         ],
       },
+      { //REPORTE DE COMBUSTIBLE
+        num_rep: 'R004',
+        headers: ['fecha', 'hora', 'can_speed', 'fuel_level', 'fuel_used', 'can_HRFC', 'combusrestante', 'di4', 'can_dist', 'ubicacion', 'alerta', 'combustiblealerta', 'can_rpm', 'altitude'],
+        colDefs: [
+          { orderData: [ 1, 2 ], targets: [1] }, //fecha
+          { orderData: [ 2, 1 ], targets: [2] }, //hora
+        ],
+      },
       { //REPORTE DE POSICION
         num_rep: 'R008',
         headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
@@ -1226,8 +1234,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               }
 
               columnName = tableHeaders[sortingColIndex - 1];
-              console.log('Headers List', tableHeaders);
-              console.log('Sorting Column...', columnName);
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
 
               switch(columnName){
                 //LIMITE DE VELOCIDAD
@@ -1461,8 +1469,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               let tableHeaders = [...columnsConfig.headers];
 
               columnName = tableHeaders[sortingColIndex - 1];
-              console.log('Headers List', tableHeaders);
-              console.log('Sorting Column...', columnName);
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
 
               switch(columnName){
                 case 'fecha_in':
@@ -1592,6 +1600,175 @@ export class ResultComponent implements OnDestroy, OnInit {
         };
         break;
       case 'R004': //REPORTE DE COMBUSTIBLE
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'fecha':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'can_speed':
+                case 'fuel_level':
+                case 'fuel_used':
+                case 'can_HRFC':
+                case 'combusrestante':
+                case 'combustiblealerta':
+                case 'altitude':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+                case 'di4':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.di4 != 1 && a.di4 != 0? -1: this.Math.abs(a.di4 - 1); //1 es Abierto
+                        let term2 = b.di4 != 1 && b.di4 != 0? -1: this.Math.abs(b.di4 - 1); //0 es cerrado
+                        //Pero alfabeticamente hablando, 1 deberia ir antes del 0, entonces se les resta 1 y aplica abs
+                        //para que 0 sea abierto y 1 cerrado, solo con fines de ordeniamiento
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.di4 != 1 && a.di4 != 0? -1: this.Math.abs(a.di4 - 1);
+                      let term2 = b.di4 != 1 && b.di4 != 0? -1: this.Math.abs(b.di4 - 1);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break
+                case 'can_dist':
+                case 'can_rpm':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName].toFixed(2));
+                        let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName].toFixed(2));
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName].toFixed(2));
+                      let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName].toFixed(2));
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'combusrestante':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
         break;
       case 'R005': //REPORTE DE EXCESOS EN ZONA
         break;
@@ -1610,6 +1787,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string = columnsConfig.headers[sortingColIndex - 1];
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
               switch(columnName){
                 case 'fecha':
                   this.sortedData.sort((a: any, b: any) => { 
@@ -1787,6 +1966,14 @@ export class ResultComponent implements OnDestroy, OnInit {
               }
             },
           );
+          break;
+        case 'R004': //REPORTE DE COMBUSTIBLE
+          break;
+        case 'R005': //REPORTE DE EXCESOS EN ZONA
+          break;
+        case 'R006': //REPORTE GENERAL
+          break;
+        case 'R007': //REPORTE DE EVENTOS
           break;
         case 'R008': //REPORTE DE POSICIÓN
           this.dtOptions.columnDefs.push(
@@ -3550,7 +3737,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var table_width = 1 + (this.chkDateHour? 2:1) + 12;
     var vehiculo_width = (this.chkDateHour? 7:5);
 
-    this.data.forEach((table_data: any) => {
+    this.sortedData.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
 
