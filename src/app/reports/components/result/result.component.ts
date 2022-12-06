@@ -63,6 +63,8 @@ export interface ReportData{
 export class ResultComponent implements OnDestroy, OnInit {
   @ViewChild(DataTableDirective)
   dtElement!: DataTableDirective;
+  currentActiveTables: string[] = []; 
+  directSorting: boolean = true;
 
   dtOptions: any = {};
   dtOptions2: any = {};
@@ -393,16 +395,9 @@ export class ResultComponent implements OnDestroy, OnInit {
   singleTableReportIDs = ['R008', 'R020', 'R021'];
   chkTableDropdown: boolean = false;
 
-  columnsConfig: any = [
-    { 
-      num_rep: 'R008',
-      headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
-      colDefs: [
-        { orderData: [ 3, 4 ], targets: [3] }, //fecha
-        { orderData: [ 4, 3 ], targets: [4] }, //hora
-      ],
-    },
-  ];
+  columnsConfig: any = [];
+
+  dtTableCurrentOrder = [[0, 'asc']];
 
   dataTableStartingIndex: number = -1;
   dataTableEndingIndex: number = -1;
@@ -424,6 +419,33 @@ export class ResultComponent implements OnDestroy, OnInit {
   ngOnInit(){
     // console.log("=======================================");
     // console.log(this.reportService.getParams());
+    this.columnsConfig = [
+      { //REPORTE DE PARADAS Y MOVIMIENTOS
+        num_rep: 'R001',
+        headers: ['estado', 'fecha_ini', 'hora_ini', 'fecha_fin', 'hora_fin', 'duracion', 'ubicacion', 'recorrido', 'maxima_velocidad', 'vel_max_can', 'pCercano', 'vel_promedio', 'vel_prom_can', 'referencia'],
+        colDefs: [
+          { orderData: [ 2, 3 ], targets: [2] }, //fecha
+          { orderData: [ 3, 2 ], targets: [3] }, //hora
+          { orderData: [ 4, 5 ], targets: [4] }, //fecha
+          { orderData: [ 5, 4 ], targets: [5] }, //hora
+        ],
+      },
+      { //REPORTE DE EXCESOS DE VELOCIDAD
+        num_rep: 'R002',
+        headers: ['nombre', 'fecha', 'hora', 'maxima_velocidad', 'ubicacion', 'fecha_ini', 'hora_ini', 'fecha_fin', 'hora_fin', 'duracion', 'cant_tramas', 'string_tramas', 'vel_min', 'vel_max', 'PC', 'ZC'],
+        colDefs: [
+          //Por definir después, dependiendo de si es por duracion o limte de velocidad
+        ],
+      },
+      { //REPORTE DE POSICION
+        num_rep: 'R008',
+        headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
+        colDefs: [
+          { orderData: [ 3, 4 ], targets: [3] }, //fecha
+          { orderData: [ 4, 3 ], targets: [4] }, //hora
+        ],
+      },
+    ];
     
     const isIndependentWindow = document.getElementById('vehicle_label') === null;
     if(isIndependentWindow){
@@ -449,12 +471,6 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         this.chkTableDropdown = data.chkTableDropdown;
 
-        if(this.isSingleTableReport()){
-          this.setDataTablesConfig(isIndependentWindow, 1);
-        } else {
-          this.setDataTablesConfig(isIndependentWindow, data.data.length);
-        }
-
         /* console.log('ES ARRAY?', data.data[0].constructor === Array);
         if(data.data[0].constructor === Array){
           console.log('MULTITABLA');
@@ -463,7 +479,13 @@ export class ResultComponent implements OnDestroy, OnInit {
         } */
         
         this.data = data.data;
-        this.sortedData = [...this.data];
+        this.sortedData = JSON.parse(JSON.stringify(this.data));
+
+        if(this.isSingleTableReport()){
+          this.setDataTablesConfig(isIndependentWindow, 1);
+        } else {
+          this.setDataTablesConfig(isIndependentWindow, data.data.length);
+        }
 
         this.chkDateHour = data.chkDateHour;
         this.chkDuracion = data.chkDuracion;
@@ -511,14 +533,14 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       this.chkTableDropdown = report_data.chkTableDropdown;
 
+      this.data = report_data.data;
+      this.sortedData = JSON.parse(JSON.stringify(this.data));
+
       if(this.isSingleTableReport()){
         this.setDataTablesConfig(isIndependentWindow, 1);
       } else {
         this.setDataTablesConfig(isIndependentWindow, report_data.data.length);
       }
-
-      this.data = report_data.data;
-      this.sortedData = [...this.data];
       
       this.chkDateHour = report_data.chkDateHour;
       this.chkDuracion = report_data.chkDuracion;
@@ -564,7 +586,13 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
   setDataTablesConfig(isIndependentWindow: boolean, numberOfTables: number){
+    this.currentActiveTables = [];
+    this.dtTableCurrentOrder = [[0, 'asc']];
     let columnsConfig = this.columnsConfig.filter((report: any) => { return report.num_rep == this.report_data.num_rep })[0];
+
+    let reportExistInConfig = columnsConfig !== undefined;
+    let headersExistInColumnsConfig = reportExistInConfig && columnsConfig.headers !== undefined;
+
     if(!isIndependentWindow){
       if(this.chkTableDropdown){
         this.dataTableStartingIndex = this.dataTableEndingIndex + 1;
@@ -595,8 +623,16 @@ export class ResultComponent implements OnDestroy, OnInit {
         text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
         className: 'btn btn-success'
       }],
-      initComplete: () => {
-        //console.log('InitComplete');
+      initComplete: ( oSettings: any ) => {
+        if(this.chkTableDropdown){
+          console.log('InitComplete, with order: ', this.dtOptions.order);
+        } else {
+          console.log('InitComplete');
+        }
+        if(!this.chkTableDropdown && this.currentActiveTables.indexOf(oSettings.sTableId) < 0){
+          console.log('Adding sTableId to the array', oSettings.sTableId);
+          this.currentActiveTables.push(oSettings.sTableId);
+        }
         this.dt_completed++;
         //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
         if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
@@ -621,7 +657,11 @@ export class ResultComponent implements OnDestroy, OnInit {
       },
       destroy: true,
       "orderMulti": false,
-      "fnDrawCallback": ( oSettings: any ) => {
+      /* "fnDrawCallback": ( oSettings: any ) => {
+        if(this.chkTableDropdown){
+          this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+          this.dtOptions.order = this.dtTableCurrentOrder;
+        }
         const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
         if(   isIndependentWindow 
           ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
@@ -643,20 +683,197 @@ export class ResultComponent implements OnDestroy, OnInit {
               dataOfSortedTable: this.sortedData[sortedDataTableIndex],
             } );
           }
-          /* console.log( 'Reporte: ', this.report_data ); 
-          console.log( 'Reporte: ', this.sortedData ); 
-          console.log( 'DataTables has redrawn the table ', oSettings.aaSorting ); 
-          console.log( 'DataTables Sorting Column index ', oSettings.aaSorting[0]['0'] ); //index de columna
-          console.log( 'DataTables Sorting Order ', oSettings.aaSorting[0]['1'] ); //'asc' o 'desc'
-          console.log( 'DataTables Sorting Order *integer* ', oSettings.aaSorting[0]['_idx'] ); // 0 si es asc, 1 si es desc */
+
+          console.log( 'DataTables Sorting: ', {
+            columnIndex: oSettings.aaSorting[0]['0'],
+            strAscDesc: oSettings.aaSorting[0]['1'],
+            intAscDesc: oSettings.aaSorting[0]['_idx'],
+            object: oSettings.aaSorting,
+          } ); 
           let sortingColIndex = oSettings.aaSorting[0]['0'];
           let sortingOrder = oSettings.aaSorting[0]['1'];
-          let reportExistInConfig = columnsConfig != undefined;
           
-          if(sortingColIndex > 0 && reportExistInConfig){
-            let columnName = columnsConfig.headers[sortingColIndex - 1];
+          if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+            let columnName: string;
             switch(this.report_data.num_rep){
-              case 'R008': //Reporte de Posicion
+              case 'R001': //REPORTE DE PARADAS Y MOVIMIENTOS
+                let tableHeaders = [...columnsConfig.headers];
+                if(this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
+                  //Dejamos los headers tal cual
+                }
+                //Solo Movimientos
+                if(!this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
+                  console.log('Eliminar Solo Movimientos');
+                  for(let i = 0; i < tableHeaders.length; i++){
+                    if( tableHeaders[i] == 'ubicacion' || 
+                        tableHeaders[i] == 'pCercano' || 
+                        tableHeaders[i] == 'referencia'){
+                      tableHeaders.splice(i, 1);
+                      i--;
+                    }
+                  }
+                }
+                //Solo Paradas
+                if(this.sortedData[sortedDataTableIndex][2].Paradas && !this.sortedData[sortedDataTableIndex][2].Movimientos){
+                  console.log('Eliminar Solo Paradas');
+                  for(let i = 0; i < tableHeaders.length; i++){
+                    if( tableHeaders[i] == 'recorrido' || 
+                        tableHeaders[i] == 'maxima_velocidad' || 
+                        tableHeaders[i] == 'vel_max_can' || 
+                        tableHeaders[i] == 'vel_promedio' || 
+                        tableHeaders[i] == 'vel_prom_can'){
+                      tableHeaders.splice(i, 1);
+                      i--;
+                    }
+                  }
+                }
+                columnName = tableHeaders[sortingColIndex - 1];
+                console.log('Headers List', tableHeaders);
+                console.log('Sorting Column...', columnName);
+                switch(columnName){
+                  case 'fecha_ini':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
+                      });
+                    }
+                    break;
+                  case 'hora_ini':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
+                      });
+                    }
+                    break;
+                  case 'fecha_fin':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
+                      });
+                    }
+                    break;
+                  case 'hora_fin':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
+                      });
+                    }
+                    break;
+                  case 'duracion':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                      });
+                    }
+                    break;
+                  case 'recorrido': 
+                  case 'maxima_velocidad': 
+                  case 'vel_max_can':
+                  case 'vel_promedio':
+                  case 'vel_prom_can':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                          let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                          return this.numericComparison(term1, term2, sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                    break;
+                  case 'pCercano':
+                  case 'referencia':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          let term1 = a.esInt == 1? '---': a[columnName]; 
+                          let term2 = b.esInt == 1? '---': b[columnName]; 
+                          console.log('refs', [term1, term2]);
+                          console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                          return this.textComparison(term1, term2, sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': a[columnName]; 
+                        let term2 = b.esInt == 1? '---': b[columnName]; 
+                        console.log('refs', [term1, term2]);
+                        console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                    break;
+                  case 'ubicacion':
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                          let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                          return this.textComparison(term1, term2, sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                    break;
+                  default:
+                    if(this.chkTableDropdown){
+                      for(let i = 0; i < numberOfTables; i++){
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                        });
+                      }
+                    } else {
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                    break;
+                }
+                console.log(this.sortedData[sortedDataTableIndex][1]);
+                break;
+              case 'R008': //REPORTE DE POSICION
+                columnName = columnsConfig.headers[sortingColIndex - 1];
                 if(columnName == 'fecha'){
                   this.sortedData.sort((a: any, b: any) => { 
                     return this.dateComparison(a[columnName], b[columnName], sortingOrder);
@@ -669,11 +886,11 @@ export class ResultComponent implements OnDestroy, OnInit {
                 }
                 if(columnName == 'ubicacion'){
                   this.sortedData.sort((a: any, b: any) => { 
-                    return this.normalComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                   });
                 } else {
                   this.sortedData.sort((a: any, b: any) => { 
-                    return this.normalComparison(a[columnName], b[columnName], sortingOrder);
+                    return this.textComparison(a[columnName], b[columnName], sortingOrder);
                   });
                 }
                 console.log(this.sortedData);
@@ -683,27 +900,746 @@ export class ResultComponent implements OnDestroy, OnInit {
             }
           }
 
+          if(this.directSorting){
+            this.directSorting = false;
+            for(let i = 0; i < this.currentActiveTables.length; i++){
+              if(this.currentActiveTables[i] != oSettings.sTableId){
+                if(!this.chkTableDropdown){
+                  console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                  $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                }
+              }
+            }
+            this.directSorting = true;
+          }
+
         } else {
           console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
-          /* console.log( 'DataTables has NOT BEEN redrawn. Table info: ', {
-            tableName: oSettings.sTableId,
-            tableNumber: dataTableIndex,
-            indexOfDataTable: sortedDataTableIndex,
-            amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
-            rowsOfSortedTable: this.sortedData[sortedDataTableIndex],
-            dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
-          } ); */
+          //console.log( 'DataTables has NOT BEEN redrawn. Table info: ', {
+          //  tableName: oSettings.sTableId,
+          //  tableNumber: dataTableIndex,
+          //  indexOfDataTable: sortedDataTableIndex,
+          //  amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+          //  rowsOfSortedTable: this.sortedData[sortedDataTableIndex],
+          //  dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+          //} );
         }
         
-      },
+      }, */
     };
 
-    if(this.isSingleTableReport()){
-      //this.dtOptions.columnDefs = columnsConfig.colDefs;
-      if(this.report_data.num_rep == 'R008'){
-        this.dtOptions.columnDefs = columnsConfig.colDefs;
+    //Config de drawCallback
+    switch(this.report_data.num_rep){
+      case 'R001': //REPORTE DE PARADAS Y MOVIMIENTOS
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+            //console.log( 'DataTables has redrawn the table', oSettings );
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            /* console.log( 'DataTables has redrawn. Table info: ', {
+              tableName: oSettings.sTableId,
+              indexOfDataTable: sortedDataTableIndex,
+              amountOfRows: this.sortedData[sortedDataTableIndex][1].length,
+              rowsOfSortedTable: this.sortedData[sortedDataTableIndex][1],
+              dataOfSortedTable: this.sortedData[sortedDataTableIndex],
+            } ); */
+            /* console.log( 'DataTables Sorting: ', {
+              columnIndex: oSettings.aaSorting[0]['0'],
+              strAscDesc: oSettings.aaSorting[0]['1'],
+              intAscDesc: oSettings.aaSorting[0]['_idx'],
+              object: oSettings.aaSorting,
+            } );  */
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              if(this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
+                //Dejamos los headers tal cual
+              }
+              //Solo Movimientos
+              if(!this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
+                //console.log('Eliminar Solo Movimientos');
+                for(let i = 0; i < tableHeaders.length; i++){
+                  if( tableHeaders[i] == 'ubicacion' || 
+                      tableHeaders[i] == 'pCercano' || 
+                      tableHeaders[i] == 'referencia'){
+                    tableHeaders.splice(i, 1);
+                    i--;
+                  }
+                }
+              }
+              //Solo Paradas
+              if(this.sortedData[sortedDataTableIndex][2].Paradas && !this.sortedData[sortedDataTableIndex][2].Movimientos){
+                //console.log('Eliminar Solo Paradas');
+                for(let i = 0; i < tableHeaders.length; i++){
+                  if( tableHeaders[i] == 'recorrido' || 
+                      tableHeaders[i] == 'maxima_velocidad' || 
+                      tableHeaders[i] == 'vel_max_can' || 
+                      tableHeaders[i] == 'vel_promedio' || 
+                      tableHeaders[i] == 'vel_prom_can'){
+                    tableHeaders.splice(i, 1);
+                    i--;
+                  }
+                }
+              }
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'fecha_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'fecha_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fechasig, b.fechasig, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fechasig, b.fechasig, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fechasig, b.fechasig, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fechasig, b.fechasig, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'duracion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+                case 'recorrido': 
+                case 'maxima_velocidad': 
+                case 'vel_max_can':
+                case 'vel_promedio':
+                case 'vel_prom_can':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'pCercano':
+                case 'referencia':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': a[columnName]; 
+                        let term2 = b.esInt == 1? '---': b[columnName]; 
+                        console.log('refs', [term1, term2]);
+                        console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.esInt == 1? '---': a[columnName]; 
+                      let term2 = b.esInt == 1? '---': b[columnName]; 
+                      console.log('refs', [term1, term2]);
+                      console.log('refs result', this.textComparison(term1, term2, sortingOrder));
+                      return this.textComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
+                      let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                      return this.textComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+  
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    //console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+  
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
+        break;
+      case 'R002': //REPORTE DE EXCESOS DE VELOCIDAD
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              
+              if(!this.chkDuracion){
+                //Limite de velocidad
+                for(let i = 0; i < tableHeaders.length; i++){
+                  if( tableHeaders[i] == 'fecha_ini' || 
+                      tableHeaders[i] == 'hora_ini' || 
+                      tableHeaders[i] == 'fecha_fin' || 
+                      tableHeaders[i] == 'hora_fin' || 
+                      tableHeaders[i] == 'duracion' || 
+                      tableHeaders[i] == 'cant_tramas' || 
+                      tableHeaders[i] == 'string_tramas' || 
+                      tableHeaders[i] == 'vel_min' || 
+                      tableHeaders[i] == 'vel_max' || 
+                      tableHeaders[i] == 'ZC'){
+                    tableHeaders.splice(i, 1);
+                    i--;
+                  }
+                }
+              } else {
+                //Duracion
+                for(let i = 0; i < tableHeaders.length; i++){
+                  if( tableHeaders[i] == 'nombre' || 
+                      tableHeaders[i] == 'fecha' || 
+                      tableHeaders[i] == 'hora' || 
+                      tableHeaders[i] == 'maxima_velocidad'){
+                    tableHeaders.splice(i, 1);
+                    i--;
+                  }
+                }
+              }
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              console.log('Headers List', tableHeaders);
+              console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                //LIMITE DE VELOCIDAD
+                case 'fecha':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'maxima_velocidad':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+
+                //DURACION
+                case 'fecha_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'fecha_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'duracion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+                case 'cant_tramas': 
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(parseInt(a[columnName]), parseInt(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(parseInt(a[columnName]), parseInt(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+                case 'vel_min': 
+                case 'vel_max':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = parseFloat(a[columnName].split(' ')[0]); 
+                        let term2 = parseFloat(b[columnName].split(' ')[0]); 
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = parseFloat(a[columnName].split(' ')[0]); 
+                      let term2 = parseFloat(b[columnName].split(' ')[0]); 
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'vel_max_can':
+                case 'vel_promedio':
+                case 'vel_prom_can':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
+                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    });
+                  }
+                  break;
+
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
+        break;
+      case 'R003': //REPORTE DE ENTRADA Y SALIDA
+        break;
+      case 'R004': //REPORTE DE COMBUSTIBLE
+        break;
+      case 'R005': //REPORTE DE EXCESOS EN ZONA
+        break;
+      case 'R006': //REPORTE DE GENERAL
+        break;
+      case 'R007': //REPORTE DE EVENTOS
+        break;
+      case 'R008': //REPORTE DE POSICIÓN
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string = columnsConfig.headers[sortingColIndex - 1];
+              switch(columnName){
+                case 'fecha':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                  });
+                  break;
+                case 'hora':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                  });
+                  break;
+                case 'velocidad':
+                case 'velocidad_can':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
+                  });
+                  break;
+                case 'odometro':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    let term1 = a.odometro == '-'? -1: parseFloat(a.odometro);
+                    let term2 = b.odometro == '-'? -1: parseFloat(b.odometro);
+                    return this.numericComparison(term1, term2, sortingOrder);
+                  });
+                  break;
+                case 'ubicacion':
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                  });
+                  break;
+                default:
+                  this.sortedData.sort((a: any, b: any) => { 
+                    return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                  });
+                  break;
+              }
+              console.log(this.sortedData);
+            }
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
+        break;
+      case 'R009': //REPORTE DE EXCESOS Y TRANSGRESIONES
+        break;
+      case 'R010': //REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL
+        break;
+      case 'R011': //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
+        break;
+      case 'R012': //REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA
+        break;
+      case 'R013': //REPORTE DE CALIFICACIÓN DE MANEJO
+        break;
+      case 'R014': //REPORTE DE FATIGA EXTREMA
+        break;
+      case 'R015': //REPORTE DE ANTICOLISIÓN FRONTAL
+        break;
+      case 'R016': //REPORTE DE COLISIÓN CON PEATONES
+        break;
+    }
+
+    if(this.chkTableDropdown){
+      this.dtOptions.order = this.dtTableCurrentOrder;
+    }
+
+    console.log('Columns Config', columnsConfig);
+    console.log('Columns Config', columnsConfig !== undefined);
+    console.log('This Columns Config', this.columnsConfig);
+    console.log('This Columns Config', this.columnsConfig.filter((report: any) => { return report.num_rep == this.report_data.num_rep })[0]);
+
+    if(columnsConfig !== undefined && columnsConfig.colDefs !== undefined && columnsConfig.colDefs.length != 0){
+      this.dtOptions.columnDefs = JSON.parse(JSON.stringify(columnsConfig.colDefs));
+
+      //Custom renders para sorting de las dataTables
+      switch(this.report_data.num_rep){
+        case 'R001': //REPORTE DE PARADAS Y MOVIMIENTOS
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [6],
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return this.intervalToSeconds(data);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
+          console.log('this.data para revisar paradas y movimientos', this.data);
+          //PARADAS Y MOVIMIENTOS
+          if(this.data[0][2].Paradas && this.data[0][2].Movimientos){
+            this.dtOptions.columnDefs.push(
+              { 
+                targets: [8, 9, 10, 12, 13],
+                "render": ( data: string, type: any, row: any, meta: any ) => {
+                  if(type === 'sort' || type === 'type'){
+                    return parseFloat(data.split(' ')[0]);
+                  } else {
+                    return data;
+                  }
+                }
+              },
+            );
+          }
+          //SOLO MOVIMIENTOS
+          if(!this.data[0][2].Paradas && this.data[0][2].Movimientos){
+            this.dtOptions.columnDefs.push(
+              { 
+                targets: [7, 8, 9, 10, 11],
+                "render": ( data: string, type: any, row: any, meta: any ) => {
+                  if(type === 'sort' || type === 'type'){
+                    return parseFloat(data.split(' ')[0]);
+                  } else {
+                    return data;
+                  }
+                }
+              },
+            );
+          }
+          break;
+        case 'R002': //REPORTE DE EXCESOS DE VELOCIDAD
+          if(!this.chkDuracion){ //Limite de velocidad
+            this.dtOptions.columnDefs.push(
+              { orderData: [ 2, 3 ], targets: [2] },
+              { orderData: [ 3, 2 ], targets: [3] },
+              { 
+                targets: [4], // Maxima velocidad
+                "render": ( data: string, type: any, row: any, meta: any ) => {
+                  if(type === 'sort' || type === 'type'){
+                    return parseFloat(data);
+                  } else {
+                    return data;
+                  }
+                }
+              },
+            );
+          } else {
+            this.dtOptions.columnDefs.push(
+              { orderData: [ 1, 2 ], targets: [1] },
+              { orderData: [ 2, 1 ], targets: [2] },
+              { orderData: [ 3, 4 ], targets: [3] },
+              { orderData: [ 4, 3 ], targets: [4] },
+              { 
+                targets: [5], // Duracion
+                "render": ( data: string, type: any, row: any, meta: any ) => {
+                  if(type === 'sort' || type === 'type'){
+                    return this.intervalToSeconds(data);
+                  } else {
+                    return data;
+                  }
+                }
+              },
+              { 
+                targets: [8, 9], //Vel min y Vel max
+                "render": ( data: string, type: any, row: any, meta: any ) => {
+                  if(type === 'sort' || type === 'type'){
+                    return parseFloat(data.split(' ')[0]);
+                  } else {
+                    return data;
+                  }
+                }
+              },
+            );
+          }
+          break;
+        case 'R008': //REPORTE DE POSICIÓN
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [7, 8], //velocidad  y velocidad_can
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return parseFloat(data.split(' ')[0]);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [9], //odometro
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return data == '-'? -1: parseFloat(data);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
+          break;
       }
-      //console.log('dtOptions: ', this.dtOptions);
     }
     
     this.dtOptions2 = {
@@ -720,7 +1656,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
       buttons: [{
         extend: 'excel',
-        text: '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Exportar a Excel',
+        text: '<i class="fa fa-file-excel-o" aria-hidden="true"click></i> Exportar a Excel',
         className: 'btn btn-success'
       }],
       initComplete: () => {
@@ -740,38 +1676,112 @@ export class ResultComponent implements OnDestroy, OnInit {
     };
   }
 
-  normalComparison(a: string, b: string, order: string){
+  prepareStringForComparison(str: string){
+    return str.toLowerCase();
+  }
+
+  textComparison(a: string, b: string, order: string){
+    //los acentos igual irand despues de la z, tal cual ordena datatables
+    let str1 = this.prepareStringForComparison(a);
+    let str2 = this.prepareStringForComparison(b);
     if(order == 'asc'){
-      if(a < b){ return -1; };
-      if(a > b){ return 1; };
+      if(str1 < str2){ return -1; };
+      if(str1 > str2){ return 1; };
       return 0;
     }
     if(order == 'desc'){
-      if(a < b){ return 1; };
-      if(a > b){ return -1; };
+      if(str1 < str2){ return 1; };
+      if(str1 > str2){ return -1; };
       return 0;
     }
     console.log(`Expecting order asc or desc (normal), got: `, order);
     return 0;
   }
 
-  dateComparison(fecha1: string, fecha2: string, order: string){
+  dateComparison(fecha1: string, fecha2: string, order: string, hourOnly?: boolean){
     let date1 = fecha1.split(' ')[0];
     let hour1 = fecha1.split(' ')[1];
     let date2 = fecha2.split(' ')[0];
     let hour2 = fecha2.split(' ')[1];
+    if(hourOnly == undefined || !hourOnly){
+      if(order == 'asc'){
+        if(date1 < date2){ return -1; };
+        if(date1 > date2){ return 1; };
+        if(hour1 < hour2){ return -1; };
+        if(hour1 > hour2){ return 1; };
+        return 0;
+      }
+      if(order == 'desc'){
+        if(date1 < date2){ return 1; };
+        if(date1 > date2){ return -1; };
+        if(hour1 < hour2){ return 1; };
+        if(hour1 > hour2){ return -1; };
+        return 0;
+      }
+    } else {
+      if(order == 'asc'){
+        if(hour1 < hour2){ return -1; };
+        if(hour1 > hour2){ return 1; };
+        if(date1 < date2){ return -1; };
+        if(date1 > date2){ return 1; };
+        return 0;
+      }
+      if(order == 'desc'){
+        if(hour1 < hour2){ return 1; };
+        if(hour1 > hour2){ return -1; };
+        if(date1 < date2){ return 1; };
+        if(date1 > date2){ return -1; };
+        return 0;
+      }
+    }
+    console.log(`Expecting order asc or desc (date), got: `, order);
+    return 0;
+  }
+
+  intervalToSeconds(intervalStr: string){
+    let intervalArr = intervalStr.trim().split(' ');
+    let intervalValue = 0;
+    for(let i = 0; i < intervalArr.length; i = i + 2){
+      if(intervalArr[i + 1] == 'd'){ intervalValue = intervalValue + parseInt(intervalArr[i]) * 24 * 60 * 60 }
+      if(intervalArr[i + 1] == 'h'){ intervalValue = intervalValue + parseInt(intervalArr[i]) * 60 * 60 }
+      if(intervalArr[i + 1] == 'min'){ intervalValue = intervalValue + parseInt(intervalArr[i]) * 60 }
+      if(intervalArr[i + 1] == 's'){ intervalValue = intervalValue + parseInt(intervalArr[i]) }
+    }
+    return intervalValue;
+  }
+
+  numericComparison(num1: number, num2: number, order: string){
     if(order == 'asc'){
-      if(date1 < date2){ return -1; };
-      if(date1 > date2){ return 1; };
-      if(hour1 < hour2){ return -1; };
-      if(hour1 > hour2){ return 1; };
+      if(num1 < num2){ return -1; };
+      if(num1 > num2){ return 1; };
       return 0;
     }
     if(order == 'desc'){
-      if(date1 < date2){ return 1; };
-      if(date1 > date2){ return -1; };
-      if(hour1 < hour2){ return 1; };
-      if(hour1 > hour2){ return -1; };
+      if(num1 < num2){ return 1; };
+      if(num1 > num2){ return -1; };
+      return 0;
+    }
+    console.log(`Expecting order asc or desc (date), got: `, order);
+    return 0;
+  }
+
+  coordinatesComparison(coord1: string, coord2: string, order: string){
+    let lat1 = parseFloat(coord1.split(',')[0]);
+    let long1 = parseFloat(coord1.split(',')[1]);
+    let lat2 = parseFloat(coord2.split(',')[0]);
+    let long2 = parseFloat(coord2.split(',')[1]);
+    if(order == 'asc'){
+      if(lat1 < lat2){ return -1; };
+      if(lat1 > lat2){ return 1; };
+      if(long1 < long2){ return -1; };
+      if(long1 > long2){ return 1; };
+      return 0;
+    }
+    if(order == 'desc'){
+      if(lat1 < lat2){ return 1; };
+      if(lat1 > lat2){ return -1; };
+      if(long1 < long2){ return 1; };
+      if(long1 > long2){ return -1; };
       return 0;
     }
     console.log(`Expecting order asc or desc (date), got: `, order);
@@ -1167,16 +2177,19 @@ export class ResultComponent implements OnDestroy, OnInit {
     var posicion_detenida_cell_ch_width = "Posicion Detenida".length;
     var recorrido_cell_ch_width = "Recorrido".length;
     var vel_max_cell_ch_width = "Velocidad Maxima".length;
+    var vel_max_can_cell_ch_width = "Vel. max. CAN".length;
     var pc_cell_ch_width = "Punto cercano".length;
     var vel_promedio_cell_ch_width = "Velocidad Promedio".length;
+    var vel_prom_can_cell_ch_width = "Vel. Prom. CAN".length;
     var referencia_cell_ch_width = "Referencia".length;
 
-    this.data.forEach((table_data: any) => {
+    this.sortedData.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
 
         bol_datos_ex = true;
 
+        let rowIndex = 0;
         var nom_vehi = table_data[0][1];
         var ruta = "";
         /* if (vm.optionR() == 28) {
@@ -1189,7 +2202,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             }
         } */
 
-        table_width = 2 + (this.chkDateHour? 4:2) + 1 + (table_data[2].Paradas? 3:0) + (table_data[2].Movimientos? 3:0);
+        table_width = 2 + (this.chkDateHour? 4:2) + 1 + (table_data[2].Paradas? 3:0) + (table_data[2].Movimientos? 5:0);
         var vehiculo_width = table_width<=8? 3:4;
         var ruta_width = table_width<=5? 1: table_width<=8? 3: 4;
         /* var vehiculo_width = table_width<=8? 2:3;
@@ -1251,8 +2264,10 @@ export class ResultComponent implements OnDestroy, OnInit {
         if ( table_data[2].Paradas == true) 		{ cellsCampos.push({ value: "Posición detenida", ...this.colHeaderConfig });  };
         if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Recorrido", ...this.colHeaderConfig });					};
         if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad máxima", ...this.colHeaderConfig });		};
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Vel. máx. CAN", ...this.colHeaderConfig });		};
         if ( table_data[2].Paradas == true)			{ cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig }); 			};
         if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad Promedio", ...this.colHeaderConfig });	};
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Vel. Prom. CAN", ...this.colHeaderConfig });	};
         if ( table_data[2].Paradas == true)			{ cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig }); 			};
 
         // <td ng-if="dato[2].ubicacion" ><a href="http://maps.google.com/maps?q={{dat.lat.toFixed(6)}},{{dat.lng.toFixed(6)}}&amp;t=m" target="_blank">{{dat.lat.toFixed(6)}},{{dat.lng.toFixed(6)}}</a></td>
@@ -1267,6 +2282,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         if ( table_data[2].Paradas == true && table_data[2].Movimientos == true ) {
 
           table_data[1].forEach((item: { latitud: number; longitud: number; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; esInt: number; pCercano: any; referencia: any; recorrido: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
+                rowIndex++;
                 var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                 var cellsCuerpo = [];
 
@@ -1275,11 +2291,13 @@ export class ResultComponent implements OnDestroy, OnInit {
                 posicion_detenida_cell_ch_width = Math.max(posicion_detenida_cell_ch_width, (ubicacion??'').toString().length);
                 recorrido_cell_ch_width = Math.max(recorrido_cell_ch_width, (item.recorrido??'').toString().length);
                 vel_max_cell_ch_width = Math.max(vel_max_cell_ch_width, (item.maxima_velocidad??'').toString().length);
+                vel_max_can_cell_ch_width = Math.max(vel_max_can_cell_ch_width, (item.vel_max_can??'').toString().length);
                 pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.pCercano??'').toString().length);
                 vel_promedio_cell_ch_width = Math.max(vel_promedio_cell_ch_width, (item.vel_promedio??'').toString().length);
+                vel_prom_can_cell_ch_width = Math.max(vel_prom_can_cell_ch_width, (item.vel_prom_can??'').toString().length);
                 referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
 
-                cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
+                cellsCuerpo.push({ value: rowIndex, ...this.bodyRowsConfig });
                 cellsCuerpo.push({ value: item.estado, ...this.bodyRowsConfig });
 
                 if (this.chkDateHour) {
@@ -1301,20 +2319,24 @@ export class ResultComponent implements OnDestroy, OnInit {
 
                 if (item.esInt == 0) {
                     cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
-                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
-                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.pCercano, ...this.bodyRowsConfig });
-                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
                 }
 
                 if (item.esInt == 1) {
-                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.recorrido, ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.maxima_velocidad, ...this.bodyRowsConfig });
-                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.vel_max_can, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.vel_promedio, ...this.bodyRowsConfig });
-                    cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.vel_prom_can, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: "---", ...this.bodyRowsConfig });
                 }
 
                 rows.push({
@@ -1328,6 +2350,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           table_data[1].forEach((item: { esInt: number; latitud: number; longitud: number; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; pCercano: any; referencia: any; }, index: number) => {
                 if (item.esInt==0) {
+                    rowIndex++
                     var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
                     var cellsCuerpo = [];
 
@@ -1337,7 +2360,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                     pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.pCercano??'').toString().length);
                     referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
 
-                    cellsCuerpo.push({ value: ( Math.floor(index/2) + 1 ), ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: rowIndex, ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.estado, ...this.bodyRowsConfig });
 
                     if (this.chkDateHour) {
@@ -1374,17 +2397,19 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (  table_data[2].Paradas == false && table_data[2].Movimientos == true ) {
 
           table_data[1].forEach((item: { esInt: number; latitud: number; longitud: number; estado: any; fecha: any; fechasig: any; duracion: any; h_acumuladas: any; recorrido: any; maxima_velocidad: any; vel_max_can: any; vel_promedio: any; vel_prom_can: any; }, index: number) => {
-
                 if (item.esInt == 1) {
+                    rowIndex++;
                     var cellsCuerpo = [];
 
                     estado_cell_ch_width = Math.max(estado_cell_ch_width, (item.estado??'').toString().length);
                     duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
                     recorrido_cell_ch_width = Math.max(recorrido_cell_ch_width, (item.recorrido??'').toString().length);
                     vel_max_cell_ch_width = Math.max(vel_max_cell_ch_width, (item.maxima_velocidad??'').toString().length);
+                    vel_max_can_cell_ch_width = Math.max(vel_max_can_cell_ch_width, (item.vel_max_can??'').toString().length);
                     vel_promedio_cell_ch_width = Math.max(vel_promedio_cell_ch_width, (item.vel_promedio??'').toString().length);
+                    vel_prom_can_cell_ch_width = Math.max(vel_prom_can_cell_ch_width, (item.vel_prom_can??'').toString().length);
 
-                    cellsCuerpo.push({ value: ( Math.floor(index/2) + 1 ), ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: rowIndex, ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.estado, ...this.bodyRowsConfig });
 
                     if (this.chkDateHour) {
@@ -1403,8 +2428,10 @@ export class ResultComponent implements OnDestroy, OnInit {
                     // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.recorrido, ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.maxima_velocidad, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.vel_max_can, ...this.bodyRowsConfig });
                     // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
                     cellsCuerpo.push({ value: item.vel_promedio, ...this.bodyRowsConfig });
+                    cellsCuerpo.push({ value: item.vel_prom_can, ...this.bodyRowsConfig });
                     // cellsCuerpo.push({ value: "--", ...this.bodyRowsConfig });
 
                     rows.push({
@@ -1514,8 +2541,10 @@ export class ResultComponent implements OnDestroy, OnInit {
               { width: this.calculateColWidth(posicion_detenida_cell_ch_width) },
               { width: this.calculateColWidth(recorrido_cell_ch_width) },
               { width: this.calculateColWidth(vel_max_cell_ch_width) },
+              { width: this.calculateColWidth(vel_max_can_cell_ch_width) },
               { width: this.calculateColWidth(pc_cell_ch_width) },
               { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
+              { width: this.calculateColWidth(vel_prom_can_cell_ch_width) },
               { width: this.calculateColWidth(referencia_cell_ch_width) },
             )
           }
@@ -1523,7 +2552,9 @@ export class ResultComponent implements OnDestroy, OnInit {
             column_config.push(
               { width: this.calculateColWidth(recorrido_cell_ch_width) },
               { width: this.calculateColWidth(vel_max_cell_ch_width) },
+              { width: this.calculateColWidth(vel_max_can_cell_ch_width) },
               { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
+              { width: this.calculateColWidth(vel_prom_can_cell_ch_width) },
             )
           }
           if( table_data[2].Paradas && !table_data[2].Movimientos ){
@@ -1589,8 +2620,10 @@ export class ResultComponent implements OnDestroy, OnInit {
           { width: this.calculateColWidth(posicion_detenida_cell_ch_width) },
           { width: this.calculateColWidth(recorrido_cell_ch_width) },
           { width: this.calculateColWidth(vel_max_cell_ch_width) },
+          { width: this.calculateColWidth(vel_max_can_cell_ch_width) },
           { width: this.calculateColWidth(pc_cell_ch_width) },
           { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
+          { width: this.calculateColWidth(vel_prom_can_cell_ch_width) },
           { width: this.calculateColWidth(referencia_cell_ch_width) },
         )
       }
@@ -1598,7 +2631,9 @@ export class ResultComponent implements OnDestroy, OnInit {
         column_config.push(
           { width: this.calculateColWidth(recorrido_cell_ch_width) },
           { width: this.calculateColWidth(vel_max_cell_ch_width) },
+          { width: this.calculateColWidth(vel_max_can_cell_ch_width) },
           { width: this.calculateColWidth(vel_promedio_cell_ch_width) },
+          { width: this.calculateColWidth(vel_prom_can_cell_ch_width) },
         )
       }
       if( chk_par! && !chk_mov! ){
@@ -1693,7 +2728,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 
-    this.data.forEach((table_data: any) => {
+    this.sortedData.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
         var p_cercano_width = 155;

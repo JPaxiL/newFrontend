@@ -1,0 +1,169 @@
+<div class="d-flex flex-column" style="height: 100%;">
+
+    <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="action == 'edit' ? 'Configurar Geocerca Circular' : 'Nueva Geocerca Circular' "></div>
+
+    <div class="modal-body panel-izq-container p-fluid overflow-auto" style="position: relative;">
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="spinnerLoading" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Guardando cambios... </p></ngx-spinner>
+    
+        <div class="panel-izq-form">
+            <div class="gl-row-underline">
+                <div class="col-12">
+                    <label>NOMBRE</label>
+                </div>
+                <div class="col-12">
+                    <input type="text" class="form-control" id="circular-geofence-name" name="nombre" [(ngModel)]="form.nombre" required pInputText>
+                </div>
+            </div>
+
+            <div class="gl-middleline gl-permanent-middleline gl-row-underline" >
+                <div class="row">
+                    <div class="col p-field">
+                        <div class="col-12">
+                            <label>RADIO</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p-inputNumber [ngModel]="form.radio" suffix=" km" [disabled]="true"></p-inputNumber>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col p-field">
+                        <div class="col-12">
+                            <label>ÁREA:</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                              <p-inputNumber [ngModel]="form.area" suffix=" km&#178;" [disabled]="true"></p-inputNumber>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gl-middleline gl-permanent-middleline gl-row-underline">
+                <div class="row">
+                    <div class="col p-field">
+                        <div class="col-12">
+                            <label>COLOR DE GEOCERCA:</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 d-flex">
+                              <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" [(ngModel)]="form.color" id="color_picker" title="Elige un color">
+                              <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="color_picker">
+                                <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col p-field">
+                        <div class="col-12">
+                            <label>RELLENO:</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                              <p-dropdown [options]="booleanOptions" [(ngModel)]="form.zone_no_int_color" optionLabel="label" optionValue="value" [appendTo]="'body'" (onChange)="changeGeoFill(form.id)" ></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gl-middleline gl-permanent-middleline gl-row-underline">
+                <div class="row">
+                    <div class="col p-field">
+                        <div class="col-12">
+                            <label>COLOR DE TEXTO:</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 d-flex">
+                              <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" id="text_color_picker" title="Elige un color" [(ngModel)]="form.tag_name_color">
+                              <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="text_color_picker">
+                                <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col p-field">
+                        <div class="col-12">
+                            <label>TAMAÑO DE TEXTO:</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                              <p-dropdown [options]="fontSizeOptions" [(ngModel)]="form.tag_name_font_size" optionLabel="label" optionValue="value" [appendTo]="'body'" [ngModelOptions]="{standalone: true}" ></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="gl-row-underline">
+                <div class="col-12">
+                    <label>VELOCIDAD:</label>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                      <p-dropdown [options]="booleanOptions" [(ngModel)]="form.checkVelocidad" optionLabel="label" optionValue="value" [appendTo]="'body'" ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gl-row-underline">
+                <div class="col-12">
+                    <label>LÍMITE DE VELOCIDAD:</label>
+                </div>
+                <div class="col-12 d-flex">
+                  <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_velocidad" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+                  <span class="flex-none center-icon neutral-icon-color">
+                    <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un límite de velocidad estándar para todas las unidades que transiten dentro de la geocerca."></i>
+                  </span>
+                </div>
+            </div>
+
+            <div class="gl-row-underline">
+                <div class="col-12">
+                    <label>TOLERABLE:</label>
+                </div>
+                <div class="col-12 d-flex">
+                  <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_tolerable" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+                  <span class="flex-none center-icon neutral-icon-color">
+                    <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un exceso de velocidad tolerable al sobrepasar el límite establecido en el presente campo. Termina hasta llegar al siguiente límite de velocidad."></i>
+                  </span>
+                </div>
+            </div>
+
+            <div class="gl-row-underline">
+                <div class="col-12">
+                    <label>GRAVE:</label>
+                </div>
+                <div class="col-12 d-flex">
+                  <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_grave" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+                  <span class="flex-none center-icon neutral-icon-color">
+                    <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un exceso de velocidad grave al sobrepasar el límite establecido en el presente campo. Termina hasta llegar al siguiente límite de velocidad."></i>
+                  </span>
+                </div>
+            </div>
+              
+            <div class="gl-row-underline">
+                <div class="col-12">
+                    <label>MUY GRAVE:</label>
+                </div>
+                <div class="col-12 d-flex">
+                  <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_muy_grave" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+                  <span class="flex-none center-icon neutral-icon-color">
+                    <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un exceso de velocidad muy grave al sobrepasar el límite establecido en el presente campo. No posee un siguiente límite de velocidad."></i>
+                  </span>
+                </div>
+            </div> -->
+
+            <div class="row justify-content-center mt-4 panel-izq-container-footer">
+                <div class="col-6">
+                    <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelar(form.id)">Cancelar</button>
+                </div>
+                <div class="col-6">
+                    <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickGuardar(form.id)">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

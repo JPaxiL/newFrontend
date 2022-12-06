@@ -115,6 +115,9 @@ import { AuditdetailComponent } from './auditoria/components/auditdetail/auditde
 import { AuditmapComponent } from './auditoria/components/auditmap/auditmap.component';
 import { AuditInfoActivityComponent } from './auditoria/components/auditdetail/audit-info-activity/audit-info-activity.component';
 import { NotFoundComponent } from './panel/not-found/not-found.component';
+import { GeocercaCircularMainComponent } from './geofences/components/geocerca-circular-main/geocerca-circular-main.component';
+import { GeocercaCircularAddComponent } from './geofences/components/geocerca-circular-add/geocerca-circular-add.component';
+import { GeocercaCircularListsComponent } from './geofences/components/geocerca-circular-lists/geocerca-circular-lists.component';
 
 @NgModule({
   declarations: [
@@ -181,6 +184,9 @@ import { NotFoundComponent } from './panel/not-found/not-found.component';
     AuditmapComponent,
     AuditInfoActivityComponent,
     NotFoundComponent,
+    GeocercaCircularMainComponent,
+    GeocercaCircularAddComponent,
+    GeocercaCircularListsComponent,
 
   ],
   imports: [

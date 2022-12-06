@@ -15,7 +15,7 @@ export class MapServicesService {
     public toolbarMapService: ToolbarMapService
     ) {}
 
-  setLayers(geofences:any, points:any) {
+  setLayers(geofences:any, points:any, circular_geofences:any) {
     const mainLayer = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
@@ -78,9 +78,12 @@ export class MapServicesService {
 
     var geoPoints =  L.layerGroup(points.map( (point:any) => { return point.geo_elemento}));
 
+    var circular_geos = L.layerGroup(circular_geofences.map( (circular_geo:any) => { return circular_geo.geo_elemento}));
+
     const overlays = {
       "Geocercas poligonales": geos,
       "Geopuntos": geoPoints,
+      "Geocercas circulares": circular_geos,
       // " Geocercas circulares":
     }
 
