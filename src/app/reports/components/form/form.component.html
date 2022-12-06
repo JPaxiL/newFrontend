@@ -183,7 +183,7 @@
         <div class="row">
           <div class="p-field">
             <div class="d-flex p-dropdown-full-width">
-              <p-dropdown [options]="pDropdownDuration" [(ngModel)]="checkboxDuration" [showClear]="false" optionLabe="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'" [disabled]="reportService.workingOnReport"></p-dropdown>
+              <p-dropdown [options]="pDropdownDuration" [(ngModel)]="checkboxDuration" [showClear]="false" optionLabe="label" optionValue="value" (onChange)="validateForm();" [styleClass]="'bg-subtitle'" [disabled]="reportService.workingOnReport"></p-dropdown>
               <!-- <button class="bg-subtitle btn-toggle-option btn-toggle-left" [ngClass]="!checkboxDuration? '': 'disabled'" (click)="checkboxDuration = false; onSelectedConvoyChange(); validateForm();">Límite de Velocidad</button>
               <button class="bg-subtitle btn-toggle-option btn-toggle-right" [ngClass]="checkboxDuration? '': 'disabled'" (click)="checkboxDuration = true; onSelectedGroupChange(); validateForm();">Duración</button> -->
             </div>

@@ -220,8 +220,6 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
     }
     this.form.checkVelocidad = checkVelocidad;
 
-    console.log(geo);
-
     this.form.limite_velocidad = geo.int_limite_velocidad_0;
     this.form.limite_tolerable = geo.int_limite_velocidad_1;
     this.form.limite_grave = geo.int_limite_velocidad_2;
