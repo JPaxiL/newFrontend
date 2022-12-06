@@ -1819,7 +1819,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     }).bindTooltip(
         // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
         /* '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geopoints[i].geopunto_color+';">'+this.geopoints[i].geopunto_name+'</b>', */
-        '<b class="" style=" background-color: '+ this.mapService.hexToRGBA('#6633FF') +'; color: '+ this.mapService.getContrastYIQ('#6633FF') +';">'+trama.dt_tracker+'<br>'+trama.speed+' km/h</b>',
+        '<b class="" style=" background-color: '+ this.mapService.hexToRGBA('#6633FF') +'; color: '+ this.mapService.getContrastYIQ('#6633FF') +';">'+trama.dt_tracker+' -> '+trama.speed+' km/h</b>',
         { permanent: true,
           offset: [20, 20],
           direction: 'center',

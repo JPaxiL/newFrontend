@@ -150,7 +150,7 @@ export class GeopointsService {
               { permanent: true,
                 offset: [0, 20],
                 direction: 'center',
-                className: 'leaflet-tooltip-own',
+                className: 'leaflet-tooltip-own geopoint-tooltip',
               });
 
         if (this.geopoints[i].geopunto_nombre_visible == "true") {
