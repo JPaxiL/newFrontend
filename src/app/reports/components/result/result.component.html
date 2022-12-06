@@ -1275,7 +1275,23 @@
                       <td *ngIf="reportTableDropdownData[2].recFacial" >{{row.recFacial}}</td>
                       <td *ngIf="reportTableDropdownData[2].velCAN" [ngStyle]="{'background-color': row.velCAN > reportTableDropdownData[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="reportTableDropdownData[2].pCercano" >{{row.pCercano}}</td>
-                      <td *ngIf="reportTableDropdownData[2].referencia" >{{row.referencia}}</td>
+                      <td *ngIf="reportTableDropdownData[2].referencia" >
+                        <!-- {{row.referencia}} -->
+                        <span *ngIf="row.referencia != 'NN'" [innerHTML]="row.referencia"></span>
+                        <button class="btn btn-success" (click)="showGeneralDireccion(row, reportTableDropdownData[1]);">Ver</button>
+                      </td>
+
+
+
+											<!-- <td ng-if="dato[2].referencia" >
+												<span ng-if="dat.referencia != 'NN'"  ng-bind-html="dat.referencia" ></span>
+												<md-button ng-if="dat.referencia == 'NN'" class="md-primary md-raised btn-sm" ng-click="res.showGeneralDireccion( dat, reportTableDropdownData[1])"  >
+													Ver
+												</md-button>
+											</td> -->
+
+
+
 
                       <td *ngIf="reportTableDropdownData[2].DUOT2state" >{{row.DUOT2state}}</td>
 
@@ -1428,7 +1444,16 @@
                       <td *ngIf="v_table[2].recFacial" >{{row.recFacial}}</td>
                       <td *ngIf="v_table[2].velCAN" [ngStyle]="{'background-color': row.velCAN > v_table[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="v_table[2].pCercano" >{{row.pCercano}}</td>
-                      <td *ngIf="v_table[2].referencia" >{{row.referencia}}</td>
+                      <!-- <td *ngIf="v_table[2].referencia" >{{row.referencia}}</td> -->
+
+                      <td *ngIf="v_table[2].referencia" >
+                        <!-- {{row.referencia}} -->
+                        <span *ngIf="row.referencia != 'NN'" [innerHTML]="row.referencia"></span>
+                        <button class="btn btn-success" (click)="showGeneralDireccion(row, v_table[1]);">Ver</button>
+
+
+                      </td>
+
 
                       <td *ngIf="v_table[2].DUOT2state" >{{row.DUOT2state}}</td>
 

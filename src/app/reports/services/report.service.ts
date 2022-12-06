@@ -13,6 +13,7 @@ export class ReportService {
   modalActive:boolean = false;
   workingOnReport: boolean = false;
   objGeneral :any = {};
+  chkApiGoogle : any = false;
 
   setParams(values:any) {
     console.log("se ejecuta setParams");
@@ -23,5 +24,11 @@ export class ReportService {
     console.log("se obtiene setParams");
     return this.params;
   }
+
+  setApiGoogle(value:any) {
+    console.log("se ejecuta setApiGoogle");
+    this.chkApiGoogle = value;
+  }
+
 
 }

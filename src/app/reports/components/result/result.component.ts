@@ -8149,6 +8149,192 @@ export class ResultComponent implements OnDestroy, OnInit {
       }
 
 
+		showGeneralDireccion(trama:any, gT:any=[]) {
+			console.log("Averiguar la direccion");
+			console.log(trama);
+			console.log(gT);
+
+			console.log(this.reportService.chkApiGoogle);
+			// trama.referencia = "direccion nueva xDDD"
+			if (trama.lat === undefined) {
+				trama.lat = trama.latitud;
+				trama.lng = trama.longitud;
+	   		}
+      // var cbd = { lat:trama.lat, lng:trama.lng, status:'BD' };
+
+      // this.http.post(environment.apiUrl + 'geocoder/fnDireccion', cbd).subscribe({
+      //   next: data => {
+      //     // console.log(this.selectedConvoy.length);
+      //     // console.log(this.selectedGroup.length);
+      //   }
+      // });
+
+      // var cbd = { lat:trama.lat, lng:trama.lng, status:'BD' };
+      // $q.all([
+			// 	api.post('geocoder/fnDireccion',cbd)
+			// ]).then(responseP => {
+			// 		console.log("0 BD ------->>>>> " + responseP);
+			// 		if (responseP[0] !== 'NN') {
+			// 			trama.referencia = responseP;
+			// 		} else {
+
+			// 			if (reportServices.chkApiGoogle) {
+				
+			// 				console.log("API ACTIVADA");
+			
+
+			
+			// 				console.log("fnc_direccion--xD");
+			// 				var f = new google.maps.Geocoder();
+			// 				var g = '';
+			// 				var h = new google.maps.LatLng(trama.lat, trama.lng);
+			// 				f.geocode({
+			// 						'latLng': h
+			// 				}, function (a, b) {
+			// 						console.log("*********************1");
+			// 						console.log(a);
+			// 						console.log(b);
+			// 						console.log("*********************2");
+			
+			// 						if (b == "OK") {
+			// 									console.log("Api google : OK");
+			// 									var g = "";
+			// 									if (a[0]) {
+			// 											g = a[0].formatted_address;
+			// 									} else if (a[1]) {
+			// 											g = a[1].formatted_address;
+			// 									} else {
+			// 											console.log("DIRECCION AMBIGUA");
+			// 									}
+			// 									// item.layer.setPopupContent(vehiclesHelper.getContentPopup(item, g,tiempoParada));
+			// 									if (g !== "") {
+			// 										console.log("1------->>>>> " + g);
+			// 										trama.referencia = g;
+			// 										// var cnav = { lat:trama.lat, lng:trama.lng, status:'js' ,dir:g };
+			// 										var cnav = { lat:trama.lat, lng:trama.lng ,dir:g };
+			// 										$q.all([
+			// 											api.post('geocoder/save',cnav)
+			// 										]).then(responseG => {
+			// 												console.log(responseG);//Se guardo elemento
+			// 										});
+			// 									}
+			// 						} else if (b == "OVER_QUERY_LIMIT") {
+			// 									console.log("Api google : VER_QUERY_LIMIT");
+			// 									var cphp = { lat:trama.lat, lng:trama.lng, status:'php' };
+			// 									$q.all([
+			// 										api.post('geocoder/fnDireccion',cphp)
+			// 									]).then(responseP => {
+			// 											trama.referencia = responseP;
+			// 											// item.layer.setPopupContent(vehiclesHelper.getContentPopup(item,responseP,tiempoParada));
+			// 											console.log("2------->>>>> " + responseP);
+			// 									});
+			// 						} else {
+			// 							// item.layer.setPopupContent(vehiclesHelper.getContentPopup(item,"No encontrado...",tiempoParada));
+			// 							trama.referencia = "No encontrado...";
+			// 							console.log("3------->>>>> " + "No encontrado...");
+			// 						}
+			
+			// 				});
+			
+			
+			// 			} else {
+			// 				console.log("NO TIENE API ACTIVADA");
+			// 				//============== OSM
+			// 				var coord = { lat:trama.lat, lng:trama.lng };
+			// 				$q.all([
+			// 					api.post('geocoder/show',coord)  //funcion OSM
+			// 				]).then(responseG => {
+			// 						console.log("osm------->>>>> " + responseP);
+			// 						console.log(responseG);//Se guardo elemento
+			// 						console.log(responseG[0]);//Se guardo elemento
+			// 						g = responseG[0];
+			// 						if (g != 'NN') {
+			// 							console.log(g);//Se guardo elemento
+			// 							// console.log(g[0]);//Se guardo elemento
+			// 							trama.referencia = g;
+
+			// 							//============puntos cercanos
+			// 							var count = 0;
+			// 							for (let i = 0; i < gT.length; i++) {
+			// 								if ( ( trama.lat - 0.0015 <= gT[i].lat &&  gT[i].lat <= trama.lat + 0.0015 ) && ( trama.lng - 0.0015 <= gT[i].lng && gT[i].lng <= trama.lng + 0.0015 ) ) {
+			// 									if (gT[i].referencia == 'NN') {
+			// 										console.log("punto cercano :  cambio de nombre");
+			// 										gT[i].referencia = trama.referencia;
+			// 										count = count + 1;
+			// 										console.log(gT[i].referencia);
+			// 									} else {
+			// 										console.log("no cambio de nombre");
+			// 										console.log(gT[i].referencia);
+			// 									}
+			// 								} 
+			// 							}
+			// 							console.log("se encontrarton "+count);
+			// 							//============puntos cercanos
+
+			// 							//============guardar nueva direccion 
+			// 							var cnav = { lat:trama.lat, lng:trama.lng ,dir:g };
+			// 							$q.all([
+			// 								api.post('geocoder/save',cnav)  
+			// 							]).then(responseG => {
+			// 									console.log(responseG);//Se guardo elemento
+			// 							});
+			// 							//============guardar nueva direccion 
+
+
+			// 						} else {
+			// 							trama.referencia = 'desconocido ... ';
+			// 														// //=============PHP
+			// 							console.log("No tiene API - Api OSM arroja NN");
+
+			// 							var cphp = { lat:trama.lat, lng:trama.lng, status:'php' };
+			// 							console.log(cphp);
+			// 							$q.all([
+			// 								api.post('geocoder/fnDireccion', cphp)
+			// 							]).then(responseP => {
+			// 									console.log(responseP);
+
+			// 									// console.log("php------->>>>> " + responseP);
+			// 									if (responseP == "NN php") {
+			// 										trama.referencia = 'desconocido';
+			// 									} else {
+			// 										trama.referencia = responseP;
+			// 									}
+			// 									// console.log(responseP);//Se guardo elemento
+			// 									// item.layer.setPopupContent(vehiclesHelper.getContentPopup(item,responseP,tiempoParada));
+			// 							});
+			// 						}
+			// 				});
+
+
+			// 				// //=============PHP
+			// 				// console.log("No tiene API - Api OSM arroja NN");
+
+			// 				// var cphp = { lat:trama.lat, lng:trama.lng, status:'php' };
+			// 				// $q.all([
+			// 				// 	api.post('geocoder/fnDireccion', cphp)
+			// 				// ]).then(responseP => {
+			// 				// 		console.log(responseP);
+
+			// 				// 		// console.log("php------->>>>> " + responseP);
+			// 				// 		if (responseP == "NN php") {
+			// 				// 			trama.referencia = 'desconocido';
+			// 				// 		} else {
+			// 				// 			trama.referencia = responseP;
+			// 				// 		}
+			// 				// 		// console.log(responseP);//Se guardo elemento
+			// 				// 		// item.layer.setPopupContent(vehiclesHelper.getContentPopup(item,responseP,tiempoParada));
+			// 				// });
+
+			// 			}
+						
+			// 		}
+
+
+			// });
+
+
+		}
+
 
 
 

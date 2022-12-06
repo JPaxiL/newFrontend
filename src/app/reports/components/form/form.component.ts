@@ -13,6 +13,10 @@ import { ToastrService } from 'ngx-toastr';
 import { BrowserDetectorService } from '../../services/browser-detector.service';
 
 import Swal from 'sweetalert2';
+// import { threadId } from 'worker_threads';
+
+
+declare var google: any;
 
 @Component({
   selector: 'app-form',
@@ -447,7 +451,28 @@ export class FormComponent implements OnInit {
     console.log("Es firefox ? " + this.isFirefox);
     console.log("Es safari ? " + this.isSafari);
 
+    	// console.log("fnc_direccion--xDs");
+			var f = new google.maps.Geocoder();
+			// var h = new google.maps.LatLng(trama.lat, trama.lng);
+			var h = new google.maps.LatLng(-16.406578,-71.560808);
+
+			f.geocode({
+					'latLng': h
+			},  (a:any, b:any) => {
+					console.log("*********************1");
+					console.log(a);
+					console.log(b);
+					console.log("*********************2");
+					if (b == "REQUEST_DENIED") {
+						// vm.chkApiGoogle = false;
+					} else {
+            this.reportService.setApiGoogle(true);
+					}
+			});
+
+
   }
+
 
   endInit(){
     if(this.errorFlag == 1){
