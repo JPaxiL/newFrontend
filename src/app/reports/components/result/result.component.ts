@@ -481,6 +481,14 @@ export class ResultComponent implements OnDestroy, OnInit {
           { orderData: [ 4, 3 ], targets: [4] }, //hora
         ],
       },
+      { //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
+        num_rep: 'R011',
+        headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'velGPS', 'vel_can', 'tipo_frenada', 'tramo', 'PC'],
+        colDefs: [
+          { orderData: [ 1, 2 ], targets: [1] }, //fecha
+          { orderData: [ 2, 1 ], targets: [2] }, //hora
+        ],
+      },
     ];
     
     const isIndependentWindow = document.getElementById('vehicle_label') === null;
@@ -1713,15 +1721,15 @@ export class ResultComponent implements OnDestroy, OnInit {
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
                       this.sortedData[i][1].sort((a: any, b: any) => { 
-                        let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName].toFixed(2));
-                        let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName].toFixed(2));
+                        let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName].toFixed(2));
+                        let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName].toFixed(2));
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
                     this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName].toFixed(2));
-                      let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName].toFixed(2));
+                      let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName].toFixed(2));
+                      let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName].toFixed(2));
                       return this.numericComparison(term1, term2, sortingOrder);
                     });
                   }
@@ -1823,16 +1831,16 @@ export class ResultComponent implements OnDestroy, OnInit {
                     for(let i = 0; i < numberOfTables; i++){
                       this.sortedData[i][1].sort((a: any, b: any) => { 
                         this.sortedData[i][1].sort((a: any, b: any) => { 
-                          let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
-                          let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                          let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
+                          let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                           return this.numericComparison(term1, term2, sortingOrder);
                         });
                       });
                     }
                   } else {
                     this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
-                      let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                      let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
+                      let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
                     });
                   }
@@ -2011,15 +2019,15 @@ export class ResultComponent implements OnDestroy, OnInit {
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
                       this.sortedData[i][1].sort((a: any, b: any) => { 
-                        let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
-                        let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                        let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
+                        let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
                     this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
-                      let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                      let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
+                      let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
                     });
                   }
@@ -2133,6 +2141,141 @@ export class ResultComponent implements OnDestroy, OnInit {
       case 'R010': //REPORTE DE COMBUSTIBLE ODÓMETRO VIRTUAL
         break;
       case 'R011': //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              console.log('Headers List', tableHeaders);
+              console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'fecha':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'idConductor':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
+                        let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
+                      let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'velGPS':
+                case 'vel_can':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
+                        let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
+                      let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
         break;
       case 'R012': //REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA
         break;
@@ -2316,6 +2459,23 @@ export class ResultComponent implements OnDestroy, OnInit {
               "render": ( data: string, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
                   return data == '-'? -1: parseFloat(data);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
+          break;
+        case 'R011': //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [8, 9], //velocidad gps  y velocidad can
+              "render": ( data: string | number, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  let aux = -1;
+                  if(typeof data == 'string'){ aux = parseFloat(data.split(' ')[0]); }
+                  if(typeof data == 'number'){ aux = data; }
+                  return isNaN(aux)? -1: aux;
                 } else {
                   return data;
                 }
@@ -5851,7 +6011,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     var cc = 0;
 
-    this.data.forEach((table_data: any) => {
+    this.sortedData.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
 
@@ -5916,14 +6076,14 @@ export class ResultComponent implements OnDestroy, OnInit {
         });
 
         //----------- CONTENIDO / FILAS ------------
-        table_data[1].forEach((item: { latitud: number; longitud: number; tipo_unidad: any; id_conductor: any; nombre_conductor: any; tipo_frenada: any; tramo: any; vel_final: any; vel_can: any; PC: any; fecha_final: any; }, index: number) => {
+        table_data[1].forEach((item: { latitud: number; longitud: number; tipo_unidad: any; idConductor: any; conductor: any; tipo_frenada: any; tramo: any; vel_final: any; vel_can: any; PC: any; fecha_final: any; }, index: number) => {
 
           var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
           var cellsCuerpo = [];
 
           tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
-          id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.id_conductor??'').toString().length);
-          conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.nombre_conductor??'').toString().length);
+          id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+          conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
           vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_final??'').toString().length);
           vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
           descripcion_cell_ch_width = Math.max(descripcion_cell_ch_width, (item.tipo_frenada??'').toString().length);
@@ -5940,8 +6100,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             cellsCuerpo.push({ value: this.isChe(item.fecha_final), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
           }
           cellsCuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
-          cellsCuerpo.push({ value: item.id_conductor, ...this.bodyRowsConfig });
-          cellsCuerpo.push({ value: item.nombre_conductor, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.idConductor, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ value: item.conductor, ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.vel_final, ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.vel_can, ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.tipo_frenada, ...this.bodyRowsConfig });
