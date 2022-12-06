@@ -455,6 +455,16 @@ export class ResultComponent implements OnDestroy, OnInit {
           { orderData: [ 2, 1 ], targets: [2] }, //hora
         ],
       },
+      { //REPORTE DE EXCESOS EN ZONA
+        num_rep: 'R005',
+        headers: ['convoy', 'codigo', 'tracto', 'v0', 'velocidad', 'fecha_ini', 'hora_ini', 'fecha_fin', 'hora_fin', 'duracion', 'nombre_zona', 'referencia', 'ubicacion'],
+        colDefs: [
+          { orderData: [ 6, 7 ], targets: [6] }, //fecha
+          { orderData: [ 7, 6 ], targets: [7] }, //hora
+          { orderData: [ 8, 9 ], targets: [8] }, //fecha
+          { orderData: [ 9, 8 ], targets: [9] }, //hora
+        ],
+      },
       { //REPORTE DE POSICION
         num_rep: 'R008',
         headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
@@ -1771,6 +1781,167 @@ export class ResultComponent implements OnDestroy, OnInit {
         };
         break;
       case 'R005': //REPORTE DE EXCESOS EN ZONA
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'codigo':
+                case 'v0':
+                case 'velocidad':
+                case 'velocidad':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                          let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
+                          let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                          return this.numericComparison(term1, term2, sortingOrder);
+                        });
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
+                      let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'fecha_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_ini':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'fecha_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_fin':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'duracion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
         break;
       case 'R006': //REPORTE DE GENERAL
         break;
@@ -1968,8 +2139,21 @@ export class ResultComponent implements OnDestroy, OnInit {
           );
           break;
         case 'R004': //REPORTE DE COMBUSTIBLE
+          //NADA ADICIONAL
           break;
         case 'R005': //REPORTE DE EXCESOS EN ZONA
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [6], //duracion
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return this.intervalToSeconds(data);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
           break;
         case 'R006': //REPORTE GENERAL
           break;
@@ -4055,7 +4239,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
-    this.data.forEach((data: any,idx:any) => {
+    this.sortedData.forEach((data: any,idx:any) => {
 
       if(data[1].length > 0){
         bol_datos_ex = true;
