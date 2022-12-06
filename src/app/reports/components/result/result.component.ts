@@ -465,6 +465,14 @@ export class ResultComponent implements OnDestroy, OnInit {
           { orderData: [ 9, 8 ], targets: [9] }, //hora
         ],
       },
+      { //REPORTE DE EVENTOS
+        num_rep: 'R007',
+        headers: ['nombre_objeto', 'descripcion_evento', 'fecha', 'hora', 'velocidad', 'vel_can', 'nombre_zona', 'ubicacion', 'referencia'],
+        colDefs: [
+          { orderData: [ 3, 4 ], targets: [3] }, //fecha
+          { orderData: [ 4, 3 ], targets: [4] }, //hora
+        ],
+      },
       { //REPORTE DE POSICION
         num_rep: 'R008',
         headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
@@ -1946,6 +1954,124 @@ export class ResultComponent implements OnDestroy, OnInit {
       case 'R006': //REPORTE DE GENERAL
         break;
       case 'R007': //REPORTE DE EVENTOS
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'fecha':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'velocidad':
+                case 'vel_can':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
+                        let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = isNaN(parseFloat(a[columnName]))? -1: parseFloat(a[columnName]);
+                      let term2 = isNaN(parseFloat(b[columnName]))? -1: parseFloat(b[columnName]);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
         break;
       case 'R008': //REPORTE DE POSICIÓN
         this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
@@ -2158,6 +2284,18 @@ export class ResultComponent implements OnDestroy, OnInit {
         case 'R006': //REPORTE GENERAL
           break;
         case 'R007': //REPORTE DE EVENTOS
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [5, 6], //velocidad gps  y velocidad_can
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return isNaN(parseFloat(data.split(' ')[0]))? -1: parseFloat(data.split(' ')[0]);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
           break;
         case 'R008': //REPORTE DE POSICIÓN
           this.dtOptions.columnDefs.push(
@@ -2226,10 +2364,10 @@ export class ResultComponent implements OnDestroy, OnInit {
     return str.toLowerCase();
   }
 
-  textComparison(a: string, b: string, order: string){
+  textComparison(a: string | null, b: string | null, order: string){
     //los acentos igual irand despues de la z, tal cual ordena datatables
-    let str1 = this.prepareStringForComparison(a);
-    let str2 = this.prepareStringForComparison(b);
+    let str1 = a == null? '': this.prepareStringForComparison(a);
+    let str2 = b == null? '': this.prepareStringForComparison(b);
     if(order == 'asc'){
       if(str1 < str2){ return -1; };
       if(str1 > str2){ return 1; };
@@ -5158,7 +5296,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //this.data.forEach((table_data: any) => {
 
-    this.data.forEach((data: any,idx:any) => {
+    this.sortedData.forEach((data: any,idx:any) => {
 
       if(data[1].length > 0){
         bol_datos_ex = true;
