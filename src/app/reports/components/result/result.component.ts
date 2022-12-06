@@ -437,6 +437,16 @@ export class ResultComponent implements OnDestroy, OnInit {
           //Por definir después, dependiendo de si es por duracion o limte de velocidad
         ],
       },
+      { //REPORTE DE ENTRADA Y SALIDA
+        num_rep: 'R003',
+        headers: ['fecha_in', 'hora_in', 'fecha_out', 'hora_out', 'duracion', 'nombre_zona', 'ubicacion', 'PC'],
+        colDefs: [
+          { orderData: [ 1, 2 ], targets: [1] }, //fecha
+          { orderData: [ 2, 1 ], targets: [2] }, //hora
+          { orderData: [ 3, 4 ], targets: [3] }, //fecha
+          { orderData: [ 4, 3 ], targets: [4] }, //hora
+        ],
+      },
       { //REPORTE DE POSICION
         num_rep: 'R008',
         headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
@@ -1429,6 +1439,157 @@ export class ResultComponent implements OnDestroy, OnInit {
         };
         break;
       case 'R003': //REPORTE DE ENTRADA Y SALIDA
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              console.log('Headers List', tableHeaders);
+              console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'fecha_in':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_in':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'fecha_out':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
+                        let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
+                        return this.dateComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
+                      let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
+                      return this.dateComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora_out':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
+                        let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
+                        return this.dateComparison(term1, term2, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
+                      let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
+                      return this.dateComparison(term1, term2, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'duracion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a.duracion == 'n/a'? -1: this.intervalToSeconds(a.duracion);
+                        let term2 = b.duracion == 'n/a'? -1: this.intervalToSeconds(b.duracion);
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a.duracion == 'n/a'? -1: this.intervalToSeconds(a.duracion);
+                      let term2 = b.duracion == 'n/a'? -1: this.intervalToSeconds(b.duracion);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
         break;
       case 'R004': //REPORTE DE COMBUSTIBLE
         break;
@@ -1612,6 +1773,20 @@ export class ResultComponent implements OnDestroy, OnInit {
               },
             );
           }
+          break;
+        case 'R003': //REPORTE DE ENTRADA Y SALIDA
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [5], //Duracion
+              "render": ( data: string, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  return this.intervalToSeconds(data);
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
           break;
         case 'R008': //REPORTE DE POSICIÓN
           this.dtOptions.columnDefs.push(
@@ -3122,7 +3297,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var table_width = 1 + (this.chkDateHour? 4:2) + 4;
     var vehiculo_width = (this.chkDateHour? 4:3);
 
-    this.data.forEach((table_data: any) => {
+    this.sortedData.forEach((table_data: any) => {
       if(table_data[1].length > 0){
         column_config = [];
 
