@@ -539,6 +539,9 @@ export class FormComponent implements OnInit {
 
     var repSubtitle = '';
     var chkDateHour = this.chkDateHour;
+    var chkFatigaSomnolencia = this.chkFatigaSomnolencia;
+    var chkFatigaDistraccion = this.chkFatigaDistraccion;
+
     var chkDuracion = this.checkboxDuration;
     var chkOdomV = this.chkOdomVirtual;
 
@@ -596,7 +599,6 @@ export class FormComponent implements OnInit {
     //var eV: any=[];
 
     //selectedZone[i].id
-
     //var zonesArr: any=[];
 
     let reportSelect = _.find(this.reports, (rep:any) => { if (rep.codigo == this.selectedReport) { return true;} else {return false} });  
@@ -657,6 +659,28 @@ export class FormComponent implements OnInit {
     //console.log(param);
     console.log('Proceso iniciado a las: ', moment(new Date()).format("YYYY-MM-DD HH:mm:ss"));
     console.log(param);
+
+
+    //CONFIGURACION DE TITULOS  
+    var repTitle = reportSelect.value;
+    if (param.numRep == 'R012' || param.numRep == 'R022') {
+      //REPORTE DE DISTRACIÓN Y POSIBLE FATIGA
+      if (chkFatigaSomnolencia && chkFatigaDistraccion) {
+        repTitle = reportSelect.value;
+      } else {
+        if (chkFatigaSomnolencia) {
+          repTitle = 'REPORTE DE POSIBLE FATIGA';
+        }
+        if (chkFatigaDistraccion) {
+          repTitle = 'REPORTE DE DISTRACIÓN';
+        }
+      }
+      reportSelect.value
+    } else {
+      repTitle = reportSelect.value;
+    }
+
+
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
         //console.log(this.selectedConvoy.length);
@@ -672,9 +696,11 @@ export class FormComponent implements OnInit {
           numRep: param.numRep, // codigo
           repSubtitle: repSubtitle,
           chkDateHour: chkDateHour,
+          chkFatigaSomnolencia: chkFatigaSomnolencia,
+          chkFatigaDistraccion: chkFatigaDistraccion,
           chkDuracion: chkDuracion,
           chkOdomV: chkOdomV,
-          repTitle: reportSelect.value, //this.reports[param.numRep].value,
+          repTitle: repTitle, //reportSelect.value, //this.reports[param.numRep].value,
           period: M1_t + ' - ' + M2_t,
           isVehicleReport: !cv,
           chkTableDropdown: !this.chkSimultaneousTables,

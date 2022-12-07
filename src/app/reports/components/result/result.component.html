@@ -1916,7 +1916,7 @@
                     <th>Conductor</th>
                     <th>Vel.GPS</th>
                     <th>Vel.CAN</th>
-                    <th>Descripción</th>
+                    <th *ngIf="chkFatigaSomnolencia && chkFatigaDistraccion">Descripción</th>
                     <th>Reconocimiento Facial (ai1x)</th>
 
                     <th>Tramo</th>
@@ -1941,7 +1941,7 @@
                     <td>{{row.conductor}}</td>
                     <td>{{row.velGPS}} Km/h</td>
                     <td>{{row.vel_can}} Km/h</td>
-                    <td>{{row.descripcion}}</td>
+                    <td *ngIf="chkFatigaSomnolencia && chkFatigaDistraccion">{{row.descripcion}}</td>
 
                     <td *ngIf="(row.ai1x > 1000)">Rostro detectado ({{row.ai1x}})</td>
                     <td *ngIf="(row.ai1x < 1001)">Rostro ausente ({{row.ai1x}})</td>
@@ -1992,7 +1992,7 @@
                     <th>Conductor</th>
                     <th>Vel.GPS</th>
                     <th>Vel.CAN</th>
-                    <th>Descripción</th>
+                    <th *ngIf="chkFatigaSomnolencia && chkFatigaDistraccion">Descripción</th>
                     <th>Reconocimiento Facial (ai1x)</th>
 
                     <th>Tramo</th>
@@ -2017,7 +2017,7 @@
                     <td>{{row.conductor}}</td>
                     <td>{{row.velGPS}} Km/h</td>
                     <td>{{row.vel_can}} Km/h</td>
-                    <td>{{row.descripcion}}</td>
+                    <td *ngIf="chkFatigaSomnolencia && chkFatigaDistraccion">{{row.descripcion}}</td>
 
                     <td *ngIf="(row.ai1x > 1000)">Rostro detectado ({{row.ai1x}})</td>
                     <td *ngIf="(row.ai1x < 1001)">Rostro ausente ({{row.ai1x}})</td>
