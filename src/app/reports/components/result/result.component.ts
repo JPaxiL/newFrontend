@@ -421,7 +421,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // console.log(this.reportService.getParams());
     this.columnsConfig = [
       { //REPORTE DE PARADAS Y MOVIMIENTOS
-        num_rep: 'R001',
+        num_rep: ['R001'],
         headers: ['estado', 'fecha_ini', 'hora_ini', 'fecha_fin', 'hora_fin', 'duracion', 'ubicacion', 'recorrido', 'maxima_velocidad', 'vel_max_can', 'pCercano', 'vel_promedio', 'vel_prom_can', 'referencia'],
         colDefs: [
           { orderData: [ 2, 3 ], targets: [2] }, //fecha
@@ -431,14 +431,14 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE EXCESOS DE VELOCIDAD
-        num_rep: 'R002',
+        num_rep: ['R002'],
         headers: ['nombre', 'fecha', 'hora', 'maxima_velocidad', 'ubicacion', 'fecha_ini', 'hora_ini', 'fecha_fin', 'hora_fin', 'duracion', 'cant_tramas', 'string_tramas', 'vel_min', 'vel_max', 'PC', 'ZC'],
         colDefs: [
           //Por definir después, dependiendo de si es por duracion o limte de velocidad
         ],
       },
       { //REPORTE DE ENTRADA Y SALIDA
-        num_rep: 'R003',
+        num_rep: ['R003'],
         headers: ['fecha_in', 'hora_in', 'fecha_out', 'hora_out', 'duracion', 'nombre_zona', 'ubicacion', 'PC'],
         colDefs: [
           { orderData: [ 1, 2 ], targets: [1] }, //fecha
@@ -448,7 +448,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE COMBUSTIBLE
-        num_rep: 'R004',
+        num_rep: ['R004'],
         headers: ['fecha', 'hora', 'can_speed', 'fuel_level', 'fuel_used', 'can_HRFC', 'combusrestante', 'di4', 'can_dist', 'ubicacion', 'alerta', 'combustiblealerta', 'can_rpm', 'altitude'],
         colDefs: [
           { orderData: [ 1, 2 ], targets: [1] }, //fecha
@@ -456,7 +456,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE EXCESOS EN ZONA
-        num_rep: 'R005',
+        num_rep: ['R005'],
         headers: ['convoy', 'codigo', 'tracto', 'v0', 'velocidad', 'fecha_ini', 'hora_ini', 'fecha_fin', 'hora_fin', 'duracion', 'nombre_zona', 'referencia', 'ubicacion'],
         colDefs: [
           { orderData: [ 6, 7 ], targets: [6] }, //fecha
@@ -466,7 +466,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE EVENTOS
-        num_rep: 'R007',
+        num_rep: ['R007'],
         headers: ['nombre_objeto', 'descripcion_evento', 'fecha', 'hora', 'velocidad', 'vel_can', 'nombre_zona', 'ubicacion', 'referencia'],
         colDefs: [
           { orderData: [ 3, 4 ], targets: [3] }, //fecha
@@ -474,7 +474,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE POSICION
-        num_rep: 'R008',
+        num_rep: ['R008'],
         headers: ['codigo', 'placa', 'fecha', 'hora', 'estado', 'conductor', 'velocidad', 'velocidad_can', 'odometro', 'ubicacion', 'referencia'],
         colDefs: [
           { orderData: [ 3, 4 ], targets: [3] }, //fecha
@@ -482,7 +482,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
-        num_rep: 'R011',
+        num_rep: ['R011'],
         headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'velGPS', 'vel_can', 'tipo_frenada', 'tramo', 'PC'],
         colDefs: [
           { orderData: [ 1, 2 ], targets: [1] }, //fecha
@@ -490,7 +490,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA
-        num_rep: 'R012',
+        num_rep: ['R012'],
         headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'velGPS', 'vel_can', 'descripcion', 'ai1x', 'tramo', 'PC', 'ubicacion'],
         colDefs: [
           { orderData: [ 1, 2 ], targets: [1] }, //fecha
@@ -498,40 +498,20 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
       { //REPORTE DE FATIGA EXTREMA
-        num_rep: 'R014',
+        num_rep: ['R014'],
         headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'velGPS', 'vel_can',  'ai1x', 'tramo', 'PC', 'ubicacion'],
         colDefs: [
           { orderData: [ 1, 2 ], targets: [1] }, //fecha
           { orderData: [ 2, 1 ], targets: [2] }, //hora
         ],
       },
-      { //REPORTE DE ANTICOLISIÓN FRONTAL
-        num_rep: 'R015',
-        headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'vel_gps_speed', 'vel_can',  'tramo', 'PC', 'ubicacion', 'sonidoEnCabina'],
-        colDefs: [
-          { orderData: [ 1, 2 ], targets: [1] }, //fecha
-          { orderData: [ 2, 1 ], targets: [2] }, //hora
-        ],
-      },
-      { //REPORTE DE COLISIÓN CON PEATONES
-        num_rep: 'R016',
-        headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'vel_gps_speed', 'vel_can',  'tramo', 'PC', 'ubicacion', 'sonidoEnCabina'],
-        colDefs: [
-          { orderData: [ 1, 2 ], targets: [1] }, //fecha
-          { orderData: [ 2, 1 ], targets: [2] }, //hora
-        ],
-      },
-      { //REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA
-        num_rep: 'R017',
-        headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'vel_gps_speed', 'vel_can',  'tramo', 'PC', 'ubicacion', 'sonidoEnCabina'],
-        colDefs: [
-          { orderData: [ 1, 2 ], targets: [1] }, //fecha
-          { orderData: [ 2, 1 ], targets: [2] }, //hora
-        ],
-      },
-      { //REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA
-        num_rep: 'R018',
-        headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'vel_gps_speed', 'vel_can',  'tramo', 'PC', 'ubicacion', 'sonidoEnCabina'],
+      { 
+        //REPORTE DE ANTICOLISIÓN FRONTAL
+        //REPORTE DE COLISIÓN CON PEATONES
+        //REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA
+        //REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA
+        num_rep: ['R015', 'R016', 'R017', 'R018'],
+        headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'vel_gps_speed', 'vel_can', 'tramo', 'PC', 'ubicacion', 'sonidoEnCabina'],
         colDefs: [
           { orderData: [ 1, 2 ], targets: [1] }, //fecha
           { orderData: [ 2, 1 ], targets: [2] }, //hora
@@ -680,7 +660,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   setDataTablesConfig(isIndependentWindow: boolean, numberOfTables: number){
     this.currentActiveTables = [];
     this.dtTableCurrentOrder = [[0, 'asc']];
-    let columnsConfig = this.columnsConfig.filter((report: any) => { return report.num_rep == this.report_data.num_rep })[0];
+    let columnsConfig = this.columnsConfig.filter((report: any) => { return report.num_rep.indexOf(this.report_data.num_rep) > -1; })[0];
 
     let reportExistInConfig = columnsConfig !== undefined;
     let headersExistInColumnsConfig = reportExistInConfig && columnsConfig.headers !== undefined;
@@ -3092,7 +3072,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     console.log('Columns Config', columnsConfig);
     console.log('Columns Config', columnsConfig !== undefined);
     console.log('This Columns Config', this.columnsConfig);
-    console.log('This Columns Config', this.columnsConfig.filter((report: any) => { return report.num_rep == this.report_data.num_rep })[0]);
+    console.log('This Columns Config', this.columnsConfig.filter((report: any) => { return report.num_rep.indexOf(this.report_data.num_rep) > -1; })[0]);
 
     if(columnsConfig !== undefined && columnsConfig.colDefs !== undefined && columnsConfig.colDefs.length != 0){
       this.dtOptions.columnDefs = JSON.parse(JSON.stringify(columnsConfig.colDefs));
