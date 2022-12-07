@@ -497,6 +497,14 @@ export class ResultComponent implements OnDestroy, OnInit {
           { orderData: [ 2, 1 ], targets: [2] }, //hora
         ],
       },
+      { //REPORTE DE FATIGA EXTREMA
+        num_rep: 'R014',
+        headers: ['fecha', 'hora', 'codigo', 'placa', 'tipo_unidad', 'idConductor', 'conductor', 'velGPS', 'vel_can',  'ai1x', 'tramo', 'PC', 'ubicacion'],
+        colDefs: [
+          { orderData: [ 1, 2 ], targets: [1] }, //fecha
+          { orderData: [ 2, 1 ], targets: [2] }, //hora
+        ],
+      },
     ];
     
     const isIndependentWindow = document.getElementById('vehicle_label') === null;
@@ -2373,6 +2381,23 @@ export class ResultComponent implements OnDestroy, OnInit {
                     });
                   }
                   break;
+                case 'ai1x':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
+                        let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
+                      let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
+                      return this.textComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
@@ -2425,6 +2450,158 @@ export class ResultComponent implements OnDestroy, OnInit {
       case 'R013': //REPORTE DE CALIFICACIÓN DE MANEJO
         break;
       case 'R014': //REPORTE DE FATIGA EXTREMA
+        this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
+
+          if(this.chkTableDropdown){
+            this.dtTableCurrentOrder = [[ oSettings.aaSorting[0]['0'], oSettings.aaSorting[0]['1']]];
+            this.dtOptions.order = this.dtTableCurrentOrder;
+          }
+
+          const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
+          if(   isIndependentWindow 
+            ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
+            let sortedDataTableIndex = -1; 
+
+            sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
+
+            let sortingColIndex = oSettings.aaSorting[0]['0'];
+            let sortingOrder = oSettings.aaSorting[0]['1'];
+            
+            if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
+              let columnName: string;
+              let tableHeaders = [...columnsConfig.headers];
+
+              columnName = tableHeaders[sortingColIndex - 1];
+              //console.log('Headers List', tableHeaders);
+              //console.log('Sorting Column...', columnName);
+
+              switch(columnName){
+                case 'fecha':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'hora':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
+                    });
+                  }
+                  break;
+                case 'idConductor':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
+                        let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
+                      let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'velGPS':
+                case 'vel_can':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
+                        let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
+                        return this.numericComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
+                      let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
+                      return this.numericComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ai1x':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
+                        let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
+                        return this.textComparison(term1, term2, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
+                      let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
+                      return this.textComparison(term1, term2, sortingOrder);
+                    });
+                  }
+                  break;
+                case 'ubicacion':
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
+                    });
+                  }
+                  break;
+                default:
+                  if(this.chkTableDropdown){
+                    for(let i = 0; i < numberOfTables; i++){
+                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                        return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                      });
+                    }
+                  } else {
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      return this.textComparison(a[columnName], b[columnName], sortingOrder);
+                    });
+                  }
+                  break;
+              }
+              console.log(this.sortedData[sortedDataTableIndex][1]);
+              
+            }
+
+            if(this.directSorting){
+              this.directSorting = false;
+              for(let i = 0; i < this.currentActiveTables.length; i++){
+                if(this.currentActiveTables[i] != oSettings.sTableId){
+                  if(!this.chkTableDropdown){
+                    console.log('Sorting other dataTables: ', this.currentActiveTables[i]);
+                    $(`#${this.currentActiveTables[i]}`).DataTable().order([[sortingColIndex, sortingOrder]]).draw();
+                  }
+                }
+              }
+              this.directSorting = true;
+            }
+
+          } else {
+            console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
+          }
+        };
         break;
       case 'R015': //REPORTE DE ANTICOLISIÓN FRONTAL
         break;
@@ -2627,6 +2804,23 @@ export class ResultComponent implements OnDestroy, OnInit {
           );
           break;
         case 'R012': //REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA
+          this.dtOptions.columnDefs.push(
+            { 
+              targets: [8, 9], //velocidad gps  y velocidad can
+              "render": ( data: string | number, type: any, row: any, meta: any ) => {
+                if(type === 'sort' || type === 'type'){
+                  let aux = -1;
+                  if(typeof data == 'string'){ aux = parseFloat(data.split(' ')[0]); }
+                  if(typeof data == 'number'){ aux = data; }
+                  return isNaN(aux)? -1: aux;
+                } else {
+                  return data;
+                }
+              }
+            },
+          );
+          break;
+        case 'R014': //REPORTE DE FATIGA EXTREMA
           this.dtOptions.columnDefs.push(
             { 
               targets: [8, 9], //velocidad gps  y velocidad can
@@ -7185,7 +7379,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //this.data.forEach((table_data: any) => {
 
-    this.data.forEach((data: any,idx:any) => {
+    this.sortedData.forEach((data: any,idx:any) => {
 
       if(data[1].length > 0){
         bol_datos_ex = true;
