@@ -270,6 +270,9 @@
         padding: 0.25rem 0.5rem;
         border-radius: 1rem;
         font-size: 0.675rem;
+      }
+      &.geofence-tooltip > b,
+      &.geopoint-tooltip > b{
         //Borde blanco para texto
         text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
                1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;

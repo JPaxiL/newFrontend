@@ -323,7 +323,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
               { permanent: true,
                 offset: [0, 20],
                 direction: 'center',
-                className: 'leaflet-tooltip-own',
+                className: 'leaflet-tooltip-own geopoint-tooltip',
               });
 
         if (geo.geopunto_nombre_visible == "true") {
@@ -412,7 +412,7 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
               { permanent: true,
                 offset: [0, 20],
                 direction: 'center',
-                className: 'leaflet-tooltip-own',
+                className: 'leaflet-tooltip-own geopoint-tooltip',
               });
 
         if (geo.geopunto_nombre_visible == "true") {

@@ -142,7 +142,7 @@ export class GeofencesService {
           { permanent: true,
             // offset: [-100, 0],
             direction: 'center',
-            className: 'leaflet-tooltip-own',
+            className: 'leaflet-tooltip-own geofence-tooltip',
           });
 
       this.bindMouseEvents(this.geofences[i]);

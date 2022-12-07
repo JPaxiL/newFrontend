@@ -625,7 +625,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
             { permanent: true,
               // offset: [-100, 0],
               direction: 'center',
-              className: 'leaflet-tooltip-own',
+              className: 'leaflet-tooltip-own geofence-tooltip',
             });
 
 
@@ -718,7 +718,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
               { permanent: true,
                 // offset: [-100, 0],
                 direction: 'center',
-                className: 'leaflet-tooltip-own',
+                className: 'leaflet-tooltip-own geofence-tooltip',
               });
 
           geo.marker_name.addTo(this.mapService.map);
