@@ -2341,6 +2341,15 @@ export class ResultComponent implements OnDestroy, OnInit {
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
 
+              if(!this.chkFatigaSomnolencia || !this.chkFatigaDistraccion){
+                for(let i = 0; i < tableHeaders.length; i++){
+                  if(tableHeaders[i] == 'descripcion'){
+                    tableHeaders.splice(i, 1);
+                    break;
+                  }
+                }
+              }
+
               columnName = tableHeaders[sortingColIndex - 1];
               //console.log('Headers List', tableHeaders);
               //console.log('Sorting Column...', columnName);
