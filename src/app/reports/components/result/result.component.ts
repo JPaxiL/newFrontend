@@ -11287,6 +11287,34 @@ export class ResultComponent implements OnDestroy, OnInit {
     exportPdfDistraccionPosibleFatiga() {
 			var exportFilePdf:any = [];
 			var bol_datos_pdf = false;
+
+      var nom_pdf: string = '';
+
+      if (this.report_data.num_rep == 'R012') {
+        if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion) {
+          nom_pdf = "ReporteDistraccionPosibleFatiga.pdf";
+        } else {
+          if (this.chkFatigaSomnolencia) {
+            nom_pdf = "ReportePosibleFatiga.pdf";
+          }
+          if (this.chkFatigaDistraccion) {
+            nom_pdf = "ReporteDistraccion.pdf";
+          }
+        }
+      } else if (this.report_data.num_rep == 'R022') {
+         if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion) {
+          nom_pdf = "ReporteSomnolenciaDistraccionProloint.pdf";
+        } else {
+          if (this.chkFatigaSomnolencia) {
+            nom_pdf = "ReportePosibleFatigaProloin.pdf";
+          }
+          if (this.chkFatigaDistraccion) {
+            nom_pdf = "ReporteDistraccionProloin.pdf";
+          }
+        }
+      }
+
+      
 			this.data.forEach((data:any, index:any)=>{
 				console.log(data);
 				console.log(index);
@@ -11297,7 +11325,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 						columns: [
 							[
 								{
-									text: 'REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA',
+									text: this.repTitle, //'REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA',
 									fontSize: this.c1,
 									bold: true,
 									alignment: 'left',
@@ -11381,7 +11409,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             cabecera.push({ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
-            cabecera.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion){ cabecera.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
 
             cabecera.push({ text: 'Reconocimiento Facial (ai1x)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
@@ -11407,26 +11435,49 @@ export class ResultComponent implements OnDestroy, OnInit {
 								var rec_facial = "Rostro ausente (" + item.ai1x + ")";
 							}
 
-							tabla.push([
-								{ text: (idx + 1), bold: true, fontSize: 6, alignment: 'center' },
-								{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+							// tabla.push([
+							// 	{ text: (idx + 1), bold: true, fontSize: 6, alignment: 'center' },
+							// 	{ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
 
-		        				{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
-								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
-								{ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+							// 	{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+							// 	{ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' },
 
-		        				{ text: rec_facial, bold: true, fontSize: 6, alignment: 'center' },
-								{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
-		        				{ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: rec_facial, bold: true, fontSize: 6, alignment: 'center' },
+							// 	{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+              //   { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+		        	// ]);
 
-		        			]);
+              var cuerpo = [];
+
+              cuerpo.push({ text: (idx + 1), bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: this.isChe(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: this.isChs(item.fecha), bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' });
+  
+              cuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
+              if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion){ cuerpo.push({ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+              cuerpo.push({ text: rec_facial, bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
+              cuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
+  
+              tabla.push(cuerpo);
+
+
 						});
 
 
@@ -11464,7 +11515,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             cabecera.push({ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
-            cabecera.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion){ cabecera.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
 
             cabecera.push({ text: 'Reconocimiento Facial (ai1x)', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
@@ -11492,20 +11543,20 @@ export class ResultComponent implements OnDestroy, OnInit {
 							// tabla.push([
 							// 	{ text: (idx + 1), bold: true, fontSize: 6, alignment: 'center' },
 							// 	{ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' },
-              //   { text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
-              //   { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
-              //   { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' },
 
-              //   { text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' },
 							// 	{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' },
-              //   { text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
-              //   { text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
 							// 	{ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' },
 
-              //   { text: rec_facial, bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: rec_facial, bold: true, fontSize: 6, alignment: 'center' },
 							// 	{ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
-              //   { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
-              //   { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+              //  { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
 		        	// ]);
 
 
@@ -11521,7 +11572,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               cuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
-              cuerpo.push({ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' });
+              if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion){ cuerpo.push({ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' }); };
+
   
               cuerpo.push({ text: rec_facial, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' });
@@ -11576,7 +11628,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 			      	}
 
 			    };
-			    pdfMake.createPdf(docDefinition).download('ReporteDistraccionPosibleFatiga.pdf');
+			    pdfMake.createPdf(docDefinition).download(nom_pdf);
 
 			} else {
 				alert('No se han encontrado datos para exportar');
