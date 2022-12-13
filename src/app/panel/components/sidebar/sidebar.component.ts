@@ -25,6 +25,7 @@ export class SidebarComponent implements OnInit {
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Seguridad Vehicular"},
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'CIRCULAR-GEOFENCE', name:"Circular Geofences"},
+    { id:'POLYLINE-GEOFENCE', name:"Polyline Geofences"},
     { id: 'EVENT-USER', name: 'Eventos'}
 
 

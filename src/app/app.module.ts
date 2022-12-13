@@ -118,6 +118,7 @@ import { NotFoundComponent } from './panel/not-found/not-found.component';
 import { GeocercaCircularMainComponent } from './geofences/components/geocerca-circular-main/geocerca-circular-main.component';
 import { GeocercaCircularAddComponent } from './geofences/components/geocerca-circular-add/geocerca-circular-add.component';
 import { GeocercaCircularListsComponent } from './geofences/components/geocerca-circular-lists/geocerca-circular-lists.component';
+import { GeocercaPolylineMainComponent } from './geofences/components/geocerca-polyline-main/geocerca-polyline-main.component';
 
 @NgModule({
   declarations: [
@@ -187,6 +188,7 @@ import { GeocercaCircularListsComponent } from './geofences/components/geocerca-
     GeocercaCircularMainComponent,
     GeocercaCircularAddComponent,
     GeocercaCircularListsComponent,
+    GeocercaPolylineMainComponent,
 
   ],
   imports: [

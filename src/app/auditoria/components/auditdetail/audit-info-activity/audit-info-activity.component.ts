@@ -135,7 +135,8 @@ export class AuditInfoActivityComponent implements OnChanges {
         vehiculos = vehiculos.split(',');
       }
 
-      
+
+
       for (let i = 0; i < vehiculos.length; i++) {
         
         

@@ -89,6 +89,10 @@
         <app-geocerca-circular-main></app-geocerca-circular-main>
       </ng-container>
 
+      <ng-container *ngIf="(panelService.nombreComponente == 'POLYLINE-GEOFENCE')">
+        <app-geocerca-polyline-main></app-geocerca-polyline-main>
+      </ng-container>
+
       <ng-container *ngIf="(panelService.nombreComponente == 'EVENT-USER')">
         <app-event-board></app-event-board>
       </ng-container>
