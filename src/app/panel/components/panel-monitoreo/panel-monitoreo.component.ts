@@ -82,6 +82,8 @@ export class PanelMonitoreoComponent implements OnInit {
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geocercas-header-height').replace('rem', '')) != 0;
       case "CIRCULAR-GEOFENCE":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-circular-geofences-header-height').replace('rem', '')) != 0;
+      case "POLYLINE-GEOFENCE":
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-polyline-geofences-header-height').replace('rem', '')) != 0;
       case "GEOPOINTS":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geopunto-header-height').replace('rem', '')) != 0;
       case "HISTORIAL":

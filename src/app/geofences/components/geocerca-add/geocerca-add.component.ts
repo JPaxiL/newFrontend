@@ -374,6 +374,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     }
 
+    this.form.zone_type = 'POLYGON';
 
     this.form.color = geo.zone_color;//"#FFEE00";
     this.form.categoria = geo.zone_cat;
@@ -449,6 +450,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.categoria = 0;
 
     this.form.checkVelocidad = false;
+
+    this.form.zone_type = 'POLYGON';
 
     this.form.tag_name_color = this.geofencesService.defaultTagNameColor;
     this.form.tag_name_font_size = this.geofencesService.defaultTagNameFontSize; //px
