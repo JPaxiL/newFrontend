@@ -352,7 +352,7 @@ export class FormComponent implements OnInit {
 // 20 -R021	REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)
 // 21 -R022	REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT
 // 22 -R023	REPORTE DE MANTENIMIENTO FISICO
-
+//    -R024	REPORTE DE NO ROSTRO
 
 
 
@@ -835,6 +835,7 @@ export class FormComponent implements OnInit {
       case 'R021':  // 20 -R021	REPORTE DE EXCESOS DE VELOCIDAD (FORMATO EXTENDIDO)
       case 'R022':  // 21 -R022	REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT
       case 'R023':  // 22 -R023	REPORTE DE MANTENIMIENTO FISICO
+      case 'R024':  //    -R024	REPORTE DE NO ROSTRO
           this.showLimitTime = true;
 				break;
       default: break;
@@ -1042,6 +1043,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R022' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R023' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R024' && is_vehicle_selected)
       );
   }
 

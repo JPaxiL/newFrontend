@@ -4086,6 +4086,253 @@
 
 
 
+    <!--   -R024 REPORTE DE NO ROSTRO -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R024'">
+
+      <ng-container *ngIf="chkTableDropdown">
+
+        <div class="p-card" style="padding: 1rem;">
+
+          <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>
+                <div class="gl-row-underline vehicle-dropdown border-0">
+                  <p-dropdown
+                        [filter]="true"
+                        [options]="reportTableVehicleDropdownOptions"
+                        optionLabel="name"
+                        [(ngModel)]="reportTableVehicleSelected"
+                        [appendTo]="'body'"
+                        (onChange)="renderDataTable()">
+                        <ng-template let-vehicle pTemplate="item">
+                            <div class="country-item">
+                                <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                            </div>
+                        </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <!-- <th>Item</th>
+                    <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                    <th *ngIf="chkDateHour">Fecha</th>
+                    <th *ngIf="chkDateHour">Hora</th>
+                    <th>Código</th>
+                    <th>Placa</th>
+                    <th>Tipo de Unidad</th>
+                    <th>Tipo de Mantenimiento</th>
+
+                    <th>Id Conductor</th>
+                    <th>Conductor</th>
+                    <th>Vel.GPS</th>
+                    <th>Vel.CAN</th>
+
+                    <th>Tramo</th>
+                    <th>Punto Cercano</th>
+                    <th>Ubicación</th> -->
+
+
+                    <th>Item</th>
+                    <th>Convoy</th>
+                    <th>Placa</th>
+                    <th>Tipo de Unidad</th>
+
+                    <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                    <th *ngIf="chkDateHour">Fecha</th>
+                    <th *ngIf="chkDateHour">Hora</th>
+                    <th>vel. GPS</th>
+                    <th>GPS speed</th>
+                    <th>ai1 </th>
+                    <th>Resumen(ai1-Fecha)</th>
+                    <th>Ubicación</th>
+                    <th>Punto Cercano</th>
+
+
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+
+                    <!-- <td>{{i + 1}}</td>
+                    <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+                    <td>{{row.codigo}}</td>
+                    <td>{{row.placa}}</td>
+                    <td>{{row.tipo_unidad}}</td>
+                    <td>{{row.tipo_mantenimiento}}</td>
+
+
+                    <td>{{row.idConductor}}</td>
+                    <td>{{row.conductor}}</td>
+                    <td>{{row.vel_gps_speed}} Km/h</td>
+                    <td>{{row.vel_can}} Km/h</td>
+
+                    <td>{{row.tramo}}</td>
+                    <td>{{row.PC}}</td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td> -->
+
+
+                    <td>{{i + 1}}</td>
+
+                    <td>{{row.convoy}}</td>
+                    <td>{{row.placa}}</td>
+                    <td>{{row.tipo_unidad}}</td>
+
+                    <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+                    <td>{{row.velGPS}} km/h</td>
+                    <td>{{row.GPS_speed}} km/h</td>
+                    <td>{{row.ai1x}}</td>
+                    <td>{{row.campoResumen}} </td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+                    <td>{{row.PC}}</td>
+
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="!chkTableDropdown">
+
+        <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+
+          <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>{{v_table[0][1]}}</div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <!-- <th>Item</th>
+                    <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                    <th *ngIf="chkDateHour">Fecha</th>
+                    <th *ngIf="chkDateHour">Hora</th>
+                    <th>Código</th>
+                    <th>Placa</th>
+                    <th>Tipo de Unidad</th>
+                    <th>Tipo de Mantenimiento</th>
+
+                    <th>Id Conductor</th>
+                    <th>Conductor</th>
+                    <th>Vel.GPS</th>
+                    <th>Vel.CAN</th>
+
+                    <th>Tramo</th>
+                    <th>Punto Cercano</th>
+                    <th>Ubicación</th> -->
+
+
+                    <th>Item</th>
+                    <th>Convoy</th>
+                    <th>Placa</th>
+                    <th>Tipo de Unidad</th>
+
+                    <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                    <th *ngIf="chkDateHour">Fecha</th>
+                    <th *ngIf="chkDateHour">Hora</th>
+                    <th>vel. GPS</th>
+                    <th>GPS speed</th>
+                    <th>ai1 </th>
+                    <th>Resumen(ai1-Fecha)</th>
+                    <th>Ubicación</th>
+                    <th>Punto Cercano</th>
+
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                    <!-- <td>{{i + 1}}</td>
+                    <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+                    <td>{{row.codigo}}</td>
+                    <td>{{row.placa}}</td>
+                    <td>{{row.tipo_unidad}}</td>
+                    <td>{{row.tipo_mantenimiento}}</td>
+
+
+                    <td>{{row.idConductor}}</td>
+                    <td>{{row.conductor}}</td>
+                    <td>{{row.vel_gps_speed}} Km/h</td>
+                    <td>{{row.vel_can}} Km/h</td>
+
+                    <td>{{row.tramo}}</td>
+                    <td>{{row.PC}}</td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td> -->
+
+
+                    <td>{{i + 1}}</td>
+
+                    <td>{{row.convoy}}</td>
+                    <td>{{row.placa}}</td>
+                    <td>{{row.tipo_unidad}}</td>
+
+                    <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+                    <td>{{row.velGPS}} km/h</td>
+                    <td>{{row.GPS_speed}} km/h</td>
+                    <td>{{row.ai1x}}</td>
+                    <td>{{row.campoResumen}} </td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+                    <td>{{row.PC}}</td>
+
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+
+        
+
     <div *ngIf="dtRendered" class="export-container">
       <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R002'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
@@ -4106,6 +4353,7 @@
       <button *ngIf="report_data.num_rep == 'R019'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelBloqueoVisionMobileye');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R021'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadFormatoExtendido');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R023'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelMantenimientoFisico');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R024'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelNoRostro');">EXPORTAR EXCEL</button>
 
       <!-- <div style="display: flex; flex-direction: row; justify-content: center; gap: 4rem; margin: 0; padding: 0;">
         <button class="btn btn-success" (click)="exportExcelParadasMovimientos(1)">EXPORTAR EXCEL SEPARADO</button>
