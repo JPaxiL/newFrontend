@@ -544,6 +544,9 @@ export class FormComponent implements OnInit {
 
     var chkDuracion = this.checkboxDuration;
     var chkOdomV = this.chkOdomVirtual;
+    var chkFrenada = this.chkFrenada;
+    var chkAceleracion = this.chkAceleracion;
+
 
     var f1 = moment(new Date(this.dateInit));
 		var f2 = moment(new Date(this.dateEnd));
@@ -663,6 +666,8 @@ export class FormComponent implements OnInit {
 
     //CONFIGURACION DE TITULOS  
     var repTitle = reportSelect.value;
+
+
     if (param.numRep == 'R012' || param.numRep == 'R022') {
       //REPORTE DE DISTRACIÓN Y POSIBLE FATIGA
       if (chkFatigaSomnolencia && chkFatigaDistraccion) {
@@ -675,7 +680,20 @@ export class FormComponent implements OnInit {
           repTitle = 'REPORTE DE DISTRACIÓN';
         }
       }
-      reportSelect.value
+
+    } else if(param.numRep == 'R011') {
+      //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA (ECO DRIVE)
+      if (chkFrenada && chkAceleracion) {
+        repTitle = reportSelect.value;
+      } else {
+        if (chkFrenada) {
+          repTitle = 'REPORTE DE FRENADA BRUSCA';
+        }
+        if (chkAceleracion) {
+          repTitle = 'REPORTE DE ACELERACIÓN BRUSCA';
+        }
+      }
+
     } else {
       repTitle = reportSelect.value;
     }
@@ -698,6 +716,9 @@ export class FormComponent implements OnInit {
           chkDateHour: chkDateHour,
           chkFatigaSomnolencia: chkFatigaSomnolencia,
           chkFatigaDistraccion: chkFatigaDistraccion,
+          chkFrenada: chkFrenada,
+          chkAceleracion: chkAceleracion,
+
           chkDuracion: chkDuracion,
           chkOdomV: chkOdomV,
           repTitle: repTitle, //reportSelect.value, //this.reports[param.numRep].value,

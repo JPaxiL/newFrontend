@@ -1757,7 +1757,7 @@
                   <th>Vel. GPS</th>
                   <th>Vel. CAN</th>
 
-                  <th>Descripción</th>
+                  <th *ngIf="chkFrenada && chkAceleracion">Descripción</th>
                   <th>Tramo</th>
                   <th>Punto Cercano</th>
                   <th>Ubicación</th>
@@ -1779,7 +1779,7 @@
                   <td>{{row.velGPS}}</td>
                   <td>{{row.vel_can}}</td>
 
-                  <td>{{row.tipo_frenada}}</td>
+                  <td *ngIf="chkFrenada && chkAceleracion">{{row.tipo_frenada}}</td>
                   <td>{{row.tramo}}</td>
                   <td>{{row.PC}}</td>
                   <td>
@@ -1826,7 +1826,7 @@
                   <th>Vel. GPS</th>
                   <th>Vel. CAN</th>
 
-                  <th>Descripción</th>
+                  <th *ngIf="chkFrenada && chkAceleracion">Descripción</th>
                   <th>Tramo</th>
                   <th>Punto Cercano</th>
                   <th>Ubicación</th>
@@ -1848,7 +1848,7 @@
                   <td>{{row.velGPS}}</td>
                   <td>{{row.vel_can}}</td>
 
-                  <td>{{row.tipo_frenada}}</td>
+                  <td *ngIf="chkFrenada && chkAceleracion">{{row.tipo_frenada}}</td>
                   <td>{{row.tramo}}</td>
                   <td>{{row.PC}}</td>
                   <td>
