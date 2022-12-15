@@ -22,6 +22,7 @@ export class PanelService {
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Seguridad Vehicular"},
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'CIRCULAR-GEOFENCE', name:"Circular Geofences"},
+    { id:'POLYLINE-GEOFENCE', name:"Polyline Geofences"},
     { id:'EVENT-USER', name:'Eventos'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
     { id:'DASHBOARD', name: 'Dashboard'},
@@ -76,6 +77,8 @@ export class PanelService {
         return 'geocercas';
       case "CIRCULAR-GEOFENCE":
         return 'circular-geofences';
+      case "POLYLINE-GEOFENCE":
+        return 'polyline-geofences';
       case "GEOPOINTS":
         return 'geopuntos';
       case "HISTORIAL":

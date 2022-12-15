@@ -9,6 +9,7 @@ import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
 import { GeopointsService } from '../../../geopoints/services/geopoints.service';
 import { CircularGeofencesService } from 'src/app/geofences/services/circular-geofences.service';
+import { PolylineGeogencesService } from 'src/app/geofences/services/polyline-geogences.service';
 
 declare var $: any;
 
@@ -25,6 +26,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   constructor(
     private mapService: MapService,
     private circularGeofencesService: CircularGeofencesService,
+    private polylineGeofenceService: PolylineGeogencesService,
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService
@@ -39,6 +41,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     await this.geofencesService.initialize();
     await this.geopointsService.initialize();
     this.circularGeofencesService.initialize();
+    this.polylineGeofenceService.initialize();
 
     this.setLayers();
 

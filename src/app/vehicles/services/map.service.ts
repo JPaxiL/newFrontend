@@ -616,8 +616,8 @@ export class MapService {
                   else{
 
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                    console.log('se borra la flecha');
-                    console.log(vehicles[index].name);
+                    //console.log('se borra la flecha');
+                    //console.log(vehicles[index].name);
 
                   }
 
