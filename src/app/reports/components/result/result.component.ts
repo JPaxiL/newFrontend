@@ -5125,7 +5125,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           //====================  CUERPO =============================
 
           data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; tramo: string; PC: any;
-            convoy:any; tracto:any; v0:any; velocidad:any; fecha_inicio:any; fecha_final:any; duracion:any; nombre_zona:any; referencia:any}, index: number) => {
+            convoy:any; tracto:any; v0:any; velocidad:any; fecha_inicio:any; fecha_final:any; duracion2:any; nombre_zona:any; referencia:any}, index: number) => {
 
 
             var ubicacion = item.latitud + "," + item.longitud;
@@ -5138,7 +5138,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.tracto??'').toString().length);
             convoy_cell_ch_width = Math.max(convoy_cell_ch_width, (item.convoy??'').toString().length);
             exceso_vel_max_litros_cell_ch_width = Math.max(exceso_vel_max_litros_cell_ch_width, (item.velocidad??'').toString().length);
-            duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion??'').toString().length);
+            duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion2??'').toString().length);
             geocerca_restante_cell_ch_width = Math.max(geocerca_restante_cell_ch_width, (item.nombre_zona??'').toString().length);
             referencia_motor_cell_ch_width = Math.max(referencia_motor_cell_ch_width, (item.referencia??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
@@ -5168,7 +5168,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 cellsCuerpo.push({ value: this.isChe(item.fecha_final), type: 'date', format: "yyyy/MM/dd hh:mm:ss", ...this.bodyRowsConfig });
             }
 
-            cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.duracion2, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.nombre_zona, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
