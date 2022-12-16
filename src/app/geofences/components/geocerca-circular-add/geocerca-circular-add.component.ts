@@ -102,6 +102,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
 
     this.poligonAdd.off();
+    this.mapService.map.editTools.stopDrawing();
 
     if ( this.action == "edit" ) {
 

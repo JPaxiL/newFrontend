@@ -32,6 +32,8 @@ export class PolylineGeogencesService {
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
 
+  paintpolygonControl: any;
+
   polylineGeofenceCounters: any = {
     visible: 0,
     hidden: 0,
@@ -50,13 +52,14 @@ export class PolylineGeogencesService {
   initialize(){
     this.getUserPrivileges();
     this.getAll();
-
+    this.initializePaintPolygon();
   }
 
   getAll(){
     this.http.get<ResponseInterface>(`${environment.apiUrl}/api/polyline-zone`).subscribe(resp => {
 
       this.polyline_geofences = resp.data;
+      console.log("getAll Polilinea", resp.data);
       this.initializeTable();
       this.drawGeofencesOnMap();
       this.updateGeoCounters();
@@ -65,7 +68,6 @@ export class PolylineGeogencesService {
       this.tagNamesEyeState = this.polylineGeofenceCounters.visible != 0;
       this.initializingPolylineGeofences = true;
       this.attemptToHideSpinner();
-      console.log(this.polyline_geofences);
     });
   }
 
@@ -73,15 +75,13 @@ export class PolylineGeogencesService {
     this.tblDataGeo = [];
     for(let i = 0; i < this.polyline_geofences.length; i++){
       if(this.polyline_geofences[i].id != newCircularGeofenceId){
-        this.polyline_geofences[i].zone_name_visible_bol = (this.polyline_geofences[i].zone_name_visible === true);
+        this.polyline_geofences[i].zone_name_visible_bol = (this.polyline_geofences[i].zone_name_visible == true);
       } else {
         this.polyline_geofences[i].zone_name_visible_bol = true;
       }
       this.tblDataGeo.push({trama:this.polyline_geofences[i]});
     }
     this.tblDataGeoFiltered = this.getTableData();
-
-    console.log(this.tblDataGeoFiltered);
     
   }
 
@@ -249,19 +249,27 @@ export class PolylineGeogencesService {
     }
   }
 
+  initializePaintPolygon(){
+  
+    //@ts-ignore
+    this.paintpolygonControl = L.control.paintPolygon({
+      menu: false,
+    }).addTo(this.mapService.map);
+  }
+
   edit(zone: any){
     
-    return this.http.put<ResponseInterface>(`${environment.apiUrl}/api/circular-zone/${zone.id}`,zone).pipe(switchMap(({data}) => [data]));
+    return this.http.put<ResponseInterface>(`${environment.apiUrl}/api/polyline-zone/${zone.id}`,zone).pipe(switchMap(({data}) => [data]));
   }
 
   store(zone: any){
     
-    return this.http.post<ResponseInterface>(`${environment.apiUrl}/api/circular-zone`,zone).pipe(switchMap(({data}) => [data]));
+    return this.http.post<ResponseInterface>(`${environment.apiUrl}/api/polyline-zone`,zone).pipe(switchMap(({data}) => [data]));
 
   }
 
   async delete(id: any){
-    return await (await this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/circular-zone/${id}`).toPromise()).data;
+    return await (await this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/polyline-zone/${id}`).toPromise()).data;
     
   }
 }
