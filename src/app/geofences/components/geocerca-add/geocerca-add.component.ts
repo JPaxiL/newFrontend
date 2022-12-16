@@ -261,6 +261,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
 
   ngOnDestroy(){
+    
+    this.mapService.map.editTools.stopDrawing();
 
     //console.log('SALDRE DE LA EDICION DE GEOCERCA');
     if ( this.geofencesService.action == "edit" ) {
@@ -511,6 +513,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
   clickCancelar(id:number){
     //console.log("---clickCancelar");
+    this.mapService.map.editTools.stopDrawing();
+    
     this.geofencesService.nombreComponente = "LISTAR";
 
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
