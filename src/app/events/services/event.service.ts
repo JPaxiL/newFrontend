@@ -148,6 +148,10 @@ export class EventService {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
     let events = response.data;
 
+    events = events.filter(function( obj:any ) {
+      return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    });
+
     this.classFilterArray = events.map( (event:any) => ({
       id:event.id,
       option:event.name,
