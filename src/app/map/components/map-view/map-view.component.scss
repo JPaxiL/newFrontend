@@ -233,18 +233,14 @@
     }
 
     /* Nombres de vehículos */
-    .leaflet-tooltip.leaflet-tooltip-right:not(.leaflet-tooltip-own),
-    .leaflet-tooltip.leaflet-tooltip-left:not(.leaflet-tooltip-own){
+    .leaflet-tooltip.vehicle-tooltip{
       border: none;
-      /* color: #fff;
-      border-radius: 8px;
-      background-color: var(--gl-light-blue); */
+      color: #fff;
+      border-radius: 0.5rem;
+      background-color: var(--gl-blue-dark);
       font-weight: bold;
-      /* -webkit-text-stroke: 0.75px black; */
-      //New styles
-      box-shadow: none;
-      background-color: inherit;
-      color: #000;
+      line-height: 1rem;
+      //-webkit-text-stroke: 0.75px black;
       &::before{
         display: none;
       }
@@ -279,6 +275,7 @@
         /* text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
                1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff; */
       }
+
     }
 
   }
