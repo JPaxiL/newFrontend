@@ -25,8 +25,8 @@ export class EventSocketService extends Socket {
     private userService : UsersService,
     private AlertService: AlertService,) {
     super({
-      //url: 'https://socketprueba.glmonitoreo.com/',
-      url: 'http://23.29.124.173',
+      url: 'https://socketprueba.glmonitoreo.com/',
+      //url: 'http://23.29.124.173',
 
       // options: {
       //   transports: ["websocket"]
