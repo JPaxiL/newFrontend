@@ -21,11 +21,13 @@ export class EventSocketService extends Socket {
   public sendEventObservable = this.sendEventSuject.asObservable();
 
   constructor(
-    public eventService : EventService, 
+    public eventService : EventService,
     private userService : UsersService,
     private AlertService: AlertService,) {
     super({
-      url: 'https://socketprueba.glmonitoreo.com/',
+      //url: 'https://socketprueba.glmonitoreo.com/',
+      url: 'http://23.29.124.173',
+
       // options: {
       //   transports: ["websocket"]
       // }
@@ -33,7 +35,7 @@ export class EventSocketService extends Socket {
 
     this.user_id = localStorage.getItem('user_id');
 
-    //console.log('Panel notif first key on service', this.eventService.panelNotifKey); 
+    //console.log('Panel notif first key on service', this.eventService.panelNotifKey);
   }
 
   public listen() {
@@ -58,7 +60,7 @@ export class EventSocketService extends Socket {
           }
 
           even.imei = even.tracker_imei;
-          
+
           //Si las alertas ya cargaron
           if(this.AlertService.alertsForEventSocket.length > 0){
             //console.log(this.AlertService.alertsForEventSocket);
@@ -82,9 +84,9 @@ export class EventSocketService extends Socket {
         } else {
           console.log('Evento duplicado ' + new Date() + ': ', even);
         }
-        
+
         this.eventService.checkDuplicates();
-        
+
         //console.log('new notification stack', this.new_notif_stack);
         //console.log('new notification stack counter', this.new_notif_stack.length);
         //console.log('new notification Event Content en Socket', even);
