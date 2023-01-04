@@ -154,7 +154,7 @@ export class EventService {
 
     this.classFilterArray = events.map( (event:any) => ({
       id:event.id,
-      option:event.name,
+      option:this.toCamelCase(event.name),
       tipo:event.name,
       clase:event.slug
     }))
@@ -169,6 +169,20 @@ export class EventService {
     //console.log('Filtros de Eventos: ', events);
     return this.classFilterArray;
   }
+
+  toCamelCase(str:any){
+    const palabras = str.split(" ");
+
+    var palabraM = palabras.map((palabra:any) => { 
+      if (palabra=='de' || palabra=='en' || palabra=='con' || palabra=='de' || palabra=='la' ) {
+        return palabra;
+      } else {
+        return palabra[0].toUpperCase() + palabra.substring(1); 
+      }
+    }).join(" ");
+    return palabraM;
+  }
+
 
     //== Para el uso del modulo historial
 
@@ -211,8 +225,8 @@ export class EventService {
 
       await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/dataEventUserHistorial`,param)
         .toPromise().then((response:any) => {
-          // console.log("=======================");
-          // console.log(response.data);
+          console.log("=======================ShowAllHistorial");
+          console.log(response.data);
           this.eventsHistorial = response.data;
 
           for (let index = 0; index < this.eventsHistorial.length; index++) {
