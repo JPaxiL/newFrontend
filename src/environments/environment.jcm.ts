@@ -7,5 +7,6 @@ export const environment = {
   idClient: '84',
   secretClient: 'LUTj1k8Tley9SvQ1Jwmrha1HPHJs87ShfiQVB18S',
   socketUrl: 'https://escucha.glmonitoreo.com/',
+  socketEvent: 'http://23.29.124.173',
   grant_type: 'client_credentials'
 };

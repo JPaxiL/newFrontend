@@ -1187,7 +1187,10 @@ export class MapService {
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
-    tempMarker.bindTooltip('<span>'+data.name+'</span>', { permanent: true, offset: [0, 12] });
+    tempMarker.bindTooltip(`<span>${data.name}</span>`, { 
+      permanent: true, 
+      offset: [0, 12],
+      className: 'vehicle-tooltip', });
     let options = {
       imei: data.IMEI,
       name: data.name,
