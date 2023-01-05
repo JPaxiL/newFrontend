@@ -84,7 +84,26 @@ export class AlertService {
   public async getEventsByType(type:string){
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events/${type}`).toPromise();
     let event = response.data;
+
+    event = event.map( (ev:any) => {
+      ev.name = this.toCamelCase(ev.name);
+      return ev;
+    });
+
     return event;
+  }
+
+  toCamelCase(str:any){
+    const palabras = str.split(" ");
+
+    var palabraM = palabras.map((palabra:any) => { 
+      if (palabra=='de' || palabra=='en' || palabra=='con' || palabra=='de' || palabra=='la' ) {
+        return palabra;
+      } else {
+        return palabra[0].toUpperCase() + palabra.substring(1); 
+      }
+    }).join(" ");
+    return palabraM;
   }
 
   public async getAlertsByType(type:string){
