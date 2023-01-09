@@ -123,10 +123,10 @@
                     <th *ngIf="chkDateHour">Fecha de Fin</th>
                     <th *ngIf="chkDateHour">Hora de Fin</th>
                     <th>Duración</th>
-                    <th *ngIf="reportTableDropdownData[2].Paradas">Posición detenida</th>
-                    <th *ngIf="reportTableDropdownData[2].Movimientos">Recorrido</th>
-                    <th *ngIf="reportTableDropdownData[2].Movimientos">Velocidad Máxima</th>
-                    <th *ngIf="reportTableDropdownData[2].Movimientos">Vel. máx. CAN</th>
+                    <th *ngIf="reportTableDropdownData[2].Paradas">Ubicación</th> <!-- Posición detenida -->
+                    <th *ngIf="reportTableDropdownData[2].Movimientos">Distancia Recorrida</th><!-- Recorrido -->
+                    <th *ngIf="reportTableDropdownData[2].Movimientos">Velocidad Máxima GPS</th>
+                    <th *ngIf="reportTableDropdownData[2].Movimientos">Velocidad Máxima CAN</th>
                     <th *ngIf="reportTableDropdownData[2].Paradas">Punto cercano</th>
                     <th *ngIf="reportTableDropdownData[2].Movimientos">Velocidad Promedio</th>
                     <th *ngIf="reportTableDropdownData[2].Movimientos">Vel. prom. CAN</th>
@@ -280,10 +280,12 @@
                     <th *ngIf="chkDateHour">Fecha de Fin</th>
                     <th *ngIf="chkDateHour">Hora de Fin</th>
                     <th>Duración</th>
-                    <th *ngIf="v_table[2].Paradas">Posición detenida</th>
-                    <th *ngIf="v_table[2].Movimientos">Recorrido</th>
-                    <th *ngIf="v_table[2].Movimientos">Velocidad Máxima</th>
-                    <th *ngIf="v_table[2].Movimientos">Vel. máx. CAN</th>
+
+
+                    <th *ngIf="v_table[2].Paradas">Ubicación</th> <!-- Posición detenida -->
+                    <th *ngIf="v_table[2].Movimientos">Distancia Recorrida</th><!-- Recorrido -->
+                    <th *ngIf="v_table[2].Movimientos">Velocidad Máxima GPS</th>
+                    <th *ngIf="v_table[2].Movimientos">Velocidad Máxima CAN</th>
                     <th *ngIf="v_table[2].Paradas">Punto cercano</th>
                     <th *ngIf="v_table[2].Movimientos">Velocidad Promedio</th>
                     <th *ngIf="v_table[2].Movimientos">Vel. prom. CAN</th>
@@ -1277,8 +1279,9 @@
                       <td *ngIf="reportTableDropdownData[2].pCercano" >{{row.pCercano}}</td>
                       <td *ngIf="reportTableDropdownData[2].referencia" >
                         <!-- {{row.referencia}} -->
-                        <span *ngIf="row.referencia != 'NN'" [innerHTML]="row.referencia"></span>
-                        <button class="btn btn-success" (click)="showGeneralDireccion(row, reportTableDropdownData[1]);">Ver</button>
+                        <span *ngIf="row.referencia != 'desconocido ...'" [innerHTML]="row.referencia">
+                        </span>
+                        <button *ngIf="row.referencia == 'desconocido ...'" class="btn btn-success" (click)="showGeneralDireccion(row, reportTableDropdownData[1]);">Ver</button>
                       </td>
 
 
@@ -1448,8 +1451,8 @@
 
                       <td *ngIf="v_table[2].referencia" >
                         <!-- {{row.referencia}} -->
-                        <span *ngIf="row.referencia != 'NN'" [innerHTML]="row.referencia"></span>
-                        <button class="btn btn-success" (click)="showGeneralDireccion(row, v_table[1]);">Ver</button>
+                        <span *ngIf="row.referencia != 'desconocido ...'" [innerHTML]="row.referencia"></span>
+                        <button *ngIf="row.referencia == 'desconocido ...'" class="btn btn-success" (click)="showGeneralDireccion(row, v_table[1]);">Ver</button>
 
 
                       </td>

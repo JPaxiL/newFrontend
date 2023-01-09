@@ -3536,10 +3536,10 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     var estado_cell_ch_width = "Estado".length;
     var duracion_cell_ch_width = "Duracion".length;
-    var posicion_detenida_cell_ch_width = "Posicion Detenida".length;
-    var recorrido_cell_ch_width = "Recorrido".length;
-    var vel_max_cell_ch_width = "Velocidad Maxima".length;
-    var vel_max_can_cell_ch_width = "Vel. max. CAN".length;
+    var posicion_detenida_cell_ch_width = "Ubicacion".length;//"Posicion Detenida".length;
+    var recorrido_cell_ch_width = "Distancia Recorrida".length;//"Recorrido".length;
+    var vel_max_cell_ch_width = "Velocidad Máxima GPS".length;//"Velocidad Maxima".length;
+    var vel_max_can_cell_ch_width = "Velocidad Máxima CAN".length;//"Vel. max. CAN".length;
     var pc_cell_ch_width = "Punto cercano".length;
     var vel_promedio_cell_ch_width = "Velocidad Promedio".length;
     var vel_prom_can_cell_ch_width = "Vel. Prom. CAN".length;
@@ -3623,10 +3623,10 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         /* if (vm.optionUser() == 445 ) {  cellsCampos.push({ value: "H.Acumuladas", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 });  }; */
 
-        if ( table_data[2].Paradas == true) 		{ cellsCampos.push({ value: "Posición detenida", ...this.colHeaderConfig });  };
-        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Recorrido", ...this.colHeaderConfig });					};
-        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad máxima", ...this.colHeaderConfig });		};
-        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Vel. máx. CAN", ...this.colHeaderConfig });		};
+        if ( table_data[2].Paradas == true) 		{ cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig });  };
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Distancia Recorrida", ...this.colHeaderConfig });					};
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad Máxima GPS", ...this.colHeaderConfig });		};
+        if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad Máxima CAN", ...this.colHeaderConfig });		};
         if ( table_data[2].Paradas == true)			{ cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig }); 			};
         if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Velocidad Promedio", ...this.colHeaderConfig });	};
         if ( table_data[2].Movimientos == true) { cellsCampos.push({ value: "Vel. Prom. CAN", ...this.colHeaderConfig });	};
