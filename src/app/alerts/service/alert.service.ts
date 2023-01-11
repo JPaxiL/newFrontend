@@ -85,6 +85,10 @@ export class AlertService {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events/${type}`).toPromise();
     let event = response.data;
 
+    event = event.filter(function( obj:any ) {
+      return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    });
+
     event = event.map( (ev:any) => {
       ev.name = this.toCamelCase(ev.name);
       return ev;

@@ -1012,7 +1012,7 @@
                       <th *ngIf="chkDateHour">Hora Final</th>
 
                       <th>Duración</th>
-                      <th>Geocerca</th>
+                      <th>Tramo</th>
                       <th>Referencia</th>
                       <th>Ubicación</th>
                       <th>Detalle</th>
@@ -1096,7 +1096,7 @@
                       <th *ngIf="chkDateHour">Hora Final</th>
 
                       <th>Duración</th>
-                      <th>Geocerca</th>
+                      <th>Tramo</th>
                       <th>Referencia</th>
                       <th>Ubicación</th>
                       <th>Detalle</th>
@@ -1553,14 +1553,17 @@
               <thead>
                 <tr>
                   <th>Ítem</th>
-                  <th>Unidad</th>
+                  <!-- <th>Unidad</th> -->
+                  <th>Código</th>
+                  <th>Placa</th>
+
                   <th>Evento</th>
                   <th *ngIf="!chkDateHour">Fecha/Hora</th>
                   <th *ngIf="chkDateHour">Fecha</th>
                   <th *ngIf="chkDateHour">Hora</th>
                   <th>Velocidad GPS</th>
                   <th>Velocidad CAN</th>
-                  <th>Geocerca</th>
+                  <th>Tramo</th>
                   <th>Ubicación</th>
                   <th>Referencia</th>
                 </tr>
@@ -1570,9 +1573,11 @@
                 <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
-                  <td>{{row.nombre_objeto}}</td>
-                  <td>{{row.descripcion_evento}}</td>
+                  <!-- <td>{{row.nombre_objeto}}</td> -->
+                  <td>{{row.codigo}}</td>
+                  <td>{{row.placa_con_guion}}</td>
 
+                  <td>{{row.descripcion_evento}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
                   <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
                   <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
@@ -1615,14 +1620,17 @@
               <thead>
                 <tr>
                   <th>Ítem</th>
-                  <th>Unidad</th>
+                  <!-- <th>Unidad</th> -->
+                  <th>Código</th>
+                  <th>Placa</th>
+                  
                   <th>Evento</th>
                   <th *ngIf="!chkDateHour">Fecha/Hora</th>
                   <th *ngIf="chkDateHour">Fecha</th>
                   <th *ngIf="chkDateHour">Hora</th>
                   <th>Velocidad GPS</th>
                   <th>Velocidad CAN</th>
-                  <th>Geocerca</th>
+                  <th>Tramo</th>
                   <th>Ubicación</th>
                   <th>Referencia</th>
                 </tr>
@@ -1632,9 +1640,11 @@
                 <tr *ngFor="let row of v_table[1];  let i = index;">
 
                   <td>{{i + 1}}</td>
-                  <td>{{row.nombre_objeto}}</td>
-                  <td>{{row.descripcion_evento}}</td>
+                  <!-- <td>{{row.nombre_objeto}}</td> -->
+                  <td>{{row.codigo}}</td>
+                  <td>{{row.placa_con_guion}}</td>
 
+                  <td>{{row.descripcion_evento}}</td>
                   <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
                   <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
                   <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
@@ -2568,7 +2578,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
 
 
                 </tr>
@@ -2595,7 +2605,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
@@ -2642,7 +2652,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
 
 
                 </tr>
@@ -2669,7 +2679,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
@@ -2737,7 +2747,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
 
 
                 </tr>
@@ -2764,7 +2774,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
@@ -2811,7 +2821,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
 
 
                 </tr>
@@ -2838,7 +2848,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
@@ -2906,7 +2916,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
 
                 </tr>
               </thead>
@@ -2932,7 +2942,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
@@ -2979,7 +2989,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
 
                 </tr>
               </thead>
@@ -3005,7 +3015,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
@@ -3074,7 +3084,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
                 </tr>
               </thead>
 
@@ -3099,7 +3109,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
@@ -3146,7 +3156,7 @@
                     <th>Tramo</th>
                     <th>Punto Cercano</th>
                     <th>Ubicación</th>
-                    <th>Sonido en Cabina</th>
+                    <!-- <th>Sonido en Cabina</th> -->
                 </tr>
               </thead>
 
@@ -3171,7 +3181,7 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.sonidoEnCabina}}</td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
 
                 </tr>
               </tbody>
