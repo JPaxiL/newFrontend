@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 
 
 
+
 // import { ColDef } from 'ag-grid-community';
 // import { threadId } from 'worker_threads';
 
@@ -107,14 +108,16 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   selectedEvents: any = [];
   chkAllEvents: boolean = false;
+  chkMostrarRuta: boolean = false;
+
    eventList = [
     {
       label: 'Evento GPS',
       items: [
         // { name: 'Batería baja', value: false },
-        { name: 'Batería desconectada', value: false },
-        { name: 'Aceleración brusca', value: false },
-        { name: 'Frenada brusca', value: false },
+        { name: 'Batería Desconectada', value: false },
+        { name: 'Aceleración Brusca', value: false },
+        { name: 'Frenada Brusca', value: false },
         // { name: 'Bloqueo de Transmisión', value: false },
         { name: 'SOS', value: false },
         // { name: 'Remolque', value: false },
@@ -131,7 +134,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         { name: 'Zona de Salida', value: false },
         { name: 'Tiempo de Estadía en Zona', value: false },
         { name: 'Parad en Zona no Autorizada', value: false },
-        { name: 'Vehículo en movimiento sin programación', value: false },
+        { name: 'Vehículo en Movimiento Sin Programación', value: false },
         { name: 'Infracción', value: false },
         { name: 'Exceso de Velocidad', value: false },
         // { name: 'Anticolisión frontal', value: false },
@@ -146,16 +149,16 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     {
       label: 'Evento Seguridad Vehicular',
       items: [
-        { name: 'Ausencia de rostro', value: false },// { name: 'No Rostro', value: false },
+        { name: 'Ausencia de Rostro', value: false },// { name: 'No Rostro', value: false },
         { name: 'Fatiga Extrema', value: false },
         { name: 'Posible Fatiga', value: false },
         { name: 'Distracción', value: false },
-        { name: 'Detección de alcohol', value: false },//  { name: 'Alcoholemia', value: false },
-        { name: 'Anticolisión frontal', value: false },
+        { name: 'Detección de Alcohol', value: false },//  { name: 'Alcoholemia', value: false },
+        { name: 'Anticolisión Frontal', value: false },
         { name: 'Colisión con Peatones', value: false },
-        { name: 'Desvío de carril hacia la izquierda', value: false },
-        { name: 'Desvío de carril hacia la derecha', value: false },
-        { name: 'Bloqueo de visión del Mobileye', value: false },
+        { name: 'Desvío de Carril Hacia la Izquierda', value: false },
+        { name: 'Desvío de Carril Hacia la Derecha', value: false },
+        { name: 'Bloqueo de Visión del Mobileye', value: false },
       ]
     }
     // ,
@@ -542,9 +545,198 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   };
 
 
+  onChkMostrarRuta(key:any) {
+    console.log("-----------------onChkMostrarRuta");
+    console.log();
+
+    this.historialService.arrayRecorridos[key];
+
+    console.log(this.historialService.arrayRecorridos[key]);
+    console.log(this.historialService.arrayRecorridos);
+
+    
+    var dH = this.historialService.arrayRecorridos[key].recorrido;
+    var iH  = dH[0].index_historial; //indices de paradas y movimientos
+
+
+
+    // if (this.conHistorial) {
+    //   this.mostrar_tabla(dH, dH[0].index_historial);
+    // }
+
+
+    if (this.historialService.arrayRecorridos[key].mostrarRuta) {
+
+
+      for (let i = 0; i < iH.length; i++) {
+        if (dH[iH[i]].marker == "PARADA") {
+          if (this.form.chckParada ) {
+            //this.transfers.push({icono:"assets/images/stop.png", tooltip: "Parada",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
+            dH[iH[i]].layer.addTo(this.mapService.map);
+          }
+        }
+        // else {
+        //   this.transfers.push({icono:"assets/images/drive.png", tooltip: "Movimiento",trama:dH[iH[i]],icono_width:"13px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
+        // }
+      }
+
+
+      if (this.form.chckTrama) {
+        for (let i = 0; i < dH.length; i++) {
+          dH[i]._trama.addTo(this.mapService.map);
+        }
+      } 
+      // else {
+      //   for (let i = 0; i < dH.length; i++) {
+      //     this.mapService.map.removeLayer(dH[i]._trama);
+      //   }
+      // }
+
+
+      if (this.form.chckTramaFechaVelocidad) {
+        for (let i = 0; i < dH.length; i++) {
+          dH[i]._trama_fecha_velocidad.addTo(this.mapService.map);
+        }
+      } 
+
+
+
+
+
+      dH[0].layer0.addTo(this.mapService.map);
+      dH[dH.length - 1].layerN.addTo(this.mapService.map);
+
+      
+      dH[0].rutaH2.addTo(this.mapService.map);// = this.get_historial_line( dH[0].rutaH , color).addTo(this.mapService.map); //Linea del historial
+      dH[0].ruta_sub.addTo(this.mapService.map); // = this.get_historial_line( [] , color_sub).addTo(this.mapService.map); //Sub linea del historial
+      dH[0].rutaH2_trace.addTo(this.mapService.map);
+
+
+
+    } else {
+
+        for (let i = 0; i < dH.length; i++) {
+            if (dH[i].layer != null) {
+                this.mapService.map.removeLayer(dH[i].layer);
+            }
+            // if(dH[i]._trama_fecha_velocidad != null){
+            //     this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+            // }
+            // this.mapService.map.removeLayer(dH[i]._trama);
+        }
+        
+        // if (this.form.chckTrama) {
+        //   for (let i = 0; i < dH.length; i++) {
+        //     dH[i]._trama.addTo(this.mapService.map);
+        //   }
+        // } 
+        // else {
+          for (let i = 0; i < dH.length; i++) {
+            this.mapService.map.removeLayer(dH[i]._trama);
+            this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+
+          }
+        // }
+
+
+
+        this.mapService.map.removeLayer(dH[0].layer0);
+        this.mapService.map.removeLayer(dH[dH.length - 1].layerN);
+
+        this.mapService.map.removeLayer(dH[0].rutaH2);
+        this.mapService.map.removeLayer(dH[0].ruta_sub);
+        this.mapService.map.removeLayer(dH[0].rutaH2_trace);
+
+    
+    }
+
+
+
+    // for (let index = 0; index < this.EventService.eventsHistorial.length; index++) {
+    //   const item = this.EventService.eventsHistorial[index];
+    //   this.mapService.map.removeLayer(item.layer);
+    // }
+
+
+
+    var eH = this.historialService.arrayRecorridos[key].eventos;
+
+    if (this.historialService.arrayRecorridos[key].mostrarRuta) {
+
+
+
+      this.mostrar_tabla2(dH,iH,key);
+
+      
+
+    } else {
+      for (let i = 0; i < eH.length; i++) {
+        this.mapService.map.removeLayer(eH[i].layer);
+      }
+    }
+
+
+  }
+
+  clickEliminar(index:any, key:any) {
+    console.log("-----------------clickEliminar");
+    console.log();
+
+    this.historialService.arrayRecorridos[index];
+
+    console.log(this.historialService.arrayRecorridos[index]);
+    console.log(this.historialService.arrayRecorridos);
+
+    var dH = this.historialService.arrayRecorridos[index].recorrido;
+    var iH  = dH[0].index_historial; //indices de paradas y movimientos
+
+    for (let i = 0; i < dH.length; i++) {
+        if (dH[i].layer != null) {
+            this.mapService.map.removeLayer(dH[i].layer);
+        }
+
+        this.mapService.map.removeLayer(dH[i]._trama);
+        this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+
+    }
+
+
+    this.mapService.map.removeLayer(dH[0].layer0);
+    this.mapService.map.removeLayer(dH[dH.length-1].layerN);
+    
+    this.mapService.map.removeLayer(dH[0].rutaH2);
+    this.mapService.map.removeLayer(dH[0].ruta_sub);
+    this.mapService.map.removeLayer(dH[0].rutaH2_trace);
+    
+
+
+    // Eliminar eventos
+    var eH = this.historialService.arrayRecorridos[index].eventos;
+    for (let i = 0; i < eH.length; i++) {
+      this.mapService.map.removeLayer(eH[i].layer);
+    }
+
+
+
+
+
+
+
+
+    this.historialService.arrayRecorridos = this.historialService.arrayRecorridos.filter(function( obj:any ) {
+      return obj.key !== key;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    });
+
+
+  }
+
+
+
   async clickCargarHistorial() {
     this.spinner.show('loadingHistorial');
-    this.clickEliminarHistorial();
+    // this.clickEliminarHistorial();
+
+
 
     this.historialService.getHistorial();
     // var dH =  this.historialService.tramasHistorial; // Data Historial
@@ -581,6 +773,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     var M1 = moment(this.form.pngFechaIni).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + HMDstr + '-05:00';
     var M2 = moment(this.form.pngFechaFin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + HMHstr + '-05:00';
 
+    var M1str = moment(this.form.pngFechaIni).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + ' ' + HMDstr + '';
+    var M2str = moment(this.form.pngFechaFin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + ' ' + HMHstr + '';
+
+    
     // var M1 = moment(this.form.pngFechaIni).format("YYYY")+'-'+this.fStrMD(MDstr)+'-'+this.fStrMD(DDstr) + 'T' + this.fStrMD(horaDstr)+":"+this.fStrMD(minDstr)+':00-05:00';
     // var M2 = moment(this.form.pngFechaFin).format("YYYY")+'-'+this.fStrMD(MHstr)+'-'+this.fStrMD(DHstr) + 'T' + this.fStrMD(horaHstr)+":"+this.fStrMD(minHstr)+':00-05:00';
 
@@ -598,6 +794,37 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // console.log( this.fStrMD(this.pngHoraFin2.toString()) );
     // console.log( this.fStrMD(this.pngMinFin.toString()));
 
+
+
+    this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+
+
+    var au = this.historialService.arrayRecorridos;
+    var key = this.nombreUnidad+'_'+M1+'_'+M2;
+
+    //verificar q no existan keys repetidas :
+    for (let i = 0; i < au.length; i++) {
+      console.log(au[i].key+' - '+key);
+      
+      if ( au[i].key == key ) {
+        console.log("SE REPITE LA KEY ");
+        Swal.fire({
+          title: 'Error',
+          text: 'Unidad y recorrido ya seleccionado.',
+          icon: 'error',
+        });
+        this.spinner.hide('loadingHistorial');
+
+        return ;
+        
+      }
+      
+    }
+
+
+
+
+
     var param = {
                 fecha_desde:M1, fecha_hasta:M2,
                 imei:this.form.selectedCar
@@ -609,7 +836,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
               };
     console.log(param);
 
-    this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
 
     this.historialService.get_tramas_recorrido(param).then( res => {
 
@@ -1007,9 +1233,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 dH[0].layer0 = this.get_inicial_marker(dH[0]).addTo(this.mapService.map);
                 dH[h].layerN = this.get_final_marker(dH[h]).addTo(this.mapService.map);
 
-                this.mostrar_tabla(dH, dH[0].index_historial);
-                this.changeShowingTramas();
-                this.changeShowingGrafico();
 
                 // console.log('Mostrar tabla', dH);
 
@@ -1032,6 +1255,109 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
                 this.historialService.changeMessage("desde com panel-historial")
 
+
+
+              var x1 = (dH[0].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[0].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
+              dH[0].can_dist_a = x1;
+
+              var x2 = (dH[h].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[h].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
+              dH[h].can_dist_b = x2;
+
+              var distancia_total = '-';
+              var distancia_bol = false;
+              if (x1 == '-') {
+                  distancia_total = '-';
+              } else {
+                  distancia_total = (dH[h].can_dist_b - dH[0].can_dist_a).toFixed(2) + ' km';
+                  distancia_bol = true;
+              }
+             
+
+
+
+                this.historialService.arrayRecorridos.push({
+                    key: this.nombreUnidad+'_'+M1+'_'+M2,
+                    nombre: this.nombreUnidad,
+                    f_ini: M1str,
+                    f_fin: M2str,
+                    kilometrajeTotal: distancia_total,
+                    mostrarRuta : true,
+                    recorrido: dH,
+                    recorrido_bol :distancia_bol,
+                    eventos:this.EventService.eventsHistorial,
+                    tramas : [{
+                          tooltip: '11111',
+                          dato:'gaaaaa1',
+                          dt_tracker:'2011-10-10 11:11:11',
+                          temp:'ee'
+                        },{
+                          tooltip: '1112',
+                          dato:'gaaaaa2',
+                          dt_tracker:'2011-10-10 11:11:11',
+                          temp:'ee'
+
+                        },{
+                          tooltip: '1113',
+                          dato:'gaaaaa3',
+                          dt_tracker:'2011-10-10 11:11:11',
+                          temp:'ee'
+
+                        }]
+                });
+
+                // this.historialService.arrayRecorridos = [
+                //   {
+                //     nombre: this.nombreUnidad+'o',
+                //     f_ini: M1,
+                //     f_fin: M2,
+                //     kilometrajeTotal: 20,
+                //     tramas : [{
+                //           tooltip: '11111',
+                //           dato:'gaaaaa1',
+                //           dt_tracker:'2011-10-10 11:11:11',
+                //           temp:'ee'
+                //         },{
+                //           tooltip: '1112',
+                //           dato:'gaaaaa2',
+                //           dt_tracker:'2011-10-10 11:11:11',
+                //           temp:'ee'
+
+                //         },{
+                //           tooltip: '1113',
+                //           dato:'gaaaaa3',
+                //           dt_tracker:'2011-10-10 11:11:11',
+                //           temp:'ee'
+
+                //         }]
+                //   },
+                //   {
+                //     nombre: this.nombreUnidad,
+                //     f_ini: M1,
+                //     f_fin: M2,
+                //     kilometrajeTotal: 30,
+                //     tramas : [{
+                //           tooltip: '1117',
+                //           dato:'gaaaaa4',
+                //           dt_tracker:'2011-10-10 11:11:11'
+                //         },{
+                //           tooltip: '1118',
+                //           dato:'gaaaaa5',
+                //           dt_tracker:'2011-10-10 11:11:11'
+                //         },{
+                //           tooltip: '1119',
+                //           dato:'gaaaaa6',
+                //           dt_tracker:'2011-10-10 11:11:11'
+                //         },{
+                //           tooltip: '1120',
+                //           dato:'gaaaaa7',
+                //           dt_tracker:'2011-10-10 11:11:11'
+                //         }
+                      
+                //       ]
+                //   }
+
+
+                // ];
 
                 // var allmap = new map.Movimiento(h1,{color: param.colorHistorial }).addTo(overlay);
                 // allmap._trace.addTo(overlay);
@@ -1102,7 +1428,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             // this.panelService.nombreCabecera =   item[0].name;
 
+                this.mostrar_tabla(dH, dH[0].index_historial);
+
+                this.mostrar_tabla2(dH, dH[0].index_historial,(this.historialService.arrayRecorridos.length-1))
                 this.changeShowingTramas();
+                this.changeShowingGrafico();
+
+                
+                // this.changeShowingTramas();
                 this.changeShowingTramasFechaVelocidad();
                 this.isHistorialTableLoaded = true;
                 /* $('#tbl_fechas').floatThead({
@@ -1210,11 +1543,34 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.mostrar_tabla(dH,iH);
     }
 
+    //===================================  ARRAY DE HISTORIALES ============================================
+    
+    var rdH = this.historialService.arrayRecorridos;
+
+    for (let i = 0; i < rdH.length; i++) {
+
+        var dH = rdH[i].recorrido;
+        var iH  = dH[0].index_historial; //indices de paradas y movimientos
+        
+        this.mostrar_tabla2(dH,iH,i);
+
+        for (let i = 0; i < iH.length; i++) {
+          if (dH[iH[i]].marker == "PARADA") {
+            if (this.form.chckParada ) {
+              dH[iH[i]].layer.addTo(this.mapService.map);
+            } else {
+              this.mapService.map.removeLayer(dH[iH[i]].layer);
+            }
+          }
+        }
+
+    }
+
   }
 
 
 
-  mostrar_tabla(dH:any, iH:any) {
+  mostrar_tabla(dH:any, iH:any , idx:any=-1) {
       if (this.conHistorial) {
 
             // console.log("========================== HISTORIAL ===========================");
@@ -1239,15 +1595,68 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                               // });
 
 
+                             
+
             this.transfers = [];
             this.transfers.push({icono:"assets/images/start.png", tooltip: "Inicio",trama:dH[0],icono_width:"13px",icono_height:"13px",dt_tracker:dH[0].dt_tracker});
+
+
+
             for (let i = 0; i < iH.length; i++) {
+
+              //===== obtener la distacia con en can
+              var x1 = (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
+              dH[iH[i]].can_dist_x = x1;
+
+              if(i == iH.length-1) {
+                dH[iH[i]].can_dist_y = (dH[dH.length-1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[dH.length-1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
+                dH[iH[i]].distancia = (dH[iH[i]].can_dist_y - dH[iH[i]].can_dist_x).toFixed(2) +' km';
+              }
+
+
+              if (i == 0) {
+              } else {
+                  dH[iH[i-1]].can_dist_y = x1;
+                  if (x1 == '-') {
+                      dH[iH[i-1]].distancia = '- km';
+                  } else {
+                      dH[iH[i-1]].distancia = (dH[iH[i-1]].can_dist_y - dH[iH[i-1]].can_dist_x).toFixed(2) +' km';
+                  }
+
+                  if (dH[iH[i-1]].marker == "PARADA") {
+                    dH[iH[i-1]].distancia = '';
+                  }
+              }
+
+
               if (dH[iH[i]].marker == "PARADA") {
+
+                console.log('parara = '+iH[i]+' - '+x1);
+                console.log(dH[iH[i]]);
+
+                dH[iH[i]].distancia = '';
+               
                 if (this.form.chckParada ) {
                   this.transfers.push({icono:"assets/images/stop.png", tooltip: "Parada",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
                 }
               }
               else {
+                // var x1 = (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value;
+
+                var x1 = (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" : (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value;
+
+                console.log('movimi = '+iH[i]+' - '+x1);
+                console.log(dH[iH[i]]);
+
+                // const item2 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0];
+
+                // //console.log("===================================");
+
+                // //console.log(item1);
+                // //console.log(item2);
+
+
+
                 this.transfers.push({icono:"assets/images/drive.png", tooltip: "Movimiento",trama:dH[iH[i]],icono_width:"13px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
               }
             }
@@ -1479,9 +1888,192 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             // }
 
 
+
+    
+            dH[dH.length-1].distancia = '- km';
             this.transfers.push({icono:"assets/images/end.png", tooltip: "Fin", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px",dt_tracker:dH[dH.length-1].dt_tracker});
 
+           
+            // console.log("================================================");
+            // console.log(this.historialService.arrayRecorridos);
+            // console.log(this.transfers);
+            // console.log(this.transfers.length);
+      
+            // if (idx == -1) {
+            //     if (this.conHistorial && this.transfers.length > 0) {
+            //         console.log("LLENAR TRAMAS ================================================ - " + idx);
+            //         this.historialService.arrayRecorridos[this.historialService.arrayRecorridos.length-1].tramas = this.transfers;
+            //     }
+            // } else {
+            //     if (this.conHistorial && this.transfers.length > 0) {
+            //         console.log("LLENAR TRAMAS ================================================ - " + idx);
+            //         this.historialService.arrayRecorridos[idx].tramas = this.transfers;
+            //     }
+            // }
+
+
       }
+
+  }
+
+
+  mostrar_tabla2(dH:any, iH:any , idx:any=-1) {
+    if (this.conHistorial) {
+
+          this.transfers = [];
+          this.transfers.push({icono:"assets/images/start.png", tooltip: "Inicio",trama:dH[0],icono_width:"13px",icono_height:"13px",dt_tracker:dH[0].dt_tracker});
+
+
+
+          for (let i = 0; i < iH.length; i++) {
+
+            //===== obtener la distacia con en can
+            var x1 = (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
+            dH[iH[i]].can_dist_x = x1;
+
+            if(i == iH.length-1) {
+              dH[iH[i]].can_dist_y = (dH[dH.length-1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[dH.length-1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
+              dH[iH[i]].distancia = (dH[iH[i]].can_dist_y - dH[iH[i]].can_dist_x).toFixed(2) +' km';
+            }
+
+
+            if (i == 0) {
+            } else {
+                dH[iH[i-1]].can_dist_y = x1;
+                if (x1 == '-') {
+                    dH[iH[i-1]].distancia = '- km';
+                } else {
+                    dH[iH[i-1]].distancia = (dH[iH[i-1]].can_dist_y - dH[iH[i-1]].can_dist_x).toFixed(2) +' km';
+                }
+
+                if (dH[iH[i-1]].marker == "PARADA") {
+                  dH[iH[i-1]].distancia = '';
+                }
+            }
+
+
+            if (dH[iH[i]].marker == "PARADA") {
+              console.log('parara = '+iH[i]+' - '+x1);
+              console.log(dH[iH[i]]);
+              dH[iH[i]].distancia = '';
+              if (this.form.chckParada ) {
+                this.transfers.push({icono:"assets/images/stop.png", tooltip: "Parada",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
+              }
+            }
+            else {
+              var x1 = (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" : (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value;
+              console.log('movimi = '+iH[i]+' - '+x1);
+              console.log(dH[iH[i]]);
+              this.transfers.push({icono:"assets/images/drive.png", tooltip: "Movimiento",trama:dH[iH[i]],icono_width:"13px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
+            }
+          }
+
+
+          console.log(this.eventList);
+          console.log(this.EventService.eventsHistorial);
+
+
+
+
+          var EventosAll = [];
+
+          if (idx == -1) {
+            EventosAll = this.EventService.eventsHistorial;
+          } else {
+
+            console.log("=======================================");
+            console.log(this.historialService.arrayRecorridos);
+            console.log(idx);
+            console.log(this.historialService.arrayRecorridos[idx]);
+
+
+            EventosAll = this.historialService.arrayRecorridos[idx].eventos;
+          }
+
+          for (let index = 0; index < EventosAll.length; index++) {
+
+            //const item = this.EventService.eventsHistorial[index];
+            const item = EventosAll[index];
+            var activar = false;
+
+            for (let j = 0; j < this.selectedEvents.length; j++) {
+              const opEve = this.selectedEvents[j];
+
+              //Nombres de eventos que cambiaron
+              var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
+              
+              if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
+              if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
+              if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
+              if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
+              if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
+              if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
+
+              if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
+              if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
+              if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
+
+              if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
+              if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
+              if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
+              if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
+
+              if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
+              if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
+              if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
+              if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
+
+              if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
+
+              if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
+              if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
+              if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
+
+
+              if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
+              if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
+              if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
+              if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
+
+            }
+
+            if (activar) {
+
+              item.layer.addTo(this.mapService.map);//.openPopup();
+
+              item.lat = parseFloat(item.latitud);
+              item.lng = parseFloat(item.longitud);
+              item.dt_tracker = item.fecha_tracker.replace(/\//g, "-");
+              this.transfers.push({icono: item.layer.options.icon.options.iconUrl, tooltip: item.evento, trama:item,icono_width:"17px",icono_height:"18px",dt_tracker:item.dt_tracker});
+
+            } else {
+              this.mapService.map.removeLayer(item.layer);
+            }
+
+          } // fin del for
+
+
+          this.transfers = this.sortByKey(this.transfers, "dt_tracker");
+
+          dH[dH.length-1].distancia = '- km';
+          this.transfers.push({icono:"assets/images/end.png", tooltip: "Fin", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px",dt_tracker:dH[dH.length-1].dt_tracker});
+
+
+          if (idx == -1) {
+              if (this.conHistorial && this.transfers.length > 0) {
+                  console.log("LLENAR TRAMAS ================================================ - " + idx);
+                  this.historialService.arrayRecorridos[this.historialService.arrayRecorridos.length-1].tramas = this.transfers;
+              }
+          } else {
+              if (this.conHistorial && this.transfers.length > 0) {
+                  console.log("LLENAR TRAMAS ================================================ - " + idx);
+                  this.historialService.arrayRecorridos[idx].tramas = this.transfers;
+              }
+          }
+
+
+    }
+
   }
 
   sortByKey(array:any, key:any) {
@@ -1492,13 +2084,76 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
-  clickLocate(row:any) {
+  clickLocate(row:any, key:any=-1) {
+    console.log(row);
+    console.log(key);
+    
+    //console.log("-----movimiento ----");
+    if (key == -1) {
+      var dH =  this.historialService.tramasHistorial; // Data Historial
+    } else {
 
-    var dH =  this.historialService.tramasHistorial; // Data Historial
+      //=======================================================================================
+
+      // this.historialService.arrayRecorridos.push({
+      //   key: this.nombreUnidad+'_'+M1+'_'+M2,
+      //   nombre: this.nombreUnidad,
+      //   f_ini: M1str,
+      //   f_fin: M2str,
+      //   kilometrajeTotal: distancia_total,
+      //   mostrarRuta : true,
+      //   recorrido: dH,
+      //   recorrido_bol :distancia_bol,
+      //   eventos:this.EventService.eventsHistorial,
+      //   tramas : [{
+      //         tooltip: '11111',
+      //         dato:'gaaaaa1',
+      //         dt_tracker:'2011-10-10 11:11:11',
+      //         temp:'ee'
+      //       },{
+      //         tooltip: '1112',
+      //         dato:'gaaaaa2',
+      //         dt_tracker:'2011-10-10 11:11:11',
+      //         temp:'ee'
+      //       },{
+      //         tooltip: '1113',
+      //         dato:'gaaaaa3',
+      //         dt_tracker:'2011-10-10 11:11:11',
+      //         temp:'ee'
+      //       }]
+      // });
+
+      var rdH = this.historialService.arrayRecorridos;
+
+      for (let i = 0; i < rdH.length; i++) {
+          console.log(rdH[i].key+"  -  -  "+key);
+          if ( rdH[i].key == key ) {
+            var dH = rdH[i].recorrido;
+          }
+  
+          // var dH = rdH[i].recorrido;
+          // var iH  = dH[0].index_historial; //indices de paradas y movimientos
+          // this.mostrar_tabla2(dH,iH,i);
+          // for (let i = 0; i < iH.length; i++) {
+          //   if (dH[iH[i]].marker == "PARADA") {
+          //     if (this.form.chckParada ) {
+          //       dH[iH[i]].layer.addTo(this.mapService.map);
+          //     } else {
+          //       this.mapService.map.removeLayer(dH[iH[i]].layer);
+          //     }
+          //   }
+          // }
+      }
+      //=======================================================================================
+
+    }
+
+
+
 
     let trama = row.trama;
-      //console.log("click en el tr");
-      //console.log(trama);
+      console.log("click en el tr");
+      console.log(trama);
 
     if (row.icono == "assets/images/eventos/pin_point.svg") {
 
@@ -1521,6 +2176,32 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.mapService.map.setView([trama.lat, trama.lng], 15);
 
     } else if (row.icono == "assets/images/drive.png") {
+
+
+
+
+
+      // var rdH = this.historialService.arrayRecorridos;
+
+      // for (let i = 0; i < rdH.length; i++) {
+  
+      //     var dH = rdH[i].recorrido;
+      //     var iH  = dH[0].index_historial; //indices de paradas y movimientos
+          
+      //     this.mostrar_tabla2(dH,iH,i);
+  
+      //     for (let i = 0; i < iH.length; i++) {
+      //       if (dH[iH[i]].marker == "PARADA") {
+      //         if (this.form.chckParada ) {
+      //           dH[iH[i]].layer.addTo(this.mapService.map);
+      //         } else {
+      //           this.mapService.map.removeLayer(dH[iH[i]].layer);
+      //         }
+      //       }
+      //     }
+      // }
+
+
       //console.log("-----movimiento ----");
 
       let t1 = trama.cc[0];
@@ -1558,19 +2239,33 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   changeShowingTramas(){
 
-    if (this.conHistorial) {
+    // if (this.conHistorial) {
+    //   var dH =  this.historialService.tramasHistorial; // Data Historial
+    //   if (this.form.chckTrama) {
+    //     for (let i = 0; i < dH.length; i++) {
+    //       dH[i]._trama.addTo(this.mapService.map);
+    //     }
+    //   } else {
+    //     for (let i = 0; i < dH.length; i++) {
+    //       this.mapService.map.removeLayer(dH[i]._trama);
+    //     }
+    //   }
+    // }
 
-      var dH =  this.historialService.tramasHistorial; // Data Historial
+    //=================================================================================
 
-      if (this.form.chckTrama) {
+    var allH = this.historialService.arrayRecorridos;
+    for (let j = 0; j < allH.length; j++) {
+      var dH       = allH[j].recorrido;
+      var mostrarR = allH[j].mostrarRuta;
+
+      if (this.form.chckTrama && mostrarR) {
         for (let i = 0; i < dH.length; i++) {
           dH[i]._trama.addTo(this.mapService.map);
         }
       } else {
-
         for (let i = 0; i < dH.length; i++) {
           this.mapService.map.removeLayer(dH[i]._trama);
-
         }
       }
     }
@@ -1579,46 +2274,51 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   changeShowingTramasFechaVelocidad(){
 
-    // : marker.bindTooltip(tooltipText, {permanent:false} )
+    // // : marker.bindTooltip(tooltipText, {permanent:false} )
+    // if (this.conHistorial) {
+    //   var dH =  this.historialService.tramasHistorial; // Data Historial
+
+    //   if (this.form.chckTrama) {
+    //     if (this.form.chckTramaFechaVelocidad) {
+    //         for (let i = 0; i < dH.length; i++) {
+    //           dH[i]._trama_fecha_velocidad.addTo(this.mapService.map);
+    //           // dH[i]._trama.bindTooltip( "gaaaaaaa1",{permanent:true})
+    //         }
+    //     } else {
+    //         for (let i = 0; i < dH.length; i++) {
+    //           this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+    //           // dH[i]._trama.bindTooltip("gaaaaaaa2",{permanent:false})
+    //         }
+    //     }
+    //   } else {
+    //     for (let i = 0; i < dH.length; i++) {
+    //       this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+    //       // dH[i]._trama.bindTooltip("gaaaaaaa3",{permanent:false})
+    //     }
+    //   }
+    // }
 
 
+    ///==============================================================
 
 
+    var allH = this.historialService.arrayRecorridos;
+    for (let j = 0; j < allH.length; j++) {
+      var dH       = allH[j].recorrido;
+      var mostrarR = allH[j].mostrarRuta;
 
-    if (this.conHistorial) {
-
-      var dH =  this.historialService.tramasHistorial; // Data Historial
-
-      if (this.form.chckTrama) {
-
-        if (this.form.chckTramaFechaVelocidad) {
-
-            for (let i = 0; i < dH.length; i++) {
-              dH[i]._trama_fecha_velocidad.addTo(this.mapService.map);
-              // dH[i]._trama.bindTooltip( "gaaaaaaa1",{permanent:true})
-
-
-
-            }
-
-        } else {
-
-            for (let i = 0; i < dH.length; i++) {
-              this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
-              // dH[i]._trama.bindTooltip("gaaaaaaa2",{permanent:false})
-            }
-
+      if (this.form.chckTramaFechaVelocidad && mostrarR) {
+        for (let i = 0; i < dH.length; i++) {
+          dH[i]._trama_fecha_velocidad.addTo(this.mapService.map);
         }
-
       } else {
-
         for (let i = 0; i < dH.length; i++) {
           this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
-          // dH[i]._trama.bindTooltip("gaaaaaaa3",{permanent:false})
-
         }
       }
     }
+
+
 
   }
 
