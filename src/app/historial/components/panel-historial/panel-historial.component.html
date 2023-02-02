@@ -661,6 +661,9 @@
                   <th style="width: 4rem">
                     <!-- <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" >Eliminar</button> -->
                   </th>
+                  <th style="width: 4rem">
+                    <!-- <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" >Eliminar</button> -->
+                  </th>
                   <!-- <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th> -->
                   <!-- <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th> -->
                   <!-- <th pSortableColumn="rating">Reviews <p-sortIcon field="rating"></p-sortIcon></th> -->
@@ -678,8 +681,13 @@
                   <td>{{recorrido.nombre}} <br> {{recorrido.f_ini}} - {{recorrido.f_fin}}</td>
                   <td>{{recorrido.kilometrajeTotal}}</td>
                   <td>
-                    <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" (click)="clickEliminar(rowIndex,recorrido.key)"  >
+                    <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" [title]="'Borrar Recorrido'"(click)="clickEliminar(rowIndex,recorrido.key)"  >
                       <i class="fa fa-trash-o" aria-hidden="true"></i> 
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" [title]="'Mostrar Gráfico'" (click)="clickVerGrafico(rowIndex,recorrido.key)"  >
+                      <i class="fa fa-area-chart" aria-hidden="true"></i> 
                     </button>
                   </td>
                   <!-- <td>{{product.price | currency:'USD'}}</td> -->
@@ -690,7 +698,7 @@
           </ng-template>
           <ng-template pTemplate="rowexpansion" let-recorrido>
               <tr>
-                  <td colspan="5">
+                  <td colspan="6">
                       <div class="panel-izq-table-container2 p-p-3">
                           <p-table [value]="recorrido.tramas" dataKey="id">
                               <ng-template pTemplate="header">

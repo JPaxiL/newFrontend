@@ -46,9 +46,11 @@ export class HistorialService {
   //---------------------------  Multi Historial --------------------------------------------------
 
   public arrayRecorridos : any = [];
+  public keyGrafico : string = "";
 
 
 
+  //---------------------------  Multi Historial --------------------------------------------------
 
 
   constructor(private http: HttpClient,

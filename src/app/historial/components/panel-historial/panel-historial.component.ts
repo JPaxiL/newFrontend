@@ -731,6 +731,58 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
+  clickVerGrafico(index:any, key:any) {
+    console.log("-----------------clickVerGrafico");
+    console.log("-----------index");
+    console.log(index);
+    console.log("-----------key");
+    console.log(key);
+
+    this.historialService.keyGrafico = key;
+
+    // this.changeShowingGrafico();
+
+    this.historialService.changeMessage("desde com panel-historial");
+
+
+    // this.historialService.arrayRecorridos[index];
+
+    // console.log(this.historialService.arrayRecorridos[index]);
+    // console.log(this.historialService.arrayRecorridos);
+
+    // var dH = this.historialService.arrayRecorridos[index].recorrido;
+    // var iH  = dH[0].index_historial; //indices de paradas y movimientos
+
+    // for (let i = 0; i < dH.length; i++) {
+    //     if (dH[i].layer != null) {
+    //         this.mapService.map.removeLayer(dH[i].layer);
+    //     }
+
+    //     this.mapService.map.removeLayer(dH[i]._trama);
+    //     this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+
+    // }
+
+    // this.mapService.map.removeLayer(dH[0].layer0);
+    // this.mapService.map.removeLayer(dH[dH.length-1].layerN);
+    
+    // this.mapService.map.removeLayer(dH[0].rutaH2);
+    // this.mapService.map.removeLayer(dH[0].ruta_sub);
+    // this.mapService.map.removeLayer(dH[0].rutaH2_trace);
+
+    // // Eliminar eventos
+    // var eH = this.historialService.arrayRecorridos[index].eventos;
+    // for (let i = 0; i < eH.length; i++) {
+    //   this.mapService.map.removeLayer(eH[i].layer);
+    // }
+
+    // this.historialService.arrayRecorridos = this.historialService.arrayRecorridos.filter(function( obj:any ) {
+    //   return obj.key !== key;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    // });
+
+
+  }
+
 
   async clickCargarHistorial() {
     this.spinner.show('loadingHistorial');
@@ -1253,7 +1305,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 }).addTo(this.mapService.map);
 
 
-                this.historialService.changeMessage("desde com panel-historial")
 
 
 
@@ -1304,6 +1355,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
                         }]
                 });
+
+                // this.historialService.changeMessage("desde com panel-historial")
+
 
                 // this.historialService.arrayRecorridos = [
                 //   {
@@ -1631,8 +1685,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
               if (dH[iH[i]].marker == "PARADA") {
 
-                console.log('parara = '+iH[i]+' - '+x1);
-                console.log(dH[iH[i]]);
+                // console.log('parara = '+iH[i]+' - '+x1);
+                // console.log(dH[iH[i]]);
 
                 dH[iH[i]].distancia = '';
                
@@ -1645,8 +1699,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
                 var x1 = (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" : (dH[iH[i]].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value;
 
-                console.log('movimi = '+iH[i]+' - '+x1);
-                console.log(dH[iH[i]]);
+                // console.log('movimi = '+iH[i]+' - '+x1);
+                // console.log(dH[iH[i]]);
 
                 // const item2 = (dH[0].paramsGet.filter((item:any)=> item.id == "GPRS Status"))[0];
 
@@ -2323,6 +2377,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
   changeShowingGrafico(){
+    console.log("--changeShowingGrafico");
+    console.log(this.conHistorial);
+
       if (this.conHistorial) {
 
           if (this.form.chckGrafico) {

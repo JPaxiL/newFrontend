@@ -154,7 +154,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     // });
 
     this.historialService.currentMessage.subscribe( () => {
-      // //console.log('llamada = '+ this.llamadas);
+      console.log('llamada = '+ this.llamadas);
 
       if (this.llamadas != 0) {
         this.cargarGrafico();
@@ -194,6 +194,10 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
   cargarGrafico(): void {
 
+    console.log("GRAFICOOOOOOOO");
+
+    console.log( this.historialService.keyGrafico);
+    
 
     // jQuery.fn.jquery
     // jQuery().jquery
@@ -206,9 +210,17 @@ export class PanelHistorialGraficoComponent implements OnInit {
     // console.log($().jquery); // This prints v1.4.2
     // console.log($j().jquery); // This prints v1.9.1
 
+    var rdH = this.historialService.arrayRecorridos;
 
+    for (let i = 0; i < rdH.length; i++) {
+        console.log(rdH[i].key+"  -  -  "+this.historialService.keyGrafico);
+        if ( rdH[i].key == this.historialService.keyGrafico ) {
+          var dH = rdH[i].recorrido;
+        }
 
-    var dH =  this.historialService.tramasHistorial; // Data Historial
+    }
+
+    // var dH =  this.historialService.tramasHistorial; // Data Historial
 
     this.cl = {
       sin:Array(),
