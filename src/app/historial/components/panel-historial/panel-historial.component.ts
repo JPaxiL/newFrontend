@@ -251,7 +251,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.getCars(vehicles);
     }
 
-    this.historialService.initializeForm();
+    // this.historialService.initializeForm();
 
     // const hoy = Date.now();
     // this.pngFechaIni = new Date(moment(hoy).format('YYYY-MM-DDTHH:mm'));
@@ -326,7 +326,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     let dH =  this.historialService.tramasHistorial; // Data Historial
 
     this.conHistorial = this.historialService.conHistorial;
+    
+    
     this.form = this.historialService.dataFormulario;
+
+    console.log("=== formulario ===");
+
+    console.log(this.form);
 
     // //console.log(this.form.selectedCarC );
 
@@ -339,7 +345,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     if (this.conHistorial) {
       this.mostrar_tabla(dH, dH[0].index_historial);
-
     }
 
     // (function($) {
@@ -365,6 +370,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     this.historialService.conHistorial = this.conHistorial;
 
+    console.log("=========== Destroy =============");
+    
+    console.log( this.form);
+    
     this.historialService.dataFormulario = this.form;
 
     this.VehicleService.dataCompleted.unsubscribe;
@@ -408,9 +417,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   changeColorHistorial() {
     if (this.conHistorial) {
-      let newColor = this.form.colorHistorial;
-      let dH =  this.historialService.tramasHistorial; // Data Historial
-      dH[0].rutaH2.setStyle({opacity: 1, color: newColor });
+      // let newColor = this.form.colorHistorial;
+      // let dH =  this.historialService.tramasHistorial; // Data Historial
+      // dH[0].rutaH2.setStyle({opacity: 1, color: newColor });
     }
 
   }

@@ -219,6 +219,10 @@ export class PanelHistorialGraficoComponent implements OnInit {
         }
 
     }
+    console.log("================== HISTORIAL ENCONTRADO");
+
+    console.log(dH);
+    
 
     // var dH =  this.historialService.tramasHistorial; // Data Historial
 
