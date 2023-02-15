@@ -698,7 +698,14 @@
           </ng-template>
           <ng-template pTemplate="rowexpansion" let-recorrido>
               <tr>
-                  <td colspan="6">
+                  <td [attr.colspan]="recorrido.kilometrajeTotal != '-' ? 6 : 6">
+
+
+                    <!-- <td [attr.colspan]="fieldsChanged.fieldName == 'Comments' ? '2' : ''">                                {{fieldsChanged.newValue}}</td> -->
+
+                    
+
+
                       <div class="panel-izq-table-container2 p-p-3">
                           <p-table [value]="recorrido.tramas" dataKey="id">
                               <ng-template pTemplate="header">
@@ -769,7 +776,7 @@
 
 
 
-    <!-- <div class="table-content-component-panel-monitoreo h-auto" *ngIf="isHistorialTableLoaded">
+    <div class="table-content-component-panel-monitoreo h-auto" *ngIf="isHistorialTableLoaded">
 
       <div class="panel-izq-table-container mt-2" style="overflow-y: auto;">
 
@@ -806,7 +813,7 @@
           </tbody>
         </table>
       </div>
-    </div> -->
+    </div>
 
 
 

@@ -343,9 +343,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
     //==================  MUESTRA INF EN LA LEGENDA DE LA CONSOLA PASANDO EL CURSOR POR ENCIMA DEL GRAFICO ==================
 
-    $("#placeholder").unbind("plothover");
+    $j("#placeholder").unbind("plothover");
 
-    $("#placeholder").bind("plothover", (o:any, p:any, n:any) => {
+    $j("#placeholder").bind("plothover", (o:any, p:any, n:any) => {
 
       if (n) {
           var m = n.dataIndex;
@@ -450,9 +450,17 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
     //==================  UBICAR PUNTO EN EL HISTORIAL ==================
 
-    $("#placeholder").unbind("plotclick");
+    $j("#placeholder").unbind("plotclick");
 
-    $("#placeholder").bind("plotclick",  (o:any, p:any, n:any ) => {
+    $j("#placeholder").bind("plotclick",  (o:any, p:any, n:any ) => {
+        console.log("===========");
+
+        console.log(n);
+        console.log(p);
+        console.log(o);
+        
+        
+        
         if (n) {
             var m = n.dataIndex;
             switch (this.opcionGraficoConsola) {
@@ -468,9 +476,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
     //================== FIN UBICAR PUNTO EN EL HISTORIAL ==================
 
     //==================  ZOOM A LA PARTE DELECCIONADA ==================
-    $("#placeholder").unbind("plotselected");
+    $j("#placeholder").unbind("plotselected");
 
-    $("#placeholder").bind  ("plotselected", (c:any, d:any) => {
+    $j("#placeholder").bind  ("plotselected", (c:any, d:any) => {
       //var f = document.getElementById("opcionGraficoConsola").value;
 
       switch (this.opcionGraficoConsola) {
