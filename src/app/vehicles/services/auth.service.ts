@@ -47,7 +47,7 @@ export class AuthService {
       .set('password', loginData.password)
       .set('grant_type', 'password');
 
-    return this.http.post<any>(API_URL + 'oauth/token', body, HTTP_OPTIONS)
+    return this.http.post<any>(API_URL + 'api/login', body, HTTP_OPTIONS)
       .pipe(
         tap(res => {
           this.tokenService.saveToken(res.access_token);
@@ -63,7 +63,7 @@ export class AuthService {
     const body = new HttpParams()
       .set('refresh_token', refreshData.refresh_token)
       .set('grant_type', 'refresh_token');
-    return this.http.post<any>(API_URL + 'oauth/token', body, HTTP_OPTIONS)
+    return this.http.post<any>(API_URL + 'api/login', body, HTTP_OPTIONS)
       .pipe(
         tap(res => {
           this.tokenService.saveToken(res.access_token);
