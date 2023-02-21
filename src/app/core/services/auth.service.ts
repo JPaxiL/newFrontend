@@ -16,7 +16,7 @@ export class AuthService {
     username: string,
     password: string,
 ): Observable<OAuthResource> {
-    return this.http.post<OAuthResource>(environment.apiUrl + '/oauth/token', {
+    return this.http.post<OAuthResource>(environment.apiUrl + '/api/login', {
       grant_type: 'password',
       client_id: environment.idClient ,
       client_secret: environment.secretClient ,

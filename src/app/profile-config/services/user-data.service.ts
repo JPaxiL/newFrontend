@@ -27,10 +27,10 @@ export class UserDataService {
       next: data => {
         //this.userData = this.panelService.userData = data[0];
         //console.log('User Data obtenida: ',data[0]);
-        console.log('User Data obtenida');
-        this.userData = data[0];
-        this.userName = data[0].nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
-        this.userEmail = data[0].email;
+        console.log('User Data obtenida ======> ',  data.data);
+        this.userData = data.data;
+        this.userName = data.data.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
+        this.userEmail = data.data.email;
         this.userDataInitialized = true;
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);

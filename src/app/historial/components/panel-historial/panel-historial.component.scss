@@ -36,6 +36,35 @@
     font-size: 1rem;
     font-weight: normal;
   }
-  
+
+  .p-datatable {
+    & .p-datatable-tbody,
+    & .p-datatable-thead{
+      & > tr {
+        font-size: 0.875rem;
+
+        &.historial-nested-table{
+          background-color: var(--gl-gray-subtitle);
+          box-shadow: inset 0 0.625rem 0.625rem -0.5rem rgb(0 0 0 / 40%);
+
+          &::after{
+            content: "";
+            position: absolute;
+            right: 50%;
+            top: -1px;
+            display: block;
+            border: 1.25rem solid transparent;
+            border-top: 1.25rem solid white;
+          }
+        }
+
+        & > th, 
+        & >td {
+          padding-left: 0.125rem;
+          padding-right: 0.125rem;
+        }
+      }
+    }
+  }
   
 }
