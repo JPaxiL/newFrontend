@@ -960,6 +960,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             for (let i = 0; i < dH.length; i++) {
 
+                if (i!=0) {
+                  dH[i].distancia =   (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng)) * 1000;
+                }
+
                 dH[i].dt_ss = new Date(dH[i].dt_server);
                 dH[i].dt_js = new Date(dH[i].dt_tracker);
 
@@ -1630,6 +1634,26 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     }
 
   }
+
+
+  calcularDistanciaEntreDosCoordenadas (lat1:any, lon1:any, lat2:any, lon2:any) {
+      // Convertir todas las coordenadas a radianes
+      lat1 = this.gradosARadianes(lat1);
+      lon1 = this.gradosARadianes(lon1);
+      lat2 = this.gradosARadianes(lat2);
+      lon2 = this.gradosARadianes(lon2);
+      // Aplicar fórmula
+      const RADIO_TIERRA_EN_KILOMETROS = 6371;
+      let diferenciaEntreLongitudes = (lon2 - lon1);
+      let diferenciaEntreLatitudes = (lat2 - lat1);
+      let a = Math.pow(Math.sin(diferenciaEntreLatitudes / 2.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(diferenciaEntreLongitudes / 2.0), 2);
+      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return RADIO_TIERRA_EN_KILOMETROS * c;
+  };
+
+  gradosARadianes(grados:any) {
+    return grados * Math.PI / 180;
+  };
 
 
 
@@ -2316,22 +2340,90 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // }
 
     //=================================================================================
+    
+    this.historialService.dataFormulario.chckTrama = this.form.chckTrama;
 
-    var allH = this.historialService.arrayRecorridos;
-    for (let j = 0; j < allH.length; j++) {
-      var dH       = allH[j].recorrido;
-      var mostrarR = allH[j].mostrarRuta;
+    console.log(this.mapService.map.getZoom());
 
-      if (this.form.chckTrama && mostrarR) {
-        for (let i = 0; i < dH.length; i++) {
-          dH[i]._trama.addTo(this.mapService.map);
-        }
-      } else {
+    var lvlzoom = this.mapService.map.getZoom();
+    var nivel = 1000;; // todo
+    var ccont = 0;
+    switch (lvlzoom) {
+      case 12:
+        nivel = 1000; //todo
+        console.log("-------12 - 1000");
+        break;
+      case 13:
+        nivel = 600; //todo
+        console.log("-------13 - 600");
+        break;
+      case 14:
+        nivel = 400; //todo
+        console.log("-------14 - 400");
+        break;
+      case 15:
+        nivel = 300; //todo
+        console.log("-------15 - 200");
+        break;
+      case 16:
+        nivel = 200; //todo
+        console.log("-------16 - 100");
+        break;
+      case 17:
+        nivel = 100; //todo
+        console.log("-------17 - 50");
+        break;
+      case 18:
+        nivel = 1; //todo
+        console.log("-------18 - 1");
+        break;
+      default:
+        nivel = 1000; // todo
+        console.log("-------default");
+        break;
+    }
+
+
+
+    var acum1 = 0.000000;
+    var acum2 = nivel;
+
+
+
+    if (lvlzoom >= 12) {
+      var allH = this.historialService.arrayRecorridos;
+
+      for (let j = 0; j < allH.length; j++) {
+        var dH       = allH[j].recorrido;
+        var mostrarR = allH[j].mostrarRuta;
+
         for (let i = 0; i < dH.length; i++) {
           this.mapService.map.removeLayer(dH[i]._trama);
+          // this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
         }
+  
+        if (this.form.chckTrama && mostrarR) {
+          for (let i = 0; i < dH.length; i++) {
+
+            dH[i]._trama.addTo(this.mapService.map);
+            
+            // acum1 = acum1 + dH[i].distancia;
+            // // if (dH[i].distancia > nivel) {
+            // if (acum1 > acum2) {
+            //   acum2 = acum2 + nivel;
+            //   // if (ccont == i) {
+            //   // console.log(ccont);
+            //   dH[i]._trama.addTo(this.mapService.map);
+            //   //   ccont = ccont + nivel;
+            //   // }
+            // }
+
+          }
+        } 
+
       }
     }
+
 
   }
 
@@ -2364,24 +2456,90 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     ///==============================================================
 
+    this.historialService.dataFormulario.chckTramaFechaVelocidad = this.form.chckTramaFechaVelocidad;
 
-    var allH = this.historialService.arrayRecorridos;
-    for (let j = 0; j < allH.length; j++) {
-      var dH       = allH[j].recorrido;
-      var mostrarR = allH[j].mostrarRuta;
+    // console.log(this.mapService.map.getZoom());
 
-      if (this.form.chckTramaFechaVelocidad && mostrarR) {
-        for (let i = 0; i < dH.length; i++) {
-          dH[i]._trama_fecha_velocidad.addTo(this.mapService.map);
-        }
-      } else {
-        for (let i = 0; i < dH.length; i++) {
-          this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
-        }
-      }
+    var lvlzoom = this.mapService.map.getZoom();
+    var nivel = 100; // todo
+    var ccont = 0;
+    switch (lvlzoom) {
+      case 12:
+        nivel = 1000; //todo
+        console.log("-------12 - 1000");
+        break;
+      case 13:
+        nivel = 600; //todo
+        console.log("-------13 - 600");
+        break;
+      case 14:
+        nivel = 400; //todo
+        console.log("-------14 - 400");
+        break;
+      case 15:
+        nivel = 300; //todo
+        console.log("-------15 - 200");
+        break;
+      case 16:
+        nivel = 200; //todo
+        console.log("-------16 - 100");
+        break;
+      case 17:
+        nivel = 100; //todo
+        console.log("-------17 - 50");
+        break;
+      case 18:
+        nivel = 1; //todo
+        console.log("-------18 - 1");
+        break;
+      default:
+        nivel = 1000; // todo
+        console.log("-------default");
+        break;
     }
 
 
+    var acum1 = 0.000000;
+    var acum2 = nivel;
+
+    //movimiento
+    //https://stackoverflow.com/questions/35800775/leaflet-js-fire-event-when-map-pans
+    if (lvlzoom >= 12) {
+        var allH = this.historialService.arrayRecorridos;
+        for (let j = 0; j < allH.length; j++) {
+          var dH       = allH[j].recorrido;
+          var mostrarR = allH[j].mostrarRuta;
+
+          for (let i = 0; i < dH.length; i++) {
+            // this.mapService.map.removeLayer(dH[i]._trama);
+            this.mapService.map.removeLayer(dH[i]._trama_fecha_velocidad);
+          }
+
+          if (this.form.chckTramaFechaVelocidad && mostrarR) {
+ 
+            for (let i = 0; i < dH.length; i++) {
+
+              if (isNaN(parseFloat(dH[i].distancia))) {
+                // console.log("----------DAA---------");
+              } else {
+                acum1 = acum1 + parseFloat(dH[i].distancia);
+                // console.log(acum1 +"  -  "+acum2+"  -  "+parseFloat(dH[i].distancia));
+              }
+
+              if ( acum1 > acum2 ) {
+                acum1 = 0;
+                // console.log(acum1 +"  -  "+ acum2);
+                if(this.mapService.map.getBounds().contains(dH[i]._trama.getLatLng())){
+                  dH[i]._trama_fecha_velocidad.addTo(this.mapService.map);
+                } 
+                
+              }
+
+            }
+            
+          } 
+        }
+    }
 
   }
 
