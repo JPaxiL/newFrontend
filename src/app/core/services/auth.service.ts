@@ -20,8 +20,8 @@ export class AuthService {
       grant_type: 'password',
       client_id: environment.idClient ,
       client_secret: environment.secretClient ,
-      username: '' + username,
-      password: '' + password,
+      username: username,
+      password: password,
       scope: '*'
     });
 }
