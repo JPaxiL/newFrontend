@@ -857,6 +857,9 @@ export class FormComponent implements OnInit {
       case 'R022':  // 21 -R022	REPORTE DE SOMNOLENCIA Y/O DISTRACCIÓN - PROLOINT
       case 'R023':  // 22 -R023	REPORTE DE MANTENIMIENTO FISICO
       case 'R024':  //    -R024	REPORTE DE NO ROSTRO
+      case 'R025':  //    -R025 NEW 1
+      case 'R026':  //    -R026 NEW 2
+
           this.showLimitTime = true;
 				break;
       default: break;
@@ -1023,6 +1026,7 @@ export class FormComponent implements OnInit {
       (JSON.stringify(this.selectedReport) != '{}') &&
       this.areDatesValid &&
       (
+
         (this.selectedReport == 'R001' && is_vehicle_selected && (this.chkStops || this.chkMovements))
         ||
         (this.selectedReport == 'R002' && is_vehicle_selected)
@@ -1066,6 +1070,11 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R023' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R024' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R025' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R026' && is_vehicle_selected)
+
       );
   }
 
