@@ -13,6 +13,7 @@ export class SubcuentasService {
 
   public subUsers:any = [];
   public reportesAll:any = [];
+  public eventosAll:any = [];
 
   public nombreComponente:string = "LISTAR";
 
@@ -34,6 +35,7 @@ export class SubcuentasService {
 
   public async initialize() {
     await this.getReportes();
+    await this.getEventos();
     await this.getAll();
   }
 
@@ -64,8 +66,21 @@ export class SubcuentasService {
     });
   }
 
+  public async getEventos(){
+    await this.http.get<ResponseInterface>(environment.apiUrl + '/api/events').toPromise()
+    .then(response => {
+        console.log(response);
+        this.eventosAll = response.data;
+    });
+  }
+
   public getDataReportesAll() {
     return this.reportesAll;
+  }
+
+
+  public getDataEventosAll() {
+    return this.eventosAll;
   }
 
   initializeTable(newGeofenceId?: number) {

@@ -123,7 +123,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   public async loadData() {
-    this.events = await this.AlertService.getEventsByType('platform');
+    this.events = await this.AlertService.getEventsByType('Plataforma');
     this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();

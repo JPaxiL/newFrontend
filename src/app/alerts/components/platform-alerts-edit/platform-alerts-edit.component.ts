@@ -176,7 +176,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.setDataGeofences();
     this.setDataVehicles();
 
-    this.events = await this.AlertService.getEventsByType('platform');
+    this.events = await this.AlertService.getEventsByType('Plataforma');
     this.alertForm.patchValue({
       tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
     });
