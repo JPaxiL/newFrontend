@@ -85,7 +85,7 @@ export class GpsAlertsCreateComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.AlertService.getEventsByType('gps');
+    this.events = await this.AlertService.getEventsByType('Gps');
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;

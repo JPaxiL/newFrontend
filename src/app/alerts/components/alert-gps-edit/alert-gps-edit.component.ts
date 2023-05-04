@@ -100,7 +100,7 @@ export class AlertGpsEditComponent implements OnInit {
 
   public async loadData(){
     this.setDataVehicles();
-    this.events = await this.alertService.getEventsByType('gps');
+    this.events = await this.alertService.getEventsByType('Gps');
     this.alertForm.patchValue({
       tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
     });

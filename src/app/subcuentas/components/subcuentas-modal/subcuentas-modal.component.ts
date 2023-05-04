@@ -28,6 +28,7 @@ export class SubcuentasModalComponent implements OnInit {
   public geocircles: Select2Data = [];
   public geopuntos: Select2Data = [];
   public reportes: Select2Data = [];
+  public eventos: Select2Data = [];
 
   public eyeStateCreate: boolean = true;
   public eyeStateEditBefore: boolean = true;
@@ -98,7 +99,8 @@ export class SubcuentasModalComponent implements OnInit {
               vehiculos: [JSON.parse(sub.array_trackers)],//[['867688036621526']],
               geocercas: [JSON.parse(sub.array_zonas)],//[JSON.parse(sub.array_zonas)], //[[]],
               geopuntos: [JSON.parse(sub.array_puntos)],//[JSON.parse(sub.array_puntos)],
-              reportes: [JSON.parse(sub.array_reportes)]//[JSON.parse(sub.array_puntos)],
+              reportes: [JSON.parse(sub.array_reportes)],//[JSON.parse(sub.array_puntos)],
+              eventos: [JSON.parse(sub.array_eventos)]//[JSON.parse(sub.array_puntos)],
 
 
             });
@@ -127,6 +129,7 @@ export class SubcuentasModalComponent implements OnInit {
       geocercas: [[]],
       geopuntos: [[]],
       reportes: [[]],
+      eventos: [[]],
 
     })
   }
@@ -146,6 +149,7 @@ export class SubcuentasModalComponent implements OnInit {
     this.setDataGeofences();
     this.setDataGeopoints();
     this.setDataReportes();
+    this.setDataEventos();
 
     // this.loadingAlertDropdownReady = true;
     // this.hideLoadingSpinner();
@@ -207,6 +211,20 @@ export class SubcuentasModalComponent implements OnInit {
     // this.hideLoadingSpinner();
   }
 
+  setDataEventos() {
+    let eventos = this.subcuentasService.getDataEventosAll();
+
+    this.eventos = eventos.map((evento: any) => {
+      return {
+        value: evento.code,
+        label: evento.name,
+      };
+    });
+
+    // this.loadingGeofencesMultiselectReady = true;
+    // this.hideLoadingSpinner();
+  }
+
 
   onSubmit(): void {
 
@@ -241,6 +259,9 @@ export class SubcuentasModalComponent implements OnInit {
     );
     this.subcuentasForm.value.reportes = JSON.stringify(
       this.subcuentasForm.value.reportes
+    );
+    this.subcuentasForm.value.eventos = JSON.stringify(
+      this.subcuentasForm.value.eventos
     );
 
     // console.log(this.subcuentasForm.value.contrasena);
