@@ -160,6 +160,10 @@
   #panelMonitoreo.configuracion > .card > div.component-containers {
     height: calc(100% - var(--pm-configuracion-header-height));
   }
+  #panelMonitoreo.drivers > .card > div.component-containers {
+    height: calc(100% - var(--pm-drivers-header-height));
+  }
+
 
   #rowBusqueda{
     display: flex;

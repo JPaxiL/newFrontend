@@ -121,6 +121,9 @@ import { GeocercaCircularListsComponent } from './geofences/components/geocerca-
 import { GeocercaPolylineMainComponent } from './geofences/components/geocerca-polyline-main/geocerca-polyline-main.component';
 import { GeocercaPolylineAddComponent } from './geofences/components/geocerca-polyline-add/geocerca-polyline-add.component';
 import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-polyline-lists/geocerca-polyline-lists.component';
+import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
+import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
+import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
 
 @NgModule({
   declarations: [
@@ -193,6 +196,9 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
     GeocercaPolylineMainComponent,
     GeocercaPolylineAddComponent,
     GeocercaPolylineListsComponent,
+    DriversListComponent,
+    DriversPanelComponent,
+    DriversModalComponent,
 
   ],
   imports: [

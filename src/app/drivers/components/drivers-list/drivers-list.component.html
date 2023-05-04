@@ -1,0 +1,98 @@
+<div class="table-content-component-panel-monitoreo" style="position: relative;">
+
+        <div
+            class="d-flex flex-column justify-content-center align-items-center"
+            style="position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 999999;"
+            *ngIf="isUnderConstruction">
+            <img
+                src="./assets/images/en_construccion.png"
+                alt="under_construction"
+                style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
+            <span style="color: #fff;">Panel en construcción</span>
+        </div>
+  
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDrivers" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
+  
+        <div class="panel-izq-table-container" style="flex-grow: 0;">
+          <table id="tbl_geos">
+            <colgroup>
+              <col width="15%" />
+              <col width="25%" />
+              <col width="30%" />
+              <col width="15%" />
+              <col width="15%" />
+  
+            </colgroup>
+            <thead class="visible-on-scroll">
+                <tr>
+                    <th>Nº</th>
+                    <!-- <td></td> -->
+                    <th class="text-start">Nombre</th>
+                    <th class="text-start">DNI</th>
+                    <th>N° Llave</th>
+                    <!-- <th><i class="fa fa-id-card fa-lg"></i></th> -->
+                    <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
+                    <th><i class="fa fa-pencil fa-lg"></i></th>
+  
+                </tr>
+            </thead>
+            <tbody style="border-top: inherit;">
+  
+                <tr *ngFor="let sub of driversService.tblDataDriver;let indice=index">
+                  <td class="text-center">{{indice+1}} </td>
+                  <td>{{sub.trama.nombre_conductor}} </td>
+                  <td>{{sub.trama.dni_conductor}}</td>
+                  <td>{{sub.trama.nro_llave}}</td>
+
+                  <!-- <td class="inline-png-checkbox text-center">
+                    <p-checkbox [(ngModel)]="sub.trama.activo" [disabled]="true" [binary]="true"></p-checkbox>
+                  </td> -->
+  
+  
+                  <td>
+                    <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+  
+                      <i class="fa fa-pencil" ngbDropdownToggle></i>
+                      <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                        <!-- <div ngbDropdownItem (click)="clickActivarSubusuario(sub.trama.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Activar/Desactivar</div> -->
+                        <div ngbDropdownItem (click)="clickConfigurarDriver(sub.trama.id_conductor)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                        <div ngbDropdownItem (click)="clickEliminarDriver($event, sub.trama.id_conductor)" ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="driversService.isRowDataEmpty">
+                  <td colspan="6" class="text-center">No hay conductores asignados</td>
+                </tr>
+  
+          
+            </tbody>
+          </table>
+        </div>
+  
+  
+  
+        <!-- {{userData.nombre_usuario}} -->
+  
+  
+        <div class="d-flex justify-content-center my-4 panel-izq-container-footer">
+          <div class="col-6">
+              <button type="button" (click)="clickAgregarDriver()" class="btn-gl-save btn-dark-hover w-100" >Agregar Conductor</button>
+          </div>
+        </div>
+  
+
+  
+        <div *ngIf="(driversService.modalActive)">
+          <app-drivers-modal></app-drivers-modal>
+        </div>
+  
+  
+  
+  
+  </div>
+  

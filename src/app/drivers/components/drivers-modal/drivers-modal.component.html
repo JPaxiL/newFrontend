@@ -1,0 +1,106 @@
+<p-dialog [(visible)]="driversService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'640px'}" >
+
+    <ng-template class="p-dialog-title" pTemplate="header">
+      <div>
+        <i class="fa fa-user me-2" aria-hidden="true"></i>
+        <strong [innerHTML]="this.driversService.action == 'edit' ? 'Configurar Conductor' : 'Agregar nuevo Conductor' " ></strong>
+      </div>
+    </ng-template>
+  
+  
+    <!-- 5. REPORTE GENERAL-->
+    <!-- <div class="container grand-container"> -->
+    <!-- </div> -->
+  
+    <form [formGroup]="driversForm" (submit)="onSubmit()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
+  
+      <div class="dialog-body-container">
+  
+        <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+          <!-- <div class="" *ngIf="true">
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+          </div> -->
+  
+
+  
+          <div class="dialog-form-container d-flex" >
+
+
+            <div class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="nameCreate">Nombre</label>
+                  </div>
+                  <div class="col-7">
+                    <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="nombre" autocomplete="no">
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="nameCreate">DNI</label>
+                  </div>
+                  <div class="col-7">
+                    <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="dni" autocomplete="no">
+                  </div>
+                </label>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="nameCreate">Nro Llave</label>
+                  </div>
+                  <div class="col-7">
+                    <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="nro_llave" autocomplete="no">
+                  </div>
+                </label>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="nameCreate">Nro Licencia</label>
+                  </div>
+                  <div class="col-7">
+                    <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="nro_licencia" autocomplete="no">
+                  </div>
+                </label>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+      <!-- <ng-template pTemplate="footer" style="width: 60vw;"> -->
+          <div class="row justify-content-center mt-4 pt-2 panel-izq-container-footer">
+            <div class="col-4">
+                <button type="button" class="btn-gl-cancel btn-dark-hover w-100" (click)="driversService.modalActive=false">Cancelar</button>
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn-gl-save btn-dark-hover w-100" >Guardar</button>
+            </div>
+          </div>
+      <!-- </ng-template> -->
+  
+  
+    </form>
+  
+    <ng-template pTemplate="footer" style="width: 60vw;">
+    </ng-template>
+  
+  
+  </p-dialog>
+  

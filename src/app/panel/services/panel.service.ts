@@ -28,6 +28,8 @@ export class PanelService {
     { id:'DASHBOARD', name: 'Dashboard'},
     { id:'AUDITORIA', name: 'Auditoría'},
     { id:'SUBCUENTAS', name: 'Relación de Subcuentas'},
+    { id:'DRIVERS', name: 'Relación de Conductores'},
+
   );
 
   nombreComponente: string = '';
@@ -39,6 +41,8 @@ export class PanelService {
   constructor(private http: HttpClient) { }
 
   clickShowPanel( nomComponent:string ){
+    console.log("-----clickShowPanel");
+    console.log(this.activePanelClass());
     
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
 
@@ -93,6 +97,8 @@ export class PanelService {
         return 'auditoria';
       case "SUBCUENTAS":
         return 'subcuentas';
+      case "DRIVERS":
+        return 'drivers';
       default:
         return '';
     }

@@ -98,6 +98,8 @@ export class PanelMonitoreoComponent implements OnInit {
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-auditoria-header-height').replace('rem', '')) != 0;
       case "SUBCUENTAS":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-subcuentas-header-height').replace('rem', '')) != 0;
+      case "DRIVERS":
+        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-drivers-header-height').replace('rem', '')) != 0;
       default:
       return false;
     }
