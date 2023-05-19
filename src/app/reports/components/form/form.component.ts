@@ -859,7 +859,8 @@ export class FormComponent implements OnInit {
       case 'R024':  //    -R024	REPORTE DE NO ROSTRO
       case 'R025':  //    -R025 NEW 1
       case 'R026':  //    -R026 NEW 2
-
+      case 'R027':  //    -
+      case 'R028':  //    -
           this.showLimitTime = true;
 				break;
       default: break;
@@ -1074,7 +1075,10 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R025' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R026' && is_vehicle_selected)
-
+        ||
+        (this.selectedReport == 'R027' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R028' && is_vehicle_selected)
       );
   }
 

@@ -7,11 +7,7 @@
       </div>
     </ng-template>
   
-  
-    <!-- 5. REPORTE GENERAL-->
-    <!-- <div class="container grand-container"> -->
-    <!-- </div> -->
-  
+
     <form [formGroup]="driversForm" (submit)="onSubmit()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
   
       <div class="dialog-body-container">
@@ -53,7 +49,7 @@
             </div>
 
 
-            <div class="row">
+            <!-- <div class="row">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
@@ -64,7 +60,96 @@
                   </div>
                 </label>
               </div>
+            </div> -->
+
+            <div class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="tipo-unidad">Identificacion :</label>
+                  </div>
+                  <div class="col-7">
+                    <div class="p-field">
+                      <p-dropdown
+                      [filter]="true"
+                      [options]="listIdentificacion"
+                      optionLabel="value"
+                      optionValue="id"
+                      formControlName="tipo_identificacion"
+                      [showClear]="true"
+                      [appendTo]="'body'"
+                      (onChange)="onChangeIdentificacion($event)"
+                      placeholder="Seleccione el tipo"></p-dropdown>
+                    </div>
+                  </div>
+                </label>
+              </div>
             </div>
+
+
+            <div *ngIf="driversForm.value.tipo_identificacion == 'ibutton'" class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="tipo-unidad">Nro Llave :</label>
+                  </div>
+                  <div class="col-7">
+                    <div class="p-field">
+                      <p-dropdown
+                      [filter]="true"
+                      [options]="ibuttons"
+                      optionLabel="value"
+                      optionValue="id"
+                      formControlName="nro_llave"
+                      [showClear]="true"
+                      [appendTo]="'body'"
+                      placeholder="Seleccione llave I-button..."></p-dropdown>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+
+
+            <div *ngIf="driversForm.value.tipo_identificacion == 'imei'" class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="tipo-unidad">Vehículo :</label>
+                  </div>
+                  <div class="col-7">
+                    <div class="p-field">
+                      <p-dropdown
+                      [filter]="true"
+                      [options]="cars"
+                      optionLabel="nombre"
+                      optionValue="imei"
+                      formControlName="tracker_imei"
+                      [showClear]="true"
+                      [appendTo]="'body'"
+                      placeholder="Seleccione el Vehículo..."></p-dropdown>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- [(ngModel)]="form.selectedCar" -->
+
+            <!-- <p-multiSelect
+            [options]="geocercas"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="nro_llave"
+            defaultLabel="0 geocercas seleccionados"
+            [appendTo]="'body'"
+            [maxSelectedLabels]="1"
+            [selectedItemsLabel]="'{0} geocercas seleccionados'"
+            ></p-multiSelect> -->
+
+    
+
 
 
             <div class="row">

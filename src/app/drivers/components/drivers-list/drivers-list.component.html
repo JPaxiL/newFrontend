@@ -33,7 +33,7 @@
                     <!-- <td></td> -->
                     <th class="text-start">Nombre</th>
                     <th class="text-start">DNI</th>
-                    <th>N° Llave</th>
+                    <th>N° Llave/Placa</th>
                     <!-- <th><i class="fa fa-id-card fa-lg"></i></th> -->
                     <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
                     <th><i class="fa fa-pencil fa-lg"></i></th>
@@ -46,7 +46,9 @@
                   <td class="text-center">{{indice+1}} </td>
                   <td>{{sub.trama.nombre_conductor}} </td>
                   <td>{{sub.trama.dni_conductor}}</td>
-                  <td>{{sub.trama.nro_llave}}</td>
+                  <td *ngIf="(sub.trama.tipo_identificacion == 'ibutton')">{{sub.trama.nro_llave}}</td>
+                  <td *ngIf="(sub.trama.tipo_identificacion == 'imei')">{{sub.trama.tracker_nombre}}</td>
+                  <td *ngIf="(sub.trama.tipo_identificacion == '' || sub.trama.tipo_identificacion == null)"></td>
 
                   <!-- <td class="inline-png-checkbox text-center">
                     <p-checkbox [(ngModel)]="sub.trama.activo" [disabled]="true" [binary]="true"></p-checkbox>

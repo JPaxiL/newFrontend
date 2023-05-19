@@ -13,6 +13,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class DriversService {
 
   public drivers:any = [];
+  public ibuttons:any = [];
 
   public nombreComponente:string = "LISTAR";
 
@@ -29,6 +30,7 @@ export class DriversService {
   constructor(
     private http: HttpClient,
     public spinner: NgxSpinnerService,
+    
   ) { }
 
 
@@ -42,12 +44,17 @@ export class DriversService {
 
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/driverDataAll`).toPromise()
     .then(response => {
-      // console.log("------------CONDUCTORES");
-      this.drivers = response.data;
+      console.log("------------CONDUCTORES");
+      console.log(response.data);
+      
+      this.drivers  = response.data[0];
+      this.ibuttons = response.data[1];
       this.initializeTable();
+      // this.getDataIbuttons('1');
       this.initializingDriver = true;
 
     });
+
   }
 
 
@@ -60,7 +67,18 @@ export class DriversService {
     this.isRowDataEmpty = this.tblDataDriver.length == 0;
     this.spinner.hide('loadingDrivers');
 
+
   }
+
+  // getDataIbuttons(id: string) {
+  //   let url = `${environment.apiUrl}/api/getIbutton/${id}`;
+  //   this.ibuttons = this.http.get(url);
+  //   console.log("--------------lista de ibuttons");
+  //   console.log(this.ibuttons);
+  //   //return buttons;
+  // }
+
+
 
   public async create(subuser: any) {
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/driver/create`,subuser).toPromise();
