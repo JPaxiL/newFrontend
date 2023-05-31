@@ -172,6 +172,7 @@ export class FormComponent implements OnInit {
     velECO:false,
     velGPS:false,
     velGPS_speed:false,
+    velMobileye_ME460:false,
   };
 
 
@@ -1145,6 +1146,7 @@ export class FormComponent implements OnInit {
       velECO:false,
       velGPS:false,
       velGPS_speed:false,
+      velMobileye_ME460:false,
     };
 
     //6. Eventos

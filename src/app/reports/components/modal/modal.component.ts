@@ -242,6 +242,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].velMobileye_ME460) { cellsCampos.push({ value: "Velocidad Mobileye", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
 
         if (data[2].altitud) { cellsCampos.push({ value: "Altitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].angulo) { cellsCampos.push({ value: "Angulo", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
@@ -274,7 +275,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         //====================  CUERPO =============================
         data[1].forEach((item: { fecha: number;  lat: number; lng: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any;
           vel_gps_speed: any; vel_can: any; tramo: string; PC: any;
-        referencia:any; fServidor:any; velGPS:any; velECO:any; velGPS_speed:any; altitud:any; angulo:any; fatiga:any; fExBrusca:any; fBrusca:any; aBrusca:any; RPMAlta:any;
+        referencia:any; fServidor:any; velGPS:any; velECO:any; velGPS_speed:any; velMobileye_ME460:any; altitud:any; angulo:any; fatiga:any; fExBrusca:any; fBrusca:any; aBrusca:any; RPMAlta:any;
         alcohol_nombre:any; parametros:any; cNivel:any; cRestante:any; cMotor:any; odometro:any; onOff:any; RxM:any; recFacial:any; velCAN:any; pCercano:any; DUOT2state:any;
         }, index: number) => {
 
@@ -306,7 +307,7 @@ export class ModalComponent implements OnInit, OnDestroy {
             if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-
+            if (data[2].velMobileye_ME460) { cellsCuerpo.push({ value: item.velMobileye_ME460, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
 
             if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };

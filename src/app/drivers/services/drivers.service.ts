@@ -60,7 +60,7 @@ export class DriversService {
 
   initializeTable() {
     this.tblDataDriver = [];
-    // console.log('drivers: ', this.drivers);
+    console.log('drivers: ', this.drivers);
     for (let i = 0; i < this.drivers.length; i++) {
       this.tblDataDriver.push({trama:this.drivers[i]});
     }

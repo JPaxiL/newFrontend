@@ -439,6 +439,7 @@
                   <th>Máxima Velocidad</th>
                   <th>Ubicación</th>
                   <th>Punto Cercano</th>
+                  <th>Referencia</th>
                 </tr>
               </thead>
 
@@ -454,6 +455,7 @@
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
                   <td>{{row.PC}}</td>
+                  <td>{{row.referencia}}</td>
                 </tr>
               </tbody>
 
@@ -538,6 +540,7 @@
                   <th>Máxima Velocidad</th>
                   <th>Ubicación</th>
                   <th>Punto Cercano</th>
+                  <th>Referencia</th>
                 </tr>
               </thead>
 
@@ -553,6 +556,7 @@
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
                   <td>{{row.PC}}</td>
+                  <td>{{row.referencia}}</td>
                 </tr>
               </tbody>
 
@@ -1204,6 +1208,7 @@
                       <th *ngIf="reportTableDropdownData[2].velGPS" >Velocidad GPS</th>
                       <th *ngIf="reportTableDropdownData[2].velECO" >Velocidad ECO</th>
                       <th *ngIf="reportTableDropdownData[2].velGPS_speed" >Velocidad GPS speed</th>
+                      <th *ngIf="reportTableDropdownData[2].velMobileye_ME460" >Velocidad Mobileye</th>
 
                       <th *ngIf="reportTableDropdownData[2].altitud" >Altitud</th>
                       <th *ngIf="reportTableDropdownData[2].angulo" >Angulo</th>
@@ -1255,6 +1260,8 @@
                       <td *ngIf="reportTableDropdownData[2].velGPS" [ngStyle]="{'background-color': row.velGPS > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
                       <td *ngIf="reportTableDropdownData[2].velECO" [ngStyle]="{'background-color': row.velECO > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
                       <td *ngIf="reportTableDropdownData[2].velGPS_speed" >{{row.velGPS_speed}}</td>
+                      <td *ngIf="reportTableDropdownData[2].velMobileye_ME460" >{{row.velMobileye_ME460}}</td>
+                      
 
                       <td *ngIf="reportTableDropdownData[2].altitud" >{{row.altitud}}</td>
                       <td *ngIf="reportTableDropdownData[2].angulo" >{{row.angulo}}</td>
@@ -1380,6 +1387,7 @@
                       <th *ngIf="v_table[2].velGPS" >Velocidad GPS</th>
                       <th *ngIf="v_table[2].velECO" >Velocidad ECO</th>
                       <th *ngIf="v_table[2].velGPS_speed" >Velocidad GPS speed</th>
+                      <th *ngIf="v_table[2].velMobileye_ME460" >Velocidad Mobileye</th>
 
                       <th *ngIf="v_table[2].altitud" >Altitud</th>
                       <th *ngIf="v_table[2].angulo" >Angulo</th>
@@ -1425,6 +1433,7 @@
                       <td *ngIf="v_table[2].velGPS" [ngStyle]="{'background-color': row.velGPS > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
                       <td *ngIf="v_table[2].velECO" [ngStyle]="{'background-color': row.velECO > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
                       <td *ngIf="v_table[2].velGPS_speed" >{{row.velGPS_speed}}</td>
+                      <td *ngIf="v_table[2].velMobileye_ME460" >{{row.velMobileye_ME460}}</td>
 
                       <td *ngIf="v_table[2].altitud" >{{row.altitud}}</td>
                       <td *ngIf="v_table[2].angulo" >{{row.angulo}}</td>

@@ -399,6 +399,25 @@
               </div>
             </div>
           </div>
+          
+          
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.velMobileye_ME460" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Velocidad Mobileye</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Velocidad CAN</label>
+              </div>
+            </div>
+          </div>
+
 
           <div class="row">
             <div class="col-6">
@@ -468,22 +487,7 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <!-- <label>
-                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
-                  Referencia</label> -->
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Velocidad CAN</label>
-              </div>
-            </div>
-          </div>
+
 
           <div class="row">
             <div class="col-6">

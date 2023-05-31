@@ -4072,8 +4072,10 @@ export class ResultComponent implements OnDestroy, OnInit {
     var zc_cell_ch_width = "Zona Cercana".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
     var max_vel_cell_ch_width = "Maxima velocidad".length;
+    var referencia_cell_ch_width = "Referencia".length;
 
-    var table_width = this.chkDuracion? (1 + (this.chkDateHour? 4:2) + 8): (2 + (this.chkDateHour? 2:1) + 3);
+
+    var table_width = this.chkDuracion? (1 + (this.chkDateHour? 4:2) + 8): (2 + (this.chkDateHour? 2:1) + 4);
     var vehiculo_width = this.chkDuracion? ((this.chkDateHour? 6:4)): (this.chkDateHour? 4:3);
 
     var nom_inf = "REPORTE DE EXCESOS DE VELOCIDAD";
@@ -4178,6 +4180,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCampos.push({ value: "Máxima Velocidad", ...this.colHeaderConfig });
           cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig });
           cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig });
+          cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig });
 
         }
 
@@ -4244,6 +4247,9 @@ export class ResultComponent implements OnDestroy, OnInit {
             pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
 
             p_cercano_width = Math.max(p_cercano_width, item.PC.length * this.char_to_px);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+
+
 
             cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.nombre, ...this.bodyRowsConfig });
@@ -4257,6 +4263,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             cellsCuerpo.push({ value: item.maxima_velocidad, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
 
             rows.push({
               cells:cellsCuerpo,
@@ -4329,6 +4336,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               { width: this.calculateColWidth(max_vel_cell_ch_width) },
               { width: this.calculateColWidth(ubicacion_cell_ch_width) },
               { width: this.calculateColWidth(pc_cell_ch_width) },
+              { width: this.calculateColWidth(referencia_cell_ch_width) },
             )
 
           }
@@ -4418,6 +4426,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           { width: this.calculateColWidth(max_vel_cell_ch_width) },
           { width: this.calculateColWidth(ubicacion_cell_ch_width) },
           { width: this.calculateColWidth(pc_cell_ch_width) },
+          { width: this.calculateColWidth(referencia_cell_ch_width) },
         )
 
       }
@@ -5337,6 +5346,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var vel_gps_cell_ch_width = "Velocidad".length;
     var vel_eco_cell_ch_width = "Velocidad".length;
     var vel_gps_speed_cell_ch_width = "Velocidad".length;
+    var vel_mobileye_cell_ch_width = "Velocidad".length;
 
     var altitud_cell_ch_width = "Altitud".length;
     var angulo_cell_ch_width = "Angulo".length;
@@ -5366,6 +5376,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bool_col_velGPS = false;
     var bool_col_velECO = false;
     var bool_col_velGPS_speed = false;
+    var bool_col_velMobileye_ME460 = false;
 
     var bool_col_altitud = false;
     var bool_col_angulo = false;
@@ -5418,6 +5429,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (data[2].velGPS){  table_width++; bool_col_velGPS = true;  }
         if (data[2].velECO){  table_width++; bool_col_velECO = true;  }
         if (data[2].velGPS_speed){  table_width++; bool_col_velGPS_speed = true;  }
+        if (data[2].velMobileye_ME460){  table_width++; bool_col_velMobileye_ME460 = true;  }
 
         if (data[2].altitud){ table_width++; bool_col_altitud = true;  }
         if (data[2].angulo){  table_width++; bool_col_angulo = true;  }
@@ -5497,6 +5509,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velMobileye_ME460) { cellsCampos.push({ value: "Velocidad Mobileye", ...this.colHeaderConfig, wrap: header_two_lines }); };
 
         if (data[2].altitud) { cellsCampos.push({ value: "Altitud", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].angulo) { cellsCampos.push({ value: "Angulo", ...this.colHeaderConfig, wrap: header_two_lines }); };
@@ -5530,7 +5543,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         //====================  CUERPO =============================
         data[1].forEach((item: { fecha: number;  lat: number; lng: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any;
           vel_gps_speed: any; vel_can: any; tramo: string; PC: any;
-        referencia:any; fServidor:any; velGPS:any; velECO:any; velGPS_speed:any; altitud:any; angulo:any; fatiga:any; fExBrusca:any; fBrusca:any; aBrusca:any; RPMAlta:any;
+        referencia:any; fServidor:any; velGPS:any; velECO:any; velGPS_speed:any; velMobileye_ME460:any; altitud:any; angulo:any; fatiga:any; fExBrusca:any; fBrusca:any; aBrusca:any; RPMAlta:any;
         alcohol_nombre:any; parametros:any; cNivel:any; cRestante:any; cMotor:any; odometro:any; onOff:any; RxM:any; recFacial:any; velCAN:any; pCercano:any; DUOT2state:any;
         }, index: number) => {
 
@@ -5546,6 +5559,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
             vel_eco_cell_ch_width = Math.max(vel_eco_cell_ch_width, (item.velECO??'').toString().length);
             vel_gps_speed_cell_ch_width = Math.max(vel_gps_speed_cell_ch_width, (item.velGPS_speed??'').toString().length);
+            vel_mobileye_cell_ch_width = Math.max(vel_mobileye_cell_ch_width, (item.velMobileye_ME460??'').toString().length);
 
             altitud_cell_ch_width = Math.max(altitud_cell_ch_width, (item.altitud??'').toString().length);
             angulo_cell_ch_width = Math.max(angulo_cell_ch_width, (item.angulo??'').toString().length);
@@ -5596,7 +5610,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, ...this.bodyRowsConfig }); };
             if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, ...this.bodyRowsConfig }); };
             if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, ...this.bodyRowsConfig }); };
-
+            if (data[2].velMobileye_ME460) { cellsCuerpo.push({ value: item.velMobileye_ME460, ...this.bodyRowsConfig }); };
 
             if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, ...this.bodyRowsConfig }); };
             if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, ...this.bodyRowsConfig }); };
