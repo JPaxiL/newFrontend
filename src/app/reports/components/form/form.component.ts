@@ -398,6 +398,7 @@ export class FormComponent implements OnInit {
     this.http.get(environment.apiUrl + '/api/userId').subscribe({
       next: data => {
         this.userId = parseInt(JSON.stringify(data));
+        this.reportService.setUserId(this.userId);
         console.log("user ID", this.userId);
         this.isUserIdLoaded = true;
 
@@ -707,6 +708,7 @@ export class FormComponent implements OnInit {
         //console.log(this.selectedVehicles.length);
         console.log(typeof data);
         console.log(data);
+        this.reportService.setDatos(data);
         this.reportService.setParams(param);
         // console.log("MODAL ACTIVATE");
         // this.reportService.modalActive = true;
@@ -862,6 +864,9 @@ export class FormComponent implements OnInit {
       case 'R026':  //    -R026 NEW 2
       case 'R027':  //    -
       case 'R028':  //    -
+      case 'R029':  //    -
+      case 'R030':  //    -
+      case 'R031':  //    -
           this.showLimitTime = true;
 				break;
       default: break;
@@ -1080,6 +1085,12 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R027' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R028' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R029' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R030' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R031' && is_vehicle_selected)
       );
   }
 
