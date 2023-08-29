@@ -28,6 +28,8 @@ deploy_development:
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
     - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/development/newFrontend && git pull origin develop && exit"
+  after_script:
+    - rm -rf ~/.ssh
   only:
     - develop
 
@@ -42,5 +44,7 @@ deploy_production:
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
     - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/production/newFrontend && git pull origin master && exit"
+  after_script:
+    - rm -rf ~/.ssh
   only:
     - master
