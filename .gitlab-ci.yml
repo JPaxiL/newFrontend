@@ -1,70 +1,46 @@
-#image: node:latest
-
-#.docker: &docker
-#  tags:
-#  - docker
-
-#before_script:
-#  - npm install
-
-#cache:
-#  paths:
-#    - node_modules/
-
 stages:
-  - publish
   - deploy
 
-variables:
-  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
-  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
-# Verify it can build.
-publish:
-  image: docker:stable
-  stage: publish
-  services:
-    - name: docker:dind
-      entrypoint: ["env", "-u", "DOCKER_HOST"]
-      command: ["dockerd-entrypoint.sh"]
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    # See https://github.com/docker-library/docker/pull/166
-    DOCKER_TLS_CERTDIR: ""
-  script:
-    - echo $TAG_LATEST."====== Deploy to production server ======".$TAG_COMMIT
-    - mv $ENVIRONMENT src/environments/environment.ts
-    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker push $TAG_COMMIT
-    - docker push $TAG_LATEST
-  only:
-    - develop
-
-deploy:
-  image: alpine:latest
+deploy_testing:
+  image: ubuntu:latest
   stage: deploy
-  tags:
-    - deployment
+  before_script:
+    - apt-get -yq update
+    - apt-get -yqq install ssh
+    - install -m 600 -D /dev/null ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
+    - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - chmod og= $ID_RSA
-    - apk update && apk add openssh-client
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f frontend || true"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run 
-      --detach 
-      --restart always 
-      --name frontend 
-      --network service-network 
-      --env VIRTUAL_HOST=$SERVER_HOST
-      --env LETSENCRYPT_HOST=$SERVER_HOST
-      --env LETSENCRYPT_EMAIL="neil20fc@gmail.com"  
-      --env REDIRECT_STATUS_CODE=301 
-      $TAG_COMMIT "
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/test/newFrontend && git pull origin test && exit"
+  after_script:
+    - rm -rf ~/.ssh
+  only:
+    - test
 
-  environment:
-    name: production
-    url: http://23.29.124.174
+deploy_development:
+  image: ubuntu:latest
+  stage: deploy
+  before_script:
+    - apt-get -yq update
+    - apt-get -yqq install ssh
+    - install -m 600 -D /dev/null ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
+    - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
+  script:
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/development/newFrontend && git pull origin develop && exit"
   only:
     - develop
+
+deploy_production:
+  image: ubuntu:latest
+  stage: deploy
+  before_script:
+    - apt-get -yq update
+    - apt-get -yqq install ssh
+    - install -m 600 -D /dev/null ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
+    - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
+  script:
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/production/newFrontend && git pull origin master && exit"
+  only:
+    - master
