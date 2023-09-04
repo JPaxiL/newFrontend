@@ -206,7 +206,17 @@
   <div class="">
     <!-- Cambiar scrollHeight a 100% - 4.375rem artificialmente -->
     <!-- scrollHeight no soporta porcentajes % -->
-    <p-treeTable #tt [value]="vehicles" [loading]="loading" [resizableColumns]="true" [reorderableColumns]="true" [columns]="cols" [scrollable]="true" scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name" [sortOrder]="sortOrder" [virtualScroll]="true" [virtualRowHeight]="30" [ngClass]="{'vehicle-treetable' : true}" (onFilter)="headerScrollHandler()">
+    <p-treeTable #tt [value]="vehicles" [loading]="loading" 
+      scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name" 
+      [resizableColumns]="true" 
+      [reorderableColumns]="true" 
+      [columns]="cols" 
+      [scrollable]="true" 
+      [sortOrder]="sortOrder" 
+      [virtualScroll]="true" [virtualRowHeight]="30" 
+      [ngClass]="{'vehicle-treetable' : true}" 
+      (onFilter)="headerScrollHandler()"
+      [globalFilterFields]="['name','IMEI']"> <!-- Added to filter by IMEI -->
       <!-- <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
