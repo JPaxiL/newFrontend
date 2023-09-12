@@ -93,7 +93,8 @@ export class PanelMonitoreoComponent implements OnInit {
       case "USER-CONFIG":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-configuracion-header-height').replace('rem', '')) != 0;
       case "DASHBOARD":
-        return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-dashboard-header-height').replace('rem', '')) != 0;
+        return false;
+        //return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-dashboard-header-height').replace('rem', '')) != 0;
       case "AUDITORIA":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-auditoria-header-height').replace('rem', '')) != 0;
       case "SUBCUENTAS":

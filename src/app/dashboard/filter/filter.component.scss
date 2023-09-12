@@ -1,0 +1,16 @@
+.btn-dashboard-filter {
+    border: 1px solid var(--gray-400);
+    border-radius: 0.5rem;
+    color: var(--gray-600);
+}
+
+.btn-dashboard-filter:hover:not(.selected) {
+    border: 1px solid var(--gl-blue-dark);
+    background-color: var(--gl-blue-dark);
+    color: var(--gray-100);
+}
+
+.btn-dashboard-filter.selected {
+    border: 1px solid var(--gl-blue-dark);
+    color: var(--gl-blue-dark);
+}

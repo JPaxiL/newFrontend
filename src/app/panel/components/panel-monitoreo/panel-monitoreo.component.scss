@@ -163,7 +163,9 @@
   #panelMonitoreo.drivers > .card > div.component-containers {
     height: calc(100% - var(--pm-drivers-header-height));
   }
-
+  .dashboard {
+    width: 100% !important;
+  }
 
   #rowBusqueda{
     display: flex;

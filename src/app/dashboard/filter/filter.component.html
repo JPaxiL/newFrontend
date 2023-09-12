@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-start">
+        <button type="button" class="btn btn-dashboard-filter me-2">Hoy</button>
+        <button type="button" class="btn btn-dashboard-filter mx-2">Ayer</button>
+        <button type="button" class="btn btn-dashboard-filter mx-2 selected">Semanal</button>
+        <button type="button" class="btn btn-dashboard-filter ms-2">Mensual</button> 
+        <div class="p-field">
+            <label>Desde: 
+                <p-calendar
+                    [(ngModel)]="dateFrom"
+                    dateFormat="dd/mm/yy"
+                    [maxDate]="dateTo"
+                    [appendTo]="'body'"
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    yearRange="{{strYearRange}}"
+                    (onSelect)="onTimeChange(); validateForm();"
+                    (onBlur)="onTimeChange(); validateForm();"
+                    (onInput)="onTimeChange(); validateForm();"
+                    (onClickOutside)="onTimeChange(); validateForm();"
+                    [showIcon]="true"
+                    >
+                </p-calendar>
+            </label>
+        </div>      
+        <div class="p-field">
+            <label>Hasta: 
+                <p-calendar
+                    [(ngModel)]="dateTo"
+                    dateFormat="dd/mm/yy"
+                    [minDate]="dateFrom"
+                    [maxDate]="today"
+                    [appendTo]="'body'"
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    yearRange="{{strYearRange}}"
+                    (onSelect)="onTimeChange(); validateForm();"
+                    (onBlur)="onTimeChange(); validateForm();"
+                    (onInput)="onTimeChange(); validateForm();"
+                    (onClickOutside)="onTimeChange(); validateForm();"
+                    [showIcon]="true"
+                    >
+                </p-calendar>
+            </label>
+        </div>      
+    </div>
+</div>

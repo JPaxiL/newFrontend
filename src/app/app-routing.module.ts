@@ -10,7 +10,7 @@ import { MapComponent } from './vehicles/components/map/map.component';
 import { ReportComponent } from './reports/components/report/report.component';
 import { ResultComponent } from './reports/components/result/result.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { Dashboard2Component } from './dashboard2/dashboard2.component';
+//import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AuditComponent } from './auditoria/components/audit/audit.component';
 import { AuditresultComponent } from './auditoria/components/auditresult/auditresult.component';
 import { NotFoundComponent } from './panel/not-found/not-found.component';
@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: Dashboard2Component,
+    component: DashboardComponent,
     canActivate: [AuthGuard]
   },
   {

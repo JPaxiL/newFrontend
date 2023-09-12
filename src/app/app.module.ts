@@ -95,8 +95,7 @@ import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { Dashboard2Component } from './dashboard2/dashboard2.component';
+//import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
@@ -124,6 +123,9 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { PieComponent } from './dashboard/pie/pie.component';
+import { FilterComponent } from './dashboard/filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -174,7 +176,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     ListGeopointsComponent,
     ModalComponent,
     UserConfigComponent,
-    Dashboard2Component,
+    DashboardComponent,
     AreagraphsComponent,
     PanalDashboardComponent,
     AuditComponent,
@@ -199,7 +201,8 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
-
+    PieComponent,
+    FilterComponent
   ],
   imports: [
     ToastrModule.forRoot({
