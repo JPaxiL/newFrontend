@@ -867,8 +867,17 @@ export class FormComponent implements OnInit {
       case 'R029':  //    -
       case 'R030':  //    -
       case 'R031':  //    -
+      case 'R032':  //    -
           this.showLimitTime = true;
 				break;
+      case 'R033':  //    -
+          this.showZones = true;
+        break;
+      case 'R034':  //    -
+      case 'R035':  //    -
+          //this.showZones = true;
+      break;
+      
       default: break;
     }
 /*     console.log(Object.keys(this.reports[this.selectedReport]).length === 0);
@@ -1091,6 +1100,14 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R030' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R031' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R032' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R033')
+        ||
+        (this.selectedReport == 'R034')
+        ||
+        (this.selectedReport == 'R035')
       );
   }
 
