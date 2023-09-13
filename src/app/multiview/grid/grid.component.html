@@ -1,0 +1,13 @@
+<div class="grid">
+    <div *ngFor="let row of gridData; let i = index" class="grid-row">
+        <div
+            *ngFor="let block of row; let j = index"
+            class="grid-cell"
+            [dnd-draggable]="block"
+            [dnd-dropzone]="true"
+            (dnd-dragstart)="onDragStart(i, j)"
+            (dnd-dragend)="onDragEnd(i, j)">
+            {{ block }}
+        </div>
+    </div>
+</div>

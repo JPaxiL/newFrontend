@@ -124,6 +124,8 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
+import { NgxDnDModule } from '@swimlane/ngx-dnd';
+import { GridComponent } from './multiview/grid/grid.component';
 
 @NgModule({
   declarations: [
@@ -199,6 +201,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
+    GridComponent,
 
   ],
   imports: [
@@ -212,6 +215,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     }),
     BrowserModule,
     DataTablesModule,
+    NgxDnDModule,
     CommonModule,
     BrowserModule,
     NgxSpinnerModule,
