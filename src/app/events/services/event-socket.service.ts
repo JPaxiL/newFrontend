@@ -5,6 +5,7 @@ import * as L from 'leaflet';
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { EventService } from './event.service';
+import { VehicleService } from '../../vehicles/services/vehicle.service';
 import { UsersService } from 'src/app/dashboard/service/users.service';
 import { AlertService } from 'src/app/alerts/service/alert.service';
 @Injectable({
@@ -22,11 +23,14 @@ export class EventSocketService extends Socket {
 
   constructor(
     public eventService : EventService,
+    public vehicleService : VehicleService,
     private userService : UsersService,
     private AlertService: AlertService,) {
     super({
-      url: 'https://socketprueba.glmonitoreo.com/',
-      //url: 'http://23.29.124.173',
+      // url: 'https://socketprueba.glmonitoreo.com/',
+      url: 'https://eventos.glmonitoreo.com',
+      // url: 'http://localhost:5000',
+
 
       // options: {
       //   transports: ["websocket"]
@@ -40,16 +44,21 @@ export class EventSocketService extends Socket {
 
   public listen() {
     this.AlertService.getAll();
-    console.log('Is Listening');
+    console.log('Is Listening',this.vehicleService.vehicles);
     //console.log(this.user_id);
-
+    // this.filterImei(this.vehicleService.vehicles);
     this.ioSocket.on('events', (event: any) => {
-      let even = JSON.parse(event);
-      if(this.user_id == even.usuario_id){
-        //this.count = this.count + 1;
+      console.log("recibiendo evento........",this.vehicleService.vehicles);
+      // return;
+      // let even = JSON.parse(event);
+      let even = event;
 
-        if(this.eventService.events.findIndex(event => event.id == even.id) == -1 &&
-          this.eventService.socketEvents.findIndex(event => event.id == even.id) == -1){
+      // if(this.user_id == even.usuario_id){
+      if(this.user_id){
+        //this.count = this.count + 1;
+        if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
+        // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
+        //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
           //Si el evento no existe previamente
           even.evento = even.descripcion_evento;
           even.tipo = even.descripcion_evento;
@@ -82,7 +91,7 @@ export class EventSocketService extends Socket {
           console.log('Nuevo evento ' + new Date() + ': ', even);
           this.eventService.sortEventsTableData();
         } else {
-          console.log('Evento duplicado ' + new Date() + ': ', even);
+          console.log('Evento no pertence al usuario ' + new Date() + ': ', even);
         }
 
         this.eventService.checkDuplicates();
@@ -95,6 +104,20 @@ export class EventSocketService extends Socket {
     });
   }
 
+  private filterImei(data:any,imei: any){
+    // console.log("imei",imei);
+    for (const index in data) {
+      // console.log("IMEI",data[index].IMEI);
+      if(String(data[index].IMEI)==String(imei)){
+
+        console.log("return true");
+        return true;
+      }
+    }
+    console.log("return false");
+    return false;
+
+  }
   public getIcon() {
     // this.img_icon = 'assets/images/eventos/pin_point.svg';
     // this.img_iconSize = [30, 30];
