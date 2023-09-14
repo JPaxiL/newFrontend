@@ -28,8 +28,8 @@ export class EventSocketService extends Socket {
     private AlertService: AlertService,) {
     super({
       // url: 'https://socketprueba.glmonitoreo.com/',
-      // url: 'https://eventos.glmonitoreo.com',
-      url: 'http://localhost:5000',
+      url: 'https://eventos.glmonitoreo.com',
+      // url: 'http://localhost:5000',
 
 
       // options: {
