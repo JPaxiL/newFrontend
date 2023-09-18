@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
   userData: any; //Informacion del usuario
   showBtnSubcuentas = false;
   showBtnDrivers =true;
-
+  showMultiviewModal = false;
   constructor(
     public eventService: EventService,
     public eventSocketService : EventSocketService,
@@ -92,6 +92,16 @@ export class NavbarComponent implements OnInit {
       this.sidevarIZ = true;
     }
 
+  }
+
+  clickShowModalMultiview(){
+    this.panelService.nombreComponente = "MULTIVIEW";
+    $("#panelMonitoreo").hide( "slow" );
+    this.showMultiviewModal = true;
+  }
+  onHideMultiviewModal(){
+    this.panelService.nombreComponente = "";
+    this.showMultiviewModal = false;
   }
 
   logOut(): void {

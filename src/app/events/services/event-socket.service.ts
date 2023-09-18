@@ -25,7 +25,7 @@ export class EventSocketService extends Socket {
     private userService : UsersService,
     private AlertService: AlertService,) {
     super({
-      url: 'https://socketprueba.glmonitoreo.com/',
+      url: 'https://eventos.glmonitoreo.com/',
       //url: 'http://23.29.124.173',
 
       // options: {
@@ -44,7 +44,7 @@ export class EventSocketService extends Socket {
     //console.log(this.user_id);
 
     this.ioSocket.on('events', (event: any) => {
-      let even = JSON.parse(event);
+      /*let even = JSON.parse(event);
       if(this.user_id == even.usuario_id){
         //this.count = this.count + 1;
 
@@ -79,10 +79,10 @@ export class EventSocketService extends Socket {
           this.eventService.addNewEvent(newEvent);
 
           this.eventService.new_notif_stack.push(even.id);
-          console.log('Nuevo evento ' + new Date() + ': ', even);
+          //console.log('Nuevo evento ' + new Date() + ': ', even);
           this.eventService.sortEventsTableData();
         } else {
-          console.log('Evento duplicado ' + new Date() + ': ', even);
+          //console.log('Evento duplicado ' + new Date() + ': ', even);
         }
 
         this.eventService.checkDuplicates();
@@ -91,7 +91,7 @@ export class EventSocketService extends Socket {
         //console.log('new notification stack counter', this.new_notif_stack.length);
         //console.log('new notification Event Content en Socket', even);
         //console.log('new notification time', new Date());
-      }
+      }*/
     });
   }
 

@@ -95,7 +95,6 @@ import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
@@ -124,8 +123,10 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
-import { NgxDnDModule } from '@swimlane/ngx-dnd';
 import { GridComponent } from './multiview/grid/grid.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DialogComponent } from './multiview/dialog/dialog.component';
+import { DragItemComponent } from './multiview/drag-item/drag-item.component';
 
 @NgModule({
   declarations: [
@@ -163,7 +164,9 @@ import { GridComponent } from './multiview/grid/grid.component';
     PanelAlertsComponent,
     TreeTableComponent,
     VehicleConfigComponent,
+    DashboardComponent,
     GeocercaAddComponent,
+    GridComponent,
     GeocercaListsComponent,
     GeocercaMainComponent,
     VehicleGroupComponent,
@@ -201,7 +204,8 @@ import { GridComponent } from './multiview/grid/grid.component';
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
-    GridComponent,
+    DialogComponent,
+    DragItemComponent,
 
   ],
   imports: [
@@ -215,7 +219,6 @@ import { GridComponent } from './multiview/grid/grid.component';
     }),
     BrowserModule,
     DataTablesModule,
-    NgxDnDModule,
     CommonModule,
     BrowserModule,
     NgxSpinnerModule,

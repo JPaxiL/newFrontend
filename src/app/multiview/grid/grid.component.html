@@ -1,13 +1,28 @@
-<div class="grid">
-    <div *ngFor="let row of gridData; let i = index" class="grid-row">
-        <div
-            *ngFor="let block of row; let j = index"
-            class="grid-cell"
-            [dnd-draggable]="block"
-            [dnd-dropzone]="true"
-            (dnd-dragstart)="onDragStart(i, j)"
-            (dnd-dragend)="onDragEnd(i, j)">
-            {{ block }}
-        </div>
+<!--div class="example-container">
+    <label for="" class="mb-2">Vista</label>
+    <div
+      cdkDropList
+      #todoList="cdkDropList"
+      [cdkDropListData]="items"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of items" cdkDrag>{{item}}</div>
     </div>
+</div-->
+<div cdkDropListGroup>
+  <div class="grid-container">
+    <!-- All lists in here will be connected. -->
+    <ng-container *ngFor="let info of items">
+      <div
+        class="grid-item"
+        [style.gridColumnStart]="info.col"
+        [style.gridRowStart]="info.row"
+        [style.gridColumnEnd]="info.col + info.span"
+      >
+        <app-drag-item [items]="[info]" (itemsChange)="onChangeDrops($event)">
+
+        </app-drag-item>
+      </div>
+    </ng-container>
+  </div>
 </div>
