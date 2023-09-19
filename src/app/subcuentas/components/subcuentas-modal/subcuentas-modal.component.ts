@@ -277,7 +277,8 @@ export class SubcuentasModalComponent implements OnInit {
 
 
 
-    if (nro != 0) {
+    //if (nro != 0) {
+    if (true) {
 
       Swal.fire({
         //title: '¿Desea guardar los cambios?',

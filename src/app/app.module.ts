@@ -28,8 +28,7 @@ import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
-
-
+import { SliderModule } from 'primeng-lts/slider';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -124,6 +123,7 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
+import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
 
 @NgModule({
   declarations: [
@@ -199,6 +199,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
+    PanelHistorialRecorridoModalComponent,
 
   ],
   imports: [
@@ -229,6 +230,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     InputTextModule,
     InputSwitchModule,
     TableModule,
+    SliderModule,
     ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,
