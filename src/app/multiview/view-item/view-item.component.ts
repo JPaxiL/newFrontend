@@ -1,0 +1,18 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { UserTracker } from '../models/interfaces';
+
+@Component({
+  selector: 'app-view-item',
+  templateUrl: './view-item.component.html',
+  styleUrls: ['./view-item.component.scss']
+})
+export class ViewItemComponent implements OnInit {
+
+  @Input() configuration!: UserTracker;
+  constructor() { }
+
+  ngOnInit(): void {
+    
+  }
+
+}

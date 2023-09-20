@@ -5,6 +5,7 @@
     (cdkDropListDropped)="drop($event)">
     <div class="drop-box" *ngFor="let item of items" cdkDrag [cdkDragData]="item">
         <div class="custom-placeholder" *cdkDragPlaceholder></div>
-        {{item.id}}
+        <ng-content select="div">
+        </ng-content>
     </div>
 </div>

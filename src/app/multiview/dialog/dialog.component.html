@@ -9,7 +9,7 @@
       <div class="p-fluid p-formgrid p-grid">
         <div class="dialog-form-container">
           <div class="flex-column mt-3">
-            <div class="row h-auto">
+            <div *ngIf="!this.showSaveMultiview" class="row h-auto">
                 <div class="col-xxl-6 col-xl-12 col-lg-12 col-md-12 d-flex flex-column justify-content-center">
                     <label class="my-2">Operaciones</label>
                     <p-dropdown 
@@ -29,15 +29,56 @@
                         [showHeader]="false"
                         defaultLabel="Unidades" 
                         optionLabel="nombre" 
-                        [(ngModel)]="selectedUnits"
+                        [(ngModel)]="multiviewService.selectedUnits"
                         (onChange)="changeUnits()"
                         maxSelectedLabels="20"
                         [appendTo]="'body'">
                     </p-multiSelect>
+                    <hr>
+                    <label for="" class="my-2">Grupos almacenados</label>
+                    <p-dropdown 
+                      [options]="multiviewService.userMultiview" 
+                      [(ngModel)]="currentMultiview" 
+                      optionLabel="name" 
+                      [filter]="true" 
+                      filterBy="name" 
+                      [showClear]="true" 
+                      placeholder="Grupo"
+                      (onChange)="onSelectMultiview()"
+                      [appendTo]="'body'"
+                    >
+                      <ng-template pTemplate="selectedItem">
+                          <div class="flex align-items-center gap-2" *ngIf="currentMultiview">
+                              <div>{{ currentMultiview.name }}</div>
+                          </div>
+                      </ng-template>
+                      <ng-template let-country pTemplate="item">
+                          <div class="d-flex justify-content-between align-items-center gap-2">
+                            <div>{{ country.name }}</div>
+                            <p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger p-button-text" (click)="deleteMultiview(country.name);"></p-button>
+                          </div>
+                      </ng-template>
+                  </p-dropdown>
                 </div>
                 <div class="col d-flex flex-column justify-content-center align-items-center">
-                    <app-grid [items]="selectedUnits" (itemsChange)="onChangeDisplayUnits($event)"></app-grid>
+                    <div class="preview-grid-container">
+                      <app-preview [items]="multiviewService.selectedUnits" (itemsChange)="onGridChange($event)"></app-preview>
+                    </div>
                 </div>
+            </div>
+            <div *ngIf="this.showSaveMultiview" class="row h-auto">
+              <div class="d-flex flex-column justify-content-center text-center gap-4">
+                <h4 class="my-2">¿Desea guardar el grupo de Multipantallas?</h4>
+                <div class="d-flex justify-content-center">
+                  <p-selectButton class="w-25" [options]="stateOptions" [(ngModel)]="saveMultiviewOption" optionLabel="label" optionValue="value"></p-selectButton>
+                </div>
+                <div *ngIf="saveMultiviewOption == 'si' && currentMultiview" class="d-flex justify-content-center align-items-center gap-2">
+                  <label class="fs-6">Nombre del grupo: </label>
+                  <div class="flex flex-column gap-2">
+                    <input type="text" pInputText [(ngModel)]="currentMultiview.name" (input)="isValidGroupName()" [maxlength]="30" [minlength]="1" #nameInput/>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="row d-flex justify-content-end">
                 <div class="col d-flex justify-content-center align-items-center">
@@ -45,7 +86,7 @@
                         (click)="onConfirmGroup()" _ngcontent-cic-c118="" type="button" 
                         class="btn-gl-save btn-dark-hover btn-sm w-25 my-4" 
                         [disabled]="loading">
-                        Generar
+                        Siguiente
                     </button>
                 </div>
             </div>

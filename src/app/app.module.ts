@@ -28,7 +28,7 @@ import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
-
+import { PanelModule } from 'primeng-lts/panel';
 
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
@@ -127,6 +127,9 @@ import { GridComponent } from './multiview/grid/grid.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogComponent } from './multiview/dialog/dialog.component';
 import { DragItemComponent } from './multiview/drag-item/drag-item.component';
+import { PreviewComponent } from './multiview/preview/preview.component';
+import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
+import { ViewItemComponent } from './multiview/view-item/view-item.component';
 
 @NgModule({
   declarations: [
@@ -206,6 +209,9 @@ import { DragItemComponent } from './multiview/drag-item/drag-item.component';
     DriversModalComponent,
     DialogComponent,
     DragItemComponent,
+    PreviewComponent,
+    ScreenViewComponent,
+    ViewItemComponent,
 
   ],
   imports: [
@@ -228,6 +234,7 @@ import { DragItemComponent } from './multiview/drag-item/drag-item.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    PanelModule,
     NgbModule,
     NgSelectModule,
     TreeTableModule,

@@ -21,3 +21,22 @@ export interface UserTracker {
     span: number,
     structure_index: number,
 }
+
+export interface ScreenView {
+    id?: number,
+    name: string,
+    is_open?: boolean,
+    grids?: GridItem[],
+    was_edited?: boolean,
+}
+
+export interface GridItem {
+    row: number,
+    col: number,
+    span:number,
+    structure_index?:number,
+    content?: any,
+    content_type: string, // minimap or chart or add another in grid component
+    label?: string,
+    show_only_label: boolean,
+}

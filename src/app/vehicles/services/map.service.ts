@@ -871,7 +871,7 @@ export class MapService {
           //console.log('se econtraron '+cont+' resultados');
           // //console.log('aux = ', aux.getLatLng());
 
-// iconUrl = './assets/images/accbrusca.png';
+          // iconUrl = './assets/images/accbrusca.png';
 
           // //console.log('markerClusterGroup',this.markerClusterGroup);
         }

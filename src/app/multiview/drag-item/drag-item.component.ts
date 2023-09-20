@@ -20,26 +20,18 @@ export class DragItemComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<UserTracker[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    }else{
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+    transferArrayItem(event.previousContainer.data,event.container.data,event.previousIndex,event.currentIndex);
 
-        if (event.previousContainer.data.length === 0) {
-          if(event.currentIndex == 1){
-            const originalElement = event.container.data.splice(0, 1)[0];
-            this.aux_exchanged_item = originalElement;
-            event.previousContainer.data.push(originalElement);
-          }else{
-            const originalElement = event.container.data.splice(1, 1)[0];
-            this.aux_exchanged_item = originalElement;
-            event.previousContainer.data.push(originalElement);
-          }
-        }
+    if(event.currentIndex == 1){
+      const originalElement = event.container.data.splice(0, 1)[0];
+      this.aux_exchanged_item = originalElement;
+      event.previousContainer.data.push(originalElement);
+    }else{
+      const originalElement = event.container.data.splice(1, 1)[0];
+      this.aux_exchanged_item = originalElement;
+      event.previousContainer.data.push(originalElement);
     }
+    
     this.itemsChange.emit({
       current_item : this.items[0],
       exchanged_item : this.aux_exchanged_item

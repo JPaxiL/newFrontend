@@ -1,0 +1,6 @@
+<ng-container *ngIf="!show_not_found">
+    <app-grid (itemsChange)="onExchange($event)" #_gridChild></app-grid>
+</ng-container>
+<ng-container *ngIf="show_not_found">
+    <app-not-found></app-not-found>
+</ng-container>
