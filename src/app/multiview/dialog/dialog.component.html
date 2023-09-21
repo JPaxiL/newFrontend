@@ -37,14 +37,13 @@
                     <hr>
                     <label for="" class="my-2">Grupos almacenados</label>
                     <p-dropdown 
-                      [options]="multiviewService.userMultiview" 
-                      [(ngModel)]="currentMultiview" 
+                      [options]="multiviewService.getUserMultiview()" 
                       optionLabel="name" 
                       [filter]="true" 
                       filterBy="name" 
                       [showClear]="true" 
                       placeholder="Grupo"
-                      (onChange)="onSelectMultiview()"
+                      (onChange)="onSelectMultiview($event)"
                       [appendTo]="'body'"
                     >
                       <ng-template pTemplate="selectedItem">

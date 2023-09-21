@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 })
 export class MultiviewService {
   public userMultiview: ScreenView[] = [];
-
   constructor(
     private http: HttpClient,
     public spinner: NgxSpinnerService,
@@ -23,6 +22,9 @@ export class MultiviewService {
 
   selectedUnits: UserTracker[] = [];
   
+  public getUserMultiview(){
+    return this.userMultiview.filter(item => item.name != "default");
+  }
   public loadUserData(){
     if(!this.userDataService.userDataInitialized){
       console.log('(multiviewService) User Data no está listo. Subscribiendo para obtener data...');
@@ -47,6 +49,7 @@ export class MultiviewService {
 
   public async updateMultiviews() {
     this.userMultiview.push(...(JSON.parse(this.userDataService.userData.multiview) as ScreenView[]));
+    this.userMultiview.map(it => it.was_edited = false);
     console.log("user mv loaded: ",this.userMultiview);
   }
 
@@ -162,4 +165,31 @@ export class MultiviewService {
     return res;
   }
 
+  public arraysAreEqual(arr1:any, arr2: any) {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    arr1.sort((a:any, b:any) => a.name - b.name);
+    arr2.sort((a:any, b:any) => a.name - b.name);
+  
+    for (let i = 0; i < arr1.length; i++) {
+      const obj1 = arr1[i];
+      const obj2 = arr2[i];
+      // Compara los atributos de los objetos en cada posición
+      if (!this.objectsAreEqual(obj1, obj2)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  private objectsAreEqual(obj1:any, obj2:any) {
+    // Compara los atributos de los objetos
+    for (const key in obj1) {
+      if (obj1[key] !== obj2[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

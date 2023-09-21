@@ -21,7 +21,7 @@ export class PreviewComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
   ngOnChanges(changes: SimpleChanges) {
-    // Aquí puedes acceder a los cambios en miVariableDeEntrada
+    // Aquí puedes acceder a los cambios en items
     if (changes.items) {
       this.updateGridItems();
     }
@@ -29,7 +29,7 @@ export class PreviewComponent implements OnInit, OnChanges {
 
   updateGridItems(){
     this.gridItems = this.multiviewService.calculateStructure(this.items, "minimap", true);
-    if(this.gridItems && this.gridItems.length>0){
+    if(this.gridItems){
       this.gridChild.setItems(this.gridItems);
       this.itemsChange.emit(this.gridItems);
     }
