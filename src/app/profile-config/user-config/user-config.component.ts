@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgModule } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PanelService } from 'src/app/panel/services/panel.service';
+
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-config',
@@ -19,6 +22,12 @@ export class UserConfigComponent implements OnInit {
   pngNewPassR: string = '';
 
   isUnderConstruction: boolean = true;
+  switchPoint: boolean = false;
+  switchCircle: boolean = false;
+  switchMobile: boolean = false;
+
+
+  activeSwitch: number = 0;
 
   mostrarDirVehicle: number = 0;
   mostrarIcono: number = 0;
@@ -39,7 +48,7 @@ export class UserConfigComponent implements OnInit {
     { id: 1, name: 'Flecha de dirección' },
     { id: 2, name: 'Cola de dirección' },
   ];
-  
+
   constructor(
     public panelService: PanelService,
   ) { }
@@ -49,6 +58,26 @@ export class UserConfigComponent implements OnInit {
 
   consoleMostrar(){
     console.log(this.mostrarDirVehicle);
+  }
+
+  switchActive(switchNumber: number){
+    if (switchNumber === 1) {
+      this.switchCircle = true;
+      this.switchPoint = false;
+      this.switchMobile = false;
+    } else if (switchNumber === 2) {
+      this.switchCircle = false;
+      this.switchPoint = true;
+      this.switchMobile = false;
+    } else if (switchNumber === 3) {
+      this.switchCircle = false;
+      this.switchPoint = false;
+      this.switchMobile = true;
+    }
+  }
+
+  setActiveSwitch(selectedSwitch: number){
+    this.activeSwitch = selectedSwitch;
   }
 
 }

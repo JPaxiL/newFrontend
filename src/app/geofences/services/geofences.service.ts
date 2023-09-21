@@ -42,6 +42,7 @@ export class GeofencesService {
   initializingUserPrivleges: boolean = false;
   showBtnAdd = true;
   showBtnEdit = true;
+  showBtnImportExport = true;
 
   constructor(
     private http: HttpClient,
@@ -100,7 +101,7 @@ export class GeofencesService {
     if (geofence.zone_name_visible == "true") {
       geofence.marker_name.addTo(this.mapService.map);
     }
-    
+
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // // tempMarker.bindLabel("My Label");
     // tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
@@ -212,7 +213,7 @@ export class GeofencesService {
       this.tblDataGeo.push({trama:this.geofences[i]});
     }
     this.tblDataGeoFiltered = this.getTableData();
-    
+
     //this.spinner.hide('loadingGeofencesSpinner');
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
   }
@@ -235,12 +236,12 @@ export class GeofencesService {
       console.log('(Geofences Service) User Data está listo. Obteniendo privilegios...');
       this.verifyPrivileges();
     }
-    
+
   }
 
   attemptToHideSpinner(){
-    console.log('Attempt to hide Geofences Spinner: ', { 
-      isTableReady: this.initializingGeofences, 
+    console.log('Attempt to hide Geofences Spinner: ', {
+      isTableReady: this.initializingGeofences,
       isUserDataReady: this.initializingUserPrivleges } );
     if(this.initializingGeofences && this.initializingUserPrivleges){
       this.spinner.hide('loadingGeofencesSpinner');
