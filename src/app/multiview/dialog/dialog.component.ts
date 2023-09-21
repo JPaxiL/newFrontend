@@ -51,7 +51,7 @@ export class DialogComponent implements OnInit {
   }
 
   onHide(){
-    // //console.log('on hide...');
+    this.clearPreview();
     this.onHideEvent.emit(false);
   }
   onOption(e : string){
@@ -184,7 +184,7 @@ export class DialogComponent implements OnInit {
     this.resetCurrentMultiview();
     this.multiviewService.selectedUnits = [];
     this.validName = true;
-    this.saveMultiviewOption == 'si'
+    this.saveMultiviewOption = 'si';
     this.loading = false;
   }
   onConfirmGroup(){
