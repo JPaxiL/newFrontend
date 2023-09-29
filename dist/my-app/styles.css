@@ -23240,6 +23240,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 }
 .p-card .p-card-content {
   padding: 1rem 0;
+  height: 100%;
 }
 .p-card .p-card-footer {
   padding: 1rem 0 0 0;

@@ -1,5 +1,5 @@
-<p-panel [header]="configuration.nombre+' ('+configuration.empresa+')'">
-    <div class="minimap">
-        {{configuration | json}}
+<ng-container *ngIf="type == 'minimap'">
+    <div class="h-100 w-100">
+        <app-minimap [configuration]="configuration"></app-minimap>
     </div>
-</p-panel>
+</ng-container>

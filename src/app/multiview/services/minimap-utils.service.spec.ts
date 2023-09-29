@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MultiviewService } from './multiview.service';
+import { MinimapUtilsService } from './minimap-utils.service';
 
-describe('MultiviewService', () => {
-  let service: MultiviewService;
+describe('MinimapUtilsService', () => {
+  let service: MinimapUtilsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MultiviewService);
+    service = TestBed.inject(MinimapUtilsService);
   });
 
   it('should be created', () => {

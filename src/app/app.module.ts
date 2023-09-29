@@ -29,7 +29,7 @@ import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
 import { PanelModule } from 'primeng-lts/panel';
-
+import { BadgeModule } from 'primeng-lts/badge';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -130,6 +130,7 @@ import { DragItemComponent } from './multiview/drag-item/drag-item.component';
 import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 import { ViewItemComponent } from './multiview/view-item/view-item.component';
+import { MinimapComponent } from './multiview/minimap/minimap.component';
 
 @NgModule({
   declarations: [
@@ -212,6 +213,7 @@ import { ViewItemComponent } from './multiview/view-item/view-item.component';
     PreviewComponent,
     ScreenViewComponent,
     ViewItemComponent,
+    MinimapComponent,
 
   ],
   imports: [
@@ -251,6 +253,7 @@ import { ViewItemComponent } from './multiview/view-item/view-item.component';
     PickListModule,
     ListboxModule,
     CardModule,
+    BadgeModule,
     CheckboxModule,
     MultiSelectModule,
     CalendarModule,

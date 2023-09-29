@@ -15,15 +15,9 @@
         </ng-container>
         <ng-container *ngIf="!item.show_only_label">
           <app-drag-item [items]="[item.content]" (itemsChange)="onChangeDrops($event)">
-            <div>
-              <div [ngSwitch]="item.content_type">
-                <div *ngSwitchCase="'minimap'">
-                  <app-view-item [configuration]="item.content">
-
-                  </app-view-item>
-                </div>
-                <div *ngSwitchDefault>output2</div>
-              </div>
+            <div class="w-100 h-100">
+              <app-view-item [configuration]="item.content" [type]="item.content_type">
+              </app-view-item>
             </div>
           </app-drag-item>
         </ng-container>

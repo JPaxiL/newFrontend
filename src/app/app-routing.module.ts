@@ -60,7 +60,8 @@ const routes: Routes = [
     component: SessionComponent
   },
   { path: 'multiview/:name', 
-    component: ScreenViewComponent 
+    component: ScreenViewComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

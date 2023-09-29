@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserTracker } from '../models/interfaces';
+import { GridItem, UserTracker } from '../models/interfaces';
 
 @Component({
   selector: 'app-view-item',
@@ -9,6 +9,7 @@ import { UserTracker } from '../models/interfaces';
 export class ViewItemComponent implements OnInit {
 
   @Input() configuration!: UserTracker;
+  @Input() type:string = "minimap";
   constructor() { }
 
   ngOnInit(): void {

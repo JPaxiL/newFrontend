@@ -702,7 +702,6 @@ export class VehicleService {
     // //console.log("map",map);
     // //console.log("prueba",prueba);
 
-
     return map;
   }
 

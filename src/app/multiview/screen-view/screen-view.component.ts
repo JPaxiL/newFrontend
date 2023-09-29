@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GridComponent } from '../grid/grid.component';
 import { GridItem, UserTracker, ScreenView } from '../models/interfaces';
+import { LayersService } from '../services/layers.service';
 import { MultiviewService } from '../services/multiview.service';
 
 @Component({
@@ -17,8 +18,9 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   show_not_found = false;
   @ViewChild('_gridChild') gridChild!: GridComponent;
 
-  constructor(private route: ActivatedRoute, public multiviewService: MultiviewService) { }
+  constructor(private route: ActivatedRoute, public multiviewService: MultiviewService, private layersService: LayersService) { }
   ngOnInit() : void{
+    this.layersService.initializeServices();
   }
   ngAfterViewInit(): void {
     // Obtiene el parámetro configId de la URL

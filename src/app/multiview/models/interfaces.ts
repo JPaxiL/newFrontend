@@ -5,21 +5,22 @@ export interface Operation {
     usuario_id: number,
 }
 
-
 export interface UserTracker {
     id: number,
     numero_placa: string,
     nombre: string,
     empresa: string,
+    nombre_grupo?: string,
     tracker_imei: string,
     grupo_convoy_id: string,
     icono: string,
     id_conductor: string,
     selected: boolean,
-    row: number,
-    col:number,
-    span: number,
     structure_index: number,
+    events?: number,
+    latitud?: string,
+    longitud?: string,
+    zoom?: number,
 }
 
 export interface ScreenView {
@@ -39,4 +40,17 @@ export interface GridItem {
     content_type: string, // minimap or chart or add another in grid component
     label?: string,
     show_only_label: boolean,
+}
+
+export interface MapItem {
+    id: string;
+    map?: L.Map | null; 
+    markerClusterGroup?: any,
+    markerClusterData?: any,
+    configuration?: UserTracker,
+    vehicles?: any[],
+    imeiPopup?: any,
+    time_stop?: any,
+    dataFitBounds?: [number, number][],
+    createMap(containerId: string, configuration: UserTracker): void;
 }
