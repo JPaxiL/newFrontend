@@ -127,6 +127,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
 import { GeocercaAllListsComponent } from './geofences/components/geocerca-all-lists/geocerca-all-lists.component';
 import { GeocercaAllAddComponent } from './geofences/components/geocerca-all-add/geocerca-all-add.component';
 import { GeocercaAllMainComponent } from './geofences/components/geocerca-all-main/geocerca-all-main.component';
+import { ConfigColorComponent } from './vehicles/components/config-color/config-color.component';
 
 @NgModule({
   declarations: [
@@ -205,6 +206,7 @@ import { GeocercaAllMainComponent } from './geofences/components/geocerca-all-ma
     GeocercaAllListsComponent,
     GeocercaAllAddComponent,
     GeocercaAllMainComponent,
+    ConfigColorComponent,
 
   ],
   imports: [

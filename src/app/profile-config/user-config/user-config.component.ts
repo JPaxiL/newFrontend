@@ -1,5 +1,5 @@
-import { Component, OnInit, NgModule } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Output, EventEmitter, OnInit, NgModule } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PanelService } from 'src/app/panel/services/panel.service';
 
 import { FormsModule } from '@angular/forms';
@@ -11,20 +11,23 @@ import { BrowserModule } from '@angular/platform-browser';
   styleUrls: ['./user-config.component.scss']
 })
 export class UserConfigComponent implements OnInit {
+  @Output() submit = new EventEmitter<string>();
 
-  profileConfigForm = new FormGroup({
+  perfileConfigForm = new FormGroup({
     actual_pass: new FormControl('', Validators.required),
     new_pass_1: new FormControl('', Validators.required),
     new_pass_2: new FormControl('', Validators.required),
   });
-
+  
   pngNewPass: string = '';
   pngNewPassR: string = '';
 
   isUnderConstruction: boolean = true;
-  switchPoint: boolean = false;
+  switchPoint: boolean = true;
   switchCircle: boolean = false;
   switchMobile: boolean = false;
+
+  selectedType: any = {};
 
 
   activeSwitch: number = 0;
@@ -50,7 +53,7 @@ export class UserConfigComponent implements OnInit {
   ];
 
   constructor(
-    private panelService: FormBuilder) {
+    public panelService: FormBuilder) {
       this.perfileConfigForm = this.panelService.group({
         color: ['#RRGGBB']
       });
@@ -86,6 +89,42 @@ export class UserConfigComponent implements OnInit {
 
   setActiveSwitch(selectedSwitch: number){
     this.activeSwitch = selectedSwitch;
+  }
+
+  types: any = [
+    {id: '0', name: 'MOTO'},
+    {id: '1', name: 'AUTO'},
+    {id: '2', name: 'CAMIONETA'},
+    {id: '3', name: 'MINIBUS'},
+    {id: '4', name: 'BUS'},
+    {id: '5', name: 'CARGA'},
+    {id: '6', name: 'TRACKER'},
+    {id: '7', name: 'TRAILER'},
+  ];
+
+  updateIconsDropdown(){
+    let found = false;
+    // this.dropdownIcons = this.icons.filter((icon: any) => {
+    //   return icon.type == this.selectedType.id;
+    // });
+    // for(let i = 0; i < this.dropdownIcons.length; i++){
+    //   if(this.dropdownIcons[i].code == this.selectedIcon.code){
+    //     this.selectedIcon = this.dropdownIcons[i];
+    //     found = true;
+    //   }
+    // }
+    // if(!found){
+    //   this.selectedIcon = this.selectedIcon = this.dropdownIcons[0];
+    // }
+  }
+  clickShowPanel(){
+
+  }
+  vehicleColor: string = '#000000';
+
+  onColorSelected(color: string): void {
+    this.vehicleColor = color;
+    // Aquí puedes hacer lo que quieras con el color seleccionado, por ejemplo, enviarlo al servidor.
   }
 
 }

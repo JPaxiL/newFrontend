@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <span class="col-12 text-center w-100 mt-2">
-                            example@gmail.com
+                            tracker@gltracker.pe
                         </span>
                     </div>
 
@@ -82,7 +82,45 @@
                         </div>
                     </div>
 
+                    <div class="row gl-row-underline">
+                        <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                          <label for="tipo-unidad">Tipo de Unidad :</label>
+                        </div>
+                        <div class="col-7">
+                          <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'" (onChange)="updateIconsDropdown()" placeholder="Selecciona un tipo de unidad">
+                            <ng-template pTemplate="selectedItem">
+                              <div class="type-item type-item-value" *ngIf="selectedType">
+                                <div>{{selectedType.name}}</div>
+                              </div>
+                            </ng-template>
+                            <ng-template let-type pTemplate="item">
+                              <div class="type-item">
+                                <div>{{type.name}}</div>
+                              </div>
+                            </ng-template>
+                          </p-dropdown>
+                        </div>
+                    </div>
                     <div class="gl-row-underline">
+                        <div class="col-12">
+                            <form [formGroup]="perfileConfigForm">
+                                <label for="color">Color del ícono del vehículo:</label>
+                            </form>
+                        </div>
+                        <div class="col-7">
+                            <app-config-color (colorSelected)="onColorSelected($event)"></app-config-color>
+                        </div>
+                    </div>
+                    <div class="gl-row-underline">
+                        <div class="col-12">
+                            <label>Calculador de combustible:</label>
+                        </div>
+                        <div class="col-12">
+                            <input type="text" text="galones aproximados"/>
+                        </div>
+                    </div>
+
+                    <!-- <div class="gl-row-underline">
                         <div class="col-12">
                             <label>MOSTRAR DIRECCIÓN DE VEHÍCULO:</label>
                         </div>
@@ -118,7 +156,7 @@
 
                     <div class="gl-row-underline">
                         <div class="col-12">
-                            <label>CALCULAR LA CATIDAD DE COMBUSTIBLE:</label>
+                            <label>CALCULADOR DE COMBUSTIBLE:</label>
                         </div>
                         <div class="col-12">
                             <p-dropdown
@@ -131,8 +169,11 @@
                             (onChange)="consoleMostrar()"
                             placeholder="Seleccione una opción..."></p-dropdown>
                         </div>
-                    </div>
-                    <div class="flex flex-wrap gap-4 justify-center w-full border py-4 rounded-lg icon-box grid" >
+                    </div> -->
+                    <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
+                        <div class="col-12">
+                            <label>Habilitar item en los vehículos según su estado:</label>
+                        </div>
                       <div class="align-items-center h-5 column" >
                         <div class="">
                           <img src="assets/images/vehicle/circulo_movimiento.png">
@@ -146,7 +187,7 @@
                       </div>
                       <div class="align-items-center h-5 column">
                         <div class="">
-                          <img src="assets/images/vehicle/flecha_movimiento.png">
+                          <img width="45" height="45" src="assets/images/vehicle/arrowLeft.svg">
                         </div>
                         <div>
                           <label class="switch" >
@@ -157,7 +198,7 @@
                       </div>
                       <div class="flex align-items h-5 column">
                         <div class="">
-                            <img src="assets/images/vehicle/moto.svg" alt="auto">
+                            <img src="assets/images/vehicle/auto.svg" alt="auto">
                         </div>
                         <div>
                           <label class="switch" >
@@ -170,7 +211,7 @@
 
                     <div class="row justify-content-center mt-4 panel-izq-container-footer">
                         <div class="col-6">
-                            <button class="btn-gl-cancel btn-dark-hover w-100" (click)="panelService.clickShowPanel('USER-CONFIG')">Cancelar</button>
+                            <button class="btn-gl-cancel btn-dark-hover w-100" (click)="panelService">Cancelar</button>
                         </div>
                         <div class="col-6">
                             <button class="btn-gl-save btn-dark-hover w-100">Guardar</button>

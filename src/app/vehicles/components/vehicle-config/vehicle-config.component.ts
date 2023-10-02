@@ -59,7 +59,7 @@ export class VehicleConfigComponent implements OnInit {
   icons: any = [
     { name: "1.png", code: "1", type: "4" },
     { name: "2.png", code: "2", type: "4" },
-    { name: "3.png", code: "3", type: "3" },
+    { name: "3.svg", code: "3", type: "3" },
     { name: "4.png", code: "4", type: "4" },
     { name: "5.png", code: "5", type: "4" },
     { name: "6.png", code: "6", type: "2" },
