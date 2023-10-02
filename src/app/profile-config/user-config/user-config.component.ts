@@ -50,8 +50,16 @@ export class UserConfigComponent implements OnInit {
   ];
 
   constructor(
-    public panelService: PanelService,
-  ) { }
+    private panelService: FormBuilder) {
+      this.perfileConfigForm = this.panelService.group({
+        color: ['#RRGGBB']
+      });
+  }
+
+  onSubmit(){
+    const color = this.perfileConfigForm.value.color;
+    this.submit.emit(color);
+  }
 
   ngOnInit(): void {
   }
