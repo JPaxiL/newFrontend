@@ -28,8 +28,8 @@ import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
-
-
+import { PanelModule } from 'primeng-lts/panel';
+import { BadgeModule } from 'primeng-lts/badge';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -95,7 +95,6 @@ import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
@@ -124,6 +123,14 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
+import { GridComponent } from './multiview/grid/grid.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DialogComponent } from './multiview/dialog/dialog.component';
+import { DragItemComponent } from './multiview/drag-item/drag-item.component';
+import { PreviewComponent } from './multiview/preview/preview.component';
+import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
+import { ViewItemComponent } from './multiview/view-item/view-item.component';
+import { MinimapComponent } from './multiview/minimap/minimap.component';
 
 @NgModule({
   declarations: [
@@ -161,7 +168,9 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     PanelAlertsComponent,
     TreeTableComponent,
     VehicleConfigComponent,
+    DashboardComponent,
     GeocercaAddComponent,
+    GridComponent,
     GeocercaListsComponent,
     GeocercaMainComponent,
     VehicleGroupComponent,
@@ -199,6 +208,12 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
+    DialogComponent,
+    DragItemComponent,
+    PreviewComponent,
+    ScreenViewComponent,
+    ViewItemComponent,
+    MinimapComponent,
 
   ],
   imports: [
@@ -221,6 +236,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    PanelModule,
     NgbModule,
     NgSelectModule,
     TreeTableModule,
@@ -237,6 +253,7 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     PickListModule,
     ListboxModule,
     CardModule,
+    BadgeModule,
     CheckboxModule,
     MultiSelectModule,
     CalendarModule,

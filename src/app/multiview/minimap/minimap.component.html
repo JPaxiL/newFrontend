@@ -1,0 +1,16 @@
+<div class="w-100 h-100 d-flex flex-column">
+     <div class="minimap-header d-flex justify-content-between align-items-center px-3">
+          <div class="d-flex align-items-center justify-content-start">
+               <span class="minimap-title">
+                    <!--{{configuration.numero_placa}}{{configuration.nombre_grupo? ' - ('+configuration.nombre_grupo+')' : ''}}-->
+                    {{configuration.title}}
+               </span>
+               <p-badge *ngIf="configuration.events! > 0" [value]="configuration.events" [severity]="'danger'" class="ms-3"></p-badge>
+          </div>
+          <button class="close-button">
+               <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 8L8 16M8 8L16 16" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path> </g></svg>
+          </button>
+     </div>
+     <div [id]="'map-container-'+configuration.id_container" class="w-100 h-100">
+     </div>
+</div>

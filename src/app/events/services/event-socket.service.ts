@@ -27,10 +27,8 @@ export class EventSocketService extends Socket {
     private userService : UsersService,
     private AlertService: AlertService,) {
     super({
-      // url: 'https://socketprueba.glmonitoreo.com/',
-      url: 'https://eventos.glmonitoreo.com',
-      // url: 'http://localhost:5000',
-
+      url: 'https://eventos.glmonitoreo.com/',
+      //url: 'http://23.29.124.173',
 
       // options: {
       //   transports: ["websocket"]
@@ -48,10 +46,9 @@ export class EventSocketService extends Socket {
     //console.log(this.user_id);
     // this.filterImei(this.vehicleService.vehicles);
     this.ioSocket.on('events', (event: any) => {
-      console.log("recibiendo evento........",this.vehicleService.vehicles);
-      // return;
-      // let even = JSON.parse(event);
-      let even = event;
+      /*let even = JSON.parse(event);
+      if(this.user_id == even.usuario_id){
+        //this.count = this.count + 1;
 
       // if(this.user_id == even.usuario_id){
       if(this.user_id){
@@ -88,10 +85,10 @@ export class EventSocketService extends Socket {
           this.eventService.addNewEvent(newEvent);
 
           this.eventService.new_notif_stack.push(even.id);
-          console.log('Nuevo evento ' + new Date() + ': ', even);
+          //console.log('Nuevo evento ' + new Date() + ': ', even);
           this.eventService.sortEventsTableData();
         } else {
-          console.log('Evento no pertence al usuario ' + new Date() + ': ', even);
+          //console.log('Evento duplicado ' + new Date() + ': ', even);
         }
 
         this.eventService.checkDuplicates();
@@ -100,7 +97,7 @@ export class EventSocketService extends Socket {
         //console.log('new notification stack counter', this.new_notif_stack.length);
         //console.log('new notification Event Content en Socket', even);
         //console.log('new notification time', new Date());
-      }
+      }*/
     });
   }
 

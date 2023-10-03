@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
@@ -25,7 +25,7 @@ declare var $: any;
 })
 export class MapViewComponent implements OnInit, AfterViewInit {
   //private map!: L.Map;
-
+  @Input() container = "map";
   constructor(
     private mapService: MapService,
     private circularGeofencesService: CircularGeofencesService,
@@ -34,19 +34,18 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService,
     public historialService: HistorialService
-
   ) {}
   // constructor() { }
 
   ngOnInit(): void {}
 
   async ngAfterViewInit() {
-    this.createMap();
+    await this.createMap();
     //$("#panelMonitoreo").hide( "slow" )
     await this.geofencesService.initialize();
     await this.geopointsService.initialize();
     this.circularGeofencesService.initialize();
-    this.polylineGeofenceService.initialize();
+    this.polylineGeofenceService.initialize(); 
 
     this.setLayers();
 
@@ -90,7 +89,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
     const zoomLevel = 7;
 
-    this.mapServicesService.map = L.map('map', {
+    this.mapServicesService.map = L.map(this.container, {
       center: [parcThabor.lat, parcThabor.lng],
       zoom: zoomLevel,
       maxZoom: 18,
@@ -145,7 +144,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
           break;
         case 18:
           nivel = 1; //todo
-          console.log("-------18 - 1");
+          console.log("-----a--18 - 1");
           break;
         default:
           nivel = 1000; // todo

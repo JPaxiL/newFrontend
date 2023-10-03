@@ -12,6 +12,7 @@ import { SocketWebService } from './socket-web.service';
 import { VehicleService } from './vehicle.service';
 import { FollowService } from './follow.service';
 import { TabService } from 'src/app/panel/services/tab.service';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/takeWhile';
@@ -242,7 +243,7 @@ export class MapService {
   eyeClick(map: any, IMEI: string){
     //console.log('click eye IMEI = ',IMEI);
     const vehicles = this.vehicleService.vehicles;
-    let vehicle = [];
+    let vehicle = undefined;
     for (const i in vehicles){
       if(vehicles[i].IMEI==IMEI){
         vehicles[i].eye=!vehicles[i].eye;
@@ -253,10 +254,10 @@ export class MapService {
 
     //
     //console.log(this.marker[IMEI]);
-    if(vehicle.eye==true){
+    if(vehicle!.eye==true){
       // this.map.addLayer(this.marker[IMEI]);
       this.markerClusterGroup.addLayer(this.marker[IMEI]);
-      this.tagClick(vehicle.IMEI, false);
+      this.tagClick(vehicle!.IMEI!, false);
       this.vehicleService.countOpenEyes++;
     }else{
       //console.log('quitar vehiculo del mapa ...',vehicle);
@@ -274,17 +275,17 @@ export class MapService {
       //   vehicle = vehicles[i];
       // }
       if(vehicles[i].eye==true){
-        this.markerClusterGroup.addLayer(this.marker[vehicles[i].IMEI]);
-        this.tagClick(vehicles[i].IMEI, false);
+        this.markerClusterGroup.addLayer(this.marker[vehicles[i].IMEI!]);
+        this.tagClick(vehicles[i].IMEI!, false);
       }else{
-        this.markerClusterGroup.removeLayer(this.marker[vehicles[i].IMEI]);
+        this.markerClusterGroup.removeLayer(this.marker[vehicles[i].IMEI!]);
       }
     }
     this.vehicleService.vehicles = vehicles;
   }
 
   tagClick(IMEI: string, comesFromCheckbox?: boolean){
-    let vehicle = [];
+    let vehicle = undefined;
     for (const i in this.vehicleService.vehicles){
       if(this.vehicleService.vehicles[i].IMEI==IMEI){
         if(comesFromCheckbox != false){
@@ -293,7 +294,7 @@ export class MapService {
         vehicle = this.vehicleService.vehicles[i];
       }
     }
-    if(vehicle.tag){
+    if(vehicle!.tag!){
       this.marker[IMEI].openTooltip();
     } else {
       this.marker[IMEI].closeTooltip();
@@ -306,7 +307,7 @@ export class MapService {
     //
     for (const i in vehicles){
       if(vehicles[i].IMEI==IMEI){
-        const aux2: [string, string] = [vehicles[i].latitud, vehicles[i].longitud];
+        const aux2: [string, string] = [vehicles[i].latitud!, vehicles[i].longitud!];
         this.dataFitBounds.push(aux2);
         //console.log('coordenadas',aux2);
       }
@@ -331,7 +332,7 @@ export class MapService {
         vehicles[i].follow = !vehicles[i].follow;
       }
       if(vehicles[i].follow){
-        const aux2: [string, string] = [vehicles[i].latitud, vehicles[i].longitud];
+        const aux2: [string, string] = [vehicles[i].latitud!, vehicles[i].longitud!];
         this.dataFitBounds.push(aux2);
       }
     }
@@ -756,10 +757,10 @@ export class MapService {
 
                 if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
                 {
-                  if(coord.lat > oldCoords.lat){
+                  if(coord.lat! > oldCoords.lat){
                     //arriba
                     this.direction_Y = 'up';
-                    this.dif_Y = coord.lat-oldCoords.lat;  
+                    this.dif_Y = parseFloat(coord.lat!)-oldCoords.lat;  
                     if(this.dif_Y >= this.dif_mayor){
                       this.dif_mayor = this.dif_Y; 
                       this.direction = 'up';
@@ -768,7 +769,7 @@ export class MapService {
                   }else{
                     //abajo
                     this.direction_Y = 'down';
-                    this.dif_Y = oldCoords.lat-coord.lat;
+                    this.dif_Y = oldCoords.lat-parseFloat(coord.lat!);
                     if(this.dif_Y >= this.dif_mayor){
                       this.dif_mayor = this.dif_Y;
                       this.direction = 'down';
@@ -777,10 +778,10 @@ export class MapService {
                     }
                   }
   
-                  if(coord.lng > oldCoords.lng){
+                  if(coord.lng! > oldCoords.lng){
                     //derecha
                     this.direction_X = 'right';
-                    this.dif_X = coord.lng-oldCoords.lng; 
+                    this.dif_X = parseFloat(coord.lng!)-oldCoords.lng; 
                     if(this.dif_X >= this.dif_mayor){
                       this.dif_mayor = this.dif_X;
                       this.direction = 'right';
@@ -789,7 +790,7 @@ export class MapService {
                   }else{
                     //izquierda
                     this.direction_X = 'left';
-                    this.dif_X = oldCoords.lng-coord.lng;
+                    this.dif_X = oldCoords.lng-parseFloat(coord.lng!);
                     if(this.dif_X >= this.dif_mayor){
                       this.dif_mayor = this.dif_X;
                       this.direction = 'left';
@@ -858,7 +859,7 @@ export class MapService {
               for (const i in vehicles){
 
                 if(vehicles[i].follow){
-                  const aux2: [string, string] = [vehicles[i].latitud, vehicles[i].longitud];
+                  const aux2: [string, string] = [vehicles[i].latitud!, vehicles[i].longitud!];
                   this.dataFitBounds.push(aux2);
                 }
               }
@@ -871,7 +872,7 @@ export class MapService {
           //console.log('se econtraron '+cont+' resultados');
           // //console.log('aux = ', aux.getLatLng());
 
-// iconUrl = './assets/images/accbrusca.png';
+          // iconUrl = './assets/images/accbrusca.png';
 
           // //console.log('markerClusterGroup',this.markerClusterGroup);
         }
@@ -950,7 +951,7 @@ export class MapService {
     for (const property in e){
         if (e.hasOwnProperty(property)&&e[property].eye == true) {
           if(this.statusMap==false){
-            const aux2: [string, string] = [e[property].latitud, e[property].longitud];
+            const aux2: [string, string] = [e[property].latitud!, e[property].longitud!];
             this.dataFitBounds.push(aux2);
           }
           // this.map.removeLayer(this.demo);
@@ -977,8 +978,8 @@ export class MapService {
                       for (const i in array) {
                         var aaa = array[i]['_tooltip']['_content'];
                         //console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
-                        var vehicleData = e.find((vehicle: { name: string; }) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
-                        var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color]: 'transm-color-not-defined'
+                        var vehicleData = e.find((vehicle:UserTracker) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+                        var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color!]: 'transm-color-not-defined'
                         lista = lista + '<tr><td><div class="dot-vehicle ' + transmissionColorClass + '"></div></td><td>' + aaa + '</td></tr>';
                       }
                       // for (var i=0; i<array.length; i++){
@@ -1013,10 +1014,10 @@ export class MapService {
       //   data:[]
       // };
       // get x , y
-      let x = Math.trunc(parseInt(e[i].longitud)/d) * d + d;
+      let x = Math.trunc(parseInt(e[i].longitud!)/d) * d + d;
       // //console.log('longitud vehicle ',e[i].longitud);
       // //console.log('longitud x', x);
-      let y = Math.trunc(parseInt(e[i].latitud)/d) * d + d;
+      let y = Math.trunc(parseInt(e[i].latitud!)/d) * d + d;
       // //console.log('latitud vehicle ',e[i].latitud);
       // //console.log('latitud y', y);
 

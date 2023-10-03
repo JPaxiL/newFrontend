@@ -30,7 +30,6 @@ export class DriversService {
   constructor(
     private http: HttpClient,
     public spinner: NgxSpinnerService,
-    
   ) { }
 
 
