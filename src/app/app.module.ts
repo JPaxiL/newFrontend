@@ -30,6 +30,7 @@ import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
 import { PanelModule } from 'primeng-lts/panel';
 import { BadgeModule } from 'primeng-lts/badge';
+import { SliderModule } from 'primeng-lts/slider';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -131,6 +132,7 @@ import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 import { ViewItemComponent } from './multiview/view-item/view-item.component';
 import { MinimapComponent } from './multiview/minimap/minimap.component';
+import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
 
 @NgModule({
   declarations: [
@@ -214,6 +216,7 @@ import { MinimapComponent } from './multiview/minimap/minimap.component';
     ScreenViewComponent,
     ViewItemComponent,
     MinimapComponent,
+    PanelHistorialRecorridoModalComponent,
 
   ],
   imports: [
@@ -245,6 +248,7 @@ import { MinimapComponent } from './multiview/minimap/minimap.component';
     InputTextModule,
     InputSwitchModule,
     TableModule,
+    SliderModule,
     ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,

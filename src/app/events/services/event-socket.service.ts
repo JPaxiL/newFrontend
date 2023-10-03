@@ -45,15 +45,22 @@ export class EventSocketService extends Socket {
     console.log('Is Listening',this.vehicleService.vehicles);
     //console.log(this.user_id);
     // this.filterImei(this.vehicleService.vehicles);
-    this.ioSocket.on('events', (event: any) => {
-      /*let even = JSON.parse(event);
-      if(this.user_id == even.usuario_id){
-        //this.count = this.count + 1;
+    this.ioSocket.on('events', (event: any,users: any) => {
+      // console.log("users",users); // filtrar por usuario cuando este listo el modulo
+      // console.log("recibiendo evento........",this.vehicleService.vehicles);
+      // return;
+      // let even = JSON.parse(event);
+      let even = event;
 
       // if(this.user_id == even.usuario_id){
       if(this.user_id){
         //this.count = this.count + 1;
-        if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
+        let data = this.filterImei(this.vehicleService.vehicles,even.tracker_imei);
+        // console.log("data----->",data);
+        // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
+        if(data!=undefined){
+          // console.log("name ====",data.name);
+          even.nombre_objeto = data.name;
         // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
         //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
           //Si el evento no existe previamente
@@ -97,7 +104,7 @@ export class EventSocketService extends Socket {
         //console.log('new notification stack counter', this.new_notif_stack.length);
         //console.log('new notification Event Content en Socket', even);
         //console.log('new notification time', new Date());
-      }*/
+      }
     });
   }
 
@@ -108,11 +115,11 @@ export class EventSocketService extends Socket {
       if(String(data[index].IMEI)==String(imei)){
 
         console.log("return true");
-        return true;
+        return data[index];
       }
     }
     console.log("return false");
-    return false;
+    return undefined;
 
   }
   public getIcon() {

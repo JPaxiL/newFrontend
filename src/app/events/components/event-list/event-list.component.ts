@@ -101,13 +101,14 @@ export class EventListComponent implements OnInit {
 
   public showEvent(event:any){
     if(this.eventService.activeEvent) {
+      console.log("hide event");
       this.hideEvent(this.eventService.activeEvent);
       //console.log('Ocultar evento previo');
     }
 
     if(!event.viewed){
       event.viewed = true;
-      this.markAsRead(event.id);
+      this.markAsRead(event.evento_id);
     }
 
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
@@ -118,7 +119,7 @@ export class EventListComponent implements OnInit {
       className: eventClass,
       minWidth: 250,
       maxWidth: 350,
-    } );
+    });
     this.eventService.activeEvent = event;
     event.layer.addTo(this.mapService.map).openPopup();
   }
@@ -143,11 +144,14 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement){
-    if(event.id == this.eventService.activeEvent.id){
-      this.hideEvent(this.eventService.activeEvent);
+    console.log("click event....",event.evento_id);
+    console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
+    // if(event.event_id == this.eventService.activeEvent.id){
+    if(false){
+      // this.hideEvent(this.eventService.activeEvent);
     } else {
       currentRow.classList.add('watched-event');
-      //console.log('Mostrando evento con ID: ', event.id);
+      console.log('Mostrando evento con ID: ', event.evento_id);
       let reference = await this.eventService.getReference(event.latitud, event.longitud);
       event.referencia = reference.referencia;
       this.showEvent(event);

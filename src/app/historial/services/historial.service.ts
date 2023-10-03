@@ -43,6 +43,8 @@ export class HistorialService {
 
   public nombreUnidad = '';
 
+  modalActive:boolean = false;
+
   //---------------------------  Multi Historial --------------------------------------------------
 
   public arrayRecorridos : any = [];
