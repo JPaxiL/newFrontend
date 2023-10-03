@@ -11,7 +11,7 @@ import { MinimapUtilsService } from './minimap-utils.service';
 @Injectable({
   providedIn: 'root'
 })
-export class GeofencesMinimapService {
+export class GeodataService {
 
   public geofences:any = [];
   public nombreComponente:string = "LISTAR";
@@ -56,36 +56,75 @@ export class GeofencesMinimapService {
     await this.getUserPrivileges();
     await this.getAll();
   }
-  
+
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/zone`).toPromise()
     .then(response => {
       this.geofences = response.data;
+      this.initializeTable();
+      this.drawGeofencesOnMap();
+      this.updateGeoCounters();
+      this.updateGeoTagCounters();
+      this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+      this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
+      console.log('Geocercas Cargadas');
       this.initializingGeofences = true;
       this.attemptToHideSpinner();
       this.ready.emit(true);
     });
   }
+  public clearDrawingsOfGeofence(geofence: any,map:any){
+    if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
+      && geofence.zone_visible == "true" ){
 
-  public drawGeofencesOnMap(geofences:any){
-    for (let i = 0; i < geofences.length; i++) {
+      //Si la geocerca ya existe y es visible, entonces remover la capa
+      //console.log('Geocerca visible, eliminar', geofence);
+      map.removeLayer(geofence.geo_elemento);
+    }
+    if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
+      && geofence.zone_name_visible == "true" ){
 
-      geofences[i].geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(geofences[i].geo_coordenadas).coordinates[0] ), {
+      //Si el nombre de la geocerca ya existe y es visible, entonces removerla
+      //console.log('Nombre de geocerca visible, eliminar', geofence);
+      map.removeLayer(geofence.marker_name);
+    }
+  }
+  /* Movido a minimap-service.service
+  public showDrawingsOfGeofence(geofence: any, map:any){
+    if (geofence.zone_visible == "true") {
+      geofence.geo_elemento.addTo(map);
+    }
+
+    if (geofence.zone_name_visible == "true") {
+      geofence.marker_name.addTo(map);
+    }
+    
+    // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
+    // // tempMarker.bindLabel("My Label");
+    // tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
+
+    // this.geofences.geo_elemento.setLabel("NOMBRE");
+  }*/
+
+  public drawGeofencesOnMap(){
+    for (let i = 0; i < this.geofences.length; i++) {
+
+      this.geofences[i].geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(this.geofences[i].geo_coordenadas).coordinates[0] ), {
         weight: 3,
         fill: true,
-        color: geofences[i].zone_color,
+        color: this.geofences[i].zone_color,
       });
 
       //console.log("centro de = "+this.geofences[i].zone_name);
       //console.log(centerPoligon);
-      var centerPoligon = geofences[i].geo_elemento.getBounds().getCenter();
+      var centerPoligon = this.geofences[i].geo_elemento.getBounds().getCenter();
 
-      let bg_color = this.tooltipBackgroundTransparent? this.defaultTagNameBackground: this.minimapUtils.hexToRGBA(geofences[i].zone_color);
-      let txt_color = this.tooltipBackgroundTransparent? (geofences[i].tag_name_color == ''? this.defaultTagNameColor: geofences[i].tag_name_color): this.minimapUtils.hexToRGBA(geofences[i].zone_color);
-      let font_size = (geofences[i].tag_name_font_size == 0? this.defaultTagNameFontSize: geofences[i].tag_name_font_size) + 'px';
+      let bg_color = this.tooltipBackgroundTransparent? this.defaultTagNameBackground: this.minimapUtils.hexToRGBA(this.geofences[i].zone_color);
+      let txt_color = this.tooltipBackgroundTransparent? (this.geofences[i].tag_name_color == ''? this.defaultTagNameColor: this.geofences[i].tag_name_color): this.minimapUtils.hexToRGBA(this.geofences[i].zone_color);
+      let font_size = (this.geofences[i].tag_name_font_size == 0? this.defaultTagNameFontSize: this.geofences[i].tag_name_font_size) + 'px';
 
       //this.geofences[i].marker_name = L.marker(centerPoligon).addTo(this.mapService.map);
-      geofences[i].marker_name = L.circleMarker(centerPoligon, {
+      this.geofences[i].marker_name = L.circleMarker(centerPoligon, {
         // pane: 'markers1',
         "radius": 0,
         "fillColor": "#000",//color,
@@ -97,7 +136,7 @@ export class GeofencesMinimapService {
       }).bindTooltip(
           // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
           // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
-          '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+geofences[i].zone_name+'</b>',
+          '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+this.geofences[i].zone_name+'</b>',
           { permanent: true,
             // offset: [-100, 0],
             direction: 'center',
@@ -105,7 +144,7 @@ export class GeofencesMinimapService {
           });
     }
 
-    return this.sortGeofencesBySize(geofences);
+    this.sortGeofencesBySize();
   }
   /* Movido a minimap-service.service
   public bindMouseEvents(geofence: any, map:any){
@@ -128,9 +167,9 @@ export class GeofencesMinimapService {
     });
   }*/
 
-  public sortGeofencesBySize(geofences: any){
+  public sortGeofencesBySize(){
     //console.log('Sorting...');
-    geofences.sort((a: any, b: any) => {
+    this.geofences.sort((a: any, b: any) => {
       if( L.GeometryUtil.geodesicArea((a.geo_elemento.getLatLngs()[0])) > L.GeometryUtil.geodesicArea((b.geo_elemento.getLatLngs()[0])) ){
         return -1;
       }
@@ -143,30 +182,32 @@ export class GeofencesMinimapService {
       console.log('Size de ' + geofence.zone_name, L.GeometryUtil.geodesicArea((geofence.geo_elemento.getLatLngs()[0])));
     }); */
     //console.log('Sorted geofences by size: ', this.geofences);
-    return geofences;
   }
 
   public getData() {
     console.log("[GEOFENCES] retornando datos: ", this.geofences);
-    let geof = this.initializeTable([...this.geofences]);
-    geof = this.drawGeofencesOnMap(geof);
-    console.log('Geocercas Cargadas');
-    return geof;
+    
+    return this.geofences;
   }
 
   public getTableData(){
     return this.tblDataGeo;
   }
 
-  initializeTable(geofences: any, newGeofenceId?: number) {
-    for(let i = 0; i < geofences.length; i++){
-      if(geofences[i].id != newGeofenceId){
-        geofences[i].zone_name_visible_bol = (geofences[i].zone_name_visible === 'true');
+  initializeTable(newGeofenceId?: number) {
+    this.tblDataGeo = [];
+    for(let i = 0; i < this.geofences.length; i++){
+      if(this.geofences[i].id != newGeofenceId){
+        this.geofences[i].zone_name_visible_bol = (this.geofences[i].zone_name_visible === 'true');
       } else {
-        geofences[i].zone_name_visible_bol = true;
+        this.geofences[i].zone_name_visible_bol = true;
       }
+      this.tblDataGeo.push({trama:this.geofences[i]});
     }
-    return geofences;
+    this.tblDataGeoFiltered = this.getTableData();
+    
+    //this.spinner.hide('loadingGeofencesSpinner');
+    // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
   }
 
   async getUserPrivileges(){
@@ -220,6 +261,35 @@ export class GeofencesMinimapService {
       coo.push([data[i][1],data[i][0]]);
     };
     return coo;
+  }
+
+  //====================================
+
+  public async edit(zone: any){
+    const response:ResponseInterface = await this.http.put<ResponseInterface>(`${environment.apiUrl}/api/zone/${zone.id}`,zone).toPromise();
+    return response.data;
+  }
+
+  public async store(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/zone`,zone).toPromise();
+    return response.data;
+  }
+
+  public async delete(id: any){
+    const response:ResponseInterface = await this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/zone/${id}`).toPromise();
+    return response.data;
+  }
+
+  public updateGeoCounters(){
+    this.geofenceCounters.visible = this.geofences.filter( (geofence: { zone_visible: string; }) => geofence.zone_visible == 'true').length;
+    this.geofenceCounters.hidden = this.geofences.length - this.geofenceCounters.visible;
+    //console.log('Visibles:', this.geofenceCounters.visible);
+    //console.log('Ocultos:', this.geofenceCounters.hidden);
+  }
+
+  public updateGeoTagCounters(){
+    this.geofenceTagCounters.visible = this.geofences.filter( (geofence: { zone_name_visible_bol: boolean; }) => geofence.zone_name_visible_bol == true).length;
+    this.geofenceTagCounters.hidden = this.geofences.length - this.geofenceTagCounters.visible;
   }
 
 }

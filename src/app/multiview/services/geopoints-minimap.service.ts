@@ -60,43 +60,36 @@ export class GeopointsMinimapService {
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/point`).toPromise()
     .then(response => {
       this.geopoints = response.data;
-      this.initializeTable();
-      this.drawGeopointsOnMap();
-      this.updateGeoCounters();
-      this.updateGeoTagCounters();
-      this.eyeInputSwitch = this.geopointCounters.visible != 0;
-      this.tagNamesEyeState = this.geopointTagCounters.visible != 0;
       console.log('Geopuntos Cargados');
-      console.log('Geopuntos:', this.geopoints);
       this.initializingGeopoints = true;
       this.attemptToHideSpinner();
       this.ready.emit(true);
     });
   }
-  drawGeopointsOnMap(){
-    for (let i = 0; i < this.geopoints.length; i++) {
+  drawGeopointsOnMap(geopoints: any){
+    for (let i = 0; i < geopoints.length; i++) {
       // //const element = this.geofences[i];
 
-      this.geopoints[i].geopunto_nombre_visible_bol = (this.geopoints[i].geopunto_nombre_visible === 'true');
-      this.geopoints[i].geopunto_visible_bol = (this.geopoints[i].geopunto_visible === 'true');
+      geopoints[i].geopunto_nombre_visible_bol = (geopoints[i].geopunto_nombre_visible === 'true');
+      geopoints[i].geopunto_visible_bol = (geopoints[i].geopunto_visible === 'true');
 
 
-        var latlng = this.geopoints[i].geopunto_vertices.split(",")
+        var latlng = geopoints[i].geopunto_vertices.split(",")
 
         const svgIcon = L.divIcon({
-          html: this.geopointHTMLMarkerIcon(this.geopoints[i].geopunto_color),
+          html: this.geopointHTMLMarkerIcon(geopoints[i].geopunto_color),
           className: "",
           iconSize: [24, 41.86],
           iconAnchor: [12, 41.86],
         });
 
-        this.geopoints[i].geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
+        geopoints[i].geo_elemento = L.marker([parseFloat(latlng[0]), parseFloat(latlng[1])],
           { icon: svgIcon
           });
 
         
 
-        this.geopoints[i].marker_name = L.circleMarker([parseFloat(latlng[0]), parseFloat(latlng[1])], {
+        geopoints[i].marker_name = L.circleMarker([parseFloat(latlng[0]), parseFloat(latlng[1])], {
           // pane: 'markers1',
           "radius": 0,
           "fillColor": "#000",//color,
@@ -107,35 +100,28 @@ export class GeopointsMinimapService {
 
         }).bindTooltip(
             /* '<b class="" style="background-color: '+ this.mapService.hexToRGBA(this.geopoints[i].geopunto_color) +'; color: '+ this.mapService.getContrastYIQ(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>', */
-            '<b class="" style="background-color: '+ this.minimapUtils.hexToRGBA(this.geopoints[i].geopunto_color) +';">'+this.geopoints[i].geopunto_name+'</b>',
+            '<b class="" style="background-color: '+ this.minimapUtils.hexToRGBA(geopoints[i].geopunto_color) +';">'+geopoints[i].geopunto_name+'</b>',
             { permanent: true,
               offset: [0, 20],
               direction: 'center',
               className: 'leaflet-tooltip-own geopoint-tooltip',
             });
-
     }
+    return geopoints
   }
   public getData() {
     console.log("[GEOPOINTS] retornando datos: ", this.geopoints);
-
-    return this.geopoints;
+    let geof = this.initializeTable([...this.geopoints]);
+    geof = this.drawGeopointsOnMap(geof);
+    return geof;
   }
 
-  public getTableData(){
-    return this.tblDataGeo;
-  }
-
-  public initializeTable(newGeopointId?: number){
-    this.tblDataGeo = [];
-    for (let i = 0; i < this.geopoints.length; i++) {
-      this.geopoints[i].geopunto_nombre_visible_bol = (this.geopoints[i].geopunto_nombre_visible === 'true');
-      this.geopoints[i].geopunto_visible_bol = (this.geopoints[i].geopunto_visible === 'true');
-
-      this.tblDataGeo.push({trama:this.geopoints[i]});
+  public initializeTable(geopoints:any, newGeopointId?: number){
+    for (let i = 0; i < geopoints.length; i++) {
+      geopoints[i].geopunto_nombre_visible_bol = (geopoints[i].geopunto_nombre_visible === 'true');
+      geopoints[i].geopunto_visible_bol = (geopoints[i].geopunto_visible === 'true');
     }
-    this.tblDataGeoFiltered = this.getTableData();
-    //this.spinner.hide('loadingGeopointsSpinner');
+    return geopoints;
   }
 
   async getUserPrivileges(){
@@ -204,17 +190,5 @@ export class GeopointsMinimapService {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 34.892"><g transform="matrix(1.18559 0 0 1.18559 -965.773 -331.784)"><path d="M817.112 282.971c-1.258 1.343-2.046 3.299-2.015 5.139.064 3.845 1.797 5.3 4.568 10.592.999 2.328 2.04 4.792 3.031 8.873.138.602.272 1.16.335 1.21.062.048.196-.513.334-1.115.99-4.081 2.033-6.543 3.031-8.871 2.771-5.292 4.504-6.748 4.568-10.592.031-1.84-.759-3.798-2.017-5.14-1.437-1.535-3.605-2.67-5.916-2.717-2.312-.048-4.481 1.087-5.919 2.621z" style="fill:`+color+`;"/><circle r="3.035" cy="288.253" cx="823.031" style="fill:#fff"/></g></svg>`;
   }
 
-  public updateGeoCounters(){
-    //console.log('Geopuntos update: ', this.geopoints);
-    //console.log('Geopuntos update: ', this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
-    //console.log('Geopuntos update: ', this.tblDataGeo.length - this.tblDataGeo.filter( geopoint => geopoint.trama.geopunto_visible == 'true').length);
-    this.geopointCounters.visible = this.geopoints.filter( (geopoint: { geopunto_visible: string; }) => geopoint.geopunto_visible == 'true').length;
-    this.geopointCounters.hidden = this.geopoints.length - this.geopointCounters.visible;
-  }
-
-  public updateGeoTagCounters(){
-    this.geopointTagCounters.visible = this.geopoints.filter( (geopoint: { geopunto_nombre_visible_bol: boolean; }) => geopoint.geopunto_nombre_visible_bol == true).length;
-    this.geopointTagCounters.hidden = this.geopoints.length - this.geopointTagCounters.visible;
-  }
 
 }

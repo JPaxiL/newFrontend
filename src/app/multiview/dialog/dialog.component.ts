@@ -59,7 +59,6 @@ export class DialogComponent implements OnInit {
   }
   onSelectMultiview(event:any){
     console.log("onSelectMV event", event.value);
-    
     this.currentMultiview = { ...event.value };
     if(!event.value){
       this.clearPreview();

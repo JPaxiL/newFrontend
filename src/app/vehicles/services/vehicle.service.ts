@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 
 import RefData from '../data/refData';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class VehicleService {
   // private url_demo = 'assets/trackers3.json';
   public treeTableStatus: boolean = false;
   public TableStatus: boolean = false;
-  public vehicles: any = [];
+  public vehicles: UserTracker[] = [];
   public vehiclesTree: TreeNode[]=[];
   public groups: any = [];
   public convoys: any = [];
@@ -87,7 +88,7 @@ export class VehicleService {
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
-        // console.log("get vehicles",vehicles);
+        console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.vehiclesTree = this.createNode(this.vehicles);
         this.dataCompleted.emit(this.vehicles);
@@ -194,7 +195,7 @@ export class VehicleService {
   public updateVehicle(data : any){
 
   }
-  public updateVehiclesData(data : Vehicle):void {
+  public updateVehiclesData(data : UserTracker[]):void {
     this.vehicles = data;
     this.drawIconMap.emit(data);
   }

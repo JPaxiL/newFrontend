@@ -59,12 +59,6 @@ export class CircularGeofencesMinimapService {
       const resp = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/circular-zone`).toPromise();
       
       this.circular_geofences = resp.data;
-      this.initializeTable();
-      this.drawGeofencesOnMap();
-      this.updateGeoCounters();
-      this.updateGeoTagCounters();
-      this.eyeInputSwitch = this.circularGeofenceCounters.visible != 0;
-      this.tagNamesEyeState = this.circularGeofenceCounters.visible != 0;
       this.initializingCircularGeofences = true;
       this.attemptToHideSpinner();
       console.log(this.circular_geofences);
@@ -74,20 +68,15 @@ export class CircularGeofencesMinimapService {
     }
   }
   
-  initializeTable(newCircularGeofenceId?: number) {
-    this.tblDataGeo = [];
-    for(let i = 0; i < this.circular_geofences.length; i++){
-      if(this.circular_geofences[i].id != newCircularGeofenceId){
-        this.circular_geofences[i].zone_name_visible_bol = (this.circular_geofences[i].zone_name_visible === true);
+  initializeTable(circular_geofences:any, newCircularGeofenceId?: number) {
+    for(let i = 0; i < circular_geofences.length; i++){
+      if(circular_geofences[i].id != newCircularGeofenceId){
+        circular_geofences[i].zone_name_visible_bol = (circular_geofences[i].zone_name_visible === true);
       } else {
-        this.circular_geofences[i].zone_name_visible_bol = true;
+        circular_geofences[i].zone_name_visible_bol = true;
       }
-      this.tblDataGeo.push({trama:this.circular_geofences[i]});
     }
-    this.tblDataGeoFiltered = this.getTableData();
-
-    console.log(this.tblDataGeoFiltered);
-    
+    return circular_geofences;
   }
 
   sortGeofencesBySize(){
@@ -103,22 +92,22 @@ export class CircularGeofencesMinimapService {
     });
   }
 
-  drawGeofencesOnMap(){
+  drawGeofencesOnMap(circular_geofences: any){
     for (let i = 0; i < this.circular_geofences.length; i++) {
       
-      this.circular_geofences[i].geo_elemento = new L.Circle( this.getCoordenadas(this.circular_geofences[i].geo_coordenadas), {
-        radius: this.getRadius(this.circular_geofences[i].geo_coordenadas),
+      circular_geofences[i].geo_elemento = new L.Circle( this.getCoordenadas(circular_geofences[i].geo_coordenadas), {
+        radius: this.getRadius(circular_geofences[i].geo_coordenadas),
         weight: 3,
-        fill: this.circular_geofences[i].zone_no_int_color,
-        color: this.circular_geofences[i].zone_color,
+        fill: circular_geofences[i].zone_no_int_color,
+        color: circular_geofences[i].zone_color,
       });
 
-      let bg_color = this.tooltipBackgroundTransparent? this.defaultTagNameBackground: this.minimapUtils.hexToRGBA(this.circular_geofences[i].zone_color);
-      let txt_color = this.tooltipBackgroundTransparent? (this.circular_geofences[i].tag_name_color == ''? this.defaultTagNameColor: this.circular_geofences[i].tag_name_color): this.minimapUtils.hexToRGBA(this.circular_geofences[i].zone_color);
-      let font_size = (this.circular_geofences[i].tag_name_font_size == 0? this.defaultTagNameFontSize: this.circular_geofences[i].tag_name_font_size) + 'px';
+      let bg_color = this.tooltipBackgroundTransparent? this.defaultTagNameBackground: this.minimapUtils.hexToRGBA(circular_geofences[i].zone_color);
+      let txt_color = this.tooltipBackgroundTransparent? (circular_geofences[i].tag_name_color == ''? this.defaultTagNameColor: circular_geofences[i].tag_name_color): this.minimapUtils.hexToRGBA(circular_geofences[i].zone_color);
+      let font_size = (circular_geofences[i].tag_name_font_size == 0? this.defaultTagNameFontSize: circular_geofences[i].tag_name_font_size) + 'px';
 
       
-      this.circular_geofences[i].marker_name = L.circleMarker(this.getCoordenadas(this.circular_geofences[i].geo_coordenadas), {
+      circular_geofences[i].marker_name = L.circleMarker(this.getCoordenadas(circular_geofences[i].geo_coordenadas), {
         
         "radius": 0,
         "fillColor": "#000",//color,
@@ -129,12 +118,13 @@ export class CircularGeofencesMinimapService {
 
       }).bindTooltip(
           
-          '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+this.circular_geofences[i].zone_name+'</b>',
+          '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+circular_geofences[i].zone_name+'</b>',
           { permanent: true,
             direction: 'center',
             className: 'leaflet-tooltip-own',
           });
     }
+    return circular_geofences;
   }
 
   getCoordenadas(data:any){
@@ -157,7 +147,9 @@ export class CircularGeofencesMinimapService {
 
   getData() {
     console.log("[CIRCULAR GEOFENCES] retornando datos: ", this.circular_geofences);
-    return this.circular_geofences;
+    let geof = this.initializeTable([...this.circular_geofences]);
+    geof = this.drawGeofencesOnMap(geof);
+    return geof;
   }
 
   getTableData(){

@@ -192,4 +192,5 @@ export class MultiviewService {
     }
     return true;
   }
+
 }
