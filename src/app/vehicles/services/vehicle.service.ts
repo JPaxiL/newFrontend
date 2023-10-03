@@ -573,9 +573,11 @@ export class VehicleService {
       vehicle.capacidad_tanque = 0;
       vehicle.capacidad_tanque_text = '0 gal. || 0 l.';
     }else{
-      const tanqueC = vehicle.tanque.split(',');
-      vehicle.capacidad_tanque = parseInt(tanqueC[1]);
-      vehicle.capacidad_tanque_text = vehicle.capacidad_tanque+" gal. || "+( vehicle.capacidad_tanque * 3.7854118).toFixed(2) +' l.';
+      if(vehicle.tanque){
+        const tanqueC = vehicle.tanque.split(',');
+        vehicle.capacidad_tanque = parseInt(tanqueC[1]);
+        vehicle.capacidad_tanque_text = vehicle.capacidad_tanque+" gal. || "+( vehicle.capacidad_tanque * 3.7854118).toFixed(2) +' l.';
+      }
     }
     return vehicle;
   }
