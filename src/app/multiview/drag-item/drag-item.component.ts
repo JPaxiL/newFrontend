@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UserTracker } from '../models/interfaces';
+import { StructureGrid, UserTracker } from '../models/interfaces';
 
 @Component({
   selector: 'app-drag-item',
@@ -9,8 +9,8 @@ import { UserTracker } from '../models/interfaces';
 })
 export class DragItemComponent implements OnInit {
 
-  @Input() items:UserTracker[] = [];
-  aux_exchanged_item!: UserTracker;
+  @Input() items:StructureGrid[] = [];
+  aux_exchanged_item!: StructureGrid;
 
   @Output() itemsChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -19,7 +19,7 @@ export class DragItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<UserTracker[]>) {
+  drop(event: CdkDragDrop<StructureGrid[]>) {
     if((event.previousContainer !== event.container)){
       transferArrayItem(event.previousContainer.data,event.container.data,event.previousIndex,event.currentIndex);
   

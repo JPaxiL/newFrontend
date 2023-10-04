@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GridComponent } from '../grid/grid.component';
-import { GridItem, ScreenView, UnitItem } from '../models/interfaces';
+import { GridItem, ScreenView, StructureGrid, UnitItem } from '../models/interfaces';
 import { LayersService } from '../services/layers.service';
 import { MultiviewService } from '../services/multiview.service';
 
@@ -15,6 +15,7 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   screenView!: ScreenView;
   gridItems: GridItem[] = [];
   items: UnitItem[] = [];
+  structures: StructureGrid[] = [];
   show_not_found = false;
   @ViewChild('_gridChild') gridChild!: GridComponent;
 
@@ -32,8 +33,8 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
         console.log("this.gridItems: ", this.gridItems);
         
         for (let item of this.gridItems) {
-          
           this.items.push(item.content!);
+          this.structures.push(item.structure!);
         }
         this.updateGridItems();
       } catch (error) {
@@ -43,18 +44,37 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
     });
   }
 
-  updateGridItems(){
-    this.gridItems = this.multiviewService.calculateStructure(this.items,"minimap");
+  setGritItems(){
     if(this.gridItems && this.gridItems.length>0){
       this.gridChild.setItems(this.gridItems);
     }
   }
 
-  onExchange(event: any){
-    const { current_item: current, exchanged_item: exchanged }  = event;
-    this.items = this.multiviewService.exchangeItems(this.items,current,exchanged);
-    this.updateGridItems();
-    
+  updateGridItems(){
+    this.structures = this.multiviewService.calculateStructure(this.structures);
+    this.gridItems.forEach(item => {
+      item.structure = this.structures.find(st => st.gridItem_id == item.label)!;
+      item.content_type = "minimap";
+      item.show_only_label = false;
+    })
+    this.setGritItems();
   }
 
+  updateGridStructureInChild(){
+    this.gridChild.updateStructure(this.structures);
+  }
+
+  onExchange(event: any){
+    const { current_item: current, exchanged_item: exchanged }  = event;
+    this.structures = this.multiviewService.calculateStructure(this.multiviewService.exchangeItems(this.structures,current,exchanged));
+    this.updateGridStructureInChild();
+  }
+  deleteView(idContainer: string){
+    console.log("deleting ",idContainer);
+    console.log("structure leng: ", this.structures.length);
+    this.structures = this.structures.filter(st => st.gridItem_id !== idContainer);
+    this.structures = this.multiviewService.calculateStructure(this.structures);
+    console.log("structure leng: ", this.structures.length);
+    this.updateGridStructureInChild();
+  }
 }

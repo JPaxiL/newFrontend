@@ -7,7 +7,7 @@
                </span>
                <!--p-badge *ngIf="miniMap.events! > 0" [value]="miniMap.events" [severity]="'danger'" class="ms-3"></p-badge-->
           </div>
-          <button class="close-button">
+          <button class="close-button" (click)="deleteMap()">
                <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 8L8 16M8 8L16 16" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path> </g></svg>
           </button>
      </div>

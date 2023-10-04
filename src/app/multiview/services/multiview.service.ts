@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
-import { GridItem, ScreenView, UnitItem, UserTracker } from '../models/interfaces';
+import { GridItem, ScreenView, StructureGrid, UnitItem, UserTracker } from '../models/interfaces';
 import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
@@ -114,35 +114,57 @@ export class MultiviewService {
     return list;
   }
 
-  calculateStructure(items:any[], content_type: string, show_only_label = false) {
+  calculateStructure(structures: StructureGrid[]) {
     //The "nombre" attribute must exist in objects inside items array.
     //Calculo el numero de columnas y filas
-    const items_length = items.length;
-    const gridCol = this.calcNColumns(items_length);
-    const gridRow = this.calcNRows(gridCol,items_length)
+    const gridCol = this.calcNColumns(structures.length);
+    const gridRow = this.calcNRows(gridCol,structures.length)
     //calculo la ubicación y distribución de cada item
     //this.vehicleInfo = [];
-    const gridItems: GridItem[] = [];
-    for (let i = 0; i < items_length; i++) {
+    const structureGrids: StructureGrid[] = [];
+    for (let i = 0; i < structures.length; i++) {
       //Calculo la celda a la que ira este item y cuanto span ocupará
       // Todos ocupan un espacio pero el ultimo elemento ocupa todo el resto de la grilla
       const col = (i % gridCol) + 1;
       const row = Math.floor(i / gridCol) + 1;
       //Si es el ultimo elemento, ocupara el resto de espacios, caso contrario solo uno.
-      const span = (i+1 == items_length ? (gridCol*gridRow)-items_length+1 : 1); // Si es el último elemento de la fila, ocupa 2 columnas
-      const auxGridItem:GridItem = {
+      const span = (i+1 == structures.length ? (gridCol*gridRow)-structures.length+1 : 1); // Si es el último elemento de la fila, ocupa 2 columnas
+      const structureGrid:StructureGrid = {
         row: row,
         col: col,
         span: span,
         structure_index: i,
-        content: items[i],
-        content_type: content_type,
-        label: items[i].nombre,
-        show_only_label: show_only_label,
+        gridItem_id: structures[i].gridItem_id,
       }
-      gridItems.push(auxGridItem)
+      structureGrids.push(structureGrid)
     }
-    return gridItems;
+    return structureGrids;
+  }
+  calculateStructureFromUnitItems(unitItems: UnitItem[]) {
+    //The "nombre" attribute must exist in objects inside items array.
+    //Calculo el numero de columnas y filas
+    const gridCol = this.calcNColumns(unitItems.length);
+    const gridRow = this.calcNRows(gridCol,unitItems.length)
+    //calculo la ubicación y distribución de cada item
+    //this.vehicleInfo = [];
+    const structureGrids: StructureGrid[] = [];
+    for (let i = 0; i < unitItems.length; i++) {
+      //Calculo la celda a la que ira este item y cuanto span ocupará
+      // Todos ocupan un espacio pero el ultimo elemento ocupa todo el resto de la grilla
+      const col = (i % gridCol) + 1;
+      const row = Math.floor(i / gridCol) + 1;
+      //Si es el ultimo elemento, ocupara el resto de espacios, caso contrario solo uno.
+      const span = (i+1 == unitItems.length ? (gridCol*gridRow)-unitItems.length+1 : 1); // Si es el último elemento de la fila, ocupa 2 columnas
+      const structureGrid:StructureGrid = {
+        row: row,
+        col: col,
+        span: span,
+        structure_index: i,
+        gridItem_id: unitItems[i].nombre,
+      }
+      structureGrids.push(structureGrid)
+    }
+    return structureGrids;
   }
   calcNColumns(n: number){
     if(n<1){

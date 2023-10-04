@@ -2,23 +2,23 @@
     <ng-container *ngFor="let item of items">
       <div
         class="grid-item"
-        [style.gridColumnStart]="item.col"
-        [style.gridRowStart]="item.row"
-        [style.gridColumnEnd]="item.col + item.span"
+        [style.gridColumnStart]="item.structure.col"
+        [style.gridRowStart]="item.structure.row"
+        [style.gridColumnEnd]="item.structure.col + item.structure.span"
       >
         <ng-container *ngIf="item.show_only_label">
-          <app-drag-item [items]="[item.content]" (itemsChange)="onChangeDrops($event)">
+          <app-drag-item [items]="[item.structure]" (itemsChange)="onChangeDrops($event)">
             <div>
               {{item.label}}
             </div>
           </app-drag-item>
         </ng-container>
         <ng-container *ngIf="!item.show_only_label">
-          <app-drag-item [items]="[item.content]" (itemsChange)="onChangeDrops($event)">
+          <app-drag-item [items]="[item.structure]" (itemsChange)="onChangeDrops($event)">
             <div class="w-100 h-100">
               <ng-container *ngIf="item.content_type == 'minimap'">
                 <div class="h-100 w-100">
-                    <app-minimap [title]="item.label" [configuration]="item" [idContainer]="item.label"></app-minimap>
+                    <app-minimap (onDelete)="deleteGrid($event)" [title]="item.label" [configuration]="item" [idContainer]="item.label"></app-minimap>
                 </div>
             </ng-container>
             </div> 

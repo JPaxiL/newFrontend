@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, Output } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
@@ -25,6 +25,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   @Input() configuration!: GridItem;
   @Input() title!: string;
   @Input() idContainer!: string;
+  @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
   miniMap!: MinimapContent;
   mapItem!: Map;
 
@@ -69,6 +70,12 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     }
     console.log("minimap: ", this.miniMap);
     
+  }
+
+  deleteMap(){
+    //Eliminamos la instancia en minimap service
+    this.minimapService.maps = this.minimapService.maps.filter(map => map.id !== this.mapItem.id);
+    this.onDelete.emit(this.idContainer);
   }
 
   createMap() {

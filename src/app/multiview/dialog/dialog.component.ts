@@ -150,6 +150,7 @@ export class DialogComponent implements OnInit {
     }
     console.log("lista structura: ", this.currentMultiview);
   }
+  
   changeUnits(){
     if(this.multiviewService.selectedUnits.length > 20){
       this.multiviewService.selectedUnits.splice(20);

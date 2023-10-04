@@ -88,14 +88,19 @@ export interface ScreenView {
 }
 
 export interface GridItem {
+    structure: StructureGrid,
+    content?: UnitItem,
+    content_type: string, // minimap or chart or add another in grid component
+    label?: string,
+    title?: string,
+    show_only_label: boolean,
+}
+export interface StructureGrid {
     row: number,
     col: number,
     span:number,
     structure_index?:number,
-    content?: UnitItem,
-    content_type: string, // minimap or chart or add another in grid component
-    label?: string,
-    show_only_label: boolean,
+    gridItem_id: string,
 }
 
 export interface MinimapContent {
