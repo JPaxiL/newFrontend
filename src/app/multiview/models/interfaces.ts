@@ -5,6 +5,22 @@ export interface Operation {
     nombre: string,
     usuario_id: number,
 }
+export interface Convoy {
+    nombre: string,
+    descripcion?: string,
+    usuario_id: number,
+    id: number,
+    grupo_convoy_id?: number,
+    bol_eliminado?: boolean,
+}
+
+export interface UnitItem {
+    nombre: string,
+    type: string, //"tracker", "convoy"
+    imeis: string[],
+    selected?: boolean,
+    id?: number
+}
 
 export interface UserTracker {
     id?: number,
@@ -61,6 +77,8 @@ export interface UserTracker {
     tag?: boolean,
 }
 
+
+
 export interface ScreenView {
     id?: number,
     name: string,
@@ -74,7 +92,7 @@ export interface GridItem {
     col: number,
     span:number,
     structure_index?:number,
-    content?: MinimapContent | UserTracker | any,
+    content?: UnitItem,
     content_type: string, // minimap or chart or add another in grid component
     label?: string,
     show_only_label: boolean,
@@ -86,6 +104,7 @@ export interface MinimapContent {
     events?: number,
     zoom?: number,
     id_container: string,
+    imeis?: string[],
     vehicles?: UserTracker[],
 }
 

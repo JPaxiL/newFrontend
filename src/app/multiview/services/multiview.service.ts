@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
-import { GridItem, ScreenView, UserTracker } from '../models/interfaces';
+import { GridItem, ScreenView, UnitItem, UserTracker } from '../models/interfaces';
 import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class MultiviewService {
     this.loadUserData();
   }
 
-  selectedUnits: UserTracker[] = [];
+  selectedUnits: UnitItem[] = [];
   
   public getUserMultiview(){
     return this.userMultiview.filter(item => item.name != "default");

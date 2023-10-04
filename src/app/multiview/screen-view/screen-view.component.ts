@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GridComponent } from '../grid/grid.component';
-import { GridItem, UserTracker, ScreenView } from '../models/interfaces';
+import { GridItem, ScreenView, UnitItem } from '../models/interfaces';
 import { LayersService } from '../services/layers.service';
 import { MultiviewService } from '../services/multiview.service';
 
@@ -14,7 +14,7 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   configName = "";
   screenView!: ScreenView;
   gridItems: GridItem[] = [];
-  items: UserTracker[] = [];
+  items: UnitItem[] = [];
   show_not_found = false;
   @ViewChild('_gridChild') gridChild!: GridComponent;
 
@@ -29,8 +29,11 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
       try {
         this.screenView = this.multiviewService.getMultiviewFromLocalStorage(this.configName)[0] as ScreenView;
         this.gridItems = this.screenView.grids! as GridItem[];
+        console.log("this.gridItems: ", this.gridItems);
+        
         for (let item of this.gridItems) {
-          this.items.push(item.content);
+          
+          this.items.push(item.content!);
         }
         this.updateGridItems();
       } catch (error) {

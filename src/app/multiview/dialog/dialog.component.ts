@@ -1,9 +1,10 @@
 
 import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import Swal from 'sweetalert2';
-import { GridItem, Operation, ScreenView, UserTracker } from '../models/interfaces';
+import { Convoy, GridItem, Operation, ScreenView, UnitItem, UserTracker } from '../models/interfaces';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { MultiviewService } from '../services/multiview.service';
+import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -17,7 +18,9 @@ export class DialogComponent implements OnInit {
   selectedValue: string="";
   multiple: boolean = true;
   operations: Operation[] = [];
+  unitItems: UnitItem[] = [];
   units: UserTracker[] = [];
+  convoys: Convoy[] = [];
   selectedOperation: any = null;
 
   currentMultiview!: ScreenView;
@@ -31,12 +34,14 @@ export class DialogComponent implements OnInit {
   validName = false;
   constructor(
     public multiviewService: MultiviewService,
+    private vehicleService: VehicleService,
   ) {
   }
 
   async ngOnInit(): Promise<void> {
     this.multiviewService.getOperations().subscribe((resp:ResponseInterface) => {
       this.operations = resp.data as Operation[];
+      this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
     });
     this.resetCurrentMultiview();
   }
@@ -66,7 +71,7 @@ export class DialogComponent implements OnInit {
       console.log("onselectmultiview: ",this.multiviewService.selectedUnits);
     }else{
       this.multiviewService.selectedUnits = this.currentMultiview.grids!.map( (item:GridItem) => {
-        return item.content as UserTracker;
+        return item.content as UnitItem;
       });
     }
   }
@@ -108,7 +113,25 @@ export class DialogComponent implements OnInit {
   }
   changeOperation(){
     this.multiviewService.getTrackersByOperation(this.selectedOperation).subscribe((resp:ResponseInterface) => {
-      this.units = resp.data as UserTracker[];
+      this.units = resp.data.trackers as UserTracker[];
+      this.convoys = resp.data.convoys;
+      this.unitItems = [];
+      this.units.forEach(item => {
+        this.unitItems.push({nombre: item.nombre!, type: "tracker",selected: false, id:item.id, imeis: [item.IMEI!.toString()]});
+      })
+      this.convoys.forEach(item => {
+        this.unitItems.push(
+          {
+            nombre: item.nombre!, 
+            type: "convoy",
+            selected: false, 
+            id:item.id, 
+            imeis: this.vehicleService.vehicles.filter(vehi => vehi.idconvoy === item.id).map(vh => vh.IMEI!)
+          }
+        );
+      });
+      this.unitItems.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      console.log(this.unitItems);
     });
   }
 

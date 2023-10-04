@@ -16,9 +16,12 @@
         <ng-container *ngIf="!item.show_only_label">
           <app-drag-item [items]="[item.content]" (itemsChange)="onChangeDrops($event)">
             <div class="w-100 h-100">
-              <app-view-item [configuration]="item.content" [type]="item.content_type">
-              </app-view-item>
-            </div>
+              <ng-container *ngIf="item.content_type == 'minimap'">
+                <div class="h-100 w-100">
+                    <app-minimap [title]="item.label" [configuration]="item" [idContainer]="item.label"></app-minimap>
+                </div>
+            </ng-container>
+            </div> 
           </app-drag-item>
         </ng-container>
       </div>

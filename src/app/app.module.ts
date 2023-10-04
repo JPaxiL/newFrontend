@@ -130,7 +130,6 @@ import { DialogComponent } from './multiview/dialog/dialog.component';
 import { DragItemComponent } from './multiview/drag-item/drag-item.component';
 import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
-import { ViewItemComponent } from './multiview/view-item/view-item.component';
 import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
 
@@ -214,7 +213,6 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     DragItemComponent,
     PreviewComponent,
     ScreenViewComponent,
-    ViewItemComponent,
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
 
