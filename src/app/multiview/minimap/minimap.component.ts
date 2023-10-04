@@ -1,10 +1,10 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, Output } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
 
 //import { MinimapService } from '../services/minimap.service';
-import { MinimapContent, UserTracker } from '../models/interfaces';
+import { GridItem, MinimapContent, UnitItem, UserTracker } from '../models/interfaces';
 import { CircularGeofencesMinimapService } from '../services/circular-geofences-minimap.service';
 import { GeofencesMinimapService } from '../services/geofences-minimap.service';
 import { GeopointsMinimapService } from '../services/geopoints-minimap.service';
@@ -22,8 +22,11 @@ import { MinimapService } from '../services/minimap.service';
   //providers: [CircularGeofencesMinimapService,GeofencesMinimapService,GeopointsMinimapService]
 })
 export class MinimapComponent implements OnInit, AfterViewInit {
-  @Input() configuration!: UserTracker | MinimapContent;
-
+  @Input() configuration!: GridItem;
+  @Input() title!: string;
+  @Input() idContainer!: string;
+  @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
+  miniMap!: MinimapContent;
   mapItem!: Map;
 
   mapLayers: L.LayerGroup[] = [];
@@ -35,23 +38,17 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     public geopointsService: GeopointsMinimapService
   ) {
 
-    this.mapLayers[0] = L.layerGroup();
-
   }
 
   ngOnInit(): void {
-    //Si es UserTracker se debe convertir en tipo MinimapContent
-    if('numero_placa' in  this.configuration){
-      let auxConf = {...this.configuration};
-      this.configuration.vehicles = [{...auxConf}];
-      this.configuration.title = auxConf.numero_placa + (auxConf.nombre_grupo? ' - ('+auxConf.nombre_grupo+')' : '')
-      this.configuration.events = 0;
-      this.configuration.id_container = auxConf.numero_placa!;
-    }else{
-      //si es gridItem
+    //Si es GridItem se debe convertir en tipo MinimapContent
+    this.miniMap = {
+      imeis: this.configuration.content!.imeis,
+      title: this.configuration.label!.toUpperCase(),
+      events: 0,
+      id_container: this.idContainer!
     }
-
-    console.log("configuration: ", this.configuration);
+    console.log("miniMap: ", this.miniMap);
   }
 
   ngOnDestroy() {
@@ -61,17 +58,34 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async ngAfterViewInit() {
-    this.createMap();
+  ngAfterViewInit() {
+    if(this.minimapService.vehicleServiceIsReady){
+      this.miniMap.vehicles = this.minimapService.getVehicles().filter((vh:UserTracker) => this.configuration.content?.imeis.includes(vh.IMEI!.toString()));
+      this.createMap();
+    }else{
+      this.minimapService.vehicleServiceReady.subscribe(data => {
+        this.miniMap.vehicles = data.filter((vh:UserTracker) => this.configuration.content?.imeis.includes(vh.IMEI!.toString()));
+        this.createMap();
+      })
+    }
+    console.log("minimap: ", this.miniMap);
+    
+  }
+
+  deleteMap(){
+    //Eliminamos la instancia en minimap service
+    this.minimapService.maps = this.minimapService.maps.filter(map => map.id !== this.mapItem.id);
+    this.onDelete.emit(this.idContainer);
   }
 
   createMap() {
     console.log("CREATE MAPPPPPPPPPP");
-    const containerId = 'map-container-'+this.configuration.id_container;
+    const containerId = 'map-container-'+this.idContainer.toString();
     const mapContainer = document.getElementById(containerId);
+    console.log("no llego aca", mapContainer);
     if (mapContainer) {
-      this.mapItem = new Map(this.configuration.id_container!);
-      this.mapItem.createMap(containerId,this.configuration as MinimapContent);
+      this.mapItem = new Map(this.miniMap.id_container!);
+      this.mapItem.createMap(containerId,this.miniMap as MinimapContent);
       this.setLayers();
       this.loadMinimapService();
       //this.minimapService.addMap(this.mapItem);

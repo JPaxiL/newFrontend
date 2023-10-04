@@ -35,8 +35,9 @@ export class MinimapService {
   final_direction = '';
   direction_X = '';
   direction_Y = '';
-
+  vehicleServiceIsReady = false;
   @Output() sendData = new EventEmitter<any>();
+  @Output() vehicleServiceReady = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
 
   constructor(
@@ -47,8 +48,8 @@ export class MinimapService {
     this.vehicleService.initialize();
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("user data completadoooo",vehicles);
-        
-        this.onDrawIcon();
+        this.vehicleServiceIsReady = true;
+        this.vehicleServiceReady.emit(vehicles);
     });
     this.socketWebService.callback.subscribe(res =>{
       this.monitor(res);
@@ -153,11 +154,12 @@ export class MinimapService {
     });
 
   }
-
-  onDrawIcon(): void{
+  getVehicles(){
+    return this.vehicleService.vehicles;
+  }
+  onDrawIcon(mapItem: MapItem): void{
     console.log("onDrawIcon");
-    this.maps.forEach(mapItem => {
-      const e = mapItem.configuration!.vehicles!;
+    const e = mapItem.configuration!.vehicles!;
 
       const transmissionStatusColor: any = {
         10:"green",
@@ -213,7 +215,6 @@ export class MinimapService {
             .setContent(lista)
             .openOn(mapItem.map!);
       });
-    });
   }
   private drawIcon(data:any, mapItem: MapItem): void{
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
@@ -342,7 +343,7 @@ export class MinimapService {
     
     this.maps.forEach(item => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
-      const resultado = item.configuration?.vehicles!.find(vehi => vehi.tracker_imei == data.IMEI.toString());
+      const resultado = item.configuration?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
       //console.log("data IMEI: ", data.IMEI.toString());
       //console.log("vehicles IMEIs: ", item.configuration?.vehicles!.map(item=> {return item.tracker_imei}));
       
@@ -533,6 +534,7 @@ export class MinimapService {
   public addMap(mapItem:MapItem): void{
     console.log("loadMapp--------");
     this.maps.push(mapItem);
+    this.onDrawIcon(mapItem);
   }
 
   public timeStopAux(data: any): void{

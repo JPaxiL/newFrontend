@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { GridComponent } from '../grid/grid.component';
-import { GridItem, UserTracker } from '../models/interfaces';
+import { GridItem, StructureGrid, UnitItem, UserTracker } from '../models/interfaces';
 import { MultiviewService } from '../services/multiview.service';
 
 @Component({
@@ -10,7 +10,8 @@ import { MultiviewService } from '../services/multiview.service';
 })
 export class PreviewComponent implements OnInit, OnChanges {
 
-  @Input() items: UserTracker[] = [];
+  @Input() items: UnitItem[] = [];
+  structures: StructureGrid[] = [];
   gridItems: GridItem[] = [];
 
   @Output() itemsChange: EventEmitter<GridItem[]> = new EventEmitter<GridItem[]>();
@@ -27,17 +28,39 @@ export class PreviewComponent implements OnInit, OnChanges {
     }
   }
 
-  updateGridItems(){
-    this.gridItems = this.multiviewService.calculateStructure(this.items, "minimap", true);
+  setGritItems(){
     if(this.gridItems){
       this.gridChild.setItems(this.gridItems);
       this.itemsChange.emit(this.gridItems);
     }
   }
 
+  updateGridItems(newStructure=true){
+    if(newStructure){
+      this.structures = this.multiviewService.calculateStructureFromUnitItems(this.items);
+      this.gridItems = [];
+      for (let item of this.items){
+        this.gridItems.push({
+          structure: this.structures.find(st => st.gridItem_id == item.nombre)!,
+          content_type: "minimap",
+          show_only_label: true,
+          content: item,
+          label: item.nombre
+        });
+      }
+    }else{
+      this.structures = this.multiviewService.calculateStructure(this.structures);
+      this.gridItems.forEach(item => {
+          item.structure = this.structures.find(st => st.gridItem_id == item.label)!;
+      })
+    }
+    this.setGritItems();
+  }
+
   onExchange(event: any){
     const { current_item: current, exchanged_item: exchanged }  = event;
-    this.items = this.multiviewService.exchangeItems(this.items,current,exchanged);
-    this.updateGridItems();
+    this.structures = this.multiviewService.exchangeItems(this.structures,current,exchanged);
+    this.items = this.multiviewService.exchangeItems(this.items,this.items.find(ite=>ite.nombre == current.gridItem_id),this.items.find(ite=>ite.nombre == exchanged.gridItem_id));
+    this.updateGridItems(false);
   }
 }
