@@ -501,13 +501,13 @@ export class MapService {
             if (object[key]['_tooltip']['_content']=="<span>"+vehicles[index].name+"</span>") {
               cont++;
               let oldCoords = this.markerClusterGroup.getLayers()[key].getLatLng();
-              
+
               let coord = {
                 lat : vehicles[index].latitud,
                 lng : vehicles[index].longitud
               };
 
-              
+
               // //console.log('coord',coord);
               // //console.log('aux = ', aux['_latlng']);
               //_popup
@@ -522,9 +522,9 @@ export class MapService {
                 '</aside>';
               // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
-              
+
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
-              
+
               // if(vehicles[index].speed != 0){
 
               //   let prueba = this.coords_vehicle.find(term => term.name == vehicles[index].name);
@@ -552,8 +552,8 @@ export class MapService {
               //       moreOldCoords: this.markerClusterGroup.getLayers()[key].getLatLng(),
               //     })
               //   }
-                
-                
+
+
 
               //   this.dif_mayor = 0.00;
               //   this.dif_divide = 0.00;
@@ -569,11 +569,11 @@ export class MapService {
               //     if(coord.lat > oldCoords.lat){
               //       //arriba
               //       this.direction_Y = 'up';
-              //       this.dif_Y = coord.lat-oldCoords.lat;  
+              //       this.dif_Y = coord.lat-oldCoords.lat;
               //       if(this.dif_Y >= this.dif_mayor){
-              //         this.dif_mayor = this.dif_Y; 
+              //         this.dif_mayor = this.dif_Y;
               //         this.direction = 'up';
-              //         this.dif_divide = this.dif_Y/2; 
+              //         this.dif_divide = this.dif_Y/2;
               //       }
               //     }else{
               //       //abajo
@@ -583,14 +583,14 @@ export class MapService {
               //         this.dif_mayor = this.dif_Y;
               //         this.direction = 'down';
               //         this.dif_divide = this.dif_Y/2;
-                      
+
               //       }
               //     }
-  
+
               //     if(coord.lng > oldCoords.lng){
               //       //derecha
               //       this.direction_X = 'right';
-              //       this.dif_X = coord.lng-oldCoords.lng; 
+              //       this.dif_X = coord.lng-oldCoords.lng;
               //       if(this.dif_X >= this.dif_mayor){
               //         this.dif_mayor = this.dif_X;
               //         this.direction = 'right';
@@ -606,28 +606,28 @@ export class MapService {
               //         this.dif_divide = this.dif_X/2;
               //       }
               //     }
-                  
+
               //     if(this.direction == 'up' || this.direction == 'down'){
-  
-              //       if(this.dif_X >= this.dif_divide){ 
-  
+
+              //       if(this.dif_X >= this.dif_divide){
+
               //         this.final_direction = `${this.direction}-${this.direction_X}`;
-  
+
               //       }else{
-  
+
               //         this.final_direction = `${this.direction}`;
-                      
+
               //       }
-  
+
               //     }else{
-  
+
               //       if(this.dif_Y >= this.dif_divide){
-  
+
               //         this.final_direction = `${this.direction_Y}-${this.direction}`;
               //       }else{
-  
+
               //         this.final_direction = `${this.direction}`;
-                      
+
               //       }
               //     }
 
@@ -645,11 +645,11 @@ export class MapService {
               //         if(coord.lat > prueba2.moreOldCoords.lat){
               //           //arriba
               //           this.direction_Y = 'up';
-              //           this.dif_Y = coord.lat-prueba2.moreOldCoords.lat;  
+              //           this.dif_Y = coord.lat-prueba2.moreOldCoords.lat;
               //           if(this.dif_Y >= this.dif_mayor){
-              //             this.dif_mayor = this.dif_Y; 
+              //             this.dif_mayor = this.dif_Y;
               //             this.direction = 'up';
-              //             this.dif_divide = this.dif_Y/2; 
+              //             this.dif_divide = this.dif_Y/2;
               //           }
               //         }else{
               //           //abajo
@@ -659,14 +659,14 @@ export class MapService {
               //             this.dif_mayor = this.dif_Y;
               //             this.direction = 'down';
               //             this.dif_divide = this.dif_Y/2;
-                          
+
               //           }
               //         }
-      
+
               //         if(coord.lng > prueba2.moreOldCoords.lng){
               //           //derecha
               //           this.direction_X = 'right';
-              //           this.dif_X = coord.lng-prueba2.moreOldCoords.lng; 
+              //           this.dif_X = coord.lng-prueba2.moreOldCoords.lng;
               //           if(this.dif_X >= this.dif_mayor){
               //             this.dif_mayor = this.dif_X;
               //             this.direction = 'right';
@@ -682,54 +682,54 @@ export class MapService {
               //             this.dif_divide = this.dif_X/2;
               //           }
               //         }
-                      
+
               //         if(this.direction == 'up' || this.direction == 'down'){
-      
-              //           if(this.dif_X >= this.dif_divide){ 
-      
+
+              //           if(this.dif_X >= this.dif_divide){
+
               //             this.final_direction = `${this.direction}-${this.direction_X}`;
-      
+
               //           }else{
-      
+
               //             this.final_direction = `${this.direction}`;
-                          
+
               //           }
-      
+
               //         }else{
-      
+
               //           if(this.dif_Y >= this.dif_divide){
-      
+
               //             this.final_direction = `${this.direction_Y}-${this.direction}`;
               //           }else{
-      
+
               //             this.final_direction = `${this.direction}`;
-                          
+
               //           }
               //         }
-  
+
               //         this.changePositionArrow(this.final_direction,key);
-  
+
               //         this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-  
+
               //       }
               //       else{
               //         if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-  
+
               //           let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-                        
+
               //           this.changePositionArrow(old_direction[1],key);
-  
+
               //           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
-                        
+
               //         }
               //         else{
-  
+
               //           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
               //           console.log('sin flecha',vehicles[index].name,prueba2);
               //           //console.log(vehicles[index].name);
-  
+
               //         }
-  
+
               //       }
               //     }else{
               //       console.log('no tiene modeCoordsData', vehicles[index].name,prueba2)
@@ -741,7 +741,7 @@ export class MapService {
               // }else{
               //   this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
               //   console.log('sin velocidad', vehicles[index].name);
-                
+
               // }
 
               if(vehicles[index].speed != 0){
@@ -760,11 +760,11 @@ export class MapService {
                   if(coord.lat! > oldCoords.lat){
                     //arriba
                     this.direction_Y = 'up';
-                    this.dif_Y = parseFloat(coord.lat!)-oldCoords.lat;  
+                    this.dif_Y = parseFloat(coord.lat!)-oldCoords.lat;
                     if(this.dif_Y >= this.dif_mayor){
-                      this.dif_mayor = this.dif_Y; 
+                      this.dif_mayor = this.dif_Y;
                       this.direction = 'up';
-                      this.dif_divide = this.dif_Y/2; 
+                      this.dif_divide = this.dif_Y/2;
                     }
                   }else{
                     //abajo
@@ -774,14 +774,14 @@ export class MapService {
                       this.dif_mayor = this.dif_Y;
                       this.direction = 'down';
                       this.dif_divide = this.dif_Y/2;
-                      
+
                     }
                   }
-  
+
                   if(coord.lng! > oldCoords.lng){
                     //derecha
                     this.direction_X = 'right';
-                    this.dif_X = parseFloat(coord.lng!)-oldCoords.lng; 
+                    this.dif_X = parseFloat(coord.lng!)-oldCoords.lng;
                     if(this.dif_X >= this.dif_mayor){
                       this.dif_mayor = this.dif_X;
                       this.direction = 'right';
@@ -797,35 +797,35 @@ export class MapService {
                       this.dif_divide = this.dif_X/2;
                     }
                   }
-                  
+
                   if(this.direction == 'up' || this.direction == 'down'){
-  
-                    if(this.dif_X >= this.dif_divide){ 
-  
+
+                    if(this.dif_X >= this.dif_divide){
+
                       this.final_direction = `${this.direction}-${this.direction_X}`;
-  
+
                     }else{
-  
+
                       this.final_direction = `${this.direction}`;
-                      
+
                     }
-  
+
                   }else{
-  
+
                     if(this.dif_Y >= this.dif_divide){
-  
+
                       this.final_direction = `${this.direction_Y}-${this.direction}`;
                     }else{
-  
+
                       this.final_direction = `${this.direction}`;
-                      
+
                     }
                   }
 
                   //this.changePositionArrow(this.final_direction,key);
 
                   this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                 }
                 else{
                   if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
@@ -834,7 +834,7 @@ export class MapService {
                     //this.changePositionArrow(old_direction[1],key);
 
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                   }
                   else{
 
@@ -848,9 +848,9 @@ export class MapService {
 
               }else{
                 this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                
+
               }
-              
+
               this.markerClusterGroup.getLayers()[key].setLatLng(coord);
               let aux = this.markerClusterGroup.getLayers()[key];
               // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
@@ -899,7 +899,7 @@ export class MapService {
   changePositionArrow(direction: string, key: any){
     switch(direction){
       case 'up':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
         break;
       case 'up-left':
         this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,60];
@@ -920,7 +920,7 @@ export class MapService {
         this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,30];
         break;
       case 'right':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,30]; 
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,30];
         break;
     }
   }
@@ -1170,8 +1170,8 @@ export class MapService {
     }
     const iconMarker = L.icon({
       iconUrl: iconUrl,
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
+      iconSize: [40, 40],
+      iconAnchor: [25, 40],
       popupAnchor:  [-3, -40]
     });
     //console.log('data.name',data.name);
@@ -1188,8 +1188,8 @@ export class MapService {
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
-    tempMarker.bindTooltip(`<span>${data.name}</span>`, { 
-      permanent: true, 
+    tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+      permanent: true,
       offset: [0, 12],
       className: 'vehicle-tooltip', });
     let options = {
@@ -1249,7 +1249,7 @@ export class MapService {
   }
 
   public changeClusteringVisibility(visibility: boolean){
-    
+
     this.clustering = visibility;
   }
 
