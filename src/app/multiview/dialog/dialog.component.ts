@@ -22,9 +22,9 @@ export class DialogComponent implements OnInit {
   units: UserTracker[] = [];
   convoys: Convoy[] = [];
   selectedOperation: any = null;
-
+  fromBack = false;
+  fromSaved = false;
   currentMultiview!: ScreenView;
-  
   loading : boolean = false;
   
   // Save multiview
@@ -36,6 +36,7 @@ export class DialogComponent implements OnInit {
     public multiviewService: MultiviewService,
     private vehicleService: VehicleService,
   ) {
+  
   }
 
   async ngOnInit(): Promise<void> {
@@ -65,6 +66,7 @@ export class DialogComponent implements OnInit {
   onSelectMultiview(event:any){
     console.log("onSelectMV event", event.value);
     this.currentMultiview = { ...event.value };
+    this.fromSaved = true;
     if(!event.value){
       this.clearPreview();
       this.multiviewService.selectedUnits = [];
@@ -116,37 +118,67 @@ export class DialogComponent implements OnInit {
       this.units = resp.data.trackers as UserTracker[];
       this.convoys = resp.data.convoys;
       this.unitItems = [];
-      this.units.forEach(item => {
-        this.unitItems.push({nombre: item.nombre!, type: "tracker",selected: false, id:item.id, imeis: [item.IMEI!.toString()]});
-      })
-      this.convoys.forEach(item => {
-        this.unitItems.push(
-          {
-            nombre: item.nombre!, 
-            type: "convoy",
-            selected: false, 
-            id:item.id, 
-            imeis: this.vehicleService.vehicles.filter(vehi => vehi.idconvoy === item.id).map(vh => vh.IMEI!)
-          }
-        );
-      });
+      if(this.units && this.units.length>0){
+        this.units.forEach(item => {
+          this.unitItems.push(
+            {
+              nombre: item.nombre!, 
+              operation: this.operations.find(op => op.id == parseInt(this.selectedOperation))!.nombre,
+              type: "tracker",
+              selected: false, 
+              id:item.id, 
+              imeis: [item.IMEI!.toString()]
+            }
+          );
+        })
+      }
+      if(this.convoys && this.convoys.length>0){
+        this.convoys.forEach(item => {
+          this.unitItems.push(
+            {
+              nombre: item.nombre!, 
+              operation: this.operations.find(op => op.id == parseInt(this.selectedOperation))!.nombre,
+              type: "convoy",
+              selected: false, 
+              id:item.id, 
+              imeis: this.vehicleService.vehicles.filter(vehi => vehi.idconvoy === item.id).map(vh => vh.IMEI!)
+            }
+          );
+        });
+      }
       this.unitItems.sort((a, b) => a.nombre.localeCompare(b.nombre));
-      console.log(this.unitItems);
+      console.log("this.unitItems: ",this.unitItems);
     });
   }
 
   onGridChange(event:GridItem[]){
     //console.log("lista unidades: ", event);
     console.log("lista structura prev: ", this.currentMultiview);
+    this.currentMultiview.was_edited = true;
     if(!this.multiviewService.arraysAreEqual(this.currentMultiview.grids,event)){
       this.currentMultiview.grids = event!;
       if(this.currentMultiview.grids.length > 0){
         this.currentMultiview.was_edited = true;
+        console.log("this.currentMultiview.was_edited",this.currentMultiview.was_edited);
+        
       }else{
         this.currentMultiview.was_edited = false;
+        console.log("this.currentMultiview.was_edited3",this.currentMultiview.was_edited);
       }
-    }else{
+    }
+    if(this.fromBack){
+      this.currentMultiview.was_edited = true;
+      console.log("this.currentMultiview.was_edited2",this.currentMultiview.was_edited);
+
+      console.log("fromBack: ",this.fromBack);
+      this.fromBack = false;
+    }
+    if(this.fromSaved){
       this.currentMultiview.was_edited = false;
+      console.log("this.currentMultiview.was_edited22",this.currentMultiview.was_edited);
+
+      console.log("fromSaved: ",this.fromSaved);
+      this.fromSaved = false;
     }
     console.log("lista structura: ", this.currentMultiview);
   }
@@ -209,6 +241,11 @@ export class DialogComponent implements OnInit {
     this.validName = true;
     this.saveMultiviewOption = 'si';
     this.loading = false;
+  }
+  backToPreview(){
+    console.log("multiviewService.selectedUnits",this.multiviewService.selectedUnits);
+    this.fromBack = true;
+    this.showSaveMultiview = false;
   }
   onConfirmGroup(){
     if(!this.showSaveMultiview){

@@ -20,7 +20,6 @@ export class EventSocketService extends Socket {
 
   private sendEventSuject = new Subject<any>();
   public sendEventObservable = this.sendEventSuject.asObservable();
-
   constructor(
     public eventService : EventService,
     public vehicleService : VehicleService,

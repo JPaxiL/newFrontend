@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EventSocketService } from 'src/app/events/services/event-socket.service';
+import { EventService } from 'src/app/events/services/event.service';
 import { GridComponent } from '../grid/grid.component';
 import { GridItem, ScreenView, StructureGrid, UnitItem } from '../models/interfaces';
 import { LayersService } from '../services/layers.service';
@@ -19,9 +21,17 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   show_not_found = false;
   @ViewChild('_gridChild') gridChild!: GridComponent;
 
-  constructor(private route: ActivatedRoute, public multiviewService: MultiviewService, private layersService: LayersService) { }
+  constructor(
+    private route: ActivatedRoute, 
+    public multiviewService: MultiviewService, 
+    private layersService: LayersService,
+    private eventService: EventService,
+    private eventSocketService: EventSocketService
+    ) { }
   ngOnInit() : void{
     this.layersService.initializeServices();
+    this.eventService.getAll();
+    this.eventSocketService.listen();
   }
   ngAfterViewInit(): void {
     // Obtiene el parámetro configId de la URL
@@ -70,11 +80,8 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
     this.updateGridStructureInChild();
   }
   deleteView(idContainer: string){
-    console.log("deleting ",idContainer);
-    console.log("structure leng: ", this.structures.length);
     this.structures = this.structures.filter(st => st.gridItem_id !== idContainer);
     this.structures = this.multiviewService.calculateStructure(this.structures);
-    console.log("structure leng: ", this.structures.length);
     this.updateGridStructureInChild();
   }
 }

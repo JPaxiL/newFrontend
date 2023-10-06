@@ -1,10 +1,11 @@
-import { Component, OnInit, AfterViewInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, Output, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
-
+import { OverlayPanel } from 'primeng-lts/overlaypanel';
+import { getContentPopup } from 'src/app/events/helpers/event-helper';
 //import { MinimapService } from '../services/minimap.service';
-import { GridItem, MinimapContent, UnitItem, UserTracker } from '../models/interfaces';
+import { Event, GridItem, MinimapContent, TableRowSelectEvent, UnitItem, UserTracker } from '../models/interfaces';
 import { CircularGeofencesMinimapService } from '../services/circular-geofences-minimap.service';
 import { GeofencesMinimapService } from '../services/geofences-minimap.service';
 import { GeopointsMinimapService } from '../services/geopoints-minimap.service';
@@ -29,6 +30,11 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   miniMap!: MinimapContent;
   mapItem!: Map;
 
+  events:Event[] = [];
+  eventSelected!: Event;
+  @ViewChildren(OverlayPanel) overlayPanels!: QueryList<OverlayPanel>;
+
+
   mapLayers: L.LayerGroup[] = [];
   constructor(
     public minimapService: MinimapService,
@@ -45,10 +51,58 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     this.miniMap = {
       imeis: this.configuration.content!.imeis,
       title: this.configuration.label!.toUpperCase(),
-      events: 0,
+      nEvents: 0,
+      events:[],
       id_container: this.idContainer!
     }
     console.log("miniMap: ", this.miniMap);
+    this.events = [
+      {
+        id: '1',
+        evento: 'exceso velocidad1',
+        nombre: 'Exceso de Velocidad1',
+        clase: 'Clase1',
+        viewed: false,
+        nombre_objeto: "Gltracker",
+        fecha_tracker: "24/07/2023 19:45:23"
+      },
+      {
+        id: '2',
+        evento: 'exceso velocidad2',
+        nombre: 'Exceso de Velocidad2',
+        clase: 'Clase2',
+        viewed: false,
+        nombre_objeto: "Gltracker",
+        fecha_tracker: "24/07/2023 20:45:23"
+      },
+      {
+        id: '3',
+        evento: 'exceso velocidad3',
+        nombre: 'Exceso de Velocidad3',
+        clase: 'Clase3',
+        viewed: false,
+        nombre_objeto: "Gltracker",
+        fecha_tracker: "24/07/2023 21:45:23"
+      },
+      {
+        id: '4',
+        evento: 'exceso velocidad4',
+        nombre: 'Exceso de Velocidad4',
+        clase: 'Clase4',
+        viewed: false,
+        nombre_objeto: "Gltracker",
+        fecha_tracker: "24/07/2023 22:45:23"
+      },
+      {
+        id: '5',
+        evento: 'exceso velocidad5',
+        nombre: 'Exceso de Velocidad5',
+        clase: 'Clase5',
+        viewed: false,
+        nombre_objeto: "Gltracker",
+        fecha_tracker: "24/07/2023 23:45:23"
+      }
+    ]
   }
 
   ngOnDestroy() {
@@ -68,8 +122,64 @@ export class MinimapComponent implements OnInit, AfterViewInit {
         this.createMap();
       })
     }
-    console.log("minimap: ", this.miniMap);
+    console.log("overlaysPanels: ", this.overlayPanels);
     
+  }
+
+  openOverlay(event: any, id:string){
+    this.overlayPanels.find(item => item.el.nativeElement.id == id)!.show(event);
+  }
+
+  onEventSelect(event: TableRowSelectEvent, op_id: string) {
+    //event.data
+    this.overlayPanels.find(item => item.el.nativeElement.id == op_id)!.hide();
+  }
+  public async switchEventOnMap(event: any, currentRow: HTMLElement, op_id:string){
+    this.overlayPanels.find(item => item.el.nativeElement.id == op_id)!.hide();
+    console.log("click event....",event.evento_id);
+    currentRow.classList.add('watched-event');
+    console.log('Mostrando evento con ID: ', event.evento_id);
+    let reference = await this.minimapService.eventService.getReference(event.latitud, event.longitud);
+    event.referencia = reference.referencia;
+    this.showEvent(event);
+  }
+
+  public showEvent(event:any){
+    if(this.minimapService.eventService.activeEvent) {
+      console.log("hide event");
+      this.hideEvent(this.minimapService.eventService.activeEvent);
+      //console.log('Ocultar evento previo');
+    }
+
+    if(!event.viewed){
+      event.viewed = true;
+      this.markAsRead(event.evento_id);
+      this.mapItem.configuration!.nEvents = this.mapItem.configuration!.events?.filter(ev => ev.viewed == false).length;
+    }
+
+    let eventClass:any = this.minimapService.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
+    eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
+
+    this.mapItem.map!.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
+    event.layer.bindPopup(getContentPopup(event), {
+      className: eventClass,
+      minWidth: 250,
+      maxWidth: 350,
+    });
+    this.minimapService.eventService.activeEvent = event;
+    event.layer.addTo(this.mapItem.map).openPopup();
+  }
+
+  private markAsRead(event_id: any){
+    console.log('Marking ' + event_id + ' as read...');
+    //this.eventService.decreaseUnreadCounter();
+    this.minimapService.eventService.updateUnreadCounter();
+    this.minimapService.eventService.markAsRead(event_id);
+  }
+
+  public hideEvent(event:any){
+    this.mapItem.map!.removeLayer(event.layer);
+    this.minimapService.eventService.activeEvent = false;
   }
 
   deleteMap(){

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, AfterViewInit } from '@angular/core';
 import { GridComponent } from '../grid/grid.component';
 import { GridItem, StructureGrid, UnitItem, UserTracker } from '../models/interfaces';
 import { MultiviewService } from '../services/multiview.service';
@@ -8,7 +8,7 @@ import { MultiviewService } from '../services/multiview.service';
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss']
 })
-export class PreviewComponent implements OnInit, OnChanges {
+export class PreviewComponent implements OnInit, OnChanges,AfterViewInit {
 
   @Input() items: UnitItem[] = [];
   structures: StructureGrid[] = [];
@@ -18,8 +18,15 @@ export class PreviewComponent implements OnInit, OnChanges {
   @ViewChild('gridChild') gridChild!: GridComponent;
 
   constructor(private multiviewService: MultiviewService) { }
+  ngAfterViewInit(): void {
+    console.log("itemsss: ", this.items);
+    if(this.items.length>0){
+      this.updateGridItems();
+    }
+  }
 
   ngOnInit(): void {
+    
   }
   ngOnChanges(changes: SimpleChanges) {
     // Aquí puedes acceder a los cambios en items
@@ -45,7 +52,8 @@ export class PreviewComponent implements OnInit, OnChanges {
           content_type: "minimap",
           show_only_label: true,
           content: item,
-          label: item.nombre
+          label: item.nombre,
+          title: item.nombre + (item.operation? ' ('+item.operation+')' : "")
         });
       }
     }else{

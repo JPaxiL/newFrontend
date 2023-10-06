@@ -33,3 +33,22 @@
     background: rgba(130, 130, 130, 0.5); /* Fondo circular semitransparente gris */
     border-radius: 50%; /* Forma circular */
 }
+
+.event-column{
+    background-color: inherit;
+    color: #000;
+    border-radius: 0.375rem;
+    padding: 0.125rem 0.625rem 0.125rem 0;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+}    
+
+.unread-event:not(.watched-event){
+    .event-column{
+        background-color: var(--event-main-color);
+        color: #fff;
+        font-weight: bold;
+        padding: 0.125rem 0.625rem;
+    }
+}
