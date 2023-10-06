@@ -4,3 +4,10 @@
     min-height: 15rem;
     height: auto;
 }
+
+
+.btn-back-fixed {
+    position: fixed;
+    top: 20px; /* Ajusta esta propiedad para la distancia desde la parte superior */
+    left: 20px; /* Ajusta esta propiedad para la distancia desde la izquierda */
+}

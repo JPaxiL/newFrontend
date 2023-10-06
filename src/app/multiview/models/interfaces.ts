@@ -19,7 +19,8 @@ export interface UnitItem {
     type: string, //"tracker", "convoy"
     imeis: string[],
     selected?: boolean,
-    id?: number
+    id?: number,
+    operation?: string
 }
 
 export interface UserTracker {
@@ -106,7 +107,8 @@ export interface StructureGrid {
 export interface MinimapContent {
     title?: string,
     show_events?: boolean,
-    events?: number,
+    nEvents?: number,
+    events?: any[],
     zoom?: number,
     id_container: string,
     imeis?: string[],
@@ -125,4 +127,21 @@ export interface MapItem {
     createMap(containerId: string, configuration: MinimapContent): void;
     setFitBounds(configuration: MinimapContent): [number, number][];
     setCenterMap(configuration: MinimapContent): [number, number];
+}
+
+export interface Event {
+    id: string,
+    evento: string,
+    nombre: string,
+    clase: string,
+    viewed: boolean,
+    nombre_objeto: string,
+    fecha_tracker: string,
+}
+
+export interface TableRowSelectEvent {
+    originalEvent?: Event;
+    data?: any;
+    type?: string;
+    index?: number;
 }

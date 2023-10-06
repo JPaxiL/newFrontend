@@ -139,10 +139,10 @@ export class VehicleService {
     return this.http.get(this.URL_TIME_STOP+'?fecha_i='+params.fecha_i+'&vel='+params.speed+'&fecha_f='+params.fecha_f+'&imei='+params.imei+'&lat='+params.latitud+'&lng='+params.longitud);
   }
   public postTimeStop(data: any){
-    // console.log("function time stop datos de envio",data);
+    console.log("function time stop datos de envio",data);
 
       this.queryTimeStop(data).subscribe(response=>{
-        // console.log('respuesta server response ',response);
+        console.log('respuesta server response ',response);
         let aux = {
           imei: data.imei,
           name: data.name,

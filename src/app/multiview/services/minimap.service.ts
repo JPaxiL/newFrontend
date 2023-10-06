@@ -8,6 +8,7 @@ import { SocketWebService } from 'src/app/vehicles/services/socket-web.service';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { FollowService } from 'src/app/vehicles/services/follow.service';
 import { MapItem, UserTracker } from '../models/interfaces';
+import { EventService } from 'src/app/events/services/event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,7 @@ export class MinimapService {
     private vehicleService:VehicleService,
     private followService:FollowService,
     private socketWebService: SocketWebService,
+    public eventService: EventService,
   ) {
     this.vehicleService.initialize();
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
@@ -138,22 +140,42 @@ export class MinimapService {
             ref:data.direction,
             tiempoParada: tiempoParada,
           };
+          console.log("auxxxx",aux);
+          
           //Una vez llegado el evento con la data de tiempo de parada de un vehiculo,
           //Buscamos a que mapas pertenece el vehiculo y actualizamos el valor de imeiPopu y time_stop
           // de cada mapa ya que seran tomados al llamar a printPopup con el mapa correspondiente
           this.maps.forEach(item => {
             item.configuration!.vehicles?.forEach(element => {
-              if(element.tracker_imei == data.imei){
+              if(element.IMEI!.toString() == data.imei.toString()){
                 item.imeiPopup = data.imei;
                 item.time_stop = tiempoParada;
-                this.printPopup(aux,item.id!); //que actualice el popup en el mapa con tal id
+                this.printPopup(aux,item); //que actualice el popup en el mapa con tal id
               }
             });
           });
       }
     });
 
+    this.eventService.newEventStream.subscribe(events => {
+      this.onEvent(events);
+    });
+
   }
+
+  onEvent(events:any){
+    console.log(events);
+    const aux = events[0];
+    this.maps.forEach(item => {
+      //console.log("vehicles in item: ", item.configuration?.vehicles);
+      const resultado = item.configuration?.vehicles!.find(vehi => vehi.IMEI?.toString() == aux.tracker_imei.toString());
+      if(resultado){
+        item.configuration!.events?.unshift(aux);
+        item.configuration!.nEvents = item.configuration?.events?.filter(ev => ev.viewed == false).length;
+      }
+    });
+  }
+
   getVehicles(){
     return this.vehicleService.vehicles;
   }
@@ -172,8 +194,11 @@ export class MinimapService {
       }
 
       mapItem.markerClusterGroup.clearLayers();
-
+      
       for (const property in e){
+        console.log("e----- ", property);
+        console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
+        console.log("e[property].eye", e[property].eye);
           if (e.hasOwnProperty(property)&&e[property].eye == true) {
             this.drawIcon(e[property], mapItem);
           }
@@ -217,6 +242,8 @@ export class MinimapService {
       });
   }
   private drawIcon(data:any, mapItem: MapItem): void{
+    console.log("dataaaaa---",data);
+    
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
     if(data.speed>0){
       iconUrl = './assets/images/accbrusca.png';
@@ -257,11 +284,11 @@ export class MinimapService {
       vehicleService : this.vehicleService
     };
     // console.log('envia cero data',data.speed);
-    console.log('envia cero XD',options.speed);
-    tempMarker.on('click',mapItem.time_stop,options);
+    console.log('envia cero XD',options);
+    tempMarker.on('click',this.timeStop,options);
     // tempMarker.on('click',this.timeStop,options);
     // // this
-    //this.marker[data.IMEI]=tempMarker;
+    this.marker[data.IMEI]=tempMarker;
 
     mapItem.markerClusterGroup.addLayer(tempMarker);
     // //console.log('this.markerClusterGroup',this.markerClusterGroup);
@@ -279,27 +306,65 @@ export class MinimapService {
     mapItem.markerClusterGroup.addTo(mapItem.map);
     //let layers = mapItem.markerClusterGroup.getLayers();
   }
+  public timeStop(this: any): void{
+    console.log("this",this);
+    // consultar data actual
+    let vehicle = this.vehicleService.getVehicle(this.imei);
 
-  printPopup(data: any, id:string): void{
-    // console.log("data final",data);
-    let map = this.maps.find(item => item.id == id);
-    if(map){
-      let layers = map.markerClusterGroup.getLayers();
+    this.speed = vehicle.speed;
+    this.dt_tracker = vehicle.dt_tracker;
 
-      for (const key in layers) {
-  
-        if(layers[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
-          // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
-  
-            map.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
-            '<aside class="">'+
-            '<small>CONVOY: '+data.convoy+'</small><br>'+
-            '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-            '<small>REFERENCIA: '+data.ref+'</small><br>'+
-            '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-            '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
-            '</aside>');
+    // console.log("calculando time stop ...");
+
+    let ar_vel = this.speed;
+    if (this.speed > 3) {
+        ar_vel = this.speed;
+        this.paradaDesde = false;
+    } else {
+        if (this.paradaDesde == false) {
+            ar_vel = this.speed;
+        } else {
+            ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
         }
+    }
+
+        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+    let params = {
+      imei: this.imei,
+      name: this.name,
+      convoy: this.convoy,
+      longitud: this.longitud,
+      latitud: this.latitud,
+      speed: this.speed,
+      dt_tracker: this.dt_tracker,
+      paradaDesde: this.paradaDesde,
+      fecha_i: f_ini,
+      fecha_f: f_fin,
+      vel: ar_vel
+    };
+
+    this.vehicleService.postTimeStop(params);
+  }
+
+  printPopup(data: any, mapItem: MapItem): void{
+    console.log("data final printpopup",data);
+    let layers = mapItem.markerClusterGroup.getLayers();
+
+    for (const key in layers) {
+
+      if(layers[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
+        // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
+
+        mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+          '<aside class="">'+
+          '<small>CONVOY: '+data.convoy+'</small><br>'+
+          '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small>REFERENCIA: '+data.ref+'</small><br>'+
+          '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+          '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
+          '</aside>');
       }
     }
   }

@@ -18,7 +18,7 @@
             <div class="w-100 h-100">
               <ng-container *ngIf="item.content_type == 'minimap'">
                 <div class="h-100 w-100">
-                    <app-minimap (onDelete)="deleteGrid($event)" [title]="item.label" [configuration]="item" [idContainer]="item.label"></app-minimap>
+                    <app-minimap (onDelete)="deleteGrid($event)" [title]="item.title" [configuration]="item" [idContainer]="item.label"></app-minimap>
                 </div>
             </ng-container>
             </div> 

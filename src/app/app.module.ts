@@ -31,7 +31,8 @@ import { TableModule } from 'primeng-lts/table';
 import { PanelModule } from 'primeng-lts/panel';
 import { BadgeModule } from 'primeng-lts/badge';
 import { SliderModule } from 'primeng-lts/slider';
-
+import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
+import { TagModule } from 'primeng-lts/tag';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -257,6 +258,8 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     CardModule,
     BadgeModule,
     CheckboxModule,
+    OverlayPanelModule,
+    TagModule,
     MultiSelectModule,
     CalendarModule,
     LeafletModule,
