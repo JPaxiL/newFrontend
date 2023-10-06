@@ -1,9 +1,11 @@
 import { Component, Output, EventEmitter, OnInit, NgModule } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PanelService } from 'src/app/panel/services/panel.service';
+import { UserDataService } from '../services/user-data.service';
 
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-config',
@@ -12,6 +14,8 @@ import { BrowserModule } from '@angular/platform-browser';
 })
 export class UserConfigComponent implements OnInit {
   @Output() submit = new EventEmitter<string>();
+  @Output() eventDisplay = new EventEmitter<boolean>();
+
 
   perfileConfigForm = new FormGroup({
     actual_pass: new FormControl('', Validators.required),
@@ -29,6 +33,7 @@ export class UserConfigComponent implements OnInit {
 
   selectedType: any = {};
 
+  loading : boolean = false;
 
   activeSwitch: number = 0;
 
@@ -120,11 +125,46 @@ export class UserConfigComponent implements OnInit {
   clickShowPanel(){
 
   }
-  vehicleColor: string = '#000000';
 
   onColorSelected(color: string): void {
-    this.vehicleColor = color;
-    // Aquí puedes hacer lo que quieras con el color seleccionado, por ejemplo, enviarlo al servidor.
+    // Aquí, enviarlo al servidor.
+  }
+  onClickCancel(){
+    this.eventDisplay.emit(false);
+  }
+
+  confirm(){
+    this.loading=true;
+
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Se aplicarán los cambios',
+      //icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        await this.onSubmit();
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Éxito',
+          'Los cambios se guardaron exitosamente',
+          'success'
+        );
+      } else {
+        console.log('(Vehicle Config) Hubo un error al guardar los cambios');
+      }
+      this.loading=false;
+    });
   }
 
 }

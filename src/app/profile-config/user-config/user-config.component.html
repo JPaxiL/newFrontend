@@ -102,17 +102,17 @@
                         </div>
                     </div>
                     <div class="gl-row-underline">
-                        <div class="col-12">
+                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
                             <form [formGroup]="perfileConfigForm">
                                 <label for="color">Color del ícono del vehículo:</label>
                             </form>
                         </div>
                         <div class="col-7">
-                            <app-config-color (colorSelected)="onColorSelected($event)"></app-config-color>
+                            <app-change-color (colorSelected)="onColorSelected($event)"></app-change-color>
                         </div>
                     </div>
                     <div class="gl-row-underline">
-                        <div class="col-12">
+                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
                             <label>Calculador de combustible:</label>
                         </div>
                         <div class="col-12">
@@ -208,15 +208,19 @@
                         </div>
                       </div>
                     </div>
-
-                    <div class="row justify-content-center mt-4 panel-izq-container-footer">
-                        <div class="col-6">
-                            <button class="btn-gl-cancel btn-dark-hover w-100" (click)="panelService">Cancelar</button>
+                    <p-footer>
+                        <div class="row d-flex justify-content-center">
+                          <div class="col-6">
+                            <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
+                          </div>
+                          <div class="col-6">
+                            <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading">Guardar</button>
+                          </div>
                         </div>
-                        <div class="col-6">
-                            <button class="btn-gl-save btn-dark-hover w-100">Guardar</button>
+                        <div class="" *ngIf="loading">
+                  
                         </div>
-                    </div>
+                      </p-footer>
 
                 </div>
             </div>
@@ -367,4 +371,4 @@
 
         </div> -->
 
-    </div>
+</div>

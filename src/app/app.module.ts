@@ -28,8 +28,7 @@ import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
-
-
+import { SliderModule } from 'primeng-lts/slider';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -127,7 +126,8 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
 import { GeocercaAllListsComponent } from './geofences/components/geocerca-all-lists/geocerca-all-lists.component';
 import { GeocercaAllAddComponent } from './geofences/components/geocerca-all-add/geocerca-all-add.component';
 import { GeocercaAllMainComponent } from './geofences/components/geocerca-all-main/geocerca-all-main.component';
-import { ConfigColorComponent } from './vehicles/components/config-color/config-color.component';
+import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
+import { ChangeColorComponent } from './profile-config/change-color/change-color.component';
 
 @NgModule({
   declarations: [
@@ -206,7 +206,8 @@ import { ConfigColorComponent } from './vehicles/components/config-color/config-
     GeocercaAllListsComponent,
     GeocercaAllAddComponent,
     GeocercaAllMainComponent,
-    ConfigColorComponent,
+    PanelHistorialRecorridoModalComponent,
+    ChangeColorComponent,
 
   ],
   imports: [
@@ -237,6 +238,7 @@ import { ConfigColorComponent } from './vehicles/components/config-color/config-
     InputTextModule,
     InputSwitchModule,
     TableModule,
+    SliderModule,
     ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,

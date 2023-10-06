@@ -3,6 +3,8 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 
+import { BehaviorSubject, Observable } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,9 +18,8 @@ export class UserDataService {
   @Output() geofencesPrivileges = new EventEmitter<any>();
   @Output() geopointsPrivileges = new EventEmitter<any>();
 
-  constructor(
-    private http: HttpClient,
-  ) {}
+  constructor(private http: HttpClient,) {}
+  private api_url = environment.apiUrl;
 
 
   getUserData(){
@@ -39,5 +40,11 @@ export class UserDataService {
       error: (errorMsg) => {
         console.log('No se pudo obtener datos del usuario', errorMsg);
       }});
+  }
+  changeColor(color: string){
+    
+  }
+  putConfig(vehicle: any): Observable<any>{
+    return this.http.put(this.api_url+"/api/tracker/"+vehicle.IMEI,vehicle);
   }
 }

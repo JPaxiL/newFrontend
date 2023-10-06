@@ -1,0 +1,155 @@
+<p-dialog [(visible)]="historialService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'640px'}" >
+
+    <ng-template class="p-dialog-title" pTemplate="header">
+      <div>
+        <i class="fa fa-user me-2" aria-hidden="true"></i>
+        <!-- <strong [innerHTML]="this.historialService.action == 'edit' ? 'Configurar Subcuenta' : 'Crear nueva Subcuenta' " ></strong> -->
+
+        <strong>Reproductor de recorrido</strong>
+
+
+      </div>
+    </ng-template>
+  
+
+    <div class="row"><br></div>
+
+    <div class="row p-3">
+      <div class="col p-field">
+        <div class="row ">
+          <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+            <label for="nameCreate">Operación:</label>
+          </div>
+          <div class="col-7">
+
+            Quellaveco
+            <!-- <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="nombre" autocomplete="no"> -->
+          </div>
+        </div>
+      </div>
+      <div class="col p-field">
+        <div class="row ">
+          <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+            <label for="passCreate">Unidad:</label>
+          </div>
+          <div class="col-7">
+            <span class="p-input-icon-right">
+              BVU-522
+              <!-- <i class="pi pi-eye-slash" role="button" *ngIf="eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
+              <i class="pi pi-eye" role="button" *ngIf="!eyeStateCreate" (click)="eyeStateCreate = !eyeStateCreate; togglePassEye();"></i>
+              <input id="passCreate" type="password" pInputText class="p-inputtext-sm" formControlName="contrasena" autocomplete="no" readonly onfocus="$(this).removeAttr('readonly');"> -->
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row p-3">
+
+        <div class="col-9 p-field">
+      
+            <div class="d-flex align-items-center justify-content-start text-start fw-bold">
+              <label for="nameCreate">Carretera Panamericana Sur, Tacna, Perú</label>
+            </div>
+
+            <div class="">
+              2013-10-09 10:10:00
+            </div>
+        
+        </div>
+
+        <div class="col-3 p-field">
+      
+            <div class="d-flex align-items-center justify-content-start text-start fw-bold">
+              <label for="nameCreate"> 21km/h</label>
+            </div>
+
+            <div class="">
+              <i class="fa fa-crosshairs" aria-hidden="true"></i>
+            </div>
+        
+        </div>
+
+    </div>
+
+
+
+    <div class="row p-3">
+
+        <div class="col p-field">
+            <div class="row ">
+                <p-slider [(ngModel)]="value" ></p-slider>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="row p-3">
+      <div class="col-7 p-field">
+        <div class="row ">
+
+          <div class="col-4">
+             
+              <button type="button" class="btn btn-dark-hover flex-none">
+                  <i class="fa fa-play" aria-hidden="true"></i>
+              </button>
+
+          </div>
+          <div class="col-8">
+
+              <button type="button" class="btn btn-dark-hover flex-none">
+                  <i class="fa fa-fast-backward" aria-hidden="true"></i>
+              </button>
+
+              <button type="button" class="btn btn-dark-hover flex-none">
+                  <i class="fa fa-step-backward" aria-hidden="true"></i>
+              </button>
+
+              <button type="button" class="btn btn-dark-hover flex-none">
+                  <i class="fa fa-step-forward" aria-hidden="true"></i>
+              </button>
+
+              <button type="button" class="btn btn-dark-hover flex-none">
+                  <i class="fa fa-fast-forward" aria-hidden="true"></i>
+              </button>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-5 p-field">
+        <div class="row ">
+          <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+            <label for="passCreate">Velocidad:</label>
+          </div>
+          <div class="col-5">
+            <span class="p-input-icon-right">
+              <select id="opcionTamanoConsola" class="claseinputs">
+                  <option value="1" selected="selected">1x</option>
+                  <option value="2">2x</option>
+                  <option value="3">3x</option>
+                  <option value="2">4x</option>
+                  <option value="3">5x</option>
+              </select>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="row">
+      <div style="width: 100%; height:100px;background-color: blueviolet;"></div>
+    </div>
+
+
+    <ng-template pTemplate="footer" style="width: 60vw;">
+    </ng-template>
+  
+  
+  </p-dialog>
+  
