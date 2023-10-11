@@ -4,7 +4,7 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8000',
+  apiUrl: 'http://newbackendgltracker.test',
   idClient: '106',
   secretClient: 'au2vdKGrRK013Sy1rlgu5H7yb9k1LOzTx5wXz9Uu',
   socketUrl: 'https://escucha.glmonitoreo.com/'
