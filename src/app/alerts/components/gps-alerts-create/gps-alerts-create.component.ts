@@ -29,12 +29,18 @@ export class GpsAlertsCreateComponent implements OnInit {
   public disabledEventSoundActive = true;
 
   public disabledEmail = true;
+  public disabledWhatsapp = true;
 
   loadingEventSelectInput: boolean = true;
 
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
+  ];
+
+  booleanOptionsVentanaEmergente = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
   ];
 
   listaSonidos: any = [];
@@ -77,6 +83,13 @@ export class GpsAlertsCreateComponent implements OnInit {
         [Validators.required, Validators.email],
       ],
       eventType: ['gps'],
+      chkwhatsapp: [false],
+      lista_whatsapp: [[]],
+      whatsapp: [
+        { value: '', disabled: this.disabledWhatsapp },
+        [Validators.required],
+      ],
+      chkVentanaEmergente:[false]
     });
     this.loading = false;
     console.log('Lista Emails', this.alertForm.value.lista_emails);
@@ -204,6 +217,11 @@ export class GpsAlertsCreateComponent implements OnInit {
       return
     }
 
+    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+      Swal.fire('Error', 'Debe ingresar un número', 'warning');
+      return
+    }
+
     if (this.alertForm.value.vehicles.length != 0) {
       Swal.fire({
         title: '¿Desea guardar los cambios?',
@@ -243,6 +261,48 @@ export class GpsAlertsCreateComponent implements OnInit {
   hideLoadingSpinner(){
     if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){
       this.spinner.hide('loadingAlertData');
+    }
+  }
+
+  addWhatsapp() {
+    if (this.alertForm.value.chkwhatsapp) {
+      if (this.alertForm.value.whatsapp) {
+        if (
+          !this.isInArray(
+            this.alertForm.value.whatsapp,
+            this.alertForm.value.lista_whatsapp
+          )
+        ) {
+          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.controls.whatsapp.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El número ingresado ya existe.',
+            icon: 'warning',
+          });
+        }
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un número.',
+          icon: 'warning',
+        });
+      }
+
+    }
+  }
+
+  restWhatsapp(index: number) {
+    this.alertForm.value.lista_whatsapp.splice(index, 1);
+  }
+
+  chkWhatsappHandler() {
+
+    if (this.alertForm.value.chkwhatsapp) {
+      this.alertForm.controls['whatsapp'].enable();
+    } else {
+      this.alertForm.controls['whatsapp'].disable();
     }
   }
 }
