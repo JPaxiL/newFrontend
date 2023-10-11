@@ -32,7 +32,9 @@ export class GridComponent implements OnInit {
     this.itemsChange.emit(event);
   }
   deleteGrid(idContainer: string){
+    console.log("CURRENT GRIDS?", this.items.length);
     this.items = this.items.filter(item => item.label != idContainer);
+    console.log("AFTER DELETE GRIDS?", this.items.length);
     this.onDeleteGrid.emit(idContainer);
   }
 }

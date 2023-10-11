@@ -1,0 +1,18 @@
+.display-menu {
+    z-index: 999999 !important;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+}
+
+.display-menu button {
+    background-color: var(--gl-blue-dark);
+    border: 1px solid var(--gl-blue-dark) !important;
+}
+.view-container {
+    height: 100%;
+    width: 100%;
+}
+.grid-section {
+    height: 100%;
+}
