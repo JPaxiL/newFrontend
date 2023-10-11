@@ -28,8 +28,11 @@ import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
+import { PanelModule } from 'primeng-lts/panel';
+import { BadgeModule } from 'primeng-lts/badge';
 import { SliderModule } from 'primeng-lts/slider';
-
+import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
+import { TagModule } from 'primeng-lts/tag';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -94,7 +97,6 @@ import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
@@ -123,6 +125,13 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
+import { GridComponent } from './multiview/grid/grid.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DialogComponent } from './multiview/dialog/dialog.component';
+import { DragItemComponent } from './multiview/drag-item/drag-item.component';
+import { PreviewComponent } from './multiview/preview/preview.component';
+import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
+import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
 
 @NgModule({
@@ -161,7 +170,9 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     PanelAlertsComponent,
     TreeTableComponent,
     VehicleConfigComponent,
+    DashboardComponent,
     GeocercaAddComponent,
+    GridComponent,
     GeocercaListsComponent,
     GeocercaMainComponent,
     VehicleGroupComponent,
@@ -199,6 +210,11 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
+    DialogComponent,
+    DragItemComponent,
+    PreviewComponent,
+    ScreenViewComponent,
+    MinimapComponent,
     PanelHistorialRecorridoModalComponent,
 
   ],
@@ -222,6 +238,7 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    PanelModule,
     NgbModule,
     NgSelectModule,
     TreeTableModule,
@@ -239,7 +256,10 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     PickListModule,
     ListboxModule,
     CardModule,
+    BadgeModule,
     CheckboxModule,
+    OverlayPanelModule,
+    TagModule,
     MultiSelectModule,
     CalendarModule,
     LeafletModule,

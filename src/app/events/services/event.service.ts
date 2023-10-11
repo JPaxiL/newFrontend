@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import * as moment from 'moment';
@@ -15,6 +15,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class EventService {
+  @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   componentKey = new Subject<Number>();
   public events: any[] = [];
   public eventsFiltered: any[] = [];
@@ -37,7 +38,6 @@ export class EventService {
   public strUnreadCount: string = '0';
   public socketEvents: any[] = [];
   public enableSocketEvents: boolean = true;
-
   audio = new Audio();
 
   new_notif_stack: number[] = [];
@@ -122,6 +122,9 @@ export class EventService {
       }
       this.attachClassesToEvents();
     }
+    
+    this.newEventStream.emit(this.events);
+    console.log("new Event added: ", event);
   }
 
   playNotificationSound(path: string){
@@ -385,6 +388,17 @@ export class EventService {
         console.log('EVENTO DUPLICADO DETECTADO!', currEvent.id);
       }
     }
+  }
+
+  markAsRead(event_id:string){
+    this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
+      next: data => {
+        console.log('Mark ' + event_id + ' as read Success? : ', data.success);
+      },
+      error: () => {
+        console.log(event_id + ': Hubo un error al marcar como leído');
+      }
+    });
   }
 
   async getReference(lat: any, lng: any){

@@ -29,6 +29,7 @@ export class PanelService {
     { id:'AUDITORIA', name: 'Auditoría'},
     { id:'SUBCUENTAS', name: 'Relación de Subcuentas'},
     { id:'DRIVERS', name: 'Relación de Conductores'},
+    { id:'MULTIVIEW', name: 'Multiples pantallas'},
 
   );
 
@@ -99,6 +100,8 @@ export class PanelService {
         return 'subcuentas';
       case "DRIVERS":
         return 'drivers';
+      case "MULTIVIEW":
+        return 'multiview';
       default:
         return '';
     }
