@@ -19,6 +19,7 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   configName = "";
   screenView!: ScreenView;
   gridItems: GridItem[] = [];
+  auxGridItems: GridItem[] = [];
   //items: UnitItem[] = [];
   structures: StructureGrid[] = [];
   show_not_found = false;
@@ -134,6 +135,13 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   setGritItems(){
     if(this.gridItems && this.gridItems.length>0){
       this.gridChild.setItems(this.gridItems);
+      this.auxGridItems = [...this.gridItems];
+      this.auxGridItems.unshift({
+        structure: {row:0,col:0,span:0,gridItem_id:"Todo"},
+        content_type: 'minimap',
+        label: 'Todo',
+        show_only_label:false
+      });
     }
   }
 
