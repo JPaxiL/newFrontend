@@ -78,9 +78,7 @@ export class MultimediaService {
         }
 
         // looper keeps calling this method until recording stops
-        const canvasresult = await html2canvas(element,{
-          allowTaint: true
-        });
+        const canvasresult = await html2canvas(element);
         this.ctx!.clearRect(0, 0, this.canvas2d!.width, this.canvas2d!.height);
 
         // draw html2canvas resulting canvas on our own canvas
@@ -209,9 +207,7 @@ export class MultimediaService {
     this.canvas2d.className = "d-none";
     (document.body || document.documentElement).appendChild(this.canvas2d);
 
-    const img = await html2canvas(element,{
-      useCORS: true
-    });
+    const img = await html2canvas(element);
     // Toma la captura del canvas como una imagen PNG
     
     this.ctx!.clearRect(0, 0, this.canvas2d!.width, this.canvas2d!.height);
