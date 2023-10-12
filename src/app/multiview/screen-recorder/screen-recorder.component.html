@@ -8,11 +8,24 @@
             [offIcon]="'pi pi-play'"
             [style]="{padding:'0.6rem'}"
             [pTooltip]="play?'Detener':'Grabar'"
+            [disabled]="type =='minimap'? !selectedElement : false"
         >
         </p-toggleButton>
         <div class="cronometer">
             <span class="fs-4 fw-light">{{hours | number: '2.0'}}:{{minutes | number: '2.0'}}:{{seconds | number: '2.0'}}</span>
         </div>
+        <p-dropdown *ngIf="type == 'minimap'"
+            [options]="recordingElements" 
+            optionLabel="label" 
+            [filter]="true" 
+            filterBy="label" 
+            [(ngModel)]="selectedElement"
+            [showClear]="true" 
+            placeholder="Seleccione mapa"
+            (onChange)="onSelectElement($event)"
+            [appendTo]="'body'"
+        >
+        </p-dropdown>
         <div *ngIf="videoReady" class="d-flex justify-content-center gap-2">
             <button pButton type="button" label="Ver preview" class="p-button-text" (click)="showPreview = true"></button>
             <button pButton type="button" class="p-button-outlined p-button-sm p-button-secondary" icon="pi pi-download" (click)="downloadLastVideo()"></button>

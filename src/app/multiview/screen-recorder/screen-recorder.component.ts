@@ -1,6 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, AfterContentInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
+import { GridItem } from '../models/interfaces';
 import { MultimediaService } from '../services/multimedia.service';
 
 @Component({
@@ -8,13 +9,17 @@ import { MultimediaService } from '../services/multimedia.service';
   templateUrl: './screen-recorder.component.html',
   styleUrls: ['./screen-recorder.component.scss']
 })
-export class ScreenRecorderComponent implements OnInit, AfterViewInit {
+export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterContentInit {
   
     @Input() display:boolean = false;
+    @Input() type:string = "minimap";
     @Output() changeDisplay: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() onRecording: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() recordingElement!:HTMLElement;
+    @Input() recordingElements : GridItem[] = [];
+
+    selectedElement! : GridItem;
   
     @ViewChild('videoPreview') videoPreview!: ElementRef;
     video: any;
@@ -52,17 +57,24 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit {
       console.log("ESTADOOOOO: ", data);
     });
   }
-
+  onSelectElement(event:any){
+    this.recordingElement = document.getElementById(this.selectedElement.label!)!;
+  }
   ngOnInit(): void {
-
+    
   }
 
   ngAfterViewInit(): void {
     this.video = this.videoPreview.nativeElement;
     console.log("this.recordingElement",this.recordingElement);
   }
+  ngAfterContentInit(): void {
+  }
 
   async playButton(){
+    if(this.type == 'minimap' && !this.selectedElement){
+      return;
+    }
     if (this.play){
       if(!this.downloaded && this.videoReady){
         this.showPreview = false;

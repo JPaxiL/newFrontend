@@ -1,13 +1,13 @@
 <ng-container *ngIf="!show_not_found">
     <div class="view-container d-flex flex-column ">
-        <div class="grid-section" #gridDiv>
+        <div class="grid-section" #gridDiv [id]="'Todo'">
             <app-grid (onDeleteGrid)="deleteView($event)" (itemsChange)="onExchange($event)" #_gridChild></app-grid>
             <div class="display-menu">
                 <button #btn type="button" pButton pRipple icon="pi pi-ellipsis-v" label="" class="p-button-rounded shadow-lg" (click)="menu.toggle($event)"></button>
                 <p-slideMenu [appendTo]="'body'" #menu [model]="itemsMenu" [popup]="true" [viewportHeight]="250"></p-slideMenu>
             </div>
         </div>
-        <app-screen-recorder [display]="showScreenRecorder" [recordingElement]="gridDiv" (onClose)="closeScreenRecorder();" (onRecording)="recordingStatus($event)">
+        <app-screen-recorder [display]="showScreenRecorder" [recordingElements]="auxGridItems" [type]="'minimap'" (onClose)="closeScreenRecorder();" (onRecording)="recordingStatus($event)">
         </app-screen-recorder>
     </div>
     <p-dialog [header]="'Guardar como...'" [(visible)]="showSaveAs" [breakpoints]="{'960px': '50vw', '640px': '750vw'}" (close)="showSaveAs=false;" [style]="{width: '30vw',height: 'auto'}" [closable]="true">
