@@ -78,10 +78,7 @@ export class MultimediaService {
         }
 
         // looper keeps calling this method until recording stops
-        const canvasresult = await html2canvas(element,{
-          allowTaint: true,
-          useCORS: true
-        });
+        const canvasresult = await html2canvas(element);
         this.ctx!.clearRect(0, 0, this.canvas2d!.width, this.canvas2d!.height);
 
         // draw html2canvas resulting canvas on our own canvas
