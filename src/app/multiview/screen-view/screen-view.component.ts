@@ -137,13 +137,13 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
     }
   }
 
-  updateGridItems(){
+  async updateGridItems(){
     //this.structures = this.multiviewService.calculateStructure(this.structures);
-    this.gridItems.forEach(item => {
+    for await (const item of this.gridItems) {
       item.structure = this.structures.find(st => st.gridItem_id == item.label)!;
       item.content_type = "minimap";
-      item.show_only_label = false;
-    })
+      item.show_only_label = false; 
+    }
     this.setGritItems();
   }
 

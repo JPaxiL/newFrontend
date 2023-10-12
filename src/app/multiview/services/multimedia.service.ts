@@ -24,6 +24,7 @@ export class MultimediaService {
   private ctx: CanvasRenderingContext2D | null = null;
 
   private captureInterval: any;
+  public isRecording = false;
   /* [****]
   private async updateCanvas(element:any) {
     if (!element || !this.ctx || !this.canvas) {
@@ -47,7 +48,6 @@ export class MultimediaService {
     // Solicitar el siguiente cuadro de animación
     requestAnimationFrame(() => this.updateCanvas(element));
   }*/
-
   getMediaStream(){
     return this._mediaStream.asObservable();
   }
@@ -61,18 +61,12 @@ export class MultimediaService {
 
   async startRecording(element:HTMLElement){
     try {
-      /*
-      no se puede con canvas debido a los mapas [****]
-      this.canvas = document.createElement('canvas')!;
-      this.ctx = this.canvas.getContext('2d');
-      this.updateCanvas(element);
-      */
 
       this.canvas2d = document.createElement('canvas')!; // OUR OWN invisible CANVAS
       this.ctx = this.canvas2d.getContext('2d')!;
       this.canvas2d.width = element.clientWidth;
       this.canvas2d.height = element.clientHeight;
-      this.canvas2d.className = "d-none";
+      //this.canvas2d.className = "d-none";
       (document.body || document.documentElement).appendChild(this.canvas2d);
 
       this.captureInterval = setInterval( async () => {
@@ -101,7 +95,7 @@ export class MultimediaService {
         const x = 20 // Centrado horizontal
         const y = this.canvas2d!.height - 20; // Parte inferior
         this.ctx!.fillText(currentTime, x, y);
-      }, 10);
+      }, 1000);
       //requestAnimationFrame(() => {});
 
       // Obtener el audioStream
@@ -112,7 +106,7 @@ export class MultimediaService {
   
       // Capturar el stream del canvas
       // @ts-ignore
-      this.canvasStream = this.canvas2d.captureStream(30);
+      this.canvasStream = this.canvas2d.captureStream();
       console.log("Capturar el stream del canvas");
   
       // Crear una nueva MediaStream para combinar las pistas de audio y video
@@ -143,34 +137,12 @@ export class MultimediaService {
       console.log("instanciar recorder");
   
       await this.recorder.startRecording();
+      this.isRecording = true;
       console.log("iniciar grabacion recorder");
     } catch (error) {
+      this.isRecording = false;
       console.error('Error al iniciar la grabación:', error);
     }
-    // const screenConstraints:MediaStreamConstraints = {
-    //   video: {
-    //     mandatory: {x|
-    //       chromeMediaSource: 'tab',
-    //       maxWidth: window.screen.width,
-    //       maxHeight: window.screen.height
-    //     }
-    //   } as MediaTrackConstraints
-    // };
-  
-    // try {
-    //   const screenStream = await navigator.mediaDevices.getUserMedia(screenConstraints);
-    //   const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  
-    //   const mediaStream = new MediaStream();
-    //   screenStream.getTracks().forEach((track) => mediaStream.addTrack(track));
-    //   audioStream.getTracks().forEach((track) => mediaStream.addTrack(track));
-  
-    //   this.recorder = new RecordRTC(mediaStream, { type: 'video' });
-    //   await this.recorder.startRecording();
-    // } catch (error) {
-    //   console.error('Error al iniciar la grabación:', error);
-    // }
-    //await this.handleRecording();
   }
 
   async handleRecording(){

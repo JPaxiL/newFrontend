@@ -1,4 +1,5 @@
 <div cdkDropListGroup class="grid-container">
+  <ng-container *ngIf="items && items.length > 0">
     <ng-container *ngFor="let item of items">
       <div
         class="grid-item"
@@ -26,4 +27,5 @@
         </ng-container>
       </div>
     </ng-container>
+  </ng-container>
 </div>

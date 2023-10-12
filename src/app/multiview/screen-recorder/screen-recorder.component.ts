@@ -70,18 +70,20 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit {
         this.showReplaceDialog = true;
         return;
       }
-      this.showReplaceDialog = false;
-      this.showPreview = true;
-      this.clearCronometer();
-      this.videoReady = false;
-      this.showPreview = false;
-      this.downloaded = false;
-      console.log("this.recordingElement",this.recordingElement);
-      
       await this.multimediaService.startRecording(this.recordingElement);
-      this.startCronometer();
-      //lamar a fuincion de grabar
-      this.onRecording.emit(true);
+      if(this.multimediaService.isRecording){
+        console.log("Yes, is reording");
+        this.showReplaceDialog = false;
+        this.showPreview = true;
+        this.videoReady = false;
+        this.showPreview = false;
+        this.downloaded = false;
+        console.log("this.recordingElement",this.recordingElement);
+        
+        this.startCronometer();
+        //lamar a fuincion de grabar
+        this.onRecording.emit(true);
+      }
     }else{
       this.stopCronometer()
       await this.multimediaService.stopRecording();
@@ -116,6 +118,7 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit {
   }
 
   startCronometer(){
+    this.clearCronometer();
     this.interval = setInterval(() => {
       this.seconds++;
       if (this.seconds === 60) {

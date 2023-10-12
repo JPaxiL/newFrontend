@@ -8,7 +8,7 @@ import { GridItem, StructureGrid } from '../models/interfaces';
 })
 export class GridComponent implements OnInit {
 
-  items!: GridItem[];
+  items: GridItem[] = [];
 
   @Output() itemsChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDeleteGrid: EventEmitter<any> = new EventEmitter<any>();
