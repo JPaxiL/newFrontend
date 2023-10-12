@@ -58,7 +58,11 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterCont
     });
   }
   onSelectElement(event:any){
-    this.recordingElement = document.getElementById(this.selectedElement.label!)!;
+    if(this.selectedElement){
+      this.recordingElement = document.getElementById(this.selectedElement.label!)!;
+    }else{
+      this.recordingElement = document.getElementById('Todo')!;
+    }
   }
   ngOnInit(): void {
     
