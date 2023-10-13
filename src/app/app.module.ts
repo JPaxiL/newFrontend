@@ -28,8 +28,11 @@ import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
+import { PanelModule } from 'primeng-lts/panel';
+import { BadgeModule } from 'primeng-lts/badge';
 import { SliderModule } from 'primeng-lts/slider';
-
+import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
+import { TagModule } from 'primeng-lts/tag';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -94,7 +97,6 @@ import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
@@ -126,6 +128,13 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
 import { GeocercaAllListsComponent } from './geofences/components/geocerca-all-lists/geocerca-all-lists.component';
 import { GeocercaAllAddComponent } from './geofences/components/geocerca-all-add/geocerca-all-add.component';
 import { GeocercaAllMainComponent } from './geofences/components/geocerca-all-main/geocerca-all-main.component';
+import { GridComponent } from './multiview/grid/grid.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DialogComponent } from './multiview/dialog/dialog.component';
+import { DragItemComponent } from './multiview/drag-item/drag-item.component';
+import { PreviewComponent } from './multiview/preview/preview.component';
+import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
+import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
 import { ChangeColorComponent } from './profile-config/change-color/change-color.component';
 
@@ -165,7 +174,9 @@ import { ChangeColorComponent } from './profile-config/change-color/change-color
     PanelAlertsComponent,
     TreeTableComponent,
     VehicleConfigComponent,
+    DashboardComponent,
     GeocercaAddComponent,
+    GridComponent,
     GeocercaListsComponent,
     GeocercaMainComponent,
     VehicleGroupComponent,
@@ -206,6 +217,11 @@ import { ChangeColorComponent } from './profile-config/change-color/change-color
     GeocercaAllListsComponent,
     GeocercaAllAddComponent,
     GeocercaAllMainComponent,
+    DialogComponent,
+    DragItemComponent,
+    PreviewComponent,
+    ScreenViewComponent,
+    MinimapComponent,
     PanelHistorialRecorridoModalComponent,
     ChangeColorComponent,
 
@@ -230,6 +246,7 @@ import { ChangeColorComponent } from './profile-config/change-color/change-color
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    PanelModule,
     NgbModule,
     NgSelectModule,
     TreeTableModule,
@@ -247,7 +264,10 @@ import { ChangeColorComponent } from './profile-config/change-color/change-color
     PickListModule,
     ListboxModule,
     CardModule,
+    BadgeModule,
     CheckboxModule,
+    OverlayPanelModule,
+    TagModule,
     MultiSelectModule,
     CalendarModule,
     LeafletModule,

@@ -20,17 +20,14 @@ export class EventSocketService extends Socket {
 
   private sendEventSuject = new Subject<any>();
   public sendEventObservable = this.sendEventSuject.asObservable();
-
   constructor(
     public eventService : EventService,
     public vehicleService : VehicleService,
     private userService : UsersService,
     private AlertService: AlertService,) {
     super({
-      // url: 'https://socketprueba.glmonitoreo.com/',
-      url: 'https://eventos.glmonitoreo.com',
-      // url: 'http://localhost:5000',
-
+      url: 'https://eventos.glmonitoreo.com/',
+      //url: 'http://23.29.124.173',
 
       // options: {
       //   transports: ["websocket"]
@@ -94,10 +91,10 @@ export class EventSocketService extends Socket {
           this.eventService.addNewEvent(newEvent);
 
           this.eventService.new_notif_stack.push(even.id);
-          console.log('Nuevo evento ' + new Date() + ': ', even);
+          //console.log('Nuevo evento ' + new Date() + ': ', even);
           this.eventService.sortEventsTableData();
         } else {
-          console.log('Evento no pertence al usuario ' + new Date() + ': ', even);
+          //console.log('Evento duplicado ' + new Date() + ': ', even);
         }
 
         this.eventService.checkDuplicates();

@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 
 import RefData from '../data/refData';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class VehicleService {
   // private url_demo = 'assets/trackers3.json';
   public treeTableStatus: boolean = false;
   public TableStatus: boolean = false;
-  public vehicles: any = [];
+  public vehicles: UserTracker[] = [];
   public vehiclesTree: TreeNode[]=[];
   public groups: any = [];
   public convoys: any = [];
@@ -87,7 +88,7 @@ export class VehicleService {
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
-        // console.log("get vehicles",vehicles);
+        console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.vehiclesTree = this.createNode(this.vehicles);
         this.dataCompleted.emit(this.vehicles);
@@ -138,10 +139,10 @@ export class VehicleService {
     return this.http.get(this.URL_TIME_STOP+'?fecha_i='+params.fecha_i+'&vel='+params.speed+'&fecha_f='+params.fecha_f+'&imei='+params.imei+'&lat='+params.latitud+'&lng='+params.longitud);
   }
   public postTimeStop(data: any){
-    // console.log("function time stop datos de envio",data);
+    console.log("function time stop datos de envio",data);
 
       this.queryTimeStop(data).subscribe(response=>{
-        // console.log('respuesta server response ',response);
+        console.log('respuesta server response ',response);
         let aux = {
           imei: data.imei,
           name: data.name,
@@ -194,7 +195,7 @@ export class VehicleService {
   public updateVehicle(data : any){
 
   }
-  public updateVehiclesData(data : Vehicle):void {
+  public updateVehiclesData(data : UserTracker[]):void {
     this.vehicles = data;
     this.drawIconMap.emit(data);
   }
@@ -572,9 +573,11 @@ export class VehicleService {
       vehicle.capacidad_tanque = 0;
       vehicle.capacidad_tanque_text = '0 gal. || 0 l.';
     }else{
-      const tanqueC = vehicle.tanque.split(',');
-      vehicle.capacidad_tanque = parseInt(tanqueC[1]);
-      vehicle.capacidad_tanque_text = vehicle.capacidad_tanque+" gal. || "+( vehicle.capacidad_tanque * 3.7854118).toFixed(2) +' l.';
+      if(vehicle.tanque){
+        const tanqueC = vehicle.tanque.split(',');
+        vehicle.capacidad_tanque = parseInt(tanqueC[1]);
+        vehicle.capacidad_tanque_text = vehicle.capacidad_tanque+" gal. || "+( vehicle.capacidad_tanque * 3.7854118).toFixed(2) +' l.';
+      }
     }
     return vehicle;
   }
@@ -701,7 +704,6 @@ export class VehicleService {
     // //console.log("convoys",this.convoys);
     // //console.log("map",map);
     // //console.log("prueba",prueba);
-
 
     return map;
   }
