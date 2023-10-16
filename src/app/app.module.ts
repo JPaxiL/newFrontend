@@ -33,6 +33,9 @@ import { BadgeModule } from 'primeng-lts/badge';
 import { SliderModule } from 'primeng-lts/slider';
 import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
 import { TagModule } from 'primeng-lts/tag';
+import { TooltipModule } from 'primeng-lts/tooltip';
+import {SlideMenuModule} from 'primeng-lts/slidemenu';
+import {SidebarModule} from 'primeng-lts/sidebar';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -133,6 +136,8 @@ import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
+import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
+import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 
 @NgModule({
   declarations: [
@@ -216,6 +221,8 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     ScreenViewComponent,
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
+    AlphaNumericDashDirective,
+    ScreenRecorderComponent
 
   ],
   imports: [
@@ -260,10 +267,13 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     CheckboxModule,
     OverlayPanelModule,
     TagModule,
+    TooltipModule,
     MultiSelectModule,
     CalendarModule,
+    SlideMenuModule,
     LeafletModule,
     LeafletMarkerClusterModule,
+    SidebarModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

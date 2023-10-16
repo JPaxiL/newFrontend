@@ -18,6 +18,8 @@ export class Map implements MapItem {
     createMap(containerId: string, configuration: MinimapContent){
         this.configuration = configuration;
         this.map = L.map(containerId, {
+            preferCanvas:true,
+            renderer: L.canvas(),
             center: this.setCenterMap(configuration),
             zoom: configuration.zoom??7,
             maxZoom: 18,

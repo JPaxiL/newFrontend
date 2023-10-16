@@ -241,10 +241,11 @@ export class MinimapService {
             .openOn(mapItem.map!);
       });
   }
-  private drawIcon(data:any, mapItem: MapItem): void{
+  private async drawIcon(data:any, mapItem: MapItem): Promise<void>{
     console.log("dataaaaa---",data);
     
-    let iconUrl = './assets/images/objects/nuevo/'+data.icon;
+    //let iconUrl = './assets/images/objects/nuevo/'+data.icon;
+    let iconUrl = await this.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+data.icon);
     if(data.speed>0){
       iconUrl = './assets/images/accbrusca.png';
     }
@@ -252,7 +253,7 @@ export class MinimapService {
       iconUrl: iconUrl,
       iconSize: [30, 30],
       iconAnchor: [15, 30],
-      popupAnchor:  [-3, -40]
+      popupAnchor:  [-3, -40],
     });
     //console.log('data.name',data.name);
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
@@ -290,7 +291,7 @@ export class MinimapService {
     // // this
     this.marker[data.IMEI]=tempMarker;
 
-    mapItem.markerClusterGroup.addLayer(tempMarker);
+    mapItem.markerClusterGroup.addLayer(tempMarker,{renderer:L.canvas()});
     // //console.log('this.markerClusterGroup',this.markerClusterGroup);
     let object = mapItem.markerClusterGroup.getLayers();
     let cont = 0;
@@ -303,7 +304,7 @@ export class MinimapService {
       }
     }
     
-    mapItem.markerClusterGroup.addTo(mapItem.map);
+    mapItem.markerClusterGroup.addTo(mapItem.map,{renderer:L.canvas()});
     //let layers = mapItem.markerClusterGroup.getLayers();
   }
   public timeStop(this: any): void{
@@ -403,10 +404,10 @@ export class MinimapService {
     });
   }
 
-  private monitor(data: any): void{
+  private async monitor(data: any): Promise<void>{
     
     
-    this.maps.forEach(item => {
+    this.maps.forEach(async (item) => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
       const resultado = item.configuration?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
       //console.log("data IMEI: ", data.IMEI.toString());
@@ -461,7 +462,7 @@ export class MinimapService {
                 lng : parseFloat(item.configuration!.vehicles![index].longitud!)
               };
 
-              let iconUrl = './assets/images/objects/nuevo/'+item.configuration!.vehicles![index].icon;
+              let iconUrl = await this.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.configuration!.vehicles![index].icon);
               item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.configuration!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.configuration!.vehicles![index].speed+' km/h</strong></div></div>'+
                 '<aside class="">'+
                   '<small>CONVOY: '+item.configuration!.vehicles![index].convoy+'</small><br>'+
@@ -557,7 +558,7 @@ export class MinimapService {
 
                   //this.changePositionArrow(this.final_direction,key);
 
-                  item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
+                  item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await this.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
                   item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
                 }
                 else{
@@ -566,7 +567,7 @@ export class MinimapService {
                     let old_direction = item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
                     //this.changePositionArrow(old_direction[1],key);
 
-                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await this.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
                   }
                   else{
@@ -646,5 +647,38 @@ export class MinimapService {
   public get getClustering(): boolean{
 
     return this.clustering;
+  }
+  async loadAndConvertSVGToPNG(svgURL: string): Promise<string> {
+    // Crear un elemento de imagen
+    const img = new Image();
+    
+    // Cargar el SVG desde la URL
+    return new Promise<string>((resolve, reject) => {
+      img.onload = async () => {
+        // Crear un elemento de lienzo para convertir la imagen
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+    
+        if (ctx) {
+          // Dibujar la imagen en el lienzo
+          ctx.drawImage(img, 0, 0, img.width, img.height);
+    
+          // Convertir el lienzo a un formato PNG
+          const dataURL = canvas.toDataURL('image/png');
+          canvas.remove();
+          resolve(dataURL);
+        } else {
+          reject('Failed to get 2D context for canvas');
+        }
+      };
+    
+      img.onerror = () => {
+        reject('Failed to load SVG image');
+      };
+    
+      img.src = svgURL;
+    });
   }
 }

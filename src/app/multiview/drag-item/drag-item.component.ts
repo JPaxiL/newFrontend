@@ -10,6 +10,7 @@ import { StructureGrid, UserTracker } from '../models/interfaces';
 export class DragItemComponent implements OnInit {
 
   @Input() items:StructureGrid[] = [];
+  @Input() showHandler = true;
   aux_exchanged_item!: StructureGrid;
 
   @Output() itemsChange: EventEmitter<any> = new EventEmitter<any>();

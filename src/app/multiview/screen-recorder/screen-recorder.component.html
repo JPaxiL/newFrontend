@@ -1,0 +1,57 @@
+<div *ngIf="display" class="d-flex justify-content-between">
+    <button pButton type="button" icon="pi pi-times" pRipple class="p-button-text p-button-danger" pTooltip="Cerrar panel" (click)="close()"></button>
+    <div class="sidebar-recorder d-flex justify-content-center  align-items-center gap-4">
+        <p-toggleButton 
+            [(ngModel)]="play"
+            (click)="playButton();"
+            [onIcon]="'pi pi-pause'" 
+            [offIcon]="'pi pi-play'"
+            [style]="{padding:'0.6rem'}"
+            [pTooltip]="play?'Detener':'Grabar'"
+            [disabled]="type =='minimap'? !selectedElement : false"
+        >
+        </p-toggleButton>
+        <div class="cronometer">
+            <span class="fs-4 fw-light">{{hours | number: '2.0'}}:{{minutes | number: '2.0'}}:{{seconds | number: '2.0'}}</span>
+        </div>
+        <p-dropdown *ngIf="type == 'minimap'"
+            [options]="recordingElements" 
+            optionLabel="label" 
+            [filter]="true" 
+            filterBy="label" 
+            [(ngModel)]="selectedElement"
+            [showClear]="true" 
+            placeholder="Seleccione mapa"
+            (onChange)="onSelectElement($event)"
+            [appendTo]="'body'"
+        >
+        </p-dropdown>
+        <div *ngIf="videoReady" class="d-flex justify-content-center gap-2">
+            <button pButton type="button" label="Ver preview" class="p-button-text" (click)="showPreview = true"></button>
+            <button pButton type="button" class="p-button-outlined p-button-sm p-button-secondary" icon="pi pi-download" (click)="downloadLastVideo()"></button>
+            <button pButton type="button" class="p-button-outlined p-button-sm p-button-danger" icon="pi pi-trash" (click)="clearRecorder()"></button>
+        </div>
+    </div>
+    <div></div>
+</div>
+<p-dialog [header]="titleModal" [(visible)]="showPreview" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw',height: 'auto'}" [closable]="true">
+    <div class="preview-container w-100 h-auto d-flex">
+        <video class="preview-video"
+        #videoPreview
+        controls
+        autoplay
+        playsInline
+        >
+            <source [src]="videoBlobUrl">
+        </video>
+    </div>
+</p-dialog>
+<p-dialog [header]="'Ups!'" [(visible)]="showReplaceDialog" [breakpoints]="{'960px': '50vw', '640px': '750vw'}" [style]="{width: '30vw',height: 'auto'}" [closable]="false">
+    <div class="d-flex justify-content-center flex-column pb-3 align-items-center">
+        <h4 class="my-2 text-center">¿Desea guardar el video actual?</h4>
+        <div class="d-flex justify-content-center gap-4">
+            <button pButton type="button" label="Si" class="p-button-secondary" (click)="downloadLastVideo(); "></button>
+            <button pButton type="button" label="No" class="p-button-success" (click)="play=true;downloaded=true; playButton()"></button>
+        </div>
+    </div>
+</p-dialog>
