@@ -12,7 +12,7 @@ import { MultimediaService } from '../services/multimedia.service';
 export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterContentInit {
   
     @Input() display:boolean = false;
-    @Input() type:string = "minimap";
+    @Input() type:string = "general";
     @Output() changeDisplay: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() onRecording: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -38,6 +38,8 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterCont
     downloaded = false;
     showReplaceDialog = false;
 
+    timeoutRecorder:any = null;
+
   constructor(
     private multimediaService: MultimediaService,
     private ref: ChangeDetectorRef,
@@ -56,6 +58,21 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterCont
     this.multimediaService.getStateChanges().subscribe(data => {
       console.log("ESTADOOOOO: ", data);
     });
+    /*this.multimediaService.onStop.subscribe(data => {
+      console.log("mesnaje estopped: ", data);
+      if(data == true){
+        if(this.play && this.multimediaService.isRecording){
+          this.stopCronometer()
+          this.multimediaService.stopRecording().then( () => {
+            console.log("stopped");
+            this.showPreview = true;
+            this.videoReady = true;
+            this.onRecording.emit(false);
+            this.play = false;
+          });
+        }
+      }
+    });*/
   }
   onSelectElement(event:any){
     if(this.selectedElement){
@@ -86,7 +103,11 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterCont
         this.showReplaceDialog = true;
         return;
       }
-      await this.multimediaService.startRecording(this.recordingElement);
+      if(this.type == "general"){
+        await this.multimediaService.startRecordingWindow();
+      }else{
+        await this.multimediaService.startRecording(this.recordingElement);
+      }
       if(this.multimediaService.isRecording){
         console.log("Yes, is reording");
         this.showReplaceDialog = false;
@@ -97,10 +118,26 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterCont
         console.log("this.recordingElement",this.recordingElement);
         
         this.startCronometer();
-        //lamar a fuincion de grabar
         this.onRecording.emit(true);
+        if(this.type != "general"){
+          this.timeoutRecorder = setTimeout(async () => {
+            if(this.play && this.multimediaService.isRecording){
+              this.stopCronometer()
+              await this.multimediaService.stopRecording();
+              console.log("stopped");
+              
+              this.showPreview = true;
+              this.videoReady = true;
+              this.onRecording.emit(false);
+              this.play = false;
+            }
+          }, 30 * 1000);
+        }
       }
     }else{
+      if(this.timeoutRecorder){
+        clearTimeout(this.timeoutRecorder);
+      }
       this.stopCronometer()
       await this.multimediaService.stopRecording();
       console.log("stopped");

@@ -34,7 +34,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   eventSelected!: Event;
   @ViewChildren(OverlayPanel) overlayPanels!: QueryList<OverlayPanel>;
 
-
+  
   mapLayers: L.LayerGroup[] = [];
   constructor(
     public minimapService: MinimapService,
@@ -43,7 +43,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     public circularGeofences: CircularGeofencesMinimapService,
     public geopointsService: GeopointsMinimapService
   ) {
-
+   
   }
 
   ngOnInit(): void {
@@ -211,15 +211,13 @@ export class MinimapComponent implements OnInit, AfterViewInit {
         const geofences = this.geofencesService.getData();
         const geopoints = this.geopointsService.getData();
 
-        const mainLayer = L.tileLayer(
-          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          {
-            minZoom: 4,
-            maxZoom: 18,
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          }
-        );
+        const mainLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; GL Tracker',
+          minZoom: 4,
+          maxZoom: 18,
+	        crossOrigin: true
+          // Otras opciones de configuración de la capa
+        });
     
         mainLayer.addTo(this.mapItem.map!);
         // Google Map Layer

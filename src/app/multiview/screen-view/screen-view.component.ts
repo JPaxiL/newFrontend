@@ -74,7 +74,7 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
       },
       {
         id: '3',
-        label: 'Grabar Pantalla',
+        label: 'Grabar Pantalla (30seg max)',
         icon: 'pi pi-fw pi-video',
         command: (event) => {
           console.log("grabar video: ", event);

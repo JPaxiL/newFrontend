@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import * as RecordRTC from 'recordrtc';
 import html2canvas from 'html2canvas';
 import { Subject } from 'rxjs';
@@ -17,6 +17,7 @@ export class MultimediaService {
   private _mediaStream = new Subject<any>();
   private _blob = new Subject<any>();
   private _stateChange = new Subject<any>();
+  //@Output() onStop: EventEmitter<boolean> = new EventEmitter<boolean>();
   public blob: any;
 
   private canvas: HTMLCanvasElement | null = null;
@@ -59,6 +60,10 @@ export class MultimediaService {
     return this._stateChange.asObservable();
   }
 
+  async startRecordingWindow(){
+    await this.handleRecording();
+  }
+
   async startRecording(element:HTMLElement){
     try {
 
@@ -70,13 +75,10 @@ export class MultimediaService {
       (document.body || document.documentElement).appendChild(this.canvas2d);
 
       this.captureInterval = setInterval( async () => {
-        console.log("holaaaa");
-        
         if (this.recorder && this.recorder.getBlob() && this.recorder.getBlob().size) {
           // this line checks whether recorder is stopped
           return;
         }
-
         // looper keeps calling this method until recording stops
         const canvasresult = await html2canvas(element,{
           useCORS: true,
@@ -95,7 +97,7 @@ export class MultimediaService {
         const x = 20 // Centrado horizontal
         const y = this.canvas2d!.height - 20; // Parte inferior
         this.ctx!.fillText(currentTime, x, y);
-      }, 500);
+      }, 1000);
       //requestAnimationFrame(() => {});
 
       // Obtener el audioStream
@@ -146,24 +148,35 @@ export class MultimediaService {
   }
 
   async handleRecording(){
-    // @ts-ignore
-    this.mediaStream = await navigator.mediaDevices.getDisplayMedia({
-      audio: true,
-      video: true
-    });
-    this._mediaStream.next(this.mediaStream);
-    this.recorder = new RecordRTC(this.mediaStream, { type: 'video'});
-    this.recorder.onStateChanged = function(state:any) {
-      console.log("STATEEE: ",state);
-      
-      this._stateChange.next(state);
-    };
-    await this.recorder.startRecording();
+    try {
+      this.audioStream = await navigator.mediaDevices.getUserMedia({audio: true});
+      // @ts-ignore
+      this.mediaStream = await navigator.mediaDevices.getDisplayMedia({
+        audio: true,
+        video: true
+      });
+      this.mediaStream = new MediaStream([...this.mediaStream.getTracks(), ...this.audioStream.getTracks()])
+      this._mediaStream.next(this.mediaStream);
+      this.recorder = new RecordRTC(this.mediaStream, { type: 'video'});
+      this.recorder.onStateChanged = function(state:any) {
+        console.log("STATEEE: ",state);
+        this._stateChange.next(state);
+      };
+      await this.recorder.startRecording();
+      this.isRecording = true;
+      /*await this.recorder.on('stopped', async () => {
+        // Realiza acciones cuando se detiene la grabación
+        console.log('La grabación se detuvo.');
+        this.onStop.emit(true);
+      });*/
+    } catch (error) {
+      this.isRecording = false;
+    }
   }
 
   async stopRecording(){
     if (this.captureInterval) {
-      clearTimeout(this.captureInterval);
+      clearInterval(this.captureInterval);
     }
     console.log("STARTING STOP RECORDING-------1");
     console.log(this.recorder);
@@ -176,15 +189,20 @@ export class MultimediaService {
     console.log("STARTING STOP RECORDING-------3");
     
     await this.recorder.stopRecording(() => {
+      this.isRecording = false;
       this.blob = this.recorder.getBlob();
       this._blob.next(URL.createObjectURL(this.blob));
-      this.canvas2d!.remove();
-      this.mediaStream.stop();
+      if(this.canvas2d){
+        this.canvas2d!.remove();
+      }
+      this.mediaStream.getTracks().forEach((track:any) => track.stop());
       console.log("mediastream.stop");
-      this.audioStream.stop();
+      this.audioStream.getTracks().forEach((track:any) => track.stop());
       console.log("audiotream.stop");
-      this.canvasStream.stop();
-      console.log("canvasstream.stop");
+      if(this.canvasStream){
+        this.canvasStream.getTracks().forEach((track:any) => track.stop());
+        console.log("canvasstream.stop");
+      }
       this.recorder.destroy();
     });
   }
@@ -200,6 +218,7 @@ export class MultimediaService {
     this.mediaStream = null;
     this.audioStream = null;
     this.canvasStream = null;
+    this.isRecording = false;
   }
 
   async screenShot(element:HTMLElement) {
