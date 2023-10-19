@@ -3,6 +3,7 @@ import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter }
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import Swal from 'sweetalert2';
+import { DIR_DOCUMENT } from '@angular/cdk/bidi';
 
 @Component({
   selector: 'app-vehicle-group',
@@ -20,13 +21,13 @@ export class VehicleGroupComponent implements OnInit {
 
   stateOptions: any[];
   selectedValue: string="";
-  value1: string = "grupo";
+  value1: string = "operacion";
   paymentOptions: any[];
   multiple: boolean = true;
   value2: number = 1;
 
   //option: string="nada";
-  option: string="grupo";
+  option: string="operacion";
 
   selectedCategory: any = null;
 
@@ -42,6 +43,7 @@ export class VehicleGroupComponent implements OnInit {
   list2: any=[];
   selectedList2: any=[];
   groups: any=[];
+  selectedOperation: any={};
   selectedGroup: any={};
   nameTarget: string = "";
   descriptionTarget: string = "";
@@ -52,6 +54,7 @@ export class VehicleGroupComponent implements OnInit {
   ) {
 
     this.stateOptions = [
+     { label: "Operacion", value: "operacion" },
      { label: "Grupo", value: "grupo" },
      { label: "Convoy", value: "convoy" }
    ];
@@ -63,7 +66,7 @@ export class VehicleGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
   onHide(){
@@ -78,9 +81,11 @@ export class VehicleGroupComponent implements OnInit {
     // //console.log('option...',e);
     // //console.log('vehicles',this.vehicleService.vehicles);
     // //console.log('vehiclestree',this.vehicleService.vehiclesTree);
-    if(e=='grupo'){
-      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
+    if(e=='operacion'){
+      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.tipo_agrupacion==null);
 
+    }else if(e== 'grupo'){
+      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
     }else{
       //getGroup
       this.selectedGroup = {};
@@ -98,14 +103,20 @@ export class VehicleGroupComponent implements OnInit {
         }
         //console.log("key",key);
         //console.log("vehicles[key]['grupo'] / ",vehicles[key]['grupo']);
-        
-        
+
+
       }
       //console.log(aux2);
       this.groups = aux;
 
       this.list1 = [];
     }
+  }
+  onChangeOperation (){
+    let vehicles = this.vehicleService.vehicles;
+    let aux = [];
+
+    console.log('Operation changed',this.selectedOperation);
   }
   onChangeGroup(){
     // //console.log('cambio de grupo',this.selectedGroup);
@@ -215,15 +226,28 @@ export class VehicleGroupComponent implements OnInit {
       req = {
         vehicles : this.list2,
         name : this.nameTarget,
-        description : this.descriptionTarget
+        description : this.descriptionTarget,
+        operation_id : this.selectedOperation,
+        enm_type: this.option
         // }
+      };
+    }else if(this.option=='operacion'){
+      req = {
+        vehicles : this.list2,
+        name : this.nameTarget,
+        description : this.descriptionTarget,
+        enm_type: this.option
+
       };
     }else if(this.option=='convoy'){
       req = {
         vehicles : this.list2,
         name : this.nameTarget,
         description : this.descriptionTarget,
-        grupo_convoy_id : this.selectedGroup
+        operation_id : this.selectedOperation,
+        grupo_convoy_id : this.selectedGroup,
+        enm_type: this.option
+
       };
     }
     // const req = {
@@ -250,7 +274,7 @@ export class VehicleGroupComponent implements OnInit {
     }else{
       await this.configService.postGroup(req).toPromise()
         .then(info => {
-          //console.log("post group res =",info);
+          // console.log("post group res =",info);
           if(info.res){
             this.addGroup(info);
             this.selectedGroup = {};
@@ -302,10 +326,12 @@ export class VehicleGroupComponent implements OnInit {
         vehicles[index].idconvoy=info.data['id'];
         vehicles[index].convoy=info.data['nombre'];
 
-      }else{
+      }else if(this.option=='operacion'){
+        vehicles[index].idgrupo=info.data['id'];
+        vehicles[index].operacion=info.data['nombre'];
+      }else if(this.option=='grupo'){
         vehicles[index].idgrupo=info.data['id'];
         vehicles[index].grupo=info.data['nombre'];
-
       }
       // //console.log('vehicles index',vehicles[index])
     }
@@ -325,7 +351,7 @@ export class VehicleGroupComponent implements OnInit {
     // this.eventDisplay.emit(false);
     this.list2=[];
     //this.option = "nada";
-    this.option = "grupo";
+    this.option = "operacion";
     this.name.nativeElement.value = "";
     //this.description.nativeElement.value = "";
 

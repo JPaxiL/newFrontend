@@ -27,6 +27,7 @@ export class VehicleService {
   public TableStatus: boolean = false;
   public vehicles: UserTracker[] = [];
   public vehiclesTree: TreeNode[]=[];
+  public operations: any = [];
   public groups: any = [];
   public convoys: any = [];
   private timeDemo: number = 1000;
@@ -587,31 +588,34 @@ export class VehicleService {
 
     //identificando grupos
     let map: any=[];
+    this.operations = [];
     this.groups = [];
     this.convoys = [];
+    let status_operation = false;
     let status_group = false;
     let status_convoy = false;
     let prueba = [];
-
+    console.log('Generar arbol:',data);
     for(const index in data){
-      if(this.groups.includes(data[index]['grupo'])){
+      //para operaciones
+      if(this.operations.includes(data[index]['nameoperation'])){
       }else{
-        this.groups.push(data[index]['grupo']);
+        this.operations.push(data[index]['nameoperation']);
+        status_operation= true;
+      }
+      if(this.convoys.includes(data[index]['nameoperation']+'_'+data[index]['namegrupo'])){
+      }else{
+        this.convoys.push(data[index]['nameoperation']+'_'+data[index]['namegrupo']);
         status_group= true;
       }
-      if(this.convoys.includes(data[index]['grupo']+'_'+data[index]['convoy'])){
+
+      if(this.convoys.includes(data[index]['nameoperation']+'_'+data[index]['namegrupo']+'_'+data[index]['nameconvoy'])){
       }else{
-        this.convoys.push(data[index]['grupo']+'_'+data[index]['convoy']);
+        this.convoys.push(data[index]['nameoperation']+'_'+data[index]['namegrupo']+'_'+data[index]['nameconvoy']);
         status_convoy= true;
       }
 
-      // //console.log("posibilidad "+status_group+" - "+status_convoy);
-      // //console.log()
-      // posibilidades
-      // 1 1
-      // 0 1
-      // 1 0
-      // 0 0
+
       if(status_group&&status_convoy){
         prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
         map.push(
