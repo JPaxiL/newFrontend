@@ -33,3 +33,89 @@
   }
 
 }
+
+#tbl_circular_geofences {
+  text-align: center;
+  thead th{
+    height: 2.5rem;
+    svg{
+      fill: var(--gl-dark-gray-blue);
+    }
+    i:not(.fa-pencil, .mini-eye){
+      font-size: 1.25rem;
+    }
+    svg{
+      position: relative;
+      top: 0.125rem;
+    }
+  } 
+  
+  tbody td { 
+    .geofence-color{
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    &:nth-child(2){
+      padding-right: 0;
+    }
+    &:nth-child(3){
+      padding-left: 0;
+    }
+  }
+
+  .eye-column i,
+  .edit-column i{
+    font-size: 1rem;
+  }
+
+}
+
+#tbl_polyline_geofences {
+  text-align: center;
+  thead th{
+    height: 2.5rem;
+    svg{
+      fill: var(--gl-dark-gray-blue);
+    }
+    i:not(.fa-pencil, .mini-eye){
+      font-size: 1.25rem;
+    }
+    svg{
+      position: relative;
+      top: 0.125rem;
+    }
+  } 
+  
+  tbody td { 
+    .geofence-color{
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    &:nth-child(2){
+      padding-right: 0;
+    }
+    &:nth-child(3){
+      padding-left: 0;
+    }
+  }
+
+  .eye-column i,
+  .edit-column i{
+    font-size: 1rem;
+  }
+
+}
+
+.pentagon {
+  width: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  height: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  background-color: #3498db; /* Puedes cambiar el color de fondo */
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.circle {
+  width: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  height: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  background-color: #e74c3c; /* Puedes cambiar el color de fondo */
+  border-radius: 50%; /* Esto hace que el elemento tenga forma de círculo */
+}

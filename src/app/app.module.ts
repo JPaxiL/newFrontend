@@ -125,9 +125,6 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
-import { GeocercaAllListsComponent } from './geofences/components/geocerca-all-lists/geocerca-all-lists.component';
-import { GeocercaAllAddComponent } from './geofences/components/geocerca-all-add/geocerca-all-add.component';
-import { GeocercaAllMainComponent } from './geofences/components/geocerca-all-main/geocerca-all-main.component';
 import { GridComponent } from './multiview/grid/grid.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogComponent } from './multiview/dialog/dialog.component';
@@ -137,6 +134,9 @@ import { ScreenViewComponent } from './multiview/screen-view/screen-view.compone
 import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
 import { ChangeColorComponent } from './profile-config/change-color/change-color.component';
+import { TableFiltresComponent } from './geofences/components/table-filtres/table-filtres.component';
+import { TableLabelsComponent } from './geofences/components/table-labels/table-labels.component';
+import { GeofenceTableComponent } from './geofences/components/geofence-table/geofence-table.component';
 
 @NgModule({
   declarations: [
@@ -214,9 +214,6 @@ import { ChangeColorComponent } from './profile-config/change-color/change-color
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
-    GeocercaAllListsComponent,
-    GeocercaAllAddComponent,
-    GeocercaAllMainComponent,
     DialogComponent,
     DragItemComponent,
     PreviewComponent,
@@ -224,6 +221,9 @@ import { ChangeColorComponent } from './profile-config/change-color/change-color
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
     ChangeColorComponent,
+    TableFiltresComponent,
+    TableLabelsComponent,
+    GeofenceTableComponent,
 
   ],
   imports: [

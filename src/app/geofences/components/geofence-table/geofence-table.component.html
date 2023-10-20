@@ -1,0 +1,51 @@
+<div class="table-content-component-panel-monitoreo" style="position: relative;">
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGeofencesSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Geocercas... </p></ngx-spinner>
+    <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda">
+        <div class="d-flex">
+          <div class="d-flex flex-grow-1">
+            <span class="p-input-icon-right flex-grow-1 me-2">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              <input type="text" (keyup)="onBusqueda($event)" type="text" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/>
+            </span>
+          </div>
+          <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickImportGeocerca()" title="Importar o exportar">
+            <i class="fa fa-book" aria-hidden="true"></i>
+          </button>
+          <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocerca()" title="Crear geocerca">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <p-treeTable #tt [value]="geofences" [loading]="loading"
+      scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name"
+      [resizableColumns]="true"
+      [reorderableColumns]="true"
+      [columns]="cols"
+      [scrollable]="true"
+      [sortOrder]="sortOrder"
+      [virtualScroll]="true" [virtualRowHeight]="30"
+      [ngClass]="{'vehicle-treetable' : true}"
+      (onFilter)="headerScrollHandler()"
+      [globalFilterFields]="['name','IMEI']">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col style="width: 2.5rem;">
+          <col style="width: 45px;" *ngIf="setting['filtres']">
+          <col style="width: 100%;" *ngIf="setting['vehicle']">
+          <col style="width: 50%;" *ngIf="setting['imei']">
+          <col style="width: 45px;" *ngIf="setting['labels']">
+          <col style="width: 45px;" *ngIf="setting['config']">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th></th>
+          <th *ngIf="setting['filtres']"><app-table-filtres style="height: 1.25rem; display: flex;"></app-table-filtres></th>
+          <th *ngIf="setting['vehicle']"></th>
+          <th *ngIf="setting['imei']" style="text-align: center; white-space: nowrap;">IMEI</th>
+          <th *ngIf="setting['labels']" ><app-table-labels></app-table-labels></th>
+          <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th>
+        </tr>
+      </ng-template>
+  </p-treeTable>
+</div>

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GeocercaAllMainComponent } from './geocerca-all-main.component';
+import { TableLabelsComponent } from './table-labels.component';
 
-describe('GeocercaAllMainComponent', () => {
-  let component: GeocercaAllMainComponent;
-  let fixture: ComponentFixture<GeocercaAllMainComponent>;
+describe('TableLabelsComponent', () => {
+  let component: TableLabelsComponent;
+  let fixture: ComponentFixture<TableLabelsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GeocercaAllMainComponent ]
+      declarations: [ TableLabelsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GeocercaAllMainComponent);
+    fixture = TestBed.createComponent(TableLabelsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
