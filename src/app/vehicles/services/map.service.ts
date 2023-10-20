@@ -839,7 +839,7 @@ export class MapService {
                   else{
 
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                    console.log('se borra la flecha', vehicles[index].name);
+                    //console.log('se borra la flecha', vehicles[index].name);
                     //console.log(vehicles[index].name);
 
                   }
@@ -949,9 +949,9 @@ export class MapService {
     this.markerClusterGroup.clearLayers();
 
     for (const property in e){
-        console.log("e----- ", property);
-        console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
-        console.log("e[property].eye", e[property].eye);
+        //console.log("e----- ", property);
+        //console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
+        //console.log("e[property].eye", e[property].eye);
         if (e.hasOwnProperty(property)&&e[property].eye == true) {
           if(this.statusMap==false){
             const aux2: [string, string] = [e[property].latitud!, e[property].longitud!];
@@ -1085,7 +1085,7 @@ export class MapService {
   //   this.marker[data.IMEI]=tempMarker;
   // }
   private mensaje(){
-    console.log("mensaje");
+    //console.log("mensaje");
   }
   public timeStopAux(data: any): void{
 
@@ -1123,7 +1123,7 @@ export class MapService {
     this.vehicleService.postTimeStop(params);
   }
   public timeStop(this: any): void{
-    console.log("this",this);
+    //console.log("this",this);
     // consultar data actual
     let vehicle = this.vehicleService.getVehicle(this.imei);
 
@@ -1167,7 +1167,7 @@ export class MapService {
 
   private drawIcon(data:any, map: any): void{
     // assets/images/objects/nuevo/{{ rowData['icon']
-    console.log("dataaaaa---",data);
+    //console.log("dataaaaa---",data);
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
     if(data.speed>0){
       iconUrl = './assets/images/accbrusca.png';
@@ -1207,7 +1207,7 @@ export class MapService {
       paradaDesde: "",
       vehicleService : this.vehicleService
     };
-    // console.log('envia cero data',data.speed);
+    // //console.log('envia cero data',data.speed);
     console.log('envia cero XD',options);
     tempMarker.on('click',this.timeStop,options);
     // tempMarker.on('click',this.timeStop,options);
@@ -1215,7 +1215,7 @@ export class MapService {
     this.marker[data.IMEI]=tempMarker;
 
     this.markerClusterGroup.addLayer(tempMarker);
-    // //console.log('this.markerClusterGroup',this.markerClusterGroup);
+    // ////console.log('this.markerClusterGroup',this.markerClusterGroup);
     let object = this.markerClusterGroup.getLayers();
     let cont = 0;
     for (const key in object) {
