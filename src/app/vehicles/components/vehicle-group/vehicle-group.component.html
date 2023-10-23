@@ -61,7 +61,7 @@
                   <label>Seleccione Operación:</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown (onChange)="onChangeOperation()" [options]="operations" [(ngModel)]="selectedOperation" optionLabel="operacion" optionValue="idoperacion" placeholder="Seleccione operacion" [disabled]="loading"></p-dropdown>
+                  <p-dropdown (onChange)="onChangeOperation(option)" [options]="operations" [(ngModel)]="selectedOperation" optionLabel="nameoperation" optionValue="idoperation" placeholder="Seleccione una Operación" [disabled]="loading"></p-dropdown>
                 </div>
               </div>
             </div>
@@ -74,7 +74,7 @@
                   <label>Seleccione Grupo:</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown (onChange)="onChangeGroup()" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="grupo" optionValue="idgrupo" placeholder="Seleccione grupo" [disabled]="loading"></p-dropdown>
+                  <p-dropdown (onChange)="onChangeGroup(option)" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="namegrupo" optionValue="idgrupo" [placeholder]="placeholder_groups" [disabled]="loading"></p-dropdown>
                 </div>
               </div>
             </div>
