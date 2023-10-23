@@ -1208,7 +1208,7 @@ export class MapService {
       vehicleService : this.vehicleService
     };
     // //console.log('envia cero data',data.speed);
-    console.log('envia cero XD',options);
+    // console.log('envia cero XD',options);
     tempMarker.on('click',this.timeStop,options);
     // tempMarker.on('click',this.timeStop,options);
     // // this

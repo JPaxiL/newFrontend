@@ -1,3 +1,4 @@
+import { data } from 'jquery';
 import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 import { VehicleService } from '../../services/vehicle.service';
@@ -42,7 +43,9 @@ export class VehicleGroupComponent implements OnInit {
   selectedList1: any=[];
   list2: any=[];
   selectedList2: any=[];
+  operations: any=[];
   groups: any=[];
+  placeholder_groups: any=[];
   selectedOperation: any={};
   selectedGroup: any={};
   nameTarget: string = "";
@@ -83,52 +86,103 @@ export class VehicleGroupComponent implements OnInit {
     // //console.log('vehiclestree',this.vehicleService.vehiclesTree);
     if(e=='operacion'){
       this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.tipo_agrupacion==null);
+      console.log(this.list1);
+    }else if(e=='grupo'){
+      //getGroup
+      this.selectedOperation = {};
+      let aux: any[] = [];
+      let aux2:any[] = [];
 
-    }else if(e== 'grupo'){
-      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
+      //incluye crear grupo a Unidadaes Sin Operacion
+      // aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo == 0 && vehicle.namegrupo=='Unidades Sin Grupo' && vehicle.idoperation!=0);
+      aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo == 0 && vehicle.namegrupo=='Unidades Sin Grupo');
+      // Filtrar elementos con 'idoperacion' diferente
+      for (const vehicle of aux2) {
+        const nameoperation = vehicle.nameoperation;
+        if (!aux.some((v) => v.nameoperation === nameoperation)) {
+          aux.push(vehicle);
+        }
+      }
+      aux.sort((a, b) => a.idoperation - b.idoperation);
+      this.operations = aux;
+      this.list1 = [];
+
     }else{
       //getGroup
+      this.selectedOperation = {};
       this.selectedGroup = {};
-      console.log('es convoy');
-      let aux = [];
-      let aux2 =[];
-      let vehicles = this.vehicleService.vehicles;
-      //console.log('vehicles = ',vehicles);
+      let aux_operations: any[] = [];
+      let aux: any[] = [];
+      let aux2:any[] = [];
 
-      for (const key in vehicles){
-      //console.log("search = ",aux2.indexOf(vehicles[key]['grupo']));
-        if(aux2.indexOf(vehicles[key]['grupo'])==-1&&vehicles[key]['grupo']!='Unidades Sin Grupo'){
-          aux2.push(vehicles[key]['grupo']);
-          aux.push(vehicles[key]);
+
+      //incluye crear grupo a Unidadaes Sin Operacion
+      // aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo == 0 && vehicle.namegrupo=='Unidades Sin Grupo' && vehicle.idoperation!=0);
+      aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo == 0 && vehicle.namegrupo=='Unidades Sin Grupo');
+      // Filtrar elementos con 'idoperacion' diferente
+      for (const vehicle of aux2) {
+        const nameoperation = vehicle.nameoperation;
+        if (!aux_operations.some((v) => v.nameoperation === nameoperation)) {
+          aux_operations.push(vehicle);
         }
-        //console.log("key",key);
-        //console.log("vehicles[key]['grupo'] / ",vehicles[key]['grupo']);
-
-
       }
-      //console.log(aux2);
-      this.groups = aux;
+      aux_operations.sort((a, b) => a.idoperation - b.idoperation);
+      this.operations = aux_operations;
+      this.placeholder_groups = 'Seleccione una Operación primero...';
+
+      //incluye crear grupo a Unidadaes Sin Operacion
+      // aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idconvoy == 0 && vehicle.nameconvoy=='Unidades Sin Grupo' && vehicle.idgroup!=0);
+      // aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idconvoy == 0 && vehicle.nameconvoy=='Unidades Sin Convoy');
+      // Filtrar elementos con 'idgrupo' diferente
+      // for (const vehicle of aux2) {
+      //   const namegroup = vehicle.namegrupo;
+      //   if (!aux.some((v) => v.namegrupo === namegroup)) {
+      //     aux.push(vehicle);
+      //   }
+      // }
+      // aux.sort((a, b) => a.idgroup - b.idgroup);
+
+      this.groups = []; //asignar grupos para convoys
 
       this.list1 = [];
     }
   }
-  onChangeOperation (){
-    let vehicles = this.vehicleService.vehicles;
+  onChangeOperation (e : string){
     let aux = [];
+    let aux2:any[] = [];
+    let aux_groups:any[] = [];
 
-    console.log('Operation changed',this.selectedOperation);
-  }
-  onChangeGroup(){
-    // //console.log('cambio de grupo',this.selectedGroup);
-    // enviar todas las unidades del grupo seleccionado
-    let vehicles = this.vehicleService.vehicles;
-    let aux = [];
-    for (const key in vehicles) {
-      if (vehicles[key]['idgrupo']==this.selectedGroup&&vehicles[key]['convoy']=='Unidades Sin Convoy') {
-        aux.push(vehicles[key]);
+    //diferente filtro para crear GRUPO
+    if (e == 'grupo'){
+      aux = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation&&vehicle.idgrupo == 0);
+      this.list1 = aux;
+    }else if(e == 'convoy'){
+      //filtro para crear un CONVOY cargando lista de grupos
+      aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
+      console.log('auxliar2:',aux2);
+      for (const vehicle of aux2) {
+        const namegroup = vehicle.namegrupo;
+        if (!aux_groups.some((v) => v.namegrupo === namegroup)) {
+          aux_groups.push(vehicle);
+        }
       }
+      console.log('auxliar2 POST:',aux_groups);
+      this.groups = aux_groups; //asignar grupos para convoys
+      this.list1 = [];
+      this.placeholder_groups = 'Seleccione un Grupo';
     }
+    //diferente filtro para crear CONVOY
+    // console.log('Operation changed a: ',this.selectedOperation);
+    // console.log('LISTA DE VEHICLES por OPE: ',aux, this.list1);
+    this.selectedGroup = {};
+  }
+  onChangeGroup(e : string){
+    let aux = [];
+    console.log('OPERACION changed a: ',this.selectedOperation);
+    console.log('GRUPO changed a: ',this.selectedGroup);
+    aux = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation && vehicle.idgrupo == this.selectedGroup && vehicle.idconvoy == 0);
     this.list1 = aux;
+    console.log('LISTA DE VEHICLES por OPE: ',aux, this.list1);
   }
   onName(data: any){
     this.nameTarget = data.target.value;
