@@ -270,7 +270,7 @@ p {
             }
         }
 
-        tr.row-header-convoy,
+        tr.row-header-operacion,tr.row-header-convoy,
         tr.row-header-grupo{
             button.p-treetable-toggler.p-link.p-ripple[style*="visibility: visible; margin-left:"]  {
                 margin-left: 0.375rem !important;
@@ -290,6 +290,9 @@ p {
 
         tr.row-header-grupo button.p-treetable-toggler.p-link.p-ripple{
             color: #fff;
+        }
+        tr.row-header-operacion button.p-treetable-toggler.p-link.p-ripple{
+          color: #fff;
         }
     }
     tr.row-header-operacion {

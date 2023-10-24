@@ -461,17 +461,10 @@ export class MapService {
                 index_vehicle = parseInt(i);
             }
           }
-          // //console.log('index grupo = ',index_group);
-          // //console.log('index convoy = ',index_convoy);
-          // //console.log('index vehicle = ',index_vehicle);
-          // //console.log('placa ->'+vehicles[index]['name']+'grupo'+vehicles[index]['grupo']+'convoy'+vehicles[index]['convoy']);
-          // //console.log('aux_vehicles',aux_vehicles);
-          // //console.log('tree',tree); //ok
+
 
           if(index_group>=0&&index_convoy>=0&&index_vehicle>=0){
-            // //console.log('registro entrante ',vehicles[index]);
-            // //console.log('registro a actualizar',tree[index_group]['children']![index_convoy]["children"]![index_vehicle]['data']);
-
+            
             tree[index_group]['children']![index_convoy]["children"]![index_vehicle]['data'] = vehicles[index];
             this.vehicleService.vehiclesTree = tree;
           }
