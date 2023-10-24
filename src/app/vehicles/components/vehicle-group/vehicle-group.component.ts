@@ -159,7 +159,6 @@ export class VehicleGroupComponent implements OnInit {
     }else if(e == 'convoy'){
       //filtro para crear un CONVOY cargando lista de grupos
       aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
-      console.log('auxliar2:',aux2);
       for (const vehicle of aux2) {
         const namegroup = vehicle.namegrupo;
         if (!aux_groups.some((v) => v.namegrupo === namegroup)) {
