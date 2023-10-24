@@ -32,5 +32,6 @@ export interface Alert {
   velocidad_limite_infraccion: string,
   sonido_sistema_bol?:boolean,
   notificacion_email_bol?:boolean,
-  activo_bol?:boolean
+  activo_bol?:boolean,
+  ventana_emergente?:boolean,
 }
