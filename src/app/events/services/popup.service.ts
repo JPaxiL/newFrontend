@@ -54,7 +54,7 @@ export class PopupService {
     const countPopUp = elementsPopUp.length;
 
     // Si los popups son mas de 10 se elimina el primero para mostrar el ultimo evento
-    if (countPopUp > 10) {
+    if (countPopUp >= 10) {
       const firstPopup = elementsPopUp[0];
       firstPopup!.parentNode!.removeChild(firstPopup);
     }
@@ -63,7 +63,7 @@ export class PopupService {
 
     let lastRow = document.querySelector('.popup-row:last-child');
 
-    if (!lastRow || lastRow.children.length >= 4) {
+    if (!lastRow || lastRow.children.length >= 5) {
       lastRow = document.createElement('div');
       lastRow.classList.add('popup-row');
       this.popupContainer.appendChild(lastRow);

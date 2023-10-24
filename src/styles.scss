@@ -825,69 +825,11 @@ p-inputswitch{
     margin-bottom: 10px;
   }
   
-
-.popup {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  width: 300px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-}
-
-.header-popup {
-  background-color: #33486f;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  height: 2rem;
-}
-
-.title-popup {
-  display: flex;
-  align-items: clnter;
-}
-
-.icons-popup {
-  margin-left: auto;
-}
-
-.icons-popup i {
-  margin-left: 10px;
-  color: #ffffff;
-}
-
-.content-popup {
-  // flex: 1; /* Hace que el contenido ocupe todo el espacio disponible */
-  height: auto;
-}
-
-.info-popup {
-  background-color: rgba(192, 192, 192, 0.5);
-  /* text-align: center; */
-  padding-left: 10px;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-}
-
-.footer-popup {
-  background-color: rgba(192, 192, 192, 0.5);
-  /* text-align: center; */
-  padding-left: 10px;
-}
-
-
-
-
 .popup-events {
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  width: 300px;
+  width: 250px;
   display: flex;
   flex-direction: column;
   margin-right: 10px;
@@ -916,7 +858,7 @@ p-inputswitch{
 .icons-popup-events {
   display: flex;
   align-items: center;
-  margin-left: 110px;
+  margin-left: 50px;
 }
 
 .icons-popup-events i {
@@ -952,8 +894,6 @@ p-inputswitch{
     color: #ffffff;
   }
 }
-
-
 
 .popup-events-toggle {
   margin-left: auto; /* Mueve la "x" hacia la derecha */
