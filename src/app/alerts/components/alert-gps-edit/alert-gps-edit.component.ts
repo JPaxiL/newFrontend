@@ -85,7 +85,13 @@ export class AlertGpsEditComponent implements OnInit {
     let notificacion_whatsapp = alert.notificacion_whatsapp.toLowerCase() === 'true';
     this.disabledWhatsapp = !notificacion_whatsapp;
 
-    let whatsapps = alert.notificacion_whatsapp_lista == ''? []: alert.notificacion_whatsapp_lista.split(',');
+    let whatsapps;
+
+    if(alert.notificacion_whatsapp_lista == null || alert.notificacion_whatsapp_lista == ''){
+      whatsapps = [];
+    } else {
+      whatsapps = alert.notificacion_whatsapp_lista.split(',');
+    }
 
     let ventana_emergente = alert.ventana_emergente.toLowerCase() === 'true';
 
