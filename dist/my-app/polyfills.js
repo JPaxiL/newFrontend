@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/ti/Documents/GLTracker/NewPlatform/newFrontend/src/polyfills.ts */"hN/g");
+module.exports = __webpack_require__(/*! /home/grebo/projects/gltracker/newFrontend/src/polyfills.ts */"hN/g");
 
 
 /***/ }),
