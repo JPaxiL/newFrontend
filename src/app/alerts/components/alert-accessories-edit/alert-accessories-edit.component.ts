@@ -82,7 +82,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
     let notificacion_whatsapp = alert.notificacion_whatsapp.toLowerCase() === 'true';
     this.disabledWhatsapp = !notificacion_whatsapp;
-
+    console.log(" alert.notificacion_whatsapp_lista  =========> ", alert.notificacion_whatsapp_lista , alert.notificacion_whatsapp_lista == null || alert.notificacion_whatsapp_lista == '')
     let whatsapps;
     if(alert.notificacion_whatsapp_lista == null || alert.notificacion_whatsapp_lista == ''){
       whatsapps = [];
