@@ -81,6 +81,7 @@ export class AlertGpsEditComponent implements OnInit {
     let notificacion_email = (alert.notificacion_email.toLowerCase() === 'true')
     this.disabledEventSoundActive = !notificacion_system;
     this.disabledEmail = !notificacion_email;
+    let activo = alert.activo === 'true' ? true : false;
 
     let notificacion_whatsapp = alert.notificacion_whatsapp.toLowerCase() === 'true';
     this.disabledWhatsapp = !notificacion_whatsapp;
@@ -100,7 +101,7 @@ export class AlertGpsEditComponent implements OnInit {
       // geocercas: [[]],
       // geocircles: [[]],
       tipoAlerta: [alert.tipo,[Validators.required]],
-      chkEventoActivado: [alert.activo],
+      chkEventoActivado: [activo],
       chkSonido: [notificacion_system],
       chkCorreo: [notificacion_email],
       sonido: [{value:`sonidos/${arrayNotificationSystem[3]}`, disabled: this.disabledEventSoundActive}],

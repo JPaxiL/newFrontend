@@ -106,8 +106,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.expirationDate = !alert.bol_fecha_caducidad;
     let fecha_desde = alert.fecha_desde.split('-').map(Number);
     let fecha_hasta = alert.fecha_hasta.split('-').map(Number);
-
-    //console.log('Objeto Alertas: ',alert);
+    let activo = alert.activo === 'true' ? true : false;
 
     this.disabledTimeLimit = !alert.bol_fijar_tiempo;
     this.disabledSpeed = !alert.bol_fijar_velocidad;
@@ -145,7 +144,7 @@ export class PlatformAlertsEditComponent implements OnInit {
       geocercas: [this.geoSelected],
       geocircles: [[]],
       tipoAlerta: [alert.tipo, [Validators.required]],
-      chkEventoActivado: [alert.activo],
+      chkEventoActivado: [activo],
       chkSonido: [notificacion_system],
       chkCorreo: [notificacion_email],
       sonido: [
