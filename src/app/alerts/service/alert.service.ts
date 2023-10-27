@@ -160,4 +160,8 @@ export class AlertService {
   public getAlertEditData(){
     return this.alertEdit;
   }
+
+  public getAlertById(id:string){
+    return this.alerts[0];
+  }
 }

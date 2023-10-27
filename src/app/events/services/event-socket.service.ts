@@ -8,6 +8,8 @@ import { EventService } from './event.service';
 import { VehicleService } from '../../vehicles/services/vehicle.service';
 import { UsersService } from 'src/app/dashboard/service/users.service';
 import { AlertService } from 'src/app/alerts/service/alert.service';
+import { PopupService } from './popup.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,22 +17,20 @@ export class EventSocketService extends Socket {
   img_icon: string = '';
   img_iconSize: any;
   img_iconAnchor: any;
-  count : string = '0';
+  count: string = '0';
   user_id: any;
 
   private sendEventSuject = new Subject<any>();
   public sendEventObservable = this.sendEventSuject.asObservable();
-
   constructor(
-    public eventService : EventService,
-    public vehicleService : VehicleService,
-    private userService : UsersService,
-    private AlertService: AlertService,) {
+    public eventService: EventService,
+    public vehicleService: VehicleService,
+    private userService: UsersService,
+    private AlertService: AlertService,
+    private popupService: PopupService) {
     super({
-      // url: 'https://socketprueba.glmonitoreo.com/',
-      url: 'https://eventos.glmonitoreo.com',
-      // url: 'http://localhost:5000',
-
+      url: 'https://eventos.glmonitoreo.com/',
+      //url: 'http://23.29.124.173',
 
       // options: {
       //   transports: ["websocket"]
@@ -44,31 +44,33 @@ export class EventSocketService extends Socket {
 
   public listen() {
     this.AlertService.getAll();
-    console.log('Is Listening',this.vehicleService.vehicles);
+    console.log('Is Listening', this.vehicleService.vehicles);
     //console.log(this.user_id);
     // this.filterImei(this.vehicleService.vehicles);
-    this.ioSocket.on('events', (event: any,users: any) => {
+    this.ioSocket.on('events', (event: any, users: any) => {
       // console.log("users",users); // filtrar por usuario cuando este listo el modulo
       // console.log("recibiendo evento........",this.vehicleService.vehicles);
       // return;
       // let even = JSON.parse(event);
       let even = event;
 
-      // if(this.user_id == even.usuario_id){
+      // console.log(' getAlertById =====> ', this.AlertService.getAlertById(even.id), this.user_id, even.usuario_id);
+      // console.log("this.vehicleService.vehicles,even.tracker_imei ========> ", this.vehicleService.vehicles,even.tracker_imei);
+      // if (this.user_id == even.usuario_id) {
       if(this.user_id){
         //this.count = this.count + 1;
-        let data = this.filterImei(this.vehicleService.vehicles,even.tracker_imei);
-        // console.log("data----->",data);
+        let data = this.filterImei(this.vehicleService.vehicles, even.tracker_imei);
+        // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
         // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
-        if(data!=undefined){
+        if (data != undefined) {
           // console.log("name ====",data.name);
           even.nombre_objeto = data.name;
-        // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
-        //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
+          // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
+          //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
           //Si el evento no existe previamente
           even.evento = even.descripcion_evento;
           even.tipo = even.descripcion_evento;
-          if( event.descripcion_evento !='Infraccion' || event.descripcion_evento != 'Infracción'){
+          if (event.descripcion_evento != 'Infraccion' || event.descripcion_evento != 'Infracción') {
             even.fecha_tracker = moment(even.fecha_tracker).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
             even.fecha_minuto = moment(even.fecha_minuto).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
             even.fecha_servidor = moment(even.fecha_servidor).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
@@ -77,10 +79,10 @@ export class EventSocketService extends Socket {
           even.imei = even.tracker_imei;
 
           //Si las alertas ya cargaron
-          if(this.AlertService.alertsForEventSocket.length > 0){
+          if (this.AlertService.alertsForEventSocket.length > 0) {
             //console.log(this.AlertService.alertsForEventSocket);
             let alert_data = this.AlertService.alertsForEventSocket.find(alert => alert.evento_id == even.evento_id);
-            if(typeof alert_data != 'undefined'){
+            if (typeof alert_data != 'undefined') {
               even['sonido_sistema_bol'] = alert_data.sonido_sistema_bol;
               even['ruta_sonido'] = alert_data.ruta_sonido;
             } else {
@@ -94,27 +96,29 @@ export class EventSocketService extends Socket {
           this.eventService.addNewEvent(newEvent);
 
           this.eventService.new_notif_stack.push(even.id);
-          console.log('Nuevo evento ' + new Date() + ': ', even);
           this.eventService.sortEventsTableData();
+
+          let alert = this.AlertService.getAlertById(even.id);
+
+          if (alert) {
+            if (alert.ventana_emergente) {
+              this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
+            }
+          }
         } else {
-          console.log('Evento no pertence al usuario ' + new Date() + ': ', even);
+          //console.log('Evento duplicado ' + new Date() + ': ', even);
         }
 
         this.eventService.checkDuplicates();
-
-        //console.log('new notification stack', this.new_notif_stack);
-        //console.log('new notification stack counter', this.new_notif_stack.length);
-        //console.log('new notification Event Content en Socket', even);
-        //console.log('new notification time', new Date());
       }
     });
   }
 
-  private filterImei(data:any,imei: any){
+  private filterImei(data: any, imei: any) {
     // console.log("imei",imei);
     for (const index in data) {
       // console.log("IMEI",data[index].IMEI);
-      if(String(data[index].IMEI)==String(imei)){
+      if (String(data[index].IMEI) == String(imei)) {
 
         console.log("return true");
         return data[index];
@@ -130,11 +134,11 @@ export class EventSocketService extends Socket {
     // this.img_iconAnchor = [0, 30];
   }
 
-  setLayer(event:any){
+  setLayer(event: any) {
     let icon = L.icon({
       iconUrl: 'assets/images/eventos/pin_point.svg',
-      iconSize: [30,30], // size of the icon
-      iconAnchor: [0,30], //[20, 40], // point of the icon which will correspond to marker's location
+      iconSize: [30, 30], // size of the icon
+      iconAnchor: [0, 30], //[20, 40], // point of the icon which will correspond to marker's location
     });
     event.layer = L.marker([event.latitud, event.longitud], {
       icon: icon,

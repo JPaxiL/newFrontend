@@ -27,6 +27,7 @@ import { GsmComponent } from '../../components/gsm/gsm.component';
 import { TagComponent } from '../../components/tag/tag.component';
 import { FollowComponent } from '../../components/follow/follow.component';
 import { VehicleHeaderComponent } from '../../components/vehicle-header/vehicle-header.component';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 @Component({
   selector: 'app-vehicles',
@@ -36,7 +37,7 @@ import { VehicleHeaderComponent } from '../../components/vehicle-header/vehicle-
 export class VehiclesComponent implements OnInit {
 
   public statusTable: boolean = false;
-  public vehicles: Vehicle[] = [];
+  public vehicles: UserTracker[] = [];
   private init: boolean = true;
   public rowHeight: number = 38;//38
   public api: GridApi = new GridApi();

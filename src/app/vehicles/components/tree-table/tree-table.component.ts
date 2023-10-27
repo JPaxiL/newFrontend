@@ -295,7 +295,7 @@ export class TreeTableComponent implements OnInit {
 
     //list 1
     const vehicles = this.vehicleService.vehicles;
-    let aux1=[];
+    let aux1:any=[];
     let aux2=[];
     let aux_idgrupo=-1;
     for (const key in vehicles) {
@@ -309,7 +309,7 @@ export class TreeTableComponent implements OnInit {
       if (data.type=='convoy') {
         if(data.id==vehicles[key]['idconvoy']){
           aux2.push(vehicles[key]);
-          aux_idgrupo = vehicles[key]['idgrupo'];
+          aux_idgrupo = vehicles[key]['idgrupo']!;
         }
       }
     }
