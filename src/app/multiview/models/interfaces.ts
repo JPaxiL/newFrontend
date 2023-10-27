@@ -27,6 +27,9 @@ export interface UnitItem {
 }
 
 export interface UserTracker {
+    nameconvoy?: string;
+    namegrupo?: string;
+    nameoperation?: string;
     id?: number,
     numero_placa?: string,
     nombre?: string,
@@ -50,7 +53,7 @@ export interface UserTracker {
     name?: string,
     icon?:  string,
     convoy?: string,
-    operacion?: string,
+    operation?: string,
     follow?: boolean,
     IMEI?: string,
     title?: string,
@@ -68,7 +71,7 @@ export interface UserTracker {
     dat_correctivo_ini?: string,
     grupo?: string,
     id_conductor?: number | null,
-    idoperacion?: number | null,
+    idoperation?: number | null,
     idconvoy?: number | null,
     idgrupo?: number | null,
     iluminaria_h_i?: string,

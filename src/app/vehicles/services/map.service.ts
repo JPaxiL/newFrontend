@@ -435,46 +435,48 @@ export class MapService {
         }else if(this.vehicleService.listTable==1){
           //add register to treetable;
           const tree = this.vehicleService.vehiclesTree;
-          // //console.log('groups',this.vehicleService.groups);
-          let index_group = -1;//this.vehicleService.groups.indexOf(vehicles[index]["grupo"]);
-          for (const key in tree) {
-            if (tree[key]['data']['name']==vehicles[index]["grupo"]) {
-              index_group = parseInt(key);
+
+          // Encuentra la operación en el árbol
+          const existingOperation = tree.find((node) => node.data.id === vehicles[index].idoperation);
+          // console.log('************************************+ ----> ESTE ES EL VEHICULO ',vehicles[index]);
+
+          if (existingOperation) {
+            // Encuentra el grupo en la operación
+            const existingGroup = existingOperation.children!.find((node) => node.data.id === vehicles[index].idgrupo);
+
+            if (existingGroup) {
+              // Encuentra el convoy en el grupo
+              const existingConvoy = existingGroup.children!.find((node) => node.data.id === vehicles[index].idconvoy);
+
+              if (existingConvoy) {
+                // Si el convoy existe, actualiza su data con los datos de vehicle[index]
+                // console.log('************************************+ ----> ESTE ES EL CONVOY ',existingConvoy);
+                // Busca el vehículo dentro de existingConvoy.children
+                const existingVehicle = existingConvoy.children!.find((vehiculo) => vehiculo.data.id === vehicles[index].id);
+
+                if (existingVehicle) {
+                  // // Aquí puedes actualizar la información del vehículo
+                  // console.log('************************************+ ----> ESTE ES EL NAME VEHICLE ',vehicles[index].name);
+                  // console.log('************************************+ ----> ESTE ES EL TREE SIN UPDATE ',tree);
+                  
+                  existingVehicle.data = vehicles[index];
+
+                  // Asigna la estructura de datos modificada a this.vehicleService.vehiclesTree
+                  this.vehicleService.vehiclesTree = tree;
+
+                  // Emite el evento para actualizar la vista (si es necesario)
+                  this.vehicleService.reloadTableTree.emit();
+
+                  // console.log('************************************+ ----> ESTE ES EL TREE UPDATE ',tree);
+                  // Imprime la información actualizada del vehículo
+                } else {
+                  // El vehículo no se encontró
+                  // console.log('Vehículo no encontrado');
+                }
+              }
             }
           }
 
-
-          let e = tree[index_group]['children'];
-          let index_convoy: number = -1;
-          //buscando index convoy;
-          for(const i in e){
-
-            if(e[parseInt(i)]['data']['name']==vehicles[index]['convoy']){
-              index_convoy = parseInt(i);
-            }
-          }
-          // buscando index registro tree
-          let aux_vehicles = tree[index_group]['children']![index_convoy]["children"];
-          let index_vehicle = -1;
-          for (const i in aux_vehicles) {
-            if(aux_vehicles[parseInt(i)]['data']['id']==vehicles[index]['id']){
-                index_vehicle = parseInt(i);
-            }
-          }
-
-
-          if(index_group>=0&&index_convoy>=0&&index_vehicle>=0){
-            
-            tree[index_group]['children']![index_convoy]["children"]![index_vehicle]['data'] = vehicles[index];
-            this.vehicleService.vehiclesTree = tree;
-          }
-
-          // if(tree[index_group]['children'][index_convoy]["children"]){
-          //
-          //   let aux_reg = tree[index_group]['children'][index_convoy]["children"];
-          //   //console.log('aux reg == ',aux_reg);
-          // }
-          // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles); -->obsoleto
           this.vehicleService.reloadTableTree.emit();
         }
 
