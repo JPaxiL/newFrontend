@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
@@ -32,6 +32,7 @@ export class CircularGeofencesService {
   defaultTagNameFontSize = 10;
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
+  @Output() dataCompleted = new EventEmitter<any>();
 
   circularGeofenceCounters: any = {
     visible: 0,
@@ -59,6 +60,7 @@ export class CircularGeofencesService {
     this.http.get<ResponseInterface>(`${environment.apiUrl}/api/circular-zone`).subscribe(resp => {
 
       this.circular_geofences = resp.data;
+      console.log("Circularessss",resp.data);
       this.initializeTable();
       this.drawGeofencesOnMap();
       this.updateGeoCounters();
@@ -68,6 +70,7 @@ export class CircularGeofencesService {
       this.initializingCircularGeofences = true;
       this.attemptToHideSpinner();
       console.log(this.circular_geofences);
+      this.dataCompleted.emit(this.circular_geofences);
     });
   }
 

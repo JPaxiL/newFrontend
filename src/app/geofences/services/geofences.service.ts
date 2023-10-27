@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
+import {TreeNode} from 'primeng-lts/api';
 
 import { MapServicesService } from '../../map/services/map-services.service';
-
+import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
@@ -16,10 +18,13 @@ export class GeofencesService {
 
   public geofences:any = [];
   public nombreComponente:string = "LISTAR";
-
+  public geofencesTree: TreeNode[]=[];
+  public treeTableStatus: boolean = false;
   public idGeocercaEdit:number = 0;
   public action:string = "add"; //[add,edit,delete]
 
+  @Output() dataTreeCompleted = new EventEmitter<any>();
+  @Output() dataCompleted = new EventEmitter<any>();
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];
   initializingGeofences: boolean = false;
@@ -63,6 +68,7 @@ export class GeofencesService {
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/zone`).toPromise()
     .then(response => {
       this.geofences = response.data;
+      console.log("Polygonalessss",response.data);
       this.initializeTable();
       this.drawGeofencesOnMap();
       this.updateGeoCounters();
@@ -73,6 +79,7 @@ export class GeofencesService {
       this.initializingGeofences = true;
       this.attemptToHideSpinner();
       console.log(this.geofences);
+      this.dataCompleted.emit(this.geofences);
     });
   }
 

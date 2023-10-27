@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { switchMap } from 'rxjs/operators';
@@ -31,6 +31,7 @@ export class PolylineGeogencesService {
   defaultTagNameFontSize = 10;
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
+  @Output() dataCompleted = new EventEmitter<any>();
 
   paintpolygonControl: any;
 
@@ -68,6 +69,7 @@ export class PolylineGeogencesService {
       this.tagNamesEyeState = this.polylineGeofenceCounters.visible != 0;
       this.initializingPolylineGeofences = true;
       this.attemptToHideSpinner();
+      this.dataCompleted.emit(this.polyline_geofences);
     });
   }
 

@@ -3,6 +3,8 @@ import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { CircularGeofencesService } from '../../services/circular-geofences.service';
 import * as L from 'leaflet';
 import Swal from 'sweetalert2';
+import { Geofences } from '../../models/geofences';
+import { IGeofence } from '../../models/interfaces';
 
 @Component({
   selector: 'app-geocerca-circular-lists',
@@ -13,6 +15,8 @@ export class GeocercaCircularListsComponent implements OnInit {
 
   NomBusqueda: string = "";
   noResults: boolean = false;
+  objGeofences= new Geofences();
+  treeGeofences: any;
 
   constructor(private circularGeofencesService: CircularGeofencesService,
               private mapService: MapServicesService) { }
@@ -21,6 +25,14 @@ export class GeocercaCircularListsComponent implements OnInit {
     if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
       this.circularGeofencesService.spinner.show('loadingCircularGeofencesSpiner');
     }
+    if(this.circularGeofencesService.initializingCircularGeofences){
+      this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[]);
+    }else{
+      this.circularGeofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
+        this.objGeofences.setGeofences(data);
+      })
+    }
+    this.treeGeofences = this.objGeofences.createTreeNode();
   }
 
   get tblDataGeoFiltered(){

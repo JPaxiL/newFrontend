@@ -3,13 +3,12 @@ import { IHeaderAngularComp } from '@ag-grid-community/angular';
 import { IHeaderParams } from '@ag-grid-community/core';
 import { GeofencesService } from '../../services/geofences.service';
 
-
 @Component({
   selector: 'app-table-labels',
   templateUrl: './table-labels.component.html',
   styleUrls: ['./table-labels.component.scss']
 })
-export class TableLabelsComponent implements OnInit {
+export class TableLabelsComponent implements IHeaderAngularComp {
   public value: any;
   params: any;
 
@@ -28,7 +27,6 @@ export class TableLabelsComponent implements OnInit {
 
   onClickEye(){
     //console.log('all eye');
-    //this.value = !this.value;
     //console.log('params',this.params);
 
     const data = this.geofencesService.geofences;
