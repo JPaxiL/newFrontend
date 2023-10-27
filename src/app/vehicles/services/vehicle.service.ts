@@ -30,6 +30,7 @@ export class VehicleService {
   public operations: any = [];
   public groups: any = [];
   public convoys: any = [];
+  public listOperations: any = [];
   private timeDemo: number = 1000;
   public statusDataVehicle: boolean = false;
   public statusDataVehicleTree: boolean = false;
@@ -92,10 +93,12 @@ export class VehicleService {
         console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.vehiclesTree = this.createNode(this.vehicles);
-        this.dataCompleted.emit(this.vehicles);
-        this.dataTreeCompleted.emit(this.vehiclesTree);
+        this.listOperations = this.generatedListOperations();
         this.statusDataVehicle = true;
         this.statusDataVehicleTree = true;
+        this.dataCompleted.emit(this.vehicles);
+        this.dataTreeCompleted.emit(this.vehiclesTree);
+       
 
         //InputSwitch EyeHeader behavior
         for(let i = 0; i < this.vehicles.length; i++){
@@ -117,6 +120,24 @@ export class VehicleService {
   /*tree table*/
   // public get
   /*end tree table*/
+  public generatedListOperations (){
+    var aux2 = [];
+    var auxOperations:any[] = [];
+    aux2 = this.vehicles.filter((vehicle: any)=>vehicle.idconvoy == 0 && vehicle.nameconvoy=='Unidades Sin Convoy');
+    // Filtrar elementos con 'idoperacion' diferente
+    for (const vehicle of aux2) {
+      const nameoperation = vehicle.nameoperation;
+      const filteredOperation = {
+        idoperation: vehicle.idoperation,
+        nameoperation: vehicle.nameoperation
+      };
+      if (!auxOperations.some((v) => v.nameoperation === nameoperation)) {
+        auxOperations.push(filteredOperation);
+      }
+    }
+    auxOperations.sort((a, b) => a.idoperation - b.idoperation);
+    return auxOperations;
+  }
   public onClickEye(IMEI: string):void{
     this.clickEye.emit(IMEI);
   }
@@ -598,59 +619,11 @@ export class VehicleService {
     this.operations = [];
     this.groups = [];
     this.convoys = [];
-    console.log('Generar arbol:',data);
+    // console.log('Generar arbol:',data);
     // var map: { [key: string]: any } = {};
 
     for (const index in data) {
-      console.log('****** INDEX: ',index,'******');
-      // if (!this.operations.some((op: { id: any; }) => op.id === data[index]['idoperation'])) {
-      //   this.operations.push({
-      //     id: data[index]['idoperation'],
-      //     name: data[index]['nameoperation']
-      //   });
-      //   status_operation = true; //SE CREO NUEVA OPERACION
-      // }
 
-      // if (!this.groups.some((gp: { id: any; }) => gp.id === data[index]['idgrupo'])) {
-      //   this.groups.push({
-      //     id: data[index]['idgrupo'],
-      //     name: data[index]['namegrupo']
-      //   });
-      //   status_group = true; //SE CREO NUEVA GRUPO
-      // }
-
-      // if (!this.convoys.some((cy: { id: any; }) => cy.id === data[index]['idconvoy'])) {
-      //   this.convoys.push({
-      //     id: data[index]['idconvoy'],
-      //     name: data[index]['nameconvoy']
-      //   });
-      //   status_convoy = true; //SE CREO NUEVA CONVOY
-      // }
-
-
-      // var idoperation = data[index]['idoperation'];
-      // var idgrupo = data[index]['idgrupo'];
-      // var idconvoy = data[index]['idconvoy'];
-      // var nameoperation = data[index]['nameoperation'];
-      // var namegrupo = data[index]['namegrupo'];
-      // var nameconvoy = data[index]['nameconvoy'];
-
-
-      //  // Nivel 1: Operación
-      // const operationKey = idoperation === 0 ? "Unidades Sin Operacion" : nameoperation;
-      // if (!map[operationKey]) {
-      //   map[operationKey] = { name: nameoperation, type: "operacion", id: idoperation, grupo: {} };
-      // }
-
-      // // Nivel 2: Grupo
-      // const groupKey = idgrupo === 0 ? "Unidades Sin Grupo" : namegrupo;
-      // if (!map[operationKey].grupo[groupKey]) {
-      //   map[operationKey].grupo[groupKey] = { name: namegrupo, type: "grupo", id: idgrupo, convoy: [] };
-      // }
-
-      // // Nivel 3: Convoy
-      // const convoyKey = idconvoy === 0 ? "Unidades Sin Convoy" : nameconvoy;
-      // map[operationKey].grupo[groupKey].convoy.push({ name: nameconvoy, type: "convoy", id: idconvoy, data: data[index] });
       //CASOS SI ES UN CREACION DE OPERATION
       //CASOS SI ES UN CREACION DE GRUPO
       //CASOS SI ES UN CREACION DE CONVOY
@@ -668,9 +641,9 @@ export class VehicleService {
         status_group= true;
       }
       // if(this.convoys.includes(data[index]['idconvoy'])){
-      if(this.convoys.includes(data[index]['idoperation'] + data[index]['idgrupo']+'_'+data[index]['idconvoy'])){
+      if(this.convoys.includes(data[index]['idoperation']+'_'+ data[index]['idgrupo']+'_'+data[index]['idconvoy'])){
       }else{
-        this.convoys.push(data[index]['idoperation'] + data[index]['idgrupo']+'_'+data[index]['idconvoy']);
+        this.convoys.push(data[index]['idoperation'] +'_'+ data[index]['idgrupo']+'_'+data[index]['idconvoy']);
         // this.convoys.push(data[index]['idconvoy']);
         status_convoy= true;
       }
@@ -705,11 +678,11 @@ export class VehicleService {
         );
       //case para nueva operacion/grupo pero convoy existente
       }else if(status_operation&&status_group&&!status_convoy){
-        console.log('case : 1 1 0');
+        console.log('case : 1 1 0'); //caso imposible
       }else if(status_operation&&!status_group&&status_convoy){
-        console.log('case : 1 0 1');
+        console.log('case : 1 0 1'); //caso imposible
       }else if(status_operation&&!status_group&&!status_convoy){
-        console.log('case : 1 0 0');
+        console.log('case : 1 0 0'); //caso imposible
       }else if(!status_operation&&status_group&&status_convoy){
         console.log('case : 0 1 1');
         const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
@@ -731,7 +704,7 @@ export class VehicleService {
         existingOperation.children.push(newGroup);
 
       }else if(!status_operation&&status_group&&!status_convoy){
-        console.log('case : 0 1 0');
+        console.log('case : 0 1 0'); // nunca se va dar
         // const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
 
       }else if(!status_operation&&!status_group&&status_convoy){
@@ -760,91 +733,12 @@ export class VehicleService {
         });
       }
 
-    // if(status_group&&status_convoy){
-    //   prueba.push(data[index]['namegrupo']+"--"+data[index]['nameconvoy']);
-    //   map.push(
-    //     {
-    //       data:{name: data[index]['namegrupo'], col:3, type:'grupo', id:data[index]['idgrupo']},
-    //       expanded: true,
-    //       children:[
-    //         {
-    //           data:{name:data[index]['nameconvoy'], col:3, type:'convoy', id:data[index]['idconvoy']},
-    //           expanded: true,
-    //           children: [
-    //             {
-    //               data:data[index]
-    //             }
-    //           ]
-    //         }
-    //       ]
-    //     }
-    //   );
-
-    // }else if(!status_group&&status_convoy){
-    //   prueba.push(data[index]['namegrupo']+"--"+data[index]['nameconvoy']);
-    //   //recuperar el id del grupo
-    //   let index_group = this.groups.indexOf(data[index]["namegrupo"]);
-    //   //reucperar id del convoy
-    //   map[index_group]['children'].push(
-    //     {
-    //       data : {name: data[index]['nameconvoy'], col: 3, type:'convoy', id:data[index]['idconvoy']},
-    //       expanded: true,
-    //       children: [
-    //         {
-    //           data:data[index]
-    //         }
-    //       ]
-    //     }
-    //   );
-    //   // //console.log("index_group",index_group)
-    //   // map[data]
-    // }else if(status_group&&!status_convoy){//igual que el caso 1 1
-    //   map.push(
-    //     {
-    //       data:{name: data[index]['namegrupo'], col: 3, type:'grupo', id:data[index]['idgrupo']},
-    //       expanded: true,
-    //       children:[
-    //         {
-    //           data:{name: data[index]['nameconvoy'], col: 3, type:'convoy', id:data[index]['idconvoy']},
-    //           expanded: true,
-    //           children: [
-    //             {
-    //               data:data[index]
-    //             }
-    //           ]
-    //         }
-    //       ]
-    //     }
-    //   );
-    // }else if(!status_group&&!status_convoy){
-    //   // prueba.push(data[index]['grupo']+"--"+data[index]['convoy']);
-    //   //recuperar el id del grupo
-    //   console.log('GRUPITOS this :',this.groups);
-    //   let index_group = this.groups.indexOf(data[index]["namegrupo"]);
-    //   console.log('index Group :  ',index_group);
-    //   let e = map[index_group]['children'];
-    //   // //console.log("index-->",e.indexOf(b));
-    //   let aux_index: string = "0";
-    //   for(const i in e){
-    //     // //console.log("convoy",e[i]['data']['name'])
-    //     if(e[i]['data']['name']==data[index]['nameconvoy']){
-    //       // //console.log("exito en "+data[index]["grupo"]+"/"+data[index]['convoy']+" -->",i);
-    //       aux_index = i;
-    //     }
-    //   }
-    //   // //console.log("aux_index",aux_index);
-    //   map[index_group]['children'][aux_index]["children"].push({
-    //     data:data[index]
-    //   });
-    // }
     status_group=false;
     status_convoy=false;
     status_operation=false;
   }
 
-    console.log("operations",this.operations);
-    console.log("groups",this.groups);
-    console.log("convoys",this.convoys);
+    // ORDENACION DEL MAPEO POR ID (ID = 0 singifica que no tiene Operacion/Grupo/Convoy)
     map.sort((a: { data: { id: any; }; }, b: { data: { id: any; }; }) => {
       const idA = a.data.id;
       const idB = b.data.id;
@@ -858,6 +752,9 @@ export class VehicleService {
 
       return 0;
     });
+    // console.log("operations",this.operations);
+    // console.log("groups",this.groups);
+    // console.log("convoys",this.convoys);
     console.log("mapa:",map);
     // console.log("prueba:",prueba);
 

@@ -36,7 +36,7 @@
                     <label for="gv_name">Nombre:</label>
                   </div>
                   <div class="col-7">
-                    <input (keyup)="onName($event)" #name id="gv_name" type="text" pInputText [disabled]="loading">
+                    <input (keyup)="onName($event)" #name id="gv_name" type="text" pInputText [disabled]="loading" (change)="validateFormsInputs()">
                   </div>
                 </label>
               </div>
