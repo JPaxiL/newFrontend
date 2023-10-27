@@ -36,9 +36,11 @@ export class PreviewComponent implements OnInit, OnChanges,AfterViewInit {
   }
 
   setGritItems(){
-    if(this.gridItems){
-      this.gridChild.setItems(this.gridItems);
-      this.itemsChange.emit(this.gridItems);
+    if (this.gridChild) {
+      if(this.gridItems){
+        this.gridChild.setItems(this.gridItems);
+        this.itemsChange.emit(this.gridItems);
+      }
     }
   }
 

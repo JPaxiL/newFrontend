@@ -33,6 +33,9 @@ import { BadgeModule } from 'primeng-lts/badge';
 import { SliderModule } from 'primeng-lts/slider';
 import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
 import { TagModule } from 'primeng-lts/tag';
+import { TooltipModule } from 'primeng-lts/tooltip';
+import {SlideMenuModule} from 'primeng-lts/slidemenu';
+import {SidebarModule} from 'primeng-lts/sidebar';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -137,6 +140,8 @@ import { ChangeColorComponent } from './profile-config/change-color/change-color
 import { TableFiltresComponent } from './geofences/components/table-filtres/table-filtres.component';
 import { TableLabelsComponent } from './geofences/components/table-labels/table-labels.component';
 import { GeofenceTableComponent } from './geofences/components/geofence-table/geofence-table.component';
+import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
+import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 
 @NgModule({
   declarations: [
@@ -224,6 +229,8 @@ import { GeofenceTableComponent } from './geofences/components/geofence-table/ge
     TableFiltresComponent,
     TableLabelsComponent,
     GeofenceTableComponent,
+    AlphaNumericDashDirective,
+    ScreenRecorderComponent
 
   ],
   imports: [
@@ -268,10 +275,13 @@ import { GeofenceTableComponent } from './geofences/components/geofence-table/ge
     CheckboxModule,
     OverlayPanelModule,
     TagModule,
+    TooltipModule,
     MultiSelectModule,
     CalendarModule,
+    SlideMenuModule,
     LeafletModule,
     LeafletMarkerClusterModule,
+    SidebarModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

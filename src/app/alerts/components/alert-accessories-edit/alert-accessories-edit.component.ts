@@ -32,14 +32,22 @@ export class AlertAccessoriesEditComponent implements OnInit {
   public disabledEventSoundActive = true;
   public disabledEmail = true;
   public vehiclesSelected: string[] = [];
+  public disabledWhatsapp = true;
   overlay = false;
   loadingEventSelectInput: boolean = true;
   audio = new Audio();
+  
 
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
   ];
+
+  booleanOptionsVentanaEmergente = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
+
 
   listaSonidos: any = [];
 
@@ -72,6 +80,13 @@ export class AlertAccessoriesEditComponent implements OnInit {
     this.disabledEventSoundActive = !notificacion_system;
     this.disabledEmail = !notificacion_email;
 
+    let notificacion_whatsapp = alert.notificacion_whatsapp.toLowerCase() === 'true';
+    this.disabledWhatsapp = !notificacion_whatsapp;
+
+    let whatsapps = alert.notificacion_whatsapp_lista == ''? []: alert.notificacion_whatsapp_lista.split(',');
+
+    let ventana_emergente = alert.ventana_emergente.toLowerCase() === 'true';
+
     this.alertForm = this.formBuilder.group({
       vehicles: [this.vehiclesSelected, [Validators.required]],
       // geocercas: [[]],
@@ -96,6 +111,13 @@ export class AlertAccessoriesEditComponent implements OnInit {
       ],
       eventType: ['accessories'],
       id: [alert.id],
+      chkwhatsapp: [notificacion_whatsapp],
+      lista_whatsapp: [whatsapps],
+      whatsapp: [
+        { value: '', disabled: this.disabledWhatsapp },
+        [Validators.required],
+      ],
+      chkVentanaEmergente:[ventana_emergente]
     });
 
     this.loading = false;
@@ -216,6 +238,11 @@ export class AlertAccessoriesEditComponent implements OnInit {
       return
     }
 
+    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+      Swal.fire('Error', 'Debe ingresar un número', 'warning');
+      return
+    }
+
     if (this.alertForm.value.vehicles.length != 0) {
       Swal.fire({
         title: 'Desea guardar los cambios?',
@@ -272,6 +299,48 @@ export class AlertAccessoriesEditComponent implements OnInit {
   prepareString(str: string){
     return str.toLowerCase().normalize('NFKD').replace(/[^\w ]/g, '').replace(/  +/g, ' ').trim();
     //return str.toLowerCase().normalize('NFKD').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/  +/g, ' ').trim();
+  }
+
+  addWhatsapp() {
+    if (this.alertForm.value.chkwhatsapp) {
+      if (this.alertForm.value.whatsapp) {
+        if (
+          !this.isInArray(
+            this.alertForm.value.whatsapp,
+            this.alertForm.value.lista_whatsapp
+          )
+        ) {
+          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.controls.whatsapp.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El número ingresado ya existe.',
+            icon: 'warning',
+          });
+        }
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un número.',
+          icon: 'warning',
+        });
+      }
+
+    }
+  }
+
+  restWhatsapp(index: number) {
+    this.alertForm.value.lista_whatsapp.splice(index, 1);
+  }
+
+  chkWhatsappHandler() {
+
+    if (this.alertForm.value.chkwhatsapp) {
+      this.alertForm.controls['whatsapp'].enable();
+    } else {
+      this.alertForm.controls['whatsapp'].disable();
+    }
   }
 
 }

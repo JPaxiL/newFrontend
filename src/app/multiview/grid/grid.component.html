@@ -1,13 +1,15 @@
 <div cdkDropListGroup class="grid-container">
+  <ng-container *ngIf="items && items.length > 0">
     <ng-container *ngFor="let item of items">
       <div
         class="grid-item"
         [style.gridColumnStart]="item.structure.col"
         [style.gridRowStart]="item.structure.row"
         [style.gridColumnEnd]="item.structure.col + item.structure.span"
+        [id]="item.label"
       >
         <ng-container *ngIf="item.show_only_label">
-          <app-drag-item [items]="[item.structure]" (itemsChange)="onChangeDrops($event)">
+          <app-drag-item [items]="[item.structure]" [showHandler]="false" (itemsChange)="onChangeDrops($event)">
             <div>
               {{item.label}}
             </div>
@@ -26,4 +28,5 @@
         </ng-container>
       </div>
     </ng-container>
+  </ng-container>
 </div>

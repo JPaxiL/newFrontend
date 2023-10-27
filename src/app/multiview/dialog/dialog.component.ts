@@ -24,7 +24,9 @@ export class DialogComponent implements OnInit {
   selectedOperation: any = null;
   fromBack = false;
   fromSaved = false;
+  itJustCleaned = false;
   currentMultiview!: ScreenView;
+  selectedGroup!: ScreenView | null;
   loading : boolean = false;
   
   // Save multiview
@@ -180,6 +182,13 @@ export class DialogComponent implements OnInit {
       console.log("fromSaved: ",this.fromSaved);
       this.fromSaved = false;
     }
+    if(this.itJustCleaned){
+      this.currentMultiview.was_edited = false;
+      console.log("this.currentMultiview.was_edited333",this.currentMultiview.was_edited);
+
+      console.log("fromSaved: ",this.fromSaved);
+      this.itJustCleaned = false;
+    }
     console.log("lista structura: ", this.currentMultiview);
   }
   
@@ -214,15 +223,15 @@ export class DialogComponent implements OnInit {
     console.log('Show Multi View Modal');
   }
   isValidGroupName(){
-    if(this.currentMultiview.name.length > 3){
-      this.validName = true;
-      this.nameInput.nativeElement.classList.remove('ng-invalid','ng-dirty');
-      this.nameInput.nativeElement.classList.add('ng-valid');
-    }
-    else{
+    if(this.currentMultiview.name.length < 3 || this.currentMultiview.name.includes(' ')){
       this.validName = false;
       this.nameInput.nativeElement.classList.remove('ng-valid');
       this.nameInput.nativeElement.classList.add('ng-invalid','ng-dirty');
+    }
+    else{
+      this.validName = true;
+      this.nameInput.nativeElement.classList.remove('ng-invalid','ng-dirty');
+      this.nameInput.nativeElement.classList.add('ng-valid');
     }
   }
   openNewMultiview(multiview: ScreenView){
@@ -236,11 +245,12 @@ export class DialogComponent implements OnInit {
   }
   clearPreview(){
     this.showSaveMultiview = false;
-    this.resetCurrentMultiview();
     this.multiviewService.selectedUnits = [];
     this.validName = true;
     this.saveMultiviewOption = 'si';
     this.loading = false;
+    this.selectedGroup = null;
+    this.resetCurrentMultiview();
   }
   backToPreview(){
     console.log("multiviewService.selectedUnits",this.multiviewService.selectedUnits);

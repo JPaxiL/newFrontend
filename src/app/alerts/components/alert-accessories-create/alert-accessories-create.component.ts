@@ -25,13 +25,19 @@ export class AlertAccessoriesCreateComponent implements OnInit {
   public vehicles: Select2Data = [];
   public disabledEventSoundActive = true;
   public disabledEmail = true;
+  public disabledWhatsapp = true;
   loadingEventSelectInput: boolean = true;
-  
+
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
   ];
-  
+
+  booleanOptionsVentanaEmergente = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
+
   listaSonidos: any = [];
   audio = new Audio();
 
@@ -60,6 +66,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
       chkEventoActivado: [true],
       chkSonido: [false],
       chkCorreo: [false],
+      chkwhatsapp: [false],
       sonido: [
         {
           value: 'sonidos/alarm8.mp3',
@@ -75,6 +82,13 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         [Validators.required, Validators.email],
       ],
       eventType: ['accessories'],
+
+      lista_whatsapp: [[]],
+      whatsapp: [
+        { value: '', disabled: this.disabledWhatsapp },
+        [Validators.required],
+      ],
+      chkVentanaEmergente:[false]
     });
 
     this.loading = false;
@@ -105,8 +119,8 @@ export class AlertAccessoriesCreateComponent implements OnInit {
   }
 
   playAudio(path: string) {
-    if(typeof path != 'undefined' && path != ''){
-      if(this.audio.currentSrc != '' && !this.audio.ended){
+    if (typeof path != 'undefined' && path != '') {
+      if (this.audio.currentSrc != '' && !this.audio.ended) {
         this.audio.pause();
       }
       this.audio = new Audio('assets/' + path);
@@ -116,10 +130,10 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         audioPromise.then(() => {
           //console.log('Playing notification sound')
         })
-        .catch((error: any) => {
-          //console.log(error);
-          // Auto-play was prevented
-        });
+          .catch((error: any) => {
+            //console.log(error);
+            // Auto-play was prevented
+          });
       }
     }
   }
@@ -178,11 +192,25 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     }
   }
 
+  chkWhatsappHandler() {
+
+    if (this.alertForm.value.chkwhatsapp) {
+      this.alertForm.controls['whatsapp'].enable();
+    } else {
+      this.alertForm.controls['whatsapp'].disable();
+    }
+  }
+
   onSubmit(event: any) {
     event.preventDefault();
 
-    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+    if (this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0) {
       Swal.fire('Error', 'Debe ingresar un correo', 'warning');
+      return
+    }
+
+    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+      Swal.fire('Error', 'Debe ingresar un número', 'warning');
       return
     }
 
@@ -230,9 +258,42 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     this.panelService.nombreCabecera = item[0].name;
   }
 
-  hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){
+  hideLoadingSpinner() {
+    if (this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady) {
       this.spinner.hide('loadingAlertData');
     }
+  }
+
+  addWhatsapp() {
+    if (this.alertForm.value.chkwhatsapp) {
+      if (this.alertForm.value.whatsapp) {
+        if (
+          !this.isInArray(
+            this.alertForm.value.whatsapp,
+            this.alertForm.value.lista_whatsapp
+          )
+        ) {
+          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.controls.whatsapp.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El número ingresado ya existe.',
+            icon: 'warning',
+          });
+        }
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un número.',
+          icon: 'warning',
+        });
+      }
+
+    }
+  }
+
+  restWhatsapp(index: number) {
+    this.alertForm.value.lista_whatsapp.splice(index, 1);
   }
 }

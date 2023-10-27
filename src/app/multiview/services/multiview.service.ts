@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 import { GridItem, ScreenView, StructureGrid, UnitItem, UserTracker } from '../models/interfaces';
 import { Router } from '@angular/router';
 @Injectable({
@@ -61,10 +62,25 @@ export class MultiviewService {
     return this.http.get<ResponseInterface>(`${environment.apiUrl}/api/operations/trackers/${operation_id}`);
   }
   public saveMultiview(multiview: ScreenView): Observable<ResponseInterface> {
-    return this.http.post<ResponseInterface>(`${environment.apiUrl}/api/multiview`,{item:multiview});
+    console.log("multiview: ",multiview);
+    const auxMultiview = {...multiview}
+    console.log("auxMultiview: ",auxMultiview);
+    const auxGrids = auxMultiview.grids!;
+    console.log("auxGrids: ",auxGrids);
+
+    auxGrids.sort((a, b) => {
+      if (a.structure.structure_index === undefined) return 1;
+      if (b.structure.structure_index === undefined) return -1;
+      return a.structure.structure_index - b.structure.structure_index;
+    });
+    auxMultiview.grids = auxGrids;
+    localStorage.setItem('screen_'+auxMultiview.name, JSON.stringify([auxMultiview]));
+
+    return this.http.post<ResponseInterface>(`${environment.apiUrl}/api/multiview`,{item:auxMultiview});
   }
 
   public deleteMultiview(name:string): Observable<ResponseInterface> {
+    localStorage.removeItem('screen_'+name);
     return this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/multiview/${name}`);
   }
 
@@ -74,10 +90,11 @@ export class MultiviewService {
     const newTab = window.open(url, '_blank');
     if (newTab) {
       // Enfoca la nueva ventana si se abrió correctamente
+      Swal.fire('Éxito', 'Se abrió la vista correctamente', 'success');
       newTab.focus();
     } else {
       // Manejar el caso en que las ventanas emergentes están bloqueadas
-      alert('El bloqueo de ventanas emergentes puede estar impidiendo abrir una nueva ventana.');
+      Swal.fire('Error', 'El bloqueo de ventanas emergentes puede estar impidiendo abrir una nueva ventana.', 'error');
     }
   }
 
@@ -87,6 +104,7 @@ export class MultiviewService {
   }
 
   getMultiviewFromLocalStorage(name: string){
+    console.log("getlocalstorage",localStorage.getItem('screen_'+name)!);
     return JSON.parse(localStorage.getItem('screen_'+name)!);
   }
 

@@ -8,9 +8,9 @@
     <div class="dialog-body-container">
       <div class="p-fluid p-formgrid p-grid">
         <div class="dialog-form-container">
-          <div class="flex-column mt-3">
-            <div *ngIf="!this.showSaveMultiview" class="row h-auto">
-                <div class="col-xxl-6 col-xl-12 col-lg-12 col-md-12 d-flex flex-column justify-content-center">
+          <div class="d-flex flex-column mt-2">
+            <div *ngIf="!this.showSaveMultiview" class="h-auto row">
+                <div class="col-xxl-5 col-xl-4 col-lg-12 d-flex flex-column justify-content-center px-3 pb-xl-0 pb-lg-3 ">
                     <label class="my-2">Operaciones</label>
                     <p-dropdown 
                         class="mb-4"
@@ -25,8 +25,8 @@
                     <label for="" class="my-2">Unidades</label>
                     <p-multiSelect 
                         class="mb-4"
-                        [options]="unitItems" 
-                        [showHeader]="false"
+                        [filter]="true"
+                        [options]="unitItems"
                         defaultLabel="Unidades" 
                         optionLabel="nombre" 
                         [(ngModel)]="multiviewService.selectedUnits"
@@ -35,22 +35,18 @@
                         [appendTo]="'body'">
                     </p-multiSelect>
                     <hr>
-                    <label for="" class="my-2">Grupos almacenados</label>
+                    <label for="" class="my-2">Vistas guardadas</label>
                     <p-dropdown 
                       [options]="multiviewService.getUserMultiview()" 
                       optionLabel="name" 
                       [filter]="true" 
                       filterBy="name" 
+                      [(ngModel)]="selectedGroup"
                       [showClear]="true" 
                       placeholder="Grupo"
                       (onChange)="onSelectMultiview($event)"
                       [appendTo]="'body'"
                     >
-                      <ng-template pTemplate="selectedItem">
-                          <div class="flex align-items-center gap-2" *ngIf="currentMultiview">
-                              <div>{{ currentMultiview.name }}</div>
-                          </div>
-                      </ng-template>
                       <ng-template let-country pTemplate="item">
                           <div class="d-flex justify-content-between align-items-center gap-2">
                             <div>{{ country.name }}</div>
@@ -59,7 +55,19 @@
                       </ng-template>
                     </p-dropdown>
                 </div>
-                <div class="col d-flex flex-column justify-content-center align-items-center">
+                <div class="col-xxl-7 col-xl-8 col-lg-12 d-flex flex-column justify-content-center align-items-center px-3 pt-xl-0 pt-lg-3 ">
+                    <div class="d-flex justify-content-between w-100">
+                      <label for="">{{selectedGroup? 'Vista: '+selectedGroup.name:'Vista'}}</label>
+                      <div>
+                        <i *ngIf="multiviewService.selectedUnits.length > 0" 
+                          (click)="itJustCleaned=true; clearPreview()" 
+                          class="pi pi-trash"
+                          pTooltip="Limpiar vista"
+                          tooltipPosition="left" 
+                          style="font-size: 1rem">
+                        </i>
+                      </div>
+                    </div>
                     <div class="preview-grid-container">
                       <app-preview [items]="multiviewService.selectedUnits" (itemsChange)="onGridChange($event)"></app-preview>
                     </div>
@@ -69,16 +77,26 @@
               <div class="d-flex flex-column justify-content-center text-center gap-4">
                 <div class="d-flex justify-content-between ">
                   <p-button icon="pi pi-arrow-left" styleClass="p-button-rounded p-button-outlined" (click)="backToPreview()"></p-button>
-                  <h4 class="my-2">¿Desea guardar el grupo de Multipantallas?</h4>
+                  <h4 class="my-2">¿Desea guardar la vista de Multipantallas?</h4>
                   <div></div>
                 </div>
                 <div class="d-flex justify-content-center">
                   <p-selectButton class="w-25" [options]="stateOptions" [(ngModel)]="saveMultiviewOption" optionLabel="label" optionValue="value"></p-selectButton>
                 </div>
                 <div *ngIf="saveMultiviewOption == 'si' && currentMultiview" class="d-flex justify-content-center align-items-center gap-2">
-                  <label class="fs-6">Nombre del grupo: </label>
+                  <label class="fs-6">Nombre de la vista: </label>
                   <div class="flex flex-column gap-2">
-                    <input type="text" pInputText [(ngModel)]="currentMultiview.name" (input)="isValidGroupName()" [maxlength]="30" [minlength]="1" #nameInput/>
+                    <input type="text" pInputText 
+                      [(ngModel)]="currentMultiview.name" 
+                      (input)="isValidGroupName()" 
+                      [maxlength]="30" 
+                      [minlength]="1" 
+                      pTooltip="Solo letras, números y guiones (-)"
+                      tooltipPosition="right"
+                      hideDelay="1000"
+                      appAlphaNumericDash
+                      #nameInput
+                    />
                   </div>
                 </div>
               </div>
