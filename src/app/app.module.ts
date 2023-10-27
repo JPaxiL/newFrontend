@@ -29,6 +29,7 @@ import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
 import { SliderModule } from 'primeng-lts/slider';
+import { TooltipModule } from 'primeng-lts/tooltip';
 
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 
@@ -231,6 +232,7 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
     InputSwitchModule,
     TableModule,
     SliderModule,
+    TooltipModule,
     ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,
