@@ -436,6 +436,7 @@ export class VehicleGroupComponent implements OnInit {
     if (type == 'operacion'){
       let existingOperations = [];
       existingOperations = this.vehicleService.listOperations.filter((op: any)=>op.nameoperation == name); //FUNCIONA SOLO LISTA DE OPERACIONES
+      console.log('TEMPLATE:',this.vehicleService.listOperations)
       if (existingOperations.length > 0) {
         console.log(existingOperations.length);
         return true;

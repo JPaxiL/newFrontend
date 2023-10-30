@@ -93,12 +93,11 @@ export class VehicleService {
         console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.vehiclesTree = this.createNode(this.vehicles);
-        this.listOperations = this.generatedListOperations();
         this.statusDataVehicle = true;
         this.statusDataVehicleTree = true;
+        this.listOperations = this.generatedListOperations();
         this.dataCompleted.emit(this.vehicles);
         this.dataTreeCompleted.emit(this.vehiclesTree);
-       
 
         //InputSwitch EyeHeader behavior
         for(let i = 0; i < this.vehicles.length; i++){
@@ -652,7 +651,7 @@ export class VehicleService {
       // 8 segun logica binatria 000011110011001101010101
       //case es una nueva operacion/grupo/convoy
       if(status_operation&&status_group&&status_convoy){
-        console.log('case : 1 1 1');
+        // console.log('case : 1 1 1');
         map.push(
           {
             data:{name: data[index]['nameoperation'], col:3, type:'operacion', id:data[index]['idoperation']},
@@ -678,13 +677,13 @@ export class VehicleService {
         );
       //case para nueva operacion/grupo pero convoy existente
       }else if(status_operation&&status_group&&!status_convoy){
-        console.log('case : 1 1 0'); //caso imposible
+        // console.log('case : 1 1 0'); //caso imposible
       }else if(status_operation&&!status_group&&status_convoy){
-        console.log('case : 1 0 1'); //caso imposible
+        // console.log('case : 1 0 1'); //caso imposible
       }else if(status_operation&&!status_group&&!status_convoy){
-        console.log('case : 1 0 0'); //caso imposible
+        // console.log('case : 1 0 0'); //caso imposible
       }else if(!status_operation&&status_group&&status_convoy){
-        console.log('case : 0 1 1');
+        // console.log('case : 0 1 1');
         const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
         const newGroup = {
           data: { name: data[index]['namegrupo'], col: 3, type: 'grupo', id: data[index]['idgrupo'] },
@@ -704,12 +703,12 @@ export class VehicleService {
         existingOperation.children.push(newGroup);
 
       }else if(!status_operation&&status_group&&!status_convoy){
-        console.log('case : 0 1 0'); // nunca se va dar
+        // console.log('case : 0 1 0'); // nunca se va dar
         // const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
 
       }else if(!status_operation&&!status_group&&status_convoy){
         //logica para cuando ya existe operacion grupo, pero no existe el convoy
-        console.log('case : 0 0 1');
+        // console.log('case : 0 0 1');
         const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
         const existingGroup = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idgrupo']);
         existingGroup.children.push({
@@ -724,7 +723,7 @@ export class VehicleService {
 
       }else if(!status_operation&&!status_group&&!status_convoy){
         //case cuando ya existen todos y se agrega el convoy existente
-        console.log('case : 0 0 0');
+        // console.log('case : 0 0 0');
         const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
         const existingGroup = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idgrupo']);
         const existingConvoy = existingGroup.children.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idconvoy']);
@@ -737,24 +736,16 @@ export class VehicleService {
     status_convoy=false;
     status_operation=false;
   }
-
     // ORDENACION DEL MAPEO POR ID (ID = 0 singifica que no tiene Operacion/Grupo/Convoy)
-    map.sort((a: { data: { id: any; }; }, b: { data: { id: any; }; }) => {
-      const idA = a.data.id;
-      const idB = b.data.id;
 
-      if (idA < idB) {
-        return -1;
-      }
-      if (idA > idB) {
-        return 1;
-      }
-
-      return 0;
-    });
     // console.log("operations",this.operations);
     // console.log("groups",this.groups);
     // console.log("convoys",this.convoys);
+    map.sort((a: { data: { id: any; }; }, b: { data: { id: any; }; }) => b.data.id - a.data.id);
+    console.log('Nodos del mapa ordenados:');
+    map.forEach((node: { data: { id: any; }; }) => {
+      console.log(node.data.id);
+    });
     console.log("mapa:",map);
     // console.log("prueba:",prueba);
 
