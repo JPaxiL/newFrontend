@@ -9,6 +9,7 @@ import { PanelService } from 'src/app/panel/services/panel.service';
 
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 
 @Component({
   selector: 'app-event-list',
@@ -33,6 +34,7 @@ export class EventListComponent implements OnInit {
     public ess:EventSocketService,
     private spinner: NgxSpinnerService,
     private http:HttpClient,
+    private multimediaService:MultimediaService
     ) {
       // this.tipoEvento = [
       //   { id: 0, option: 'Todos los Eventos', tipo: '' },
@@ -113,15 +115,40 @@ export class EventListComponent implements OnInit {
 
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
+    // convierto el atributo params en un objeto
+    const objParams:any = {};
+    event.parametros.split('|').forEach((item:any) => {
+      const [key, value] = item.split('=');
+      objParams[key] = value;
+    });
+    //reemplazo el atributo parametros (string) con el objeto
+    event.parametros = objParams;
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
-    event.layer.bindPopup(getContentPopup(event), {
-      className: eventClass,
-      minWidth: 250,
-      maxWidth: 350,
-    });
-    this.eventService.activeEvent = event;
-    event.layer.addTo(this.mapService.map).openPopup();
+    //si el evento es de cipia y tiene video(s)
+    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+      // obtengo la url del video o imagen
+      this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
+        // Añado la url del video/imagen como atributo del evento
+        event.videoUrl = data;
+        event.layer.bindPopup(getContentPopup(event), {
+          className: eventClass,
+          minWidth: 250,
+          maxWidth: 350,
+        });
+        this.eventService.activeEvent = event;
+        event.layer.addTo(this.mapService.map).openPopup();
+      });
+    }else{
+      // caso contrario ejecuto la via normal
+      event.layer.bindPopup(getContentPopup(event), {
+        className: eventClass,
+        minWidth: 250,
+        maxWidth: 350,
+      });
+      this.eventService.activeEvent = event;
+      event.layer.addTo(this.mapService.map).openPopup();
+    }
   }
 
   public hideEvent(event:any){

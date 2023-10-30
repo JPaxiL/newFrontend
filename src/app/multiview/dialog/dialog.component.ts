@@ -1,10 +1,11 @@
 
 import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import Swal from 'sweetalert2';
-import { Convoy, GridItem, Operation, ScreenView, UnitItem, UserTracker } from '../models/interfaces';
+import { Convoy, GridItem, MediaRequest, Operation, ScreenView, UnitItem, UserTracker } from '../models/interfaces';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { MultiviewService } from '../services/multiview.service';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
+
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -34,6 +35,8 @@ export class DialogComponent implements OnInit {
   stateOptions: any[] = [{label: 'Si', value: 'si'}, {label: 'No', value: 'no'}];
   saveMultiviewOption: string = 'si';
   validName = false;
+
+
   constructor(
     public multiviewService: MultiviewService,
     private vehicleService: VehicleService,

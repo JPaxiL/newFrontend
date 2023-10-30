@@ -1,3 +1,7 @@
+import { event } from "jquery";
+import { environment } from "src/environments/environment";
+
+
 export const getContentPopup = (event: any, d: any = '...') => {
   if (event.tipo == 'Zona de entrada') { //PLATAFORMA
     return render_leaflet_tootlip(
@@ -435,6 +439,102 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
+  }else if (event.tipo == 'Conductor Somnoliento') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada 
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'Conductor Fumando') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'Cinturon Desabrochado') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'Uso de Celular') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'Error de Camara') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'Manipulacion 360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
   }
 
   return '';
@@ -500,5 +600,8 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
           ${(typeof event_content.fecha_tracker !== 'undefined')? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>`:''}
         </tbody>
       </table>
+      ${(event_content.parametros && event_content.parametros.gps == "cipia" && event_content.parametros.has_video != "0") ?
+        '<div><video id="'+event_content.parametros.eventId+'" width="100%" height="auto" controls src="'+event_content.videoUrl+'" type="video/mp4"></video></div>':''
+      }
     </div>`;
 }

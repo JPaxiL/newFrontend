@@ -78,8 +78,6 @@ export interface UserTracker {
     tag?: boolean,
 }
 
-
-
 export interface ScreenView {
     id?: number,
     name: string,
@@ -144,4 +142,18 @@ export interface TableRowSelectEvent {
     data?: any;
     type?: string;
     index?: number;
+}
+
+export interface TableRowSelectEvent {
+    originalEvent?: Event;
+    data?: any;
+    type?: string;
+    index?: number;
+}
+
+export interface MediaRequest {
+    device_id: string,
+    from?: string, //date in UTC0 "2023-10-09 19:12:00"
+    seconds: number, // max = 30
+    source: string, //  CABIN | ROAD
 }

@@ -138,6 +138,7 @@ import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
 import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
+import { CipiaComponent } from './cipia/cipia.component';
 
 @NgModule({
   declarations: [
@@ -222,7 +223,8 @@ import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-reco
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
     AlphaNumericDashDirective,
-    ScreenRecorderComponent
+    ScreenRecorderComponent,
+    CipiaComponent
 
   ],
   imports: [

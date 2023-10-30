@@ -31,7 +31,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
   itemsMenu: MenuItem[]=[];
   showScreenRecorder = false;
-
+  showCipiaExample = false;
   @ViewChild('MapView') mapView!: ElementRef;
 
   constructor(
@@ -64,6 +64,14 @@ export class MapViewComponent implements OnInit, AfterViewInit {
         icon: 'pi pi-fw pi-camera',
         command: (event) => {
           this.multimediaService.screenShot(this.mapView.nativeElement);
+        },
+      },
+      {
+        id: '3',
+        label: 'Ejemplo cipia video',
+        icon: 'pi pi-fw pi-video',
+        command: (event) => {
+          this.showCipiaExample = true;
         },
       }
     ];
