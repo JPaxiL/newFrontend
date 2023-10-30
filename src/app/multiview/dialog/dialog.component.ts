@@ -5,7 +5,6 @@ import { Convoy, GridItem, MediaRequest, Operation, ScreenView, UnitItem, UserTr
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { MultiviewService } from '../services/multiview.service';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
-
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -45,11 +44,42 @@ export class DialogComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.multiviewService.getOperations().subscribe((resp:ResponseInterface) => {
-      this.operations = resp.data as Operation[];
-      this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
-    });
-    this.resetCurrentMultiview();
+    // this.multiviewService.getOperations().subscribe((resp:ResponseInterface) => {
+    //   this.operations = resp.data as Operation[];
+    //   this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
+    // });
+    if(!this.vehicleService.statusDataVehicle){
+      // console.log('(vehicleService) vehicle service no está listo. Subscribiendo para obtener data...');
+      this.vehicleService.dataCompleted.subscribe({
+        next: (result: boolean) => {
+          if(result){
+            this.operations = this.vehicleService.listOperations.map((operation: { idoperation: any; nameoperation: any; }) => {
+              return {
+                id: operation.idoperation,
+                nombre: operation.nameoperation,
+                usuario_id: 0
+              };
+            });
+            console.log('OPERATIONS MULTIVIEW NEW ----->',this.vehicleService.listOperations);
+            this.resetCurrentMultiview();
+          }
+        },
+        error: (errMsg: any) => {
+          console.log('(vehicle service) Error al obtener list operations: ', errMsg);
+        }
+      });
+    } else {
+      // console.log('(vehicel service) está listo. Subscribiendo para obtener data...');
+      this.operations = this.vehicleService.listOperations.map((operation: { idoperation: any; nameoperation: any; }) => {
+        return {
+          id: operation.idoperation,
+          nombre: operation.nameoperation,
+          usuario_id: 0
+        };
+      });
+      console.log('OPERATIONS MULTIVIEW NEW ----->',this.vehicleService.listOperations);
+      this.resetCurrentMultiview();
+    }
   }
 
   resetCurrentMultiview(){
@@ -119,41 +149,75 @@ export class DialogComponent implements OnInit {
     
   }
   changeOperation(){
-    this.multiviewService.getTrackersByOperation(this.selectedOperation).subscribe((resp:ResponseInterface) => {
-      this.units = resp.data.trackers as UserTracker[];
-      this.convoys = resp.data.convoys;
-      this.unitItems = [];
-      if(this.units && this.units.length>0){
-        this.units.forEach(item => {
-          this.unitItems.push(
-            {
-              nombre: item.nombre!, 
-              operation: this.operations.find(op => op.id == parseInt(this.selectedOperation))!.nombre,
-              type: "tracker",
-              selected: false, 
-              id:item.id, 
-              imeis: [item.IMEI!.toString()]
-            }
-          );
-        })
-      }
-      if(this.convoys && this.convoys.length>0){
-        this.convoys.forEach(item => {
-          this.unitItems.push(
-            {
-              nombre: item.nombre!, 
-              operation: this.operations.find(op => op.id == parseInt(this.selectedOperation))!.nombre,
-              type: "convoy",
-              selected: false, 
-              id:item.id, 
-              imeis: this.vehicleService.vehicles.filter(vehi => vehi.idconvoy === item.id).map(vh => vh.IMEI!)
-            }
-          );
-        });
-      }
-      this.unitItems.sort((a, b) => a.nombre.localeCompare(b.nombre));
-      console.log("this.unitItems: ",this.unitItems);
+    
+    // this.multiviewService.getTrackersByOperation(this.selectedOperation).subscribe((resp:ResponseInterface) => {
+    //   this.units = resp.data.trackers as UserTracker[];
+    //   this.convoys = resp.data.convoys;
+    //   this.unitItems = [];
+    //   if(this.units && this.units.length>0){
+    //     this.units.forEach(item => {
+    //       this.unitItems.push(
+    //         {
+    //           nombre: item.nombre!, 
+    //           operation: this.operations.find(op => op.id == parseInt(this.selectedOperation))!.nombre,
+    //           type: "tracker",
+    //           selected: false, 
+    //           id:item.id, 
+    //           imeis: [item.IMEI!.toString()]
+    //         }
+    //       );
+    //     })
+    //   }
+    //   if(this.convoys && this.convoys.length>0){
+    //     this.convoys.forEach(item => {
+    //       this.unitItems.push(
+    //         {
+    //           nombre: item.nombre!, 
+    //           operation: this.operations.find(op => op.id == parseInt(this.selectedOperation))!.nombre,
+    //           type: "convoy",
+    //           selected: false, 
+    //           id:item.id, 
+    //           imeis: this.vehicleService.vehicles.filter(vehi => vehi.idconvoy === item.id).map(vh => vh.IMEI!)
+    //         }
+    //       );
+    //     });
+    //   }
+    //   this.unitItems.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    //   console.log("this.unitItems: ",this.unitItems);
+    // });
+
+    let aux_convoys:any[] = [];
+    let aux_trackers:any[] = [];
+    aux_convoys = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation && vehicle.idconvoy != 0);
+    const uniqueIdConvoySet = new Set<number>();
+    aux_convoys = aux_convoys.filter((vehicle: any) => uniqueIdConvoySet.size === uniqueIdConvoySet.add(vehicle.idconvoy).size);
+    this.unitItems = aux_convoys.map(item => {
+      return {
+        id: item.idconvoy,
+        nombre: "(CONVOY) "+item.nameconvoy!,
+        operation: item.nameoperation,
+        selected: false,
+        type: "convoy",
+        imeis: this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation && vehicle.idconvoy == item.idconvoy)
+        .map(vh => vh.IMEI!)
+      };
     });
+    
+    aux_trackers = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
+    for (const tracker_unit of aux_trackers) {
+      const filteredGroup = {
+        id: tracker_unit.id,
+        nombre: tracker_unit.name,
+        operation: tracker_unit.nameoperation,
+        selected: false,
+        type: "tracker",
+        imeis: tracker_unit.IMEI.toString()
+      };
+      this.unitItems.push(filteredGroup);
+    }
+
+    // console.log("this.unitItems: ",this.unitItems);
+
   }
 
   onGridChange(event:GridItem[]){

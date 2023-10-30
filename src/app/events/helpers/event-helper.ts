@@ -258,7 +258,21 @@ export const getContentPopup = (event: any, d: any = '...') => {
       'assets/images/events-icons/bateria_desconectada.svg',
     );
 
-  } else if (event.tipo == 'Motor encendido' || event.tipo == 'Motor apagado') {
+  } else if (event.tipo == 'Motor Encendido') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/motor.svg'
+    );
+
+  } else if (event.tipo == 'Motor apagado') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -559,7 +573,7 @@ function string_diffechas(a: any, b: any) {
   return g;
 }
 
-function render_leaflet_tootlip(event_content: any, icon_src: string){
+function render_leaflet_tootlip(event_content: any, icon_src: string) {
   return `
     <div style="padding: 0.2rem;">
       <div class="d-flex flex-row" style="font-size: 0.8rem; gap: 1rem; padding-bottom: 0.5rem;">
@@ -579,25 +593,25 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
           <col style="width:50%"></col>
         </colgroup>
         <tbody style="font-size: 0.7rem;">
-          ${(typeof event_content.nombre_objeto !== 'undefined')? `<tr><td>UNIDAD:</td><td>${event_content.nombre_objeto}</td></tr>`:''}
-          ${(typeof event_content.luminaria !== 'undefined')? `<tr><td>LUMINARIA:</td><td>${event_content.luminaria}</td></tr>`:''}
-          ${(typeof event_content.latitud !== 'undefined' && typeof event_content.latitud !== 'undefined')? `<tr><td>UBICACIÓN:</td><td><a href="http://maps.google.com/maps?q=${event_content.latitud},${event_content.longitud}&amp;t=m" target="_blank">${event_content.latitud} °,  ${event_content.longitud} °</a></td></tr>`:''}
-          ${(typeof event_content.int_mant_ultimo_mantenimiento !== 'undefined')? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.int_mant_ultimo_mantenimiento} h</td></tr>`:''}
-          ${(typeof event_content.int_mant_horas_transcurridas !== 'undefined')? `<tr><td>HORAS TRANSCURRIDAS:</td><td>${event_content.int_mant_horas_transcurridas} h</td></tr>`:''}
-          ${(typeof event_content.int_mant_horas_restantes !== 'undefined')? `<tr><td>HORAS RESTANTES:</td><td>${event_content.int_mant_horas_restantes} h</td></tr>`:''}
-          ${(typeof event_content.int_mant_odometro !== 'undefined')? `<tr><td>ODÓMETRO ACTUAL:</td><td>${event_content.int_mant_odometro} h</td></tr>`:''}
-          ${(typeof event_content.ultimo_mantenimiento !== 'undefined')? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.ultimo_mantenimiento} h</td></tr>`:''}
-          ${(typeof event_content.voltaje !== 'undefined')? `<tr><td>VOLTAJE:</td><td>${event_content.voltaje}</td></tr>`:''}
-          ${(typeof event_content.nombre_zona !== 'undefined')? `<tr><td>ZONA:</td><td>${event_content.nombre_zona}</td></tr>`:''}
-          ${(typeof event_content.velocidad !== 'undefined')? `<tr><td>VELOCIDAD:</td><td>${event_content.velocidad} km/h</td></tr>`:''}
-          ${(typeof event_content.velocidad_unidad !== 'undefined')? `<tr><td>VELOCIDAD:</td><td>${event_content.velocidad_unidad} km/h</td></tr>`:''}
-          ${(typeof event_content.velocidad_limite !== 'undefined')? `<tr><td>LÍMITE DE VELOCIDAD:</td><td>${event_content.velocidad_limite} km/h</td></tr>`:''}
-          ${(typeof event_content.tiempo_limite_infraccion !== 'undefined')? `<tr><td>LÍMITE DE TIEMPO:</td><td>${event_content.tiempo_limite_infraccion} h</td></tr>`:''}
-          ${(typeof event_content.tiempo_tolerancia !== 'undefined')? `<tr><td>TIEMPO DE TOLERANCIA:</td><td>${event_content.tiempo_tolerancia}</td></tr>`:''}
-          ${(typeof event_content.tiempo_estadia !== 'undefined')? `<tr><td>TIEMPO DE ESTADÍA:</td><td>${event_content.tiempo_estadia}</td></tr>`:''}
-          ${(typeof event_content.referencia !== 'undefined')? `<tr><td>REFERENCIA:</td><td>${event_content.referencia}</td></tr>`:''}
-          ${(typeof event_content.geocerca !== 'undefined')? `<tr><td>GEOCERCA:</td><td>${event_content.geocerca}</td></tr>`:''}
-          ${(typeof event_content.fecha_tracker !== 'undefined')? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>`:''}
+          ${(typeof event_content.nombre_objeto !== 'undefined') ? `<tr><td>UNIDAD:</td><td>${event_content.nombre_objeto}</td></tr>` : ''}
+          ${(typeof event_content.luminaria !== 'undefined') ? `<tr><td>LUMINARIA:</td><td>${event_content.luminaria}</td></tr>` : ''}
+          ${(typeof event_content.latitud !== 'undefined' && typeof event_content.latitud !== 'undefined') ? `<tr><td>UBICACIÓN:</td><td><a href="http://maps.google.com/maps?q=${event_content.latitud},${event_content.longitud}&amp;t=m" target="_blank">${event_content.latitud} °,  ${event_content.longitud} °</a></td></tr>` : ''}
+          ${(typeof event_content.int_mant_ultimo_mantenimiento !== 'undefined') ? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.int_mant_ultimo_mantenimiento} h</td></tr>` : ''}
+          ${(typeof event_content.int_mant_horas_transcurridas !== 'undefined') ? `<tr><td>HORAS TRANSCURRIDAS:</td><td>${event_content.int_mant_horas_transcurridas} h</td></tr>` : ''}
+          ${(typeof event_content.int_mant_horas_restantes !== 'undefined') ? `<tr><td>HORAS RESTANTES:</td><td>${event_content.int_mant_horas_restantes} h</td></tr>` : ''}
+          ${(typeof event_content.int_mant_odometro !== 'undefined') ? `<tr><td>ODÓMETRO ACTUAL:</td><td>${event_content.int_mant_odometro} h</td></tr>` : ''}
+          ${(typeof event_content.ultimo_mantenimiento !== 'undefined') ? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.ultimo_mantenimiento} h</td></tr>` : ''}
+          ${(typeof event_content.voltaje !== 'undefined') ? `<tr><td>VOLTAJE:</td><td>${event_content.voltaje}</td></tr>` : ''}
+          ${(typeof event_content.nombre_zona !== 'undefined') ? `<tr><td>ZONA:</td><td>${event_content.nombre_zona}</td></tr>` : ''}
+          ${(typeof event_content.velocidad !== 'undefined') ? `<tr><td>VELOCIDAD:</td><td>${event_content.velocidad} km/h</td></tr>` : ''}
+          ${(typeof event_content.velocidad_unidad !== 'undefined') ? `<tr><td>VELOCIDAD:</td><td>${event_content.velocidad_unidad} km/h</td></tr>` : ''}
+          ${(typeof event_content.velocidad_limite !== 'undefined') ? `<tr><td>LÍMITE DE VELOCIDAD:</td><td>${event_content.velocidad_limite} km/h</td></tr>` : ''}
+          ${(typeof event_content.tiempo_limite_infraccion !== 'undefined') ? `<tr><td>LÍMITE DE TIEMPO:</td><td>${event_content.tiempo_limite_infraccion} h</td></tr>` : ''}
+          ${(typeof event_content.tiempo_tolerancia !== 'undefined') ? `<tr><td>TIEMPO DE TOLERANCIA:</td><td>${event_content.tiempo_tolerancia}</td></tr>` : ''}
+          ${(typeof event_content.tiempo_estadia !== 'undefined') ? `<tr><td>TIEMPO DE ESTADÍA:</td><td>${event_content.tiempo_estadia}</td></tr>` : ''}
+          ${(typeof event_content.referencia !== 'undefined') ? `<tr><td>REFERENCIA:</td><td>${event_content.referencia}</td></tr>` : ''}
+          ${(typeof event_content.geocerca !== 'undefined') ? `<tr><td>GEOCERCA:</td><td>${event_content.geocerca}</td></tr>` : ''}
+          ${(typeof event_content.fecha_tracker !== 'undefined') ? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>` : ''}
         </tbody>
       </table>
       ${(event_content.parametros && event_content.parametros.gps == "cipia" && event_content.parametros.has_video != "0") ?
@@ -605,3 +619,102 @@ function render_leaflet_tootlip(event_content: any, icon_src: string){
       }
     </div>`;
 }
+
+
+export const getIcon = (event_type: string) => {
+  let icon = '';
+  switch (event_type) {
+    case 'Zona de entrada':
+      icon = 'assets/images/events-icons/entrada_zona.svg';
+      break;
+    case 'Zona de salida':
+      icon = 'assets/images/events-icons/salida_zona.svg';
+      break;
+    case 'Tiempo de estadia en zona':
+      icon = 'assets/images/events-icons/tiempo_estadia_zona.svg';
+      break;
+    case 'Parada en zona no autorizada':
+      icon = 'assets/images/events-icons/parada_zona_no_autorizada.svg';
+      break;
+    case 'Mantenimiento correctivo':
+      icon = 'assets/images/events-icons/mant_correctivo.svg';
+      break;
+    case 'Mantenimiento preventivo':
+      icon = 'assets/images/events-icons/mant_preventivo.svg';
+      break;
+    case 'Mantenimiento correctivo realizado':
+      icon = 'assets/images/events-icons/mant_correctivo_realizado.svg';
+      break;
+    case 'Mantenimiento preventivo realizado':
+      icon = 'assets/images/events-icons/mant_preventivo_realizado.svg';
+      break;
+    case 'SOS':
+      icon = 'assets/images/events-icons/sos.svg';
+      break;
+    case 'Exceso de Velocidad':
+      icon = 'assets/images/events-icons/exceso_velocidad.svg';
+      break;
+    case 'Infraccion':
+      icon = 'assets/images/events-icons/infraccion.svg';
+      break;
+    case 'Vehiculo sin programacion':
+      icon = 'assets/images/events-icons/sin_programacion.svg';
+      break;
+    case 'Frenada brusca':
+      icon = 'assets/images/events-icons/frenada_brusca.svg';
+      break;
+    case 'Aceleracion brusca':
+      icon = 'assets/images/events-icons/aceleracion_brusca.svg';
+      break;
+    case 'Bateria desconectada':
+      icon = 'assets/images/events-icons/bateria_desconectada.svg';
+      break;
+    case 'Motor Encendido':
+      icon = 'assets/images/events-icons/motor.svg';
+      break;
+    case 'Motor apagado':
+      icon = 'assets/images/events-icons/motor.svg';
+      break;
+    case 'Fatiga':
+      icon = 'assets/images/events-icons/fatiga.svg';
+      break;
+    case 'Somnolencia':
+      icon = 'assets/images/events-icons/somnolenciaWhite.svg';
+      break;
+    case 'Distraccion':
+    case 'Distracción':
+      icon = 'assets/images/events-icons/distraccionWhite.svg';
+      break;
+    case 'Desvío de carril hacia la izquierda':
+      icon = 'assets/images/events-icons/desvio_izquierda.svg';
+      break;
+    case 'Desvío de carril hacia la derecha':
+      icon = 'assets/images/events-icons/desvio_derecha.svg';
+      break;
+    case 'Bloqueo de visión del mobileye':
+      icon = 'assets/images/events-icons/bloqueo_mobileye.svg';
+      break;
+    case 'Colisión con peatones':
+      // Falta icono
+      icon = '';
+      break;
+    case 'Colisión delantera':
+    case 'Anticolisión frontal':
+      icon = 'assets/images/events-icons/colision_delantera.svg';
+      break;
+    case 'Posible Fatiga':
+      icon = 'assets/images/events-icons/fatiga.svg';
+      break;
+    case 'Fatiga Extrema':
+      icon = 'assets/images/events-icons/fatiga.svg';
+      break;
+    case 'No Rostro':
+      icon = 'assets/images/events-icons/no-rostro.svg';
+      break;
+    default:
+      icon = '';
+      break;
+  }
+
+  return icon;
+};
