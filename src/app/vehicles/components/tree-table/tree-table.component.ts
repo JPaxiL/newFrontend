@@ -141,7 +141,7 @@ export class TreeTableComponent implements OnInit {
     this.treeTableResizing(true);
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
-    console.log(this.vehicleService.vehicles);
+    // console.log(this.vehicleService.vehicles);
   }
 
   headerScrollHandler(){
@@ -246,49 +246,66 @@ export class TreeTableComponent implements OnInit {
   }
   updateGroup(){
     const vehicles = this.vehicleService.vehicles;
-    if(this.dataEdit.type=='grupo'){
+    if(this.dataEdit.type=='operacion'){
       for (const key in this.list1) {
         let index = vehicles.indexOf(this.list1[key]);
-        vehicles[index].idgrupo = null;
-        vehicles[index].grupo = "Unidades Sin Grupo";
+        vehicles[index].idoperation = 0;
+        vehicles[index].nameoperation = "Unidades Sin Operacion";
+      }
 
+      for (const key in this.list2){
+        let index = vehicles.indexOf(this.list2[key]);
+        vehicles[index].idoperation = this.dataEdit.id;
+        vehicles[index].nameoperation = this.nameEdit.nativeElement.value;
+      }
+      for(const key in vehicles){
+        if(vehicles[key].idoperation==this.dataEdit.id){
+          vehicles[key].nameoperation=this.nameEdit.nativeElement.value
+        }
+      }
+    }else if(this.dataEdit.type=='grupo'){
+      for (const key in this.list1) {
+        let index = vehicles.indexOf(this.list1[key]);
+        vehicles[index].idgrupo = 0;
+        vehicles[index].namegrupo = "Unidades Sin Grupo";
       }
 
       for (const key in this.list2){
         let index = vehicles.indexOf(this.list2[key]);
         vehicles[index].idgrupo = this.dataEdit.id;
-        vehicles[index].grupo = this.nameEdit.nativeElement.value;
+        vehicles[index].namegrupo = this.nameEdit.nativeElement.value;
       }
       for(const key in vehicles){
         if(vehicles[key].idgrupo==this.dataEdit.id){
-          vehicles[key].grupo=this.nameEdit.nativeElement.value
+          vehicles[key].namegrupo=this.nameEdit.nativeElement.value
         }
       }
-    }else{
+    }else if(this.dataEdit.type=='convoy'){
       for (const key in this.list1) {
         let index = vehicles.indexOf(this.list1[key]);
-        vehicles[index].idconvoy = null;
-        vehicles[index].convoy = "Unidades Sin Convoy";
-
+        vehicles[index].idconvoy = 0;
+        vehicles[index].nameconvoy = "Unidades Sin Convoy";
       }
 
       for (const key in this.list2){
         let index = vehicles.indexOf(this.list2[key]);
         vehicles[index].idconvoy = this.dataEdit.id;
-        vehicles[index].convoy = this.nameEdit.nativeElement.value;
+        vehicles[index].nameconvoy = this.nameEdit.nativeElement.value;
       }
       for(const key in vehicles){
         if(vehicles[key].idconvoy==this.dataEdit.id){
-          vehicles[key].convoy=this.nameEdit.nativeElement.value;
+          vehicles[key].nameconvoy=this.nameEdit.nativeElement.value;
         }
       }
     }
+
+
     this.vehicleService.vehicles = vehicles;
     this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
   }
   showEditGroup(data: any){
     this.dataEdit = data;
-    // //console.log('show edit data',data);
+    // console.log('show edit data',data);
     this.displayEditGroup = true;
     this.textHeaderEdit = data.type+" "+data.name;
     this.nameEdit.nativeElement.value = data.name;
@@ -300,49 +317,49 @@ export class TreeTableComponent implements OnInit {
     let aux_idgrupo=-1;
     for (const key in vehicles) {
       // //console.log('id==idconvoy------->'+data.id+'=='+vehicles[key]['idconvoy'])
-      if (data.type=='grupo') {
-        if(data.id==vehicles[key]['idgrupo']&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
+      if (data.type=='operacion') {
+        // if(data.id==vehicles[key]['idoperation']&&data.name==vehicles[key]['operation']){
+        if(data.id==vehicles[key]['idoperation']&&vehicles[key]['idgrupo']==0&&vehicles[key]['idconvoy']==0){
           aux2.push(vehicles[key]);
         }
-        aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
+        //id 0 significa que no tiene
+        aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation==0&&vehicle.idgrupo==0&&vehicle.idconvoy==0);
+      }
+      if (data.type=='grupo') {
+        if(data.id==vehicles[key]['idgrupo']&&vehicles[key]['idconvoy']==0){
+          aux2.push(vehicles[key]);
+          //filtrar por idoperacion del grupo
+          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation==vehicles[key]['idoperation']&&vehicle.idgrupo==0&&vehicle.idconvoy==0);
+        }
       }
       if (data.type=='convoy') {
         if(data.id==vehicles[key]['idconvoy']){
           aux2.push(vehicles[key]);
-          aux_idgrupo = vehicles[key]['idgrupo']!;
+          //filtrar por idoperacion del grupo
+          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo==vehicles[key]['idgrupo']&&vehicle.idconvoy==0);
         }
-      }
-    }
-    if(data.type=='convoy'){
-      for (const key in vehicles){
-        if(vehicles[key]['idgrupo']==aux_idgrupo&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
-          // //console.log('unidades sin convoy??',vehicles[key]);
-          aux1.push(vehicles[key]);
-        }
-
       }
     }
 
     this.list2 = aux2;
     this.list1 = aux1;
 
-
   }
   
   showDelete(data: any){
     this.textDelete = data['type'];
     if(data['id']==null){
-      //console.log('no hay id');
+      console.log('no hay id');
     }else{
-      // //console.log('en proceso de borrado');
       this.idDelete = data['id'];
       this.typeDelete = data['type'];
+      console.log('en proceso de borrado',this.idDelete,this.typeDelete);
     }
 
 
     Swal.fire({
       title: 'Confirmación',
-      text: `¿Está seguro de descomponer el ${data.type} ${data.name}?`,
+      text: `¿Está seguro de descomponer, ${data.type}: ${data.name}?`,
       icon: 'warning',
       showLoaderOnConfirm: true,
       showCancelButton: true,
@@ -361,7 +378,7 @@ export class TreeTableComponent implements OnInit {
       if(data.isConfirmed) {
         Swal.fire(
           'Descomponer',
-          'Descomposición del grupo exitosa',
+          `Descomposición de ${this.typeDelete} exitosa`,
           'success'
         );
       }
@@ -443,6 +460,7 @@ export class TreeTableComponent implements OnInit {
   async onDelete(){
     const req = {
       id : this.idDelete,
+      type : this.typeDelete,
       vehicles : null
     };
     // //console.log('borrando ...');
@@ -456,11 +474,14 @@ export class TreeTableComponent implements OnInit {
             for (const j in aux_vehicles_tree) {
               if (aux_vehicles[key]['id']==aux_vehicles_tree[j]['id']) {
                 if(this.typeDelete=='grupo'){
-                  aux_vehicles_tree[j]['idgrupo']=null;
-                  aux_vehicles_tree[j]['grupo']='Unidades Sin Grupo';
-                }else{
-                  aux_vehicles_tree[j]['idconvoy']=null;
-                  aux_vehicles_tree[j]['convoy']='Unidades Sin Convoy';
+                  aux_vehicles_tree[j]['idgrupo']=0;
+                  aux_vehicles_tree[j]['namegrupo']='Unidades Sin Grupo';
+                }else if(this.typeDelete =='operacion'){
+                  aux_vehicles_tree[j]['idoperation']=0;
+                  aux_vehicles_tree[j]['nameoperation']='Unidades Sin Operacion';
+                }else if(this.typeDelete =='convoy'){
+                  aux_vehicles_tree[j]['idconvoy']=0;
+                  aux_vehicles_tree[j]['nameconvoy']='Unidades Sin Convoy';
                 }
     
               }

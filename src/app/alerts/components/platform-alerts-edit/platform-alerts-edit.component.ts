@@ -106,8 +106,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.expirationDate = !alert.bol_fecha_caducidad;
     let fecha_desde = alert.fecha_desde.split('-').map(Number);
     let fecha_hasta = alert.fecha_hasta.split('-').map(Number);
-
-    //console.log('Objeto Alertas: ',alert);
+    let activo = alert.activo === 'true' ? true : false;
 
     this.disabledTimeLimit = !alert.bol_fijar_tiempo;
     this.disabledSpeed = !alert.bol_fijar_velocidad;
@@ -131,7 +130,12 @@ export class PlatformAlertsEditComponent implements OnInit {
     let notificacion_whatsapp = alert.notificacion_whatsapp.toLowerCase() === 'true';
     this.disabledWhatsapp = !notificacion_whatsapp;
 
-    let whatsapps = alert.notificacion_whatsapp_lista == ''? []: alert.notificacion_whatsapp_lista.split(',');
+    let whatsapps;
+    if(alert.notificacion_whatsapp_lista == null || alert.notificacion_whatsapp_lista == ''){
+      whatsapps = [];
+    } else {
+      whatsapps = alert.notificacion_whatsapp_lista.split(',');
+    }
 
     let ventana_emergente = alert.ventana_emergente.toLowerCase() === 'true';
 
@@ -140,7 +144,7 @@ export class PlatformAlertsEditComponent implements OnInit {
       geocercas: [this.geoSelected],
       geocircles: [[]],
       tipoAlerta: [alert.tipo, [Validators.required]],
-      chkEventoActivado: [alert.activo],
+      chkEventoActivado: [activo],
       chkSonido: [notificacion_system],
       chkCorreo: [notificacion_email],
       sonido: [

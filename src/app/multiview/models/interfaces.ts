@@ -1,9 +1,10 @@
 
 export interface Operation {
     id: number,
-    descripcion: string,
+    descripcion?: string,
     nombre: string,
     usuario_id: number,
+    enm_type?: string,
 }
 export interface Convoy {
     nombre: string,
@@ -11,7 +12,9 @@ export interface Convoy {
     usuario_id: number,
     id: number,
     grupo_convoy_id?: number,
+    operation_id?: number,
     bol_eliminado?: boolean,
+    enm_type?: string,
 }
 
 export interface UnitItem {
@@ -24,6 +27,9 @@ export interface UnitItem {
 }
 
 export interface UserTracker {
+    nameconvoy?: string;
+    namegrupo?: string;
+    nameoperation?: string;
     id?: number,
     numero_placa?: string,
     nombre?: string,
@@ -47,6 +53,7 @@ export interface UserTracker {
     name?: string,
     icon?:  string,
     convoy?: string,
+    operation?: string,
     follow?: boolean,
     IMEI?: string,
     title?: string,
@@ -64,6 +71,7 @@ export interface UserTracker {
     dat_correctivo_ini?: string,
     grupo?: string,
     id_conductor?: number | null,
+    idoperation?: number | null,
     idconvoy?: number | null,
     idgrupo?: number | null,
     iluminaria_h_i?: string,
@@ -117,7 +125,7 @@ export interface MinimapContent {
 
 export interface MapItem {
     id: string;
-    map?: L.Map | null; 
+    map?: L.Map | null;
     markerClusterGroup?: any,
     markerClusterData?: any,
     imeiPopup?: any,
