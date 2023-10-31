@@ -2,19 +2,124 @@ import { IGeofence, IGeofences } from "./interfaces";
 
 export class Geofences implements IGeofences {
     geofences: IGeofence[]=[];
+    public operations: any = [];
+    public groups: any = [];
+    public getGeofences (){
+        return this.geofences;
+    }
     // constructor (geofences: IGeofence[]){
     //     this.geofences = geofences;
     // }
     public setGeofences(items:IGeofence[]){
         this.geofences.push(...items)
     }
-    public createTreeNode () : any{
-        let map: any=[];
-        console.log("devolviendo arbol de geocercas")        
+    public createTreeNode() : any{
+      let map: any=[];
+      
     }
-    public groups: any = [];
-    public operations: any = [];
-
+    
+    // public createTreeNode (data: []) : any{
+    //     let map: any=[];
+    //     console.log("devolviendo arbol de geocercas") 
+    //     let status_operation = false;
+    //     let status_group = false;
+    //     this.operations = [];
+    //     this.groups = [];
+    //     for (const index in data) {
+    //         //CASOS SI ES UN CREACION DE OPERATION
+    //         //CASOS SI ES UN CREACION DE GRUPO      
+    //         if(this.operations.includes(data[index]['idoperation'])){
+    //         }else{
+    //           this.operations.push(data[index]['idoperation']);
+    //           status_operation= true;
+    //         }
+    //         if(this.groups.includes(data[index]['idoperation'] +'_'+ data[index]['idgrupo'])){
+    //         // if(this.groups.includes(data[index]['idgrupo'])){
+    //         }else{
+    //           this.groups.push(data[index]['idoperation'] +'_'+ data[index]['idgrupo']);
+    //           // this.groups.push(data[index]['idgrupo']);
+    //           status_group= true;
+    //         }
+    //         // para los status true significa que es uno nuevo , false que ya existe
+    //         //posibilidades para Operacion/Grupo
+    //         // 4 segun logica binatria 0011010101
+    //         //case es una nueva operacion/grupo
+    //         if(status_operation&&status_group){
+    //           console.log('case : 1 1');
+    //           map.push(
+    //             {
+    //               data:{name: data[index]['nameoperation'], col:3, type:'operacion', id:data[index]['idoperation']},
+    //               expanded: true,
+    //               children:[
+    //                 {
+    //                   data:{name:data[index]['namegrupo'], col:3, type:'grupo', id:data[index]['idgrupo']},
+    //                   expanded: true,
+    //                   children: [
+    //                     {
+    //                         data:data[index]
+    //                     }
+    //                   ]
+    //                 }
+    //               ]
+    //             }
+    //           );
+    //         //case para nueva operacion/grupo pero convoy existente
+    //         }else if(status_operation&&status_group){
+    //           console.log('case : 1 1'); //caso imposible
+    //         }else if(status_operation&&!status_group){
+    //           console.log('case : 1 0'); //caso imposible
+    //           const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
+    //           const newGroup = {
+    //             data: { name: data[index]['namegrupo'], col: 3, type: 'grupo', id: data[index]['idgrupo'] },
+    //             expanded: true,
+    //             children: [
+    //                 {
+    //                     data: data[index],
+    //                   },
+    //             ],
+    //           };
+    //           existingOperation.children.push(newGroup);
+    //         }else if(!status_operation&&status_group){
+    //           console.log('case : 0 1'); // nunca se va dar
+    //           // const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);      
+    //         }else if(!status_operation&&!status_group){
+    //           //logica para cuando ya existe operacion grupo, pero no existe el convoy
+    //           console.log('case : 0 0');
+    //           const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
+    //           const existingGroup = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idgrupo']);
+    //           existingGroup.children.push({
+    //                 data: data[index],
+    //           });
+      
+    //         }else if(!status_operation&&!status_group){
+    //           //case cuando ya existen todos y se agrega el convoy existente
+    //           console.log('case : 0 0');
+    //           const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idoperation']);
+    //           const existingGroup = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id === data[index]['idgrupo']);
+    //           existingGroup.children.push({
+    //             data: data[index]
+    //           });
+    //         }
+    //         status_group=false;
+    //         status_operation=false;
+    //     }
+    //     map.sort((a: { data: { id: any; }; }, b: { data: { id: any; }; }) => {
+    //         const idA = a.data.id;
+    //         const idB = b.data.id;
+    //         if (idA < idB) {
+    //           return -1;
+    //         }
+    //         if (idA > idB) {
+    //           return 1;
+    //         }
+    //         return 0;
+    //     });
+    //       // console.log("operations",this.operations);
+    //       // console.log("groups",this.groups);
+    //     console.log("mapa:",map);
+    //       // console.log("prueba:",prueba);
+    //     return map;
+    // }
     // public createTreeNode () : any[]{
     //     let aux = "testSenial";
     //     let map: any=[];

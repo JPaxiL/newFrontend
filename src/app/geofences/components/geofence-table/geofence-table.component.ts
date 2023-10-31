@@ -10,6 +10,7 @@ import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 import { MapServicesService } from '../../../map/services/map-services.service';
 import * as L from 'leaflet';
 import 'leaflet-draw';
+import { forkJoin } from 'rxjs';
 import { Geofences } from '../../models/geofences';
 import { IGeofence } from '../../models/interfaces';
 interface Column {
@@ -75,17 +76,15 @@ export class GeofenceTableComponent implements OnInit {
     // });
 
     // this.geofencesService.reloadTableTree.subscribe(res=>{
-
     //   if(this.geofencesService.treeTableStatus){
     //     // //console.log('desde tree table ...');
     //     this.geofences = this.geofencesService.geofencesTree;
     //   }
-
     // });
   }
 
   ngOnInit(): void {    
-    console.log("hello!!!")
+    console.log("hello Geofences!!!")
     //this.geofencesService.getData().then((geofences) => (this.files = files));
         this.cols = [
             { field: 'name', header: 'Name' },
@@ -101,14 +100,42 @@ export class GeofenceTableComponent implements OnInit {
     if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
       this.circularGeofencesService.spinner.show('loadingCircularGeofencesSpiner');
     }
-
+    
+    forkJoin([
+      this.geofencesService.dataCompleted,
+      this.circularGeofencesService.dataCompleted,
+      this.polylineGeofenceService.dataCompleted
+    ]).subscribe((data: [IGeofence[], IGeofence[], IGeofence[]]) => {
+      // data[0] contiene los datos de geofencesService
+      // data[1] contiene los datos de circularGeofencesService
+      // data[2] contiene los datos de polylineGeofenceService
+      
+      // Utiliza los datos como desees, por ejemplo, setea en tu objGeofences:
+      const combinedData = [...data[0], ...data[1], ...data[2]];
+      this.objGeofences.setGeofences(combinedData);
+    });
     if(this.geofencesService.initializingGeofences){
       this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[]);
     }else{
       this.geofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
+        this.objGeofences.setGeofences(data);      
+      })
+    }
+    if(this.circularGeofencesService.initializingCircularGeofences){
+      this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[]);
+    }else{
+      this.circularGeofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
         this.objGeofences.setGeofences(data);
       })
     }
+    if(this.polylineGeofenceService.initializingPolylineGeofences){
+      this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[]);
+    }else{
+      this.polylineGeofenceService.dataCompleted.subscribe((data:IGeofence[])=>{
+        this.objGeofences.setGeofences(data);
+      })
+    }
+    console.log("AllGeoooo", this.objGeofences.getGeofences())
     this.treeGeofences = this.objGeofences.createTreeNode();
   }
 
