@@ -36,26 +36,20 @@ export class CipiaComponent implements OnInit {
   getMediaTest(){
     this.loading = true;
     this.multimediaService.retrieveVideoFrom(this.mediaRequestRetrieve).subscribe( (url:any) => {
-      console.log("URL OBTENIDO: ", url);
       this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.loading = false;
     },
     error => {
       console.log(error);
-      this.loading = false;
     });
   }
 
   recordMediaTest(){
     this.loading = true;
     this.multimediaService.recordVideo(this.mediaRequestRecord).subscribe( (url:any) => {
-      console.log("URL OBTENIDO: ", url);
       this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.loading = false;
     },
     error => {
       console.log(error);
-      this.loading = false;
     });
   }
 
