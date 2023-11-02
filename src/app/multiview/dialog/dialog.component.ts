@@ -40,7 +40,7 @@ export class DialogComponent implements OnInit {
     public multiviewService: MultiviewService,
     private vehicleService: VehicleService,
   ) {
-  
+   
   }
 
   async ngOnInit(): Promise<void> {

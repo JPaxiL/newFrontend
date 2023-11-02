@@ -176,6 +176,11 @@ export class MinimapService {
     });
   }
 
+  resizeMaps(){
+    this.maps.forEach(item => {
+      item.map?.invalidateSize();
+    });
+  }
   getVehicles(){
     return this.vehicleService.vehicles;
   }

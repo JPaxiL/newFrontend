@@ -172,6 +172,7 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   deleteView(idContainer: string){
     this.structures = this.structures.filter(st => st.gridItem_id !== idContainer);
     this.structures = this.multiviewService.calculateStructure(this.structures);
+    this.auxGridItems = this.auxGridItems.filter(item => item.structure.gridItem_id != idContainer);
     this.updateGridStructureInChild();
   }
 
@@ -186,7 +187,9 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
       return;
     }
     this.loading = true
+    console.log("presave: ", this.screenView.grids);
     this.screenView.grids = this.gridChild.items;
+    console.log("post save: ", this.screenView.grids);
     console.log("guardando...");
     this.multiviewService.saveMultiview(this.screenView).subscribe(resp => {
       if(resp.success){
@@ -195,9 +198,23 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
         if(this.configName !== "default"){
           this.itemsMenu.find(item => item.id! == '1')!.disabled = true;
         }
-        Swal.fire('Guardado','Los datos se guardaron correctamente!!','success');
+        Swal.fire(
+          {
+            title: 'Guardado',
+            text: 'Los datos se guardaron correctamente!!',
+            icon: 'success',
+            target:'body',
+            heightAuto: false
+          }
+        ); 
       }else{
-        Swal.fire('Error', 'No se pudo guardar el grupo. Intente nuevamente.', 'error');
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo guardar el grupo. Intente nuevamente.',
+          icon: 'error',
+          target:'body',
+          heightAuto: false
+        });
       }
     })
   }
@@ -208,73 +225,99 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
       return;
     }
     console.log("presave: ", this.screenView.grids);
-    
     this.screenView.grids = this.gridChild.items;
     console.log("post save: ", this.screenView.grids);
 
     this.loading = true;
-    this.screenView.name = this.newName;
-      if(this.multiviewService.userMultiview.find(item => item.name === this.screenView.name)){
-        // Si hay un multiview que se llame igual preguntar si sobreescribirá;
-        console.log("duplicated?: ", this.multiviewService.userMultiview);
-        Swal.fire({
-          title: '¿Sobreescribir grupo?',
-          text: `¿El grupo ${this.screenView.name} ya existe, desea sobreecribirlo?`,
-          showCancelButton: true,
-          showLoaderOnConfirm: true,
-          confirmButtonText: 'Sobreescribir',
-          cancelButtonText: 'Cancelar',
-          allowOutsideClick: () => !Swal.isLoading(), // Evita interacción externa mientras se carga
-          preConfirm: async () => {
-            try {
-              const resp = await this.multiviewService.saveMultiview(this.screenView).toPromise();
-              if (resp.success) {
-                this.wasChanged = false;
-                this.showSaveAs = false
-                if(this.configName !== "default"){
-                  this.itemsMenu.find(item => item.id! == '1')!.disabled = true;
-                }
-                this.loading = false;
-                Swal.fire(
-                  'Guardado',
-                  'Los datos se guardaron correctamente!!',
-                  'success'
-                ); 
-              } else {
-                this.loading = false;
-                Swal.fire('Error', 'No se pudo guardar los datos', 'error');
+    //this.screenView.name = this.newName;
+    if(this.multiviewService.userMultiview.find(item => item.name == this.newName)){
+      // Si hay un multiview que se llame igual preguntar si sobreescribirá;
+      console.log("duplicated?: ", this.multiviewService.userMultiview);
+      Swal.fire({
+        title: '¿Sobreescribir grupo?',
+        text: `¿El grupo ${this.newName} ya existe, desea sobreecribirlo?`,
+        showCancelButton: true,
+        showLoaderOnConfirm: true,
+        confirmButtonText: 'Sobreescribir',
+        cancelButtonText: 'Cancelar',
+        heightAuto: false,
+        allowOutsideClick: () => !Swal.isLoading(), // Evita interacción externa mientras se carga
+        preConfirm: async () => {
+          try {
+            const resp = await this.multiviewService.saveMultiview(this.screenView,this.newName).toPromise();
+            if (resp.success) {
+              this.wasChanged = false;
+              this.showSaveAs = false
+              if(this.configName === "default"){
+                this.itemsMenu.find(item => item.id! == '1')!.disabled = true;
               }
-            } catch (error) {
               this.loading = false;
-              Swal.fire('Error', 'Ocurrió un error en la solicitud', 'error');
+              Swal.fire(
+                {
+                  title: 'Guardado',
+                  text: 'Los datos se guardaron correctamente!!',
+                  icon: 'success',
+                  target:'body',
+                  heightAuto: false
+                }
+              ); 
+            } else {
+              this.loading = false;
+              Swal.fire({
+                title: 'Error',
+                text: 'No se pudo guardar los datos.',
+                icon: 'error',
+                target:'body',
+                heightAuto: false
+              });
             }
-          },
-        }).then((result) => {
-          if (result.isDismissed) {
-            this.screenView.was_edited = true;
+          } catch (error) {
             this.loading = false;
+            Swal.fire({
+              title: 'Error',
+              text: 'Ocurrió un error en la solicitud.',
+              icon: 'error',
+              target:'body',
+              heightAuto: false
+            });
           }
-        });;
-      }else{
-        this.loading = true;
-        this.multiviewService.saveMultiview(this.screenView).subscribe(resp => {
-          if(resp.success){
-            console.log("current userMultiviews: ",this.multiviewService.userMultiview);
-            this.wasChanged = false;
-            this.showSaveAs = false;
-            if(this.configName !== "default"){
-              this.itemsMenu.find(item => item.id! == '1')!.disabled = true;
-            }
-            Swal.fire(
-              'Guardado',
-              'Los datos se guardaron correctamente!!',
-              'success'
-            ); 
-          }else{
-            Swal.fire('Error', 'No se pudo guardar el grupo. Intente nuevamente.', 'error');
-          }
+        },
+      }).then((result) => {
+        if (result.isDismissed) {
+          this.screenView.was_edited = true;
           this.loading = false;
-        });
-      }
+        }
+      });;
+    }else{
+      this.loading = true;
+      this.multiviewService.saveMultiview(this.screenView, this.newName).subscribe(resp => {
+        if(resp.success){
+          console.log("current userMultiviews: ",this.multiviewService.userMultiview);
+          this.wasChanged = false;
+          this.showSaveAs = false;
+          if(this.configName === "default"){
+            this.itemsMenu.find(item => item.id! == '1')!.disabled = true;
+          }
+          Swal.fire(
+            {
+              title: 'Guardado',
+              text: 'Los datos se guardaron correctamente!!',
+              icon: 'success',
+              target:'body',
+              heightAuto: false
+            }
+          ); 
+        }else{
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo guardar el grupo. Intente nuevamente.',
+            icon: 'error',
+            target:'body',
+            heightAuto: false
+          });
+        }
+        this.loading = false;
+      });
+    }
   }
 }
