@@ -44,21 +44,14 @@ export class DialogComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // this.multiviewService.getOperations().subscribe((resp:ResponseInterface) => {
-    //   this.operations = resp.data as Operation[];
-    //   this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
-    // });
     if(!this.vehicleService.statusDataVehicle){
       // console.log('(vehicleService) vehicle service no está listo. Subscribiendo para obtener data...');
       this.vehicleService.dataCompleted.subscribe({
         next: (result: boolean) => {
           if(result){
-            this.operations = this.vehicleService.listOperations.map((operation: { idoperation: any; nameoperation: any; }) => {
-              return {
-                id: operation.idoperation,
-                nombre: operation.nameoperation,
-                usuario_id: 0
-              };
+            this.multiviewService.getOperations().subscribe((resp:ResponseInterface) => {
+              this.operations = resp.data as Operation[];
+              this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
             });
             console.log('OPERATIONS MULTIVIEW NEW ----->',this.vehicleService.listOperations);
             this.resetCurrentMultiview();
@@ -70,12 +63,9 @@ export class DialogComponent implements OnInit {
       });
     } else {
       // console.log('(vehicel service) está listo. Subscribiendo para obtener data...');
-      this.operations = this.vehicleService.listOperations.map((operation: { idoperation: any; nameoperation: any; }) => {
-        return {
-          id: operation.idoperation,
-          nombre: operation.nameoperation,
-          usuario_id: 0
-        };
+      this.multiviewService.getOperations().subscribe((resp:ResponseInterface) => {
+        this.operations = resp.data as Operation[];
+        this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
       });
       console.log('OPERATIONS MULTIVIEW NEW ----->',this.vehicleService.listOperations);
       this.resetCurrentMultiview();
@@ -146,10 +136,9 @@ export class DialogComponent implements OnInit {
         }
       },
     });
-    
   }
+
   changeOperation(){
-    
     // this.multiviewService.getTrackersByOperation(this.selectedOperation).subscribe((resp:ResponseInterface) => {
     //   this.units = resp.data.trackers as UserTracker[];
     //   this.convoys = resp.data.convoys;
@@ -186,38 +175,43 @@ export class DialogComponent implements OnInit {
     //   console.log("this.unitItems: ",this.unitItems);
     // });
 
-    let aux_convoys:any[] = [];
-    let aux_trackers:any[] = [];
-    aux_convoys = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation && vehicle.idconvoy != 0);
-    const uniqueIdConvoySet = new Set<number>();
-    aux_convoys = aux_convoys.filter((vehicle: any) => uniqueIdConvoySet.size === uniqueIdConvoySet.add(vehicle.idconvoy).size);
-    this.unitItems = aux_convoys.map(item => {
-      return {
-        id: item.idconvoy,
-        nombre: "(CONVOY) "+item.nameconvoy!,
-        operation: item.nameoperation,
-        selected: false,
-        type: "convoy",
-        imeis: this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation && vehicle.idconvoy == item.idconvoy)
-        .map(vh => vh.IMEI!)
-      };
+    this.unitItems = [];
+    // obtengo los convoys que pertenecen a esa operación
+    //Para ello obtengo todos los vehiculos que pertenecen a esa operación
+    let aux_convoys = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation && vehicle.idconvoy != 0);
+    // de todos esos vehiculos extraigo los ids de convoys
+    let convoysIds = new Set<number>(aux_convoys.map(vh => {
+      return vh.idconvoy!;
+    }));
+    //Por cada Id de convoys, busco el primer vehiculo con ese convoyid y me creo un objeto de tipo UnitItem para insertarlo en UnitItems[]
+    convoysIds.forEach(id => {
+      this.unitItems.push(
+        ...[aux_convoys.find(convoy => convoy.idconvoy == id)].map(item => {
+          return {
+            id: item!.idconvoy!,
+            nombre: "(CONVOY) "+item!.nameconvoy!,
+            operation: item!.nameoperation!,
+            selected: false,
+            type: "convoy",
+            imeis: this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation && vehicle.idconvoy == item!.idconvoy).map(vh => vh.IMEI!)
+          } as UnitItem
+        })
+      );
     });
-    
-    aux_trackers = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
-    for (const tracker_unit of aux_trackers) {
-      const filteredGroup = {
+
+    //Una vex obtenga todos los convoys de esa operación, ahora agrego los vehiculos individualmente
+    this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation).forEach(tracker_unit => {
+      this.unitItems.push({
         id: tracker_unit.id,
-        nombre: tracker_unit.name,
+        nombre: tracker_unit.name!,
         operation: tracker_unit.nameoperation,
         selected: false,
         type: "tracker",
-        imeis: tracker_unit.IMEI.toString()
-      };
-      this.unitItems.push(filteredGroup);
-    }
-
-    // console.log("this.unitItems: ",this.unitItems);
-
+        imeis: [tracker_unit.IMEI!.toString()]
+      });
+    })
+    this.unitItems.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    console.log("this.unitItems: ",this.unitItems);
   }
 
   onGridChange(event:GridItem[]){
