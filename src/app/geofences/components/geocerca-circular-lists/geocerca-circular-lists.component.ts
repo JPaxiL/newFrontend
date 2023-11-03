@@ -188,13 +188,13 @@ export class GeocercaCircularListsComponent implements OnInit {
   }
 
   clickAgregarGeocerca() {
-    this.circularGeofencesService.nombreComponente = "AGREGAR";
+    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
     this.circularGeofencesService.action = "add";
 
   }
 
   clickConfigurarGeocerca(id:number) {
-    this.circularGeofencesService.nombreComponente = "AGREGAR";
+    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
     this.circularGeofencesService.action         = "edit";
     this.circularGeofencesService.idGeocercaEdit = id;
   }

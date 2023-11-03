@@ -12,6 +12,8 @@ import 'leaflet-path-drag';
 import 'leaflet-measure-path'
 import 'leaflet-measure-path/leaflet-measure-path.css';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CircularGeofencesService } from '../../services/circular-geofences.service';
+
 
 declare var $: any;
 // import FreeDraw, { CREATE, EDIT } from 'leaflet-freedraw';
@@ -38,6 +40,7 @@ declare var $: any;
 
 export class GeocercaAddComponent implements OnInit, OnDestroy  {
   form :any = {};
+  nameComponentCirc = "CREAR GEO CIRC";
 
   booleanOptions = [
     { label: 'Sí', value: true },
@@ -66,6 +69,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
     public vehicleService: VehicleService,
+    private circularGeofencesService: CircularGeofencesService,
 
   ) { }
 
@@ -211,6 +215,14 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     //     }
     //   }
     //   aux.sort((a, b) => a.idoperation - b.idoperation);
+  }
+  get showBtnAdd(){
+    return this.circularGeofencesService.showBtnAdd;
+  }
+  clickAgregarGeocercaCir() {
+    this.circularGeofencesService.nameComponentCirc = "CREAR GEO CIRC";
+    this.circularGeofencesService.action = "add";
+    console.log("this.clickAgregarGeocercaCir");
   }
 
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {

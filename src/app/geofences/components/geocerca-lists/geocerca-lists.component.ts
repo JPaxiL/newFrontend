@@ -505,20 +505,20 @@ export class GeocercaListsComponent implements OnInit {
 
   clickConfigurarGeocerca(id:number) {
     //console.log('clickConfigurarGeocerca');
-    this.geofencesService.nombreComponente = "AGREGAR";
+    //this.geofencesService.nombreComponente = "AGREGAR";
     //console.log(id);
     this.geofencesService.action         = "edit";
     this.geofencesService.idGeocercaEdit = id;
   }
 
   clickAgregarGeocercaCirc() {
-    this.circularGeofencesService.nombreComponente = "AGREGAR";
+    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
     this.circularGeofencesService.action = "add";
 
   }
 
   clickConfigurarGeocercaCirc(id:number) {
-    this.circularGeofencesService.nombreComponente = "AGREGAR";
+    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
     this.circularGeofencesService.action         = "edit";
     this.circularGeofencesService.idGeocercaEdit = id;
   }

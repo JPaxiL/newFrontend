@@ -279,7 +279,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
   clickCancelar(id:number){
 
-    this.circularGeofencesService.nombreComponente = "LISTAR";
+    this.circularGeofencesService.nameComponentCirc = "LISTAR";
 
     var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
     if ( this.action == "edit" ) {
@@ -334,7 +334,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
       this.circularGeofencesService.edit(this.form).subscribe((res) => {
 
-        this.circularGeofencesService.nombreComponente =  "LISTAR";
+        this.circularGeofencesService.nameComponentCirc =  "LISTAR";
 
         let gEdit = res[2];
         let gEdit2 = res[3][0];
@@ -411,7 +411,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
         this.circularGeofencesService.store(this.form).subscribe( (resp: any) => {
 
-          this.circularGeofencesService.nombreComponente =  "LISTAR";
+          this.circularGeofencesService.nameComponentCirc =  "LISTAR";
 
           let gNew = resp[2];
           let gNew2 = resp[3][0];

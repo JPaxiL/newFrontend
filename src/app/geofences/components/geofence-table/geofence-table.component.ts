@@ -135,8 +135,8 @@ export class GeofenceTableComponent implements OnInit {
         this.objGeofences.setGeofences(data);
       })
     }
-    console.log("AllGeoooo", this.objGeofences.getGeofences())
-    this.treeGeofences = this.objGeofences.createTreeNode();
+    console.log("AllGeoooo todas las geocercas", this.objGeofences.getGeofences())
+    this.geofences = this.objGeofences.createTreeNode();
   }
 
   onBusqueda(gaaa?:any) {

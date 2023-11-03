@@ -1,5 +1,5 @@
 <div class="d-flex flex-column" style="height: 100%;">
-  <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca Poligonal' "></div>
+  <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca' "></div>
 
   <div class="modal-body panel-izq-container p-fluid overflow-auto" style="position: relative;">
 
@@ -8,6 +8,26 @@
     <div class="panel-izq-form">
 
       <div class="gl-row-underline">
+        <div class="flex contenedor">
+          <div class="border mi-div center-icon btn-gl-save btn-dark-hover w-100" >
+            <button type="button" *ngIf="geofencesService.showBtnAdd" (click)="clickAgregarGeocerca()" class="pentagon">
+
+            </button>
+            <label>Poligonales</label>
+          </div>
+          <div class="border mi mi-div center-icon btn-gl-save btn-dark-hover w-100">
+            <button type="button" *ngIf="showBtnAdd" (click)="clickAgregarGeocercaCir()" class="circle">
+              <i aria-hidden="true"></i>
+            </button>
+            <span>Circulares</span>
+          </div>
+          <div class="border mi mi-div center-icon btn-gl-save btn-dark-hover w-100">
+            <button class="circle">
+              
+            </button>
+            <span>Lineales</span>
+          </div>
+        </div>
         <div class="col-12">
             <label>NOMBRE:</label>
         </div>
