@@ -31,7 +31,6 @@ export class EventSocketService extends Socket {
     super({
       url: 'https://eventos.glmonitoreo.com/',
       //url: 'http://23.29.124.173',
-
       // options: {
       //   transports: ["websocket"]
       // }

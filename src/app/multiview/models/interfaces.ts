@@ -1,9 +1,10 @@
 
 export interface Operation {
     id: number,
-    descripcion: string,
+    descripcion?: string,
     nombre: string,
     usuario_id: number,
+    enm_type?: string,
 }
 export interface Convoy {
     nombre: string,
@@ -11,7 +12,9 @@ export interface Convoy {
     usuario_id: number,
     id: number,
     grupo_convoy_id?: number,
+    operation_id?: number,
     bol_eliminado?: boolean,
+    enm_type?: string,
 }
 
 export interface UnitItem {
@@ -24,6 +27,9 @@ export interface UnitItem {
 }
 
 export interface UserTracker {
+    nameconvoy?: string;
+    namegrupo?: string;
+    nameoperation?: string;
     id?: number,
     numero_placa?: string,
     nombre?: string,
@@ -47,6 +53,7 @@ export interface UserTracker {
     name?: string,
     icon?:  string,
     convoy?: string,
+    operation?: string,
     follow?: boolean,
     IMEI?: string,
     title?: string,
@@ -64,6 +71,7 @@ export interface UserTracker {
     dat_correctivo_ini?: string,
     grupo?: string,
     id_conductor?: number | null,
+    idoperation?: number | null,
     idconvoy?: number | null,
     idgrupo?: number | null,
     iluminaria_h_i?: string,
@@ -77,8 +85,6 @@ export interface UserTracker {
     tolva?: string,
     tag?: boolean,
 }
-
-
 
 export interface ScreenView {
     id?: number,
@@ -117,7 +123,7 @@ export interface MinimapContent {
 
 export interface MapItem {
     id: string;
-    map?: L.Map | null; 
+    map?: L.Map | null;
     markerClusterGroup?: any,
     markerClusterData?: any,
     imeiPopup?: any,
@@ -144,4 +150,18 @@ export interface TableRowSelectEvent {
     data?: any;
     type?: string;
     index?: number;
+}
+
+export interface TableRowSelectEvent {
+    originalEvent?: Event;
+    data?: any;
+    type?: string;
+    index?: number;
+}
+
+export interface MediaRequest {
+    device_id: string,
+    from?: string, //date in UTC0 "2023-10-09 19:12:00"
+    seconds: number, // max = 30
+    source: string, //  CABIN | ROAD
 }

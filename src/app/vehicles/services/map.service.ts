@@ -435,53 +435,48 @@ export class MapService {
         }else if(this.vehicleService.listTable==1){
           //add register to treetable;
           const tree = this.vehicleService.vehiclesTree;
-          // //console.log('groups',this.vehicleService.groups);
-          let index_group = -1;//this.vehicleService.groups.indexOf(vehicles[index]["grupo"]);
-          for (const key in tree) {
-            if (tree[key]['data']['name']==vehicles[index]["grupo"]) {
-              index_group = parseInt(key);
+
+          // Encuentra la operación en el árbol
+          const existingOperation = tree.find((node) => node.data.id === vehicles[index].idoperation);
+          // console.log('************************************+ ----> ESTE ES EL VEHICULO ',vehicles[index]);
+
+          if (existingOperation) {
+            // Encuentra el grupo en la operación
+            const existingGroup = existingOperation.children!.find((node) => node.data.id === vehicles[index].idgrupo);
+
+            if (existingGroup) {
+              // Encuentra el convoy en el grupo
+              const existingConvoy = existingGroup.children!.find((node) => node.data.id === vehicles[index].idconvoy);
+
+              if (existingConvoy) {
+                // Si el convoy existe, actualiza su data con los datos de vehicle[index]
+                // console.log('************************************+ ----> ESTE ES EL CONVOY ',existingConvoy);
+                // Busca el vehículo dentro de existingConvoy.children
+                const existingVehicle = existingConvoy.children!.find((vehiculo) => vehiculo.data.id === vehicles[index].id);
+
+                if (existingVehicle) {
+                  // // Aquí puedes actualizar la información del vehículo
+                  // console.log('************************************+ ----> ESTE ES EL NAME VEHICLE ',vehicles[index].name);
+                  // console.log('************************************+ ----> ESTE ES EL TREE SIN UPDATE ',tree);
+                  
+                  existingVehicle.data = vehicles[index];
+
+                  // Asigna la estructura de datos modificada a this.vehicleService.vehiclesTree
+                  this.vehicleService.vehiclesTree = tree;
+
+                  // Emite el evento para actualizar la vista (si es necesario)
+                  this.vehicleService.reloadTableTree.emit();
+
+                  // console.log('************************************+ ----> ESTE ES EL TREE UPDATE ',tree);
+                  // Imprime la información actualizada del vehículo
+                } else {
+                  // El vehículo no se encontró
+                  // console.log('Vehículo no encontrado');
+                }
+              }
             }
           }
 
-
-          let e = tree[index_group]['children'];
-          let index_convoy: number = -1;
-          //buscando index convoy;
-          for(const i in e){
-
-            if(e[parseInt(i)]['data']['name']==vehicles[index]['convoy']){
-              index_convoy = parseInt(i);
-            }
-          }
-          // buscando index registro tree
-          let aux_vehicles = tree[index_group]['children']![index_convoy]["children"];
-          let index_vehicle = -1;
-          for (const i in aux_vehicles) {
-            if(aux_vehicles[parseInt(i)]['data']['id']==vehicles[index]['id']){
-                index_vehicle = parseInt(i);
-            }
-          }
-          // //console.log('index grupo = ',index_group);
-          // //console.log('index convoy = ',index_convoy);
-          // //console.log('index vehicle = ',index_vehicle);
-          // //console.log('placa ->'+vehicles[index]['name']+'grupo'+vehicles[index]['grupo']+'convoy'+vehicles[index]['convoy']);
-          // //console.log('aux_vehicles',aux_vehicles);
-          // //console.log('tree',tree); //ok
-
-          if(index_group>=0&&index_convoy>=0&&index_vehicle>=0){
-            // //console.log('registro entrante ',vehicles[index]);
-            // //console.log('registro a actualizar',tree[index_group]['children']![index_convoy]["children"]![index_vehicle]['data']);
-
-            tree[index_group]['children']![index_convoy]["children"]![index_vehicle]['data'] = vehicles[index];
-            this.vehicleService.vehiclesTree = tree;
-          }
-
-          // if(tree[index_group]['children'][index_convoy]["children"]){
-          //
-          //   let aux_reg = tree[index_group]['children'][index_convoy]["children"];
-          //   //console.log('aux reg == ',aux_reg);
-          // }
-          // this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles); -->obsoleto
           this.vehicleService.reloadTableTree.emit();
         }
 
@@ -839,7 +834,7 @@ export class MapService {
                   else{
 
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                    console.log('se borra la flecha', vehicles[index].name);
+                    //console.log('se borra la flecha', vehicles[index].name);
                     //console.log(vehicles[index].name);
 
                   }
@@ -949,9 +944,9 @@ export class MapService {
     this.markerClusterGroup.clearLayers();
 
     for (const property in e){
-        console.log("e----- ", property);
-        console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
-        console.log("e[property].eye", e[property].eye);
+        //console.log("e----- ", property);
+        //console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
+        //console.log("e[property].eye", e[property].eye);
         if (e.hasOwnProperty(property)&&e[property].eye == true) {
           if(this.statusMap==false){
             const aux2: [string, string] = [e[property].latitud!, e[property].longitud!];
@@ -1085,7 +1080,7 @@ export class MapService {
   //   this.marker[data.IMEI]=tempMarker;
   // }
   private mensaje(){
-    console.log("mensaje");
+    //console.log("mensaje");
   }
   public timeStopAux(data: any): void{
 
@@ -1123,7 +1118,7 @@ export class MapService {
     this.vehicleService.postTimeStop(params);
   }
   public timeStop(this: any): void{
-    console.log("this",this);
+    //console.log("this",this);
     // consultar data actual
     let vehicle = this.vehicleService.getVehicle(this.imei);
 
@@ -1167,7 +1162,7 @@ export class MapService {
 
   private drawIcon(data:any, map: any): void{
     // assets/images/objects/nuevo/{{ rowData['icon']
-    console.log("dataaaaa---",data);
+    //console.log("dataaaaa---",data);
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
     if(data.speed>0){
       iconUrl = './assets/images/accbrusca.png';
@@ -1207,15 +1202,15 @@ export class MapService {
       paradaDesde: "",
       vehicleService : this.vehicleService
     };
-    // console.log('envia cero data',data.speed);
-    console.log('envia cero XD',options);
+    // //console.log('envia cero data',data.speed);
+    // console.log('envia cero XD',options);
     tempMarker.on('click',this.timeStop,options);
     // tempMarker.on('click',this.timeStop,options);
     // // this
     this.marker[data.IMEI]=tempMarker;
 
     this.markerClusterGroup.addLayer(tempMarker);
-    // //console.log('this.markerClusterGroup',this.markerClusterGroup);
+    // ////console.log('this.markerClusterGroup',this.markerClusterGroup);
     let object = this.markerClusterGroup.getLayers();
     let cont = 0;
     for (const key in object) {

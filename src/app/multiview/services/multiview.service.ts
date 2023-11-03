@@ -61,7 +61,7 @@ export class MultiviewService {
   public getTrackersByOperation(operation_id:string): Observable<ResponseInterface> {
     return this.http.get<ResponseInterface>(`${environment.apiUrl}/api/operations/trackers/${operation_id}`);
   }
-  public saveMultiview(multiview: ScreenView): Observable<ResponseInterface> {
+  public saveMultiview(multiview: ScreenView, name : string = ''): Observable<ResponseInterface> {
     console.log("multiview: ",multiview);
     const auxMultiview = {...multiview}
     console.log("auxMultiview: ",auxMultiview);
@@ -74,6 +74,9 @@ export class MultiviewService {
       return a.structure.structure_index - b.structure.structure_index;
     });
     auxMultiview.grids = auxGrids;
+    if(name.length > 0){
+      auxMultiview.name = name;
+    }
     localStorage.setItem('screen_'+auxMultiview.name, JSON.stringify([auxMultiview]));
 
     return this.http.post<ResponseInterface>(`${environment.apiUrl}/api/multiview`,{item:auxMultiview});

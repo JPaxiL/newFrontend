@@ -186,6 +186,9 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     //Eliminamos la instancia en minimap service
     this.minimapService.maps = this.minimapService.maps.filter(map => map.id !== this.mapItem.id);
     this.onDelete.emit(this.idContainer);
+    setTimeout(() => {
+      this.minimapService.resizeMaps();
+    }, 300);
   }
 
   createMap() {
