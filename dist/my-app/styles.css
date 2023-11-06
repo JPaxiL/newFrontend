@@ -35593,6 +35593,7 @@ textarea.form-control-lg {
   --pm-notificaciones-header-height: var( --pm-general-header-height);
   --pm-configuracion-header-height: var( --pm-general-header-height);
   --navbar-height: 4.75rem;
+  --footbar-height: 2rem;
   --row-busqueda-height: var(--pm-general-header-height);
   --treetable-header-height: 2.625rem;
   --gl-btn-border-radius: 0.5rem;
