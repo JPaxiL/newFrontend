@@ -575,11 +575,9 @@ export class VehicleService {
   }
 
   private addSelect(vehicle: any){
-    if(this.statusDataVehicle==false){
-      vehicle.follow = false;
-      vehicle.eye = true;
-      vehicle.tag = true;
-    }
+    vehicle.follow = false;
+    vehicle.eye = true;
+    vehicle.tag = true;
     vehicle.arrayPrueba = [];
     vehicle.arrayPruebaParada = [];
     vehicle.paradaDesde = false;
