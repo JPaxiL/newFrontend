@@ -295,7 +295,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
     //console.log(this.events);
     for(let i = 0; i < this.events.length; i++){
       if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
-        console.log('Se encontro match');
+        // console.log('Se encontro match');
         return this.events[i].name;
       }
     }

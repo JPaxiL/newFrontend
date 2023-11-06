@@ -72,11 +72,11 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       var geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == this.polylineGeofenceService.idGeocercaEdit)[0];
       
-      console.log(geo);
+      // console.log(geo);
 
       if (geo.zone_visible == true) {
 
-        console.log('Eliminando geocerca porque era visible');
+        // console.log('Eliminando geocerca porque era visible');
         this.mapService.map.removeLayer(geo.geo_elemento);
 
       }
@@ -397,7 +397,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       geo0.geo_elemento.editing.disable();
 
-      console.log(this.form.geo_geometry)
+      // console.log(this.form.geo_geometry);
 
       this.polylineGeofenceService.edit(this.form).subscribe(res1 => {
 

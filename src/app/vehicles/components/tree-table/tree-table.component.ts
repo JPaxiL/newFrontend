@@ -567,7 +567,7 @@ export class TreeTableComponent implements OnInit {
     this.vehicleService.onClickIcon(IMEI);
   }
   onSort(data: any){
-    // //console.log("sort desde tree", data);
+    console.log("sort desde tree", data);
     this.sortOrder=data;
   }
   onClickTag(IMEI: string){
