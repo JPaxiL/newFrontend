@@ -29,10 +29,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   //private map!: L.Map;
   @Input() container = "map";
 
-  itemsMenu: MenuItem[]=[];
-  showScreenRecorder = false;
-  showCipiaExample = false;
-  @ViewChild('MapView') mapView!: ElementRef;
+  
+  
 
   constructor(
     private mapService: MapService,
@@ -42,39 +40,12 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService,
     public historialService: HistorialService,
-    private multimediaService: MultimediaService,
   ) {}
   // constructor() { }
 
   ngOnInit(): void {
 
-    this.itemsMenu = [
-      {
-        id: '1',
-        label: 'Grabar Pantallas',
-        icon: 'pi pi-fw pi-video',
-        command: (event) => {
-          console.log("grabar pantallas: ", event);
-          this.showScreenRecorder = true;
-        },
-      },
-      {
-        id: '2',
-        label: 'Tomar captura',
-        icon: 'pi pi-fw pi-camera',
-        command: (event) => {
-          this.multimediaService.screenShot(this.mapView.nativeElement);
-        },
-      },
-      {
-        id: '3',
-        label: 'Ejemplo cipia video',
-        icon: 'pi pi-fw pi-video',
-        command: (event) => {
-          this.showCipiaExample = true;
-        },
-      }
-    ];
+    
   }
 
   async ngAfterViewInit() {
@@ -299,7 +270,5 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.mapServicesService.display = false;
   }
 
-  closeScreenRecorder(){
-    this.showScreenRecorder = false;
-  }
+  
 }

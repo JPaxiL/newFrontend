@@ -1,12 +1,20 @@
 .cronometer {
-    width: 10rem;
+    width: 7rem;
     display: flex;
     justify-content: center;
     align-content: center;
 }
 
-.sidebar-recorder {
+.recorder-content {
+    height: 1.75rem;
+}
+
+.recorder-content-minimap {
     height: 3rem;
+}
+
+.sidebar-recorder {
+    height: 100%;
 }
 
 .preview-video {
