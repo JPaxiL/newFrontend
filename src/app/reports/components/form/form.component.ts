@@ -32,10 +32,27 @@ export class FormComponent implements OnInit {
   selectedConvoy: any={};
   groups: any=[];
   selectedGroup: any={};
+  //para operaciones
+  operations: any=[];
+  selectedOperation: any={};
+	disabledOperation = false;
+	disabledGroup = true;
+  placeholderOperation = 'Seleccione una Operación ...';
+  placeholderGroup = 'Seleccione una Operación Primero...';
+  placeholderConvoy = 'Seleccione una Operación Primero...';
+	disabledConvoy = true;
+  listOptionCheckbox = 'all';
+  listOptions: any= [
+    { idOption: 'Mostrar Todos los Vehículos', valueOption: 'all' },
+    { idOption: 'Operación', valueOption: 'operacion' },
+    { idOption: 'Grupo', valueOption: 'grupo' },
+    { idOption: 'Convoy', valueOption: 'convoy' }
+  ];
   checkboxGroup: boolean = false;
   pDropdownGroup: any= [
     { label: 'Convoy', value: false },
-    { label: 'Grupo', value: true }
+    { label: 'Grupo', value: true },
+    { label: 'Operacion', value: false }
   ];
   /* checkboxParada: boolean = true; //Renamed to chkStops
   checkboxMovimiento: boolean = true; */ //Renamed to chkMovements
@@ -255,6 +272,8 @@ export class FormComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private http: HttpClient,
     private titleService: Title) {
+      //INICIAR EL VEHICLE SERVICE PARA REPORTES
+      vehicleService.initialize();
       //this.fullScreenSpinnerMsg = 'Iniciando Módulo de Reportes';
       spinner.show("fullScreenSpinner");
       this.titleService.setTitle('Reportes');
@@ -263,13 +282,15 @@ export class FormComponent implements OnInit {
         if(vehicles){
           this.vehicles = vehicles;
           console.log('Vehicles: ',vehicles);
-          this.convoys = _.uniqBy(this.vehicles, 'convoy');
-          this.groups = _.uniqBy(this.vehicles, 'grupo');
-          this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
-          this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
-          this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
-          console.log('Convoys: ',this.convoys);
-          console.log('Groups: ',this.groups);
+          // this.convoys = _.uniqBy(this.vehicles, 'nameconvoy');
+          // this.groups = _.uniqBy(this.vehicles, 'namegrupo');
+          // this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
+          // this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
+          // this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
+          
+          // this.operations = this.vehicles.listOperations;
+          //lista de Operaciones Grupos Convoys existentes con vehiculos
+          
           this.areVehiclesLoaded = true;
         } else {
           console.log('Fallo al obtener vehiculos');
@@ -499,6 +520,162 @@ export class FormComponent implements OnInit {
       this.spinner.hide("fullScreenSpinner");
       this.fullScreenSpinnerMsg = '';
     }
+  }
+  //funciones para operaciones / grupos / convoys
+
+  onOptionSelected(){
+    
+    let aux: any[] = [];
+    aux = this.vehicleService.vehicles
+    for (const vehicle of aux) {
+      const id_operation = vehicle.idoperation;
+      // const id_grupo = vehicle.idgrupo;
+      // const id_convoy = vehicle.idconvoy;
+      const filteredOperation = {
+        idoperation: vehicle.idoperation,
+        nameoperation: vehicle.nameoperation,
+      };
+      // const filteredConvoy = {
+      //   idconvoy: vehicle.idconvoy,
+      //   nameconvoy: vehicle.nameconvoy,
+      //   idgrupo: vehicle.idgrupo,
+      //   namegrupo: vehicle.namegrupo,
+      //   idoperation: vehicle.idoperation,
+      //   nameoperation: vehicle.nameoperation,
+      // };
+      // const filteredGroup = {
+      //   idgrupo: vehicle.idgrupo,
+      //   namegrupo: vehicle.namegrupo,
+      //   idoperation: vehicle.idoperation,
+      //   nameoperation: vehicle.nameoperation,
+      // };
+      if (!this.operations.some((op:any) => op.idoperation === id_operation)) {
+        this.operations.push(filteredOperation);
+      }
+      // if (!this.convoys.some((cv:any) => cv.idconvoy === id_convoy)) {
+      //   this.convoys.push(filteredConvoy);
+      // }
+      // if (!this.groups.some((gp:any) => gp.idgrupo === id_grupo)) {
+      //   this.groups.push(filteredGroup);
+      // }
+    }
+    this.operations.sort((a: { idoperation: number; }, b: { idoperation: number; }) => a.idoperation - b.idoperation);
+    // this.groups.sort((a: { idgrupo: number; }, b: { idgrupo: number; }) => a.idgrupo - b.idgrupo);
+    // this.convoys.sort((a: { idconvoy: number; }, b: { idconvoy: number; }) => a.idconvoy - b.idconvoy);
+    console.log('Operations: ',this.operations);
+    // console.log('Convoys: ',this.convoys);
+    // console.log('Groups: ',this.groups);
+
+    //actualizar lista de vehiculos
+    this.vehicles = this.vehicleService.vehicles;
+    this.disabledGroup = true;
+    this.disabledConvoy = true;
+    this.groups = [];
+    this.convoys = [];
+    this.selectedOperation = '';
+    this.selectedGroup = '';
+    this.selectedConvoy = '';
+    this.placeholderOperation = 'Seleccione una Operación ...';
+    this.placeholderGroup = 'Seleccione una Operación Primero...';
+    this.placeholderConvoy = 'Seleccione una Operación Primero...';
+  }
+  onChangeOperation(){
+    this.selectedGroup = '';
+    this.selectedConvoy = '';
+    this.groups = [];
+    this.convoys = [];
+    this.vehicles = [];
+    this.selectedVehicles = [];
+    let aux:any[] =[];
+    let aux2:any[] =[];
+    
+    if (this.listOptionCheckbox == 'grupo' || this.listOptionCheckbox == 'convoy'){
+       //filtrar grupos en base a operacion seleccionada
+      aux = this.vehicleService.vehicles.filter((gp:any) => gp.idoperation==this.selectedOperation);
+      for (const vehicle of aux) {
+        const id_grupo = vehicle.idgrupo;
+        const filteredGroup = {
+          idgrupo: vehicle.idgrupo,
+          namegrupo: vehicle.namegrupo,
+          idconvoy: vehicle.idconvoy,
+          nameconvoy: vehicle.nameconvoy,
+          idoperation: vehicle.idoperation,
+          nameoperation: vehicle.nameoperation,
+        };
+        if (!this.groups.some((gp:any) => gp.idgrupo === id_grupo)) {
+          this.groups.push(filteredGroup);
+        }
+      }
+      this.groups.sort((a: { idgrupo: number; }, b: { idgrupo: number; }) => a.idgrupo - b.idgrupo);
+
+      this.disabledGroup = false;
+      this.placeholderGroup = 'Seleccione un Grupo...';
+      this.placeholderConvoy = 'Seleccione un Grupo Primero...';
+    }
+    //filtrar vehiculos
+    aux2 = this.vehicleService.vehicles.filter((vh:any) => vh.idoperation == this.selectedOperation);
+    this.vehicles = aux2;
+    // for (const vehicle of aux2) {
+    //   const id_operation = vehicle.idoperation;
+
+    //   if (!this.vehicles.some((vh:any) => vh.idoperation === id_operation)) {
+    //     this.vehicles.push(vehicle);
+    //   }
+    // }
+    console.log('Groups: ',this.groups);
+    console.log('Vehicles: ',this.vehicles);
+
+  }
+  onChangeGroup(){
+    this.selectedConvoy = '';
+    this.convoys = [];
+    this.vehicles = [];
+    this.selectedVehicles = [];
+
+    let aux:any[] =[];
+    let aux2:any[] =[];
+    
+    if (this.listOptionCheckbox == 'convoy'){
+       //filtrar grupos en base a operacion seleccionada
+      aux = this.vehicleService.vehicles.filter((cv:any) => cv.idgrupo==this.selectedGroup && cv.idoperation == this.selectedOperation);
+      for (const vehicle of aux) {
+        const id_convoy = vehicle.idconvoy;
+        const filteredGroup = {
+          idgrupo: vehicle.idgrupo,
+          namegrupo: vehicle.namegrupo,
+          idconvoy: vehicle.idconvoy,
+          nameconvoy: vehicle.nameconvoy,
+        };
+        if (!this.convoys.some((cv:any) =>cv.idconvoy === id_convoy)) {
+          this.convoys.push(filteredGroup);
+        }
+      }
+      this.disabledConvoy = false;
+      this.placeholderConvoy = 'Seleccione un Convoy..';
+      this.convoys.sort((a: { idconvoy: number; }, b: { idconvoy: number; }) => a.idconvoy - b.idconvoy);
+    }
+
+    //filtrar vehiculos
+    aux2 = this.vehicleService.vehicles.filter((vh:any) => vh.idgrupo == this.selectedGroup && vh.idoperation == this.selectedOperation);
+    this.vehicles = aux2;
+    // for (const vehicle of aux2) {
+    //   const id_operation = vehicle.idoperation;
+
+    //   if (!this.vehicles.some((vh:any) => vh.idoperation === id_operation)) {
+    //     this.vehicles.push(vehicle);
+    //   }
+    // }
+    console.log('Convoys: ',this.convoys);
+    console.log('Vehicles: ',this.vehicles);
+  }
+  onChangeConvoy(){
+    this.vehicles = [];
+    this.selectedVehicles = [];
+    let aux:any[] =[];
+    aux = this.vehicleService.vehicles.filter((vh:any) => vh.idconvoy == this.selectedConvoy && vh.idgrupo == this.selectedGroup && vh.idoperation == this.selectedOperation);
+    this.vehicles = aux;
+
+    console.log('Vehicles: ',this.vehicles);
   }
 
   selectAllVehicles(){
@@ -1035,7 +1212,7 @@ export class FormComponent implements OnInit {
   }
 
   validateForm(){
-    var is_vehicle_selected = (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}');
+    var is_vehicle_selected = (this.selectedVehicles.length != 0 || JSON.stringify(this.selectedOperation) != '{}' || JSON.stringify(this.selectedConvoy) != '{}' || JSON.stringify(this.selectedGroup) != '{}');
     var is_zone_selected = this.selectedZones.length != 0;
 
     this.isFormFilled =

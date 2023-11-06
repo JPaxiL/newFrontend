@@ -90,7 +90,7 @@ export class VehicleService {
       },this.timeDemo);
     }else{
       this.getVehicles().subscribe(vehicles=>{
-        console.log("get vehicles",vehicles);
+        // console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
         this.vehiclesTree = this.createNode(this.vehicles);
         this.statusDataVehicle = true;
@@ -122,15 +122,16 @@ export class VehicleService {
   public generatedListOperations (){
     var aux2 = [];
     var auxOperations:any[] = [];
-    aux2 = this.vehicles.filter((vehicle: any)=>vehicle.idconvoy == 0 && vehicle.nameconvoy=='Unidades Sin Convoy');
+    // aux2 = this.vehicles.filter((vehicle: any)=>vehicle.idconvoy == 0 && vehicle.nameconvoy=='Unidades Sin Convoy');
+    aux2 = this.vehicles;
     // Filtrar elementos con 'idoperacion' diferente
     for (const vehicle of aux2) {
-      const nameoperation = vehicle.nameoperation;
+      const idoperation = vehicle.nameoperation;
       const filteredOperation = {
         idoperation: vehicle.idoperation,
         nameoperation: vehicle.nameoperation
       };
-      if (!auxOperations.some((v) => v.nameoperation === nameoperation)) {
+      if (!auxOperations.some((v) => v.idoperation === idoperation)) {
         auxOperations.push(filteredOperation);
       }
     }
@@ -740,10 +741,10 @@ export class VehicleService {
     // console.log("groups",this.groups);
     // console.log("convoys",this.convoys);
     map.sort((a: { data: { id: any; }; }, b: { data: { id: any; }; }) => b.data.id - a.data.id);
-    console.log('Nodos del mapa ordenados:');
-    map.forEach((node: { data: { id: any; }; }) => {
-      console.log(node.data.id);
-    });
+    // console.log('Nodos del mapa ordenados:');
+    // map.forEach((node: { data: { id: any; }; }) => {
+    //   console.log(node.data.id);
+    // });
     console.log("mapa:",map);
     // console.log("prueba:",prueba);
 

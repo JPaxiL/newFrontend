@@ -69,6 +69,42 @@
       <div class="row">
         <div class="col-6">
           <div class="p-field">
+          <label class="bg-subtitle" id="filtrado_label">Filtrar por:</label>
+          <p-dropdown [options]="listOptions" [(ngModel)]="listOptionCheckbox" [showClear]="false" optionLabel="idOption" optionValue="valueOption" (onChange)="onOptionSelected();validateForm();" [disabled]="reportService.workingOnReport"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-6" *ngIf="listOptionCheckbox=='operacion' || listOptionCheckbox=='convoy'">
+          <div class="p-field">
+            <label class="bg-subtitle" id="operation_label">Operaciones:</label>
+            <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true"  optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();validateForm();"  [placeholder]="placeholderOperation" [disabled]="reportService.workingOnReport || disabledOperation"></p-dropdown>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="row">
+        <div class="col-6" *ngIf="listOptionCheckbox=='grupo'">
+          <div class="p-field">
+            <label class="bg-subtitle" id="operation_label">Operaciones:</label>
+            <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();validateForm();"  [placeholder]="placeholderOperation"  [disabled]="reportService.workingOnReport || disabledOperation"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-6" *ngIf="listOptionCheckbox=='grupo' || listOptionCheckbox=='convoy'">
+          <div class="p-field">
+            <label class="bg-subtitle" id="grupo_label">Grupos:</label>
+            <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="true" optionLabel="namegrupo" optionValue="idgrupo" (onChange)="onChangeGroup();validateForm(); " [placeholder]="placeholderGroup" [disabled]="reportService.workingOnReport || disabledGroup"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-6" *ngIf="listOptionCheckbox=='convoy'">
+          <div class="p-field">
+            <label class="bg-subtitle" id="grupo_label">Convoys:</label>
+            <p-dropdown [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="true" optionLabel="nameconvoy" optionValue="idconvoy" (onChange)="onChangeConvoy();validateForm();" [placeholder]="placeholderConvoy" [disabled]="reportService.workingOnReport || disabledConvoy"></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="p-field">
             <label class="bg-subtitle" id="vehicle_label">Vehículos:</label>
             <p-multiSelect [options]="vehicles" [(ngModel)]="selectedVehicles" optionLabel="name" [showToggleAll]="false" [appendTo]="'body'" placeholder="Seleccione..." (onChange)="onSelectedVehiclesChange(); validateForm();" [disabled]="reportService.workingOnReport"></p-multiSelect>
             <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
@@ -81,13 +117,13 @@
 
           </div>
         </div>
-        <div class="col-6">
+        <!-- <div class="col-6">
           <div class="p-field">
             <p-dropdown [options]="pDropdownGroup" [(ngModel)]="checkboxGroup" [showClear]="false" optionLabel="label" optionValue="value" (onChange)="onSelectedConvoyChange(); validateForm();" [styleClass]="'bg-subtitle'" [disabled]="reportService.workingOnReport"></p-dropdown>
             <p-dropdown *ngIf="!checkboxGroup" [options]="convoys" [(ngModel)]="selectedConvoy" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione convoy..." (onChange)="onSelectedConvoyChange(); validateForm();" [disabled]="reportService.workingOnReport"></p-dropdown>
             <p-dropdown *ngIf="checkboxGroup" [options]="groups" [(ngModel)]="selectedGroup" [showClear]="false" [appendTo]="'body'" placeholder="Seleccione grupo..." (onChange)="onSelectedGroupChange(); validateForm();" [disabled]="reportService.workingOnReport"></p-dropdown>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="row" style="padding: 0px 0.3rem">
