@@ -141,7 +141,7 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
   onSlideEndSlider() {
     console.log("========================= onSlideEndSlider");
     // console.log(this.sliderValue);
-    //this.ogChangeReferences();
+    this.ogChangeReferences();
 
     // var dH =  this.HM.recorrido; //this.historialService.tramasHistorial; // Data Historial
     // var ppos = this.sliderValue;
@@ -159,7 +159,7 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
   ogChangeReferences() {
     console.log("----- ogChangeReferences get referencia y fotos");
     this.getReference(this.HM.recorrido[this.sliderValue]);
-    this.getStreetViewImg(this.HM.recorrido[this.sliderValue]);
+    // this.getStreetViewImg(this.HM.recorrido[this.sliderValue]);
   }
 
   async getReference(trama:any) {
@@ -211,12 +211,12 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
 
     console.log("===============  modalhistorialPlay ");
 
-    // if (this.sliderPlayActivo == false) {
-    //     this.temporizadorModalReferencia = setInterval(() => {
-    //         console.log("===============  cada 5 segundos ?????  ");
-    //         this.ogChangeReferences();
-    //     }, 5000);
-    // }
+    if (this.sliderPlayActivo == false) {
+        this.temporizadorModalReferencia = setInterval(() => {
+            console.log("===============  cada 5 segundos ?????  ");
+            this.ogChangeReferences();
+        }, 5000);
+    }
 
     // $("#btnPlayModalSlider").click(() => {
     //   //this.consolahistorialPlay();
