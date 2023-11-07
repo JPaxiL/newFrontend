@@ -349,7 +349,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   changeAlertType() {
-    console.log(this.alertForm.value.tipoAlerta);
+    // console.log(this.alertForm.value.tipoAlerta);
     switch (this.alertForm.value.tipoAlerta) {
       case 'Zona de entrada':
       case 'Zona de salida':

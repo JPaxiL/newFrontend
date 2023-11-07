@@ -139,6 +139,7 @@ import { PanelHistorialRecorridoModalComponent } from './historial/components/pa
 import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 import { CipiaComponent } from './cipia/cipia.component';
+import { FootbarComponent } from './panel/components/footbar/footbar.component';
 
 @NgModule({
   declarations: [
@@ -224,7 +225,8 @@ import { CipiaComponent } from './cipia/cipia.component';
     PanelHistorialRecorridoModalComponent,
     AlphaNumericDashDirective,
     ScreenRecorderComponent,
-    CipiaComponent
+    CipiaComponent,
+    FootbarComponent
 
   ],
   imports: [

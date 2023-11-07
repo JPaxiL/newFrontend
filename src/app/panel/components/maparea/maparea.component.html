@@ -1,10 +1,11 @@
 <div class="map-wrapper" id="wraper_map">
-
-    <div class="map-border">
-        <app-sidebar></app-sidebar>
-        <app-panel-monitoreo></app-panel-monitoreo>
-        <app-map-view></app-map-view>
-        <app-panel-historial-grafico></app-panel-historial-grafico>
-
+    <div class="d-flex flex-column h-100">
+        <div class="map-border">
+            <app-sidebar></app-sidebar>
+            <app-panel-monitoreo></app-panel-monitoreo>
+            <app-map-view></app-map-view>
+            <app-panel-historial-grafico></app-panel-historial-grafico>
+            <div class="popup-container" id="popupContainer"></div>
+        </div>
     </div>
 </div>

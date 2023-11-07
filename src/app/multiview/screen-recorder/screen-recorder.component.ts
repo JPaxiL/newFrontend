@@ -58,21 +58,6 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterCont
     this.multimediaService.getStateChanges().subscribe(data => {
       console.log("ESTADOOOOO: ", data);
     });
-    /*this.multimediaService.onStop.subscribe(data => {
-      console.log("mesnaje estopped: ", data);
-      if(data == true){
-        if(this.play && this.multimediaService.isRecording){
-          this.stopCronometer()
-          this.multimediaService.stopRecording().then( () => {
-            console.log("stopped");
-            this.showPreview = true;
-            this.videoReady = true;
-            this.onRecording.emit(false);
-            this.play = false;
-          });
-        }
-      }
-    });*/
   }
   onSelectElement(event:any){
     if(this.selectedElement){

@@ -162,6 +162,7 @@ export class TreeTableComponent implements OnInit {
     /* console.log('--navbar-height: ', Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''))); */
 
     const navbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
+    const footbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--footbar-height').replace('rem', ''));
     const rowBusquedaHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--row-busqueda-height').replace('rem', ''));
     const panelMonitoreoVehiclesHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', ''));
     const treetableHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--treetable-header-height').replace('rem', ''));
@@ -173,7 +174,7 @@ export class TreeTableComponent implements OnInit {
     //0.125rem es tolerancia para evitar overflow
     //Le quité la tolerancia porque el cálculo ahora es exacto.
     //12.125 era 9.375 + 2.75 (previa altura del navbar)
-    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (rowBusquedaHeight + panelMonitoreoVehiclesHeaderHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
+    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (rowBusquedaHeight + panelMonitoreoVehiclesHeaderHeight + footbarHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
     //$('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr("style", '');
     $('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
     //console.log('treeTable altura en px:' + treeTable_height_in_px);
@@ -566,7 +567,7 @@ export class TreeTableComponent implements OnInit {
     this.vehicleService.onClickIcon(IMEI);
   }
   onSort(data: any){
-    // //console.log("sort desde tree", data);
+    console.log("sort desde tree", data);
     this.sortOrder=data;
   }
   onClickTag(IMEI: string){

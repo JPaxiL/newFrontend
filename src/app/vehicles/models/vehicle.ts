@@ -37,6 +37,7 @@ export class Vehicle {
     public speed: number,
     public tanque: string,
     public tipo: string,
+    public nametype_vehicle: string | null,
     public tolva: string
   ){}
 }

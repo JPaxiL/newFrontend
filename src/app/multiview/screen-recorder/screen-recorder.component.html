@@ -1,18 +1,18 @@
-<div *ngIf="display" class="d-flex justify-content-between">
-    <button pButton type="button" icon="pi pi-times" pRipple class="p-button-text p-button-danger" pTooltip="Cerrar panel" (click)="close()"></button>
+<div *ngIf="display" class="d-flex justify-content-between gap-4" [ngClass]="type=='minimap'? 'recorder-content-minimap':'recorder-content'">
+    <button pButton type="button" pRipple class="p-button-text p-button-danger" label="Cerrar" (click)="close()"></button>
     <div class="sidebar-recorder d-flex justify-content-center  align-items-center gap-4">
         <p-toggleButton 
             [(ngModel)]="play"
             (click)="playButton();"
             [onIcon]="'pi pi-pause'" 
             [offIcon]="'pi pi-play'"
-            [style]="{padding:'0.6rem'}"
+            [style]="{padding:'0.3rem', width:'1.2rem', border:'0px'}"
             [pTooltip]="play?'Detener':'Grabar'"
             [disabled]="type =='minimap'? !selectedElement : false"
         >
         </p-toggleButton>
         <div class="cronometer">
-            <span class="fs-4 fw-light">{{hours | number: '2.0'}}:{{minutes | number: '2.0'}}:{{seconds | number: '2.0'}}</span>
+            <span class="fs-5 fw-light">{{hours | number: '2.0'}}:{{minutes | number: '2.0'}}:{{seconds | number: '2.0'}}</span>
         </div>
         <p-dropdown *ngIf="type == 'minimap'"
             [options]="recordingElements" 
@@ -26,10 +26,10 @@
             [appendTo]="'body'"
         >
         </p-dropdown>
-        <div *ngIf="videoReady" class="d-flex justify-content-center gap-2">
-            <button pButton type="button" label="Ver preview" class="p-button-text" (click)="showPreview = true"></button>
-            <button pButton type="button" class="p-button-outlined p-button-sm p-button-secondary" icon="pi pi-download" (click)="downloadLastVideo()"></button>
-            <button pButton type="button" class="p-button-outlined p-button-sm p-button-danger" icon="pi pi-trash" (click)="clearRecorder()"></button>
+        <div *ngIf="videoReady" class="d-flex justify-content-center gap-4">
+            <button pButton type="button" label="Ver preview" class="p-button-text p-0 w-auto" (click)="showPreview = true"></button>
+            <button pButton type="button" pTooltip="Descargar" class="p-button-sm p-button-text p-button-secondary p-0 w-auto" icon="pi pi-download" (click)="downloadLastVideo()"></button>
+            <button pButton type="button" pTooltip="Eliminar" class="p-button-sm p-button-text p-button-danger p-0 w-auto" icon="pi pi-trash" (click)="clearRecorder()"></button>
         </div>
     </div>
     <div></div>
