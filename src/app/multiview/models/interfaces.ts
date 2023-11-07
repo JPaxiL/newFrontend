@@ -82,6 +82,7 @@ export interface UserTracker {
     plate_number?: string,
     sim_number?: string,
     tipo?: string,
+    nametype_vehicle?: string | null
     tolva?: string,
     tag?: boolean,
 }
