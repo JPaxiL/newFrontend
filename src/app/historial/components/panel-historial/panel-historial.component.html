@@ -790,7 +790,7 @@
 
 
                                       <td *ngIf="trama.tooltip == 'Movimiento' " class="text-center">
-                                          <button type="button" class="btn-gl-blue btn-dark-hover flex-none" title="Crear geocerca" (click)="add_geocerca_movimineto(trama,trama.trama)">
+                                          <button type="button" class="btn-gl-blue btn-dark-hover flex-none" title="Crear geocerca" (click)="add_geocerca_movimineto(trama, trama.trama, recorrido.key)">
                                               <i class="fa fa-plus" aria-hidden="true"></i>
                                           </button>
                                       </td>
@@ -892,4 +892,5 @@
         [rowData]="rowData"
         [columnDefs]="columnDefs">
     </ag-grid-angular> -->
+
 

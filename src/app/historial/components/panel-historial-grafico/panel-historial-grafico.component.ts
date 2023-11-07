@@ -197,6 +197,22 @@ export class PanelHistorialGraficoComponent implements OnInit {
     console.log("GRAFICOOOOOOOO");
 
     console.log( this.historialService.keyGrafico);
+    console.log( this.historialService.icono);
+
+
+    var nuevo_icono = L.icon({
+            iconUrl: 'assets/images/objects/nuevo/'+this.historialService.icono,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
+        });
+
+    
+    this.icoGplay.setIcon(nuevo_icono);
+
+    console.log("============================");
+    console.log(this.historialService.icono);
+    
+    
     
 
     // jQuery.fn.jquery
@@ -258,8 +274,6 @@ export class PanelHistorialGraficoComponent implements OnInit {
       if (dH[i].repeticiones > 1) {
         dH[i].params2 = dH[i].params2 +'</br><strong><small><i>Repeticiones:'+ dH[i].repeticiones+'</i></small></strong></br>';
       }
-
-
 
       // //========= 1Fusionar parametros ====================
       // if(fUnico == dH[i].dt_js.getTime()){
@@ -453,13 +467,11 @@ export class PanelHistorialGraficoComponent implements OnInit {
     $j("#placeholder").unbind("plotclick");
 
     $j("#placeholder").bind("plotclick",  (o:any, p:any, n:any ) => {
+        
         console.log("===========");
-
         console.log(n);
         console.log(p);
         console.log(o);
-        
-        
         
         if (n) {
             var m = n.dataIndex;
@@ -472,6 +484,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
             }
             this.moveIconG(dH[m]);
         }
+        
     });
     //================== FIN UBICAR PUNTO EN EL HISTORIAL ==================
 
@@ -1094,9 +1107,6 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
   }
 
-
-
-
   consolahistorialPlay() {
       // temporizadorConsola
       // vm.plot_historial.pan({  left: -100  });
@@ -1479,7 +1489,11 @@ clickOcultarTablaRecorrido() {
   //                 show: true,
   //                 steps: true
   //             }
-  //         }));
+  //         }
+  
+  
+  
+  //));
   //         break;
 
 
@@ -1707,3 +1721,6 @@ clickOcultarTablaRecorrido() {
 
 
 }
+
+
+

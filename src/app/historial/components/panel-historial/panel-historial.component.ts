@@ -381,12 +381,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
   getCars(vehicles: any){
+    console.log("======================== icono == getCars");
+    console.log(vehicles);
+    
+    
     for (let i = 0; i < vehicles.length; i++) {
-      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
+      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI, icon:vehicles[i].icon , nameoperation:vehicles[i].nameoperation };
       this.cars.push(gaa);
     }
   }
 
+  
 
   // function changeColorHistorial() {
   //   //console.log("********  ACTUALIZANDO VALORES  *******");
@@ -740,14 +745,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
-  clickVerGrafico(index:any, key:any) {
+  async clickVerGrafico(index:any, key:any) {
     console.log("-----------------clickVerGrafico");
     console.log("-----------index");
     console.log(index);
     console.log("-----------key");
     console.log(key);
 
-    
+    this.historialService.modalActive=false;
+    console.log("GAAAAAAA");
+    await new Promise(f => setTimeout(f, 500));
+
     this.historialService.modalActive=true;
 
 
@@ -862,11 +870,16 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
     this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+    this.historialService.icono = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].icon;
+    this.historialService.nameoperation = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nameoperation;
 
+
+    
 
     var au = this.historialService.arrayRecorridos;
     var key = this.nombreUnidad+'_'+M1+'_'+M2;
-
+    var icono = this.historialService.icono;
+    var nameoperation = this.historialService.nameoperation;
     //verificar q no existan keys repetidas :
     for (let i = 0; i < au.length; i++) {
       console.log(au[i].key+' - '+key);
@@ -904,7 +917,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     this.historialService.get_tramas_recorrido(param).then( res => {
 
-      this.EventService.ShowAllHistorial(param).then( res1 => {
+      // this.EventService.ShowAllHistorial(param).then( res1 => {
 
           // console.log("=== VERDADERO EVENTOS HISTORIAL");
           // console.log(res1);
@@ -1326,6 +1339,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
                 this.historialService.arrayRecorridos.push({
                     key: this.nombreUnidad+'_'+M1+'_'+M2,
+                    icono: icono,
+                    nameoperation: nameoperation,
                     nombre: this.nombreUnidad,
                     f_ini: M1str,
                     f_fin: M2str,
@@ -1508,7 +1523,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             //this.showNotEnoughInfoDialog();
           }
 
-      }); // fin de eventosa historial
+      //}); // fin de eventosa historial
     }); // fin de historial tramas
 
     // var dH22  = await this.historialService.get_tramas_recorrido(param);
@@ -1591,10 +1606,33 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-  add_geocerca_movimineto(trama:any,trama2trama:any) {
+  add_geocerca_movimineto(trama:any,trama2trama:any, key:any) {
     console.log("____________add_geocerca_movimineto");
-    console.log(trama);
-    console.log(trama2trama);
+    // console.log(key);
+    // console.log(trama);
+    // console.log(trama2trama);
+    // console.log(trama2trama.cc);
+    // console.log(trama2trama.cc[0]);
+    // console.log(trama2trama.cc[1]);
+    var recorrido_unidad = this.historialService.arrayRecorridos.filter(function( obj:any ) {
+      return obj.key == key;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    });
+    // console.log(recorrido_unidad[0]);
+    //var dH =  this.historialService.tramasHistorial; // Data Historial
+    // console.log(recorrido_unidad[0].recorrido);
+
+    var LL = recorrido_unidad[0].recorrido;
+    var arrCoordenadas = [];
+    for (let i = trama2trama.cc[0]; i <= trama2trama.cc[1]; i++) {
+      arrCoordenadas.push({lat:LL[i].lat,lng:LL[i].lng, speed:LL[i].speed});
+    }
+    console.log("==== arrCoordenadas");
+    console.log(arrCoordenadas);
+    
+
+    // console.log(recorrido_unidad[0].recorrido[trama2trama.cc[0]]);
+    // console.log(recorrido_unidad[0].recorrido[trama2trama.cc[1]]);
+
   }
 
 
@@ -2140,8 +2178,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
   clickLocate(row:any, key:any=-1) {
-    console.log(row);
-    console.log(key);
+    // console.log(row);
+    // console.log(key);
     
     //console.log("-----movimiento ----");
     if (key == -1) {
@@ -2181,7 +2219,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       var rdH = this.historialService.arrayRecorridos;
 
       for (let i = 0; i < rdH.length; i++) {
-          console.log(rdH[i].key+"  -  -  "+key);
+          //console.log(rdH[i].key+"  -  -  "+key);
           if ( rdH[i].key == key ) {
             var dH = rdH[i].recorrido;
           }
@@ -2207,8 +2245,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
     let trama = row.trama;
-      console.log("click en el tr");
-      console.log(trama);
+      // console.log("click en el tr");
+      // console.log(trama);
 
     if (row.icono == "assets/images/eventos/pin_point.svg") {
 
