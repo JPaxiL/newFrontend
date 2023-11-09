@@ -29,7 +29,7 @@ export class EventSocketService extends Socket {
     private AlertService: AlertService,
     private popupService: PopupService) {
     super({
-      url: 'https://eventos.glmonitoreo.com/',
+      url: environment.socketEvent,
       //url: 'http://23.29.124.173',
       // options: {
       //   transports: ["websocket"]

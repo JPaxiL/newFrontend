@@ -36,6 +36,7 @@ export class PanelService {
   nombreComponente: string = '';
   nombreCabecera: string = '';
   clasePanelActivo: string = '';
+  count: number = 0;
 
   userData: any; //Informacion del usuario
 
@@ -44,12 +45,12 @@ export class PanelService {
   clickShowPanel( nomComponent:string ){
     console.log("-----clickShowPanel");
     console.log(this.activePanelClass());
-    
+
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
 
       console.log(nomComponent);
       console.log(this.nombreComponente );
-      
+
       $("#panelMonitoreo").hide( "slow" );
       this.nombreComponente = '';
     } else {
