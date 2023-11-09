@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Subject } from 'rxjs';
 import * as L from 'leaflet';
@@ -22,14 +22,13 @@ export class EventSocketService extends Socket {
 
   private sendEventSuject = new Subject<any>();
   public sendEventObservable = this.sendEventSuject.asObservable();
+  public eventPopup: EventEmitter<any> = new EventEmitter<any>(undefined);
   constructor(
     public eventService: EventService,
     public vehicleService: VehicleService,
-    private userService: UsersService,
-    private AlertService: AlertService,
-    private popupService: PopupService) {
+    private AlertService: AlertService) {
     super({
-      url: 'https://eventos.glmonitoreo.com/',
+      url: 'http://localhost:5000',
       //url: 'http://23.29.124.173',
       // options: {
       //   transports: ["websocket"]
@@ -101,7 +100,8 @@ export class EventSocketService extends Socket {
 
           if (alert) {
             if (alert.ventana_emergente) {
-              this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
+              this.eventPopup.emit({event: newEvent, tracker: this.vehicleService.getVehicle(even.tracker_imei)})
+              //this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
             }
           }
         } else {

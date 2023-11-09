@@ -69,9 +69,9 @@ export class MultiviewService {
     console.log("auxGrids: ",auxGrids);
 
     auxGrids.sort((a, b) => {
-      if (a.structure.structure_index === undefined) return 1;
-      if (b.structure.structure_index === undefined) return -1;
-      return a.structure.structure_index - b.structure.structure_index;
+      if (a.structure!.structure_index === undefined) return 1;
+      if (b.structure!.structure_index === undefined) return -1;
+      return a.structure!.structure_index - b.structure!.structure_index;
     });
     auxMultiview.grids = auxGrids;
     if(name.length > 0){

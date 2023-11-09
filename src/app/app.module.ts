@@ -7,7 +7,6 @@ import { ToastrModule } from 'ngx-toastr';
 import {AuthInterceptor} from './vehicles/services/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
 import { TreeTableModule } from 'primeng-lts/treetable';
@@ -36,8 +35,9 @@ import { TagModule } from 'primeng-lts/tag';
 import { TooltipModule } from 'primeng-lts/tooltip';
 import {SlideMenuModule} from 'primeng-lts/slidemenu';
 import {SidebarModule} from 'primeng-lts/sidebar';
+import {CarouselModule} from 'primeng-lts/carousel';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
@@ -140,6 +140,7 @@ import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.direc
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 import { CipiaComponent } from './cipia/cipia.component';
 import { FootbarComponent } from './panel/components/footbar/footbar.component';
+import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
 
 @NgModule({
   declarations: [
@@ -226,7 +227,8 @@ import { FootbarComponent } from './panel/components/footbar/footbar.component';
     AlphaNumericDashDirective,
     ScreenRecorderComponent,
     CipiaComponent,
-    FootbarComponent
+    FootbarComponent,
+    EventPopupComponent
 
   ],
   imports: [
@@ -250,7 +252,6 @@ import { FootbarComponent } from './panel/components/footbar/footbar.component';
     FormsModule,
     ReactiveFormsModule,
     PanelModule,
-    NgbModule,
     NgSelectModule,
     TreeTableModule,
     DropdownModule,
@@ -258,6 +259,7 @@ import { FootbarComponent } from './panel/components/footbar/footbar.component';
     InputTextModule,
     InputSwitchModule,
     TableModule,
+    NgbModule,
     SliderModule,
     ToggleButtonModule,
     InputNumberModule,
@@ -278,6 +280,7 @@ import { FootbarComponent } from './panel/components/footbar/footbar.component';
     LeafletModule,
     LeafletMarkerClusterModule,
     SidebarModule,
+    CarouselModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

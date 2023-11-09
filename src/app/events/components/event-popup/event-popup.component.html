@@ -1,0 +1,15 @@
+<div class="w-100 h-100 d-flex flex-column">
+     <div class="popup-header d-flex justify-content-between align-items-center px-3">
+          <div class="d-flex align-items-center justify-content-start gap-4 ">
+               <span class="popup-title">
+                    <!--{{configuration.numero_placa}}{{configuration.nombre_grupo? ' - ('+configuration.nombre_grupo+')' : ''}}-->
+                    {{configuration.vehicles![0].plate_number}} {{configuration.vehicles![0].operation? ' - ('+configuration.vehicles![0].operation+')' : ''}}
+               </span>
+          </div>
+          <button class="close-button" (click)="deletePopup()">
+               <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 8L8 16M8 8L16 16" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path> </g></svg>
+          </button>
+     </div>
+     <div [id]="configuration.mapConf?.containerId.toString()" class="w-100 h-100 popup-content">
+     </div>
+</div>

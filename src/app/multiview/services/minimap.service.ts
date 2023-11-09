@@ -7,7 +7,7 @@ import 'leaflet.markercluster.freezable';
 import { SocketWebService } from 'src/app/vehicles/services/socket-web.service';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { FollowService } from 'src/app/vehicles/services/follow.service';
-import { MapItem, UserTracker } from '../models/interfaces';
+import { IMapMinimap, UserTracker } from '../models/interfaces';
 import { EventService } from 'src/app/events/services/event.service';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class MinimapService {
   
   @ViewChild('popupText') popupText!: ElementRef;
 
-  public maps: MapItem[] = [];
+  public maps: IMapMinimap[] = [];
   public respuesta: any = [];
 
   public markerClusterData!: any;
@@ -43,7 +43,6 @@ export class MinimapService {
 
   constructor(
     private vehicleService:VehicleService,
-    private followService:FollowService,
     private socketWebService: SocketWebService,
     public eventService: EventService,
   ) {
@@ -55,10 +54,6 @@ export class MinimapService {
     });
     this.socketWebService.callback.subscribe(res =>{
       this.monitor(res);
-    });
-    this.followService.callback.subscribe(res =>{
-      console.log("Follow event desde map service");
-      this.followVehicle(res.data);
     });
 
     this.vehicleService.calcTimeStop.subscribe(data=>{
@@ -146,7 +141,7 @@ export class MinimapService {
           //Buscamos a que mapas pertenece el vehiculo y actualizamos el valor de imeiPopu y time_stop
           // de cada mapa ya que seran tomados al llamar a printPopup con el mapa correspondiente
           this.maps.forEach(item => {
-            item.configuration!.vehicles?.forEach(element => {
+            item.minimapConf!.vehicles?.forEach(element => {
               if(element.IMEI!.toString() == data.imei.toString()){
                 item.imeiPopup = data.imei;
                 item.time_stop = tiempoParada;
@@ -168,10 +163,10 @@ export class MinimapService {
     const aux = events[0];
     this.maps.forEach(item => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
-      const resultado = item.configuration?.vehicles!.find(vehi => vehi.IMEI?.toString() == aux.tracker_imei.toString());
+      const resultado = item.minimapConf?.vehicles!.find(vehi => vehi.IMEI?.toString() == aux.tracker_imei.toString());
       if(resultado){
-        item.configuration!.events?.unshift(aux);
-        item.configuration!.nEvents = item.configuration?.events?.filter(ev => ev.viewed == false).length;
+        item.minimapConf!.events?.unshift(aux);
+        item.minimapConf!.nEvents = item.minimapConf?.events?.filter(ev => ev.viewed == false).length;
       }
     });
   }
@@ -184,9 +179,9 @@ export class MinimapService {
   getVehicles(){
     return this.vehicleService.vehicles;
   }
-  onDrawIcon(mapItem: MapItem): void{
+  onDrawIcon(mapItem: IMapMinimap): void{
     console.log("onDrawIcon");
-    const e = mapItem.configuration!.vehicles!;
+    const e = mapItem.minimapConf!.vehicles!;
 
       const transmissionStatusColor: any = {
         10:"green",
@@ -209,11 +204,10 @@ export class MinimapService {
           }
       }
 
-      if(mapItem.dataFitBounds!.length>0){
+      if(mapItem.minimapConf.mapConf!.dataFitBounds!.length>0){
         // //console.log("dataFitBounds map",this.dataFitBounds);
-        mapItem.map!.fitBounds(mapItem.dataFitBounds!);
+        mapItem.setFitBounds(mapItem.minimapConf.mapConf?.dataFitBounds!)
       }
-      mapItem.dataFitBounds = [];
       //EVENTO cluster lista
       mapItem.markerClusterGroup.on('clusterclick',function(a : any){
         //console.log('click cluster...........');
@@ -246,11 +240,11 @@ export class MinimapService {
             .openOn(mapItem.map!);
       });
   }
-  private async drawIcon(data:any, mapItem: MapItem): Promise<void>{
+  private async drawIcon(data:any, mapItem: IMapMinimap): Promise<void>{
     console.log("dataaaaa---",data);
     
     //let iconUrl = './assets/images/objects/nuevo/'+data.icon;
-    let iconUrl = await this.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+data.icon);
+    let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+data.icon);
     if(data.speed>0){
       iconUrl = './assets/images/accbrusca.png';
     }
@@ -354,7 +348,7 @@ export class MinimapService {
     this.vehicleService.postTimeStop(params);
   }
 
-  printPopup(data: any, mapItem: MapItem): void{
+  printPopup(data: any, mapItem: IMapMinimap): void{
     console.log("data final printpopup",data);
     let layers = mapItem.markerClusterGroup.getLayers();
 
@@ -391,59 +385,42 @@ export class MinimapService {
     }
     return g
   }
-  private followVehicle(data: any): void{
-    this.maps.forEach(item => {
-      item.dataFitBounds = [];
-      for (let index = 0; index < item.configuration!.vehicles!.length; index++) {
-        if(data.IMEI==item.configuration!.vehicles![index].tracker_imei){
-          item.configuration!.vehicles![index].follow = item.configuration!.vehicles![index].follow;
-        }
-        if(item.configuration!.vehicles![index].follow){
-          const aux2: [number, number] = [parseFloat(item.configuration!.vehicles![index].latitud!), parseFloat(item.configuration!.vehicles![index].longitud!)];
-          item.dataFitBounds.push(aux2);
-        } 
-      }
-      if(item.dataFitBounds.length>0){
-        item.map!.fitBounds(item.dataFitBounds);
-      }
-    });
-  }
 
   private async monitor(data: any): Promise<void>{
     
     
     this.maps.forEach(async (item) => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
-      const resultado = item.configuration?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
+      const resultado = item.minimapConf?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
       //console.log("data IMEI: ", data.IMEI.toString());
       //console.log("vehicles IMEIs: ", item.configuration?.vehicles!.map(item=> {return item.tracker_imei}));
       
       if(resultado){
-        const index = item.configuration!.vehicles!.indexOf(resultado);
+        const index = item.minimapConf!.vehicles!.indexOf(resultado);
         console.log("resultado e indice: ", resultado, index);
 
-        item.configuration!.vehicles![index].latitud = data.Latitud.toString();
-        item.configuration!.vehicles![index].longitud = data.Longitud.toString();
-        item.configuration!.vehicles![index].speed = data.Velocidad;
-        item.configuration!.vehicles![index].dt_server = data.fecha_server;
-        item.configuration!.vehicles![index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
-        item.configuration!.vehicles![index].altitud = data.Altitud;
-        item.configuration!.vehicles![index].señal_gps = data.señal_gps;
-        item.configuration!.vehicles![index].señal_gsm = data.señal_gsm;
-        item.configuration!.vehicles![index].parametros = data.Parametros;
-        item.configuration!.vehicles![index] = this.vehicleService.formatVehicle(item.configuration!.vehicles![index]);
+        item.minimapConf!.vehicles![index].latitud = data.Latitud.toString();
+        item.minimapConf!.vehicles![index].longitud = data.Longitud.toString();
+        item.minimapConf!.vehicles![index].speed = data.Velocidad;
+        item.minimapConf!.vehicles![index].dt_server = data.fecha_server;
+        item.minimapConf!.vehicles![index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        item.minimapConf!.vehicles![index].altitud = data.Altitud;
+        item.minimapConf!.vehicles![index].señal_gps = data.señal_gps;
+        item.minimapConf!.vehicles![index].señal_gsm = data.señal_gsm;
+        item.minimapConf!.vehicles![index].parametros = data.Parametros;
+        item.minimapConf!.vehicles![index] = this.vehicleService.formatVehicle(item.minimapConf!.vehicles![index]);
 
         console.log("["+resultado.numero_placa+"] item.imeiPopup==data.IMEI.toString()", item.imeiPopup==data.IMEI.toString());
         if(item.imeiPopup==data.IMEI.toString()){
           
           let options = {
             imei: data.IMEI,
-            name: item.configuration!.vehicles![index].name,
-            convoy: item.configuration!.vehicles![index].convoy,
+            name: item.minimapConf!.vehicles![index].name,
+            convoy: item.minimapConf!.vehicles![index].convoy,
             longitud: data.Longitud,
             latitud: data.Latitud,
             speed: data.Velocidad,
-            dt_tracker: item.configuration!.vehicles![index].dt_tracker,//luego de pasar por filtro
+            dt_tracker: item.minimapConf!.vehicles![index].dt_tracker,//luego de pasar por filtro
             paradaDesde: "",
             vehicleService : this.vehicleService
           };
@@ -451,29 +428,29 @@ export class MinimapService {
           this.timeStopAux(options);
         }
 
-        console.log("["+resultado.numero_placa+"] item.configuration!.vehicles![index].eye", item.configuration!.vehicles![index].eye);
-        if(item.configuration!.vehicles![index].eye){
+        console.log("["+resultado.numero_placa+"] item.configuration!.vehicles![index].eye", item.minimapConf!.vehicles![index].eye);
+        if(item.minimapConf!.vehicles![index].eye){
           
           let cont = 0;
           let object = item.markerClusterGroup.getLayers();
           for (const key in object) {
             // console.log("object[key]['_tooltip']['_content']==vehicles[index].name==>"+object[key]['_tooltip']['_content']+"=="+vehicles[index].name)
-            if (object[key]['_tooltip']['_content']=="<span>"+item.configuration!.vehicles![index].name+"</span>") {
+            if (object[key]['_tooltip']['_content']=="<span>"+item.minimapConf!.vehicles![index].name+"</span>") {
               cont++;
               let oldCoords = item.markerClusterGroup.getLayers()[key].getLatLng();
               
               let coord = {
-                lat : parseFloat(item.configuration!.vehicles![index].latitud!),
-                lng : parseFloat(item.configuration!.vehicles![index].longitud!)
+                lat : parseFloat(item.minimapConf!.vehicles![index].latitud!),
+                lng : parseFloat(item.minimapConf!.vehicles![index].longitud!)
               };
 
-              let iconUrl = await this.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.configuration!.vehicles![index].icon);
-              item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.configuration!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.configuration!.vehicles![index].speed+' km/h</strong></div></div>'+
+              let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.minimapConf!.vehicles![index].icon);
+              item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
                 '<aside class="">'+
-                  '<small>CONVOY: '+item.configuration!.vehicles![index].convoy+'</small><br>'+
-                  '<small>UBICACION: '+item.configuration!.vehicles![index].latitud+', '+item.configuration!.vehicles![index].longitud+'</small><br>'+
+                  '<small>CONVOY: '+item.minimapConf!.vehicles![index].convoy+'</small><br>'+
+                  '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
                   '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                  '<small>FECHA DE TRANSMISION: '+item.configuration!.vehicles![index].dt_tracker+'</small><br>'+
+                  '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
                   '<small>TIEMPO DE PARADA: Calculando ...</small>'+
                 '</aside>';
               // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
@@ -483,7 +460,7 @@ export class MinimapService {
               
               
 
-              if(item.configuration!.vehicles![index].speed != 0){
+              if(item.minimapConf!.vehicles![index].speed != 0){
 
                 this.dif_mayor = 0.00;
                 this.dif_divide = 0.00;
@@ -563,7 +540,7 @@ export class MinimapService {
 
                   //this.changePositionArrow(this.final_direction,key);
 
-                  item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await this.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
+                  item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
                   item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
                 }
                 else{
@@ -572,13 +549,13 @@ export class MinimapService {
                     let old_direction = item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
                     //this.changePositionArrow(old_direction[1],key);
 
-                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await this.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
                   }
                   else{
 
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                    console.log('se borra la flecha', item.configuration!.vehicles![index].name);
+                    console.log('se borra la flecha', item.minimapConf!.vehicles![index].name);
                   }
                 }
               }else{
@@ -589,11 +566,10 @@ export class MinimapService {
               item.markerClusterGroup.getLayers()[key].setLatLng(coord);
               let aux = item.markerClusterGroup.getLayers()[key];
 
-              item.dataFitBounds = [];
-              item.dataFitBounds = item.setFitBounds(item.configuration!);
-              item.map?.setView(item.setCenterMap(item.configuration!));
-              if(item.dataFitBounds.length>0){
-                item.map!.fitBounds(item.dataFitBounds);
+              const auxdataFitBounds = item.getDataFitBounds(item.minimapConf.vehicles!);
+              item.setViewMap(auxdataFitBounds);
+              if(auxdataFitBounds.length>0){
+                item.setFitBounds(auxdataFitBounds);
               }
             }
           }
@@ -602,7 +578,7 @@ export class MinimapService {
     });
   }
 
-  public addMap(mapItem:MapItem): void{
+  public addMap(mapItem:IMapMinimap): void{
     console.log("loadMapp--------");
     this.maps.push(mapItem);
     this.onDrawIcon(mapItem);
@@ -653,7 +629,7 @@ export class MinimapService {
 
     return this.clustering;
   }
-  async loadAndConvertSVGToPNG(svgURL: string): Promise<string> {
+  static async loadAndConvertSVGToPNG(svgURL: string): Promise<string> {
     // Crear un elemento de imagen
     const img = new Image();
     
