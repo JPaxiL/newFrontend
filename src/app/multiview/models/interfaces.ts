@@ -52,7 +52,7 @@ export interface UserTracker {
     tanque?: string,
     name?: string,
     icon?:  string,
-    convoy?: string,
+    // nameconvoy?: string,
     operation?: string,
     follow?: boolean,
     IMEI?: string,
@@ -85,6 +85,7 @@ export interface UserTracker {
     nametype_vehicle?: string | null
     tolva?: string,
     tag?: boolean,
+    cod_interno?: string | null
 }
 
 export interface ScreenView {

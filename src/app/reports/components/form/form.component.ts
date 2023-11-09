@@ -615,13 +615,10 @@ export class FormComponent implements OnInit {
     //filtrar vehiculos
     aux2 = this.vehicleService.vehicles.filter((vh:any) => vh.idoperation == this.selectedOperation);
     this.vehicles = aux2;
-    // for (const vehicle of aux2) {
-    //   const id_operation = vehicle.idoperation;
 
-    //   if (!this.vehicles.some((vh:any) => vh.idoperation === id_operation)) {
-    //     this.vehicles.push(vehicle);
-    //   }
-    // }
+    this.chkAllVehicles = false;
+    this.showChkSimultaneousTables = this.vehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1;
+  
     console.log('Groups: ',this.groups);
     console.log('Vehicles: ',this.vehicles);
 
@@ -665,6 +662,9 @@ export class FormComponent implements OnInit {
     //     this.vehicles.push(vehicle);
     //   }
     // }
+    this.chkAllVehicles = false;
+    this.showChkSimultaneousTables = this.vehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1;
+  
     console.log('Convoys: ',this.convoys);
     console.log('Vehicles: ',this.vehicles);
   }
@@ -675,6 +675,9 @@ export class FormComponent implements OnInit {
     aux = this.vehicleService.vehicles.filter((vh:any) => vh.idconvoy == this.selectedConvoy && vh.idgrupo == this.selectedGroup && vh.idoperation == this.selectedOperation);
     this.vehicles = aux;
 
+    this.chkAllVehicles = false;
+    this.showChkSimultaneousTables = this.vehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1;
+  
     console.log('Vehicles: ',this.vehicles);
   }
 
@@ -975,13 +978,15 @@ export class FormComponent implements OnInit {
 		/* this.showTimeLlegada = false;
 		this.showTimePeriodoDia = false; */
     
-    let aux_convoy = this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy);
-    let aux_group = this.vehicles.filter((vehicle: { grupo: any; }) => vehicle.grupo == this.selectedGroup);
+    let aux_convoy = this.vehicles.filter((vehicle: { idconvoy: any; }) => vehicle.idconvoy == this.selectedConvoy);
+    let aux_group = this.vehicles.filter((vehicle: { idgrupo: any; }) => vehicle.idgrupo == this.selectedGroup);
 
     this.showChkSimultaneousTables = 
       (this.selectedVehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1) || 
       (aux_convoy.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1) ||
       (aux_group.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1);
+    
+    // this.showChkSimultaneousTables = this.selectedVehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1
 
     switch(this.selectedReport){
       case 'R001': // 0 - R001	REPORTE DE PARADAS Y MOVIMIENTOS
@@ -1063,9 +1068,9 @@ export class FormComponent implements OnInit {
     console.log(this.selectedReport);
     console.log(typeof this.selectedReport);
     console.log("Selected report", this.selectedReport);
-    console.log("Grupo", this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup);
-    console.log("Convoy", !this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy);
-    console.log("Vehiculos en el Convoy", this.vehicles.filter((vehicle: { convoy: any; }) => vehicle.convoy == this.selectedConvoy));
+    // console.log("Grupo", this.checkboxGroup && !_.isEmpty(this.selectedGroup) && this.selectedGroup);
+    // console.log("Convoy", !this.checkboxGroup && !_.isEmpty(this.selectedConvoy) && this.selectedConvoy);
+    console.log("Vehiculos en el Convoy", this.vehicles.filter((vehicle: { nameconvoy: any; }) => vehicle.nameconvoy == this.selectedConvoy));
     console.log("Selected Vehicles", this.selectedVehicles);
 
   }
@@ -1078,8 +1083,8 @@ export class FormComponent implements OnInit {
   }
 
   onSelectedVehiclesChange(){
-    this.selectedConvoy = {};
-    this.selectedGroup = {};
+    // this.selectedConvoy = {};
+    // this.selectedGroup = {};
     this.chkAllVehicles = this.selectedVehicles.length == this.vehicles.length;
     this.showChkSimultaneousTables = this.selectedVehicles.length > 1 && this.singleTableReportIDs.indexOf(this.selectedReport) == -1;
   }

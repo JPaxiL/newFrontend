@@ -94,26 +94,25 @@ export class DriversListComponent implements OnInit {
 
   }
 
-  clickConfigurarDriver(id:number) {
-
+  clickConfigurarDriver(id:any) {
+    // console.log('ID ENCONTRADA',id);
     this.driversService.modalActive=true;
     this.driversService.action='edit';
     this.driversService.idDriverEdit = id;
 
   }
 
-  clickEliminarDriver(event:any, id:number) {
+  clickEliminarDriver(id:any) {
     console.log('------clickEliminarDriver');
     
     console.log(id);
     
     this.driversService.action='delete';
 
-    var sub = this.driversService.drivers.filter((item:any)=> item.id_conductor == id)[0];
+    var sub = this.driversService.drivers.filter((item:any)=> item.id == id)[0];
 
     console.log('----clickEliminarDriver');
     console.log(sub);
-
     Swal.fire({
       //title: '¿Está seguro que desea '+ str_activo.toUpperCase() +' '+sub.nombre_usuario+'?',
       title: '¿Está seguro?',
@@ -125,22 +124,24 @@ export class DriversListComponent implements OnInit {
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar',
       preConfirm: async () => {
-
-        const res = await this.driversService.delete(sub);
+        var res:any;
+        res = await this.driversService.delete(sub);
         // console.log(res);
-          if (res == 1) {
+          if (res.text == 'eliminado') {
               Swal.fire(
                 '',
                 'Conductor se elimino correctamente',
                 'success'
               );
-          } else {
+          } else if (res.text == 'no eliminado') {
               Swal.fire(
                 '',
                 'Conductor no se elimino correctamente',
                 'error'
               );
             //icon: 'error',
+          }else{
+
           }
 
 

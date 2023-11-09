@@ -453,7 +453,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'Conductor Somnoliento') {
+  }else if (event.tipo == 'somnolencia-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -469,7 +469,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'Conductor Fumando') {
+  }else if (event.tipo == 'conductor-fumando') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -485,7 +485,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'Cinturon Desabrochado') {
+  }else if (event.tipo == 'cinturon-de-seguridad-desabrochado') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -501,7 +501,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'Uso de Celular') {
+  }else if (event.tipo == 'uso-del-celular') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -517,7 +517,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'Error de Camara') {
+  }else if (event.tipo == 'error-de-camara-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -533,7 +533,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'Manipulacion 360') {
+  }else if (event.tipo == 'manipulacion-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,

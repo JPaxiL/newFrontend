@@ -76,19 +76,20 @@ export class DriversModalComponent implements OnInit {
     // });
 
     if ( this.driversService.action == "edit" ) {
-      var sub = this.driversService.drivers.filter((item:any)=> item.id_conductor == this.driversService.idDriverEdit)[0];
-      // console.log(sub);
+      //solo para el caso de EDIT su ibutton debe mostrarse
+      var sub = this.driversService.drivers.filter((item:any)=> item.id == this.driversService.idDriverEdit);
+      console.log('PRUEBA EDIT ->',sub);
       this.driversForm = this.fb.group({
-              id:         [sub.id_conductor],
-              nombre:     [sub.nombre_conductor],
-              dni:        [sub.dni_conductor],
-              nro_llave:      [sub.nro_llave],
-              nro_licencia:   [sub.nro_licencia],
-              tracker_imei:   [sub.tracker_imei],
-              tracker_nombre: [sub.tracker_nombre],
-              tipo_identificacion: [sub.tipo_identificacion],
+              id:         [sub[0].id],
+              nombre:     [sub[0].nombre_conductor],
+              dni:        [sub[0].dni_conductor],
+              nro_llave:      [sub[0].id_keyIbutton],
+              nro_licencia:   [sub[0].nro_licencia],
+              tracker_imei:   [sub[0].tracker_imei],
+              tracker_nombre: [sub[0].tracker_nombre],
+              tipo_identificacion: [sub[0].tipo_identificacion],
             });
-      
+        // console.log(this.driversForm);
 
     } else {
         //this.nuevo_formulario();
@@ -261,7 +262,7 @@ export class DriversModalComponent implements OnInit {
         } else if(res.text == 'llave_existe') {
           Swal.fire(
             '',
-            'Llave ya se encuentra registrada.',
+            'Llave ya se encuentra registrada, seleccione otra.',
             'warning'
           );
           // this.driversService.modalActive = false;

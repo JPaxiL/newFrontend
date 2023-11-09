@@ -177,13 +177,15 @@ export class MapService {
             imei: data.imei,
             name: data.name,
             dt_tracker: data.dt_tracker,
-            convoy: data.convoy,
+            nameconvoy: data.nameconvoy,
             longitud: data.longitud,
             latitud: data.latitud,
             speed:data.speed,
             ref:data.direction,
             tiempoParada: tiempoParada,
           };
+
+          console.log('DATA en MAP SERVICE ---------------->',data);
           this.imeiPopup = data.imei;
           this.time_stop = tiempoParada;
           this.printPopup(aux);
@@ -209,7 +211,7 @@ export class MapService {
 
             this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
             '<aside class="">'+
-            '<small>CONVOY: '+data.convoy+'</small><br>'+
+            '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
             '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
             '<small>REFERENCIA: '+data.ref+'</small><br>'+
             '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
@@ -390,8 +392,7 @@ export class MapService {
         // update dataCompleted
         // //console.log("update data");
         const index = vehicles.indexOf( resultado);
-        // //console.log("index ",index);
-
+        console.log('ESTA ES UNA PRUEBA -------->',vehicles[index]);
 
         vehicles[index].latitud = data.Latitud.toString();
         vehicles[index].longitud = data.Longitud.toString();
@@ -409,13 +410,14 @@ export class MapService {
 
 
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
+        console.log('ESTA ES UNA PRUEBA DESPEUS DE FORMAT -------->',vehicles[index]);
 
 
         if(this.imeiPopup==data.IMEI.toString()){
           let options = {
             imei: data.IMEI,
             name: vehicles[index].name,
-            convoy: vehicles[index].convoy,
+            nameconvoy: vehicles[index].nameconvoy,
             longitud: data.Longitud,
             latitud: data.Latitud,
             speed: data.Velocidad,
@@ -423,7 +425,6 @@ export class MapService {
             paradaDesde: "",
             vehicleService : this.vehicleService
           };
-          // console.log("data enviada a function timeStopAux",options);
           this.timeStopAux(options);
         }
 
@@ -509,7 +510,7 @@ export class MapService {
               let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
               this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
                 '<aside class="">'+
-                  '<small>CONVOY: '+vehicles[index].convoy+'</small><br>'+
+                  '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
                   '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
                   '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                   '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
@@ -1104,7 +1105,7 @@ export class MapService {
     let params = {
       imei: data.imei,
       name: data.name,
-      convoy: data.convoy,
+      nameconvoy: data.nameconvoy,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,
@@ -1145,7 +1146,7 @@ export class MapService {
     let params = {
       imei: this.imei,
       name: this.name,
-      convoy: this.convoy,
+      nameconvoy: this.nameconvoy,
       longitud: this.longitud,
       latitud: this.latitud,
       speed: this.speed,
@@ -1176,7 +1177,7 @@ export class MapService {
     //console.log('data.name',data.name);
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
-        '<small>CONVOY: '+data.convoy+'</small><br>'+
+        '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
         '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
@@ -1194,7 +1195,7 @@ export class MapService {
     let options = {
       imei: data.IMEI,
       name: data.name,
-      convoy: data.convoy,
+      nameconvoy: data.nameconvoy,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,
