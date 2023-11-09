@@ -133,7 +133,7 @@ export class MinimapService {
             imei: data.imei,
             name: data.name,
             dt_tracker: data.dt_tracker,
-            convoy: data.convoy,
+            nameconvoy: data.nameconvoy,
             longitud: data.longitud,
             latitud: data.latitud,
             speed:data.speed,
@@ -263,7 +263,7 @@ export class MinimapService {
     //console.log('data.name',data.name);
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
-        '<small>CONVOY: '+data.convoy+'</small><br>'+
+        '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
         '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
@@ -281,7 +281,7 @@ export class MinimapService {
     let options = {
       imei: data.IMEI,
       name: data.name,
-      convoy: data.convoy,
+      nameconvoy: data.nameconvoy,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,
@@ -340,7 +340,7 @@ export class MinimapService {
     let params = {
       imei: this.imei,
       name: this.name,
-      convoy: this.convoy,
+      nameconvoy: this.nameconvoy,
       longitud: this.longitud,
       latitud: this.latitud,
       speed: this.speed,
@@ -365,7 +365,7 @@ export class MinimapService {
 
         mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
           '<aside class="">'+
-          '<small>CONVOY: '+data.convoy+'</small><br>'+
+          '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
           '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
           '<small>REFERENCIA: '+data.ref+'</small><br>'+
           '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
@@ -439,7 +439,7 @@ export class MinimapService {
           let options = {
             imei: data.IMEI,
             name: item.configuration!.vehicles![index].name,
-            convoy: item.configuration!.vehicles![index].convoy,
+            nameconvoy: item.configuration!.vehicles![index].nameconvoy,
             longitud: data.Longitud,
             latitud: data.Latitud,
             speed: data.Velocidad,
@@ -470,7 +470,7 @@ export class MinimapService {
               let iconUrl = await this.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.configuration!.vehicles![index].icon);
               item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.configuration!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.configuration!.vehicles![index].speed+' km/h</strong></div></div>'+
                 '<aside class="">'+
-                  '<small>CONVOY: '+item.configuration!.vehicles![index].convoy+'</small><br>'+
+                  '<small>CONVOY: '+item.configuration!.vehicles![index].nameconvoy+'</small><br>'+
                   '<small>UBICACION: '+item.configuration!.vehicles![index].latitud+', '+item.configuration!.vehicles![index].longitud+'</small><br>'+
                   '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                   '<small>FECHA DE TRANSMISION: '+item.configuration!.vehicles![index].dt_tracker+'</small><br>'+
@@ -630,7 +630,7 @@ export class MinimapService {
     let params = {
       imei: data.imei,
       name: data.name,
-      convoy: data.convoy,
+      nameconvoy: data.nameconvoy,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,

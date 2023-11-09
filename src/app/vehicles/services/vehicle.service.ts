@@ -168,7 +168,7 @@ export class VehicleService {
         let aux = {
           imei: data.imei,
           name: data.name,
-          convoy: data.convoy,
+          nameconvoy: data.nameconvoy,
           longitud: data.longitud,
           latitud: data.latitud,
           speed: data.speed,
