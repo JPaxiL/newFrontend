@@ -15,7 +15,8 @@
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorialForm" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Cargando información... </p></ngx-spinner>
 
 <div *ngIf="(historialService.modalActive)">
-  <app-panel-historial-recorrido-modal></app-panel-historial-recorrido-modal>
+  <!-- <app-panel-historial-recorrido-modal></app-panel-historial-recorrido-modal> -->
+  <app-panel-historial-grafico></app-panel-historial-grafico>
 </div>
 
   <div id="panel_historial" class="modal-body p-fluid p-0 overflow-auto" style="position: relative;">

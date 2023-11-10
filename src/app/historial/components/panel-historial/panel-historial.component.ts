@@ -752,9 +752,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     console.log("-----------key");
     console.log(key);
 
-    this.historialService.modalActive=false;
-    console.log("GAAAAAAA");
-    await new Promise(f => setTimeout(f, 500));
+    // this.historialService.modalActive=false;
+    // console.log("GAAAAAAA");
+    // await new Promise(f => setTimeout(f, 500));
 
     this.historialService.modalActive=true;
 
@@ -905,7 +905,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     var param = {
                 fecha_desde:M1, fecha_hasta:M2,
-                imei:this.form.selectedCar
+                imei:this.form.selectedCar,
+                user_id:localStorage.getItem('user_id')
 
                 // , duracionParada:vm.form.duracionParada.id,
                 // conParada:vm.form.verParadasHistorial, nombreUnidad:vm.form.selectedUnidad.value.name,
@@ -913,14 +914,18 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 // icono : values[0].icon
               };
     console.log(param);
+    // console.log("ID DEL USUARIO");
+    // console.log(localStorage.getItem('user_id'));
+    
+    
 
 
     this.historialService.get_tramas_recorrido(param).then( res => {
 
-      // this.EventService.ShowAllHistorial(param).then( res1 => {
+      this.EventService.ShowAllHistorial(param).then( res1 => {
 
-          // console.log("=== VERDADERO EVENTOS HISTORIAL");
-          // console.log(res1);
+          console.log("=== VERDADERO EVENTOS HISTORIAL");
+          console.log(res1);
 
 
 
@@ -1327,10 +1332,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                       //{ offset: 12, repeat: 25, symbol: L.Symbol.dash({pixelSize: 10, pathOptions: {color: 'black', weight: 2}})},
                       { offset: 2, repeat: 30, symbol: L.Symbol.arrowHead({pixelSize: 4.3,polygon: false,pathOptions: {stroke: true,weight: 1.4,color: 'black',opacity: 1}})}
                   ]
-                }).addTo(this.mapService.map);
-
-
-;
+                }).addTo(this.mapService.map);;
 
               var combustibleTotal = this.get_combustible_movimiento(dH, 0, 'FIN');//'100 gal.';
               var kilometrajeTotal = this.get_distancia_movimiento(dH, 0, 'FIN');//'100 gal.';
@@ -1523,7 +1525,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             //this.showNotEnoughInfoDialog();
           }
 
-      //}); // fin de eventosa historial
+      }); // fin de eventosa historial
     }); // fin de historial tramas
 
     // var dH22  = await this.historialService.get_tramas_recorrido(param);
@@ -2177,6 +2179,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
+  
   clickLocate(row:any, key:any=-1) {
     // console.log(row);
     // console.log(key);
