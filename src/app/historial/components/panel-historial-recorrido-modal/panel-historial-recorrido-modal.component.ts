@@ -31,6 +31,7 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
   sliderValueVelocidad:any;
   sliderValueImgUrl:any="";
   sliderValueImgUrl2:any="";
+  nomostrarmodal=false;
 
 
 
@@ -97,32 +98,32 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("======= ngOnInit ========");
-    console.log(this.historialService.arrayRecorridos);
-    console.log(this.historialService);
-    console.log(this.historialService.keyGrafico);
+    // console.log("======= ngOnInit ========");
+    // console.log(this.historialService.arrayRecorridos);
+    // console.log(this.historialService);
+    // console.log(this.historialService.keyGrafico);
 
-    for (let i = 0; i < this.historialService.arrayRecorridos.length; i++) {
+    // for (let i = 0; i < this.historialService.arrayRecorridos.length; i++) {
 
-        if (this.historialService.arrayRecorridos[i].key == this.historialService.keyGrafico) {
-            console.log("indice ==");
-            console.log(i);
-            this.HM = this.historialService.arrayRecorridos[i];
-            console.log(this.HM);
+    //     if (this.historialService.arrayRecorridos[i].key == this.historialService.keyGrafico) {
+    //         console.log("indice ==");
+    //         console.log(i);
+    //         this.HM = this.historialService.arrayRecorridos[i];
+    //         console.log(this.HM);
             
-            this.sliderValueMax = this.HM.recorrido.length - 1; 
-        }
+    //         this.sliderValueMax = this.HM.recorrido.length - 1; 
+    //     }
       
-    }
+    // }
 
-    var item = this.HM.recorrido[0];
-    this.sliderValueFecha = item.dt_tracker;
-    this.sliderValueVelocidad = item.speed;
-    this.getReference(item);
-    this.getStreetViewImg(item);
+    // var item = this.HM.recorrido[0];
+    // this.sliderValueFecha = item.dt_tracker;
+    // this.sliderValueVelocidad = item.speed;
+    // this.getReference(item);
+    // this.getStreetViewImg(item);
 
-    this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
-    //http://maps.google.com/maps?q=&layer=c&cbll=31.335198,-89.287204&cbp=11,0,0,0,0
+    // this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
+    // //http://maps.google.com/maps?q=&layer=c&cbll=31.335198,-89.287204&cbp=11,0,0,0,0
     
 
   }
@@ -311,7 +312,7 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
       console.log(this.opcionVelocidadGraficoModalSlider);
       
       var vG = parseInt(this.opcionVelocidadGraficoModalSlider);
-      if (vG > 1 && vG <= 6) {
+      if (vG > 1 && vG <= 7) {
         vG = vG - 1;
         this.opcionVelocidadGraficoModalSlider = vG.toString();
       }
@@ -324,7 +325,7 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
       console.log(this.opcionVelocidadGraficoModalSlider);
 
       var vG = parseInt(this.opcionVelocidadGraficoModalSlider);
-      if (vG >= 1 && vG < 6) {
+      if (vG >= 1 && vG < 7) {
         vG = vG + 1;
         this.opcionVelocidadGraficoModalSlider = vG.toString();
       }
@@ -405,4 +406,5 @@ export class PanelHistorialRecorridoModalComponent implements OnInit {
 
   //$address = $this->getAddress($request->latitud, $request->longitud);
 }
+
 
