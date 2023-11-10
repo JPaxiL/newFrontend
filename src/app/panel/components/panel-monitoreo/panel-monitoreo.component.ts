@@ -10,7 +10,6 @@ declare var $: any;
 })
 export class PanelMonitoreoComponent implements OnInit {
 
-
   constructor( public panelService: PanelService ) { }
 
   ngOnInit(): void {
@@ -67,6 +66,14 @@ export class PanelMonitoreoComponent implements OnInit {
   clickHidePanel(): void {
     $("#panelMonitoreo").hide( "slow" );
     this.panelService.nombreComponente = '';
+  }
+
+  clickEventPanel(): void {
+    if(this.panelService.count > 5){
+      console.log("eres desarrollador ...");
+    }else{
+      this.panelService.count++;
+    }
   }
 
   hasHeader(){
