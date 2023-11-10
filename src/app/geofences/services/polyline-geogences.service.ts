@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 export class PolylineGeogencesService {
 
   polyline_geofences: any[] = []
-  nombreComponente:string = "LISTAR";
+  nameComponentLin:string = "LISTAR";
   action:string = "add";
   idGeocercaEdit:number = 0;
 

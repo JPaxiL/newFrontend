@@ -26,10 +26,10 @@ export class GeocercaPolylineListsComponent implements OnInit {
       this.polylineGeofenceService.spinner.show('loadingPolylineGeofencesSpiner');
     }
     if(this.polylineGeofenceService.initializingPolylineGeofences){
-      this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[]);
+      this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[], 'lin');
     }else{
       this.polylineGeofenceService.dataCompleted.subscribe((data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data);
+        this.objGeofences.setGeofences(data,'lin');
       })
     }
     this.treeGeofences = this.objGeofences.createTreeNode();
@@ -192,13 +192,13 @@ export class GeocercaPolylineListsComponent implements OnInit {
   }
 
   clickAgregarGeocerca() {
-    this.polylineGeofenceService.nombreComponente = "AGREGAR";
+    this.polylineGeofenceService.nameComponentLin = "AGREGAR";
     this.polylineGeofenceService.action = "add";
 
   }
 
   clickConfigurarGeocerca(id:number) {
-    this.polylineGeofenceService.nombreComponente = "AGREGAR";
+    this.polylineGeofenceService.nameComponentLin = "AGREGAR";
     this.polylineGeofenceService.action         = "edit";
     this.polylineGeofenceService.idGeocercaEdit = id;
   }

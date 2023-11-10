@@ -18,7 +18,6 @@ textarea, .input-group > * {
   font-size: 11px;
 }
 
-
 .tright {
   text-align: right;
 }
@@ -42,26 +41,33 @@ textarea, .input-group > * {
 .leaflet-edit-move{cursor:move}.leaflet-edit-resize{cursor:pointer}.leaflet-oldie .leaflet-draw-toolbar{border:1px solid #999}
 
 .pentagon {
+  position: relative;
   width: 50px; /* Puedes ajustar el tamaño según tus necesidades */
   height: 50px; /* Puedes ajustar el tamaño según tus necesidades */
-  background-color: #3498db; /* Puedes cambiar el color de fondo */
+  background-color: #c4c4c9; /* Puedes cambiar el color de fondo */
   clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
 }
 
 .circle {
   width: 50px; /* Puedes ajustar el tamaño según tus necesidades */
   height: 50px; /* Puedes ajustar el tamaño según tus necesidades */
-  background-color: #e74c3c; /* Puedes cambiar el color de fondo */
+  background-color: #c4c4c9; /* Puedes cambiar el color de fondo */
   border-radius: 50%; /* Esto hace que el elemento tenga forma de círculo */
 }
 
-.mi-div {
+.btnBorder {
   width: 100px; /* Ajusta el ancho según tus necesidades */
   height: 100px; /* Ajusta la altura según tus necesidades */
-  background-color: lightblue; /* Ajusta el color de fondo según tus necesidades */
+  background-color: rgb(150, 208, 244); /* Ajusta el color de fondo según tus necesidades */
   margin: 10px; /* Ajusta el margen entre los divs según tus necesidades */
+  cursor: pointer;
 }
 
-.contenedor {
+.container {
   display: flex;
+}
+
+.selected {
+  // Estilos cuando el contenedor está seleccionado
+  background-color: #30a9d9;
 }

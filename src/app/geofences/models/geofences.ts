@@ -10,8 +10,11 @@ export class Geofences implements IGeofences {
         return ;
     }
 
-    public setGeofences(items:IGeofence[]){
-        this.geofences.push(...items);
+    public setGeofences(items:IGeofence[],type: string){
+        items.forEach(item => {
+          item.type = type;
+          this.geofences.push(item);
+        })
         console.log("GEooofencesss unidosss", this.geofences)
     }
     
@@ -82,7 +85,7 @@ export class Geofences implements IGeofences {
             console.log("this.geofences[index]['grupo']",this.geofences[index]['idgrupo']);
             map.push(
               {
-                data:{name: this.geofences[index]['nameoperation'], col: 3, type:'operation', id:this.geofences[index]['idoperation']},
+                data:{name: this.geofences[index]['nameoperation'], col: 3, type:'operacion', id:this.geofences[index]['idoperation']},
                 expanded: true,
                 children:[
                   {

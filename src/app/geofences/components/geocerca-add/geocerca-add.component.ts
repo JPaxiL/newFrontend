@@ -13,24 +13,9 @@ import 'leaflet-measure-path'
 import 'leaflet-measure-path/leaflet-measure-path.css';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CircularGeofencesService } from '../../services/circular-geofences.service';
-
+import { PolylineGeogencesService } from '../../services/polyline-geogences.service';
 
 declare var $: any;
-// import FreeDraw, { CREATE, EDIT } from 'leaflet-freedraw';
-// import FreeDraw from 'leaflet-freedraw';
-// import "leaflet-geometryutil";
-// import "leaflet-pather";
-//import L from "leaflet";
-// import '../../node_modules/leaflet-geometryutil/src/leaflet.geometryutil.js';
-// import { } from 'leaflet-geometryutil';
-// import 'leaflet-geometryutil';
-// declare module 'leaflet' {
-//   export class GeometryUtil {
-//     // static geodesicArea(latlng: L.LatLng): number;
-//     static computeAngle(a: L.Point, b: L.Point): number;
-//     static closest(map: L.Map, layer: L.Layer, latlng: L.LatLng, vertices?: boolean): L.LatLng;
-//   }
-// }
 
 @Component({
   selector: 'app-geocerca-add',
@@ -40,8 +25,26 @@ declare var $: any;
 
 export class GeocercaAddComponent implements OnInit, OnDestroy  {
   form :any = {};
-  nameComponentCirc = "CREAR GEO CIRC";
-
+  poligonAddCir!: L.Circle;
+  nameComponentCir= "ADD GEOCIR";
+  operations : any = [];
+  groups : any = [];
+  selectedGroup: any={};
+  selectedOperation: any={};
+  disabledOperation = false;
+	disabledGroup = true;
+  geoOptions = 'poligon';
+  placeholderOperation = 'Seleccione una Operación ...';
+  placeholderGroup = 'Seleccione una Operación Primero...';
+  listOptions: any= [
+    { idOption: 'Ninguno', valueOption: 'ninguno' },
+    { idOption: 'Operación', valueOption: 'operacion' },
+    { idOption: 'Grupo', valueOption: 'grupo' },  
+    
+  ];
+  
+  listOptionCheckbox = 'ninguno';
+  btnSelected: number = 1;
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
@@ -65,12 +68,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
   constructor(
     public geofencesService: GeofencesService,
-    // public MeasureDrawService: MeasureDrawService,
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
     public vehicleService: VehicleService,
-    private circularGeofencesService: CircularGeofencesService,
-
+    public circularGeofencesService: CircularGeofencesService,
   ) { }
 
   action:string = "add";
@@ -88,8 +89,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   ];
 
   ngOnInit(): void {
-    if ( this.geofencesService.action == "edit" ) {
-      this.llenar_formulario();
+    if ( this.geofencesService.nameComponentPol = "ADD GEOPOL") {
+      if(this.geofencesService.action=='edit'){
+        this.llenar_formulario();
       var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
       //console.log(geo);
 
@@ -109,124 +111,156 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       geo.geo_elemento.addTo(this.mapService.map);
       geo.geo_elemento.editing.enable();
-
-    } else {
+      
+      } else {
       this.nuevo_formulario();
 
-      // var drawControl = new L.Draw.Polygon(this.mapService.map);
-      // drawControl.enable();
-
-      // Initialise the FeatureGroup to store editable layers
-      // var editableLayers = new L.FeatureGroup();
-      // this.mapService.map.addLayer(editableLayers);
-
-      // var drawPluginOptions = {
-      //   position: 'topright',
-      //   draw: {
-      //     polygon: {
-      //       allowIntersection: false, // Restricts shapes to simple polygons
-      //       drawError: {
-      //         color: '#e1e100', // Color the shape will turn when intersects
-      //         message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-      //       },
-      //       shapeOptions: {
-      //         color: '#97009c'
-      //       }
-      //     },
-      //     // disable toolbar item by setting it to false
-      //     polyline: false,
-      //     circle: false, // Turns off this drawing tool
-      //     rectangle: false,
-      //     marker: false,
-      //     },
-      //   edit: {
-      //     featureGroup: editableLayers, //REQUIRED!!
-      //     remove: false
-      //   }
-      // };
-
-      // new L.Draw.Polyline(this.mapService.map, {drawControl.options.polyline}).enable();
-
-      // const draw = new MeasureDrawService();
-      // //console.log(MeasureDrawService.name);
-      // var poligono = this.MeasureDrawService.createPolygon();
-      // //console.log(poligono);
-
-      // this.mapService.map.getCenter()
-      //console.log('center');
-      //console.log(this.mapService.map.getCenter());
-
-      //console.log(this.mapService.map.getCenter().lat);
-
-      // var centro = [this.mapService.map.getCenter().lat , this.mapService.map.getCenter().lng];
-
-      // var ne = [this.mapService.map.getBounds().getNorthEast().lat, this.mapService.map.getBounds().getNorthEast().lng];
-      // var no = [this.mapService.map.getBounds().getNorthWest().lat, this.mapService.map.getBounds().getNorthWest().lng];
-
-      // var se = [this.mapService.map.getBounds().getSouthEast().lat, this.mapService.map.getBounds().getSouthEast().lng];
-      // var so = [this.mapService.map.getBounds().getSouthWest().lat, this.mapService.map.getBounds().getSouthWest().lng];
-
-      //console.log(this.mapService.map.getBounds());
-
-      //console.log(this.mapService.map.getBounds().getNorthEast());
-      //console.log(this.mapService.map.getBounds().getNorthWest());
-      //console.log(this.mapService.map.getBounds().getSouthEast());
-      //console.log(this.mapService.map.getBounds().getSouthWest());
-
-      // //console.log(this.mapService.map.getBounds().getNorthEast().lat);
-      // //console.log(this.mapService.map.getBounds().getNorthWest().lng);
-      // //console.log(this.mapService.map.getBounds().getSouthEast());
-      // //console.log(this.mapService.map.getBounds().getSouthWest());
-
-      //console.log(this.getLatLngCenter([ [2,2] ,[5,5]]));
-      //console.log(this.getLatLngCenter([ ne ,centro ]));
-      // var ng1 = [this.getLatLngCenter([ ne ,centro ])[0] , this.getLatLngCenter([ ne ,centro ])[1]];
-      //console.log(ne);
-      //console.log(centro);
-
-      // this.poligonAdd = new L.Polygon( [
-      //   [this.getLatLngCenter([ ne ,centro ])[0],this.getLatLngCenter([ ne ,centro ])[1]],
-      //   [this.getLatLngCenter([ no ,centro ])[0],this.getLatLngCenter([ no ,centro ])[1]],
-      //   [this.getLatLngCenter([ so ,centro ])[0],this.getLatLngCenter([ so ,centro ])[1]],
-      //   [this.getLatLngCenter([ se ,centro ])[0],this.getLatLngCenter([ se ,centro ])[1]],
-      // ], {
-      //   weight: 3,
-      //   fill: true,
-      //   color: '#000000'
-      // }).addTo(this.mapService.map);
+      this.optionsOperationsGroups();
 
       this.poligonAdd = this.mapService.map.editTools.startPolygon();
 
       this.changeGeoColor(this.form.id);
 
       this.poligonAdd.editing.enable();
-
+      }
+    }else {
+      if (this.circularGeofencesService.action == "edit"){
+        this.llenar_formularioCir()
+        var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == this.circularGeofencesService.idGeocercaEdit)[0];
+  
+        if (geo.zone_visible == true) {
+          this.mapService.map.removeLayer(geo.geo_elemento);
+        }
+        geo.geo_elemento = new L.Circle( this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
+          radius: this.circularGeofencesService.getRadius(geo.geo_coordenadas),
+          weight: 3,
+          fill: geo.zone_no_int_color,
+          color: geo.zone_color,
+        });
+        this.poligonAdd = geo.geo_elemento.addTo(this.mapService.map);
+        this.poligonAdd.enableEdit();
+      }else{
+        this.nuevo_formulario();
+        this.poligonAdd = this.mapService.map.editTools.startCircle();
+        this.changeGeoColor(this.form.id);
+        this.optionsOperationsGroups();
+      }
+      this.poligonAddCir.on('editable:editing', (event) => {
+        let radio = (event.layer.getRadius()/1000).toFixed(2);
+        this.form.radio = radio;
+        this.form.area = this.getCircleArea(radio).toFixed(2);
+      }) 
     }
-    // aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo == 0 && vehicle.namegrupo=='Unidades Sin Grupo');
-    //   // Filtrar elementos con 'idoperacion' diferente
-    //   for (const vehicle of aux2) {
-    //     const nameoperation = vehicle.nameoperation;
-    //     const filteredOperation = {
-    //       idoperation: vehicle.idoperation,
-    //       nameoperation: vehicle.nameoperation
-    //     };
-    //     if (!aux.some((v) => v.nameoperation === nameoperation)) {
-    //       aux.push(filteredOperation);
-    //     }
-    //   }
-    //   aux.sort((a, b) => a.idoperation - b.idoperation);
-  }
-  get showBtnAdd(){
-    return this.circularGeofencesService.showBtnAdd;
-  }
-  clickAgregarGeocercaCir() {
-    this.circularGeofencesService.nameComponentCirc = "CREAR GEO CIRC";
-    this.circularGeofencesService.action = "add";
-    console.log("this.clickAgregarGeocercaCir");
   }
 
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     this.mapService.map.editTools.stopDrawing();
+  }
+
+  optionsOperationsGroups(){
+    let aux: any [] = [];
+      aux = this.vehicleService.vehicles;
+      //console.log("lista de vehivulossssssss", aux);
+      for (const vehicle of aux) {
+        const id_operation = vehicle.idoperation;
+        // const id_grupo = vehicle.idgrupo;
+        // const id_convoy = vehicle.idconvoy;
+        const filteredOperation = {
+          idoperation: vehicle.idoperation,
+          nameoperation: vehicle.nameoperation,
+        };
+  if (!this.operations.some((op:any) => op.idoperation === id_operation)) {
+          this.operations.push(filteredOperation);
+        }
+  }
+      this.operations.sort((a: { idoperation: number; }, b: { idoperation: number; }) => a.idoperation - b.idoperation);
+          console.log('Operations: ',this.operations);
+  }
+
+  selectBtn(btn: number): void {
+    this.btnSelected = btn;
+    if(btn==1){
+      this.geoOptions = 'poligon';
+      this.poligonAdd = this.mapService.map.editTools.startPolygon();
+
+      this.changeGeoColor(this.form.id);
+
+      this.poligonAdd.editing.enable();
+    }else if(btn==2){
+      this.geoOptions = 'circ';
+      this.poligonAdd = this.mapService.map.editTools.startCircle();
+      this.changeGeoColor(this.form.id);
+    }else if(btn==3){
+      this.geoOptions = 'line';
+    }
+  }
+
+  clickFormGeoPol(){
+    console.log("ClickPoligon");
+    this.geoOptions = 'poligon';
+  }
+
+  clickFormGeoCir(){
+    console.log("ClickCircccccc");
+    this.geoOptions = 'circ';
+  }
+  clickFormGeoLin(){
+    console.log("ClickLineee");
+    this.geoOptions = 'line';
+  }
+
+  clickAgregarGeocercaPol() {
+    this.geofencesService.nameComponentPol = "ADD GEOPOL";
+    this.geofencesService.action         = "add";    
+    console.log("this.clickAgregarGeocercaPol");
+
+  }
+
+  clickAgregarGeocercaCir() {
+    this.circularGeofencesService.nameComponentCir = "ADD GEOCIR";
+    this.circularGeofencesService.action = "add";
+    console.log("this.clickAgregarGeocercaCir");
+  }
+  onOptionSelected(){
+    let option = this.listOptionCheckbox;
+    if(option=='grupo'){
+      this.selectedGroup = {};
+      this.disabledGroup = true;
+      this.placeholderGroup = 'Seleccione una operacion primero...';
+    }else if(option=='operacion'){
+      this.selectedOperation = {};
+      this.selectedGroup = {};
+      this.disabledOperation = false;
+      this.placeholderOperation = 'Seleccione una operacion...';
+    }else{
+      this.selectedOperation = {};
+      this.selectedGroup = {};
+    }
+    this.selectedOperation = {};
+    this.selectedGroup = {};
+  }
+  onChangeOperation(){
+    let aux2: any[]=[];
+    console.log(this.selectedOperation);
+    aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
+
+      for (const vehicle of aux2) {
+        const idgroup = vehicle.idgrupo;
+        const filteredGroup = {
+          idgrupo: vehicle.idgrupo,
+          namegrupo: vehicle.namegrupo
+        };
+        if (!this.groups.some((v: { idgrupo: any; }) => v.idgrupo === idgroup)) {
+          this.groups.push(filteredGroup);
+        }
+      }
+      this.groups.sort((a: { idgrupo: number; }, b: { idgrupo: number; }) => a.idgrupo - b.idgrupo);
+      if(this.listOptionCheckbox == 'grupo'){
+        this.selectedGroup = {};
+        this.disabledGroup = false;
+        this.placeholderGroup = 'Seleccione un grupo...';
+      }
+      // console.log('auxliar2 POST:',this.groups);
   }
 
   getLatLngCenter(latLngInDegr:any) {
@@ -298,6 +332,38 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       this.geofencesService.showDrawingsOfGeofence(this.geofencesService.geofences[i]);
     }
 
+    //Circular
+    this.poligonAdd.off();
+    this.mapService.map.editTools.stopDrawing();
+
+    if ( this.action == "edit" ) {
+
+      var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == this.circularGeofencesService.idGeocercaEdit)[0];
+          this.mapService.map.removeLayer(geo.geo_elemento);
+          geo.geo_elemento = new L.Circle( this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
+            radius: this.circularGeofencesService.getRadius(geo.geo_coordenadas),
+            weight: 3,
+            fill: geo.zone_no_int_color,
+            color: geo.zone_color,
+          });
+
+          this.circularGeofencesService.bindMouseEvents(geo);
+
+          if (geo.zone_visible == true) {
+            geo.geo_elemento.addTo(this.mapService.map);
+          }
+
+    } else {
+      this.mapService.map.removeLayer(this.poligonAdd);
+    }
+
+    for(let i = 0; i < this.circularGeofencesService.circular_geofences.length; i++){
+      this.circularGeofencesService.clearDrawingsOfGeofence(this.circularGeofencesService.circular_geofences[i]);
+    }
+    // this.circularGeofencesService.sortGeofencesBySize();
+    for(let i = 0; i < this.circularGeofencesService.circular_geofences.length; i++){
+      this.circularGeofencesService.showDrawingsOfGeofence(this.circularGeofencesService.circular_geofences[i]);
+    }
   }
 
   layerToPoints(figure:any, type:string) {
@@ -420,6 +486,70 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     // //console.log(this.getPerimeter(geo.geo_elemento.getLatLngs()[0]));
   }
 
+  llenar_formularioCir(){
+    var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == this.circularGeofencesService.idGeocercaEdit)[0];
+    this.mapService.map.panTo(new L.LatLng(geo.geo_elemento._latlng.lat, geo.geo_elemento._latlng.lng));
+
+    this.form.id = geo.id;
+    this.form.nombre = geo.zone_name;
+    this.form.descripcion = geo.zone_descripcion;
+
+    if (geo.geo_elemento) {
+
+      let radio = (geo.geo_elemento.getRadius()/1000).toFixed(2);
+
+      this.form.radio = radio;
+
+      this.form.area = this.getCircleArea(radio).toFixed(2);
+
+    } else {
+      this.form.perimetro = 0;
+      this.form.area = 0;
+
+    }
+
+    this.form.color = geo.zone_color;
+    this.form.categoria = geo.zone_cat;
+
+    let checkVelocidad = false;
+    switch (geo.vel_act_zona) {
+      case "0":
+      case "false":
+      case false:
+        checkVelocidad = false;
+        break;
+      case "1":
+      case "true":
+      case true:
+        checkVelocidad = true;
+        break;
+      default:
+        checkVelocidad = false;
+        break;
+    }
+    this.form.checkVelocidad = checkVelocidad;
+
+    this.form.limite_velocidad = geo.int_limite_velocidad_0;
+    this.form.limite_tolerable = geo.int_limite_velocidad_1;
+    this.form.limite_grave = geo.int_limite_velocidad_2;
+    this.form.limite_muy_grave = geo.int_limite_velocidad_3;
+
+    this.form.visible_zona         = geo.zone_visible;
+    this.form.nombre_visible_zona  = geo.zone_name_visible;
+    this.form.geo_geometry          = geo.geo_coordenadas;
+
+    // this.form.fill = geo.fill;
+    this.form.zone_no_int_color = geo.zone_no_int_color;
+
+    this.form.tag_name_color = /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(geo.tag_name_color)? geo.tag_name_color : this.circularGeofencesService.defaultTagNameColor;
+    this.form.tag_name_font_size = this.circularGeofencesService.defaultTagNameFontSize; //px
+    for(let i = 0; i< this.fontSizeOptions.length; i++){
+      if(this.fontSizeOptions[i].value == parseInt(geo.tag_name_font_size)){
+        this.form.tag_name_font_size = parseInt(geo.tag_name_font_size);
+      }
+    }
+  }
+
   nuevo_formulario(){
 
 
@@ -460,6 +590,39 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     }, 0); */
   }
 
+  nuevo_formularioCir(){
+    this.form.id = 0;
+    this.form.nombre = '';
+    this.form.descripcion = '';
+
+    let radio = 0;
+    this.form.radio = radio.toFixed(2);
+
+    var factorArea = Math.pow(this.measurementUnits[1].factor, 2); //km2
+    let area = 0;
+    this.form.area = area.toFixed(2);
+
+    this.form.color = "#ff0000";
+    this.form.categoria = 0;
+
+    this.form.checkVelocidad = false;
+
+    this.form.tag_name_color = this.circularGeofencesService.defaultTagNameColor;
+    this.form.tag_name_font_size = this.circularGeofencesService.defaultTagNameFontSize; //px
+
+    this.form.limite_velocidad = 0;
+    this.form.limite_tolerable = 0;
+    this.form.limite_grave = 0;
+    this.form.limite_muy_grave = 0;
+
+    this.form.visible_zona = "true";
+    this.form.nombre_visible_zona = "true";
+
+    this.form.geo_geometry = "<(-2.98692739333486,-69.43359375),671103.240326455>";
+   
+    this.form.zone_no_int_color = true;
+  }
+
   geodesicArea (latLngs:any) {
     var pointsCount = latLngs.length,
       area = 0.0,
@@ -497,11 +660,11 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     return 0;
   }
 
-  clickCancelar(id:number){
+  clickCancelPol(id:number){
     //console.log("---clickCancelar");
     this.mapService.map.editTools.stopDrawing();
     
-    this.geofencesService.nombreComponente = "LISTAR";
+    this.geofencesService.nameComponentPol = "LISTAR";
 
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
     if ( this.geofencesService.action == "edit" ) {
@@ -526,8 +689,43 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     //geo.geo_elemento.setLatLngs( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ));
   }
+  clickCancelCir(id:number){
 
-  clickGuardar(id:number){
+    this.circularGeofencesService.nameComponentCir = "LISTAR";
+
+    var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
+    if ( this.action == "edit" ) {
+
+      this.mapService.map.removeLayer(geo.geo_elemento);
+      geo.geo_elemento = new L.Circle( this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
+        radius: this.circularGeofencesService.getRadius(geo.geo_coordenadas),
+        weight: 3,
+        fill: geo.zone_no_int_color,
+        color: geo.zone_color,
+      });
+
+      this.circularGeofencesService.bindMouseEvents(geo);
+
+      if (geo.zone_visible == true) {
+        geo.geo_elemento.addTo(this.mapService.map);
+      }
+
+    } else {
+
+      this.mapService.map.removeLayer(this.poligonAdd);
+    }
+
+  }
+
+  createGeometryString(figure: L.Circle){
+
+    //"<(-2.98692739333486,-69.43359375),671103.240326455>"
+    //"<(-7.466705320402595,-76.33300781250001),189685.38698446512>"
+    return `<(${figure.getLatLng().lat},${figure.getLatLng().lng}),${figure.getRadius()}>`
+
+  }
+
+  clickSavePol(id:number){
     if(this.form.nombre == null  || this.form.nombre.trim() == '' || this.form.nombre.trim().length == 0){
       Swal.fire({
         title: 'Error',
@@ -550,7 +748,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       this.geofencesService.edit(this.form).then( (res1) => {
         //console.log("---clickGuardar----");
         //console.log(res1);
-        this.geofencesService.nombreComponente =  "LISTAR";
+        this.geofencesService.nameComponentPol =  "LISTAR";
 
 
         let gEdit = res1[2];
@@ -642,7 +840,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           //console.log("---clickGuardar NUEVO----");
           //console.log(res1);
 
-          this.geofencesService.nombreComponente =  "LISTAR";
+          this.geofencesService.nameComponentPol =  "LISTAR";
 
           let gNew = res1[2];
           let gNew2 = res1[3][0];
@@ -745,6 +943,194 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     // PUT|PATCH | api/zone/{zone}                         | zone.update                       | App\Http\Controllers\Api\V1\ZoneController@update
   }
 
+  clickSaveCir(id:number){
+    if(this.form.nombre == null  || this.form.nombre.trim() == '' || this.form.nombre.trim().length == 0){
+      Swal.fire({
+        title: 'Error',
+        text: 'El nombre de la geocerca no puede quedar vacío.',
+        icon: 'warning',
+      });
+      return;
+    }
+
+    this.spinner.show('spinnerLoading');
+
+    this.form.radio = (this.poligonAdd.getRadius()/1000).toFixed(2);
+
+    if ( this.action == "edit" ) {
+
+      var geo0 = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
+      this.form.geo_geometry = this.createGeometryString(this.poligonAdd);
+
+      this.circularGeofencesService.edit(this.form).subscribe((res) => {
+
+        this.circularGeofencesService.nameComponentCir =  "LISTAR";
+
+        let gEdit = res[2];
+        let gEdit2 = res[3][0];
+        var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == gEdit.id)[0];
+
+
+        geo.descripcion = gEdit.descripcion;
+        geo.orden = gEdit.var_nombre;
+        geo.tag_name_color = gEdit.tag_name_color;
+        geo.tag_name_font_size = gEdit.tag_name_font_size;
+        geo.zone_name_visible = gEdit.bol_mostrar_nombre;
+        geo.zone_name_visible_bol = (gEdit.zone_name_visible === true);
+        geo.zone_visible = gEdit.bol_mostrar;
+        geo.geo_coordenadas = gEdit.geo_coordenadas;
+        geo.zone_color = gEdit.var_color;
+        geo.zone_name = gEdit.var_nombre;
+        geo.zone_cat = gEdit.int_categoria;
+        geo.vel_act_zona = gEdit.bol_limite_velocidad_activo;
+        geo.int_limite_velocidad_0 = gEdit.int_limite_velocidad_0;
+        geo.int_limite_velocidad_1 = gEdit.int_limite_velocidad_1;
+        geo.int_limite_velocidad_2 = gEdit.int_limite_velocidad_2;
+        geo.int_limite_velocidad_3 = gEdit.int_limite_velocidad_3;
+        geo.zone_no_int_color = gEdit.bol_sin_relleno;
+
+
+        this.mapService.map.removeLayer(geo.geo_elemento);
+        this.mapService.map.removeLayer(geo.marker_name);
+
+        geo.geo_elemento = new L.Circle( this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
+          radius: this.circularGeofencesService.getRadius(geo.geo_coordenadas),
+          weight: 3,
+          fill: geo.zone_no_int_color,
+          color: geo.zone_color,
+        });
+
+        this.circularGeofencesService.bindMouseEvents(geo);
+
+        if (geo.zone_visible == true) {
+          geo.geo_elemento.addTo(this.mapService.map);
+        }
+
+        let bg_color = this.circularGeofencesService.tooltipBackgroundTransparent? this.circularGeofencesService.defaultTagNameBackground: this.mapService.hexToRGBA(geo.zone_color);
+        let txt_color = this.circularGeofencesService.tooltipBackgroundTransparent? (geo.tag_name_color == ''? this.circularGeofencesService.defaultTagNameColor: geo.tag_name_color): this.mapService.hexToRGBA(geo.zone_color);
+        let font_size = (geo.tag_name_font_size == 0? this.circularGeofencesService.defaultTagNameFontSize: geo.tag_name_font_size) + 'px';
+
+        geo.marker_name = L.circleMarker(this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
+            "radius": 0,
+            "fillColor": "#000",//color,
+            "fillOpacity": 1,
+            "color": "#000",//color,
+            "weight": 1,
+            "opacity": 1
+
+          }).bindTooltip(
+              '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: '+ font_size  +'">'+geo.zone_name+'</b>',
+              { permanent: true,
+                direction: 'center',
+                className: 'leaflet-tooltip-own',
+          });
+        
+        if (geo.zone_name_visible == true) {
+          geo.marker_name.addTo(this.mapService.map);
+        }
+  
+        this.spinner.hide('spinnerLoading');
+
+      });
+
+    } else {
+
+      if(this.poligonAdd.getRadius() != 10){
+
+        this.form.geo_geometry = this.createGeometryString(this.poligonAdd);
+
+        this.circularGeofencesService.store(this.form).subscribe( (resp: any) => {
+
+          this.circularGeofencesService.nameComponentCir =  "LISTAR";
+
+          let gNew = resp[2];
+          let gNew2 = resp[3][0];
+
+          var geo:any = {};
+          geo.id = gNew.id;
+        
+          geo.descripcion = gNew.descripcion;
+          geo.orden = gNew.var_nombre;
+          geo.tag_name_color = gNew.tag_name_color;
+          geo.tag_name_font_size = gNew.tag_name_font_size;
+          geo.zone_name_visible = gNew.bol_mostrar_nombre;
+          geo.zone_name_visible_bol = (gNew.zone_name_visible === true);
+          geo.zone_visible = gNew.bol_mostrar;
+          geo.geo_coordenadas = gNew2.geo_coordenadas;
+          geo.zone_color = gNew.var_color;
+          geo.zone_name = gNew.var_nombre;
+          geo.zone_cat = gNew.int_categoria;
+          geo.vel_act_zona = gNew.bol_limite_velocidad_activo;
+          geo.int_limite_velocidad_0 = gNew.int_limite_velocidad_0;
+          geo.int_limite_velocidad_1 = gNew.int_limite_velocidad_1;
+          geo.int_limite_velocidad_2 = gNew.int_limite_velocidad_2;
+          geo.int_limite_velocidad_3 = gNew.int_limite_velocidad_3;
+          geo.zone_no_int_color = gNew.bol_sin_relleno;
+
+          this.mapService.map.removeLayer(this.poligonAdd);
+
+          geo.geo_elemento = new L.Circle( this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
+            radius: this.circularGeofencesService.getRadius(geo.geo_coordenadas),
+            weight: 3,
+            fill: geo.zone_no_int_color,
+            color: geo.zone_color,
+          });
+
+          this.circularGeofencesService.bindMouseEvents(geo);
+
+          let bg_color = this.circularGeofencesService.tooltipBackgroundTransparent? this.circularGeofencesService.defaultTagNameBackground: this.mapService.hexToRGBA(geo.zone_color);
+          let txt_color = this.circularGeofencesService.tooltipBackgroundTransparent? (geo.tag_name_color == ''? this.circularGeofencesService.defaultTagNameColor: geo.tag_name_color): this.mapService.hexToRGBA(geo.zone_color);
+          let font_size = (geo.tag_name_font_size == 0? this.circularGeofencesService.defaultTagNameFontSize: geo.tag_name_font_size) + 'px';
+
+          geo.marker_name = L.circleMarker(this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
+            "radius": 0,
+            "fillColor": "#000",//color,
+            "fillOpacity": 1,
+            "color": "#000",//color,
+            "weight": 1,
+            "opacity": 1
+
+          }).bindTooltip(
+              '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: '+ font_size  +'">'+geo.zone_name+'</b>',
+              { permanent: true,
+                direction: 'center',
+                className: 'leaflet-tooltip-own',
+              });
+
+          geo.marker_name.addTo(this.mapService.map);
+
+          this.circularGeofencesService.circular_geofences.push(geo);
+          this.spinner.hide('spinnerLoading');
+          this.circularGeofencesService.initializeTable(geo.id);
+          this.circularGeofencesService.updateGeoCounters();
+          this.circularGeofencesService.updateGeoTagCounters();
+          this.circularGeofencesService.eyeInputSwitch = (this.circularGeofencesService.circularGeofenceCounters.visible != 0);
+          this.circularGeofencesService.tagNamesEyeState = (this.circularGeofencesService.circularGeofenceCounters.visible != 0);
+
+        })
+
+      }else{
+
+        this.spinner.hide('spinnerLoading');
+
+        this.poligonAdd = this.mapService.map.editTools.startCircle();
+        this.changeGeoColor(this.form.id);
+
+        Swal.fire({
+          title: 'Error',
+          text: 'La geocerca no puede quedar vacía.',
+          icon: 'warning',
+        });
+        return;
+      }
+    }
+
+    this.circularGeofencesService.circular_geofences.sort(function (a:any, b:any){
+      return a.orden.localeCompare(b.orden, 'en', { numeric: true })
+    });
+
+  }
+
   changeGeoColor(id:number) {
 
     let newColor = this.form.color;
@@ -758,6 +1144,24 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         this.poligonAdd.setStyle({opacity: 1, color: newColor });
     }
   }
+  changeGeoColorCir(id:number) {
+    let newColor = this.form.color;
+    if ( this.circularGeofencesService.action == "edit" ) {
+        var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
+        geo.geo_elemento.setStyle({opacity: 1, color: newColor });
+    } else {
+        this.poligonAdd.setStyle({opacity: 1, color: newColor });
+    }
+  }
+  changeGeoFillCir(id:number) {
+    let newFill = this.form.zone_no_int_color;
+    if ( this.circularGeofencesService.action == "edit" ) {
+        var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
+        geo.geo_elemento.setStyle({opacity: 1, fill: newFill });
+    } else {
+        this.poligonAdd.setStyle({opacity: 1, fill: newFill });
+    }
+  }
 
   getCoordenadas(data:any){
     let coo = [];
@@ -766,6 +1170,11 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     };
     return coo;
   }
+  getCircleArea (radius:any) {
+    radius = parseFloat(radius);
+    let area = Math.PI * Math.pow(radius,2);
+    return Math.abs(area);
+  };
 
 }
 

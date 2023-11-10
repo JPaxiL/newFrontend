@@ -26,10 +26,10 @@ export class GeocercaCircularListsComponent implements OnInit {
       this.circularGeofencesService.spinner.show('loadingCircularGeofencesSpiner');
     }
     if(this.circularGeofencesService.initializingCircularGeofences){
-      this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[]);
+      this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[], 'cir');
     }else{
       this.circularGeofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data);
+        this.objGeofences.setGeofences(data, 'cir');
       })
     }
     this.treeGeofences = this.objGeofences.createTreeNode();
@@ -188,13 +188,13 @@ export class GeocercaCircularListsComponent implements OnInit {
   }
 
   clickAgregarGeocerca() {
-    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
+    this.circularGeofencesService.nameComponentCir = "ADD GEOCIR";
     this.circularGeofencesService.action = "add";
 
   }
 
   clickConfigurarGeocerca(id:number) {
-    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
+    this.circularGeofencesService.nameComponentCir = "ADD GEOCIR";
     this.circularGeofencesService.action         = "edit";
     this.circularGeofencesService.idGeocercaEdit = id;
   }

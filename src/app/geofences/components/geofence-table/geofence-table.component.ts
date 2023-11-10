@@ -13,6 +13,7 @@ import 'leaflet-draw';
 import { forkJoin } from 'rxjs';
 import { Geofences } from '../../models/geofences';
 import { IGeofence } from '../../models/interfaces';
+import moment from 'moment';
 interface Column {
   field: string;
   header: string;
@@ -43,11 +44,19 @@ export class GeofenceTableComponent implements OnInit {
     name : "",
     type : ""
   };
+
+  public setting: any = {
+    eye: true,
+    trans: false,
+    config: true,
+    sort: 'asc'
+  }
   alreadyLoaded: boolean = false;
 
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   @ViewChild('tt') tt!:any;
   treeGeofences: any;
+  optionAdd = '';
  
   public column: number = 6; //posible order
   constructor(
@@ -84,13 +93,6 @@ export class GeofenceTableComponent implements OnInit {
   }
 
   ngOnInit(): void {    
-    console.log("hello Geofences!!!")
-    //this.geofencesService.getData().then((geofences) => (this.files = files));
-        this.cols = [
-            { field: 'name', header: 'Name' },
-            { field: 'size', header: 'Size' },
-            { field: 'type', header: 'Type' }
-        ];
     if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges){
       this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
@@ -112,30 +114,29 @@ export class GeofenceTableComponent implements OnInit {
       
       // Utiliza los datos como desees, por ejemplo, setea en tu objGeofences:
       const combinedData = [...data[0], ...data[1], ...data[2]];
-      this.objGeofences.setGeofences(combinedData);
     });
     if(this.geofencesService.initializingGeofences){
-      this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[]);
+      this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[], 'polig');
     }else{
       this.geofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data);      
+        this.objGeofences.setGeofences(data, 'polig');      
       })
     }
     if(this.circularGeofencesService.initializingCircularGeofences){
-      this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[]);
+      this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[], 'circ');
     }else{
       this.circularGeofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data);
+        this.objGeofences.setGeofences(data, 'circ');
       })
     }
     if(this.polylineGeofenceService.initializingPolylineGeofences){
-      this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[]);
+      this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[], 'lin');
     }else{
       this.polylineGeofenceService.dataCompleted.subscribe((data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data);
+        this.objGeofences.setGeofences(data, 'lin');
       })
     }
-    console.log("AllGeoooo todas las geocercas", this.objGeofences.getGeofences())
+    //this.objGeofences = this.addDataGeofence(this.objGeofences);
     this.geofences = this.objGeofences.createTreeNode();
   }
 
@@ -152,6 +153,48 @@ export class GeofenceTableComponent implements OnInit {
     }
   }
 
+  onClickAddGeo(){
+    this.eventDisplayGroup.emit(true);
+  }
+
+  addDataGeofence(geofences: any){
+    const items = geofences;
+    for (const i in items){
+      items[i] = this.formatGeofence(items[i]);
+    }
+    return items;
+  }
+
+  public formatGeofence(geofence: any): any{
+    const today = moment();
+    geofence = this.addSelect(geofence);
+    return geofence;
+  }
+
+  private addSelect(geofence: any){
+    geofence.follow = false;
+    geofence.eye = true;
+    geofence.tag = true;
+    geofence.arrayPrueba = [];
+    geofence.arrayPruebaParada = [];
+    geofence.paradaDesde = false;
+    geofence.eventos = {};
+
+    return geofence;
+  }
+  params: any;
+  agInit(params: any){
+    this.params = params;
+  }
+
+  onClickEyeok(){
+
+    this.params.value = !this.params.value;
+    // this.vehicleService.vehicles = data;
+    this.geofencesService.clickEye.emit(this.params.data.IMEI);
+
+    // this.vehicleService.updateVehiclesData(data);
+  }
   headerScrollHandler(){
     setTimeout(()=> {
       const headerBox = document.querySelector('.p-treetable-scrollable-header-box') as HTMLElement;
@@ -315,14 +358,19 @@ export class GeofenceTableComponent implements OnInit {
     //this.followService.add(rowData);
   }
 
-  clickAgregarGeocerca() {
-    this.geofencesService.nombreComponente = "AGREGAR";
+  clickAgregarGeocercaPol() {
+    this.geofencesService.nameComponentPol = "ADD GEOPOL";
     this.geofencesService.action         = "add";
+  }
+
+  clickAddGeofence(){
+    this.optionAdd = 'add';
+    console.log("thiisOption", this.optionAdd);
   }
 
   clickConfigurarGeocerca(id:number) {
     //console.log('clickConfigurarGeocerca');
-    this.geofencesService.nombreComponente = "AGREGAR";
+    this.geofencesService.nameComponentPol = "ADD GEOPOL";
     //console.log(id);
     this.geofencesService.action         = "edit";
     this.geofencesService.idGeocercaEdit = id;

@@ -498,39 +498,36 @@ export class GeocercaListsComponent implements OnInit {
   }
 
   clickAgregarGeocerca() {
-    this.geofencesService.nombreComponente = "AGREGAR";
+    this.geofencesService.nameComponentPol = "ADD GEOPOL";
     this.geofencesService.action         = "add";
-
   }
 
   clickConfigurarGeocerca(id:number) {
     //console.log('clickConfigurarGeocerca');
-    //this.geofencesService.nombreComponente = "AGREGAR";
+    this.geofencesService.nameComponentPol = "ADD GEOPOL";
     //console.log(id);
     this.geofencesService.action         = "edit";
     this.geofencesService.idGeocercaEdit = id;
   }
 
   clickAgregarGeocercaCirc() {
-    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
+    this.circularGeofencesService.nameComponentCir = "ADD GEOCIR";
     this.circularGeofencesService.action = "add";
-
   }
 
   clickConfigurarGeocercaCirc(id:number) {
-    this.circularGeofencesService.nameComponentCirc = "AGREGAR";
+    this.circularGeofencesService.nameComponentCir = "ADD GEOCIR";
     this.circularGeofencesService.action         = "edit";
     this.circularGeofencesService.idGeocercaEdit = id;
   }
 
   clickAgregarGeocercaLin() {
-    this.polylineGeofenceService.nombreComponente = "AGREGAR";
+    this.polylineGeofenceService.nameComponentLin = "AGREGAR";
     this.polylineGeofenceService.action = "add";
-
   }
 
   clickConfigurarGeocercaLin(id:number) {
-    this.polylineGeofenceService.nombreComponente = "AGREGAR";
+    this.polylineGeofenceService.nameComponentLin = "AGREGAR";
     this.polylineGeofenceService.action         = "edit";
     this.polylineGeofenceService.idGeocercaEdit = id;
   }

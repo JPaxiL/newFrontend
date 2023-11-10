@@ -332,7 +332,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
   clickCancelar(id:number){
 
-    this.polylineGeofenceService.nombreComponente = "LISTAR";
+    this.polylineGeofenceService.nameComponentLin = "LISTAR";
 
     var geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == id)[0];
     if ( this.action == "edit" ) {
@@ -383,7 +383,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       this.polylineGeofenceService.edit(this.form).subscribe(res1 => {
 
-        this.polylineGeofenceService.nombreComponente =  "LISTAR";
+        this.polylineGeofenceService.nameComponentLin =  "LISTAR";
 
         let gEdit = res1[2];
         let gEdit2 = res1[3][0];
@@ -482,7 +482,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
         this.polylineGeofenceService.store(this.form).subscribe(res => {
 
-          this.polylineGeofenceService.nombreComponente =  "LISTAR";
+          this.polylineGeofenceService.nameComponentLin =  "LISTAR";
 
           let gNew = res[2];
           let gNew2 = res[3][0];

@@ -17,7 +17,7 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
 export class GeofencesService {
 
   public geofences:any = [];
-  public nombreComponente:string = "LISTAR";
+  public nameComponentPol:string = "LISTAR";
   public geofencesTree: TreeNode[]=[];
   public treeTableStatus: boolean = false;
   public idGeocercaEdit:number = 0;
@@ -25,6 +25,8 @@ export class GeofencesService {
 
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
+  @Output() clickEye = new EventEmitter<any>();
+
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];
   initializingGeofences: boolean = false;
@@ -207,6 +209,10 @@ export class GeofencesService {
 
   public getTableData(){
     return this.tblDataGeo;
+  }
+
+  public onClickEye(geofence: string):void{
+    this.clickEye.emit(geofence);
   }
 
   initializeTable(newGeofenceId?: number) {

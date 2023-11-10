@@ -11,12 +11,11 @@ export class GeocercaCircularMainComponent implements OnInit {
   constructor(private circularGeofencesService: CircularGeofencesService) { }
 
   ngOnInit(): void {
-
-    //this.circularGeofencesService.nombreComponente =  "LISTAR";
+    this.circularGeofencesService.nameComponentCir =  "LISTAR";
   }
 
-  // get nombreComponente(){
-  //   return this.circularGeofencesService.nombreComponente;
-  // }
+  get nameComponentCir(){
+    return this.circularGeofencesService.nameComponentCir;
+  }
 
 }
