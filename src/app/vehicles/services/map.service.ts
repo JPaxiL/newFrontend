@@ -392,7 +392,6 @@ export class MapService {
         // update dataCompleted
         // //console.log("update data");
         const index = vehicles.indexOf( resultado);
-        console.log('ESTA ES UNA PRUEBA -------->',vehicles[index]);
 
         vehicles[index].latitud = data.Latitud.toString();
         vehicles[index].longitud = data.Longitud.toString();
@@ -410,7 +409,6 @@ export class MapService {
 
 
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
-        console.log('ESTA ES UNA PRUEBA DESPEUS DE FORMAT -------->',vehicles[index]);
 
 
         if(this.imeiPopup==data.IMEI.toString()){

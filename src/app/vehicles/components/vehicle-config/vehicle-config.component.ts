@@ -126,7 +126,7 @@ export class VehicleConfigComponent implements OnInit {
       name: this.types[this.config.tipo]['name'],
       id: this.config.tipo,
     }; */
-
+    console.log(this.config);
     // console.log("vehicle config = ",this.config);
     this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
   }
@@ -176,7 +176,7 @@ export class VehicleConfigComponent implements OnInit {
       model: this.config.model,
       sim_number : this.valueNull(this.sim.nativeElement.value),
       plate_number : this.valueNull(this.placa.nativeElement.value),
-      tolva : this.valueNull(this.tolva.nativeElement.value),
+      // tolva : this.valueNull(this.tolva.nativeElement.value),
       empresa : this.valueNull(this.empresa.nativeElement.value),
       tipo : this.selectedType.id,
       icon : this.selectedIcon.name,

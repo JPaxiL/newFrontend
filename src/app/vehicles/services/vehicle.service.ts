@@ -214,8 +214,21 @@ export class VehicleService {
   public getIndexToIMEI(IMEI: string):any{
     ///implements
   }
-  public updateVehicle(data : any){
+  public updateDriverAndId(data : any){
+    const vehicles = this.vehicles;
 
+    const resultado = this.vehicles.find( (vehi: any) => vehi.IMEI == data.tracker_imei.toString() );
+    if(resultado){
+      const index = this.vehicles.indexOf( resultado);
+
+      vehicles[index].id_conductor  = data.id;
+      vehicles[index].nombre_conductor  = data.nombre_conductor;
+
+      this.vehicles = vehicles;
+      //reload talbe
+      this.reloadTable.emit(this.vehiclesTree);
+      this.reloadTableTree.emit(this.vehiclesTree);
+    }
   }
   public updateVehiclesData(data : UserTracker[]):void {
     this.vehicles = data;

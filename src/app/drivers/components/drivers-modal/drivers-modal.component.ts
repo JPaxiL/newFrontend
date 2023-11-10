@@ -104,6 +104,7 @@ export class DriversModalComponent implements OnInit {
 
   getCars(vehicles: any){
     for (let i = 0; i < vehicles.length; i++) {
+      // let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
       let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
       this.cars.push(gaa);
     }
@@ -227,7 +228,7 @@ export class DriversModalComponent implements OnInit {
         var res:any;
         if ( this.driversService.action == "edit" ) {
           var sub = this.driversService.drivers.filter((item:any)=> item.id_conductor == this.driversService.idDriverEdit)[0];
-          console.log(sub);
+          // console.log(sub);
           res = await this.driversService.edit(this.driversForm.value);
         } else {
           res = await this.driversService.create(this.driversForm.value);
@@ -248,6 +249,7 @@ export class DriversModalComponent implements OnInit {
             this.driversService.modalActive = false;
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
+            this.VehicleService.updateDriverAndId(res.dataInsert);
 
         } else if(res.text == 'editado') {
             Swal.fire(
@@ -258,6 +260,9 @@ export class DriversModalComponent implements OnInit {
             this.driversService.modalActive = false;
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
+            this.VehicleService.updateDriverAndId(res.driver);
+            this.VehicleService.updateDriverAndId(res.driver_old);
+
 
         } else if(res.text == 'llave_existe') {
           Swal.fire(
