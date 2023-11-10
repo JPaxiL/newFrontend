@@ -56,7 +56,7 @@ export class EventSocketService extends Socket {
       // console.log(' getAlertById =====> ', this.AlertService.getAlertById(even.id), this.user_id, even.usuario_id);
       // console.log("this.vehicleService.vehicles,even.tracker_imei ========> ", this.vehicleService.vehicles,even.tracker_imei);
       // if (this.user_id == even.usuario_id) {
-      if(this.user_id){
+      if(users.indexOf(this.user_id)>=0){
         //this.count = this.count + 1;
         let data = this.filterImei(this.vehicleService.vehicles, even.tracker_imei);
         // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
@@ -109,6 +109,8 @@ export class EventSocketService extends Socket {
         }
 
         this.eventService.checkDuplicates();
+      }else{
+        console.log("evento no pertenece al usuario ...")
       }
     });
   }
