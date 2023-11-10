@@ -26,7 +26,6 @@ export class DriversService {
   modalActive:boolean = false;
   isRowDataEmpty: boolean = false;
 
-
   constructor(
     private http: HttpClient,
     public spinner: NgxSpinnerService,
@@ -67,6 +66,10 @@ export class DriversService {
     this.spinner.hide('loadingDrivers');
 
 
+  }
+
+  public getTableDataDriver(){
+    return this.tblDataDriver;
   }
 
   // getDataIbuttons(id: string) {
