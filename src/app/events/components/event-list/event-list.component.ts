@@ -102,27 +102,37 @@ export class EventListComponent implements OnInit {
   }
 
   public showEvent(event:any){
+    console.log("desde show events - componente event list ...",event);
     if(this.eventService.activeEvent) {
-      console.log("hide event");
+      console.log("hide event",event);
       this.hideEvent(this.eventService.activeEvent);
       //console.log('Ocultar evento previo');
     }
 
     if(!event.viewed){
       event.viewed = true;
-      this.markAsRead(event.evento_id);
+      // this.markAsRead(event.evento_id);
     }
 
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
     // convierto el atributo params en un objeto
     const objParams:any = {};
-    event.parametros.split('|').forEach((item:any) => {
-      const [key, value] = item.split('=');
-      objParams[key] = value;
-    });
-    //reemplazo el atributo parametros (string) con el objeto
-    event.parametros = objParams;
+/*
+antes de procesar parametros  string
+event-list.component.ts:130 despues de procesar parametros  object
+*/
+    console.log("antes de procesar parametros ",typeof(event.parametros));
+    if(event.parametros&&typeof(event.parametros)=='string'){
+      event.parametros.split('|').forEach((item:any) => {
+        const [key, value] = item.split('=');
+        objParams[key] = value;
+      });
+      //reemplazo el atributo parametros (string) con el objeto
+      event.parametros = objParams;
+      console.log("despues de procesar parametros ",typeof(event.parametros));
+    }
+
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
     //si el evento es de cipia y tiene video(s)
@@ -157,12 +167,12 @@ export class EventListComponent implements OnInit {
   }
 
   private markAsRead(event_id: any){
-    console.log('Marking ' + event_id + ' as read...');
+    console.log('desde event list Marking ' + event_id + ' as read...');
     //this.eventService.decreaseUnreadCounter();
     this.eventService.updateUnreadCounter();
     this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
       next: data => {
-        console.log('Mark ' + event_id + ' as read Success? : ', data.success);
+        console.log('desde event list Mark ' + event_id + ' as read Success? : ', data.success);
       },
       error: () => {
         console.log(event_id + ': Hubo un error al marcar como leído');
@@ -171,7 +181,7 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement){
-    console.log("click event....",event.evento_id);
+    console.log("click event....",event);
     console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if(false){

@@ -63,7 +63,7 @@ export class EventService {
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
       .then((response) => {
-        console.log(response.data);
+        // console.log("eventos cargados === -------------->",response.data);
         this.events = response.data.map((event: any) => {
           let icon = L.icon({
             iconUrl: this.img_icon,
@@ -85,6 +85,7 @@ export class EventService {
           }
           return event;
         });
+        // return;
         this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
         this.eventsLoaded = true;
         while(this.socketEvents.length > 0){
@@ -112,9 +113,12 @@ export class EventService {
   }
 
   public addNewEvent(event:any){
+    console.log("addNewEvent ........... ",event);
     if(!this.eventsLoaded || this.enableSocketEvents){
+      console.log("event socket");
       this.socketEvents.unshift(event);
     } else {
+      console.log("event ---XD");
       this.events.unshift(event);
       this.updateUnreadCounter();
       if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
@@ -122,9 +126,10 @@ export class EventService {
       }
       this.attachClassesToEvents();
     }
-    
+
     this.newEventStream.emit(this.events);
     console.log("new Event added: ", event);
+    // this.eventService.sortEventsTableData();
   }
 
   playNotificationSound(path: string){
@@ -176,11 +181,11 @@ export class EventService {
   toCamelCase(str:any){
     const palabras = str.split(" ");
 
-    var palabraM = palabras.map((palabra:any) => { 
+    var palabraM = palabras.map((palabra:any) => {
       if (palabra=='de' || palabra=='en' || palabra=='con' || palabra=='de' || palabra=='la' ) {
         return palabra;
       } else {
-        return palabra[0].toUpperCase() + palabra.substring(1); 
+        return palabra[0].toUpperCase() + palabra.substring(1);
       }
     }).join(" ");
     return palabraM;
@@ -190,36 +195,38 @@ export class EventService {
     //== Para el uso del modulo historial
 
     eventsClassList = [
-      { tipo: 'Zona de entrada', clase: 'zona-entrada' },
-      { tipo: 'Zona de salida', clase: 'zona-salida' },
-      { tipo: 'Tiempo de estadia en zona', clase: 'tiempo-estadia-zona' },
-      { tipo: 'Parada en zona no autorizada', clase: 'parada-zona-no-autorizada' },
-      { tipo: 'Mantenimiento correctivo', clase: 'mantenimiento-correctivo' },
-      { tipo: 'Mantenimiento preventivo', clase: 'mantenimiento-preventivo' },
-      { tipo: 'Mantenimiento correctivo realizado', clase: 'mantenimiento-correctivo-realizado' },
-      { tipo: 'Mantenimiento preventivo realizado', clase: 'mantenimiento-preventivo-realizado' },
-      { tipo: 'SOS', clase: 'sos-event' },
-      { tipo: 'Exceso de Velocidad', clase: 'exceso-velocidad' },
-      { tipo: 'Infraccion', clase: 'infraccion' },
-      { tipo: 'Vehiculo sin programacion', clase: 'vehiculo-sin-programacion' },
-      { tipo: 'Frenada brusca', clase: 'frenada-brusca' },
-      { tipo: 'Aceleracion brusca', clase: 'aceleracion-brusca' },
-      { tipo: 'Bateria desconectada', clase: 'bateria-desconectada' },
-      { tipo: 'Motor encendido', clase: 'motor-encendido' },
-      { tipo: 'Motor apagado', clase: 'motor-apagado' },
-      { tipo: 'Fatiga', clase: 'fatiga' },
-      { tipo: 'Somnolencia', clase: 'somnolencia' },
-      { tipo: 'Distraccion', clase: 'distraccion' },
-      { tipo: 'Distracción', clase: 'distraccion' },
-      { tipo: 'Desvío de carril hacia la izquierda', clase: 'desvio-carril-izq' },
-      { tipo: 'Desvío de carril hacia la derecha', clase: 'desvio-carril-der' },
-      { tipo: 'Bloqueo de visión del mobileye', clase: 'bloqueo-vision-mobileye' },
-      { tipo: 'Colisión con peatones', clase: 'colision-peatones' },
-      { tipo: 'Colisión delantera', clase: 'colision-delantera' },
-      { tipo: 'Anticolisión frontal', clase: 'colision-delantera' },
-      { tipo: 'Posible Fatiga', clase: 'posible-fatiga' },
-      { tipo: 'Fatiga Extrema', clase: 'fatiga-extrema' },
-      { tipo: 'No Rostro', clase: 'no-rostro' },
+      { tipo: 'zona-de-entrada', clase: 'zona-entrada' },
+      { tipo: 'zona-de-salida', clase: 'zona-salida' },
+      { tipo: 'tiempo-estadio-zona', clase: 'tiempo-estadia-zona' },
+      { tipo: 'parada-en-zona-no-autorizada', clase: 'parada-zona-no-autorizada' },
+      { tipo: 'mantenimiento-correctivo', clase: 'mantenimiento-correctivo' },
+      { tipo: 'mantenimiento-preventivo', clase: 'mantenimiento-preventivo' },
+      { tipo: 'mantenimiento-correctivo-realizado', clase: 'mantenimiento-correctivo-realizado' },
+      { tipo: 'mantenimiento-preventivo-realizado', clase: 'mantenimiento-preventivo-realizado' },
+      { tipo: 'sos', clase: 'sos-event' },
+      { tipo: 'exceso-velocidad', clase: 'exceso-velocidad' },
+      { tipo: 'infraccion', clase: 'infraccion' },
+      { tipo: 'vehiculo-sin-programacion', clase: 'vehiculo-sin-programacion' },
+      { tipo: 'frenada-brusca', clase: 'frenada-brusca' },
+      { tipo: 'aceleracion-brusca', clase: 'aceleracion-brusca' },
+      { tipo: 'bateria-desconectada', clase: 'bateria-desconectada' },
+      { tipo: 'motor-encendido', clase: 'motor-encendido' },
+      { tipo: 'motor-apagado', clase: 'motor-apagado' },
+      { tipo: 'fatiga', clase: 'fatiga' },
+      { tipo: 'somnolencia-360', clase: 'somnolencia' },
+      { tipo: 'distraccion', clase: 'distraccion' },
+      { tipo: 'distraccion', clase: 'distraccion' },
+      { tipo: 'desvio-de-carril-izquierda', clase: 'desvio-carril-izq' },
+      { tipo: 'desvio-de-carril-derecha', clase: 'desvio-carril-der' },
+      { tipo: 'bloqueo-vision-mobileye', clase: 'bloqueo-vision-mobileye' },
+      { tipo: 'anticolision-frontal', clase: 'colision-peatones' },
+      { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
+      { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
+      { tipo: 'posible-fatiga', clase: 'posible-fatiga' },
+      { tipo: 'fatiga-extrema', clase: 'fatiga-extrema' },
+      { tipo: 'no-rostro', clase: 'no-rostro' },
+      { tipo: 'error-de-camara-360', clase: 'no-rostro' },
+
     ];
 
 
@@ -334,11 +341,13 @@ export class EventService {
           counter++;
         }
       });
+      console.log("contador de eventos = ",counter);
       this.unreadCount = counter;
       this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
     }
 
     showEventPanel(){
+      console.log("show event panel ....");
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
@@ -391,9 +400,10 @@ export class EventService {
   }
 
   markAsRead(event_id:string){
+    console.log("desde event service ... ");
     this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
       next: data => {
-        console.log('Mark ' + event_id + ' as read Success? : ', data.success);
+        console.log(' desde event service Mark ' + event_id + ' as read Success? : ', data.success);
       },
       error: () => {
         console.log(event_id + ': Hubo un error al marcar como leído');

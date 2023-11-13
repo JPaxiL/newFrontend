@@ -4,13 +4,13 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000',
+  apiUrl: 'https://apidev.glmonitoreo.com',
   idClient: '106',
   secretClient: 'au2vdKGrRK013Sy1rlgu5H7yb9k1LOzTx5wXz9Uu',
   socketUrl: 'https://escucha.glmonitoreo.com/',
-  //socketUrl: 'http://localhost:3030',
-  socketEvent: 'https://eventos.glmonitoreo.com/'
-  //socketEvent: 'http://localhost:5000'
+  // socketUrl: 'http://localhost:3030',
+  //socketEvent: 'https://eventos.glmonitoreo.com/'
+  socketEvent: 'http://localhost:5000'
 };
 
 /*

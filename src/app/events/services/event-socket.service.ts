@@ -56,7 +56,7 @@ export class EventSocketService extends Socket {
       // console.log(' getAlertById =====> ', this.AlertService.getAlertById(even.id), this.user_id, even.usuario_id);
       // console.log("this.vehicleService.vehicles,even.tracker_imei ========> ", this.vehicleService.vehicles,even.tracker_imei);
       // if (this.user_id == even.usuario_id) {
-      if(users.indexOf(this.user_id)>=0){
+      if(users.indexOf(parseInt(this.user_id))>=0){
         //this.count = this.count + 1;
         let data = this.filterImei(this.vehicleService.vehicles, even.tracker_imei);
         // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
@@ -69,7 +69,7 @@ export class EventSocketService extends Socket {
           //Si el evento no existe previamente
           even.evento = even.descripcion_evento;
           even.tipo = even.descripcion_evento;
-          if (event.descripcion_evento != 'Infraccion' || event.descripcion_evento != 'Infracción') {
+          if (event.descripcion_evento != 'infraccion' || event.descripcion_evento != 'infracción') {
             even.fecha_tracker = moment(even.fecha_tracker).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
             even.fecha_minuto = moment(even.fecha_minuto).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
             even.fecha_servidor = moment(even.fecha_servidor).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
@@ -108,9 +108,11 @@ export class EventSocketService extends Socket {
           //console.log('Evento duplicado ' + new Date() + ': ', even);
         }
 
-        this.eventService.checkDuplicates();
+        // this.eventService.checkDuplicates(); // deprecado se controla desde el server
       }else{
-        console.log("evento no pertenece al usuario ...")
+        console.log("evento no pertenece al usuario ...");
+        console.log("event-->",event);
+        console.log("users-->",users);
       }
     });
   }
