@@ -216,18 +216,20 @@ export class VehicleService {
   }
   public updateDriverAndId(data : any){
     const vehicles = this.vehicles;
-
     const resultado = this.vehicles.find( (vehi: any) => vehi.IMEI == data.tracker_imei.toString() );
     if(resultado){
       const index = this.vehicles.indexOf( resultado);
+      console.log('Encontratdo vehicle ....',vehicles[index]);
 
       vehicles[index].id_conductor  = data.id;
       vehicles[index].nombre_conductor  = data.nombre_conductor;
 
       this.vehicles = vehicles;
+      console.log('actualizando el anterior....',vehicles[index]);
       //reload talbe
-      this.reloadTable.emit(this.vehiclesTree);
-      this.reloadTableTree.emit(this.vehiclesTree);
+      this.reloadTable.emit(vehicles);
+      this.reloadTableTree.emit(vehicles);
+
     }
   }
   public updateVehiclesData(data : UserTracker[]):void {
