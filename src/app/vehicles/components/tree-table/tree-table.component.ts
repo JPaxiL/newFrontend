@@ -510,16 +510,16 @@ export class TreeTableComponent implements OnInit {
     if(resultado){
       const index = vehicles.indexOf( resultado);
 
-      vehicles[index].id_conductor = res.id_conductor;
-      vehicles[index].idgrupo = res.idgrupo;
       vehicles[index].name  = res.name;
-      vehicles[index].model = res.model;
-      vehicles[index].sim_number  = res.sim_number;
-      vehicles[index].plate_number  = res.plate_number;
-      vehicles[index].tolva  = res.tolva;
-      vehicles[index].empresa  = res.empresa;
-      vehicles[index].tipo  = res.tipo;
-      vehicles[index].icon  = res.icon;
+      // vehicles[index].id_conductor = res.id_conductor;
+      // vehicles[index].idgrupo = res.idgrupo;
+      // vehicles[index].model = res.model;
+      // vehicles[index].sim_number  = res.sim_number;
+      // vehicles[index].plate_number  = res.plate_number;
+      // vehicles[index].tolva  = res.tolva;
+      // vehicles[index].empresa  = res.empresa;
+      // vehicles[index].tipo  = res.tipo;
+      // vehicles[index].icon  = res.icon;
 
       this.vehicleService.vehicles = vehicles;
 
