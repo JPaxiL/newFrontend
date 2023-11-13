@@ -35,9 +35,11 @@ import { TagModule } from 'primeng-lts/tag';
 import { TooltipModule } from 'primeng-lts/tooltip';
 import {SlideMenuModule} from 'primeng-lts/slidemenu';
 import {SidebarModule} from 'primeng-lts/sidebar';
-import {CarouselModule} from 'primeng-lts/carousel';
+import {ScrollPanelModule} from 'primeng-lts/scrollpanel';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
+import {CarouselModule} from 'primeng-lts/carousel';
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
@@ -141,7 +143,7 @@ import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-reco
 import { CipiaComponent } from './cipia/cipia.component';
 import { FootbarComponent } from './panel/components/footbar/footbar.component';
 import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
-
+import { CarouselComponent } from './shared/components/carousel/carousel.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -228,8 +230,8 @@ import { EventPopupComponent } from './events/components/event-popup/event-popup
     ScreenRecorderComponent,
     CipiaComponent,
     FootbarComponent,
-    EventPopupComponent
-
+    EventPopupComponent,
+    CarouselComponent,
   ],
   imports: [
     ToastrModule.forRoot({
@@ -240,10 +242,10 @@ import { EventPopupComponent } from './events/components/event-popup/event-popup
       maxOpened: 4,
       autoDismiss: true,
     }),
+    RouterModule, 
     BrowserModule,
     DataTablesModule,
     CommonModule,
-    BrowserModule,
     NgxSpinnerModule,
     NgxsModule.forRoot([AuthState]),
     AlertModule,
@@ -256,6 +258,7 @@ import { EventPopupComponent } from './events/components/event-popup/event-popup
     TreeTableModule,
     DropdownModule,
     DialogModule,
+    ScrollPanelModule,
     InputTextModule,
     InputSwitchModule,
     TableModule,

@@ -10,7 +10,7 @@
         <p-slideMenu [appendTo]="'body'" #menu [model]="itemsMenu" [popup]="true" [viewportHeight]="250"></p-slideMenu>
     </div>
 </div>
-<p-dialog header="Title" 
+<!--p-dialog header="Title" 
     [(visible)]="showPopupDialog" 
     [style]="{
         width: 'calc(100% - calc(425px + var(--gl-panel-padding-left)) - 1.5rem)', 
@@ -28,32 +28,18 @@
     [showHeader]="false"
     [draggable]="false"
 >
-    <ngb-carousel *ngIf="events.length > 0">
-        <ng-template ngbSlide *ngFor="let event of events">
+    <ngx-slick-carousel class="carousel" 
+                        #slickModal="slick-carousel" 
+                        [config]="slideConfig">
+        <div ngxSlickItem *ngFor="let event of events; trackBy: trackByFn" class="slide">
             <app-event-popup 
                 (onDelete)="closeMinimapPopup($event)" 
                 [configuration]="event">
             </app-event-popup >
-        </ng-template>
-    </ngb-carousel>
-    <!--p-carousel 
-        [value]="events" [numVisible]="3" 
-        [numScroll]="1"
-        [style]="{ 
-            'background-color': 'transparent'
-        }"
-        [showIndicators]="false"
-    >
-        <ng-template let-event pTemplate="item">
-            <ng-container *ngIf="showPopupDialog">
-                <app-event-popup 
-                    (onDelete)="closeMinimapPopup($event)" 
-                    [configuration]="event">
-                </app-event-popup >
-            </ng-container>
-        </ng-template>
-    </p-carousel-->
-</p-dialog>
+        </div>
+    </ngx-slick-carousel>
+</p-dialog-->
+<app-carousel></app-carousel>
 
 <p-dialog header="Mostrar Punto" [(visible)]="showCipiaExample" (onHide)="showCipiaExample=false" [modal]="true" id="xavy">
     <app-cipia></app-cipia>

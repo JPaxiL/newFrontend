@@ -1,0 +1,15 @@
+<p-scrollPanel [style]="{
+  width: 'calc(100% - calc(425px + var(--gl-panel-padding-left)) - 1.5rem)', 
+  height: '250px',
+  bottom: '0',
+  right: '0',
+  position: 'fixed',
+  'margin-bottom': 'calc(0.5rem +  var(--footbar-height))',
+  'background-color': '#c1c1c14d'
+  }">
+  <div class="carousel-wrapper" #carouselWrapper>
+    <ng-content>
+
+    </ng-content>
+  </div>
+</p-scrollPanel>

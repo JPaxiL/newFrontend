@@ -47,15 +47,19 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
   }
 
   createMap() {
-    console.log("CREATE MAPPPPPPPPPP");
-    const mapContainer = document.getElementById(this.configuration.mapConf?.containerId!);
-    console.log("no llego aca", mapContainer);
-    if (mapContainer) {
-      this.mapItem = new PopupMap(this.configuration);
-      this.mapItem.createMap();
-      this.setLayers();
-      this.mapItem.drawIcon(this.configuration.vehicles!,this.configuration.event);
-    }
+    setTimeout(() => {
+      console.log("CREATE MAPPPPPPPPPP");
+      console.log("ByID: ",this.configuration.mapConf?.containerId!);
+      
+      const mapContainer = document.getElementById(this.configuration.mapConf?.containerId!);
+      console.log("no llego aca", mapContainer);
+      if (mapContainer) {
+        this.mapItem = new PopupMap(this.configuration);
+        this.mapItem.createMap();
+        this.setLayers();
+        this.mapItem.drawIcon(this.configuration.vehicles!,this.configuration.event);
+      }
+    }, 5000);
   }
 
   deletePopup(){

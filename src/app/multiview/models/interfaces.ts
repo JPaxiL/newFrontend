@@ -147,9 +147,15 @@ export interface IMapPopup extends IMapBase {
 }
 
 export type PopupContent = {
+    id:string;
     vehicles?: Vehicle[],
     event?: any,
     mapConf?: MapItemConfiguration
+}
+
+export type PopupWrapper = {
+    active:boolean;
+    content?: PopupContent;
 }
 
 export interface IMapMinimap extends IMapBase {
