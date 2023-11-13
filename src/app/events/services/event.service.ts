@@ -226,6 +226,7 @@ export class EventService {
       { tipo: 'fatiga-extrema', clase: 'fatiga-extrema' },
       { tipo: 'no-rostro', clase: 'no-rostro' },
       { tipo: 'error-de-camara-360', clase: 'no-rostro' },
+      { tipo: 'cinturon-de-seguridad-desabrochado', clase: 'no-rostro' },
 
     ];
 
@@ -235,8 +236,8 @@ export class EventService {
 
       await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/dataEventUserHistorial`,param)
         .toPromise().then((response:any) => {
-          console.log("=======================ShowAllHistorial");
-          console.log(response.data);
+          // console.log("=======================ShowAllHistorial event");
+          // console.log("data show historial event",response.data);
           this.eventsHistorial = response.data;
 
           for (let index = 0; index < this.eventsHistorial.length; index++) {
