@@ -2,7 +2,7 @@
     <ng-template class="p-dialog-title" pTemplate="header">
       <div>
         <i class="fa fa-user me-2" aria-hidden="true"></i>
-        <strong [innerHTML]="this.driversService.historyType == 'driver' ? 'Historial de Conductores de un vehículo' : 'Historial de Vehículos de un Conductor' " ></strong>
+        <strong [innerHTML]="this.driversService.historyType == 'driver' ? 'Historial de Vehículos de un Conductor':'Historial de Conductores de un vehículo' " ></strong>
       </div>
     </ng-template>
     <div class="dialog-body-container">
@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- En tu componente HTML -->
-                <div class="table-container" *ngIf="activeTable">
+                <div class="table-container" *ngIf="activeTable; else noDataMessage">
                     <p-table styleClass="p-datatable-striped" [value]="filteredHistory" [paginator]="true" [rows]="10">
                         <!-- Definir las columnas de la tabla según tus necesidades -->
                         <ng-template pTemplate="header" *ngIf="driversService.historyType == 'driver'">
@@ -98,6 +98,11 @@
                         </ng-template>
                     </p-table>
                 </div>
+                <ng-template #noDataMessage>
+                  <div class="no-data-message" *ngIf="showNoData">
+                      <p>No hay datos disponibles.</p>
+                  </div>
+                </ng-template>
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@ export class DriversHistoryComponent implements OnInit {
   selectedVehicle: any={};
 
   activeTable: boolean=false;
-
+  showNoData: boolean=false;
 
   constructor(
     private fb: FormBuilder,
@@ -95,10 +95,12 @@ export class DriversHistoryComponent implements OnInit {
     
     //Para no mostrar nada
     if(this.filteredHistory.length>0){
+      this.showNoData = false;
       this.activeTable = true;
       console.log('DATA mayor a 0');
     }else{
       this.activeTable = false;
+      this.showNoData = true;
     }
     
   }
