@@ -87,6 +87,8 @@ export class DriversListComponent implements OnInit {
                 'success'
               );
               if(res.driver.tipo_identificacion=='imei'){
+                res.driver.id = null;
+                res.driver.nombre_conductor = 'Conductor No especificado';
                 this.vehicleService.updateDriverAndId(res.driver);
               }
 
