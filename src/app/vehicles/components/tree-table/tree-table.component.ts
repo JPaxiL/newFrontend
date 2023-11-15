@@ -344,6 +344,8 @@ export class TreeTableComponent implements OnInit {
 
     this.list2 = aux2;
     this.list1 = aux1;
+    console.log('LISTA --> 1',this.list1);
+    console.log('LISTA --> 2',this.list2);
 
   }
   

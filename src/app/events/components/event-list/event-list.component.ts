@@ -73,6 +73,7 @@ export class EventListComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    console.log("event list on init ========================================================================");
     this.selectedEvent = null;
     if(!this.eventService.eventsLoaded || !this.eventService.filterLoaded){
       this.spinner.show('loadingEventList');
@@ -122,7 +123,7 @@ export class EventListComponent implements OnInit {
 antes de procesar parametros  string
 event-list.component.ts:130 despues de procesar parametros  object
 */
-    console.log("antes de procesar parametros ",typeof(event.parametros));
+    // console.log("antes de procesar parametros ",typeof(event.parametros));
     if(event.parametros&&typeof(event.parametros)=='string'){
       event.parametros.split('|').forEach((item:any) => {
         const [key, value] = item.split('=');
@@ -130,7 +131,7 @@ event-list.component.ts:130 despues de procesar parametros  object
       });
       //reemplazo el atributo parametros (string) con el objeto
       event.parametros = objParams;
-      console.log("despues de procesar parametros ",typeof(event.parametros));
+      // console.log("despues de procesar parametros ",typeof(event.parametros));
     }
 
 

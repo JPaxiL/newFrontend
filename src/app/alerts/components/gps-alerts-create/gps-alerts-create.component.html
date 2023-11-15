@@ -15,7 +15,7 @@
                         <label>ALERTA:</label>
                     </div>
                     <div class="col-12">
-                        <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="name" [appendTo]="'body'"></p-dropdown>
+                        <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="id" [appendTo]="'body'"></p-dropdown>
                         <!-- <div class="row">
                             <div class="col-1 text-end d-flex flex-column justify-content-center" *ngIf="loadingEventSelectInput">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -34,7 +34,7 @@
                         </div> -->
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>NOMBRE:</label>
@@ -46,7 +46,7 @@
                         </div> -->
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>VEHÍCULOS:</label>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="gl-middleline gl-permanent-middleline gl-row-underline">
                     <div class="row">
                         <div class="col p-field">
@@ -218,6 +218,6 @@
             </form>
 
         </div>
- 
+
     </div>
 </div>

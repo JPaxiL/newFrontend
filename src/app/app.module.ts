@@ -145,6 +145,8 @@ import { CipiaComponent } from './cipia/cipia.component';
 import { FootbarComponent } from './panel/components/footbar/footbar.component';
 import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
+import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -233,6 +235,7 @@ import { CarouselComponent } from './shared/components/carousel/carousel.compone
     FootbarComponent,
     EventPopupComponent,
     CarouselComponent,
+    DriversHistoryComponent
   ],
   imports: [
     ToastrModule.forRoot({

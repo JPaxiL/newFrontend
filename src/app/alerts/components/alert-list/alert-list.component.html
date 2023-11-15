@@ -44,8 +44,8 @@
             <span>Alertas Plataforma</span>
           </div>
           <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">
-            <span>Alertas Seg. Vehicular</span>
-          </div> 
+            <span>Alertas Accesorios</span>
+          </div>
         </div>
       </div>
     </div>
@@ -85,7 +85,7 @@
           </td>
           <td class="text-center inline-png-checkbox">
             <!-- <input type="checkbox" [(ngModel)]="alert.notificacion_email_bol" class="ng-pristine ng-untouched ng-valid ng-not-empty" disabled /> -->
-            <p-checkbox [(ngModel)]="alert.notificacion_email_bol" [binary]="true" [disabled]="true"></p-checkbox>      
+            <p-checkbox [(ngModel)]="alert.notificacion_email_bol" [binary]="true" [disabled]="true"></p-checkbox>
           </td>
         </tr>
         <tr *ngIf="noResults">
@@ -95,9 +95,6 @@
           <td colspan="6" class="text-center">No hay alertas configuradas</td>
         </tr>
       </tbody>
-    </table>  
+    </table>
   </div>
 </div>
-
-
-

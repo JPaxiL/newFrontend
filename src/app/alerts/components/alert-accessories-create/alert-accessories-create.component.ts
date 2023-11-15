@@ -97,7 +97,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.AlertService.getEventsByType('Accesorios');
+    this.events = await this.AlertService.getEventsByType('accessories');
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;

@@ -926,7 +926,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
           console.log("=== VERDADERO EVENTOS HISTORIAL");
           console.log(res1);
-
+          console.log(this.EventService.eventsHistorial);
 
 
           const duracion = parseInt(this.form.duracionParada);
@@ -1694,26 +1694,26 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   changeShowingParadasHistorial() {
 
-    if (this.conHistorial) {
-      var dH =  this.historialService.tramasHistorial; // Data Historial
-      var iH  = dH[0].index_historial; //indices de paradas y movimientos
+    // if (this.conHistorial) {
+    //   var dH =  this.historialService.tramasHistorial; // Data Historial
+    //   var iH  = dH[0].index_historial; //indices de paradas y movimientos
 
-      if (this.form.chckParada) {
-        for (let i = 0; i < dH.length; i++) {
-          if (dH[i].layer != null) {
-            dH[i].layer.addTo(this.mapService.map);
-          }
-        }
-      } else {
-        for (let i = 0; i < dH.length; i++) {
-          if (dH[i].layer != null) {
-            this.mapService.map.removeLayer(dH[i].layer);
-          }
-        }
-      }
+    //   if (this.form.chckParada) {
+    //     for (let i = 0; i < dH.length; i++) {
+    //       if (dH[i].layer != null) {
+    //         dH[i].layer.addTo(this.mapService.map);
+    //       }
+    //     }
+    //   } else {
+    //     for (let i = 0; i < dH.length; i++) {
+    //       if (dH[i].layer != null) {
+    //         this.mapService.map.removeLayer(dH[i].layer);
+    //       }
+    //     }
+    //   }
 
-      this.mostrar_tabla(dH,iH);
-    }
+    //   this.mostrar_tabla(dH,iH);
+    // } 
 
     //===================================  ARRAY DE HISTORIALES ============================================
     
@@ -2042,6 +2042,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
   mostrar_tabla2(dH:any, iH:any , idx:any=-1) {
+    console.log("==== mostrar_tabla2 ===>>");
+    
     if (this.conHistorial) {
 
           this.transfers = [];
@@ -2084,53 +2086,55 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             EventosAll = this.historialService.arrayRecorridos[idx].eventos;
           }
-
+          console.log(":::: LOS EVENTOS ::::");
+          console.log(EventosAll);
+          
           for (let index = 0; index < EventosAll.length; index++) {
 
             //const item = this.EventService.eventsHistorial[index];
             const item = EventosAll[index];
-            var activar = false;
+            var activar = true;// false;
 
-            for (let j = 0; j < this.selectedEvents.length; j++) {
-              const opEve = this.selectedEvents[j];
+            // for (let j = 0; j < this.selectedEvents.length; j++) {
+            //   const opEve = this.selectedEvents[j];
 
-              //Nombres de eventos que cambiaron
-              var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
+            //   //Nombres de eventos que cambiaron
+            //   var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
               
-              if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
-              if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
-              if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
-              if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
-              if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
-              if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
+            //   if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
+            //   if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
+            //   if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
+            //   if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
+            //   if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
+            //   if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
 
-              if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
-              if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
-              if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
+            //   if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
+            //   if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
+            //   if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
 
-              if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
-              if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
-              if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
-              if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
+            //   if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
+            //   if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
+            //   if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
+            //   if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
 
-              if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
-              if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
-              if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
-              if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
+            //   if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
+            //   if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
+            //   if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
+            //   if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
 
-              if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
+            //   if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
 
-              if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
-              if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
-              if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
+            //   if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
+            //   if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
+            //   if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
 
 
-              if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
-              if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
-              if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
-              if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
+            //   if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
+            //   if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
+            //   if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
+            //   if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
 
-            }
+            // }
 
             if (activar) {
 

@@ -117,9 +117,6 @@ export class DriversModalComponent implements OnInit {
 
     this.tipo_identificacion = this.driversForm.value.tipo_identificacion;
 
-    
-    
-    
   }
 
   initForm(): FormGroup {
@@ -249,7 +246,9 @@ export class DriversModalComponent implements OnInit {
             this.driversService.modalActive = false;
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
-            this.VehicleService.updateDriverAndId(res.dataInsert);
+            if(res.dataInsert.tipo_identificacion == 'imei'){
+              this.VehicleService.updateDriverAndId(res.dataInsert);
+            }
 
         } else if(res.text == 'editado') {
             Swal.fire(
@@ -260,9 +259,16 @@ export class DriversModalComponent implements OnInit {
             this.driversService.modalActive = false;
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
-            this.VehicleService.updateDriverAndId(res.driver);
-            this.VehicleService.updateDriverAndId(res.driver_old);
-
+            if(res.driver.tipo_identificacion == 'imei' || res.driver_old.tipo_identificacion == 'imei'){
+              //VERIFICAR IMEI IGUALEs
+              if(res.driver_old.tracker_imei == res.driver.tracker_imei){
+                console.log('IMEI IGUALES SOLO ACTUALIZAR UNO');
+                this.VehicleService.updateDriverAndId(res.driver);
+              }else{
+                this.VehicleService.updateDriverAndId(res.driver_old);
+                this.VehicleService.updateDriverAndId(res.driver);
+              }
+            }
 
         } else if(res.text == 'llave_existe') {
           Swal.fire(

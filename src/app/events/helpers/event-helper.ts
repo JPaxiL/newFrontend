@@ -308,6 +308,9 @@ export const getContentPopup = (event: any, d: any = '...') => {
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
+        parametros: event.parametros,
+        imei: event.imei
       },
       'assets/images/events-icons/somnolenciaWhite.svg',
     );
