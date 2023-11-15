@@ -1,4 +1,5 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { EventEmitter, Injectable, Output, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import * as moment from 'moment';
@@ -10,20 +11,43 @@ import { getContentPopup } from '../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { EventSocketService } from './event-socket.service';
 import { Subject } from 'rxjs';
+import { VehicleService } from '../../vehicles/services/vehicle.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
+  private URL_NAME = environment.apiUrl+'/api/event-name';
   @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   componentKey = new Subject<Number>();
   public events: any[] = [];
+  public events_names: any[] = [];
   public eventsFiltered: any[] = [];
   public nombreComponente: string = 'EVENT-USER';
   public img_icon: string = 'assets/images/eventos/pin_point.svg';
   public img_iconSize: any = [30, 30];
   public img_iconAnchor: any = [0, 30];
   public eventsLayers = new L.LayerGroup();
+  public eventsCommon: any[] = [
+    "sos",
+    "aceleracion-brusca",
+    "distraccion",
+    "fatiga-extrema",
+    "somnolencia",
+    "no-rostro",
+    "colision-peatones",
+    "motor-encendido",
+    "motor-apagado",
+    "bloqueo-vision-mobileye",
+    "manipulacion-360",
+    "desvio-de-carril-derecha",
+    "desvio-de-carril-izquierda",
+    "frenada-brusca",
+    "conductor-adormitado",
+    "conductor-fumando",
+    "cinturon-de-seguridad-desabrochado",
+    "uso-del-celular",
+    ];
 
   public eventsHistorial: any = []; //==> Usado en el modulo historial
 
@@ -46,25 +70,81 @@ export class EventService {
     private http: HttpClient,
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
-    ) {}
+    public vehicleService: VehicleService
+    ) {
+      this.vehicleService.dataCompleted.subscribe(vehicles=>{
+        // console.log("me entero que la data de vehiculos ya se completo. Aqui desde eventos :D");
+        for (const index in this.events) {
+          console.log(this.events[index]);
+          this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+        }
+      });
+    }
 
 
   initialize(): void {
+    // console.log("inicializando service events ....");
     this.getAll();
   }
 
+
+  public getEventName(): Observable<any>{
+    return this.http.get(this.URL_NAME);
+  }
+  public loadNameEvent(event: any){
+    // console.log("buscando evento "+event.tipo,this.eventsCommon.indexOf(event.tipo));
+    if(this.eventsCommon.indexOf(event.tipo)<0){
+      // console.log("evento personalizado");
+      return this.eventPersonalice(event.event_user_id);
+    }else{
+      // console.log("evento comun");
+      return this.eventCommon(event.tipo);
+    }
+    // this.getEventName().subscribe(name=>{
+    //   console.log("consiguiendo los nombres de los eventos",name);
+    //   this.events_names = name.data;
+    // });
+    return "---";
+  }
+
+  public eventCommon(slug: any): any{
+    for (const index in this.events_names) {
+      // console.log(this.events_names[index].slug+"=="+slug);
+      if(this.events_names[index].slug==slug){
+        return this.events_names[index].nombre;
+      }
+    }
+    return "--";
+  }
+  public eventPersonalice(event_user_id: any): any{
+    for (const index in this.events_names) {
+      if(this.events_names[index].event_user_id==event_user_id){
+        return this.events_names[index].nombre;
+      }
+    }
+    return "--";
+  }
   public async getAll(
     key: string = '',
     show_in_page: number = 15,
     page: number = 1
   ) {
-    console.log('Cargando eventos...');
+    // console.log('Cargando eventos...');
     await this.http
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
       .then((response) => {
         // console.log("eventos cargados === -------------->",response.data);
+        this.getEventName().subscribe(name=>{
+          // console.log("consiguiendo los nombres de los eventos",name.data);
+          this.events_names = name.data;
+          for (const index in this.events) {
+            this.events[index].nombre=this.loadNameEvent(this.events[index]);
+          }
+        });
         this.events = response.data.map((event: any) => {
+
+          //event.nombre=this.loadNameEvent(event); //conseguir el nombre que el usuario le puso
           let icon = L.icon({
             iconUrl: this.img_icon,
             iconSize: this.img_iconSize, // size of the icon
@@ -80,6 +160,7 @@ export class EventService {
           // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
           event.fecha_tracker = moment(event.fecha_tracker, 'YYYY/MM/DD hh:mm:ss').subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
           //console.log('Evento de tabla: ', event);
+          // console.log("view",event.viewed)
           if(!event.viewed){
             this.unreadCount++;
           }
@@ -91,6 +172,7 @@ export class EventService {
         while(this.socketEvents.length > 0){
           let last_event = this.socketEvents.pop();
           if(this.events.findIndex(event => event.id == last_event.id) == -1){
+            // this.events.nombre="XDDD";
             this.events.unshift(last_event);
             //this.increaseUnreadCounter();
           } else {
@@ -114,11 +196,15 @@ export class EventService {
 
   public addNewEvent(event:any){
     console.log("addNewEvent ........... ",event);
+//     evento: "motor-encendido"
+// evento_id: 19
+    event.event_user_id = event.evento_id;
+    event.nombre=this.loadNameEvent(event);
     if(!this.eventsLoaded || this.enableSocketEvents){
-      console.log("event socket");
+      // console.log("event socket");
       this.socketEvents.unshift(event);
     } else {
-      console.log("event ---XD");
+      // console.log("event ---XD");
       this.events.unshift(event);
       this.updateUnreadCounter();
       if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
