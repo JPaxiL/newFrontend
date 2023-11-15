@@ -140,6 +140,7 @@ import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.direc
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 import { CipiaComponent } from './cipia/cipia.component';
 import { FootbarComponent } from './panel/components/footbar/footbar.component';
+import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 
 @NgModule({
   declarations: [
@@ -226,8 +227,8 @@ import { FootbarComponent } from './panel/components/footbar/footbar.component';
     AlphaNumericDashDirective,
     ScreenRecorderComponent,
     CipiaComponent,
-    FootbarComponent
-
+    FootbarComponent,
+    DriversHistoryComponent
   ],
   imports: [
     ToastrModule.forRoot({
