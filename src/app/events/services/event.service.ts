@@ -101,8 +101,9 @@ export class EventService {
 
   public getVehiclesPlate(): void {
     for (const index in this.events) {
-      console.log(this.events[index]);
+      // console.log(this.events[index].imei);
       this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+      // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
     }
   }
 
