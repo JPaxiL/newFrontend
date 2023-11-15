@@ -1,5 +1,3 @@
-import { event } from "jquery";
-import { environment } from "src/environments/environment";
 
 
 export const getContentPopup = (event: any, d: any = '...') => {

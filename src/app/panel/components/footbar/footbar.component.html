@@ -4,12 +4,14 @@
     </app-screen-recorder>
     <div class="d-flex justify-content-around gap-2 align-items-center">
         <img src="assets/images/separator.svg" alt="" class="footer-icon separator" style="width: 1rem; height:1.25rem">
-        <img pTooltip="Mostrar/Ocultar Popups" alt="logo" src="assets/images/on_off_popups.png" class="footer-icon" style="width: 1rem"/>
-        <img pTooltip="Limpiar Popups" alt="logo" src="assets/images/delete_popups.png" class="footer-icon" style="width: 1rem"/>
+        <img pTooltip="Mostrar/Ocultar Popups" alt="logo" src="assets/images/on_off_popups.png" class="footer-icon" (click)="showPopupDialog = !showPopupDialog" />
+        <img pTooltip="Limpiar Popups" alt="logo" src="assets/images/delete_popups.png" class="footer-icon" (click)="clearPopups()" />
         <button #btn type="button" pButton pRipple icon="pi pi-ellipsis-h" label="" class="p-button-text p-button-secondary p-0" (click)="menu.toggle($event)"></button>
         <p-slideMenu [appendTo]="'body'" #menu [model]="itemsMenu" [popup]="true" [viewportHeight]="250"></p-slideMenu>
     </div>
 </div>
+<app-carousel [display]="showPopupDialog" #carousel></app-carousel>
+
 <p-dialog header="Mostrar Punto" [(visible)]="showCipiaExample" (onHide)="showCipiaExample=false" [modal]="true" id="xavy">
     <app-cipia></app-cipia>
 </p-dialog>

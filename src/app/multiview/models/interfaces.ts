@@ -1,3 +1,4 @@
+import { Vehicle } from "src/app/vehicles/models/vehicle";
 
 export interface Operation {
     id: number,
@@ -97,13 +98,14 @@ export interface ScreenView {
 }
 
 export interface GridItem {
-    structure: StructureGrid,
+    structure?: StructureGrid,
     content?: UnitItem,
     content_type: string, // minimap or chart or add another in grid component
     label?: string,
     title?: string,
-    show_only_label: boolean,
+    show_only_label?: boolean,
 }
+
 export interface StructureGrid {
     row: number,
     col: number,
@@ -112,29 +114,57 @@ export interface StructureGrid {
     gridItem_id: string,
 }
 
-export interface MinimapContent {
+export type MinimapContent = {
     title?: string,
     show_events?: boolean,
     nEvents?: number,
     events?: any[],
-    zoom?: number,
-    id_container: string,
     imeis?: string[],
     vehicles?: UserTracker[],
+    mapConf?: MapItemConfiguration
 }
 
-export interface MapItem {
-    id: string;
+export interface IMapBase {
+    containerId: string;
     map?: L.Map | null;
     markerClusterGroup?: any,
     markerClusterData?: any,
-    imeiPopup?: any,
-    time_stop?: any,
-    configuration?: MinimapContent,
-    dataFitBounds?: [number, number][],
-    createMap(containerId: string, configuration: MinimapContent): void;
-    setFitBounds(configuration: MinimapContent): [number, number][];
-    setCenterMap(configuration: MinimapContent): [number, number];
+    createMap(dataFitBounds:[number,number][], zoom?:number, maxZoom?:number, editable?:boolean): void;
+    setFitBounds(dataFitBounds:[number, number][]): void;
+    setViewMap(dataFitBounds:[number, number][],zoom?:number): void;
+    getDataFitBounds(vehicles: UserTracker[]): [number, number][];
+}
+
+export type MapItemConfiguration = {
+    containerId: string,
+    zoom?: number,
+    maxZoom?: number,
+    editable?: boolean,
+    dataFitBounds?: [number, number][];
+}
+export interface IMapPopup extends IMapBase {
+    popupConf: PopupContent,
+    createMap(): void;
+    drawIcon(data:Vehicle[],event: any): Promise<void>;
+}
+
+export type PopupContent = {
+    id:string;
+    vehicles?: Vehicle[],
+    event?: any,
+    mapConf?: MapItemConfiguration
+}
+
+export type PopupWrapper = {
+    active:boolean;
+    content?: PopupContent;
+}
+
+export interface IMapMinimap extends IMapBase {
+    minimapConf: MinimapContent
+    imeiPopup?: any;
+    time_stop?: any;
+    createMap(): void;
 }
 
 export interface Event {

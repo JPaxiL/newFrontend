@@ -172,7 +172,7 @@ export class ScreenViewComponent implements OnInit, AfterViewInit {
   deleteView(idContainer: string){
     this.structures = this.structures.filter(st => st.gridItem_id !== idContainer);
     this.structures = this.multiviewService.calculateStructure(this.structures);
-    this.auxGridItems = this.auxGridItems.filter(item => item.structure.gridItem_id != idContainer);
+    this.auxGridItems = this.auxGridItems.filter(item => item.structure!.gridItem_id != idContainer);
     this.updateGridStructureInChild();
   }
 
