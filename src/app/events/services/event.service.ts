@@ -73,12 +73,24 @@ export class EventService {
     public vehicleService: VehicleService
     ) {
       this.vehicleService.dataCompleted.subscribe(vehicles=>{
-        // console.log("me entero que la data de vehiculos ya se completo. Aqui desde eventos :D");
-        for (const index in this.events) {
-          console.log(this.events[index]);
-          this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
-        }
+        console.log("evento cargo antes que vehicles ...");
+        this.getVehiclesPlate();
       });
+      // if(false){
+      // if(this.eventsLoaded){
+      //   this.vehicleService.dataCompleted.subscribe(vehicles=>{
+      //     // console.log("me entero que la data de vehiculos ya se completo. Aqui desde eventos :D");
+      //     // for (const index in this.events) {
+      //     //   console.log(this.events[index]);
+      //     //   this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+      //     // }
+      //     this.getVehiclesPlate();
+      //   });
+      //   console.log("el modulo vehiculos a demorado mas que event");
+      // }else{
+      //   this.getVehiclesPlate();
+      //   console.log("el modulo event a demorado mas que vehiculos");
+      // }
     }
 
 
@@ -87,6 +99,12 @@ export class EventService {
     this.getAll();
   }
 
+  public getVehiclesPlate(): void {
+    for (const index in this.events) {
+      console.log(this.events[index]);
+      this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+    }
+  }
 
   public getEventName(): Observable<any>{
     return this.http.get(this.URL_NAME);
@@ -141,6 +159,8 @@ export class EventService {
           for (const index in this.events) {
             this.events[index].nombre=this.loadNameEvent(this.events[index]);
           }
+          console.log("vehicles cargo antes que eventos ...");
+          this.getVehiclesPlate();
         });
         this.events = response.data.map((event: any) => {
 
