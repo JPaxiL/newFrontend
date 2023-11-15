@@ -1,15 +1,10 @@
-<p-scrollPanel [style]="{
-  width: 'calc(100% - calc(425px + var(--gl-panel-padding-left)) - 1.5rem)', 
-  height: '250px',
-  bottom: '0',
-  right: '0',
-  position: 'fixed',
-  'margin-bottom': 'calc(0.5rem +  var(--footbar-height))',
-  'background-color': '#c1c1c14d'
-  }">
-  <div class="carousel-wrapper" #carouselWrapper>
-    <ng-content>
-
-    </ng-content>
+<div class="carousel-container d-flex justify-content-between  align-items-center " [class]="!display?'invisible':''">
+  <button (click)="scrollCarousel(-248)" pButton pRipple type="button" icon="pi pi-chevron-left" class="p-button-rounded p-button-secondary p-button-text button-left " id="button-left"></button>
+  <div class="scroll-section" #carouselSection id="scroll-section" (scroll)="onScroll()">
+    <div class="carousel-wrapper" #carouselWrapper>
+      <ng-content>
+      </ng-content>
+    </div>
   </div>
-</p-scrollPanel>
+  <button (click)="scrollCarousel(248)" pButton pRipple type="button" icon="pi pi-chevron-right" class="p-button-rounded p-button-secondary p-button-text button-right " id="button-right"></button>
+</div>

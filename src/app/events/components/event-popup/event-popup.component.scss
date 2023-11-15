@@ -7,19 +7,26 @@
 }
 .popup-content {
     border-radius: 0 0 0.5rem 0.5rem;
+    height: 100%;
 }
 
 .popup-title {
     color: whitesmoke;
-    font-weight:400;
+    font-weight:500;
     text-transform: uppercase;
     font-size:x-small;
+    text-shadow: 0 0 5px black;
+}
+
+.popup-icon {
+    height: 1.3rem;
+    width: 1.3rem;
 }
 
 /* Estilos base para el botón */
 .close-button {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     background: none;
     border: none;
     cursor: pointer;
@@ -29,4 +36,84 @@
 .close-button:hover {
     background: rgba(130, 130, 130, 0.5); /* Fondo circular semitransparente gris */
     border-radius: 50%; /* Forma circular */
+}
+
+.control-button {
+  width: 14px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: rgba(130, 130, 130, 0.5); /* Fondo circular semitransparente gris */
+  border-radius: 2px; /* Forma circular */
+}
+
+.popup-body {
+    position: relative;
+    height: 100%;
+  }
+  
+  .popup-event-header,
+  .popup-event-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #0000003c;
+    color: white; /* Puedes ajustar el color del texto según tus preferencias */
+    padding: 0.2rem 0.5rem 0.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1010;
+  }
+
+  .multimedia-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: #000000;
+  }
+  
+  .popup-event-header {
+    top: 0;
+  }
+  
+  .popup-event-footer {
+    bottom: 0;
+  }
+
+  .event-title {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5rem;
+  }
+
+.multimedia-controls {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    justify-content: end;
+}
+
+.multimedia-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.multimedia-item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

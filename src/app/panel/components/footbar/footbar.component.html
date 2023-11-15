@@ -5,41 +5,12 @@
     <div class="d-flex justify-content-around gap-2 align-items-center">
         <img src="assets/images/separator.svg" alt="" class="footer-icon separator" style="width: 1rem; height:1.25rem">
         <img pTooltip="Mostrar/Ocultar Popups" alt="logo" src="assets/images/on_off_popups.png" class="footer-icon" (click)="showPopupDialog = !showPopupDialog" />
-        <img pTooltip="Limpiar Popups" alt="logo" src="assets/images/delete_popups.png" class="footer-icon"/>
+        <img pTooltip="Limpiar Popups" alt="logo" src="assets/images/delete_popups.png" class="footer-icon" (click)="clearPopups()" />
         <button #btn type="button" pButton pRipple icon="pi pi-ellipsis-h" label="" class="p-button-text p-button-secondary p-0" (click)="menu.toggle($event)"></button>
         <p-slideMenu [appendTo]="'body'" #menu [model]="itemsMenu" [popup]="true" [viewportHeight]="250"></p-slideMenu>
     </div>
 </div>
-<!--p-dialog header="Title" 
-    [(visible)]="showPopupDialog" 
-    [style]="{
-        width: 'calc(100% - calc(425px + var(--gl-panel-padding-left)) - 1.5rem)', 
-        'margin-bottom': 'calc(0.5rem +  var(--footbar-height))',
-        'box-shadow': 'none'
-    }"
-    [contentStyle]="{
-        'background-color': 'transparent'
-    }"
-    position="bottom-right"
-    [transitionOptions]="'300ms'"
-    appendTo="body"
-    [closeOnEscape]="false"
-    [closable]="false"
-    [showHeader]="false"
-    [draggable]="false"
->
-    <ngx-slick-carousel class="carousel" 
-                        #slickModal="slick-carousel" 
-                        [config]="slideConfig">
-        <div ngxSlickItem *ngFor="let event of events; trackBy: trackByFn" class="slide">
-            <app-event-popup 
-                (onDelete)="closeMinimapPopup($event)" 
-                [configuration]="event">
-            </app-event-popup >
-        </div>
-    </ngx-slick-carousel>
-</p-dialog-->
-<app-carousel></app-carousel>
+<app-carousel [display]="showPopupDialog" #carousel></app-carousel>
 
 <p-dialog header="Mostrar Punto" [(visible)]="showCipiaExample" (onHide)="showCipiaExample=false" [modal]="true" id="xavy">
     <app-cipia></app-cipia>

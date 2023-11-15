@@ -100,7 +100,7 @@ export class EventSocketService extends Socket {
 
           if (alert) {
             if (alert.ventana_emergente) {
-              this.eventPopup.emit({event: newEvent, tracker: this.vehicleService.getVehicle(even.tracker_imei)})
+              this.eventPopup.emit({event: {...newEvent}, tracker: {...this.vehicleService.getVehicle(even.tracker_imei)}})
               //this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
             }
           }

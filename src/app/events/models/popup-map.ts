@@ -5,7 +5,7 @@ import { Vehicle } from "src/app/vehicles/models/vehicle";
 import { MinimapService } from "src/app/multiview/services/minimap.service";
 
 export class PopupMap extends MapBase implements IMapPopup{
-    
+    public markerClusterGroup!: L.MarkerClusterGroup;
     popupConf: PopupContent;
 
     public constructor( popupConf: PopupContent){
@@ -28,10 +28,7 @@ export class PopupMap extends MapBase implements IMapPopup{
     }
     async drawIcon(vehicles: Vehicle[], event: any):Promise<void>{
         for (const vehicle of vehicles){
-            let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+vehicle.icon);
-            if(vehicle.speed>0){
-              iconUrl = './assets/images/accbrusca.png';
-            }
+            let iconUrl = './assets/images/objects/nuevo/'+vehicle.icon;
         
             const iconMarker = L.icon({
               iconUrl: iconUrl,
@@ -39,16 +36,28 @@ export class PopupMap extends MapBase implements IMapPopup{
               iconAnchor: [25, 40],
               popupAnchor: [-3, -40]
             });
-        
+            console.log("iconMarker: ", iconMarker);
+
+            // const popupText = '<div class="row"><div class="col-6" align="left"><strong>' + vehicle.name + '</strong></div><div class="col-6" align="right"><strong>' + vehicle.speed + ' km/h</strong></div></div>' +
+            //                     '<aside #popupText class="">' +
+            //                     '<small>CONVOY: ' + vehicle.convoy + '</small><br>' +
+            //                     '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
+            //                     '<small>REFERENCIA: ' + 'NN' + '</small><br>' +
+            //                     '<small>FECHA DE TRANSMISION: ' + vehicle.dt_tracker + '</small><br>' +
+            //                     '<small>TIEMPO DE PARADA: Calculando ...</small>' +
+            //                     '</aside>';
+
             const tempMarker = L.marker([event.latitud, event.longitud], { icon: iconMarker });
-        
+            console.log("tempMarker: ", tempMarker);
+
             tempMarker.bindTooltip(`<span>${vehicle.name}</span>`, {
               permanent: true,
               offset: [0, 12],
               className: 'vehicle-tooltip'
             });
-        
-            tempMarker.addTo(this.map!);
+
+            this.markerClusterGroup.addLayer(tempMarker);
+            this.markerClusterGroup.addTo(this.map!);
         }
     }
 

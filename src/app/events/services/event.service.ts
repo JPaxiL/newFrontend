@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
 import { MapServicesService } from '../../map/services/map-services.service';
 import { getContentPopup } from '../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { EventSocketService } from './event-socket.service';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -46,7 +45,9 @@ export class EventService {
     private http: HttpClient,
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
-    ) {}
+    ) {
+      
+    }
 
 
   initialize(): void {
@@ -413,6 +414,13 @@ export class EventService {
       .toPromise();
 
       return response.data;
+  }
+
+  /**
+   * name
+   */
+  public getContentPopup(event:any) {
+    return getContentPopup(event);
   }
 
 }

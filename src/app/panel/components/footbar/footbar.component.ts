@@ -5,6 +5,7 @@ import { EventSocketService } from 'src/app/events/services/event-socket.service
 import { PopupContent } from 'src/app/multiview/models/interfaces';
 import { LayersService } from 'src/app/multiview/services/layers.service';
 import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
+import { CarouselComponent } from 'src/app/shared/components/carousel/carousel.component';
 import { CarouselService } from 'src/app/shared/services/carousel.service';
 
 @Component({
@@ -19,11 +20,9 @@ export class FootbarComponent implements OnInit {
   showScreenRecorder = false;
   showCipiaExample = false;
   showPopupDialog = true;
-  
-  events:PopupContent[] = [];
-
 
   @ViewChild('MapView') mapView!: ElementRef;
+  @ViewChild('carousel') carousel!: CarouselComponent;
 
   slideConfig = {"slidesToShow": 4, "slidesToScroll": 1};
 
@@ -74,46 +73,18 @@ export class FootbarComponent implements OnInit {
     this.showScreenRecorder = false;
   }
 
-  closeMinimapPopup(event: any){
-    console.log("CloseMinimapPopup: ", event)
-  }
-
   onEvent(event:any){
-    console.log("popupEVENTS: ",event);
-    /*
-    const newEvents = [
-      ...this.events,
-      {
-        vehicles: [event.tracker],
-        event: event.event,
-        mapConf: { containerId: "popup-container-" + event.event.evento_id.toString() + Date.now()}
-      }
-    ];
-    this.events = [];
-    this.events = newEvents;
-    this.changeDetector.detectChanges();*/
-    // this.popupWraper.find(item => !item.active)!.content = {
-    //   id: Date.now().toString(),
-    //   vehicles: [event.tracker],
-    //   event: event.event,
-    //   mapConf: { containerId: "popup-container-" + event.event.evento_id.toString() + Date.now()}
-    // }
-    // this.popupWraper.find(item => !item.active)!.active = true;
     const auxEvent = {
       id: Date.now().toString(),
       vehicles: [event.tracker],
       event: event.event,
-      mapConf: { containerId: "popup-container-" + event.event.evento_id.toString() + Date.now()}
+      mapConf: { containerId: "popup-container-" + event.event.evento_id.toString() + Date.now(), maxZoom: 17, zoom: 17}
     }
     this.carouselService.add(EventPopupComponent,{configuration: auxEvent})
-    this.events.push({
-      id: Date.now().toString(),
-      vehicles: [event.tracker],
-      event: event.event,
-      mapConf: { containerId: "popup-container-" + event.event.evento_id.toString() + Date.now()}
-    });
-    //this.changeDetector.detectChanges()
-    
+  }
+
+  clearPopups(){
+    this.carousel.clearPopups();
   }
 
   trackByFn(index: number, item: any): any {

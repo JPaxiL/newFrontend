@@ -36,6 +36,7 @@ import { TooltipModule } from 'primeng-lts/tooltip';
 import {SlideMenuModule} from 'primeng-lts/slidemenu';
 import {SidebarModule} from 'primeng-lts/sidebar';
 import {ScrollPanelModule} from 'primeng-lts/scrollpanel';
+import {GalleriaModule} from 'primeng-lts/galleria';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
@@ -280,6 +281,7 @@ import { CarouselComponent } from './shared/components/carousel/carousel.compone
     MultiSelectModule,
     CalendarModule,
     SlideMenuModule,
+    GalleriaModule,
     LeafletModule,
     LeafletMarkerClusterModule,
     SidebarModule,
