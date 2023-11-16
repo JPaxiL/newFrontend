@@ -22,7 +22,7 @@
                          <img [src]="'./assets/images/events/default-alert.png'" class="popup-icon">
                     </ng-template>
                     <span class="popup-title">
-                         {{configuration.event.mensaje_alerta}}
+                         {{configuration.event.nombre?configuration.event.nombre:!configuration.event.mensaje_alerta.includes('undefi')?configuration.event.mensaje_alerta:configuration.event.tipo | uppercase}}
                     </span>
                </div>
                <div *ngIf="has_multimedia && displayMultimedia && multimedias.length>0" class="multimedia-controls">

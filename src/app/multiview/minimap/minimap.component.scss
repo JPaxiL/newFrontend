@@ -53,3 +53,39 @@
         padding: 0.125rem 0.625rem;
     }
 }
+
+::ng-deep{
+    .leaflet-popup-content{
+      .infovehiculos{
+        margin: -0.125rem 0rem;
+        font-size: 0.875rem;
+        td > .dot-vehicle{
+          border-radius: 50%;
+          width: 10px;
+          height: 10px;
+          margin-right: 0.375rem;
+          &.green{
+            background-color: #45e845;
+          }
+          &.blue{
+            background-color: #2cadf2;
+          }
+          &.purple{
+            background-color: #b23ccf;
+          }
+          &.black{
+            background-color: #000;
+          }
+          &.orange{
+            background-color: #ffb300;
+          }
+          &.red{
+            background-color: #cc1013;
+          }
+          &.transm-color-not-defined{
+            background-color: #ABABAB;
+          }
+        }
+      }
+    }
+}
