@@ -11,6 +11,7 @@ import { getContentPopup } from '../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { VehicleService } from '../../vehicles/services/vehicle.service';
+import { MultimediaService } from '../../multiview/services/multimedia.service';
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +70,8 @@ export class EventService {
     private http: HttpClient,
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
-    public vehicleService: VehicleService
+    public vehicleService: VehicleService,
+    private multimediaService:MultimediaService
     ) {
       this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("evento cargo antes que vehicles ...");
@@ -337,46 +339,82 @@ export class EventService {
     ];
 
 
-    public async ShowAllHistorial(param : any,
-    ) {
-
-      await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/dataEventUserHistorial`,param)
-        .toPromise().then((response:any) => {
-          // console.log("=======================ShowAllHistorial event");
-          // console.log("data show historial event",response.data);
-          this.eventsHistorial = response.data;
-
-          for (let index = 0; index < this.eventsHistorial.length; index++) {
-
-            let icon = L.icon({
-              iconUrl: this.img_icon,
-              iconSize: this.img_iconSize, // size of the icon
-              iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
-            });
-
-            const event = this.eventsHistorial[index];
-            event.layer = L.marker([event.latitud, event.longitud], {
-              icon: icon,
-            });
-            event.layer._myType = 'eventoHistorial';
-            event.layer._myId = event.id;
-            //---------
-            var eventClass:any = this.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
-            eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
-
-            // this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
-            event.layer.bindPopup(getContentPopup(event), {
-              className: eventClass,
-              minWidth: 250,
-              maxWidth: 350,
-            } );
-            // event.layer.addTo(this.mapService.map);//.openPopup();
-
-          }
-
-          console.log(this.eventsHistorial);
-
-        });
+    public async ShowAllHistorial(param : any) {
+        // console.log("========= ShowAllHistorial ===========");
+        
+        await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/dataEventUserHistorial`,param)
+          .toPromise().then((response:any) => {
+            // console.log("=======================ShowAllHistorial event");
+            // console.log("data show historial event",response.data);
+            this.eventsHistorial = response.data;
+  
+            for (let index = 0; index < this.eventsHistorial.length; index++) {
+  
+              let icon = L.icon({
+                iconUrl: this.img_icon,
+                iconSize: this.img_iconSize, // size of the icon
+                iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
+              });
+  
+              const event = this.eventsHistorial[index];
+              event.layer = L.marker([event.latitud, event.longitud], {
+                icon: icon,
+              });
+              event.layer._myType = 'eventoHistorial';
+              event.layer._myId = event.id;
+              //---------
+              var eventClass:any = this.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
+              eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
+  
+              // // this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
+              // event.layer.bindPopup(getContentPopup(event), {
+              //   className: eventClass,
+              //   minWidth: 250,
+              //   maxWidth: 350,
+              // } );
+              // // event.layer.addTo(this.mapService.map);//.openPopup();
+  
+  
+              const objParams:any = {};
+              if(event.parametros&&typeof(event.parametros)=='string'){
+                event.parametros.split('|').forEach((item:any) => {
+                  const [key, value] = item.split('=');
+                  objParams[key] = value;
+                });
+                event.parametros = objParams;
+              }
+              //console.log("eventosssss");
+              
+              if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+                  // console.log("EVENTO CIPIA ---  ");
+                  // console.log(event);
+  
+                  // obtengo la url del video o imagen
+                  this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
+                    // Añado la url del video/imagen como atributo del evento
+                    event.videoUrl = data;
+                    event.layer.bindPopup(getContentPopup(event), {
+                      className: eventClass,
+                      minWidth: 250,
+                      maxWidth: 350,
+                    });
+  
+                  });
+              }else{
+                  // console.log("EVENTO NORMAL ---  ");
+                  // console.log(event);
+                  // caso contrario ejecuto la via normal
+                  event.layer.bindPopup(getContentPopup(event), {
+                    className: eventClass,
+                    minWidth: 250,
+                    maxWidth: 350,
+                  });
+              }
+            }
+  
+            console.log(this.eventsHistorial);
+  
+          });
     }
 
     public attachClassesToEvents(single_event?: any){
