@@ -2,7 +2,6 @@ import { Component, Output, EventEmitter, OnInit, NgModule } from '@angular/core
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PanelService } from 'src/app/panel/services/panel.service';
 import { UserDataService } from '../services/user-data.service';
-
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
@@ -25,6 +24,7 @@ export class UserConfigComponent implements OnInit {
   
   pngNewPass: string = '';
   pngNewPassR: string = '';
+  usersForm!: FormGroup;
 
   isUnderConstruction: boolean = true;
   switchPoint: boolean = true;
@@ -57,7 +57,8 @@ export class UserConfigComponent implements OnInit {
     { id: 2, name: 'Cola de dirección' },
   ];
 
-  constructor(
+  constructor(       
+    private fb: FormBuilder,
     public panelService: FormBuilder) {
       this.perfileConfigForm = this.panelService.group({
         color: ['#RRGGBB']
@@ -65,11 +66,21 @@ export class UserConfigComponent implements OnInit {
   }
 
   onSubmit(){
-    const color = this.perfileConfigForm.value.color;
-    this.submit.emit(color);
+    // const color = this.perfileConfigForm.value.color;
+    // this.submit.emit(color);
+
   }
 
   ngOnInit(): void {
+    this.usersForm = this.initForm();
+  }
+
+  initForm(): FormGroup{
+    return this.fb.group({
+      password: [''],
+      type_follow:[''],
+      indGalon: [''] ,
+    })
   }
 
   consoleMostrar(){
@@ -135,6 +146,25 @@ export class UserConfigComponent implements OnInit {
 
   confirm(){
     this.loading=true;
+    if(this.pngNewPass!=this.pngNewPassR){
+      Swal.fire({
+        title: '¡Error!',
+        text: 'Hubo un problema al guardar la información.',
+        icon: 'error',
+        allowOutsideClick: true,
+      });
+      // Swal.fire({
+      //   title: 'Falló!',
+      //   text: 'No coinsiden la contraseña, ingrese de nuevo.',
+      //   icon: 'error',
+      // }).then((result) => {
+      //   if (result.isConfirmed) {
+      //     // Lógica al confirmar
+      //   } else if (result.isDismissed) {
+      //     // Lógica al cerrar la alerta
+      //   }
+      // });
+    }
 
     Swal.fire({
       title: '¿Está seguro?',

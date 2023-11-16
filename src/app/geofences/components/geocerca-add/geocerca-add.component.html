@@ -6,23 +6,28 @@
     <div class="panel-izq-form">
       <div class="gl-row-underline">
         <div class="flex container" >
-          <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 1" (click)="selectBtn(1); clickFormGeoPol()">
-            <button type="button" *ngIf="geofencesService.showBtnAdd" (click)="clickFormGeoPol()" class="pentagon">
-
+          <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 1" (click)="selectBtn(1)">
+            <button type="button" *ngIf="geofencesService.showBtnAdd" (click)="selectBtn(1)" class="pentagon btn">
             </button>
-            <label>Poligonales</label>
+            <span>Poligonales</span>
           </div>
-          <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 2" (click)="selectBtn(2); clickFormGeoCir()">
-            <button type="button" *ngIf="circularGeofencesService.showBtnAdd" (click)="clickFormGeoCir()" class="circle">
-
+          <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 2" (click)="selectBtn(2)">
+            <button type="button" *ngIf="circularGeofencesService.showBtnAdd" (click)="selectBtn(2)" class="circle btn">
             </button>
             <span>Circulares</span>
           </div>
-          <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 3" (click)="selectBtn(3); clickFormGeoLin()">
-            <button  type="button" *ngIf="geofencesService.showBtnAdd" (click)="clickFormGeoLin()" class="pentagon">
-
+          <div disabled class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 3" (click)="selectBtn(3)">
+            <button class="btnGeo" type="button" *ngIf="geofencesService.showBtnAdd"  (click)="selectBtn(3)">
+              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                  width="30.000000pt" height="30.000000pt" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" fill="#c4c2c1" stroke="none">
+                  <path d="M103 265 c-70 -46 -79 -78 -33 -115 44 -36 36 -68 -25 -110 -25 -17
+                  -45 -33 -45 -35 0 -3 63 -5 139 -5 l140 0 11 55 c15 74 1 102 -68 136 -85 41
+                  -85 43 -17 93 19 15 18 15 -15 15 -23 0 -53 -12 -87 -34z"/>
+                  </g>
+              </svg>
             </button>
-            <span>Lineales</span>
+            <span>Polilineas</span>
           </div>
         </div>
         <div class="col-12">
@@ -186,7 +191,7 @@
         </div>
       </div>
       <div *ngIf="listOptionCheckbox=='grupo'" class="gl-middleline gl-permanent-middleline gl-row-underline">
-        <div>
+        <div class="row">
           <div class="col-6" >
             <div class="p-field">
               <label class="" id="grupo_label">OPERACIONES:</label>
@@ -196,7 +201,7 @@
           <div class="col-6" >
             <div class="p-field">
               <label class="" id="grupo_label">GRUPOS:</label>
-              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="true" optionLabel="namegrupo" optionValue="idgrupo" [placeholder]="placeholderGroup" [disabled]="disabledGroup"></p-dropdown>
+              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="true" optionLabel="namegrupo" optionValue="idgrupo"  (onChange)="onChangeGrupo();" [placeholder]="placeholderGroup" [disabled]="disabledGroup"></p-dropdown>
             </div>
           </div>
         </div>
@@ -212,10 +217,10 @@
         </div>
         <div *ngIf="geoOptions=='circ'" class="row justify-content-center mt-4 panel-izq-container-footer">
           <div class="col-6">
-            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelCir(form.id)">Cancelarrrr</button>
+            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelCir(form.id)">Cancelar</button>
           </div>
           <div class="col-6">
-            <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickSaveCir(form.id)">Guardarrr</button>
+            <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickSaveCir(form.id)">Guardar</button>
           </div>
         </div>
       </div>

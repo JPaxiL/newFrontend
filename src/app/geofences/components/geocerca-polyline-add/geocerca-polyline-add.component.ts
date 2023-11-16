@@ -73,7 +73,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
       
       console.log(geo);
 
-      if (geo.zone_visible == true) {
+      if (geo.zone_visible == 'true') {
 
         console.log('Eliminando geocerca porque era visible');
         this.mapService.map.removeLayer(geo.geo_elemento);
@@ -126,7 +126,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
           this.polylineGeofenceService.bindMouseEvents(geo);
 
-          if (geo.zone_visible == true) {
+          if (geo.zone_visible == 'true') {
             geo.geo_elemento.addTo(this.mapService.map);
           }
 
@@ -288,8 +288,8 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
     this.form.limite_grave = 0;
     this.form.limite_muy_grave = 0;
 
-    this.form.visible_zona         = true;
-    this.form.nombre_visible_zona  = true;
+    this.form.visible_zona         = 'true';
+    this.form.nombre_visible_zona  = 'true';
 
     this.form.geo_geometry          = "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)";
     
@@ -347,7 +347,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       this.polylineGeofenceService.bindMouseEvents(geo);
 
-      if (geo.zone_visible == true) {
+      if (geo.zone_visible == 'true') {
         geo.geo_elemento.addTo(this.mapService.map);
       }
 
@@ -401,7 +401,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
         geo.zone_color = gEdit.color_zona;
         geo.zone_name = gEdit.nombre_zona;
         geo.zone_name_visible = gEdit.nombre_visible_zona;
-        geo.zone_name_visible_bol = (geo.zone_name_visible === true);
+        geo.zone_name_visible_bol = (geo.zone_name_visible == 'true');
         geo.zone_visible = gEdit.visible_zona;
         geo.tag_name_color = gEdit.tag_name_color;
         geo.tag_name_font_size = gEdit.tag_name_font_size;
@@ -419,7 +419,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
         this.polylineGeofenceService.bindMouseEvents(geo);
 
-        if (geo.zone_visible == true) {
+        if (geo.zone_visible == 'true') {
           geo.geo_elemento.addTo(this.mapService.map);
         }
 
@@ -448,7 +448,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
             });
 
 
-        if (geo.zone_name_visible == true) {
+        if (geo.zone_name_visible == 'true') {
           geo.marker_name.addTo(this.mapService.map);
         }
 
@@ -501,7 +501,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
           geo.zone_color = gNew.color_zona;
           geo.zone_name = gNew.nombre_zona;
           geo.zone_name_visible = gNew.nombre_visible_zona;
-          geo.zone_name_visible_bol = (geo.zone_name_visible == true);
+          geo.zone_name_visible_bol = (geo.zone_name_visible == 'true');
           geo.zone_visible = gNew.visible_zona;
           geo.tag_name_color = gNew.tag_name_color;
           geo.tag_name_font_size = gNew.tag_name_font_size;

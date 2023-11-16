@@ -23,9 +23,8 @@ export interface IGeofence {
     zone_visible: string,
     type?: string,
     eye?: boolean,
-
-    //circular
 }
+
 export interface IGeofences {
     geofences: IGeofence[],
     createTreeNode(data: IGeofence[]): any[],

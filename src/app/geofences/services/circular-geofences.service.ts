@@ -78,7 +78,7 @@ export class CircularGeofencesService {
     this.tblDataGeo = [];
     for(let i = 0; i < this.circular_geofences.length; i++){
       if(this.circular_geofences[i].id != newCircularGeofenceId){
-        this.circular_geofences[i].zone_name_visible_bol = (this.circular_geofences[i].zone_name_visible === true);
+        this.circular_geofences[i].zone_name_visible_bol = (this.circular_geofences[i].zone_name_visible == 'true');
       } else {
         this.circular_geofences[i].zone_name_visible_bol = true;
       }
@@ -92,12 +92,12 @@ export class CircularGeofencesService {
 
   bindMouseEvents(geofence: any){
     geofence.geo_elemento.on('mouseover', () => {
-      if(geofence.zone_name_visible != true){
+      if(geofence.zone_name_visible != 'true'){
         geofence.marker_name.addTo(this.mapService.map);
       }
     });
     geofence.geo_elemento.on('mouseout', () => {
-      if(geofence.zone_name_visible != true){
+      if(geofence.zone_name_visible != 'true'){
         this.mapService.map.removeLayer(geofence.marker_name);
       }
     });
@@ -117,11 +117,11 @@ export class CircularGeofencesService {
   }
 
   showDrawingsOfGeofence(geofence: any){
-    if (geofence.zone_visible == true) {
+    if (geofence.zone_visible == 'true') {
       geofence.geo_elemento.addTo(this.mapService.map);
     }
 
-    if (geofence.zone_name_visible == true) {
+    if (geofence.zone_name_visible == 'true') {
       geofence.marker_name.addTo(this.mapService.map);
     }
     
@@ -238,7 +238,7 @@ export class CircularGeofencesService {
   }
 
   updateGeoCounters(){
-    this.circularGeofenceCounters.visible = this.circular_geofences.filter( (circular_geofences: { zone_visible: boolean; }) => circular_geofences.zone_visible == true).length;
+    this.circularGeofenceCounters.visible = this.circular_geofences.filter( (circular_geofences: { zone_visible: string; }) => circular_geofences.zone_visible == 'true').length;
     this.circularGeofenceCounters.hidden = this.circular_geofences.length - this.circularGeofenceCounters.visible;
     
   }
@@ -250,12 +250,12 @@ export class CircularGeofencesService {
 
   clearDrawingsOfGeofence(geofence: any){
     if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
-      && geofence.zone_visible == true ){
+      && geofence.zone_visible == 'true' ){
 
       this.mapService.map.removeLayer(geofence.geo_elemento);
     }
     if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
-      && geofence.zone_name_visible == true ){
+      && geofence.zone_name_visible == 'true' ){
 
       this.mapService.map.removeLayer(geofence.marker_name);
     }

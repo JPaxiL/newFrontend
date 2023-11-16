@@ -6,6 +6,7 @@
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
           <input type="text" (keyup)="onBusqueda($event)" type="text" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/>
+          <!-- <input (keyup)="onSearchGeo()" [(ngModel)]="searchValueGeo" type="text" id="searchKey" class="form-control"  class="form-control ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false" placeholder="Buscar por Nombre/tipo..." /> -->
         </span>
       </div>
       <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickImportGeocerca()" title="Importar o exportar">
@@ -30,27 +31,27 @@
       [globalFilterFields]="['nameoperation','namegrupo','zone_name']">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col width="25%" />
-          <col width="8%" />
-          <col width="28%" />
-          <col width="13%" />
-          <col width="25%" />
-          <col *ngIf="geofencesService.showBtnEdit" width="13%" />
-          <col *ngIf="geofencesService.showBtnEdit" width="13%" />
-          <col *ngIf="!geofencesService.showBtnEdit" width="26%" />
+          <col style="width: 2.5rem;" />
+          <col style="width: 18%;"/>
+          <col style="width: 50%;" />
+          <col style="width: 16%;"/>
+          <col *ngIf="geofencesService.showBtnEdit" width="20%" />
+          <col *ngIf="geofencesService.showBtnEdit" width="20%" />
+          <col *ngIf="!geofencesService.showBtnEdit" width="15%" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
+          <th></th>
           <th>
-            <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEye()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
+            <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEyeAll()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
           </th>
-          <th colspan="2">Geocerca</th>
+          <th style="text-align: center; white-space: nowrap;">Geocerca</th>
           <th>
-            <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEye()">
+            <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEyeAll()">
             <div>
-              <i *ngIf="geofencesService.tagNamesEyeState" class="fas fa-eye mini-eye"></i>
-              <i *ngIf="!geofencesService.tagNamesEyeState" class="far fa-eye-slash mini-eye"></i>
+              <i *ngIf="geofencesService.tagNamesEyeState && tagNamesEyeState && polylineGeofenceService.tagNamesEyeState" class="fas fa-eye mini-eye"></i>
+              <i *ngIf="!geofencesService.tagNamesEyeState && !tagNamesEyeState && !polylineGeofenceService.tagNamesEyeState" class="far fa-eye-slash mini-eye"></i>
             </div>
             </i>
           </th>
@@ -165,7 +166,7 @@
               </g>
             </svg>
           </th>
-          <th *ngIf="geofencesService.showBtnEdit" ><i class="fa fa-pencil fa-lg"></i></th>
+          <th><i class="fa fa-pencil fa-lg ag-grid-header-icon"></i></th>
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
@@ -183,38 +184,43 @@
         <tr *ngIf="rowData['col']!=3">
           <td></td>
           <td class="eye-column">
-            <div class="" style="font-size: 14px; text-align: center;">
-              <span (click)="onClickEye(rowData['id'])" class="btn-label"><i class="fas fa-eye"></i></span>
-            </div>
-            <div *ngIf="rowData['eye'] == false" class="" style="font-size: 14px; text-align: center;">
-              <span (click)="onClickEye(rowData['id'])" class="btn-label"><i class="fa fa-eye-slash"></i></span>
-            </div>
+            <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShowGeoAll(rowData['id'], rowData['type'])">
+              <i [ngClass]="{'fas fa-eye': rowData ['zone_visible'] === 'true', 'far fa-eye-slash' : rowData['zone_visible'] === 'false'}"></i>
+            </button>
           </td>
-          <td style="min-width: 215px;" class="vehicle-column">
-            <div class="d-flex justify-content-center align-items-center mx-2">
-              <!-- <div class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}" title="{{hint[rowData['point_color']]}}" data-bs-toggle="tooltip" data-bs-placement="top" container="body"></div> -->
-              <div class="flex-grow-1 d-flex flex-column text-start vehicle-data">
-                <strong>{{rowData['zone_name']}}</strong>
-                <!-- <span>{{rowData['dt_tracker']}}</span> -->
-              </div>
-            </div>
+          <td style="min-width: 215px;" class="geofence-column">
+            <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
+                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" style="background-color: {{rowData['zone_color']}}"></div>
+                <div *ngIf="(rowData['type'])=='circ'" class="circle" style="background-color: {{rowData['zone_color']}}"></div>
+                <div *ngIf="(rowData['type'])=='lin'" class="" > 
+                  <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                    width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
+                    <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" style="fill: {{rowData['zone_color']}}" stroke="none">
+                    <path d="M103 265 c-70 -46 -79 -78 -33 -115 44 -36 36 -68 -25 -110 -25 -17
+                    -45 -33 -45 -35 0 -3 63 -5 139 -5 l140 0 11 55 c15 74 1 102 -68 136 -85 41
+                    -85 43 -17 93 19 15 18 15 -15 15 -23 0 -53 -12 -87 -34z"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="flex-grow-1 d-flex flex-column text-start geofence-data">
+                  <strong>{{rowData['zone_name']}}</strong>
+                </div>
+            </button>
           </td>
           <td class="inline-png-checkbox">
-            <p-checkbox [binary]="true" (onChange)="clickShowNameGeocerca()"></p-checkbox>
+            <span class="btn-label" title="Mostrar nombre">
+              <p-checkbox [ngModel]="rowData['zone_name_visible_bol']" [binary]="true" (onChange)="clickShowNameGeoAll(rowData['id'], rowData['type'])"></p-checkbox>
+            </span>
           </td>
-          <td style="min-width: 215px;" class="vehicle-column">
-            <div class="d-flex justify-content-center align-items-center mx-2">
-              <div class="flex-grow-1 d-flex flex-column text-start vehicle-data">
-                <strong>{{rowData['vel_max']+" km/h"}}</strong>
-              </div>
-            </div>
+          <td style="min-width: 215px;" class="geofence-column">
+              <strong>{{rowData['vel_max']+" km/h"}}</strong>
           </td>
           <td *ngIf="geofencesService.showBtnEdit">
             <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
               <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
               <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
-                <div ngbDropdownItem (click)="clickConfigurarGeocerca(geo.trama.id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                <div ngbDropdownItem (click)="clickEliminarGeocerca($event, geo.trama.id)"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                <div ngbDropdownItem (click)="clickEliminarGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
               </div>
             </div>
           </td>
