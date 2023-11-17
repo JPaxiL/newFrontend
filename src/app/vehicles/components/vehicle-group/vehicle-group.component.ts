@@ -89,7 +89,7 @@ export class VehicleGroupComponent implements OnInit {
     // //console.log('vehicles',this.vehicleService.vehicles);
     // //console.log('vehiclestree',this.vehicleService.vehiclesTree);
     if(e=='operacion'){
-      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.tipo_agrupacion==null);
+      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == 0 && vehicle.idgrupo == 0 && vehicle.idconvoy==0);
       console.log(this.list1);
     }else if(e=='grupo'){
       //getGroup
@@ -124,15 +124,16 @@ export class VehicleGroupComponent implements OnInit {
 
       //incluye crear grupo a Unidadaes Sin Operacion
       // aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo == 0 && vehicle.namegrupo=='Unidades Sin Grupo' && vehicle.idoperation!=0);
-      aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idconvoy == 0 && vehicle.nameconvoy=='Unidades Sin Convoy');
+      // aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idconvoy == 0 && vehicle.nameconvoy=='Unidades Sin Convoy');
+      aux2 = this.vehicleService.vehicles;
       // Filtrar elementos con 'idoperacion' diferente
       for (const vehicle of aux2) {
-        const nameoperation = vehicle.nameoperation;
+        const idoperation = vehicle.idoperation;
         const filteredOperation = {
           idoperation: vehicle.idoperation,
           nameoperation: vehicle.nameoperation
         };
-        if (!aux_operations.some((v) => v.nameoperation === nameoperation)) {
+        if (!aux_operations.some((v) => v.idoperation === idoperation)) {
           aux_operations.push(filteredOperation);
         }
       }
@@ -157,19 +158,19 @@ export class VehicleGroupComponent implements OnInit {
     this.list2 = [];
     //diferente filtro para crear GRUPO
     if (e == 'grupo'){
-      aux = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation&&vehicle.idgrupo == 0);
+      aux = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation&&vehicle.idgrupo == 0&&vehicle.idconvoy == 0);
       this.list1 = aux;
     }else if(e == 'convoy'){
       //filtro para crear un CONVOY cargando lista de grupos
       aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
 
       for (const vehicle of aux2) {
-        const namegroup = vehicle.namegrupo;
+        const idgroup = vehicle.idgrupo;
         const filteredGroup = {
           idgrupo: vehicle.idgrupo,
           namegrupo: vehicle.namegrupo
         };
-        if (!aux_groups.some((v) => v.namegrupo === namegroup)) {
+        if (!aux_groups.some((v) => v.idgrupo === idgroup)) {
           aux_groups.push(filteredGroup);
         }
       }
@@ -342,7 +343,7 @@ export class VehicleGroupComponent implements OnInit {
           // console.log("post group res =",info);
           if(info.res){
             this.addGroup(info);
-            this.selectedGroup = {};
+            this.selectedGroup = {};  
             // const vehicles = this.vehicleService.vehicles;
             // for (const key in this.list2) {
             //   const index = vehicles.indexOf(this.list2[key])
