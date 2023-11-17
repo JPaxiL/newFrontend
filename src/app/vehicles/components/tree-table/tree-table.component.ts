@@ -626,6 +626,7 @@ export class TreeTableComponent implements OnInit {
   onClickFollow(rowData: any){
     rowData.follow = !rowData.follow;
     this.followService.add(rowData);
+    console.log('SEGUIR VEHICULO -->',rowData);
   }
 
   public onQuickFilterChanged(data: any) {
