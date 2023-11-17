@@ -40,7 +40,7 @@ export class AlertService {
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1): Promise<Alert[]>{
-    console.log('Obteniendo Alertas...');
+    // console.log('Obteniendo Alertas...');
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts`).toPromise();
     let i = 1;
     let alerts_for_events_socket: any[] = [];
@@ -62,7 +62,7 @@ export class AlertService {
 
     });
     this.alertsForEventSocket = alerts_for_events_socket;
-    console.log('Alertas obtenidas');
+    // console.log('Alertas obtenidas');
     //console.log(this.alertsForEventSocket);
     return this.alerts;
   }

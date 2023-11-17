@@ -183,7 +183,7 @@ event-list.component.ts:130 despues de procesar parametros  object
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement){
     console.log("click event....",event);
-    console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
+    // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if(false){
       // this.hideEvent(this.eventService.activeEvent);
@@ -201,14 +201,17 @@ event-list.component.ts:130 despues de procesar parametros  object
   }
 
   public changeTypeEvent(){
+    // console.log("eventService.classFilterArray",this.eventService.classFilterArray);
     /* if(this.selectedEvent == ''){ */
     if(this.selectedEvent === null && this.placa == ''){
       this.eventService.eventsFiltered = this.eventService.getData();
       this.noResults = false;
     }else{
+      // console.log("this.selectedEvent ??????",this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
         return this.eventFilter(event);
       });
+      // console.log("get data",this.eventService.eventsFiltered);
       this.noResults = this.eventService.eventsFiltered.length == 0;
     }
   }
@@ -228,6 +231,10 @@ event-list.component.ts:130 despues de procesar parametros  object
   }
 
   private eventFilter(event: any){
+    // console.log("filter ===> ");
+    // console.log("event",event);
+    // console.log("this.selectedEvent",this.selectedEvent);
+    // console.log("tipo select",event.tipo +"=="+ this.selectedEvent);
     return (event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase()) || this.placa == '')
           && (event.tipo == this.selectedEvent || this.selectedEvent === null);
   }

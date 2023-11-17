@@ -208,6 +208,7 @@ export class EventService {
   }
 
   public getData() {
+    console.log("get data desde eventService",this.events);
     return this.events;
   }
 
@@ -262,15 +263,16 @@ export class EventService {
   public async getAllEventsForTheFilter() {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
     let events = response.data;
+    // console.log("events en eventService",events);
 
-    events = events.filter(function( obj:any ) {
-      return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
-    });
+    // events = events.filter(function( obj:any ) {
+    //   return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    // });
 
     this.classFilterArray = events.map( (event:any) => ({
       id:event.id,
       option:this.toCamelCase(event.name),
-      tipo:event.name,
+      tipo:event.slug,
       clase:event.slug
     }))
     this.classFilterArray.push({
