@@ -846,7 +846,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         </tbody>
       </table>
       ${(event_content.parametros && event_content.parametros.gps == "cipia" && event_content.parametros.has_video != "0") ?
-        '<div><video id="'+event_content.parametros.eventId+'" width="100%" height="auto" controls src="'+event_content.videoUrl+'" type="video/mp4"></video></div>':''
+        '<div id="multimedia-'+event_content.parametros.eventId+'"></div>':''
       }
     </div>`;
 }
