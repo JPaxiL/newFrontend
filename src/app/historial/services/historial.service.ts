@@ -31,6 +31,8 @@ export class HistorialService {
   }
   //----------------- FIN mensaje entre componentes ------------------
 
+  public icoGplay:any;
+  public icoGclick:any;
 
 
   public tramasHistorial: any = [];
@@ -344,5 +346,3 @@ export class HistorialService {
 
 
 }
-
-

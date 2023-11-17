@@ -337,7 +337,7 @@ export class TreeTableComponent implements OnInit {
         if(data.id==vehicles[key]['idconvoy']){
           aux2.push(vehicles[key]);
           //filtrar por idoperacion del grupo
-          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo==vehicles[key]['idgrupo']&&vehicle.idconvoy==0);
+          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation==vehicles[key]['idoperation']&&vehicle.idgrupo==vehicles[key]['idgrupo']&&vehicle.idconvoy==0);
         }
       }
     }
@@ -353,12 +353,45 @@ export class TreeTableComponent implements OnInit {
     this.textDelete = data['type'];
     if(data['id']==null){
       console.log('no hay id');
+      Swal.fire({
+        title: 'Error',
+        text: 'No existe Agrupación, recarge la página ...',
+        icon: 'error',
+      });
     }else{
       this.idDelete = data['id'];
       this.typeDelete = data['type'];
       console.log('en proceso de borrado',this.idDelete,this.typeDelete);
     }
 
+    // SI EXISTE UN CONVOY DEBE ENVIAR UN MENSAJE DE ANTES DESCOMPONER EL GRUPO 
+    if(this.textDelete=='grupo'){
+      const existsElement = this.vehicleService.vehicles.some((vehicle: any) => {
+        return vehicle.idgrupo === data['id'] && vehicle.idconvoy !== 0;
+      }); 
+      if(existsElement){
+        Swal.fire({
+          title: 'Error',
+          text: 'Primero Debe Eliminar los convoy que tiene el grupo ...',
+          icon: 'error',
+        });
+        return;
+
+      }
+    // SI EXISTE UN CONVOY/GRUPO DEBE ENVIAR UN MENSAJE DE ANTES DESCOMPONER LA OPERACION
+    }else if(this.textDelete == 'operacion'){
+      const existsElement = this.vehicleService.vehicles.some((vehicle: any) => {
+        return vehicle.idoperation == data['id'] && (vehicle.idgrupo != 0 || vehicle.idconvoy != 0);
+      }); 
+      if(existsElement){
+        Swal.fire({
+          title: 'Error',
+          text: 'Primero Debe Eliminar los grupos y/o convoys que tiene la operación ...',
+          icon: 'error',
+        });
+        return;
+      }
+    }
 
     Swal.fire({
       title: 'Confirmación',
@@ -593,6 +626,7 @@ export class TreeTableComponent implements OnInit {
   onClickFollow(rowData: any){
     rowData.follow = !rowData.follow;
     this.followService.add(rowData);
+    console.log('SEGUIR VEHICULO -->',rowData);
   }
 
   public onQuickFilterChanged(data: any) {

@@ -188,6 +188,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
     // this.plot_historial = $.plot("#placeholder", [ [[0, 0], [1, 1]] ], this.options_grafico);
 
 
+    this.historialService.icoGplay = this.icoGplay;
+    this.historialService.icoGclick = this.icoGclick;
+
     console.log("======= ngOnInit ========");
     console.log(this.historialService.arrayRecorridos);
     console.log(this.historialService);
@@ -255,6 +258,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
         // var dH =  this.HM.recorrido; //this.historialService.tramasHistorial; // Data Historial
         // var ppos = this.sliderValue;
         var item = this.HM.recorrido[ this.sliderValue ];
+        this.cl.position = this.sliderValue
+
 
         //this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+dH[ppos].lat+","+dH[ppos].lng;
         this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
