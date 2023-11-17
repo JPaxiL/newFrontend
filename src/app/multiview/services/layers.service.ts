@@ -8,6 +8,7 @@ import { GeopointsMinimapService } from './geopoints-minimap.service';
   providedIn: 'root'
 })
 export class LayersService {
+  public isReady: boolean = false;
   private servicesReadySubject = new BehaviorSubject<boolean>(false);
   public servicesReady$ = this.servicesReadySubject.asObservable();
 
@@ -43,15 +44,12 @@ export class LayersService {
     await this.geopointsService.initialize();
   }
   
-  private checkReadyServices(){
-    console.log("initializingCircularGeofences: ",this.circularGeofencesService.initializingCircularGeofences);
-    console.log("initializingGeofences: ",this.geofencesService.initializingGeofences);
-    console.log("initializingGeopoints: ",this.geopointsService.initializingGeopoints);
-    
+  private checkReadyServices(){    
     if(this.circularGeofencesService.initializingCircularGeofences
       && this.geofencesService.initializingGeofences
       && this.geopointsService.initializingGeopoints){
         this.servicesReadySubject.next(true);
+        this.isReady = true;
     }
   }
   

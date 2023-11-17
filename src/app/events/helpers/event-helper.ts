@@ -1,5 +1,3 @@
-import { event } from "jquery";
-import { environment } from "src/environments/environment";
 
 
 export const getContentPopup = (event: any, d: any = '...') => {
@@ -300,23 +298,6 @@ export const getContentPopup = (event: any, d: any = '...') => {
       'assets/images/events-icons/fatiga.svg',
     );
 
-  } else if (event.tipo == 'somnolencia-360') {
-    return render_leaflet_tootlip(
-      {
-        tipo: event.tipo,
-        nombre_objeto: event.nombre_objeto,
-        latitud: event.latitud,
-        longitud: event.longitud,
-        velocidad: event.velocidad,
-        referencia: event.referencia,
-        fecha_tracker: event.fecha_tracker,
-        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
-        parametros: event.parametros,
-        imei: event.imei
-      },
-      'assets/images/events-icons/somnolenciaWhite.svg',
-    );
-
   } else if (event.tipo == 'distraccion') {
     return render_leaflet_tootlip(
       {
@@ -456,7 +437,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'somnolencia-360') {
+  }else if (event.tipo == 'error-calibracion-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -470,9 +451,106 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei
       },
-      'assets/images/events-icons/no-rostro.svg',
+      'assets/images/events-icons/mant_preventivo.png',
     );
-  }else if (event.tipo == 'conductor-fumando') {
+  }else if (event.tipo == 'error-de-camara-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/bloqueo_mobileye.svg',
+    );
+  }else if (event.tipo == 'ignicion-desactivada-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/motor.svg',
+    );
+  }else if (event.tipo == 'ignicion-activada-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/motor.svg',
+    );
+  }
+  else if (event.tipo == 'conductor-distraido-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/fatiga.png',
+    );
+  }else if (event.tipo == 'conductor-adormitado-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/somnolencia.svg',
+    );
+  }else if (event.tipo == 'conductor-somnoliento-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'', // En eventos de cipia añado la url generada
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/somnolencia.svg',
+    );
+  }else if (event.tipo == 'conductor-fumando-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -486,9 +564,9 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei
       },
-      'assets/images/events-icons/no-rostro.svg',
+      'assets/images/events-icons/infraccion.png',
     );
-  }else if (event.tipo == 'cinturon-de-seguridad-desabrochado') {
+  }else if (event.tipo == 'cinturon-desabrochado-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -502,9 +580,9 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei
       },
-      'assets/images/events-icons/no-rostro.svg',
+      'assets/images/events-icons/infraccion.png',
     );
-  }else if (event.tipo == 'uso-del-celular') {
+  }else if (event.tipo == 'uso-del-celular-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -518,7 +596,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei
       },
-      'assets/images/events-icons/no-rostro.svg',
+      'assets/images/events-icons/infraccion.png',
     );
   }else if (event.tipo == 'error-de-camara-360') {
     return render_leaflet_tootlip(
@@ -536,7 +614,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/no-rostro.svg',
     );
-  }else if (event.tipo == 'manipulacion-360') {
+  }else if (event.tipo == 'inicio-sistema-ok-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.tipo,
@@ -550,7 +628,157 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei
       },
-      'assets/images/events-icons/no-rostro.svg',
+      'assets/images/events-icons/mant_correctivo_realizado.png',
+    );
+  }else if (event.tipo == 'error-sistema-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/parada_zona_desautorizada.png',
+    );
+  }
+  else if (event.tipo == 'sistema-ok-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/mant_correctivo_realizado.png',
+    );
+  }else if (event.tipo == 'sistema-reseteado-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/mant_preventivo.png',
+    );
+  }else if (event.tipo == 'deteccion-manipulacion-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/mant_correctivo.png',
+    );
+  }
+  else if (event.tipo == 'conductor-no-identificado-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/fatiga.png',
+    );
+  }
+  else if (event.tipo == 'cambio-conductor-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/fatiga.png',
+    );
+  }
+  else if (event.tipo == 'conductor-ausente-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/fatiga.png',
+    );
+  }
+  else if (event.tipo == 'conductor-identificado-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/fatiga.png',
+    );
+  }
+  else if (event.tipo == 'actualizacion-estado-gps-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.tipo,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
+        imei: event.imei
+      },
+      'assets/images/events-icons/gps_icon.png',
     );
   }
 

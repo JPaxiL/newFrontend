@@ -11,7 +11,7 @@ import { GeofencesMinimapService } from '../services/geofences-minimap.service';
 import { GeopointsMinimapService } from '../services/geopoints-minimap.service';
 
 import { LayersService } from '../services/layers.service';
-import { Map } from '../models/map';
+import { MiniMap } from '../models/mini-map';
 import { MinimapService } from '../services/minimap.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   @Input() idContainer!: string;
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
   miniMap!: MinimapContent;
-  mapItem!: Map;
+  mapItem!: MiniMap;
 
   events:Event[] = [];
   eventSelected!: Event;
@@ -48,12 +48,13 @@ export class MinimapComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     //Si es GridItem se debe convertir en tipo MinimapContent
+    console.log("configuration: ", this.configuration);
     this.miniMap = {
       imeis: this.configuration.content!.imeis,
       title: this.configuration.label!.toUpperCase(),
       nEvents: 0,
       events:[],
-      id_container: this.idContainer!
+      mapConf: {containerId: 'map-container-'+this.idContainer!}
     }
     console.log("miniMap: ", this.miniMap);
     this.events = [
@@ -122,8 +123,6 @@ export class MinimapComponent implements OnInit, AfterViewInit {
         this.createMap();
       })
     }
-    console.log("overlaysPanels: ", this.overlayPanels);
-    
   }
 
   openOverlay(event: any, id:string){
@@ -154,7 +153,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     if(!event.viewed){
       event.viewed = true;
       this.markAsRead(event.evento_id);
-      this.mapItem.configuration!.nEvents = this.mapItem.configuration!.events?.filter(ev => ev.viewed == false).length;
+      this.mapItem.minimapConf!.nEvents = this.mapItem.minimapConf!.events?.filter(ev => ev.viewed == false).length;
     }
 
     let eventClass:any = this.minimapService.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
@@ -184,7 +183,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
 
   deleteMap(){
     //Eliminamos la instancia en minimap service
-    this.minimapService.maps = this.minimapService.maps.filter(map => map.id !== this.mapItem.id);
+    this.minimapService.maps = this.minimapService.maps.filter(map => map.containerId !== this.mapItem.containerId);
     this.onDelete.emit(this.idContainer);
     setTimeout(() => {
       this.minimapService.resizeMaps();
@@ -197,8 +196,8 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     const mapContainer = document.getElementById(containerId);
     console.log("no llego aca", mapContainer);
     if (mapContainer) {
-      this.mapItem = new Map(this.miniMap.id_container!);
-      this.mapItem.createMap(containerId,this.miniMap as MinimapContent);
+      this.mapItem = new MiniMap(this.miniMap as MinimapContent);
+      this.mapItem.createMap();
       this.setLayers();
       this.loadMinimapService();
       //this.minimapService.addMap(this.mapItem);
@@ -333,7 +332,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     this.minimapService.addMap(this.mapItem);
     this.mapItem.map!.on('moveend', (ev) => {
       var lvlzoom = this.mapItem.map!.getZoom();
-      console.log("sobre Mapa: ", this.mapItem.id);
+      console.log("sobre Mapa: ", this.mapItem.containerId);
       console.log("Zoom level: ", lvlzoom);
       var nivel = 1000; // todo
       var ccont = 0;

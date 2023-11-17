@@ -1,23 +1,41 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng-lts/api';
+import { EventPopupComponent } from 'src/app/events/components/event-popup/event-popup.component';
+import { EventSocketService } from 'src/app/events/services/event-socket.service';
+import { PopupContent } from 'src/app/multiview/models/interfaces';
+import { LayersService } from 'src/app/multiview/services/layers.service';
 import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
+import { CarouselComponent } from 'src/app/shared/components/carousel/carousel.component';
+import { CarouselService } from 'src/app/shared/services/carousel.service';
 
 @Component({
   selector: 'app-footbar',
   templateUrl: './footbar.component.html',
-  styleUrls: ['./footbar.component.scss']
+  styleUrls: ['./footbar.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FootbarComponent implements OnInit {
 
   itemsMenu: MenuItem[]=[];
   showScreenRecorder = false;
   showCipiaExample = false;
+  showPopupDialog = true;
 
   @ViewChild('MapView') mapView!: ElementRef;
+  @ViewChild('carousel') carousel!: CarouselComponent;
 
-  constructor(private multimediaService: MultimediaService) { }
+  slideConfig = {"slidesToShow": 4, "slidesToScroll": 1};
+
+  constructor(
+    private multimediaService: MultimediaService,
+    private layersService: LayersService,
+    private eventSocketService: EventSocketService,
+    private carouselService: CarouselService,
+    private changeDetector: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
+    this.layersService.initializeServices();
     this.itemsMenu = [
       {
         id: '1',
@@ -45,10 +63,31 @@ export class FootbarComponent implements OnInit {
         },
       }
     ];
+    this.eventSocketService.eventPopup.subscribe(data => {
+      this.onEvent(data);
+    });
+    
   }
 
   closeScreenRecorder(){
     this.showScreenRecorder = false;
   }
 
+  onEvent(event:any){
+    const auxEvent = {
+      id: Date.now().toString(),
+      vehicles: [event.tracker],
+      event: event.event,
+      mapConf: { containerId: "popup-container-" + event.event.evento_id.toString() + Date.now(), maxZoom: 17, zoom: 17}
+    }
+    this.carouselService.add(EventPopupComponent,{configuration: auxEvent})
+  }
+
+  clearPopups(){
+    this.carousel.clearPopups();
+  }
+
+  trackByFn(index: number, item: any): any {
+    return item.id; 
+  }
 }

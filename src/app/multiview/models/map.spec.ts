@@ -1,4 +1,4 @@
-import { Map } from './map';
+import { Map } from './mini-map';
 
 describe('Map', () => {
   it('should create an instance', () => {

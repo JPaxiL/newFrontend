@@ -7,7 +7,6 @@ import { ToastrModule } from 'ngx-toastr';
 import {AuthInterceptor} from './vehicles/services/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
 import { TreeTableModule } from 'primeng-lts/treetable';
@@ -36,8 +35,12 @@ import { TagModule } from 'primeng-lts/tag';
 import { TooltipModule } from 'primeng-lts/tooltip';
 import {SlideMenuModule} from 'primeng-lts/slidemenu';
 import {SidebarModule} from 'primeng-lts/sidebar';
+import {ScrollPanelModule} from 'primeng-lts/scrollpanel';
+import {GalleriaModule} from 'primeng-lts/galleria';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
+import {CarouselModule} from 'primeng-lts/carousel';
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
@@ -140,6 +143,8 @@ import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.direc
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 import { CipiaComponent } from './cipia/cipia.component';
 import { FootbarComponent } from './panel/components/footbar/footbar.component';
+import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
+import { CarouselComponent } from './shared/components/carousel/carousel.component';
 import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 
 @NgModule({
@@ -228,6 +233,8 @@ import { DriversHistoryComponent } from './drivers/components/drivers-history/dr
     ScreenRecorderComponent,
     CipiaComponent,
     FootbarComponent,
+    EventPopupComponent,
+    CarouselComponent,
     DriversHistoryComponent
   ],
   imports: [
@@ -239,10 +246,10 @@ import { DriversHistoryComponent } from './drivers/components/drivers-history/dr
       maxOpened: 4,
       autoDismiss: true,
     }),
+    RouterModule, 
     BrowserModule,
     DataTablesModule,
     CommonModule,
-    BrowserModule,
     NgxSpinnerModule,
     NgxsModule.forRoot([AuthState]),
     AlertModule,
@@ -251,14 +258,15 @@ import { DriversHistoryComponent } from './drivers/components/drivers-history/dr
     FormsModule,
     ReactiveFormsModule,
     PanelModule,
-    NgbModule,
     NgSelectModule,
     TreeTableModule,
     DropdownModule,
     DialogModule,
+    ScrollPanelModule,
     InputTextModule,
     InputSwitchModule,
     TableModule,
+    NgbModule,
     SliderModule,
     ToggleButtonModule,
     InputNumberModule,
@@ -276,9 +284,11 @@ import { DriversHistoryComponent } from './drivers/components/drivers-history/dr
     MultiSelectModule,
     CalendarModule,
     SlideMenuModule,
+    GalleriaModule,
     LeafletModule,
     LeafletMarkerClusterModule,
     SidebarModule,
+    CarouselModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

@@ -362,24 +362,6 @@ export class MapService {
   // }
   monitor(data: any, map: any): void{
     if(this.vehicleService.statusDataVehicle){
-      // //console.log(data);
-      /*
-      data = {
-        Altitud:
-        Angulo:
-        IMEI:
-        Latitud: ok
-        Longitud: ok
-        Parametros:
-        Velocidad:
-        eventos: ""
-        fecha_server:
-        fecha_tracker:
-        record:
-        "señal_gps": 5
-        "señal_gsm": 5
-      }
-      */
       const vehicles = this.vehicleService.vehicles;
       const vehiclestree = this.vehicleService.vehiclesTree;
       // //console.log("vehicles socket",vehicles);
