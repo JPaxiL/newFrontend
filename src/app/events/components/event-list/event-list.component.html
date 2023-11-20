@@ -1,7 +1,27 @@
 <div class="table-content-component-panel-monitoreo" style="position: relative;">
 
   <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingEventList" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" #loadingSpinner> Cargando Eventos... </p></ngx-spinner>
-
+  <div *ngIf="eventService.eventDeveloperStatus">
+    <div class="">
+      <label>Debug Servicio Event</label>
+    </div>
+    <div class="">
+      <label for="">imei de unidad:</label>
+      <input [(ngModel)]="imei_debug" type="text" name="" value="864200050708453">
+    </div>
+    <div class="">
+      <button type="button" name="button">Terminar Debug</button>
+      <button (click)="clickDatosDebug()"  type="button" name="button">Ver datos IMEI</button>
+      <button (click)="clickEndDeveloper()" type="button" name="button">Terminar modo Desarrolador</button>
+    </div>
+    <div class="">
+      <ul>
+        <li *ngFor="let debug of data_debug">
+          {{debug}}
+        </li>
+      </ul>
+    </div>
+  </div>
   <div class="card-body p-fluid" id="rowBusqueda">
     <div class="row">
       <div class="col-sm-6">
@@ -31,7 +51,7 @@
     <table id="tbl_events">
       <thead class="visible-on-scroll">
         <tr>
-          <th>Evento</th>
+          <th (click)="clickEventPanel()" >Evento</th>
           <th>Nombre</th>
           <th>Placa</th>
           <th>Fecha</th>

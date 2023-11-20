@@ -28,6 +28,9 @@ export class EventListComponent implements OnInit {
   public events:any[] = [];
   public placa:string = '';
 
+  public imei_debug: string ='864200050708453';
+  public data_debug: any = ['-','-','-','-']
+
   constructor(
     public eventService: EventService,
     public mapService: MapServicesService,
@@ -79,11 +82,33 @@ export class EventListComponent implements OnInit {
       this.spinner.show('loadingEventList');
     }
     this.loadFilterData();
+    
+    this.eventService.debugEventStream.subscribe(res=>{
+      // console.log("desde event list ",res);
+      this.data_debug = res.data;
+    });
   }
 
   ngOnDestroy(){
     if(this.eventService.activeEvent){
       this.hideEvent(this.eventService.activeEvent);
+    }
+  }
+  clickDatosDebug(): void{
+    this.ess.debug(this.imei_debug);
+  }
+  clickEndDeveloper(): void{
+    this.eventService.eventDeveloperStatus = false;
+    this.eventService.eventDeveloperCount = 0;
+    this.data_debug = ['-','-','-','-'];
+  }
+  clickEventPanel(): void {
+    console.log(this.eventService.eventDeveloperStatus);
+    if(this.eventService.eventDeveloperCount > 5){
+      this.eventService.eventDeveloperStatus = true;
+      console.log("eres desarrollador ...",this.eventService.eventDeveloperStatus);
+    }else{
+      this.eventService.eventDeveloperCount++;
     }
   }
 

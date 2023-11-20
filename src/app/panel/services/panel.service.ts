@@ -36,7 +36,6 @@ export class PanelService {
   nombreComponente: string = '';
   nombreCabecera: string = '';
   clasePanelActivo: string = '';
-  count: number = 0;
 
   userData: any; //Informacion del usuario
 

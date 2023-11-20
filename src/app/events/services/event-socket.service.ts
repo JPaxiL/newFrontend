@@ -19,6 +19,7 @@ export class EventSocketService extends Socket {
   img_iconAnchor: any;
   count: string = '0';
   user_id: any;
+  data_debug!: any;
 
   private sendEventSuject = new Subject<any>();
   public sendEventObservable = this.sendEventSuject.asObservable();
@@ -35,16 +36,35 @@ export class EventSocketService extends Socket {
       // }
     });
 
+    // this.ioSocket.on('res', (info: any) => {
+    //   console.log("info XD");
+    //   // console.log("res ....",info);
+    // });
+
     this.user_id = localStorage.getItem('user_id');
 
     //console.log('Panel notif first key on service', this.eventService.panelNotifKey);
   }
+  public debug(imei: string) {
+    // console.log("desde event socket | debug imei:",imei);
+    let data = {
+      imei: imei
+    };
+    this.ioSocket.emit('status-imei',data);
 
+  }
   public listen() {
+    console.log("listen ...");
+
     this.AlertService.getAll();
     console.log('Is Listening', this.vehicleService.vehicles);
     //console.log(this.user_id);
     // this.filterImei(this.vehicleService.vehicles);
+    this.ioSocket.on('res', (info: any) => {
+      console.log("res",info);
+      // this.data_debug = info.data;
+      this.eventService.debugEventStream.emit(info);
+    });
     this.ioSocket.on('events', (event: any, users: any) => {
       // console.log("users",users); // filtrar por usuario cuando este listo el modulo
       // console.log("recibiendo evento........",this.vehicleService.vehicles);

@@ -68,14 +68,6 @@ export class PanelMonitoreoComponent implements OnInit {
     this.panelService.nombreComponente = '';
   }
 
-  clickEventPanel(): void {
-    if(this.panelService.count > 5){
-      console.log("eres desarrollador ...");
-    }else{
-      this.panelService.count++;
-    }
-  }
-
   hasHeader(){
     switch(this.panelService.nombreComponente){
       case "VEHICLES":
