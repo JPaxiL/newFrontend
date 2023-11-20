@@ -136,6 +136,16 @@ event-list.component.ts:130 despues de procesar parametros  object
 
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
+
+    // caso contrario ejecuto la via normal
+    event.layer.bindPopup(getContentPopup(event), {
+      className: eventClass,
+      minWidth: 250,
+      maxWidth: 350,
+    });
+    this.eventService.activeEvent = event;
+    event.layer.addTo(this.mapService.map).openPopup();
+    
     //si el evento es de cipia y tiene video(s)
     if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
       // obtengo la url del video o imagen
@@ -151,14 +161,7 @@ event-list.component.ts:130 despues de procesar parametros  object
         event.layer.addTo(this.mapService.map).openPopup();
       });
     }else{
-      // caso contrario ejecuto la via normal
-      event.layer.bindPopup(getContentPopup(event), {
-        className: eventClass,
-        minWidth: 250,
-        maxWidth: 350,
-      });
-      this.eventService.activeEvent = event;
-      event.layer.addTo(this.mapService.map).openPopup();
+      
     }
   }
 
