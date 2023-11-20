@@ -109,7 +109,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   selectedEvents: any = [];
   chkAllEvents: boolean = false;
   chkMostrarRuta: boolean = false;
-
+  typeEvents :any = [];
    eventList = [
     {
       label: 'Evento GPS',
@@ -361,6 +361,87 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     //   $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
 
     // });
+
+    console.log('TESTING OPEN HISTORY');
+    let status_event = false;
+    let map: any=[];
+
+    this.EventService.getEventName().subscribe(data => {
+      console.log(data.data.event_id); // Aquí deberías ver los valores reales devueltos por el Observable
+      for (let event of data.data) {
+        status_event= false;
+        event.event_type = this.changeNameEvent(event.event_type);
+        // if(this.typeEvents.includes(event.event_type)){
+        // }else{
+        //   this.typeEvents.push(event.event_type);
+        //   status_event= true;
+        // }
+        // if (status_event){
+        //   map.push(
+        //     {
+        //       label: event.event_type,
+        //       items: [
+        //         {
+        //           name: event.name_event,
+        //           value: event.event_id,
+        //         }
+        //       ]
+        //     }
+        //   )
+        // }else{
+        //   const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_type);
+        //   // El tipo de evento ya existe en el mapa
+        //   existingTypeEvent.items.push({
+        //     name: event.name_event,
+        //     value: event.id_event
+        //   });
+        // }
+        const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_type);
+
+        if (existingTypeEvent) {
+          // El tipo de evento ya existe en el mapa
+          const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.event_id);
+
+          if (!existingEvent) {
+            // El id_event no existe para este tipo de evento, lo agregamos
+            existingTypeEvent.items.push({
+              name: event.name_event,
+              value: event.event_id
+            });
+          }
+        } else {
+          // El tipo de evento no existe en el mapa, lo añadimos
+          map.push({
+            label: event.event_type,
+            items: [
+              {
+                name: event.name_event,
+                value: event.event_id,
+              }
+            ]
+          });
+        }
+
+      }
+    });
+    // LIMPIAMOS EVENTOS LIST
+    this.eventList = [];
+    this.eventList = map;
+    
+    console.log(this.eventList,map);
+    
+  }
+
+  changeNameEvent (name:string){
+    if (name == 'gps'){
+      return 'EVENTOS GPS';
+    }else if(name == 'platform'){
+      return 'EVENTOS PLATAFORMA';
+    }else if (name == 'accessories'){
+      return 'EVENTOS DE SEGURIDAD VEHICULAR'
+    }else {
+      return 'EVENTOS '+name.toUpperCase();
+    }
   }
 
   ngOnDestroy(){
