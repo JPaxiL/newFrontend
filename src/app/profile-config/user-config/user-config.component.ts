@@ -14,11 +14,11 @@ import Swal from 'sweetalert2';
 export class UserConfigComponent implements OnInit {
   @Output() submit = new EventEmitter<string>();
   @Output() eventDisplay = new EventEmitter<boolean>();
-
   @Output() colorSelected = new EventEmitter<string>();
-    selectedColor: string = ''; // Color initial
-    vehiculoColor = 'blue'; // Cambia este valor según la preferencia del usuario  
-  
+  selectedColor: string = ''; // Color initial
+  vehiculoColor = 'blue'; // Cambia este valor según la preferencia del usuario  
+  form :any = {};
+
   
   perfileConfigForm = new FormGroup({
     actual_pass: new FormControl('', Validators.required),
@@ -151,6 +151,10 @@ export class UserConfigComponent implements OnInit {
   onColorSelected(color: string): void {
     // Aquí, enviarlo al servidor.
   }
+
+  changeGeoColor(id:number) {
+  }
+
   onClickCancel(){
     this.eventDisplay.emit(false);
   }
