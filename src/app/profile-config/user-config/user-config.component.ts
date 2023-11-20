@@ -15,13 +15,21 @@ export class UserConfigComponent implements OnInit {
   @Output() submit = new EventEmitter<string>();
   @Output() eventDisplay = new EventEmitter<boolean>();
 
-
+  @Output() colorSelected = new EventEmitter<string>();
+    selectedColor: string = ''; // Color initial
+    vehiculoColor = 'blue'; // Cambia este valor según la preferencia del usuario  
+  
+  
   perfileConfigForm = new FormGroup({
     actual_pass: new FormControl('', Validators.required),
     new_pass_1: new FormControl('', Validators.required),
     new_pass_2: new FormControl('', Validators.required),
   });
   
+  onColorChange() {
+    //this.userDataService.changeColor(this.selectedColor);
+    
+  }
   pngNewPass: string = '';
   pngNewPassR: string = '';
   usersForm!: FormGroup;
@@ -75,6 +83,7 @@ export class UserConfigComponent implements OnInit {
     this.usersForm = this.initForm();
     this.usersForm.value.type_follow= 'point';
 
+    document.documentElement.style.setProperty('--vehiculo-color', this.vehiculoColor);
   }
 
   initForm(): FormGroup{

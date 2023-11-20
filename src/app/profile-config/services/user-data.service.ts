@@ -40,4 +40,8 @@ export class UserDataService {
         console.log('No se pudo obtener datos del usuario', errorMsg);
       }});
   }
+
+  changeColor(){
+    
+  }
 }
