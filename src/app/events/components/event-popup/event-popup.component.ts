@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, AfterViewInit, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { param } from 'jquery';
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
@@ -11,8 +10,7 @@ import { CircularGeofencesMinimapService } from 'src/app/multiview/services/circ
 import { GeofencesMinimapService } from 'src/app/multiview/services/geofences-minimap.service';
 import { GeopointsMinimapService } from 'src/app/multiview/services/geopoints-minimap.service';
 import { LayersService } from 'src/app/multiview/services/layers.service';
-import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
-import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
+import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
 import { PopupMap } from '../../models/popup-map';
 import { EventService } from '../../services/event.service';
 
@@ -25,11 +23,10 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
   @Input() configuration!: PopupContent;
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
 
-  @ViewChild('multimedia_wrapper') multimediaWrapper!:ElementRef;
   mapItem!: PopupMap;
   mapLayers: L.LayerGroup[] = [];
 
-  
+  @ViewChild('appSlider') appSlider!: SliderMultimediaComponent;
   responsiveOptions:any[] = [
       {
         breakpoint: '1024px',
@@ -45,34 +42,7 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
       }
     ];
     
-    icons_available = ["alcoholemia",
-    "anticolision-frontal",
-    "bloqueo-vision-mobileye",
-    "colision-peatones",
-    "desvio-de-carril-derecha",
-    "desvio-de-carril-izquierda",
-    "exceso-velocidad",
-    "fatiga-extrema",
-    "no-rostro"
-  ]
-  
-  // -------- cipia multimedia
   has_multimedia = false;
-  displayMultimedia = false;
-  multimedias: any[] = [];
-  get activeIndex(): number {
-    return this._activeIndex;
-  }
-
-  set activeIndex(newValue) {
-      if (this.multimedias && 1 <= newValue && newValue <= (this.multimedias.length)) {
-          this._activeIndex = newValue;
-      }
-  }
-
-  _activeIndex: number = 1;
-
-  // -------- end  cipia multimedia
 
   constructor(
     public layersService: LayersService,
@@ -80,9 +50,7 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
     public circularGeofences: CircularGeofencesMinimapService,
     public geopointsService: GeopointsMinimapService,
     public eventService: EventService,
-    public mapService: MapServicesService,
-    private multimediaService: MultimediaService,
-    private sanitizer: DomSanitizer
+    public mapService: MapServicesService
   ) {
    
   }
@@ -94,8 +62,7 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
     })
     this.configuration.event.parametros = this.paramsToObject(this.configuration.event.parametros);
     console.log("CONFIGURATION############", this.configuration);
-    this.checkCipiaMultimedia(this.configuration.event.parametros,this.configuration.event.imei);
-    console.log("MULTIMEDIAS======= ",this.multimedias);
+    this.has_multimedia = this.configuration.event.parametros && (this.configuration.event.parametros.has_video == "1" || this.configuration.event.parametros.has_image == "1")
   }
 
   ngOnDestroy() {
@@ -107,7 +74,6 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.createMap();
-    this.loadMedia();
   }
 
   createMap() {
@@ -200,13 +166,7 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
     window.open(urlGS, '_blank');
   }
 
-  showMultimedia(){
-    console.log("Mostrando multimedia:");
-    this.displayMultimedia = !this.displayMultimedia;
-    if(this.displayMultimedia){
-      this.loadMedia();
-    }
-  }
+  
 
   paramsToObject(params:string):any{
     const objParams:any = {};
@@ -217,17 +177,7 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
     return objParams;
   }
 
-  prev(){
-    this.activeIndex++;
-    console.log(this.multimediaWrapper.nativeElement);
-    this.loadMedia();
-  }
-
-  next(){
-    this.activeIndex--;
-    console.log(this.multimediaWrapper.nativeElement);
-    this.loadMedia();
-  }
+  
   async showEvent(event:any){
     if(this.eventService.activeEvent) {
       console.log("hide event");
@@ -260,29 +210,13 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
 
     this.eventService.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
     //si el evento es de cipia y tiene video(s)
-    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
-      // obtengo la url del video o imagen
-      this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
-        // Añado la url del video/imagen como atributo del evento
-        event.videoUrl = this.sanitizer.bypassSecurityTrustUrl(data) as SafeUrl;
-        event.layer.bindPopup(this.eventService.getContentPopup(event), {
-          className: eventClass,
-          minWidth: 250,
-          maxWidth: 350,
-        });
-        this.eventService.activeEvent = event;
-        event.layer.addTo(this.eventService.mapService.map).openPopup();
-      });
-    }else{
-      // caso contrario ejecuto la via normal
-      event.layer.bindPopup(this.eventService.getContentPopup(event), {
-        className: eventClass,
-        minWidth: 250,
-        maxWidth: 350,
-      });
-      this.eventService.activeEvent = event;
-      event.layer.addTo(this.eventService.mapService.map).openPopup();
-    }
+    event.layer.bindPopup(this.eventService.getContentPopup(event), {
+      className: eventClass,
+      minWidth: 250,
+      maxWidth: 350,
+    });
+    this.eventService.activeEvent = event;
+    event.layer.addTo(this.eventService.mapService.map).openPopup();
   }
 
   private hideEvent(event:any){
@@ -290,37 +224,10 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
     this.eventService.activeEvent = false;
   }
 
-  checkCipiaMultimedia(params: any, imei:string){
-    if(params["gps"] && params["gps"]=="cipia" && (params["has_video"]=="1" || params["has_image"] == "1")){
-      this.has_multimedia = true
-      if(params["has_video"]=="1"){
-        if(params["cabin_video"] == "1"){
-          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"CABIN"}, url:""})
-        }
-        if(params["road_video"] == "1"){
-          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"ROAD"}, url:""})
-        }
-      }
-      if(params["has_image"]=="1"){
-        if(params["cabin_image"] == "1"){
-          this.multimedias.push({type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"CABIN"}, url:""})
-        }
-        if(params["road_image"] == "1"){
-          this.multimedias.push({type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"ROAD"}, url:""})
-        }
-      }
-    }
+  showMultimedia(){
+    console.log("Mostrando multimedia:");
+    this.appSlider.changeShowMultimedia();
   }
 
-  async loadMedia():Promise<void>{
-    const media = this.multimedias[this.activeIndex-1];
-    console.log("LOAAD PARAMSSSS: --------> ", media,this.activeIndex);
-    if(this.multimedias[this.activeIndex-1].url.length == 0){
-      const url = await this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source).toPromise();
-      if(url){
-        this.multimedias[this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
-        console.log("nueva url: ",this.multimedias[this.activeIndex-1].url);
-      }
-    }
-  }
+  
 }
