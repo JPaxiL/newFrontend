@@ -146,6 +146,7 @@ import { FootbarComponent } from './panel/components/footbar/footbar.component';
 import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
 import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
+import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
 
 @NgModule({
   declarations: [
@@ -235,7 +236,8 @@ import { DriversHistoryComponent } from './drivers/components/drivers-history/dr
     FootbarComponent,
     EventPopupComponent,
     CarouselComponent,
-    DriversHistoryComponent
+    DriversHistoryComponent,
+    SliderMultimediaComponent
   ],
   imports: [
     ToastrModule.forRoot({
