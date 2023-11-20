@@ -103,6 +103,7 @@ export class GpsAlertsCreateComponent implements OnInit {
 
     this.loadingAlertDropdownReady = true;
     this.hideLoadingSpinner();
+    console.log("alertas cargadas",this.events);
   }
 
   setDataVehicles() {
@@ -238,9 +239,11 @@ export class GpsAlertsCreateComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           const res = await this.AlertService.create(this.alertForm.value);
+          console.log("res",res);
           this.clickShowPanel('ALERTS-GPS');
         },
       }).then((data) => {
+        console.log("data de retorno",data);
         if (data.isConfirmed) {
           Swal.fire(
             'Datos guardados',

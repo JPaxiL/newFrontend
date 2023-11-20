@@ -36,7 +36,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
   overlay = false;
   loadingEventSelectInput: boolean = true;
   audio = new Audio();
-  
+
 
   booleanOptions = [
     { label: 'Sí', value: true },
@@ -131,7 +131,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.alertService.getEventsByType('Accesorios');
+    this.events = await this.alertService.getEventsByType('accessories');
     this.alertForm.patchValue({
       tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
     });
