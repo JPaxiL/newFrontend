@@ -1,10 +1,10 @@
 import { Component, Output, EventEmitter, OnInit, NgModule } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PanelService } from 'src/app/panel/services/panel.service';
-import { UserDataService } from '../services/user-data.service';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 @Component({
   selector: 'app-user-config',
@@ -14,10 +14,10 @@ import Swal from 'sweetalert2';
 export class UserConfigComponent implements OnInit {
   @Output() submit = new EventEmitter<string>();
   @Output() eventDisplay = new EventEmitter<boolean>();
+
   @Output() colorSelected = new EventEmitter<string>();
-  selectedColor: string = ''; // Color initial
-  vehiculoColor = 'blue'; // Cambia este valor según la preferencia del usuario  
-  form :any = {};
+    selectedColor: string = ''; // Color initial
+    vehiculoColor = 'blue'; // Cambia este valor según la preferencia del usuario  
 
   
   perfileConfigForm = new FormGroup({
@@ -34,9 +34,10 @@ export class UserConfigComponent implements OnInit {
   pngNewPassR: string = '';
   usersForm!: FormGroup;
   indGalon: any;
+  form :any = {};
 
   isUnderConstruction: boolean = true;
-  switchPoint: boolean = true;
+  switchPoint: boolean = false;
   switchCircle: boolean = false;
   switchMobile: boolean = false;
   selectedType: any = {};
@@ -61,7 +62,8 @@ export class UserConfigComponent implements OnInit {
     { id: 1, name: 'Flecha de dirección' },
     { id: 2, name: 'Cola de dirección' },
   ];
-
+  typeVehiclesList:any = {};
+  userTypeVehicleConfig: any = {};
   constructor(       
     private fb: FormBuilder,
     private userDataService: UserDataService,
@@ -80,18 +82,26 @@ export class UserConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.userDataService.userData);
     this.usersForm = this.initForm();
     this.usersForm.value.type_follow= 'point';
-
+    this.typeVehiclesList = this.userDataService.typeVehicles;
+    console.log(this.userDataService.typeVehicles);
     document.documentElement.style.setProperty('--vehiculo-color', this.vehiculoColor);
+    this.typeVehiclesList.forEach((item: { id: any; }, index: string) => {
+      this.usersForm.addControl('id' + index, this.fb.control(item.id));
+      this.usersForm.addControl('var_color' + index, this.fb.control(''));
+      this.usersForm.addControl('var_galon' + index, this.fb.control(''));
+    });
   }
 
   initForm(): FormGroup{
     return this.fb.group({
       password: [''],
-      type_vehicle: [''],
-      type_follow:[''],
-      indGalon: [''] ,
+      passwordRepeat: [''],
+      bol_ondas: [''],
+      bol_cursor:[''],
+      bol_vehicle:[''],
     })
   }
 
@@ -147,14 +157,12 @@ export class UserConfigComponent implements OnInit {
   clickShowPanel(){
 
   }
+  changeGeoColor(id:number) {
+  }
 
   onColorSelected(color: string): void {
     // Aquí, enviarlo al servidor.
   }
-
-  changeGeoColor(id:number) {
-  }
-
   onClickCancel(){
     this.eventDisplay.emit(false);
   }

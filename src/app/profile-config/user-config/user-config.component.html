@@ -56,49 +56,43 @@
                             <label>REPITE LA NUEVA CONTRASEÑA:</label>
                         </div>
                         <div class="col-12">
-                            <input type="text" pInputText [(ngModel)]="pngNewPassR"/>
+                            <input type="text" pInputText formControlName="passwordRepeat" [(ngModel)]="pngNewPassR"/>
                         </div>
                     </div>
-                    <div class="row gl-row-underline">
-                        <div class="col-7 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <label for="tipo-unidad">Tipo de Unidad :</label>
-                        </div>
-                        <div class="col-7">
-                            <p-dropdown inputId="tipo-unidad" [options]="types" formControlName="type_vehicle" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'" (onChange)="updateIconsDropdown()" placeholder="Selecciona un tipo de unidad">
-                                <ng-template pTemplate="selectedItem">
-                                <div class="type-item type-item-value" *ngIf="selectedType">
-                                    <div>{{selectedType.name}}</div>
-                                </div>
-                                </ng-template>
-                                <ng-template let-type pTemplate="item">
-                                <div class="type-item">
-                                    <div>{{type.name}}</div>
-                                </div>
-                                </ng-template>
-                            </p-dropdown>
-                        </div>
+                    <div class="panel-izq-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tipo de vehiculo</th>
+                                    <th>Color</th>
+                                    <th>Cap combustible</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor=" let item of typeVehiclesList; let i=index">
+                                    <tr>
+                                        <td>
+                                            <span class="d-flex text-start">{{item.var_nombre}}</span>
+                                            <input type="hidden" formControlName="'id' + i" value="{{item.id}}">
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-12 d-flex">
+                                                  <input formControlName="'var_color' + i" type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" id="text_color_picker" title="Elige un color" [(ngModel)]="form.tag_name_color">
+                                                  <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="text_color_picker">
+                                                    <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
+                                                  </label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" formControlName="'var_galon'+ i">
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="gl-row-underline">
-                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <label for="color">Color del ícono del vehículo:</label>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 d-flex">
-                              <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" id="color_picker" title="Elige un color">
-                              <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="color_picker">
-                                <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
-                              </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="gl-row-underline">
-                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <label>Calculador de combustible:</label>
-                        </div>
-                        <div class="col-12">
-                            <input type="text" formControlName="indGalon" text="galones aproximados"/>
-                        </div>
-                    </div>               
                     <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
                         <div class="col-12">
                             <label>Habilitar item en los vehículos según su estado:</label>
@@ -109,7 +103,7 @@
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input type="checkbox" [(ngModel)]="switchCircle" (change)="switchActive(1)" >
+                                    <input formControlName="bol_ondas" type="checkbox" [(ngModel)]="switchCircle" (change)="switchActive(1)" >
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -120,7 +114,7 @@
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input type="checkbox" [(ngModel)]="switchPoint" (change)="switchActive(2)">
+                                    <input formControlName="bol_cursor" type="checkbox" [(ngModel)]="switchPoint" (change)="switchActive(2)">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -131,7 +125,7 @@
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input type="checkbox" [(ngModel)]="switchMobile" (change)="switchActive(3)">
+                                    <input formControlName="bol_vehicle" type="checkbox" [(ngModel)]="switchMobile" (change)="switchActive(3)">
                                     <span class="slider"></span>
                                 </label>
                             </div>
