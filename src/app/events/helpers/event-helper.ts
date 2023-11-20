@@ -10,6 +10,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         referencia: event.referencia,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
@@ -25,6 +27,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         velocidad: event.velocidad,
         referencia: event.referencia,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
@@ -41,6 +45,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         velocidad: event.velocidad,
         tiempo_estadia: event.tiempo_limite,
         referencia: event.referencia,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
@@ -56,6 +62,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         longitud: event.longitud,
         tiempo_tolerancia: event.tiempo_limite,
         referencia: event.referencia,
+        videoUrl: event.videoUrl??'',
+        parametros: event.parametros,
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
@@ -845,8 +853,8 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           ${(typeof event_content.fecha_tracker !== 'undefined') ? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>` : ''}
         </tbody>
       </table>
-      ${(event_content.parametros && event_content.parametros.gps == "cipia" && event_content.parametros.has_video != "0") ?
-        '<div id="multimedia-'+event_content.parametros.eventId+'"></div>':''
+      ${(event_content.parametros && event_content.parametros.gps == "cipia") ?
+        '<div class="multimedia-slider" id="multimedia-'+event_content.parametros.eventId+'"></div>':''
       }
     </div>`;
 }

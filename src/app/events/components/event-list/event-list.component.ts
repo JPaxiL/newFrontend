@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
@@ -10,6 +10,8 @@ import { PanelService } from 'src/app/panel/services/panel.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
+import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
+import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 
 @Component({
   selector: 'app-event-list',
@@ -34,7 +36,9 @@ export class EventListComponent implements OnInit {
     public ess:EventSocketService,
     private spinner: NgxSpinnerService,
     private http:HttpClient,
-    private multimediaService:MultimediaService
+    private resolver: ComponentFactoryResolver, 
+    private container: ViewContainerRef,
+    private vehicleService: VehicleService
     ) {
       // this.tipoEvento = [
       //   { id: 0, option: 'Todos los Eventos', tipo: '' },
@@ -131,7 +135,6 @@ event-list.component.ts:130 despues de procesar parametros  object
       });
       //reemplazo el atributo parametros (string) con el objeto
       event.parametros = objParams;
-      // console.log("despues de procesar parametros ",typeof(event.parametros));
     }
 
 
@@ -147,22 +150,36 @@ event-list.component.ts:130 despues de procesar parametros  object
     event.layer.addTo(this.mapService.map).openPopup();
     
     //si el evento es de cipia y tiene video(s)
+    console.log("event.parametros: ",event.parametros);
+    
     if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
-      // obtengo la url del video o imagen
-      this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
-        // Añado la url del video/imagen como atributo del evento
-        event.videoUrl = data;
-        event.layer.bindPopup(getContentPopup(event), {
-          className: eventClass,
-          minWidth: 250,
-          maxWidth: 350,
-        });
-        this.eventService.activeEvent = event;
-        event.layer.addTo(this.mapService.map).openPopup();
-      });
-    }else{
-      
+      this.addMultimediaComponent(event);
     }
+  }
+
+  addMultimediaComponent(event:any){
+    console.log("adding multimedia: ", event);
+    
+    const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
+    const componentRef: ComponentRef<any> = this.container.createComponent(factory);
+    const params:any = {
+      'event': event, 
+      'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+      'showMultimediaFirst': true,
+      'hasMultimedia':true,
+      'showTitle':false
+    };
+    // Asignar datos al componente si existen
+    
+    Object.keys(
+      params
+    ).forEach((key) => {
+      componentRef.instance[key] = params[key];
+    });
+    // Agregar el componente directamente al contenedor del popup
+    const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
+    
+    divContainer.appendChild(componentRef.location.nativeElement);
   }
 
   public hideEvent(event:any){
