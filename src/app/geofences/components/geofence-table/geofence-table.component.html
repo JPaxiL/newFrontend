@@ -12,9 +12,61 @@
       <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickImportGeocerca()" title="Importar o exportar">
         <i class="fas fa-file-import" aria-hidden="true"></i>
       </button>
-      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
+      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
+      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
+        <button class="btn-gl-gray-blue btn-dark-hover btn-circle" ngbDropdownToggle>
+          <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
+        </button>
+        <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior">
+          <div class="text-center">
+            Filtrar vista
+          </div>
+          <!-- <div class="container pt-2 png-checkbox-container">
+            <div>
+              <span (click)="filtres('eye')">
+                <p-checkbox [(ngModel)]="setting['eye']" [binary]="true"></p-checkbox>
+                Vista general
+              </span>
+            </div>
+            <div>
+              <label>
+                <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
+                Ícono de Vehículo
+              </label>
+            </div>
+            <div>
+              <span (click)="filtres('imei')">
+                <p-checkbox [(ngModel)]="setting['imei']" [binary]="true"></p-checkbox>
+                operaciones
+              </span>
+            </div>
+            <div>
+              <span (click)="filtres('vehicle')">
+                <p-checkbox [(ngModel)]="setting['vehicle']" [binary]="true"></p-checkbox>
+                Vehículos
+              </span>
+            </div>
+            <div class="dropdown-divider"></div>
+          </div> -->
+
+          <!-- <div class="dropdown-item active-view" style="padding: 0.125rem 0.75rem;"> -->
+          <div class="dropdown-item active" style="padding: 0.125rem 0.75rem;">
+            <i  class="fas fa-sitemap ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <span (click)="filtre()">Vista por Operaciones</span>
+          </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <i class="fas fa-list ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <span (click)="filtre()">Vista General</span>
+          </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <i class="fas fa-signal ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <span (click)="filtre()">Vista por etiquetas</span>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
   <div class="">
@@ -184,7 +236,7 @@
         <tr *ngIf="rowData['col']!=3">
           <td></td>
           <td class="eye-column">
-            <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShowGeoAll(rowData['id'], rowData['type'])">
+            <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShowGeo(rowData['id'], rowData['type'])">
               <i [ngClass]="{'fas fa-eye': rowData ['zone_visible'] === 'true', 'far fa-eye-slash' : rowData['zone_visible'] === 'false'}"></i>
             </button>
           </td>

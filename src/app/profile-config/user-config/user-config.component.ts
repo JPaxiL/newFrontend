@@ -25,18 +25,15 @@ export class UserConfigComponent implements OnInit {
   pngNewPass: string = '';
   pngNewPassR: string = '';
   usersForm!: FormGroup;
+  indGalon: any;
 
   isUnderConstruction: boolean = true;
   switchPoint: boolean = true;
   switchCircle: boolean = false;
   switchMobile: boolean = false;
-
   selectedType: any = {};
-
   loading : boolean = false;
-
   activeSwitch: number = 0;
-
   mostrarDirVehicle: number = 0;
   mostrarIcono: number = 0;
   sizeIcono: number = 2;
@@ -59,6 +56,7 @@ export class UserConfigComponent implements OnInit {
 
   constructor(       
     private fb: FormBuilder,
+    private userDataService: UserDataService,
     public panelService: FormBuilder) {
       this.perfileConfigForm = this.panelService.group({
         color: ['#RRGGBB']
@@ -68,16 +66,21 @@ export class UserConfigComponent implements OnInit {
   onSubmit(){
     // const color = this.perfileConfigForm.value.color;
     // this.submit.emit(color);
+    console.log(this.usersForm.value);
+    return;
 
   }
 
   ngOnInit(): void {
     this.usersForm = this.initForm();
+    this.usersForm.value.type_follow= 'point';
+
   }
 
   initForm(): FormGroup{
     return this.fb.group({
       password: [''],
+      type_vehicle: [''],
       type_follow:[''],
       indGalon: [''] ,
     })
@@ -92,19 +95,18 @@ export class UserConfigComponent implements OnInit {
       this.switchCircle = true;
       this.switchPoint = false;
       this.switchMobile = false;
+      this.usersForm.value.type_follow= 'circle';
     } else if (switchNumber === 2) {
       this.switchCircle = false;
       this.switchPoint = true;
       this.switchMobile = false;
+      this.usersForm.value.type_follow= 'point';
     } else if (switchNumber === 3) {
       this.switchCircle = false;
       this.switchPoint = false;
       this.switchMobile = true;
+      this.usersForm.value.type_follow= 'mobile';
     }
-  }
-
-  setActiveSwitch(selectedSwitch: number){
-    this.activeSwitch = selectedSwitch;
   }
 
   types: any = [

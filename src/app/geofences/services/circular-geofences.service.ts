@@ -15,7 +15,7 @@ import { switchMap } from 'rxjs/operators';
 export class CircularGeofencesService {
 
   circular_geofences: any[] = []
-  nameComponentCir:string = "ADD GEOCIR";
+  nameComponentCir:string = "LISTAR";
   action:string = "add";
   idGeocercaEdit:number = 0;
 

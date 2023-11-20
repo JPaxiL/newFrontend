@@ -72,9 +72,9 @@ export class GeofenceTableComponent implements OnInit {
     if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges){
       this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
-    if(!this.polylineGeofenceService.initializingPolylineGeofences || !this.polylineGeofenceService.initializingUserPrivleges){
-      this.geofencesService.spinner.show('loadingGeofencesSpinner');
-    }
+    // if(!this.polylineGeofenceService.initializingPolylineGeofences || !this.polylineGeofenceService.initializingUserPrivleges){
+    //   this.geofencesService.spinner.show('loadingGeofencesSpinner');
+    // }
     if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
       this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
@@ -93,13 +93,13 @@ export class GeofenceTableComponent implements OnInit {
         this.objGeofences.setGeofences(data, 'circ');
       })
     }
-    if(this.polylineGeofenceService.initializingPolylineGeofences){
-      this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[], 'lin');
-    }else{
-      this.polylineGeofenceService.dataCompleted.subscribe((data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data, 'lin');
-      })
-    }
+    // if(this.polylineGeofenceService.initializingPolylineGeofences){
+    //   this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[], 'lin');
+    // }else{
+    //   this.polylineGeofenceService.dataCompleted.subscribe((data:IGeofence[])=>{
+    //     this.objGeofences.setGeofences(data, 'lin');
+    //   })
+    // }
     //this.objGeofences = this.addDataGeofence(this.objGeofences);
     this.geofences = this.objGeofences.createTreeNode();
     this.geofencesFilter = this.geofences;
@@ -305,7 +305,7 @@ export class GeofenceTableComponent implements OnInit {
     });
   }
 
-  clickShowGeoAll(id: number, type: string){
+  clickShowGeo(id: number, type: string){
     if(type=='polig'){
       this.clickShowGeoPol(id);
     }else if (type=='circ'){
@@ -722,6 +722,13 @@ export class GeofenceTableComponent implements OnInit {
     }
     this.geofencesService.geofences = geofences;
     this.geofencesService.geofencesTree = this.objGeofences.createTreeNode();
+  }
+
+  filtreOperations(){
+    
+  }
+  filtre(){
+
   }
 
 }

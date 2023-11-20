@@ -21,6 +21,7 @@ export class GeofencesService {
   public geofencesTree: TreeNode[]=[];
   public treeTableStatus: boolean = false;
   public idGeocercaEdit:number = 0;
+  public type: string = 'polig'; //[polig, cir, line]
   public action:string = "add"; //[add,edit,delete]
 
   @Output() dataTreeCompleted = new EventEmitter<any>();
