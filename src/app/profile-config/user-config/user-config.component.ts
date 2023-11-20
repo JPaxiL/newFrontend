@@ -19,7 +19,6 @@ export class UserConfigComponent implements OnInit {
     selectedColor: string = ''; // Color initial
     vehiculoColor = 'blue'; // Cambia este valor según la preferencia del usuario  
 
-  
   perfileConfigForm = new FormGroup({
     actual_pass: new FormControl('', Validators.required),
     new_pass_1: new FormControl('', Validators.required),
@@ -46,6 +45,8 @@ export class UserConfigComponent implements OnInit {
   mostrarDirVehicle: number = 0;
   mostrarIcono: number = 0;
   sizeIcono: number = 2;
+  typeVehiclesList:any = {};
+  userTypeVehicleConfig: any = {};
   configIconOptions = [
     { id: 0, name: 'Ícono'},
     { id: 1, name: 'Flecha 1'},
@@ -62,8 +63,6 @@ export class UserConfigComponent implements OnInit {
     { id: 1, name: 'Flecha de dirección' },
     { id: 2, name: 'Cola de dirección' },
   ];
-  typeVehiclesList:any = {};
-  userTypeVehicleConfig: any = {};
   constructor(       
     private fb: FormBuilder,
     private userDataService: UserDataService,
@@ -82,6 +81,7 @@ export class UserConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userDataService.getTypeVehicles();
     console.log(this.userDataService.userData);
     this.usersForm = this.initForm();
     this.usersForm.value.type_follow= 'point';
@@ -103,10 +103,6 @@ export class UserConfigComponent implements OnInit {
       bol_cursor:[''],
       bol_vehicle:[''],
     })
-  }
-
-  consoleMostrar(){
-    console.log(this.mostrarDirVehicle);
   }
 
   switchActive(switchNumber: number){
@@ -154,15 +150,7 @@ export class UserConfigComponent implements OnInit {
     //   this.selectedIcon = this.selectedIcon = this.dropdownIcons[0];
     // }
   }
-  clickShowPanel(){
-
-  }
-  changeGeoColor(id:number) {
-  }
-
-  onColorSelected(color: string): void {
-    // Aquí, enviarlo al servidor.
-  }
+ 
   onClickCancel(){
     this.eventDisplay.emit(false);
   }
