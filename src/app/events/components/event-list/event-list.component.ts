@@ -39,7 +39,7 @@ export class EventListComponent implements OnInit {
     public ess:EventSocketService,
     private spinner: NgxSpinnerService,
     private http:HttpClient,
-    private resolver: ComponentFactoryResolver, 
+    private resolver: ComponentFactoryResolver,
     private container: ViewContainerRef,
     private vehicleService: VehicleService
     ) {
@@ -176,43 +176,43 @@ event-list.component.ts:130 despues de procesar parametros  object
 
     //si el evento es de cipia y tiene video(s)
     console.log("event.parametros: ",event.parametros);
-    
-    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
-<<<<<<< HEAD
-      // obtengo la url del video o imagen
-      this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
-        // Añado la url del video/imagen como atributo del evento
-        event.videoUrl = data;
-        event.layer.bindPopup(getContentPopup(event), {
-          className: eventClass,
-          minWidth: 250,
-          maxWidth: 350,
-        });
-        this.eventService.activeEvent = event;
-        event.layer.addTo(this.mapService.map).openPopup();
-      });
-    }else{
 
-=======
+    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+// <<<<<<< HEAD
+      // obtengo la url del video o imagen
+    //   this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
+    //     // Añado la url del video/imagen como atributo del evento
+    //     event.videoUrl = data;
+    //     event.layer.bindPopup(getContentPopup(event), {
+    //       className: eventClass,
+    //       minWidth: 250,
+    //       maxWidth: 350,
+    //     });
+    //     this.eventService.activeEvent = event;
+    //     event.layer.addTo(this.mapService.map).openPopup();
+    //   });
+    // }else{
+
+// =======
       this.addMultimediaComponent(event);
->>>>>>> b49aca3caf99bb0ec70fd66cf24e74a72f81327d
+// >>>>>>> b49aca3caf99bb0ec70fd66cf24e74a72f81327d
     }
   }
 
   addMultimediaComponent(event:any){
     console.log("adding multimedia: ", event);
-    
+
     const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
     const componentRef: ComponentRef<any> = this.container.createComponent(factory);
     const params:any = {
-      'event': event, 
+      'event': event,
       'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
       'showMultimediaFirst': true,
       'hasMultimedia':true,
       'showTitle':false
     };
     // Asignar datos al componente si existen
-    
+
     Object.keys(
       params
     ).forEach((key) => {
@@ -220,7 +220,7 @@ event-list.component.ts:130 despues de procesar parametros  object
     });
     // Agregar el componente directamente al contenedor del popup
     const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
-    
+
     divContainer.appendChild(componentRef.location.nativeElement);
   }
 
