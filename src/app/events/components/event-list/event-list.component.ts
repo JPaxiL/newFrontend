@@ -178,24 +178,7 @@ event-list.component.ts:130 despues de procesar parametros  object
     console.log("event.parametros: ",event.parametros);
     
     if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
-<<<<<<< HEAD
-      // obtengo la url del video o imagen
-      this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
-        // Añado la url del video/imagen como atributo del evento
-        event.videoUrl = data;
-        event.layer.bindPopup(getContentPopup(event), {
-          className: eventClass,
-          minWidth: 250,
-          maxWidth: 350,
-        });
-        this.eventService.activeEvent = event;
-        event.layer.addTo(this.mapService.map).openPopup();
-      });
-    }else{
-
-=======
       this.addMultimediaComponent(event);
->>>>>>> b49aca3caf99bb0ec70fd66cf24e74a72f81327d
     }
   }
 

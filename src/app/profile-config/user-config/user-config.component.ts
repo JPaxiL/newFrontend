@@ -12,14 +12,8 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
   styleUrls: ['./user-config.component.scss']
 })
 export class UserConfigComponent implements OnInit {
-  @Output() submit = new EventEmitter<string>();
   @Output() eventDisplay = new EventEmitter<boolean>();
-
-  @Output() colorSelected = new EventEmitter<string>();
   
-  onColorChange() {
-    //this.userDataService.changeColor(this.selectedColor);
-  }
   usersForm!: FormGroup;
   form :any = {};
 
