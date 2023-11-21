@@ -82,7 +82,7 @@ export class EventListComponent implements OnInit {
       this.spinner.show('loadingEventList');
     }
     this.loadFilterData();
-    
+
     this.eventService.debugEventStream.subscribe(res=>{
       // console.log("desde event list ",res);
       this.data_debug = res.data;
@@ -170,7 +170,7 @@ event-list.component.ts:130 despues de procesar parametros  object
     });
     this.eventService.activeEvent = event;
     event.layer.addTo(this.mapService.map).openPopup();
-    
+
     //si el evento es de cipia y tiene video(s)
     if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
       // obtengo la url del video o imagen
@@ -186,7 +186,7 @@ event-list.component.ts:130 despues de procesar parametros  object
         event.layer.addTo(this.mapService.map).openPopup();
       });
     }else{
-      
+
     }
   }
 

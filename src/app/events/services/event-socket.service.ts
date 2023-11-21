@@ -70,6 +70,7 @@ export class EventSocketService extends Socket {
       // console.log("recibiendo evento........",this.vehicleService.vehicles);
       // return;
       // let even = JSON.parse(event);
+      console.log("event ====",event);
       let even = event;
 
       // console.log(' getAlertById =====> ', this.AlertService.getAlertById(even.id), this.user_id, even.usuario_id);

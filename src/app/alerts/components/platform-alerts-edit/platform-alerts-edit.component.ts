@@ -44,7 +44,7 @@ export class PlatformAlertsEditComponent implements OnInit {
   overlayGeo = false;
   loadingEventSelectInput: boolean = true;
   public disabledWhatsapp = true;
- 
+
 
   booleanOptions = [
     { label: 'Sí', value: true },
@@ -202,7 +202,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.setDataGeofences();
     this.setDataVehicles();
 
-    this.events = await this.AlertService.getEventsByType('Plataforma');
+    this.events = await this.AlertService.getEventsByType('platform');
     this.alertForm.patchValue({
       tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
     });

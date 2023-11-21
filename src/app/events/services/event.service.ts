@@ -340,6 +340,11 @@ export class EventService {
       { tipo: 'no-rostro', clase: 'no-rostro' },
       { tipo: 'error-de-camara-360', clase: 'no-rostro' },
       { tipo: 'cinturon-de-seguridad-desabrochado', clase: 'no-rostro' },
+      { tipo: 'conductor-distraido-360', clase: 'no-rostro' },
+      { tipo: 'conductor-adormitado-360', clase: 'no-rostro' },
+      { tipo: 'ignicion-activada-360', clase: 'no-rostro' }
+
+
 
     ];
 
