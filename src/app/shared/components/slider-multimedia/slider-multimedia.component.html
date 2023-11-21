@@ -1,29 +1,32 @@
 <div class="slider-content">
     <div class="slider-header">
         <div class="slider-title">
-            <img *ngIf="icons_available.includes(event.tipo); else default" [src]="'./assets/images/events/'+event.tipo+'.png'" class="slider-icon">
-            <ng-template #default>
-                    <img [src]="'./assets/images/events/default-alert.png'" class="slider-icon">
-            </ng-template>
-            <span class="slider-text">
+            <ng-container *ngIf="showTitle">
+                <img *ngIf="icons_available.includes(event.tipo); else default" [src]="'./assets/images/events/'+event.tipo+'.png'" class="slider-icon">
+                <ng-template #default>
+                        <img [src]="'./assets/images/events/default-alert.png'" class="slider-icon">
+                </ng-template>
+            </ng-container>
+            <span *ngIf="showTitle" class="slider-text">
                     {{event.nombre?event.nombre:!event.mensaje_alerta.includes('undefi')?event.mensaje_alerta:event.tipo | uppercase}}
             </span>
         </div>
         <div *ngIf="hasMultimedia && showMultimedias && multimedias.length>0" class="multimedia-controls">
             <button *ngIf="multimedias.length>1" class="control-button pe-auto" (click)="next()">
-                    <i class="pi pi-chevron-left"></i>
+                <i class="pi pi-chevron-left"></i>
             </button>
             <span class="slider-text">{{activeIndex}}/{{multimedias.length}}</span>
             <button *ngIf="multimedias.length>1" class="control-button pe-auto" (click)="prev()">
-                    <i class="pi pi-chevron-right"></i>
+                <i class="pi pi-chevron-right"></i>
             </button>
         </div>
     </div>
     <div *ngIf="showMultimedias" class="multimedia-body">
         <div class="multimedia-wrapper" #multimedia_wrapper>
             <div *ngFor="let item of multimedias; let i = index" class="multimedia-item" [ngClass]="i!=activeIndex-1?'d-none':''">
-                    <img *ngIf="item.type=='image'" [src]="item.url" style="height: 100%; width:100%;" alt="cargando..."/>
-                    <video width="100%" height="100%" controls type="video/mp4" *ngIf="item.type=='video'" [src]="item.url"></video>
+                    <img *ngIf="!loading && item.type=='image'" [src]="item.url" style="height: 100%;" alt="cargando..."/>
+                    <video width="100%" height="100%" controls type="video/mp4" *ngIf="!loading && item.type=='video'" [src]="item.url"></video>
+                    <p-progressSpinner *ngIf="loading" [style]="{width: '40px', height: '40px'}" styleClass="custom-spinner" strokeWidth="5" fill="#000000" animationDuration="1s"></p-progressSpinner>
             </div>
         </div>
     </div>

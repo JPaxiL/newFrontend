@@ -37,6 +37,7 @@ import {SlideMenuModule} from 'primeng-lts/slidemenu';
 import {SidebarModule} from 'primeng-lts/sidebar';
 import {ScrollPanelModule} from 'primeng-lts/scrollpanel';
 import {GalleriaModule} from 'primeng-lts/galleria';
+import {ProgressSpinnerModule} from 'primeng-lts/progressspinner';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
@@ -291,6 +292,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     LeafletMarkerClusterModule,
     SidebarModule,
     CarouselModule,
+    ProgressSpinnerModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

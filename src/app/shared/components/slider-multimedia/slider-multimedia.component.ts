@@ -15,6 +15,9 @@ export class SliderMultimediaComponent implements OnInit {
   @Input() showMultimediaFirst = true;
   @Input() showMultimedias = false;
   @Input() hasMultimedia = false;
+  @Input() showTitle = true;
+
+  loading = false;
 
   @ViewChild('multimedia_wrapper') multimediaWrapper!:ElementRef;
 
@@ -50,6 +53,7 @@ export class SliderMultimediaComponent implements OnInit {
   constructor(private multimediaService: MultimediaService,private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
+    console.log("EVENT RENDERED======= ",this.event);
     if(this.showMultimediaFirst){
       this.showMultimedias = true;
     }else{
@@ -57,7 +61,10 @@ export class SliderMultimediaComponent implements OnInit {
     }
 
     this.checkCipiaMultimedia(this.event.parametros,this.event.imei);
-    console.log("MULTIMEDIAS======= ",this.multimedias);
+    console.log("MULTIMEDIAS RENDERED======= ",this.multimedias);
+    if(this.showMultimediaFirst){
+      this.loadMedia();
+    }
   }
 
   checkCipiaMultimedia(params: any, imei:string){
@@ -96,14 +103,15 @@ export class SliderMultimediaComponent implements OnInit {
 
   async loadMedia():Promise<void>{
     const media = this.multimedias[this.activeIndex-1];
-    console.log("LOAAD PARAMSSSS: --------> ", media,this.activeIndex);
     if(this.multimedias[this.activeIndex-1].url.length == 0){
       //const url = await this.multimediaService.getMediaFromEvent('E321361117',media.params.eventId,media.params.type,media.params.source).toPromise();
+      this.loading = true;
       const url = await this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source).toPromise();
       if(url){
         this.multimedias[this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
         console.log("nueva url: ",this.multimedias[this.activeIndex-1].url);
       }
+      this.loading = false;
     }
   }
 
