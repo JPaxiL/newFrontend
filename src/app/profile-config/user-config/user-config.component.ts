@@ -16,166 +16,113 @@ export class UserConfigComponent implements OnInit {
   @Output() eventDisplay = new EventEmitter<boolean>();
 
   @Output() colorSelected = new EventEmitter<string>();
-    selectedColor: string = ''; // Color initial
-    vehiculoColor = 'blue'; // Cambia este valor según la preferencia del usuario  
-
-  perfileConfigForm = new FormGroup({
-    actual_pass: new FormControl('', Validators.required),
-    new_pass_1: new FormControl('', Validators.required),
-    new_pass_2: new FormControl('', Validators.required),
-  });
   
   onColorChange() {
     //this.userDataService.changeColor(this.selectedColor);
-    
   }
-  pngNewPass: string = '';
-  pngNewPassR: string = '';
   usersForm!: FormGroup;
-  indGalon: any;
   form :any = {};
 
   isUnderConstruction: boolean = true;
-  switchPoint: boolean = false;
-  switchCircle: boolean = false;
-  switchMobile: boolean = false;
   selectedType: any = {};
   loading : boolean = false;
-  activeSwitch: number = 0;
-  mostrarDirVehicle: number = 0;
-  mostrarIcono: number = 0;
-  sizeIcono: number = 2;
   typeVehiclesList:any = {};
   userTypeVehicleConfig: any = {};
-  configIconOptions = [
-    { id: 0, name: 'Ícono'},
-    { id: 1, name: 'Flecha 1'},
-    { id: 2, name: 'Flecha 2'},
-  ];
-  sizeIconOptions = [
-    { id: 1, name: '1x'},
-    { id: 2, name: '2x'},
-    { id: 3, name: '3x'},
-    { id: 4, name: '4x'},
-  ];
+  
+  bol_ondas!:boolean;
+  bol_cursor!:boolean;
+  bol_vehicle!:boolean;
 
-  showVehicleDirOptions = [
-    { id: 1, name: 'Flecha de dirección' },
-    { id: 2, name: 'Cola de dirección' },
-  ];
+  typeVehiclesForm: any = [];
   constructor(       
     private fb: FormBuilder,
-    private userDataService: UserDataService,
-    public panelService: FormBuilder) {
-      this.perfileConfigForm = this.panelService.group({
-        color: ['#RRGGBB']
-      });
+    private userDataService: UserDataService) {
   }
 
   onSubmit(){
-    // const color = this.perfileConfigForm.value.color;
-    // this.submit.emit(color);
-    console.log(this.usersForm.value);
-    return;
+    this.typeVehiclesForm = [];
+    const tableRows = document.querySelectorAll('table tbody tr');
+    tableRows.forEach((row: any) => {
+      const id = row.querySelector('input[type="hidden"]').value;
+      const color = row.querySelector('input[type="color"]').value;
+      const galon = row.querySelector('input[type="text"]').value;
 
+      this.typeVehiclesForm.push({ id, var_color: color, var_galon: galon });
+    });
+
+    console.log(this.usersForm.value);
+    console.log(this.typeVehiclesForm);
+    // VARIABLE para enviar DATOS 
+    let req = {
+      vehicles : this.typeVehiclesForm,
+      newPass : this.usersForm.value.newPass,
+      newCopyPass : this.usersForm.value.newPassRepeat,
+      bol_ondas : this.usersForm.value.bol_ondas,
+      bol_cursor: this.usersForm.value.bol_cursor,
+      bol_vehicle: this.usersForm.value.bol_vehicle,
+      // }
+    };
+    return req;
   }
 
   ngOnInit(): void {
-    this.userDataService.getTypeVehicles();
-    console.log(this.userDataService.userData);
     this.usersForm = this.initForm();
-    this.usersForm.value.type_follow= 'point';
     this.typeVehiclesList = this.userDataService.typeVehicles;
-    console.log(this.userDataService.typeVehicles);
-    document.documentElement.style.setProperty('--vehiculo-color', this.vehiculoColor);
-    this.typeVehiclesList.forEach((item: { id: any; }, index: string) => {
-      this.usersForm.addControl('id' + index, this.fb.control(item.id));
-      this.usersForm.addControl('var_color' + index, this.fb.control(''));
-      this.usersForm.addControl('var_galon' + index, this.fb.control(''));
-    });
+    // this.typeVehiclesList.forEach((item: { var_color: string; var_galon: string; }) => {
+    //   item.var_color = ''; // Asignar un valor inicial a var_color
+    //   item.var_galon = ''; // Asignar un valor inicial a var_galon
+    // });
+    //OJO FILTRAR POR SOLO TIPO DE VEHICULOS QUE TIENE EL USER...
+
+    // console.log(this.userDataService.typeVehicles);
+    //CONFIGURACION DE TIPO VEHICULOS GUARDADA DEL USUARIO
+    let aux = this.userDataService.typeVehiclesUserData;
+    for (const userDataItem of this.typeVehiclesList) {
+      const itemVehicle = aux.find((item: { type_vehicle_id: any; }) => item.type_vehicle_id === userDataItem.id);
+      if (itemVehicle) {
+        userDataItem.var_color = itemVehicle.var_color;
+        userDataItem.var_galon = itemVehicle.var_galon;
+      } else {
+        userDataItem.var_color = '#c3c4c4';
+        userDataItem.var_galon = '';
+      }
+    }
   }
 
   initForm(): FormGroup{
     return this.fb.group({
-      password: [''],
-      passwordRepeat: [''],
-      bol_ondas: [''],
-      bol_cursor:[''],
-      bol_vehicle:[''],
+      newPass: [''],
+      newPassRepeat: [''],
+      bol_ondas: [this.userDataService.userData.bol_ondas],
+      bol_cursor:[this.userDataService.userData.bol_cursor],
+      bol_vehicle:[this.userDataService.userData.bol_vehicle],
     })
   }
 
   switchActive(switchNumber: number){
     if (switchNumber === 1) {
-      this.switchCircle = true;
-      this.switchPoint = false;
-      this.switchMobile = false;
-      this.usersForm.value.type_follow= 'circle';
+      this.usersForm.get('bol_ondas')?.setValue(true);
+      this.usersForm.get('bol_cursor')?.setValue(false);
+      this.usersForm.get('bol_vehicle')?.setValue(false);
+      
     } else if (switchNumber === 2) {
-      this.switchCircle = false;
-      this.switchPoint = true;
-      this.switchMobile = false;
-      this.usersForm.value.type_follow= 'point';
+      this.usersForm.get('bol_ondas')?.setValue(false);
+      this.usersForm.get('bol_cursor')?.setValue(true);
+      this.usersForm.get('bol_vehicle')?.setValue(false);
+      
     } else if (switchNumber === 3) {
-      this.switchCircle = false;
-      this.switchPoint = false;
-      this.switchMobile = true;
-      this.usersForm.value.type_follow= 'mobile';
+      this.usersForm.get('bol_ondas')?.setValue(false);
+      this.usersForm.get('bol_cursor')?.setValue(false);
+      this.usersForm.get('bol_vehicle')?.setValue(true);
     }
   }
 
-  types: any = [
-    {id: '0', name: 'MOTO'},
-    {id: '1', name: 'AUTO'},
-    {id: '2', name: 'CAMIONETA'},
-    {id: '3', name: 'MINIBUS'},
-    {id: '4', name: 'BUS'},
-    {id: '5', name: 'CARGA'},
-    {id: '6', name: 'TRACKER'},
-    {id: '7', name: 'TRAILER'},
-  ];
-
-  updateIconsDropdown(){
-    let found = false;
-    // this.dropdownIcons = this.icons.filter((icon: any) => {
-    //   return icon.type == this.selectedType.id;
-    // });
-    // for(let i = 0; i < this.dropdownIcons.length; i++){
-    //   if(this.dropdownIcons[i].code == this.selectedIcon.code){
-    //     this.selectedIcon = this.dropdownIcons[i];
-    //     found = true;
-    //   }
-    // }
-    // if(!found){
-    //   this.selectedIcon = this.selectedIcon = this.dropdownIcons[0];
-    // }
-  }
- 
   onClickCancel(){
     this.eventDisplay.emit(false);
   }
 
   confirm(){
     this.loading=true;
-    if(this.pngNewPass!=this.pngNewPassR){
-      Swal.fire({
-        title: '¡Error!',
-        text: 'Hubo un problema al guardar la información.',
-        icon: 'error',
-        allowOutsideClick: true,
-      });
-      // Swal.fire({
-      //   title: 'Falló!',
-      //   text: 'No coinsiden la contraseña, ingrese de nuevo.',
-      //   icon: 'error',
-      // }).then((result) => {
-      //   if (result.isConfirmed) {
-      //     // Lógica al confirmar
-      //   } else if (result.isDismissed) {
-      //     // Lógica al cerrar la alerta
-      //   }
-      // });
-    }
 
     Swal.fire({
       title: '¿Está seguro?',
@@ -192,18 +139,39 @@ export class UserConfigComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        await this.onSubmit();
+        var response:any;
+        response = await this.onSubmit();
+        this.userDataService.updateUserConfig(response).subscribe(
+          (response) => {
+            // Manejar la respuesta del servidor si es necesario
+            // console.log('Actualización exitosa:', response);
+            if (!response.res){
+              Swal.fire(
+                'Error',
+                response.message,
+                'warning'
+              );
+            }else if (response.res){
+              Swal.fire(
+                '',
+                'Los datos se guardaron correctamente!!',
+                'success'
+              );
+            }
+          },
+          (error) => {
+            // Manejar errores si la actualización falla
+            console.error('Error al actualizar:', error);
+            Swal.fire(
+              'Error',
+              'Ocurrió un error...',
+              'warning'
+            );
+          }
+        );
       },
     }).then((data) => {
-      if(data.isConfirmed) {
-        Swal.fire(
-          'Éxito',
-          'Los cambios se guardaron exitosamente',
-          'success'
-        );
-      } else {
-        console.log('(Vehicle Config) Hubo un error al guardar los cambios');
-      }
+      // console.log('testing respuesta...',data);
       this.loading=false;
     });
   }

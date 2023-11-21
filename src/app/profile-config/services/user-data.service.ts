@@ -13,6 +13,7 @@ export class UserDataService {
   userDataInitialized: boolean = false;
   apiUrl = environment.apiUrl; 
   typeVehicles: any = {};
+  typeVehiclesUserData: any = {};
 
   @Output() userDataCompleted = new EventEmitter<any>();
   @Output() geofencesPrivileges = new EventEmitter<any>();
@@ -22,7 +23,9 @@ export class UserDataService {
 
   getUserData(){
     console.log('Getting User Data');
-    console.log(this.apiUrl);
+    //tambien llamamos los tipos de vehicles
+    this.getTypeVehicles();
+    this.getUserConfigData();
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
       next: data => {
         //this.userData = this.panelService.userData = data[0];
@@ -42,7 +45,7 @@ export class UserDataService {
   }
 
   getTypeVehicles(): void {
-    console.log('Getting Type Vehicles');
+    // console.log('Getting Type Vehicles');
     this.http.get<any>(`${this.apiUrl}/api/typevehicleId`).subscribe({
       next: data => {
         this.typeVehicles = data.data;
@@ -53,14 +56,20 @@ export class UserDataService {
     });
   }
 
-  getUserConfigData(): Observable<any> {
-    console.log('Getting User Config Data');
-    return this.http.get<any>(`${this.apiUrl}/api/userdataconfig`);
+  getUserConfigData(): void {
+    // return this.http.get<any>(`${this.apiUrl}/api/userdataconfig`);
+    this.http.get<any>(`${this.apiUrl}/api/userdataconfig`).subscribe({
+      next: data => {
+        this.typeVehiclesUserData = data.data;
+      },
+      error: (errorMsg) => {
+        console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
+      }
+    });
   }
 
   updateUserConfig(updatedUserConfig: any): Observable<any> {
-    console.log('Updating User Config');
-    return this.http.put<any>(`${this.apiUrl}/userconfig`, updatedUserConfig);
+    return this.http.post<any>(`${this.apiUrl}/api/userconfig`, updatedUserConfig);
   }
 
 
