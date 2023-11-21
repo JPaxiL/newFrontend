@@ -24,8 +24,9 @@
     <div *ngIf="showMultimedias" class="multimedia-body">
         <div class="multimedia-wrapper" #multimedia_wrapper>
             <div *ngFor="let item of multimedias; let i = index" class="multimedia-item" [ngClass]="i!=activeIndex-1?'d-none':''">
-                    <img *ngIf="item.type=='image'" [src]="item.url" style="height: 100%;" alt="cargando..."/>
-                    <video width="100%" height="100%" controls type="video/mp4" *ngIf="item.type=='video'" [src]="item.url"></video>
+                    <img *ngIf="!loading && item.type=='image'" [src]="item.url" style="height: 100%;" alt="cargando..."/>
+                    <video width="100%" height="100%" controls type="video/mp4" *ngIf="!loading && item.type=='video'" [src]="item.url"></video>
+                    <p-progressSpinner *ngIf="loading" [style]="{width: '40px', height: '40px'}" styleClass="custom-spinner" strokeWidth="5" fill="#000000" animationDuration="1s"></p-progressSpinner>
             </div>
         </div>
     </div>

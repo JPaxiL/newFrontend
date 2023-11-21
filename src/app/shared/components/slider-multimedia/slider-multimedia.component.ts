@@ -17,6 +17,8 @@ export class SliderMultimediaComponent implements OnInit {
   @Input() hasMultimedia = false;
   @Input() showTitle = true;
 
+  loading = false;
+
   @ViewChild('multimedia_wrapper') multimediaWrapper!:ElementRef;
 
   icons_available = ["alcoholemia",
@@ -103,11 +105,13 @@ export class SliderMultimediaComponent implements OnInit {
     const media = this.multimedias[this.activeIndex-1];
     if(this.multimedias[this.activeIndex-1].url.length == 0){
       //const url = await this.multimediaService.getMediaFromEvent('E321361117',media.params.eventId,media.params.type,media.params.source).toPromise();
+      this.loading = true;
       const url = await this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source).toPromise();
       if(url){
         this.multimedias[this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
         console.log("nueva url: ",this.multimedias[this.activeIndex-1].url);
       }
+      this.loading = false;
     }
   }
 
