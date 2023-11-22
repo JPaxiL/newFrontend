@@ -239,10 +239,32 @@ export class MultimediaService {
     this.canvas2d!.remove();
   }
 
-  getMediaFromEvent(imei: string, eventId: string, type: string = "video", source: string = "CABIN", index: number = 0, time_before_call = 0, maxRetries = 6, retryInterval = 5000): Observable<any> {
-    return timer(time_before_call * 1000).pipe(
+  getMediaFromEvent(imei: string, eventId: string, type: string = "video", source: string = "CABIN", index: number = 0, time_before_call = 0, maxRetries = 2, retryInterval = 5000): Observable<any> {
+    return timer(time_before_call * 500).pipe(
       mergeMap(() => {
         return this.tryGetMedia(imei, eventId, type, source, index, maxRetries, retryInterval);
+      }),
+      catchError((e) => {
+        console.log("ERRORRRSS: ",e);
+        
+        if(e.status == 403){
+          Swal.fire("Error","El dispositivo no existe",'warning');
+        }
+        else if(e.status == 500){
+          Swal.fire("Error","No se pudo conectar al servidor",'warning');
+        }
+        else if(e.status == 401){
+          Swal.fire("Error","No tienes permisos suficientes",'warning');
+        }
+        else if(e.status == 422){
+          Swal.fire("Error","Parámetros incorrectos",'warning');
+        }
+        else if(e.status == 408){
+          Swal.fire("Error","El dispositivo no se encuentra disponible",'warning');
+        }else{
+          Swal.fire("Error","El archivo aun no se encuentra disponible",'warning');
+        }
+        return throwError(e);
       })
     );
   }
@@ -253,6 +275,9 @@ export class MultimediaService {
     return this.http.get(endpoint, { responseType: 'blob' }).pipe(
       map(blob => URL.createObjectURL(blob)),
       catchError((e) => {
+        if(e.status != 404){
+          return throwError(e);
+        }
         if (maxRetries > 0) {
           maxRetries -= 1;
           // Reintentar después de un intervalo de tiempo
@@ -260,7 +285,7 @@ export class MultimediaService {
             mergeMap(() => this.tryGetMedia(imei, eventId, type, source, index, maxRetries, retryInterval))
           );
         } else {
-          return throwError('Hubo un error al obtener el archivo multimedia', e);
+          return throwError(e);
         }
       })
     );

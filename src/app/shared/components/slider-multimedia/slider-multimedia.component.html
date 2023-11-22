@@ -23,11 +23,17 @@
     </div>
     <div *ngIf="showMultimedias" class="multimedia-body">
         <div class="multimedia-wrapper" #multimedia_wrapper>
-            <div *ngFor="let item of multimedias; let i = index" class="multimedia-item" [ngClass]="i!=activeIndex-1?'d-none':''">
-                    <img *ngIf="!loading && item.type=='image'" [src]="item.url" style="height: 100%;" alt="cargando..."/>
-                    <video width="100%" height="100%" controls type="video/mp4" *ngIf="!loading && item.type=='video'" [src]="item.url"></video>
-                    <p-progressSpinner *ngIf="loading" [style]="{width: '40px', height: '40px'}" styleClass="custom-spinner" strokeWidth="5" fill="#000000" animationDuration="1s"></p-progressSpinner>
-            </div>
+            <ng-container *ngFor="let item of multimedias; let i = index" >
+                <div class="multimedia-item" *ngIf="i==activeIndex-1">
+                    <img *ngIf="!error && !loading && item.type=='image'" [src]="item.url" style="height: 100%;" alt="cargando..."/>
+                    <div *ngIf="error" (click)="loadMedia(item)" class="error-multimedia d-flex flex-column align-items-center justify-content-center">
+                        <i class="pi pi-refresh fs-2 cursor-pointer text-white"></i>
+                        <span class="text-white fs-6  cursor-pointer">Reintentar</span>
+                    </div>
+                    <video width="100%" height="100%" controls type="video/mp4" *ngIf="!error && !loading && item.type=='video'" [src]="item.url"></video>
+                    <p-progressSpinner *ngIf="!error && loading" [style]="{width: '40px', height: '40px'}" styleClass="custom-spinner" strokeWidth="5" fill="#000000" animationDuration="1s"></p-progressSpinner>
+                </div>
+            </ng-container>
         </div>
     </div>
     <ng-content></ng-content>

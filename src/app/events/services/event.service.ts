@@ -457,7 +457,6 @@ export class EventService {
         from:from
       })
       .toPromise();
-
       return response.data;
     }
 
