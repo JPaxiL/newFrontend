@@ -1,8 +1,10 @@
-import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter, AfterViewInit } from '@angular/core';
 
 import { VehicleConfigService } from '../../services/vehicle-config.service';
+import { HttpClient } from '@angular/common/http';
 
 import Swal from 'sweetalert2';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 @Component({
   selector: 'app-vehicle-config',
@@ -21,6 +23,7 @@ export class VehicleConfigComponent implements OnInit {
   @ViewChild('placa',{ static:true}) placa!: ElementRef;
   @ViewChild('tolva',{ static:true}) tolva!: ElementRef;
   @ViewChild('empresa',{ static:true}) empresa!: ElementRef;
+  @ViewChild('svgContainer') svgContainer: ElementRef | undefined;
 
   loading : boolean = false;
   formDisplay : string = "flex";
@@ -95,41 +98,48 @@ export class VehicleConfigComponent implements OnInit {
     { name: "52.png", code: "52", type: "2" },
   ];
   dropdownIcons: any = [];
+  svgContent: string | undefined;
 
   constructor(
-    private configService: VehicleConfigService, 
+    private configService: VehicleConfigService,
+    private userDataService: UserDataService,
+    private http: HttpClient, 
   ) {}
 
 
   ngOnInit(): void {
 
   }
-  onShow(){
+  async onShow(){
+
+    this.clearSVGContainer(); // Limpiar contenedor antes de cargar el SVG
+    try {
+      this.svgContent = await this.userDataService.colorTypeVehicleDefault(this.config.tipo);
+      this.injectSVG(this.svgContent);
+    } catch (error) {
+      console.error('Error al cargar el SVG:', error);
+      // Manejar el error según tus necesidades
+    }
     
-    // for (const key in this.icons) {
-    //   if (this.icons[key].name==this.config.icon) {
-    //     this.selectedIcon = {
-    //       name: this.icons[key].name,
-    //       code: this.icons[key].code,
-    //       type: this.icons[key].type,
-    //     }
-    //   }
-    // }
-    // for(let i = 0; i < this.types.length; i++){
-    //   if(this.types[i].id == this.selectedIcon.type){
-    //     this.selectedType = this.types[i];
-    //     this.updateIconsDropdown();
-    //     i = this.types.length;
-    //   }
-    // }
-    /* this.selectedType = {
-      name: this.types[this.config.tipo]['name'],
-      id: this.config.tipo,
-    }; */
     console.log(this.config);
     // console.log("vehicle config = ",this.config);
     this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
+    
   }
+  clearSVGContainer(): void {
+    const svgContainer = this.svgContainer!.nativeElement;
+    while (svgContainer.firstChild) {
+      svgContainer.removeChild(svgContainer.lastChild);
+    }
+  }
+
+  injectSVG(svgContent: string): void {
+    const svgContainer = this.svgContainer!.nativeElement;
+    const div = document.createElement('div');
+    div.innerHTML = svgContent;
+    svgContainer.appendChild(div.firstChild);
+  }
+
   onClickCancel(){
     this.eventDisplay.emit(false);
   }

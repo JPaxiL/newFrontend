@@ -8,6 +8,7 @@ import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FollowService } from '../../services/follow.service';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,6 +19,8 @@ import Swal from 'sweetalert2';
 export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
+  @ViewChild('svgContainer') svgContainer: ElementRef | undefined;
+  svgContent: string | undefined;
 
   vehicleIconState: boolean = false;
 
@@ -87,6 +90,7 @@ export class TreeTableComponent implements OnInit {
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private spinner: NgxSpinnerService,
+    private userDataService: UserDataService,
     private followService:FollowService,
   ) {
     // this.vehicleService.listTable=1;
@@ -142,6 +146,8 @@ export class TreeTableComponent implements OnInit {
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
     // console.log(this.vehicleService.vehicles);
+    
+
   }
 
   headerScrollHandler(){
@@ -595,6 +601,48 @@ export class TreeTableComponent implements OnInit {
     }
     // //console.log("colmun = ",this.column);
   }
+
+  async inyectVehicles() {
+    console.log(this.vehicleIconState);
+    if (this.vehicleIconState == false) {
+      try {
+        for (const vehicle of this.vehicleService.vehicles) {
+          const tipo = vehicle.tipo;
+          const svgContent = await this.userDataService.colorTypeVehicleDefault(tipo!);
+          const svgContainer = document.getElementById('svgContainer' + tipo);
+  
+          if (svgContainer) {
+            this.injectSVG(svgContent, svgContainer);
+          }
+        }
+      } catch (error) {
+        console.error('Error al cargar los SVG:', error);
+        // Manejar el error según tus necesidades
+      }
+    } else {
+      for (const vehicle of this.vehicleService.vehicles) {
+        const tipo = vehicle.tipo;
+        const svgContainer = document.getElementById('svgContainer' + tipo);
+  
+        if (svgContainer) {
+          this.clearSVGContainer(svgContainer);
+        }
+      }
+    }
+  }
+  
+  clearSVGContainer(svgContainer: HTMLElement): void {
+    while (svgContainer.firstChild) {
+      svgContainer.removeChild(svgContainer.lastChild!);
+    }
+  }
+  
+  injectSVG(svgContent: string, svgContainer: HTMLElement): void {
+    const div = document.createElement('div');
+    div.innerHTML = svgContent;
+    svgContainer.appendChild(div.firstChild!);
+  }
+  
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
   }

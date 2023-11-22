@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserDataService {
+  svgContents: { [key: string]: string } = {}; // Almacena los contenidos de los SVG
+
   userData: any = {};
   userName: string = '';
   userEmail: string = '';
@@ -24,8 +26,6 @@ export class UserDataService {
   getUserData(){
     console.log('Getting User Data');
     //tambien llamamos los tipos de vehicles
-    this.getTypeVehicles();
-    this.getUserConfigData();
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
       next: data => {
         //this.userData = this.panelService.userData = data[0];
@@ -38,6 +38,8 @@ export class UserDataService {
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);
         this.geopointsPrivileges.emit(true);
+        this.getTypeVehicles();
+        this.getUserConfigData();
       },
       error: (errorMsg) => {
         console.log('No se pudo obtener datos del usuario', errorMsg);
@@ -61,6 +63,7 @@ export class UserDataService {
     this.http.get<any>(`${this.apiUrl}/api/userdataconfig`).subscribe({
       next: data => {
         this.typeVehiclesUserData = data.data;
+        this.preloadSVGs();
       },
       error: (errorMsg) => {
         console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
@@ -70,6 +73,61 @@ export class UserDataService {
 
   updateUserConfig(updatedUserConfig: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/userconfig`, updatedUserConfig);
+  } 
+
+  //PARA ICONOS SVG PRELOAD
+  preloadSVGs(): void {
+    console.log('INICIANDO Preload SVGS ...');
+    const svgNames: string[] = this.typeVehiclesUserData.map((vehicle: any) => vehicle.var_icono);
+    svgNames.forEach(async (svgName) => {
+      const svgPath = `assets/images/objects/nuevo/${svgName}`;
+      const svgContent = await this.http.get(svgPath, { responseType: 'text' }).toPromise();
+      this.svgContents[svgName] = svgContent;
+    });
+  }
+
+  getSVGContent(svgName: string): string {
+    return this.svgContents[svgName] || ''; // Retorna el contenido del SVG, si está cargado
+  }
+
+  async colorTypeVehicleDefault(typeVehicleId: string): Promise<string> {
+    const vehiculoEncontrado = this.typeVehiclesUserData.find((vehiculo: { type_vehicle_id: any; }) => vehiculo.type_vehicle_id == typeVehicleId);
+    let var_icono;
+    let var_color;
+
+    if (vehiculoEncontrado) {
+      var_icono = vehiculoEncontrado.var_icono;
+      var_color = vehiculoEncontrado.var_color;
+    } else {
+      var_icono = 'image_no_encontrada.png';
+      var_color = '#c3c4c4';
+    }
+
+    const svgContent = this.getSVGContent(var_icono);
+    return this.modifySVGColor(svgContent, var_color,var_icono);
+  }
+
+  modifySVGColor(svgContent: string, color: string,var_icono:string): string {
+    const div = document.createElement('div');
+    div.innerHTML = svgContent;
+
+    // Obtener el elemento específico que deseas cambiar
+    //POR DEFECTO SOLO SE DEBERA MODIFICAR LA CLASE BODY
+    let bodyElements: NodeListOf<HTMLElement>;
+
+    if (var_icono === 'carga.svg') {
+      bodyElements = div.querySelectorAll('.cls-4') as NodeListOf<HTMLElement>;
+    } else {
+      bodyElements = div.querySelectorAll('.body') as NodeListOf<HTMLElement>;
+    }
+
+    // Cambiar el color del elemento
+    bodyElements.forEach((bodyElement: HTMLElement) => {
+      bodyElement.style.fill = color;
+    });
+    console.log('bodylemenet -->',bodyElements);
+    // Devolver el SVG modificado
+    return div.innerHTML;
   }
 
 
