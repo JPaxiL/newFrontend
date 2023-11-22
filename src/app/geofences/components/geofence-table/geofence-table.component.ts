@@ -27,6 +27,7 @@ interface Column {
 export class GeofenceTableComponent implements OnInit {
   files!: TreeNode[];
   cols!: Column[];
+  viewOptions = 'viewGroup';
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
   datosCargados: boolean = false;
   NomBusqueda: string = "";
@@ -45,12 +46,7 @@ export class GeofenceTableComponent implements OnInit {
     name : "",
     type : ""
   };
-  public setting: any = {
-    eye: true,
-    trans: false,
-    config: true,
-    sort: 'asc'
-  }
+  
   alreadyLoaded: boolean = false;
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   @ViewChild('tt') tt!:any;
@@ -119,10 +115,11 @@ export class GeofenceTableComponent implements OnInit {
       this.noResults = this.geofencesService.tblDataGeoFiltered.length == 0;
     }
   }
-  onSearchGeo(){
+  onSearchGeo(data: any){
     console.log('searching ...',this.searchValueGeo);
     //this.geosService.spinner.show('loadinggeos');
-
+    this.tt.filterGlobal(data.target.value, 'contains')
+    this.tt.defaultSortOrder=-1;
     if(this.searchValueGeo == ''){
       this.objGeofences = this.objGeofencesFilter;
       // this.noResults = false;
@@ -249,7 +246,7 @@ export class GeofenceTableComponent implements OnInit {
       return { id: circular_geofence.id, visible: circular_geofence.zone_visible}; });
 
     ciruclarGeofencesList.forEach((circular_geofence: { id: number, visible: string }) => {
-      if((circular_geofence.visible == 'true') != this.circularGeofencesService.eyeInputSwitch){
+      if((circular_geofence.visible == 'true') != this.geofencesService.eyeInputSwitch){
         this.clickShowGeoCir(circular_geofence.id, true);
       }
     });
@@ -259,7 +256,6 @@ export class GeofenceTableComponent implements OnInit {
     }
     for(let i = 0; i < this.circularGeofencesService.circular_geofences.length; i++){
       this.circularGeofencesService.showDrawingsOfGeofence(this.circularGeofencesService.circular_geofences[i]);
-      
     }
   }
 
@@ -327,7 +323,6 @@ export class GeofenceTableComponent implements OnInit {
         this.clickShowNameGeoPol(id);
       }
     } else {
-
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
     }
@@ -356,26 +351,20 @@ export class GeofenceTableComponent implements OnInit {
         }
       }
     }
-
   }
 
   clickShowGeoCir(id:number, comesFromInputSwitch?: boolean){
-
     let geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
 
     if (geo.zone_visible == 'true') {
-
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
-
       if(geo.zone_name_visible == 'true'){
         this.clickShowNameGeoCir(id);
       }
     } else {
-
-      geo.zone_visible  == 'true';
+      geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
-
     }
 
     this.circularGeofencesService.updateGeoCounters();
@@ -383,27 +372,22 @@ export class GeofenceTableComponent implements OnInit {
 
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
       let auxIndex = -1;
-      
-      this.circularGeofencesService.eyeInputSwitch = (this.circularGeofencesService.circularGeofenceCounters.visible != 0);
+      this.circularGeofencesService.eyeInputSwitch = this.circularGeofencesService.circularGeofenceCounters.visible != 0;
 
       if(geo.zone_visible == 'true'){
 
         for(let i = this.circularGeofencesService.circular_geofences.length - 1; i > -1; i--){
-
           this.circularGeofencesService.clearDrawingsOfGeofence(this.circularGeofencesService.circular_geofences[i]);
           if(this.circularGeofencesService.circular_geofences[i].id == id){
             auxIndex = i;
             i = -1;
           }
         }
-
         for(let i = auxIndex; i < this.circularGeofencesService.circular_geofences.length; i++){
           this.circularGeofencesService.showDrawingsOfGeofence(this.circularGeofencesService.circular_geofences[i]);
-          
         }
       }
     }
-
   }
 
   clickShowGeoLin(id:number, comesFromInputSwitch?: boolean){
@@ -724,11 +708,15 @@ export class GeofenceTableComponent implements OnInit {
     this.geofencesService.geofencesTree = this.objGeofences.createTreeNode();
   }
 
-  filtreOperations(){
-    
-  }
-  filtre(){
+  btnSelected: number = 1;
 
+  tableView(btn: number): void {
+    this.btnSelected = btn;
+    if(btn==1){
+      this.viewOptions='viewGroup';
+    }else if(btn==2){
+      this.viewOptions='viewGen';
+    }
   }
 
 }

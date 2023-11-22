@@ -13,6 +13,7 @@ import 'leaflet-measure-path/leaflet-measure-path.css';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CircularGeofencesService } from '../../services/circular-geofences.service';
 import { PolylineGeogencesService } from '../../services/polyline-geogences.service';
+import { id } from '@swimlane/ngx-charts';
 declare var $: any;
 @Component({
   selector: 'app-geocerca-add',
@@ -86,6 +87,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     if ( this.geofencesService.nameComponentPol = "ADD GEOPOL") {
       if(this.geofencesService.action=='edit'){
+        //desabilitar elbotton circular
         this.llenar_formulario();
       var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
       //console.log(geo);
@@ -102,7 +104,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       geo.geo_elemento.addTo(this.mapService.map);
       geo.geo_elemento.editing.enable();
-      
+      this.optionsOperationsGroups();
       } else {
       this.nuevo_formulario();
       this.optionsOperationsGroups();
@@ -126,6 +128,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         });
         this.poligonAddCir = geo.geo_elemento.addTo(this.mapService.map);
         this.poligonAddCir.enableEdit();
+        this.optionsOperationsGroups();
+
       }else{
         this.nuevo_formularioCir();
         this.poligonAddCir = this.mapService.map.editTools.startCircle();
@@ -258,6 +262,43 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       }
       this.form.id_operation = this.selectedOperation;
       // console.log('auxliar2 POST:',this.groups);
+  }
+  
+  getNameOperation(idOpe: any){
+    if(!idOpe){
+      return 'Geocercas Sin Operacion';
+    }else {
+      const foundVehicle = this.vehicleService.vehicles.find((vehicle) => vehicle.idoperation == idOpe);
+      if (foundVehicle) {
+        if(foundVehicle.nameoperation=='Unidades Sin Operacion'){
+          return 'Geocercas Sin Operacion';
+        } else {
+          return foundVehicle.nameoperation;
+        }
+          // Usa nameOperation aquí según sea necesario
+      } else {
+        return 'Geocercas Sin Operacion';
+      }
+            // aux = this.vehicleService.vehicles.find{{}}
+    }
+  }
+  getNameGrupo(idGrupo: any){
+    if(!idGrupo){
+      return 'Geocercas Sin Grupo';
+    }else {
+      const foundVehicle = this.vehicleService.vehicles.find((vehicle) => vehicle.idgrupo == idGrupo);
+      if (foundVehicle) {
+        if(foundVehicle.namegrupo=='Unidades Sin Grupo'){
+          return 'Geocercas Sin Grupo';
+        } else {
+          return foundVehicle.namegrupo;
+        }
+          // Usa nameOperation aquí según sea necesario
+      } else {
+        return 'Geocercas Sin Grupo';
+      }
+            // aux = this.vehicleService.vehicles.find{{}}
+    }
   }
 
   onChangeGrupo(){
@@ -717,10 +758,20 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       this.form.geo_geometry = this.layerToPoints(geo0.geo_elemento,'POLYGON');
 
       geo0.geo_elemento.editing.disable();
-
+      console.log(this.form);
       this.geofencesService.edit(this.form).then( (res1) => {
         //console.log("---clickGuardar----");
-        //console.log(res1);
+        console.log("revisarrrrr",res1);
+        if(res1[1] != "Registro modificado"){
+          console.log("mostrar Swalllll");
+          Swal.fire(
+            'Error',
+            'No se pudo modificar!!',
+            'error'
+          );
+          this.spinner.hide('spinnerLoading');
+          return;
+        }
         this.geofencesService.nameComponentPol =  "LISTAR";
         let gEdit = res1[2];
         let gEdit2 = res1[3][0];
@@ -746,6 +797,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.tag_name_font_size = gEdit.tag_name_font_size;
 
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
+        geo.idgrupo = gEdit.grupo_convoy_id ?? '0';
+        geo.idoperation = gEdit.operation_grupo_id ?? '0';
+        geo.nameoperation = this.getNameOperation(geo.idoperation);
+        geo.namegrupo = this.getNameGrupo(geo.idgrupo);
 
         this.mapService.map.removeLayer(geo.geo_elemento);
         this.mapService.map.removeLayer(geo.marker_name);
@@ -795,17 +850,29 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         // geo.geo_elemento.setLatLngs( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ));
         // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
         // //console.log(geo);
+        console.log("mostrar Swalllll");
+        Swal.fire(
+            'Modoficado',
+            'Se modificó correctamente!!',
+            'success'
+        );
+        this.spinner.hide('spinnerLoading');
+        return;
       });
 
     } else {
 
       if(this.poligonAdd._latlngs[0].length != 0){
         this.poligonAdd.editing.disable();
+        console.log(this.form);
         this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
         this.geofencesService.store(this.form).then( (res1) => {
           //console.log("---clickGuardar NUEVO----");
-          //console.log(res1);
+          console.log("mensage ", res1);
           this.geofencesService.nameComponentPol =  "LISTAR";
+          if(res1[1]=='Registro Guardados'){
+            console.log('suseeec');
+          }
           let gNew = res1[2];
           let gNew2 = res1[3][0];
           // var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
@@ -833,6 +900,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           geo.tag_name_font_size = gNew.tag_name_font_size;
 
           geo.geo_coordenadas = gNew2.geo_coordenadas;
+          geo.idgrupo = gNew.grupo_convoy_id ?? '0';
+          geo.idoperation = gNew.operation_grupo_id ?? '0';
+          geo.nameoperation = this.getNameOperation(geo.idoperation);
+          geo.namegrupo = this.getNameGrupo(geo.idgrupo);
 
           //console.log(geo);
 
@@ -879,6 +950,14 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           this.geofencesService.updateGeoTagCounters();
           this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
           this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
+
+          Swal.fire(
+              'Creado',
+              'Se creó correctamente!!',
+              'success'
+          );
+          this.spinner.hide('spinnerLoading');
+          return;
 
         });
       }else{
@@ -951,6 +1030,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.int_limite_velocidad_2 = gEdit.int_limite_velocidad_2;
         geo.int_limite_velocidad_3 = gEdit.int_limite_velocidad_3;
         geo.zone_no_int_color = gEdit.bol_sin_relleno;
+        geo.idgrupo = gEdit.grupo_convoy_id ?? '0';
+        geo.idoperation = gEdit.operation_grupo_id ?? '0';
+        geo.nameoperation = this.getNameOperation(geo.idoperation);
+        geo.namegrupo = this.getNameGrupo(geo.idgrupo);
 
 
         this.mapService.map.removeLayer(geo.geo_elemento);
@@ -1004,6 +1087,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         this.circularGeofencesService.store(this.form).subscribe( (resp: any) => {
           console.log(resp);
           this.geofencesService.nameComponentPol = "LISTAR";
+          if(resp[1]=='Registro Guardados'){
+            console.log('suseed');
+          }
 
           let gNew = resp[2];
           let gNew2 = resp[3][0];
@@ -1028,6 +1114,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           geo.int_limite_velocidad_2 = gNew.int_limite_velocidad_2;
           geo.int_limite_velocidad_3 = gNew.int_limite_velocidad_3;
           geo.zone_no_int_color = true;
+          geo.idgrupo = gNew.grupo_convoy_id ?? '0';
+          geo.idoperation = gNew.operation_grupo_id ?? '0';
+          geo.nameoperation = this.getNameOperation(geo.idoperation);
+          geo.namegrupo = this.getNameGrupo(geo.idgrupo);
 
           this.mapService.map.removeLayer(this.poligonAddCir);
 

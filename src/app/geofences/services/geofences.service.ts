@@ -88,14 +88,14 @@ export class GeofencesService {
 
   public clearDrawingsOfGeofence(geofence: any){
     if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
-      && geofence.zone_visible == "true" ){
+      && geofence.zone_visible == 'true' ){
 
       //Si la geocerca ya existe y es visible, entonces remover la capa
       //console.log('Geocerca visible, eliminar', geofence);
       this.mapService.map.removeLayer(geofence.geo_elemento);
     }
     if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
-      && geofence.zone_name_visible == "true" ){
+      && geofence.zone_name_visible == 'true' ){
 
       //Si el nombre de la geocerca ya existe y es visible, entonces removerla
       //console.log('Nombre de geocerca visible, eliminar', geofence);
@@ -104,11 +104,11 @@ export class GeofencesService {
   }
 
   public showDrawingsOfGeofence(geofence: any){
-    if (geofence.zone_visible == "true") {
+    if (geofence.zone_visible == 'true') {
       geofence.geo_elemento.addTo(this.mapService.map);
     }
 
-    if (geofence.zone_name_visible == "true") {
+    if (geofence.zone_name_visible == 'true') {
       geofence.marker_name.addTo(this.mapService.map);
     }
 
