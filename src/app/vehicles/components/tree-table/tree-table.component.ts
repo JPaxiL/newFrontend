@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
-  @ViewChild('svgContainer') svgContainer: ElementRef | undefined;
+  @ViewChild('svgContainer', { read: ElementRef }) svgContainer!: ElementRef;
   svgContent: string | undefined;
 
   vehicleIconState: boolean = false;
@@ -147,8 +147,70 @@ export class TreeTableComponent implements OnInit {
     screen.orientation.addEventListener('change', this.treeTableResizing);
     // console.log(this.vehicleService.vehicles);
     
+    this.clearSVGContainer();
+    this.verifyContent();
+    // this.inyectVehicles();
 
   }
+
+  
+  async injectVehicles(type:any,id:any) {
+    try {
+      // for (const vehicle of this.vehicleService.vehicles) {
+        // const tipo = vehicle.tipo;
+        // const Vh_id = vehicle.id;
+        const svgContent = await this.userDataService.colorTypeVehicleDefault(type!);
+        const svgHtml =  document.getElementById('svgContainer_' + id);
+        if (svgHtml) {
+          // console.log('EXISTE SVGHTML y SVG CONTENT-->',svgHtml);
+          this.injectSVG(svgContent, svgHtml);
+          // const div = document.createElement('div');
+          // div.innerHTML = svgContent;
+          // svgHtml.appendChild(div.firstChild!);
+        }else {
+          console.log('El elemento no existe en el DOM');
+        }
+      // }
+    } catch (error) {
+      console.error('Error al cargar los SVG:', error);
+      // Manejar el error según tus necesidades
+    }
+  }
+
+  injectSVG(svgContent: string, svgHtml: HTMLElement): void {
+    const div = document.createElement('div');
+    div.innerHTML = svgContent;
+    svgHtml.appendChild(div.firstChild!);
+  }
+  
+  clearSVGContainer(): void {
+    for (const vehicle of this.vehicleService.vehicles) {
+      const Vh_id = vehicle.id;
+      const svgContainer = document.getElementById('svgContainer_' + Vh_id);
+      if (svgContainer) {
+        while (svgContainer.firstChild) {
+          console.log('REMOVED Child ...');
+          svgContainer.removeChild(svgContainer.lastChild!);
+        }
+      }
+    }
+  }
+  verifyContent() {
+    for (const vehicle of this.vehicleService.vehicles) {
+      const Vh_id = vehicle.id;
+      const type = vehicle.tipo;
+      const svgContainer = document.getElementById('svgContainer_' + Vh_id);
+
+      if (svgContainer) {
+        while (svgContainer.firstChild) {
+          console.log('REMOVED Child ...');
+          svgContainer.removeChild(svgContainer.lastChild!);
+        }
+        this.injectVehicles(type,Vh_id);
+      }
+    }
+  }
+  
 
   headerScrollHandler(){
     setTimeout(()=> {
@@ -602,46 +664,7 @@ export class TreeTableComponent implements OnInit {
     // //console.log("colmun = ",this.column);
   }
 
-  async inyectVehicles() {
-    console.log(this.vehicleIconState);
-    if (this.vehicleIconState == false) {
-      try {
-        for (const vehicle of this.vehicleService.vehicles) {
-          const tipo = vehicle.tipo;
-          const svgContent = await this.userDataService.colorTypeVehicleDefault(tipo!);
-          const svgContainer = document.getElementById('svgContainer' + tipo);
   
-          if (svgContainer) {
-            this.injectSVG(svgContent, svgContainer);
-          }
-        }
-      } catch (error) {
-        console.error('Error al cargar los SVG:', error);
-        // Manejar el error según tus necesidades
-      }
-    } else {
-      for (const vehicle of this.vehicleService.vehicles) {
-        const tipo = vehicle.tipo;
-        const svgContainer = document.getElementById('svgContainer' + tipo);
-  
-        if (svgContainer) {
-          this.clearSVGContainer(svgContainer);
-        }
-      }
-    }
-  }
-  
-  clearSVGContainer(svgContainer: HTMLElement): void {
-    while (svgContainer.firstChild) {
-      svgContainer.removeChild(svgContainer.lastChild!);
-    }
-  }
-  
-  injectSVG(svgContent: string, svgContainer: HTMLElement): void {
-    const div = document.createElement('div');
-    div.innerHTML = svgContent;
-    svgContainer.appendChild(div.firstChild!);
-  }
   
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
