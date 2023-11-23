@@ -126,7 +126,7 @@ export class SliderMultimediaComponent implements OnInit {
     if(media.url.length == 0){
       //const url = await this.multimediaService.getMediaFromEvent('E321361117',media.params.eventId,media.params.type,media.params.source).toPromise();
       this.loading = true;
-      this.multimediaService.getMediaFromEvent('E321361152',media.params.eventId,media.params.type,media.params.source,undefined,undefined,0).pipe(takeUntil(this.destroy$)).toPromise().then(url => {
+      this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source,undefined,undefined,0).pipe(takeUntil(this.destroy$)).toPromise().then(url => {
         if(url){
           this.multimedias[this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
           console.log("nueva url: ",this.multimedias[this.activeIndex-1].url);

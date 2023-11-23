@@ -334,18 +334,27 @@ export class EventService {
       { tipo: 'bloqueo-vision-mobileye', clase: 'bloqueo-vision-mobileye' },
       { tipo: 'anticolision-frontal', clase: 'colision-peatones' },
       { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
-      { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
       { tipo: 'posible-fatiga', clase: 'posible-fatiga' },
       { tipo: 'fatiga-extrema', clase: 'fatiga-extrema' },
       { tipo: 'no-rostro', clase: 'no-rostro' },
       { tipo: 'error-de-camara-360', clase: 'no-rostro' },
-      { tipo: 'cinturon-de-seguridad-desabrochado', clase: 'no-rostro' },
+      { tipo: 'cinturon-desabrochado-360', clase: 'no-rostro' },
       { tipo: 'conductor-distraido-360', clase: 'no-rostro' },
+      { tipo: 'conductor-fumando-360', clase: 'no-rostro' },
+      { tipo: 'ignicion-activada-360', clase: 'no-rostro' },
       { tipo: 'conductor-adormitado-360', clase: 'no-rostro' },
-      { tipo: 'ignicion-activada-360', clase: 'no-rostro' }
-
-
-
+      { tipo: 'conductor-somnoliento-360', clase: 'no-rostro' },
+      { tipo: 'uso-del-celular-360', clase: 'no-rostro' },
+      { tipo: 'error-de-camara-360', clase: 'no-rostro' },
+      { tipo: 'sistema-ok-360', clase: 'no-rostro' },
+      { tipo: 'sistema-reseteado-360', clase: 'no-rostro' },
+      { tipo: 'deteccion-manipulacion-360', clase: 'no-rostro' },
+      { tipo: 'conductor-no-identificado-360', clase: 'no-rostro' },
+      { tipo: 'cambio-conductor-360', clase: 'no-rostro' },
+      { tipo: 'conductor-identificado-360', clase: 'no-rostro' },
+      { tipo: 'conductor-ausente-360', clase: 'no-rostro' },
+      { tipo: 'ignicion-activada-360', clase: 'no-rostro' },
+      { tipo: 'actualizacion-estado-gps-360', clase: 'no-rostro' }
     ];
 
 
