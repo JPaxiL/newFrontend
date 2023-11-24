@@ -111,32 +111,32 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   chkMostrarRuta: boolean = false;
   typeEvents :any = [];
    eventList = [
-    {
-      label: 'Evento GPS',
-      items: [
-        // { name: 'Batería baja', value: false },
-        { name: 'Batería Desconectada', value: false },
-        { name: 'Aceleración Brusca', value: false },
-        { name: 'Frenada Brusca', value: false },
-        // { name: 'Bloqueo de Transmisión', value: false },
-        { name: 'SOS', value: false },
-        // { name: 'Remolque', value: false },
-        // { name: 'Parada', value: false },
-        { name: 'Motor Apagado', value: false },
-        { name: 'Motor Encendido', value: false },
+    // {
+    //   label: 'Evento GPS',
+    //   items: [
+    //     // { name: 'Batería baja', value: false },
+    //     { name: 'Batería Desconectada', value: false },
+    //     { name: 'Aceleración Brusca', value: false },
+    //     { name: 'Frenada Brusca', value: false },
+    //     // { name: 'Bloqueo de Transmisión', value: false },
+    //     { name: 'SOS', value: false },
+    //     // { name: 'Remolque', value: false },
+    //     // { name: 'Parada', value: false },
+    //     { name: 'Motor Apagado', value: false },
+    //     { name: 'Motor Encendido', value: false },
 
-      ]
-    },
+    //   ]
+    // },
     {
       label: 'Evento Plataforma',
       items: [
-        { name: 'Zona de Entrada', value: false },
-        { name: 'Zona de Salida', value: false },
-        { name: 'Tiempo de Estadía en Zona', value: false },
-        { name: 'Parad en Zona no Autorizada', value: false },
-        { name: 'Vehículo en Movimiento Sin Programación', value: false },
-        { name: 'Infracción', value: false },
-        { name: 'Exceso de Velocidad', value: false },
+        { name: 'Zona de Entrada', value: 'zona-de-entrada' },
+        { name: 'Zona de Salida', value: 'Zona de salida' },
+        // { name: 'Tiempo de Estadía en Zona', value: false },
+        // { name: 'Parad en Zona no Autorizada', value: false },
+        // { name: 'Vehículo en Movimiento Sin Programación', value: false },
+        // { name: 'Infracción', value: false },
+        { name: 'Exceso de Velocidad', value: 'exceso-velocidad' },
         // { name: 'Anticolisión frontal', value: false },
         // { name: 'Colisión con Peatones', value: false },
         // { name: 'No Rostro', value: false },
@@ -146,20 +146,33 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         // { name: 'Bloqueo de visión del mobileye', value: false },
       ]
     },
+    // {
+    //   label: 'Evento Seguridad Vehicular',
+    //   items: [
+    //     { name: 'Ausencia de Rostro', value: false },// { name: 'No Rostro', value: false },
+    //     { name: 'Fatiga Extrema', value: false },
+    //     { name: 'Posible Fatiga', value: false },
+    //     { name: 'Distracción', value: false },
+    //     { name: 'Detección de Alcohol', value: false },//  { name: 'Alcoholemia', value: false },
+    //     { name: 'Anticolisión Frontal', value: false },
+    //     { name: 'Colisión con Peatones', value: false },
+    //     { name: 'Desvío de Carril Hacia la Izquierda', value: false },
+    //     { name: 'Desvío de Carril Hacia la Derecha', value: false },
+    //     { name: 'Bloqueo de Visión del Mobileye', value: false },
+    //   ]
+    // }
     {
-      label: 'Evento Seguridad Vehicular',
-      items: [
-        { name: 'Ausencia de Rostro', value: false },// { name: 'No Rostro', value: false },
-        { name: 'Fatiga Extrema', value: false },
-        { name: 'Posible Fatiga', value: false },
-        { name: 'Distracción', value: false },
-        { name: 'Detección de Alcohol', value: false },//  { name: 'Alcoholemia', value: false },
-        { name: 'Anticolisión Frontal', value: false },
-        { name: 'Colisión con Peatones', value: false },
-        { name: 'Desvío de Carril Hacia la Izquierda', value: false },
-        { name: 'Desvío de Carril Hacia la Derecha', value: false },
-        { name: 'Bloqueo de Visión del Mobileye', value: false },
-      ]
+      label: 'Eventos 360º',
+        items: [
+          { name: 'Conductor Adormitado 360°', value: 'conductor-adormitado-360' },
+          { name: 'Conductor Somnoliento 360', value: 'conductor-somnoliento-360' },
+          { name: 'Distracción Detectada 360°', value: 'conductor-distraido-360' },
+          { name: 'Cinturón no Detectado 360°', value: 'cinturon-desabrochado-360' },
+          { name: 'Celular Detectado 360°', value: 'uso-de-celular-360' },
+          { name: 'Cigarro Detectado 360°', value: 'conductor-fumando-360' },
+          { name: 'Detección de Manipulación 360°', value: 'deteccion-manipulacion-360' },
+          { name: 'Error de Cámara 360°', value: 'error-de-camara-360' },
+        ]
     }
     // ,
     // {
@@ -362,73 +375,56 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     // });
 
-    console.log('TESTING OPEN HISTORY');
-    let status_event = false;
-    let map: any=[];
 
-    this.EventService.getEventName().subscribe(data => {
-      console.log(data.data.event_id); // Aquí deberías ver los valores reales devueltos por el Observable
-      for (let event of data.data) {
-        status_event= false;
-        event.event_type = this.changeNameEvent(event.event_type);
-        // if(this.typeEvents.includes(event.event_type)){
-        // }else{
-        //   this.typeEvents.push(event.event_type);
-        //   status_event= true;
-        // }
-        // if (status_event){
-        //   map.push(
-        //     {
-        //       label: event.event_type,
-        //       items: [
-        //         {
-        //           name: event.name_event,
-        //           value: event.event_id,
-        //         }
-        //       ]
-        //     }
-        //   )
-        // }else{
-        //   const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_type);
-        //   // El tipo de evento ya existe en el mapa
-        //   existingTypeEvent.items.push({
-        //     name: event.name_event,
-        //     value: event.id_event
-        //   });
-        // }
-        const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_type);
 
-        if (existingTypeEvent) {
-          // El tipo de evento ya existe en el mapa
-          const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.event_id);
 
-          if (!existingEvent) {
-            // El id_event no existe para este tipo de evento, lo agregamos
-            existingTypeEvent.items.push({
-              name: event.name_event,
-              value: event.event_id
-            });
-          }
-        } else {
-          // El tipo de evento no existe en el mapa, lo añadimos
-          map.push({
-            label: event.event_type,
-            items: [
-              {
-                name: event.name_event,
-                value: event.event_id,
-              }
-            ]
-          });
-        }
 
-      }
-    });
-    // LIMPIAMOS EVENTOS LIST
-    this.eventList = [];
-    this.eventList = map;
+    //CHANGES FOR HISTORIAL *********************
+    // SE VA CAMBIAR TODO EL API DEL SERVICIO PARA JALAR DE USUARIOS DETALLES 
+
+    // console.log('TESTING OPEN HISTORY');
+    // let status_event = false;
+    // let map: any=[];
+
+    // this.EventService.getEventName().subscribe(data => {
+    //   console.log(data.data.event_id); // Aquí deberías ver los valores reales devueltos por el Observable
+    //   for (let event of data.data) {
+    //     status_event= false;
+    //     event.event_type = this.changeNameEvent(event.event_type);
+        
+    //     const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_type);
+
+    //     if (existingTypeEvent) {
+    //       // El tipo de evento ya existe en el mapa
+    //       const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.event_id);
+
+    //       if (!existingEvent) {
+    //         // El id_event no existe para este tipo de evento, lo agregamos
+    //         existingTypeEvent.items.push({
+    //           name: event.name_event,
+    //           value: event.event_id
+    //         });
+    //       }
+    //     } else {
+    //       // El tipo de evento no existe en el mapa, lo añadimos
+    //       map.push({
+    //         label: event.event_type,
+    //         items: [
+    //           {
+    //             name: event.name_event,
+    //             value: event.event_id,
+    //           }
+    //         ]
+    //       });
+    //     }
+
+    //   }
+    // });
+    // // LIMPIAMOS EVENTOS LIST
+    // this.eventList = [];
+    // this.eventList = map;
     
-    console.log(this.eventList,map);
+    // console.log(this.eventList,map);
     
   }
 
@@ -438,10 +434,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     }else if(name == 'platform'){
       return 'EVENTOS PLATAFORMA';
     }else if (name == 'accessories'){
-      return 'EVENTOS DE SEGURIDAD VEHICULAR'
+      return 'EVENTOS FATIGA 360º'
     }else {
       return 'EVENTOS '+name.toUpperCase();
     }
+  }
+  clickTest(){
+    console.log('Eventos seleccionados:', this.selectedEvents);
   }
 
   ngOnDestroy(){
@@ -535,7 +534,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     //console.log(this.form.chckEvento);
 
     //this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items].length;
-    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items].length;
+    // this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items].length;
+    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items].length;
 
     // console.log(this.chkAllEvents);
     // console.log(this.selectedEvents);
@@ -900,7 +900,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
   }
-
+  
 
   async clickCargarHistorial() {
     this.spinner.show('loadingHistorial');
