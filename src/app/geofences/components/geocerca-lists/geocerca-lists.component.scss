@@ -33,3 +33,18 @@
   }
 
 }
+
+
+.pentagon {
+  width: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  height: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  background-color: #3498db; /* Puedes cambiar el color de fondo */
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.circle {
+  width: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  height: 25px; /* Puedes ajustar el tamaño según tus necesidades */
+  background-color: #e74c3c; /* Puedes cambiar el color de fondo */
+  border-radius: 50%; /* Esto hace que el elemento tenga forma de círculo */
+}
