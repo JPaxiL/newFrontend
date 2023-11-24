@@ -27,7 +27,7 @@
                                     </select>
                                     <select class="form-select" aria-label="Alerta" formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
                                         <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
-                                        <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
+                                        <option *ngFor="let event of events" [value]="eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??event.name,,,,">{{ eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??event.name,,,, }}</option>
                                     </select>
                                 </div>
                             </div>
