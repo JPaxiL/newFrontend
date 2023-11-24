@@ -4,7 +4,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   if (event.tipo == 'zona-de-entrada') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -21,7 +21,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'zona-de-salida') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -38,7 +38,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'tiempo-estadio-zona') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -56,7 +56,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'parada-en-zona-no-autorizada') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -78,7 +78,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
     }
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -99,7 +99,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
     }
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -119,7 +119,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
     );
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -133,7 +133,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'mantenimiento-preventivo-realizado') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -147,7 +147,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'SOS') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -160,7 +160,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'exceso-velocidad') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -177,7 +177,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
     if (event.nombre_zona == '') {
       return render_leaflet_tootlip(
         {
-          tipo: event.tipo,
+          tipo: event.nombre??event.name,
           nombre_objeto: event.nombre_objeto,
           latitud: event.latitud,
           longitud: event.longitud,
@@ -192,7 +192,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
     } else if (event.nombre_zona != '') { // PLATAFORMA
       return render_leaflet_tootlip(
         {
-          tipo: event.tipo,
+          tipo: event.nombre??event.name,
           nombre_objeto: event.nombre_objeto,
           latitud: event.latitud,
           longitud: event.longitud,
@@ -210,7 +210,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'vehiculo-sin-programacion') { //PLATAFORMA
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -225,7 +225,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'frenada-brusca') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -239,7 +239,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'aceleracion-brusca') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -253,7 +253,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'bateria-desconectada') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -267,7 +267,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'motor-encendido') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -281,7 +281,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'motor-apagado') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -295,7 +295,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'posible-fatiga') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -309,7 +309,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'distraccion') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -323,7 +323,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'distraccion' || event.tipo == 'distraccion') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -337,7 +337,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'desvio-de-carril-izquierda') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -351,7 +351,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'desvio-de-carril-derecha') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -365,7 +365,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'bloqueo-vision-mobileye') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -379,7 +379,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'colision-peatones') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -394,7 +394,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'anticolision-frontal' || event.tipo == 'anticolision-frontal') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -408,7 +408,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'posible-fatiga') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -422,7 +422,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'fatiga-extrema') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -435,7 +435,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   } else if (event.tipo == 'no-rostro') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -448,7 +448,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'error-calibracion-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -464,7 +464,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'error-de-camara-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -480,7 +480,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'ignicion-desactivada-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -496,7 +496,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'ignicion-activada-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -513,7 +513,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   else if (event.tipo == 'conductor-distraido-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -529,7 +529,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'conductor-adormitado-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -545,7 +545,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'conductor-somnoliento-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -561,7 +561,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'conductor-fumando-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -577,7 +577,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'cinturon-desabrochado-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -593,7 +593,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'uso-del-celular-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -609,7 +609,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'error-de-camara-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -625,7 +625,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'inicio-sistema-ok-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -641,7 +641,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'error-sistema-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -658,7 +658,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   else if (event.tipo == 'sistema-ok-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -674,7 +674,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'sistema-reseteado-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -690,7 +690,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   }else if (event.tipo == 'deteccion-manipulacion-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -707,7 +707,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   else if (event.tipo == 'conductor-no-identificado-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -724,7 +724,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   else if (event.tipo == 'cambio-conductor-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -741,7 +741,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   else if (event.tipo == 'conductor-ausente-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -758,7 +758,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   else if (event.tipo == 'conductor-identificado-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
@@ -775,7 +775,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
   else if (event.tipo == 'actualizacion-estado-gps-360') {
     return render_leaflet_tootlip(
       {
-        tipo: event.tipo,
+        tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
