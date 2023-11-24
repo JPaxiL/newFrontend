@@ -31,7 +31,7 @@
                                    <tr #currRow (click)="switchEventOnMap(event, currRow, 'op-' + idContainer.toString())" [ngClass]="{ 'unread-event': !event.viewed }" [class]="event.clase">
                                         <td>
                                              <div class="d-flex justify-content-between ">
-                                                  <span>{{ event.evento }}</span>
+                                                  <span>{{ event.name }}</span>
                                                   <p-tag *ngIf="!event.viewed" severity="success" value="Nuevo"></p-tag>
                                              </div>
                                         </td>

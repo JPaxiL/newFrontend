@@ -570,7 +570,7 @@
 
         <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light">Eventos GPS</label>
             </div>
@@ -625,7 +625,7 @@
                 Motor Apagado</label>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="row">
             <div class="col-12">
@@ -650,7 +650,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-6">
               <div class="p-field">
                 <label>
@@ -665,7 +665,7 @@
                   Parada en Zona no Autorizada</label>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="row">
             <div class="col-6">
@@ -675,18 +675,91 @@
                   Exceso de Velocidad</label>
               </div>
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.evInfraccion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Infracción</label>
               </div>
-            </div>
+            </div> -->
           </div>
 
 
+          <div class="row">
+            <div class="col-12">
+              <label class="bg-subtitle bg-subtitle-light mt-2">Eventos 360º</label>
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evConductorAdormitado360" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Conductor Adormitado 360°</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evConductorSomnoliento360" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Conductor Somnoliento 360°</label>
+              </div>
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evDistraccionDetectada360" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Distracción Detectada 360°</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evCinturonNoDetectado360" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Cinturón no Detectado 360°</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evCigarroDetectado" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Cigarro Detectada 360°</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evCelularDetectado360" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Celular Detectado 360°</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evErrorDeCamara" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Error de Cámara 360°</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eV.evDeteccionDeManipulacion360" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Detección de Manipulación 360°</label>
+              </div>
+            </div>
+          </div>
+
+          <!--
           <div class="row">
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Eventos Seguridad Vehicular</label>
@@ -728,13 +801,13 @@
           </div>
 
           <div class="row">
-            <!-- <div class="col-6">
+             <div class="col-6">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eV.AccAlcoholemia" [binary]="true" inputId="binary"></p-checkbox>
                   Alcoholemia</label>
               </div>
-            </div> -->
+            </div> 
             <div class="col-6">
               <div class="p-field">
                 <label>
@@ -786,7 +859,7 @@
             <div class="col-12">
               <label class="bg-subtitle bg-subtitle-light mt-2">Otros</label>
             </div>
-          </div>
+          </div>  -->
 
           <div class="row">
             <div class="col-6">
@@ -799,15 +872,10 @@
             <div class="col-6">
               <div class="p-field">
               </div>
-            </div>
-            <!-- <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.OtroExVelocidad" [binary]="true" inputId="binary"></p-checkbox>
-                  Exceso de Velocidad</label>
-              </div>
-            </div> -->
-          </div>
+            </div> 
+          </div> 
+
+        
 
         </div>
 
