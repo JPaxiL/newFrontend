@@ -145,6 +145,7 @@ class LoginComponent {
         this.validCredentials = 0;
     }
     save() {
+        console.log("LOGIN ISVALID: ", this.loginForm.valid);
         if (this.loginForm.valid) {
             const params = this.loginForm.value;
             // params['registrador_id'] = params['registrador']['id'];
@@ -153,7 +154,7 @@ class LoginComponent {
             this.store.dispatch(new src_app_core_store_auth_actions__WEBPACK_IMPORTED_MODULE_2__["SignIn"](params.name, params.password)).subscribe((data) => {
                 // Animación de carga de Iniciando sesión...
                 this.validCredentials = 1;
-                //console.log('Inicio de sesión exitoso');
+                console.log('Inicio de sesión exitoso');
                 //console.log(data);
                 this.startSession();
                 /* this.userService.setUserInLocalStorage();
@@ -192,6 +193,7 @@ class LoginComponent {
     }
     startSession() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            console.log("starting SESION");
             yield this.userService.setUserInLocalStorage();
             this.router.navigate(['/panel'], {
                 state: {

@@ -189,6 +189,7 @@ export class EventService {
           if(!event.viewed){
             this.unreadCount++;
           }
+          
           return event;
         });
         // return;
@@ -514,6 +515,8 @@ export class EventService {
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
+        console.log("EVENTS_FILTERED: ",this.eventsFiltered);
+        
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
         console.log('Ocultar Spinner');
