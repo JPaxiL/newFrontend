@@ -189,7 +189,6 @@ export class EventService {
           if(!event.viewed){
             this.unreadCount++;
           }
-          console.log("EVENT:::::::",event);
           
           return event;
         });
