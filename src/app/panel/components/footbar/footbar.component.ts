@@ -74,6 +74,7 @@ export class FootbarComponent implements OnInit {
   }
 
   onEvent(event:any){
+    console.log("eventssss on event: ", event);
     const auxEvent = {
       id: Date.now().toString(),
       vehicles: [event.tracker],

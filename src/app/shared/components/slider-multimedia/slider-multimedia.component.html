@@ -8,7 +8,7 @@
                 </ng-template>
             </ng-container>
             <span *ngIf="showTitle" class="slider-text">
-                    {{event.nombre?event.nombre:!event.mensaje_alerta.includes('undefi')?event.mensaje_alerta:event.tipo | uppercase}}
+                    {{event.nombre?event.nombre:!event.mensaje_alerta.includes('undefi')?event.mensaje_alerta:event.name | uppercase}}
             </span>
         </div>
         <div *ngIf="hasMultimedia && showMultimedias && multimedias.length>0" class="multimedia-controls">

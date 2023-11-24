@@ -80,6 +80,8 @@ export class SliderMultimediaComponent implements OnInit {
   }
 
   checkCipiaMultimedia(params: any, imei:string){
+    console.log("params: ",params);
+    
     if(params["gps"] && params["gps"]=="cipia" && (params["has_video"]=="1" || params["has_image"] == "1")){
       this.hasMultimedia = true
       if(params["has_video"]=="1"){
