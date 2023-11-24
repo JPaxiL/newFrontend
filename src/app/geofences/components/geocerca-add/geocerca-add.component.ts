@@ -38,12 +38,11 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   placeholderOperation = 'Seleccione una Operación ...';
   placeholderGroup = 'Seleccione una Operación Primero...';
   listOptions: any= [
-    { idOption: 'Ninguno', valueOption: 'ninguno' },
     { idOption: 'Operación', valueOption: 'operacion' },
     { idOption: 'Grupo', valueOption: 'grupo' },  
   ];
   
-  listOptionCheckbox = 'ninguno';
+  listOptionCheckbox = 'operacion';
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
@@ -747,6 +746,27 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         icon: 'warning',
       });
       return;
+    }
+    console.log(this.form.id_operation, this.form.id_grupo);
+    if(this.listOptionCheckbox == 'operacion'){
+      if(this.form.id_operation == null){
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe selccionar una operación.',
+          icon: 'warning',
+        });
+        return;
+      }
+    }
+    if (this.listOptionCheckbox == 'grupo'){
+      if(this.form.id_operation == null && this.form.id_grupo == null){
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe selccionar una operación y un grupo.',
+          icon: 'warning',
+        });
+        return;
+      }
     }
 
     //console.log("---clickGuardar");

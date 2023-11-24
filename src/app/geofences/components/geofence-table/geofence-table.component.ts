@@ -28,7 +28,6 @@ export class GeofenceTableComponent implements OnInit {
   files!: TreeNode[];
   cols!: Column[];
   viewOptions = 'viewGroup';
-  @Output() eventDisplayGroup = new EventEmitter<boolean>();
   datosCargados: boolean = false;
   NomBusqueda: string = "";
   searchValueGeo: string = "";
@@ -51,7 +50,6 @@ export class GeofenceTableComponent implements OnInit {
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   @ViewChild('tt') tt!:any;
   treeGeofences: any;
-  optionAdd = '';
  
   public column: number = 6; //posible order
   constructor(
@@ -65,15 +63,15 @@ export class GeofenceTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {    
-    if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges){
+    if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges || !this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
       this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
     // if(!this.polylineGeofenceService.initializingPolylineGeofences || !this.polylineGeofenceService.initializingUserPrivleges){
     //   this.geofencesService.spinner.show('loadingGeofencesSpinner');
     // }
-    if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
-      this.geofencesService.spinner.show('loadingGeofencesSpinner');
-    }
+    // if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
+    //   // this.geofencesService.spinner.show('loadingGeofencesSpinner');
+    // }
     
     if(this.geofencesService.initializingGeofences){
       this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[], 'polig');
@@ -100,7 +98,6 @@ export class GeofenceTableComponent implements OnInit {
     this.geofences = this.objGeofences.createTreeNode();
     this.geofencesFilter = this.geofences;
     this.objGeofencesFilter = this.objGeofences;
-
   }
 
   onBusqueda(gaaa?:any) {
@@ -118,11 +115,11 @@ export class GeofenceTableComponent implements OnInit {
   onSearchGeo(data: any){
     console.log('searching ...',this.searchValueGeo);
     //this.geosService.spinner.show('loadinggeos');
-    this.tt.filterGlobal(data.target.value, 'contains')
-    this.tt.defaultSortOrder=-1;
+    // this.tt.filterGlobal(data.target.value, 'contains')
+    // this.tt.defaultSortOrder=-1;
     if(this.searchValueGeo == ''){
       this.objGeofences = this.objGeofencesFilter;
-      // this.noResults = false;
+      this.noResults = false;
       console.log('VACIO GET ALL DATA...');
     } else {
       // this.geosService.tblDatageo = this.geosService.getTableDatageo();
@@ -136,10 +133,6 @@ export class GeofenceTableComponent implements OnInit {
     //   );
       console.log(this.geofencesService.tblDataGeoFiltered);
     }
-  }
-
-  onClickAddGeo(){
-    this.eventDisplayGroup.emit(true);
   }
 
   addDataGeofence(geofences: any){
@@ -188,23 +181,18 @@ export class GeofenceTableComponent implements OnInit {
   get tblDataGeoFiltered(){
     return this.circularGeofencesService.tblDataGeoFiltered;
   }
-
   get showBtnAdd(){
     return this.circularGeofencesService.showBtnAdd;
   }
-
   get showBtnEdit(){
     return this.circularGeofencesService.showBtnEdit;
   }
-
   get eyeInputSwitch(){
     return this.circularGeofencesService.eyeInputSwitch;
   }
-
   set eyeInputSwitch(value: boolean){
     this.circularGeofencesService.eyeInputSwitch = value;
   }
-
   get tagNamesEyeState(){
     return this.circularGeofencesService.tagNamesEyeState;
   }
@@ -524,32 +512,20 @@ export class GeofenceTableComponent implements OnInit {
   }
   clickLocateCir(id:number){
     var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
-    
     this.mapService.map.fitBounds(geo.geo_elemento.getBounds(), {
       padding: [50, 50]
     });
   }
   clickLocateLin(id:any){
     const geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == id)[0];
-
     this.mapService.map.fitBounds(geo.geo_elemento.getBounds(), {
       padding: [50, 50]
     });
   }
 
-  onSort(data: any){
-    // //console.log("sort desde tree", data);
-    this.sortOrder=data;
-  }
-
   clickAgregarGeocercaPol() {
     this.geofencesService.nameComponentPol = "ADD GEOPOL";
     this.geofencesService.action         = "add";
-  }
-
-  clickAddGeofence(){
-    this.optionAdd = 'add';
-    console.log("thiisOption", this.optionAdd);
   }
 
   clickConfigGeocerca(id:number, type:string){
@@ -609,7 +585,7 @@ export class GeofenceTableComponent implements OnInit {
             }
           }
           //this.mostrar_tabla();
-          this.geofencesService.initializeTable();
+          //this.geofencesService.initializeTable();
           this.geofencesService.updateGeoCounters();
           this.geofencesService.updateGeoTagCounters();
           this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
@@ -639,9 +615,9 @@ export class GeofenceTableComponent implements OnInit {
         confirmButtonText: 'Eliminar',
         cancelButtonText: 'Cancelar',
         preConfirm:async () => {
-          await this.circularGeofencesService.delete(id);
+          const res = await this.circularGeofencesService.delete(id);
           this.mapService.map.removeLayer(geo.geo_elemento);
-            this.mapService.map.removeLayer(geo.marker_name);
+          this.mapService.map.removeLayer(geo.marker_name);
   
             for (var i = 0; i < this.circularGeofencesService.circular_geofences.length; i++) {
               if (this.circularGeofencesService.circular_geofences[i].id === id) {
@@ -652,8 +628,8 @@ export class GeofenceTableComponent implements OnInit {
             this.circularGeofencesService.initializeTable();
             this.circularGeofencesService.updateGeoCounters();
             this.circularGeofencesService.updateGeoTagCounters();
-            this.circularGeofencesService.eyeInputSwitch = (this.circularGeofencesService.circularGeofenceCounters.visible != 0);
-            this.circularGeofencesService.tagNamesEyeState = (this.circularGeofencesService.circularGeofenceTagCounters.visible != 0);
+            this.circularGeofencesService.eyeInputSwitch = this.circularGeofencesService.circularGeofenceCounters.visible != 0;
+            this.circularGeofencesService.tagNamesEyeState = this.circularGeofencesService.circularGeofenceTagCounters.visible != 0;
             this.onBusqueda();
         }
     }).then(data => {
