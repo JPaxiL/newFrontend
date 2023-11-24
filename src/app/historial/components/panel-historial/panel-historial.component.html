@@ -14,6 +14,11 @@
 
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorialForm" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Cargando información... </p></ngx-spinner>
 
+<div *ngIf="(historialService.modalActive)">
+  <!-- <app-panel-historial-recorrido-modal></app-panel-historial-recorrido-modal> -->
+  <app-panel-historial-grafico></app-panel-historial-grafico>
+</div>
+
   <div id="panel_historial" class="modal-body p-fluid p-0 overflow-auto" style="position: relative;">
 
     <div class="panel-izq-container">
@@ -652,17 +657,20 @@
     <div class="table-content-component-panel-monitoreo h-auto" *ngIf="historialService.arrayRecorridos.length>0"> 
       <div class="" style="overflow-y: auto;">
 
-        <p-table [value]="historialService.arrayRecorridos" dataKey="key"  >
+        <p-table [value]="historialService.arrayRecorridos" dataKey="key" id="tabla_historial" >
           <ng-template pTemplate="header" >
               <tr>
-                  <th style="width: 9%"></th>
-                  <th style="width: 9%"></th>
-                  <th style="width: 40%">Objeto</th>
-                  <th class="text-center" style="width: 24%">Kilometraje</th>
+                  <th style="width: 7%"></th>
+                  <th style="width: 7%"></th>
+                  <th style="width: 30%">Objeto</th>
+
+                  <th class="text-center" style="width: 20%">Consumo de Combustible</th>
+
+                  <th class="text-center" style="width: 20%">Kilometraje</th>
                   <th style="width: 9%">
                     <!-- <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" >Eliminar</button> -->
                   </th>
-                  <th style="width: 9%">
+                  <th style="width: 9%" *ngIf="form.chckGrafico"  >
                     <!-- <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" >Eliminar</button> -->
                   </th>
                   <!-- <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th> -->
@@ -680,14 +688,21 @@
                     <p-checkbox [(ngModel)]="recorrido.mostrarRuta" [binary]="true" inputId="binary" (onChange)="onChkMostrarRuta(rowIndex);"></p-checkbox>
                   </td>
                   <td>
-                    {{recorrido.nombre}} <br> {{recorrido.f_ini}} - <br> {{recorrido.f_fin}}</td>
-                  <td class="text-center">{{recorrido.kilometrajeTotal}}</td>
+                    {{recorrido.nombre}} <br> {{recorrido.f_ini}} - <br> {{recorrido.f_fin}}
+                  </td>
+                  
+                  <td class="text-center">
+                    {{recorrido.combustibleTotal}}
+                  </td>
+
+                  <td class="text-center">
+                    {{recorrido.kilometrajeTotal}}</td>
                   <td>
                     <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" [title]="'Borrar Recorrido'"(click)="clickEliminar(rowIndex,recorrido.key)"  >
                       <i class="fa fa-trash-o" aria-hidden="true"></i> 
                     </button>
                   </td>
-                  <td>
+                  <td *ngIf="form.chckGrafico">
                     <button type="button" pButton  class="p-button-text p-button-rounded p-button-plain" [title]="'Mostrar Gráfico'" (click)="clickVerGrafico(rowIndex,recorrido.key)"  >
                       <i class="fa fa-area-chart" aria-hidden="true"></i> 
                     </button>
@@ -700,7 +715,7 @@
           </ng-template>
           <ng-template pTemplate="rowexpansion" let-recorrido>
               <tr class="historial-nested-table position-relative">
-                  <td [attr.colspan]="recorrido.kilometrajeTotal != '-' ? 6 : 6" class="py-0">
+                  <td [attr.colspan]="recorrido.kilometrajeTotal != '-' ? 7 : 7" class="py-0">
 
 
                     <!-- <td [attr.colspan]="fieldsChanged.fieldName == 'Comments' ? '2' : ''">                                {{fieldsChanged.newValue}}</td> -->
@@ -713,10 +728,15 @@
                               <ng-template pTemplate="header">
                                   <tr>
                                       <!-- <th >Id </th> -->
-                                      <th style="width: 18%"></th>
-                                      <th style="width: 41%">Fecha y Hora </th>
-                                      <th class="text-center" style="width: 41%">Duración </th>
-                                      <th class="text-center" style="width: 25%" *ngIf="recorrido.kilometrajeTotal != '-'" >Kilometraje </th>
+                                      <th style="width: 9%"></th>
+                                      <th style="width: 28%">Fecha y Hora </th>
+
+                                      <th class="text-center" style="width: 12%">Comb.</th>
+                                      <th class="text-center" style="width: 12%">Km.</th>
+                                      <!-- <th class="text-center" style="width: 25%" *ngIf="recorrido.kilometrajeTotal != '-'" >Kilometraje </th> -->
+
+                                      <th class="text-center" style="width: 20%">Duración </th>
+                                      <th class="text-center" style="width: 8%"> </th>
                                       <!-- <th >Status <p-sortIcon field="status"></p-sortIcon></th> -->
                                       <!-- <th style="width: 4rem"></th> -->
                                   </tr>
@@ -734,25 +754,48 @@
 
                                       <!-- <td>{{trama.dt_tracker}}</td>  -->
 
-
                                       <td class="text-center">
                                         <div [title]="trama.tooltip" data-bs-toggle="tooltip" data-bs-placement="top" >
                                           <img class="icon-car" [src]="trama.icono" [style.height]="trama.icono_height" [style.width]="trama.icono_width"  />
                                         </div>
                                       </td>
 
-
                                       <td>{{trama.trama.dt_tracker}}</td>
   
+                                      <td *ngIf="trama.tooltip == 'Movimiento' " class="text-center">
+                                        {{trama.trama.combustible_movimiento}}
+                                      </td>
+                                      <td *ngIf="trama.tooltip != 'Movimiento' " class="text-center">-</td>
+
+
+                                      <td *ngIf="trama.tooltip == 'Movimiento' " class="text-center">
+                                        {{trama.trama.distancia_movimiento}}
+                                      </td>
+                                      <td *ngIf="trama.tooltip != 'Movimiento' " class="text-center">-</td>
+
+
+                                      <!-- <td *ngIf="rowIndex==0" class="text-center"><span>-</span></td>
+                                      <td *ngIf="(rowIndex!=0 && rowIndex!=recorrido.tramas.length-1)" class="text-center"><span>{{trama.trama.distancia}} - {{trama.trama.distancia_movimiento}}</span>  </td>
+                                      <td *ngIf="(rowIndex!=0 && rowIndex==recorrido.tramas.length-1)" class="text-center"><span>-.</span></td> -->
+
+                                      
+
+                                      <!-- <td *ngIf="recorrido.kilometrajeTotal != '-' && rowIndex==0" class="text-center"><span>-</span></td>
+                                      <td *ngIf="recorrido.kilometrajeTotal != '-' && (rowIndex!=0 && rowIndex!=recorrido.tramas.length-1)" class="text-center"><span>{{trama.trama.distancia}}</span>  </td>
+                                      <td *ngIf="recorrido.kilometrajeTotal != '-' && (rowIndex!=0 && rowIndex==recorrido.tramas.length-1)" class="text-center"><span>-.</span></td> -->
+
+
                                       <td *ngIf="rowIndex==0" class="text-center">x</td>
                                       <td *ngIf="rowIndex!=0 && rowIndex!=recorrido.tramas.length-1" class="text-center">{{trama.trama.temp}}</td>
                                       <td *ngIf="rowIndex!=0 && rowIndex==recorrido.tramas.length-1" class="text-center">x</td>
 
-                                      <td *ngIf="recorrido.kilometrajeTotal != '-' && rowIndex==0" class="text-center"><span>-</span></td>
-                                      <td *ngIf="recorrido.kilometrajeTotal != '-' && (rowIndex!=0 && rowIndex!=recorrido.tramas.length-1)" class="text-center"><span>{{trama.trama.distancia}}</span>  </td>
-                                      <td *ngIf="recorrido.kilometrajeTotal != '-' && (rowIndex!=0 && rowIndex==recorrido.tramas.length-1)" class="text-center"><span>-.</span></td>
 
-                          
+                                      <td *ngIf="trama.tooltip == 'Movimiento' " class="text-center">
+                                          <button type="button" class="btn-gl-blue btn-dark-hover flex-none" title="Crear geocerca" (click)="add_geocerca_movimineto(trama, trama.trama, recorrido.key)">
+                                              <i class="fa fa-plus" aria-hidden="true"></i>
+                                          </button>
+                                      </td>
+                                      <td *ngIf="trama.tooltip != 'Movimiento' " class="text-center">-</td>
 
                                       <!-- <td>{{order.amount | currency:'USD'}}</td> -->
                                       <!-- <td><span [class]="'order-badge order-' + order.status.toLowerCase()">{{order.status}}</span></td> -->
@@ -850,4 +893,5 @@
         [rowData]="rowData"
         [columnDefs]="columnDefs">
     </ag-grid-angular> -->
+
 

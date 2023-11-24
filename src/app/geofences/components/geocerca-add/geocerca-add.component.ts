@@ -110,7 +110,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       if (geo.zone_visible == "true") {
         //Si la geocerca era visible previamente, entonce remover la capa para eliminar 
         //los eventos mouseover y mouseout
-        console.log('Eliminando geocerca porque era visible');
+        // console.log('Eliminando geocerca porque era visible');
         this.mapService.map.removeLayer(geo.geo_elemento);
 
       }

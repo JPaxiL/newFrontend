@@ -14,6 +14,8 @@
 @import "primeng-lts/resources/primeng.min.css";
 @import "primeng-lts/resources/themes/saga-blue/theme.css";
 
+//@import "swimlane/ngx-dnd/release/index.css";
+
 @font-face {
   font-family: Futura-MD-BT-Bold;
   src: url('./assets/fonts/futura_md_bt_bold.woff') format('woff');
@@ -85,6 +87,7 @@
   --pm-configuracion-header-height: var( --pm-general-header-height);
 
   --navbar-height: 4.75rem;
+  --footbar-height: 2rem;
   //--row-busqueda-height: 4.375rem;
   //--panel-monitoreo-header-height: 3.5rem;
   //--row-busqueda-height: 3.5rem;
@@ -800,4 +803,106 @@ p-inputswitch{
   }
   
   
+}
+
+
+
+// style popup events
+  // popup
+
+
+  .popup-container {
+    display: flex;
+    flex-direction: column; /* Cambiamos a columna para que estén en columnas */
+    align-items: flex-end; /* Alineamos las ventanas a la parte inferior */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+  
+  .popup-row {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+.popup-events {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.header-popup-events {
+  background-color: #33486f;
+  span {
+    color: #ffffff;
+  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 15px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  height: 2rem;
+}
+
+.title-popup-events {
+  flex: 1; /* El título ocupa todo el espacio disponible */
+  display: flex;
+  align-items: center;
+}
+
+.icons-popup-events {
+  display: flex;
+  align-items: center;
+  margin-left: 50px;
+}
+
+.icons-popup-events i {
+  margin-right: 10px; /* Espacio entre los iconos */
+}
+
+.content-popup-events {
+  flex: 1; /* Hace que el contenido ocupe todo el espacio disponible */
+  height: auto;
+}
+
+.map-content-popup-events{
+  height: 100px;
+}
+
+.info-popup-events {
+  background-color: rgba(192, 192, 192, 0.5);
+  // text-align: center;
+  padding-left: 10px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  span {
+    color: #ffffff;
+  }
+}
+
+.footer-popup-events {
+  background-color: rgba(192, 192, 192, 0.5);
+  /* text-align: center; */
+  padding-left: 10px;
+  // color: #ffffff;
+  span {
+    color: #ffffff;
+  }
+}
+
+.popup-events-toggle {
+  margin-left: auto; /* Mueve la "x" hacia la derecha */
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.multimedia-slider {
+  height: 15rem;
+  padding-top: 1rem;
 }

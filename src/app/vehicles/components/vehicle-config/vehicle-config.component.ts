@@ -27,7 +27,7 @@ export class VehicleConfigComponent implements OnInit {
   /* formDisplay : string = "block"; */
 
 
-
+  iconUrl: string = '';
   selectedIcon: any = {};
   selectedType: any = {};
   vehicle: any = {};
@@ -105,27 +105,30 @@ export class VehicleConfigComponent implements OnInit {
 
   }
   onShow(){
-    for (const key in this.icons) {
-      if (this.icons[key].name==this.config.icon) {
-        this.selectedIcon = {
-          name: this.icons[key].name,
-          code: this.icons[key].code,
-          type: this.icons[key].type,
-        }
-      }
-    }
-    for(let i = 0; i < this.types.length; i++){
-      if(this.types[i].id == this.selectedIcon.type){
-        this.selectedType = this.types[i];
-        this.updateIconsDropdown();
-        i = this.types.length;
-      }
-    }
+    
+    // for (const key in this.icons) {
+    //   if (this.icons[key].name==this.config.icon) {
+    //     this.selectedIcon = {
+    //       name: this.icons[key].name,
+    //       code: this.icons[key].code,
+    //       type: this.icons[key].type,
+    //     }
+    //   }
+    // }
+    // for(let i = 0; i < this.types.length; i++){
+    //   if(this.types[i].id == this.selectedIcon.type){
+    //     this.selectedType = this.types[i];
+    //     this.updateIconsDropdown();
+    //     i = this.types.length;
+    //   }
+    // }
     /* this.selectedType = {
       name: this.types[this.config.tipo]['name'],
       id: this.config.tipo,
     }; */
-
+    console.log(this.config);
+    // console.log("vehicle config = ",this.config);
+    this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
   }
   onClickCancel(){
     this.eventDisplay.emit(false);
@@ -173,7 +176,7 @@ export class VehicleConfigComponent implements OnInit {
       model: this.config.model,
       sim_number : this.valueNull(this.sim.nativeElement.value),
       plate_number : this.valueNull(this.placa.nativeElement.value),
-      tolva : this.valueNull(this.tolva.nativeElement.value),
+      // tolva : this.valueNull(this.tolva.nativeElement.value),
       empresa : this.valueNull(this.empresa.nativeElement.value),
       tipo : this.selectedType.id,
       icon : this.selectedIcon.name,

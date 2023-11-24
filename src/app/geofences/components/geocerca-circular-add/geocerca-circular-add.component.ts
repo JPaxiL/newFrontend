@@ -58,7 +58,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
       if (geo.zone_visible == true) {
 
-        console.log('Eliminando geocerca porque era visible');
+        // console.log('Eliminando geocerca porque era visible');
         this.mapService.map.removeLayer(geo.geo_elemento);
 
       }

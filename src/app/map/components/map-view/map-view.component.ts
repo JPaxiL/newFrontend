@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
@@ -12,6 +12,8 @@ import { CircularGeofencesService } from 'src/app/geofences/services/circular-ge
 import { PolylineGeogencesService } from 'src/app/geofences/services/polyline-geogences.service';
 import { HistorialService } from 'src/app/historial/services/historial.service';
 import { isThisTypeNode } from 'typescript';
+import { MenuItem } from 'primeng-lts/api';
+import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 
 
 declare var $: any;
@@ -25,6 +27,10 @@ declare var $: any;
 })
 export class MapViewComponent implements OnInit, AfterViewInit {
   //private map!: L.Map;
+  @Input() container = "map";
+
+  
+  
 
   constructor(
     private mapService: MapService,
@@ -33,20 +39,22 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService,
-    public historialService: HistorialService
-
+    public historialService: HistorialService,
   ) {}
   // constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    
+  }
 
   async ngAfterViewInit() {
-    this.createMap();
+    await this.createMap();
     //$("#panelMonitoreo").hide( "slow" )
     await this.geofencesService.initialize();
     await this.geopointsService.initialize();
     this.circularGeofencesService.initialize();
-    this.polylineGeofenceService.initialize();
+    this.polylineGeofenceService.initialize(); 
 
     this.setLayers();
 
@@ -90,7 +98,9 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
     const zoomLevel = 7;
 
-    this.mapServicesService.map = L.map('map', {
+    this.mapServicesService.map = L.map(this.container, {
+      preferCanvas:true,
+      renderer: L.canvas(),
       center: [parcThabor.lat, parcThabor.lng],
       zoom: zoomLevel,
       maxZoom: 18,
@@ -145,7 +155,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
           break;
         case 18:
           nivel = 1; //todo
-          console.log("-------18 - 1");
+          console.log("-----a--18 - 1");
           break;
         default:
           nivel = 1000; // todo
@@ -259,4 +269,6 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     $('#dialog_show_point_lng').val('');
     this.mapServicesService.display = false;
   }
+
+  
 }

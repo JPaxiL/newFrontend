@@ -15,7 +15,7 @@
             <div class="col p-field">
               <label class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="firstname">Nombre / Cod. Interno:</label>
+                  <label for="firstname">Nombre:</label>
                 </div>
                 <div class="col-7">
                   <input #name id="firstname" type="text" value="{{config.name}}"  pInputText class="p-inputtext-sm" placeholder="">
@@ -25,10 +25,10 @@
             <div class="col p-field">
               <div class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="lastname">IMEI:</label>
+                  <label for="lastname">Código Interno:</label>
                 </div>
                 <div class="col-7">
-                  <input id="lastname" type="text" value="{{config.IMEI}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                  <input id="lastname" type="text" value="{{config.cod_interno}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                 </div>
               </div>
             </div>
@@ -41,17 +41,17 @@
                   <label for="sim">Número SIM:</label>
                 </div>
                 <div class="col-7">
-                  <input #sim id="sim" type="text" value="{{config.sim_number}}" pInputText class="p-inputtext-sm" placeholder="">
+                  <input #sim id="sim" type="text" value="{{config.sim_number}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                 </div>
               </label>
             </div>
             <div class="col p-field">
               <label class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="placa">Placa:</label>
+                  <label for="lastname">IMEI:</label>
                 </div>
                 <div class="col-7">
-                  <input #placa id="placa" type="text" value="{{config.plate_number}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                  <input id="lastname" type="text" value="{{config.IMEI}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                 </div>
               </label>
             </div>
@@ -61,10 +61,42 @@
             <div class="col p-field">
               <label class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="tolva">Cisterna / Tolva:</label>
+                  <label for="empresa">Empresa:</label>
                 </div>
                 <div class="col-7">
-                  <input #tolva id="tolva" type="text" value="{{config.tolva}}" pInputText class="p-inputtext-sm" placeholder="">
+                  <input #empresa id="empresa" type="text" value="{{config.empresa}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                </div>
+              </label>
+            </div>
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="placa">Placa:</label>
+                </div>
+                <div class="col-7">
+                  <input #placa id="placa" type="text" value="{{config.plate_number}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">          
+            <div class="col p-field">
+              <label class="row gl-row-underline">
+                <!-- <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="cisterna_tolva">Cisterna / Tolva:</label>
+                </div>
+                <div class="col-7">
+                  <input #tolva id="tolva" type="text" value="{{config.tolva}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                </div> -->
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="operacion">Operación:</label>
+                </div>
+                <div class="col-7">
+                  <input #empresa id="operacion" type="text" value="{{config.nameoperation}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+
+                  <!-- <span class="p-inputtext-sm">{{config.nameoperation}}</span> -->
+                  <!-- <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled> -->
                 </div>
               </label>
             </div>
@@ -78,29 +110,7 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="row">          
-            <div class="col p-field">
-              <label class="row gl-row-underline">
-                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label for="empresa">Empresa:</label>
-                </div>
-                <div class="col-7">
-                  <input #empresa id="empresa" type="text" value="{{config.empresa}}" pInputText class="p-inputtext-sm" placeholder="">
-                </div>
-              </label>
-            </div>
-            <div class="col p-field">
-              <div class="row gl-row-underline">
-                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label>Grupo:</label>
-                </div>
-                <div class="col-7">
-                  <input id="lastname" type="text" value="{{config.grupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
-                </div>
-              </div>
-            </div>
+            
           </div>
 
           <div class="row">         
@@ -108,32 +118,47 @@
             <div class="col p-field">
               <div class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="grupo">Grupo:</label>
+                </div>
+                <div class="col-7">
+                  <input #empresa id="grupo" type="text" value="{{config.namegrupo}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                  <!-- <span class="p-inputtext-sm">{{config.namegrupo}}</span> -->
+                </div>
+              </div>
+            </div>
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="tipo-unidad">Tipo de Unidad :</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown inputId="tipo-unidad" [options]="types" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'" (onChange)="updateIconsDropdown()" placeholder="Selecciona un tipo de unidad">
-                    <ng-template pTemplate="selectedItem">
-                      <div class="type-item type-item-value" *ngIf="selectedType">
-                        <div>{{selectedType.name}}</div>
-                      </div>
-                    </ng-template>
-                    <ng-template let-type pTemplate="item">
-                      <div class="type-item">
-                        <div>{{type.name}}</div>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
+                  <input #empresa id="tipo-unidad" type="text" value="{{config.nametype_vehicle}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                 </div>
               </div>
             </div>
 
+          </div>
+          <div class="row">    
+            <div class="col p-field">
+              <div class="row gl-row-underline">
+                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                  <label for="convoy">Convoy:</label>
+                </div>
+                <div class="col-7">
+                  <input #empresa id="convoy" type="text" value="{{config.nameconvoy}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                  <!-- <span class="p-inputtext-sm">{{config.nameconvoy}}</span> -->
+                </div>
+              </div>
+            </div>
             <div class="col p-field">
               <div class="row gl-row-underline">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label for="state">Icono:</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown inputId="state" [options]="dropdownIcons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name" placeholder="Selecciona un ícono">
+                  <img [src]="iconUrl"  class="vehicle-icon flag flag-vehicle-edit" />
+                  <!-- <img src="assets/images/objects/nuevo/{{config.icon}}"  class="vehicle-icon flag flag-vehicle-edit" /> -->
+                  <!-- <p-dropdown inputId="state" [options]="dropdownIcons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name" placeholder="Selecciona un ícono">
                     <ng-template pTemplate="selectedItem">
                       <div class="icon-item icon-item-value"  *ngIf="selectedIcon">
                         <label for="">
@@ -150,11 +175,11 @@
                         <img src="assets/images/objects/nuevo/{{icon.name}}"  [class]="'vehicle-icon flag flag-' + icon.code.toLowerCase()" />
                       </div>
                     </ng-template>
-                  </p-dropdown>
+                  </p-dropdown> -->
                 </div>
               </div>
             </div>
-
+            
           </div>
             
           <!-- <div class="row d-flex justify-content-center">
@@ -179,7 +204,8 @@
     <p-footer>
       <div class="row d-flex justify-content-center">
         <div class="col-4">
-          <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
+          <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cerrar</button>
+          <!-- <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cerrar</button> -->
         </div>
         <div class="col-4">
           <button (click)="confirm()" _ngcontent-cic-c118="" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading">Guardar</button>

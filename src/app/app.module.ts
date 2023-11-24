@@ -7,7 +7,6 @@ import { ToastrModule } from 'ngx-toastr';
 import {AuthInterceptor} from './vehicles/services/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgGridModule } from 'ag-grid-angular';
 import { TreeTableModule } from 'primeng-lts/treetable';
@@ -28,11 +27,21 @@ import {CalendarModule} from 'primeng-lts/calendar';
 import {ToggleButtonModule} from 'primeng-lts/togglebutton';
 import {InputSwitchModule} from 'primeng-lts/inputswitch';
 import { TableModule } from 'primeng-lts/table';
-
-
-
+import { PanelModule } from 'primeng-lts/panel';
+import { BadgeModule } from 'primeng-lts/badge';
+import { SliderModule } from 'primeng-lts/slider';
+import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
+import { TagModule } from 'primeng-lts/tag';
+import { TooltipModule } from 'primeng-lts/tooltip';
+import {SlideMenuModule} from 'primeng-lts/slidemenu';
+import {SidebarModule} from 'primeng-lts/sidebar';
+import {ScrollPanelModule} from 'primeng-lts/scrollpanel';
+import {GalleriaModule} from 'primeng-lts/galleria';
+import {ProgressSpinnerModule} from 'primeng-lts/progressspinner';
 // import { LeafletMarkerClusterModule } from '../../../leaflet-markercluster/leaflet-markercluster.module';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
+import {CarouselModule} from 'primeng-lts/carousel';
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
@@ -95,7 +104,6 @@ import { AddGeopointsComponent } from './geopoints/components/add-geopoints/add-
 import { ListGeopointsComponent } from './geopoints/components/list-geopoints/list-geopoints.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
@@ -124,6 +132,22 @@ import { GeocercaPolylineListsComponent } from './geofences/components/geocerca-
 import { DriversListComponent } from './drivers/components/drivers-list/drivers-list.component';
 import { DriversPanelComponent } from './drivers/components/drivers-panel/drivers-panel.component';
 import { DriversModalComponent } from './drivers/components/drivers-modal/drivers-modal.component';
+import { GridComponent } from './multiview/grid/grid.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DialogComponent } from './multiview/dialog/dialog.component';
+import { DragItemComponent } from './multiview/drag-item/drag-item.component';
+import { PreviewComponent } from './multiview/preview/preview.component';
+import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
+import { MinimapComponent } from './multiview/minimap/minimap.component';
+import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
+import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
+import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
+import { CipiaComponent } from './cipia/cipia.component';
+import { FootbarComponent } from './panel/components/footbar/footbar.component';
+import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
+import { CarouselComponent } from './shared/components/carousel/carousel.component';
+import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
+import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
 
 @NgModule({
   declarations: [
@@ -161,7 +185,9 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     PanelAlertsComponent,
     TreeTableComponent,
     VehicleConfigComponent,
+    DashboardComponent,
     GeocercaAddComponent,
+    GridComponent,
     GeocercaListsComponent,
     GeocercaMainComponent,
     VehicleGroupComponent,
@@ -199,7 +225,20 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     DriversListComponent,
     DriversPanelComponent,
     DriversModalComponent,
-
+    DialogComponent,
+    DragItemComponent,
+    PreviewComponent,
+    ScreenViewComponent,
+    MinimapComponent,
+    PanelHistorialRecorridoModalComponent,
+    AlphaNumericDashDirective,
+    ScreenRecorderComponent,
+    CipiaComponent,
+    FootbarComponent,
+    EventPopupComponent,
+    CarouselComponent,
+    DriversHistoryComponent,
+    SliderMultimediaComponent
   ],
   imports: [
     ToastrModule.forRoot({
@@ -210,10 +249,10 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
       maxOpened: 4,
       autoDismiss: true,
     }),
+    RouterModule, 
     BrowserModule,
     DataTablesModule,
     CommonModule,
-    BrowserModule,
     NgxSpinnerModule,
     NgxsModule.forRoot([AuthState]),
     AlertModule,
@@ -221,14 +260,17 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule,
+    PanelModule,
     NgSelectModule,
     TreeTableModule,
     DropdownModule,
     DialogModule,
+    ScrollPanelModule,
     InputTextModule,
     InputSwitchModule,
     TableModule,
+    NgbModule,
+    SliderModule,
     ToggleButtonModule,
     InputNumberModule,
     ConfirmDialogModule,
@@ -237,11 +279,20 @@ import { DriversModalComponent } from './drivers/components/drivers-modal/driver
     PickListModule,
     ListboxModule,
     CardModule,
+    BadgeModule,
     CheckboxModule,
+    OverlayPanelModule,
+    TagModule,
+    TooltipModule,
     MultiSelectModule,
     CalendarModule,
+    SlideMenuModule,
+    GalleriaModule,
     LeafletModule,
     LeafletMarkerClusterModule,
+    SidebarModule,
+    CarouselModule,
+    ProgressSpinnerModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

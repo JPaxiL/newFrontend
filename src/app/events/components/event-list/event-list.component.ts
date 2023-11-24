@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
@@ -9,6 +9,9 @@ import { PanelService } from 'src/app/panel/services/panel.service';
 
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
+import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
+import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 
 @Component({
   selector: 'app-event-list',
@@ -27,12 +30,18 @@ export class EventListComponent implements OnInit {
   public events:any[] = [];
   public placa:string = '';
 
+  public imei_debug: string ='864200050708453';
+  public data_debug: any = ['-','-','-','-']
+
   constructor(
     public eventService: EventService,
     public mapService: MapServicesService,
     public ess:EventSocketService,
     private spinner: NgxSpinnerService,
     private http:HttpClient,
+    private resolver: ComponentFactoryResolver, 
+    private container: ViewContainerRef,
+    private vehicleService: VehicleService
     ) {
       // this.tipoEvento = [
       //   { id: 0, option: 'Todos los Eventos', tipo: '' },
@@ -71,16 +80,39 @@ export class EventListComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    console.log("event list on init ========================================================================");
     this.selectedEvent = null;
     if(!this.eventService.eventsLoaded || !this.eventService.filterLoaded){
       this.spinner.show('loadingEventList');
     }
     this.loadFilterData();
+
+    this.eventService.debugEventStream.subscribe(res=>{
+      // console.log("desde event list ",res);
+      this.data_debug = res.data;
+    });
   }
 
   ngOnDestroy(){
     if(this.eventService.activeEvent){
       this.hideEvent(this.eventService.activeEvent);
+    }
+  }
+  clickDatosDebug(): void{
+    this.ess.debug(this.imei_debug);
+  }
+  clickEndDeveloper(): void{
+    this.eventService.eventDeveloperStatus = false;
+    this.eventService.eventDeveloperCount = 0;
+    this.data_debug = ['-','-','-','-'];
+  }
+  clickEventPanel(): void {
+    console.log(this.eventService.eventDeveloperStatus);
+    if(this.eventService.eventDeveloperCount > 5){
+      this.eventService.eventDeveloperStatus = true;
+      console.log("eres desarrollador ...",this.eventService.eventDeveloperStatus);
+    }else{
+      this.eventService.eventDeveloperCount++;
     }
   }
 
@@ -100,27 +132,91 @@ export class EventListComponent implements OnInit {
   }
 
   public showEvent(event:any){
-    if(this.eventService.activeEvent) {
-      this.hideEvent(this.eventService.activeEvent);
-      //console.log('Ocultar evento previo');
+    const objParams:any = {};
+    /*
+    antes de procesar parametros  string
+    event-list.component.ts:130 despues de procesar parametros  object
+    */
+    // console.log("antes de procesar parametros ",typeof(event.parametros));
+    if(event.parametros&&typeof(event.parametros)=='string'){
+      event.parametros.split('|').forEach((item:any) => {
+        const [key, value] = item.split('=');
+        objParams[key] = value;
+      });
+      //reemplazo el atributo parametros (string) con el objeto
+      event.parametros = objParams;
     }
 
+    console.log("desde show events - componente event list ...",event);
+    console.log("has popup opened", event.layer.isPopupOpen());
+    if (this.eventService.activeEvent) {
+      if(this.eventService.activeEvent.id == event.id && event.layer.isPopupOpen()){
+        console.log("no hacer nada");
+        return;
+      }
+      this.eventService.activeEvent.layer.closePopup();
+      this.eventService.activeEvent.layer.unbindPopup();
+      this.eventService.activeEvent.layer.off()
+      this.hideEvent(this.eventService.activeEvent);
+    }
+    
     if(!event.viewed){
       event.viewed = true;
-      this.markAsRead(event.id);
+      // this.markAsRead(event.evento_id);
     }
+    this.eventService.activeEvent = event;
 
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
+    // convierto el atributo params en un objeto
+    
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
+    
     event.layer.bindPopup(getContentPopup(event), {
       className: eventClass,
       minWidth: 250,
-      maxWidth: 350,
-    } );
-    this.eventService.activeEvent = event;
+      maxWidth: 350
+    });
+    event.layer.on('click', () => {
+      console.log("CLIIIIICK");
+      this.addMultimediaComponent(event);
+    });
+    console.log("has popup opened3", event.layer.isPopupOpen());
     event.layer.addTo(this.mapService.map).openPopup();
+    console.log("has popup opened4", event.layer.isPopupOpen());
+    this.addMultimediaComponent(event);
+
+
+  }
+
+  addMultimediaComponent(event:any){
+    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+      console.log("adding multimedia: ", event);
+      
+      const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
+      const componentRef: ComponentRef<any> = this.container.createComponent(factory);
+      const params:any = {
+        'event': event, 
+        'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'showMultimediaFirst': true,
+        'hasMultimedia':true,
+        'showTitle':false
+      };
+      // Asignar datos al componente si existen
+      
+      Object.keys(
+        params
+        ).forEach((key) => {
+          componentRef.instance[key] = params[key];
+        });
+        // Agregar el componente directamente al contenedor del popup
+        console.log("componentRef.location.nativeElement",componentRef.location.nativeElement);
+        
+      const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
+      console.log("divContainer",divContainer);
+      divContainer.appendChild(componentRef.location.nativeElement);
+    }
   }
 
   public hideEvent(event:any){
@@ -129,12 +225,12 @@ export class EventListComponent implements OnInit {
   }
 
   private markAsRead(event_id: any){
-    console.log('Marking ' + event_id + ' as read...');
+    console.log('desde event list Marking ' + event_id + ' as read...');
     //this.eventService.decreaseUnreadCounter();
     this.eventService.updateUnreadCounter();
     this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
       next: data => {
-        console.log('Mark ' + event_id + ' as read Success? : ', data.success);
+        console.log('desde event list Mark ' + event_id + ' as read Success? : ', data.success);
       },
       error: () => {
         console.log(event_id + ': Hubo un error al marcar como leído');
@@ -143,11 +239,14 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement){
-    if(event.id == this.eventService.activeEvent.id){
-      this.hideEvent(this.eventService.activeEvent);
+    console.log("click event....",event);
+    // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
+    // if(event.event_id == this.eventService.activeEvent.id){
+    if(false){
+      // this.hideEvent(this.eventService.activeEvent);
     } else {
       currentRow.classList.add('watched-event');
-      //console.log('Mostrando evento con ID: ', event.id);
+      console.log('Mostrando evento con ID: ', event.evento_id);
       let reference = await this.eventService.getReference(event.latitud, event.longitud);
       event.referencia = reference.referencia;
       this.showEvent(event);
@@ -159,14 +258,17 @@ export class EventListComponent implements OnInit {
   }
 
   public changeTypeEvent(){
+    // console.log("eventService.classFilterArray",this.eventService.classFilterArray);
     /* if(this.selectedEvent == ''){ */
     if(this.selectedEvent === null && this.placa == ''){
       this.eventService.eventsFiltered = this.eventService.getData();
       this.noResults = false;
     }else{
+      // console.log("this.selectedEvent ??????",this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
         return this.eventFilter(event);
       });
+      // console.log("get data",this.eventService.eventsFiltered);
       this.noResults = this.eventService.eventsFiltered.length == 0;
     }
   }
@@ -186,6 +288,10 @@ export class EventListComponent implements OnInit {
   }
 
   private eventFilter(event: any){
+    // console.log("filter ===> ");
+    // console.log("event",event);
+    // console.log("this.selectedEvent",this.selectedEvent);
+    // console.log("tipo select",event.tipo +"=="+ this.selectedEvent);
     return (event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase()) || this.placa == '')
           && (event.tipo == this.selectedEvent || this.selectedEvent === null);
   }

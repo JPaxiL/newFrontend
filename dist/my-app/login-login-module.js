@@ -1,5 +1,51 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["login-login-module"],{
 
+/***/ "NOti":
+/*!****************************************************!*\
+  !*** ./src/app/dashboard/service/users.service.ts ***!
+  \****************************************************/
+/*! exports provided: UsersService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UsersService", function() { return UsersService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+
+
+
+
+class UsersService {
+    constructor(http) {
+        this.http = http;
+    }
+    getAll() {
+        return this.http.get(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiUrl + `/api/user`);
+    }
+    getUsers(currentPage) {
+        //console.log(environment.apiUrl , currentPage);
+        return this.http.get(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiUrl + 'clientes?page=' + currentPage);
+        // .map(res => res.json());
+    }
+    setUserInLocalStorage() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            yield this.http.get(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiUrl}/api/user`)
+                .toPromise()
+                .then(res => {
+                localStorage.setItem('user_id', res.data.id);
+            });
+        });
+    }
+}
+UsersService.ɵfac = function UsersService_Factory(t) { return new (t || UsersService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"])); };
+UsersService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: UsersService, factory: UsersService.ɵfac, providedIn: 'root' });
+
+
+/***/ }),
+
 /***/ "V1Ps":
 /*!*****************************************************!*\
   !*** ./src/app/login/components/login.component.ts ***!

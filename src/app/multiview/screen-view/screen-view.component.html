@@ -1,0 +1,42 @@
+<ng-container *ngIf="!show_not_found">
+    <div class="view-container d-flex flex-column ">
+        <div class="grid-section" #gridDiv [id]="'Todo'">
+            <app-grid (onDeleteGrid)="deleteView($event)" (itemsChange)="onExchange($event)" #_gridChild></app-grid>
+            <div class="display-menu">
+                <button #btn type="button" pButton pRipple icon="pi pi-ellipsis-v" label="" class="p-button-rounded shadow-lg" (click)="menu.toggle($event)"></button>
+                <p-slideMenu [appendTo]="'body'" #menu [model]="itemsMenu" [popup]="true" [viewportHeight]="250"></p-slideMenu>
+            </div>
+        </div>
+        <app-screen-recorder [display]="showScreenRecorder" [recordingElements]="auxGridItems" [type]="'minimap'" (onClose)="closeScreenRecorder();" (onRecording)="recordingStatus($event)">
+        </app-screen-recorder>
+    </div>
+    <p-dialog [header]="'Guardar como...'" [(visible)]="showSaveAs" [breakpoints]="{'960px': '50vw', '640px': '750vw'}" (close)="showSaveAs=false;" [style]="{width: '30vw',height: 'auto'}" [closable]="true">
+        <div class="d-flex justify-content-center pb-3 align-items-center gap-4">
+            <div class="p-field d-flex flex-column">
+                <label for="username1">Nombre de la vista</label>
+                <input 
+                    id="username1" 
+                    type="username" 
+                    aria-describedby="username1-help" 
+                    pInputText 
+                    [(ngModel)]="newName" 
+                    (input)="isValidGroupName()" 
+                    [maxlength]="30" 
+                    [minlength]="1" 
+                    appAlphaNumericDash
+                    #nameInput
+                />
+                <small id="username1-help">Solo se permiten letras, números y guiones (-)</small>
+            </div>
+            <button 
+                (click)="saveAsGrid()" _ngcontent-cic-c118="" type="button" 
+                class="btn-gl-save btn-dark-hover btn-sm w-25 my-4" 
+                [disabled]="loading">
+                Siguiente
+            </button>
+        </div>
+    </p-dialog>
+</ng-container>
+<ng-container *ngIf="show_not_found">
+    <app-not-found></app-not-found>
+</ng-container>

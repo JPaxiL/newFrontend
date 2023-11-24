@@ -29,6 +29,7 @@ export class PanelService {
     { id:'AUDITORIA', name: 'Auditoría'},
     { id:'SUBCUENTAS', name: 'Relación de Subcuentas'},
     { id:'DRIVERS', name: 'Relación de Conductores'},
+    { id:'MULTIVIEW', name: 'Multiples pantallas'},
 
   );
 
@@ -43,12 +44,12 @@ export class PanelService {
   clickShowPanel( nomComponent:string ){
     console.log("-----clickShowPanel");
     console.log(this.activePanelClass());
-    
+
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
 
       console.log(nomComponent);
       console.log(this.nombreComponente );
-      
+
       $("#panelMonitoreo").hide( "slow" );
       this.nombreComponente = '';
     } else {
@@ -99,6 +100,8 @@ export class PanelService {
         return 'subcuentas';
       case "DRIVERS":
         return 'drivers';
+      case "MULTIVIEW":
+        return 'multiview';
       default:
         return '';
     }

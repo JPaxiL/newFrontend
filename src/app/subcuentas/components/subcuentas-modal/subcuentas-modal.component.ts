@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 import {Md5} from 'ts-md5';
 
 
+import * as bcrypt from 'bcryptjs';
+import { LOADERS } from 'ngx-spinner';
 
 @Component({
   selector: 'app-subcuentas-modal',
@@ -67,6 +69,22 @@ export class SubcuentasModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    console.log("===========================================ngOnInit");
+    const hash = bcrypt.hashSync('123456', 10);
+    console.log(hash);
+    
+    console.log("================================================");
+    const salt = bcrypt.genSaltSync(10);
+    const hash1 = bcrypt.hashSync('123456', salt);
+    console.log(hash1);
+    console.log("================================================ true - true - false - false");
+
+    console.log(bcrypt.compareSync("123456", hash));
+    console.log(bcrypt.compareSync("123456", hash1));
+    console.log(bcrypt.compareSync("1234567", hash));
+    console.log(bcrypt.compareSync("1234567", hash1));
+
 
     if ( this.subcuentasService.action == "edit" ) {
       //this.llenar_formulario();
@@ -277,7 +295,8 @@ export class SubcuentasModalComponent implements OnInit {
 
 
 
-    if (nro != 0) {
+    //if (nro != 0) {
+    if (true) {
 
       Swal.fire({
         //title: '¿Desea guardar los cambios?',
@@ -295,21 +314,44 @@ export class SubcuentasModalComponent implements OnInit {
 
 
             var sub = this.subcuentasService.subUsers.filter((item:any)=> item.id == this.subcuentasService.idSubUserEdit)[0];
-            console.log(sub);
-            console.log(this.subcuentasForm.value.contrasena+" -O- "+sub.contrasena);
+            // console.log(sub);
+            // console.log(this.subcuentasForm.value.contrasena+" -O- "+sub.contrasena);
+
+            // console.log("================================================ XD");
+            // // const salt = bcrypt.genSaltSync(10);
+            // // const hash1 = bcrypt.hashSync('123456', salt);
+            // // console.log(hash1);
+            // // console.log("================================================ true - true - false - false");
+        
+            // console.log(bcrypt.compareSync("123456", sub.contrasena));
+            // console.log(bcrypt.compareSync("123456", sub.contrasena));
+            // console.log(bcrypt.compareSync("1234567", sub.contrasena));
+            // console.log(bcrypt.compareSync("1234567", sub.contrasena));
+
+            
 
             // console.log(md5.createHash(this.subcuentasForm.value.contrasena));
-            const md5 = new Md5();
-            var oldpass = md5.appendStr(this.subcuentasForm.value.contrasena).end();
+            // const md5 = new Md5();
+            // const hash = bcrypt.hashSync('123456', 10);
+            // console.log("===========================================");
+            // console.log(hash);
+            
 
-            console.log(md5.appendStr(this.subcuentasForm.value.contrasena).end());
-            console.log(oldpass);
+            // var oldpass = md5.appendStr(this.subcuentasForm.value.contrasena).end();
+
+            // console.log(md5.appendStr(this.subcuentasForm.value.contrasena).end());
+            // console.log(oldpass);
 
 
             if (this.subcuentasForm.value.contrasena != "" || this.subcuentasForm.value.contrasenaNew != "" || this.subcuentasForm.value.contrasenaNew2 != "") {
 
-              console.log(oldpass+' - '+sub.contrasena);
-              if (oldpass != sub.contrasena) {
+              //console.log(oldpass+' - '+sub.contrasena);
+              console.log(' ------------------------------------------------ ');
+
+              console.log(this.subcuentasForm.value.contrasena+' - '+sub.contrasena);
+              console.log( bcrypt.compareSync(this.subcuentasForm.value.contrasena, sub.contrasena) );
+              //if (oldpass != sub.contrasena) {
+              if (!bcrypt.compareSync(this.subcuentasForm.value.contrasena, sub.contrasena)) {
                 Swal.fire(
                   '',//'Error',
                   'La contraseña anterior es incorrecta!!',
@@ -329,6 +371,11 @@ export class SubcuentasModalComponent implements OnInit {
               }
 
               if (this.subcuentasForm.value.contrasenaNew != this.subcuentasForm.value.contrasenaNew2) {
+
+                // console.log("============================");
+                // console.log(this.subcuentasForm.value.contrasenaNew);
+                // console.log(this.subcuentasForm.value.contrasenaNew2);
+                
                 Swal.fire(
                   '',//'Error',
                   'La nueva contraseña debe coincidir!!',

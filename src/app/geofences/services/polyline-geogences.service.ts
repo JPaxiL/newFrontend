@@ -250,7 +250,8 @@ export class PolylineGeogencesService {
   }
 
   initializePaintPolygon(){
-  
+    console.log("initialize paint poligon");
+    
     //@ts-ignore
     this.paintpolygonControl = L.control.paintPolygon({
       menu: false,
