@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/ti/Documents/GLTracker/NewPlatform/newFrontend/src/polyfills.ts */"hN/g");
+module.exports = __webpack_require__(/*! /Users/percy/Documents/PLATAFORMA/newFrontend_gitlab/newFrontend/src/polyfills.ts */"hN/g");
 
 
 /***/ }),
