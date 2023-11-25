@@ -5,8 +5,8 @@
       <div class="d-flex flex-grow-1">
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <!-- <input type="text" (keyup)="onBusqueda($event)" type="text" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
-          <input (keyup)="onSearchGeo($event)" [(ngModel)]="searchValueGeo" type="text" id="searchKey" class="form-control"  class="form-control ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false" placeholder="Buscar por Nombre/tipo..." />
+          <input type="text" [(ngModel)]="searchValueGeo"  class="form-control" placeholder="Buscar nombre...">
+          <!-- <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
         </span>
       </div>
       <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickImportGeocerca()" title="Importar o exportar">
@@ -56,7 +56,7 @@
         <colgroup>
           <col style="width: 2.5rem;" />
           <col style="width: 18%;"/>
-          <col style="width: 50%;" />
+          <col style="width: 185px;" />
           <col style="width: 16%;"/>
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
@@ -204,7 +204,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="rowData['col']!=3">
+        <tr *ngIf="rowData['col']!=3 && matchesSearch(rowData)">
           <td></td>
           <td class="eye-column">
             <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShowGeo(rowData['id'], rowData['type'])">
@@ -405,7 +405,7 @@
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-        <tr *ngIf="rowData['col']!=3">
+        <tr *ngIf="rowData['col']!=3 && matchesSearch(rowData)">
           <td></td>
           <td class="eye-column">
             <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShowGeo(rowData['id'], rowData['type'])">

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, OnInit, OnChanges, ViewChild, OnDestroy, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { GeofencesService } from '../../services/geofences.service';
 import { CircularGeofencesService } from '../../services/circular-geofences.service';
 import { PolylineGeogencesService } from '../../services/polyline-geogences.service';
@@ -112,27 +112,14 @@ export class GeofenceTableComponent implements OnInit {
       this.noResults = this.geofencesService.tblDataGeoFiltered.length == 0;
     }
   }
-  onSearchGeo(data: any){
-    console.log('searching ...',this.searchValueGeo);
-    //this.geosService.spinner.show('loadinggeos');
-    // this.tt.filterGlobal(data.target.value, 'contains')
-    // this.tt.defaultSortOrder=-1;
-    if(this.searchValueGeo == ''){
-      this.objGeofences = this.objGeofencesFilter;
-      this.noResults = false;
-      console.log('VACIO GET ALL DATA...');
-    } else {
-      // this.geosService.tblDatageo = this.geosService.getTableDatageo();
-      const searchTerm = this.searchValueGeo.toLowerCase();
 
-      console.log("lisstaaaaaa",this.objGeofences.geofences);
-      // Filtrar los datos según el término de búsqueda
-    //  this.objGeofences.geofences = this.objGeofences.geofences.filter((geo)) => 
-    //     geo.trama.zone_name.toLowerCase().includes(searchTerm) ||
-    //     (geo.trama.type && geo.trama.type.toLowerCase().includes(searchTerm))
-    //   );
-      console.log(this.geofencesService.tblDataGeoFiltered);
-    }
+  matchesSearch(rowData?: any): boolean {
+    const searchFields = ['zone_name']; 
+  
+    return searchFields.some(field => {
+      const cellValue = rowData[field].toString().toLowerCase();
+      return cellValue.includes(this.searchValueGeo.toLowerCase());
+    });
   }
 
   addDataGeofence(geofences: any){
@@ -549,6 +536,11 @@ export class GeofenceTableComponent implements OnInit {
     this.circularGeofencesService.action         = "edit";
     this.circularGeofencesService.idGeocercaEdit = id;
   }
+
+  updateTable(id: number){
+    this.geofencesService.initializeTable();
+    this.objGeofences.createTreeNode();
+  }
   
   clickEliminarGeocerca(id:number , type: string){
     if(type=='polig'){
@@ -566,7 +558,7 @@ export class GeofenceTableComponent implements OnInit {
 
     Swal.fire({
         title: '¿Está seguro?',
-        text: `¿Está seguro que desea eliminar ${geo.zone_name}?`,
+        text: `¿Está seguro que desea eliminar "${geo.zone_name}"?`,
         showCancelButton: true,
         showLoaderOnConfirm: true,
         confirmButtonText: 'Eliminar',
@@ -591,6 +583,8 @@ export class GeofenceTableComponent implements OnInit {
           this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
           this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
           this.onBusqueda();
+          this.updateTable(id);
+          console.log("aqui");
         }
     }).then(data => {
       if(data.isConfirmed){
@@ -609,7 +603,7 @@ export class GeofenceTableComponent implements OnInit {
 
     Swal.fire({
         title: '¿Está seguro?',
-        text: `¿Está seguro que desea eliminar ${geo.zone_name}?`,
+        text: `¿Está seguro que desea eliminar "${geo.zone_name}"?`,
         showCancelButton: true,
         showLoaderOnConfirm: true,
         confirmButtonText: 'Eliminar',
