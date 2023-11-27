@@ -190,6 +190,7 @@ export class EventService {
           if(!event.viewed){
             this.unreadCount++;
           }
+          
           return event;
         });
         // return;
@@ -335,18 +336,27 @@ export class EventService {
       { tipo: 'bloqueo-vision-mobileye', clase: 'bloqueo-vision-mobileye' },
       { tipo: 'anticolision-frontal', clase: 'colision-peatones' },
       { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
-      { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
       { tipo: 'posible-fatiga', clase: 'posible-fatiga' },
       { tipo: 'fatiga-extrema', clase: 'fatiga-extrema' },
       { tipo: 'no-rostro', clase: 'no-rostro' },
+      { tipo: 'error-de-camara-360', clase: 'error-camara' },
+      { tipo: 'cinturon-desabrochado-360', clase: 'cinturon-NoDetectado' },
+      { tipo: 'conductor-distraido-360', clase: 'distraccion-detectada' },
+      { tipo: 'conductor-fumando-360', clase: 'cigarro-detectado' },
+      { tipo: 'ignicion-activada-360', clase: 'no-rostro' },
+      { tipo: 'conductor-adormitado-360', clase: 'conductor-adormitado' },
+      { tipo: 'conductor-somnoliento-360', clase: 'conductor-somnoliento' },
+      { tipo: 'uso-del-celular-360', clase: 'celular-detectado' },
       { tipo: 'error-de-camara-360', clase: 'no-rostro' },
-      { tipo: 'cinturon-de-seguridad-desabrochado', clase: 'no-rostro' },
-      { tipo: 'conductor-distraido-360', clase: 'no-rostro' },
-      { tipo: 'conductor-adormitado-360', clase: 'no-rostro' },
-      { tipo: 'ignicion-activada-360', clase: 'no-rostro' }
-
-
-
+      { tipo: 'sistema-ok-360', clase: 'no-rostro' },
+      { tipo: 'sistema-reseteado-360', clase: 'no-rostro' },
+      { tipo: 'deteccion-manipulacion-360', clase: 'deteccion-manipulacion' },
+      { tipo: 'conductor-no-identificado-360', clase: 'no-rostro' },
+      { tipo: 'cambio-conductor-360', clase: 'no-rostro' },
+      { tipo: 'conductor-identificado-360', clase: 'no-rostro' },
+      { tipo: 'conductor-ausente-360', clase: 'no-rostro' },
+      { tipo: 'ignicion-activada-360', clase: 'no-rostro' },
+      { tipo: 'actualizacion-estado-gps-360', clase: 'no-rostro' }
     ];
 
 
@@ -463,7 +473,6 @@ export class EventService {
         from:from
       })
       .toPromise();
-
       return response.data;
     }
 
@@ -507,6 +516,8 @@ export class EventService {
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
+        console.log("EVENTS_FILTERED: ",this.eventsFiltered);
+        
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
         console.log('Ocultar Spinner');

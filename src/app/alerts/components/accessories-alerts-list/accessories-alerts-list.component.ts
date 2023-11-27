@@ -26,8 +26,8 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
   options = new Array(
     { id:'ALERTS', name:"Alertas"},
-    { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
-    { id:'ALERTS-ACCESSORIE-CREATE', name:"Crear Alertas Seguridad Vehicular"},
+    { id:'ALERTS-ACCESSORIES', name:"Alertas 360"},
+    { id:'ALERTS-ACCESSORIE-CREATE', name:"Crear Alertas 360"},
   );
 
   constructor(
@@ -79,7 +79,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
     $("#panelMonitoreo").show( "slow" );
     this.panelService.nombreComponente = "ALERTS-ACCESSORIE-EDIT";
-    this.panelService.nombreCabecera =   "Alerta Seguridad Vehicular";
+    this.panelService.nombreCabecera =   "Alerta 360";
   }
 
   clickShowPanel( nomComponent:string ): void {

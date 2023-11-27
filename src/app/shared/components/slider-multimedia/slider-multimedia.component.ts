@@ -1,5 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 
 @Component({
@@ -18,6 +20,7 @@ export class SliderMultimediaComponent implements OnInit {
   @Input() showTitle = true;
 
   loading = false;
+  error = false;
 
   @ViewChild('multimedia_wrapper') multimediaWrapper!:ElementRef;
 
@@ -47,11 +50,20 @@ export class SliderMultimediaComponent implements OnInit {
   }
 
   _activeIndex: number = 1;
-
+  
   // -------- end  cipia multimedia
+  private destroy$ = new Subject<void>();
 
   constructor(private multimediaService: MultimediaService,private sanitizer: DomSanitizer) { }
 
+
+
+  ngOnDestroy() {
+    console.log("DESTRUYENDOOO");
+    
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   ngOnInit(): void {
     console.log("EVENT RENDERED======= ",this.event);
     if(this.showMultimediaFirst){
@@ -68,6 +80,8 @@ export class SliderMultimediaComponent implements OnInit {
   }
 
   checkCipiaMultimedia(params: any, imei:string){
+    console.log("params: ",params);
+    
     if(params["gps"] && params["gps"]=="cipia" && (params["has_video"]=="1" || params["has_image"] == "1")){
       this.hasMultimedia = true
       if(params["has_video"]=="1"){
@@ -89,29 +103,42 @@ export class SliderMultimediaComponent implements OnInit {
     }
   }
 
+  retryMultimedia(multimedia: any){
+
+  }
   prev(){
-    this.activeIndex++;
-    console.log(this.multimediaWrapper.nativeElement);
-    this.loadMedia();
+    if(!this.loading){
+      this.activeIndex++;
+      console.log(this.multimediaWrapper.nativeElement);
+      this.loadMedia();
+    }
   }
 
   next(){
-    this.activeIndex--;
-    console.log(this.multimediaWrapper.nativeElement);
-    this.loadMedia();
+    if(!this.loading){
+      this.activeIndex--;
+      console.log(this.multimediaWrapper.nativeElement);
+      this.loadMedia();
+    }
   }
 
-  async loadMedia():Promise<void>{
-    const media = this.multimedias[this.activeIndex-1];
-    if(this.multimedias[this.activeIndex-1].url.length == 0){
+  async loadMedia(item?:any):Promise<void>{
+    const media = item? item : this.multimedias[this.activeIndex-1];
+    this.error = false;
+    if(media.url.length == 0){
       //const url = await this.multimediaService.getMediaFromEvent('E321361117',media.params.eventId,media.params.type,media.params.source).toPromise();
       this.loading = true;
-      const url = await this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source).toPromise();
-      if(url){
-        this.multimedias[this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
-        console.log("nueva url: ",this.multimedias[this.activeIndex-1].url);
-      }
-      this.loading = false;
+      this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source,undefined,undefined,0).pipe(takeUntil(this.destroy$)).toPromise().then(url => {
+        if(url){
+          this.multimedias[this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
+          console.log("nueva url: ",this.multimedias[this.activeIndex-1].url);
+        }
+        this.loading = false;
+      }).catch( error => {
+        console.log("eeeerror:",error);
+        this.loading = false;
+        this.error = true;
+      });
     }
   }
 

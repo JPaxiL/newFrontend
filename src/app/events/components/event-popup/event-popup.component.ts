@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, AfterViewInit, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, Output, ViewChild, ComponentRef, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
@@ -11,6 +9,7 @@ import { GeofencesMinimapService } from 'src/app/multiview/services/geofences-mi
 import { GeopointsMinimapService } from 'src/app/multiview/services/geopoints-minimap.service';
 import { LayersService } from 'src/app/multiview/services/layers.service';
 import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
+import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { PopupMap } from '../../models/popup-map';
 import { EventService } from '../../services/event.service';
 
@@ -50,7 +49,10 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
     public circularGeofences: CircularGeofencesMinimapService,
     public geopointsService: GeopointsMinimapService,
     public eventService: EventService,
-    public mapService: MapServicesService
+    public mapService: MapServicesService,
+    private resolver: ComponentFactoryResolver, 
+    private container: ViewContainerRef,
+    private vehicleService: VehicleService
   ) {
    
   }
@@ -179,35 +181,28 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
 
   
   async showEvent(event:any){
-    if(this.eventService.activeEvent) {
-      console.log("hide event");
+    if (this.eventService.activeEvent) {
+      if(this.eventService.activeEvent.id == event.id && event.layer.isPopupOpen()){
+        console.log("no hacer nada");
+        return;
+      }
+      this.eventService.activeEvent.layer.closePopup();
+      this.eventService.activeEvent.layer.unbindPopup();
+      this.eventService.activeEvent.layer.off()
       this.hideEvent(this.eventService.activeEvent);
-      return;
     }
     let reference = await this.eventService.getReference(event.latitud, event.longitud);
     event.referencia = reference.referencia;
 
     if(!event.viewed){
       event.viewed = true;
-      this.eventService.markAsRead(event.evento_id);
+      //this.eventService.markAsRead(event.evento_id);
     }
+    this.eventService.activeEvent = event;
 
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
-    // convierto el atributo params en un objeto
-
-    // const objParams:any = {};
-    // const auxParams = event.parametros;
-    // auxParams.split('|').forEach((item:any) => {
-    //   const [key, value] = item.split('=');
-    //   objParams[key] = value;
-    // });
-    // //reemplazo el atributo parametros (string) con el objeto
-    // console.log("objParams.keys().length: ----->", objParams);
-    // if(objParams > 0){
-    //   event.parametros = objParams;
-    // }
-
+    
     this.eventService.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
     //si el evento es de cipia y tiene video(s)
     event.layer.bindPopup(this.eventService.getContentPopup(event), {
@@ -215,8 +210,13 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
       minWidth: 250,
       maxWidth: 350,
     });
-    this.eventService.activeEvent = event;
+    event.layer.on('click', () => {
+      console.log("CLIIIIICK");
+      this.addMultimediaComponent(event);
+    });
     event.layer.addTo(this.eventService.mapService.map).openPopup();
+    
+    this.addMultimediaComponent(event);
   }
 
   private hideEvent(event:any){
@@ -229,5 +229,31 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
     this.appSlider.changeShowMultimedia();
   }
 
+  addMultimediaComponent(event:any){
+    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+      console.log("adding multimedia: ", event);
+      
+      const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
+      const componentRef: ComponentRef<any> = this.container.createComponent(factory);
+      const params:any = {
+        'event': event, 
+        'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'showMultimediaFirst': true,
+        'hasMultimedia':true,
+        'showTitle':false
+      };
+      // Asignar datos al componente si existen
+      
+      Object.keys(
+        params
+      ).forEach((key) => {
+        componentRef.instance[key] = params[key];
+      });
+      // Agregar el componente directamente al contenedor del popup
+      const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
+      
+      divContainer.appendChild(componentRef.location.nativeElement);
+    }
+  }
   
 }

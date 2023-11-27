@@ -85,10 +85,13 @@ export class FormComponent implements OnInit {
 
 	//showZones = false;
 	showCheckboxs = false;
+  showCheckboxsCipia = false;
 
 	showCard = false;
 	showDivHorizontal = false;
 	showEvents = false;
+  showEventsCipia = false;
+
 	showSubLimitTime = false;
 	showTrans1min = false;
 	showFatigaOp = false;
@@ -967,10 +970,12 @@ export class FormComponent implements OnInit {
     this.showOdomOpt = false; // Combustible
 		this.showZones = false; // Seleccionador de geocercas
 		this.showCheckboxs = false;// Opciones reporte general
+    this.showCheckboxsCipia = false;// Opciones reporte general CIPIA
 		this.showMovStop = false; //Ver Paradas y Movimiento
 		this.showDivHorizontal = false; // Nombre de cabecera del reporte
 		this.showLimitTime = false; //Configuracion de rango de tiempo -- true la mayoria
-		this.showEvents = false; //Configuracion de rango de tiempo
+		this.showEvents = false; //Configuracion
+    this.showEventsCipia = false; //Configuracion
 		this.showTrans1min = false; //Configuracion de duracion de parada >1min
 		this.showFatigaOp = false; //Configuracion de opcion de fatiga 2
 		this.showBrakeAccel = false; //Configuración Aceleracion y frenada
@@ -1059,7 +1064,22 @@ export class FormComponent implements OnInit {
       case 'R035':  //    -
           //this.showZones = true;
       break;
-      
+      case 'R036':  //   - R036	REPORTE GENERAL CIPIA
+          this.showLimitTime = true;
+          this.showCheckboxsCipia = true;
+          // this.showCheckboxs = true;
+      break;
+      case 'R037':  //   - R037	REPORTE DE EVENTOS CIPIA
+          this.showLimitTime = true;
+          this.showEventsCipia = true;
+          // this.showEvents = true;
+      break;
+      case 'R038':  //   - R038	REPORTE DE ATENCION DE EVENTOS CIPIA
+          this.showLimitTime = true;
+          this.showEventsCipia = true;
+          // this.showEvents = true;
+      break;
+
       default: break;
     }
 /*     console.log(Object.keys(this.reports[this.selectedReport]).length === 0);
@@ -1290,6 +1310,12 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R034')
         ||
         (this.selectedReport == 'R035')
+        ||
+        (this.selectedReport == 'R036' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R037' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R038' && is_vehicle_selected)
       );
   }
 

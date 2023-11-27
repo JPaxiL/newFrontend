@@ -132,26 +132,11 @@ export class EventListComponent implements OnInit {
   }
 
   public showEvent(event:any){
-    console.log("desde show events - componente event list ...",event);
-    if(this.eventService.activeEvent) {
-      console.log("hide event",event);
-      this.hideEvent(this.eventService.activeEvent);
-      //console.log('Ocultar evento previo');
-    }
-
-    if(!event.viewed){
-      event.viewed = true;
-      // this.markAsRead(event.evento_id);
-    }
-
-    var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
-    eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
-    // convierto el atributo params en un objeto
     const objParams:any = {};
-/*
-antes de procesar parametros  string
-event-list.component.ts:130 despues de procesar parametros  object
-*/
+    /*
+    antes de procesar parametros  string
+    event-list.component.ts:130 despues de procesar parametros  object
+    */
     // console.log("antes de procesar parametros ",typeof(event.parametros));
     if(event.parametros&&typeof(event.parametros)=='string'){
       event.parametros.split('|').forEach((item:any) => {
@@ -162,49 +147,76 @@ event-list.component.ts:130 despues de procesar parametros  object
       event.parametros = objParams;
     }
 
+    console.log("desde show events - componente event list ...",event);
+    console.log("has popup opened", event.layer.isPopupOpen());
+    if (this.eventService.activeEvent) {
+      if(this.eventService.activeEvent.id == event.id && event.layer.isPopupOpen()){
+        console.log("no hacer nada");
+        return;
+      }
+      this.eventService.activeEvent.layer.closePopup();
+      this.eventService.activeEvent.layer.unbindPopup();
+      this.eventService.activeEvent.layer.off()
+      this.hideEvent(this.eventService.activeEvent);
+    }
+
+    if(!event.viewed){
+      event.viewed = true;
+      // this.markAsRead(event.evento_id);
+    }
+    this.eventService.activeEvent = event;
+
+    var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
+    eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
+    // convierto el atributo params en un objeto
+
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
 
-    // caso contrario ejecuto la via normal
     event.layer.bindPopup(getContentPopup(event), {
       className: eventClass,
       minWidth: 250,
-      maxWidth: 350,
+      maxWidth: 350
     });
-    this.eventService.activeEvent = event;
-    event.layer.addTo(this.mapService.map).openPopup();
-
-    //si el evento es de cipia y tiene video(s)
-    console.log("event.parametros: ",event.parametros);
-
-    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+    event.layer.on('click', () => {
+      console.log("CLIIIIICK");
       this.addMultimediaComponent(event);
-    }
+    });
+    console.log("has popup opened3", event.layer.isPopupOpen());
+    event.layer.addTo(this.mapService.map).openPopup();
+    console.log("has popup opened4", event.layer.isPopupOpen());
+    this.addMultimediaComponent(event);
+
+
   }
 
   addMultimediaComponent(event:any){
-    console.log("adding multimedia: ", event);
+    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+      console.log("adding multimedia: ", event);
 
-    const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
-    const componentRef: ComponentRef<any> = this.container.createComponent(factory);
-    const params:any = {
-      'event': event,
-      'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
-      'showMultimediaFirst': true,
-      'hasMultimedia':true,
-      'showTitle':false
-    };
-    // Asignar datos al componente si existen
+      const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
+      const componentRef: ComponentRef<any> = this.container.createComponent(factory);
+      const params:any = {
+        'event': event,
+        'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'showMultimediaFirst': true,
+        'hasMultimedia':true,
+        'showTitle':false
+      };
+      // Asignar datos al componente si existen
 
-    Object.keys(
-      params
-    ).forEach((key) => {
-      componentRef.instance[key] = params[key];
-    });
-    // Agregar el componente directamente al contenedor del popup
-    const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
+      Object.keys(
+        params
+        ).forEach((key) => {
+          componentRef.instance[key] = params[key];
+        });
+        // Agregar el componente directamente al contenedor del popup
+        console.log("componentRef.location.nativeElement",componentRef.location.nativeElement);
 
-    divContainer.appendChild(componentRef.location.nativeElement);
+      const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
+      console.log("divContainer",divContainer);
+      divContainer.appendChild(componentRef.location.nativeElement);
+    }
   }
 
   public hideEvent(event:any){

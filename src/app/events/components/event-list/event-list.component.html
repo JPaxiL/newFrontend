@@ -62,7 +62,7 @@
           <tr #currRow (click)="switchEventOnMap(event, currRow)" [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.id == eventService.activeEvent.id }" [class]="event.clase">
             <td>
               <div class="event-column">
-                <span>{{ event.evento }}</span>
+                <span>{{ event.name }}</span>
               </div>
             </td>
             <td>{{ event.nombre }}</td>
