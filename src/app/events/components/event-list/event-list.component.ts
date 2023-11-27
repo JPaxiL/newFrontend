@@ -179,12 +179,9 @@ export class EventListComponent implements OnInit {
       maxWidth: 350
     });
     event.layer.on('click', () => {
-      console.log("CLIIIIICK");
       this.addMultimediaComponent(event);
     });
-    console.log("has popup opened3", event.layer.isPopupOpen());
     event.layer.addTo(this.mapService.map).openPopup();
-    console.log("has popup opened4", event.layer.isPopupOpen());
     this.addMultimediaComponent(event);
 
 

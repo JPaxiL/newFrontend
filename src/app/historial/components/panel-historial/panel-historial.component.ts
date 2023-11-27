@@ -1,4 +1,4 @@
-import { Component, OnInit ,OnDestroy} from '@angular/core';
+import { Component, OnInit ,OnDestroy, ComponentRef, ViewContainerRef, ComponentFactoryResolver} from '@angular/core';
 import { DialogModule } from 'primeng-lts/dialog';
 import { ItemHistorial } from 'src/app/historial/models/vehicle';
 
@@ -16,6 +16,7 @@ import { EventService } from 'src/app/events/services/event.service';
 import { HistorialService } from '../../services/historial.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
+import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
 
 
 
@@ -224,7 +225,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     public historialService: HistorialService,
     private VehicleService : VehicleService,
     private spinner: NgxSpinnerService,
-    private EventService: EventService
+    private EventService: EventService,
+    private resolver: ComponentFactoryResolver, 
+    private container: ViewContainerRef
     ) {
 
 
@@ -425,7 +428,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // this.eventList = map;
     
     // console.log(this.eventList,map);
-    
+    this.EventService.pinPopupStream.subscribe(event => {
+      this.clearMultimedia(event);
+      this.addMultimediaComponent(event);
+    })
   }
 
   changeNameEvent (name:string){
@@ -1435,7 +1441,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
               var kilometrajeTotal = this.get_distancia_movimiento(dH, 0, 'FIN');//'100 gal.';
 
 
-
+                console.log("dH",dH);
+                
                 this.historialService.arrayRecorridos.push({
                     key: this.nombreUnidad+'_'+M1+'_'+M2,
                     icono: icono,
@@ -2282,8 +2289,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   
   clickLocate(row:any, key:any=-1) {
-    // console.log(row);
-    // console.log(key);
+    console.log(row);
+    console.log(key);
     
     //console.log("-----movimiento ----");
     if (key == -1) {
@@ -2353,8 +2360,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       // console.log(trama);
 
     if (row.icono == "assets/images/eventos/pin_point.svg") {
-
+      this.clearMultimedia(trama);
       trama.layer.openPopup();
+      this.addMultimediaComponent(trama);
       this.mapService.map.setView([trama.lat, trama.lng], 15);
 
     } else if (row.icono == "assets/images/start.png") {
@@ -2989,6 +2997,46 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
 
   }
+  addMultimediaComponent(event:any){
+    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+      console.log("adding multimedia: ", event);
+      
+      const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
+      const componentRef: ComponentRef<any> = this.container.createComponent(factory);
+      const params:any = {
+        'event': event, 
+        'driver': this.VehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'showMultimediaFirst': true,
+        'hasMultimedia':true,
+        'showTitle':false
+      };
+      // Asignar datos al componente si existen
+      
+      Object.keys(
+        params
+        ).forEach((key) => {
+          componentRef.instance[key] = params[key];
+        });
+        // Agregar el componente directamente al contenedor del popup
+        console.log("componentRef.location.nativeElement",componentRef.location.nativeElement);
+        
+      const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
+      console.log("divContainer",divContainer);
+      divContainer.appendChild(componentRef.location.nativeElement);
+    }
+  }
 
-
+  clearMultimedia(event :any){
+    if (this.EventService.activeEvent) {
+      if(this.EventService.activeEvent.id == event.id && event.layer.isPopupOpen()){
+        console.log("no hacer nada");
+        return;
+      }
+      this.EventService.activeEvent.layer.closePopup();
+      this.EventService.activeEvent.layer.unbindPopup();
+      this.EventService.activeEvent.layer.off()
+      this.mapService.map.removeLayer(event.layer);
+      this.EventService.activeEvent = false;
+    }
+  }
 }
