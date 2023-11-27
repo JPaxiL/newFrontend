@@ -83,7 +83,9 @@ export class EventSocketService extends Socket {
         // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
         if (data != undefined) {
           // console.log("name ====",data.name);
+          console.log(even.nombre_objeto+" ========================================== "+data.name);
           even.nombre_objeto = data.name;
+
           // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
           //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
           //Si el evento no existe previamente
@@ -126,7 +128,7 @@ export class EventSocketService extends Socket {
             }
           }
         } else {
-          //console.log('Evento duplicado ' + new Date() + ': ', even);
+          // console
         }
 
         // this.eventService.checkDuplicates(); // deprecado se controla desde el server

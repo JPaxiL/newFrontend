@@ -139,7 +139,9 @@ export class AlertService {
   }
 
   public async create(alert: any) {
+    console.log("data enviada",alert);
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/alerts`,alert).toPromise();
+    console.log("response",response);
     return response.data;
   }
 

@@ -118,7 +118,8 @@ export class EventService {
     // console.log("buscando evento "+event.tipo,this.eventsCommon.indexOf(event.tipo));
     if(this.eventsCommon.indexOf(event.tipo)<0){
       // console.log("evento personalizado");
-      return this.eventPersonalice(event.event_user_id);
+      // return this.eventPersonalice(event.event_user_id);
+      return event.nombre;
     }else{
       // console.log("evento comun");
       return this.eventCommon(event.tipo);
@@ -139,14 +140,14 @@ export class EventService {
     }
     return "--";
   }
-  public eventPersonalice(event_user_id: any): any{
-    for (const index in this.events_names) {
-      if(this.events_names[index].event_user_id==event_user_id){
-        return this.events_names[index].nombre;
-      }
-    }
-    return "--";
-  }
+  // public eventPersonalice(event_user_id: any): any{
+  //   for (const index in this.events_names) {
+  //     if(this.events_names[index].event_user_id==event_user_id){
+  //       return this.events_names[index].nombre;
+  //     }
+  //   }
+  //   return "--";
+  // }
   public async getAll(
     key: string = '',
     show_in_page: number = 15,
