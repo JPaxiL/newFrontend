@@ -18,6 +18,7 @@ import { MultimediaService } from '../../multiview/services/multimedia.service';
 })
 export class EventService {
   private URL_NAME = environment.apiUrl+'/api/event-name';
+  private URL_EVENTS = environment.apiUrl+'/api/getEventsForUser';
   @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() debugEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() pinPopupStream: EventEmitter<any> = new EventEmitter<any>();
@@ -264,6 +265,13 @@ export class EventService {
         });
       }
     }
+  }
+
+
+  public getEventsForUser(): Observable<any> {
+    return this.http.get<any[]>(this.URL_EVENTS);
+    // return this.http.get<any[]>('/api/getEventsForUser'); // Corregir la ruta a getEventsForUser
+
   }
 
   public async getAllEventsForTheFilter() {

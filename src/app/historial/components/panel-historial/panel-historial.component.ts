@@ -110,6 +110,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   selectedEvents: any = [];
   chkAllEvents: boolean = false;
   chkMostrarRuta: boolean = false;
+  eventsUserList: any= {};
   typeEvents :any = [];
    eventList = [
     // {
@@ -426,8 +427,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // // LIMPIAMOS EVENTOS LIST
     // this.eventList = [];
     // this.eventList = map;
-    
-    // console.log(this.eventList,map);
+    this.EventService.getEventsForUser().subscribe(async (data: any) => {
+      this.eventsUserList = await data;
+    });
+    console.log('EVENTOS LISTOS --->',this.eventList,this.eventsUserList);
+
     this.EventService.pinPopupStream.subscribe(event => {
       this.clearMultimedia(event);
       this.addMultimediaComponent(event);
