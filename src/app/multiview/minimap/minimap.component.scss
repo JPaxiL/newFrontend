@@ -54,6 +54,7 @@
     }
 }
 
+
 ::ng-deep{
     .leaflet-popup-content{
       .infovehiculos{
@@ -88,4 +89,18 @@
         }
       }
     }
+  .leaflet-tooltip.vehicle-tooltip{
+    border: none;
+    color: var(--gl-blue-dark);
+    text-shadow: 0 0 3px white;
+    //border-radius: 0.5rem;
+    background-color: transparent !important;
+    font-weight: bold;
+    line-height: 1rem;
+    box-shadow: none !important;
+    //-webkit-text-stroke: 0.75px black;
+    &::before{
+      display: none;
+    }
+  }
 }
