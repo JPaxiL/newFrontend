@@ -20,6 +20,7 @@ export class EventService {
   private URL_NAME = environment.apiUrl+'/api/event-name';
   @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() debugEventStream: EventEmitter<any> = new EventEmitter<any>();
+  @Output() pinPopupStream: EventEmitter<any> = new EventEmitter<any>();
   componentKey = new Subject<Number>();
   public eventDeveloperCount = 0;
   public eventDeveloperStatus = false;
@@ -405,33 +406,18 @@ export class EventService {
               }
               //console.log("eventosssss");
 
-              if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
-                  // console.log("EVENTO CIPIA ---  ");
-                  // console.log(event);
+              event.layer.bindPopup(getContentPopup(event), {
+                className: eventClass,
+                minWidth: 250,
+                maxWidth: 350,
+              });
 
-                  // obtengo la url del video o imagen
-                  this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
-                    // Añado la url del video/imagen como atributo del evento
-                    event.videoUrl = data;
-                    event.layer.bindPopup(getContentPopup(event), {
-                      className: eventClass,
-                      minWidth: 250,
-                      maxWidth: 350,
-                    });
-
-                  });
-              }else{
-                  // console.log("EVENTO NORMAL ---  ");
-                  // console.log(event);
-                  // caso contrario ejecuto la via normal
-                  event.layer.bindPopup(getContentPopup(event), {
-                    className: eventClass,
-                    minWidth: 250,
-                    maxWidth: 350,
-                  });
-              }
+              event.layer.on('click', () => {
+                console.log("CLIIIIICK");
+                this.pinPopupStream.emit(event);
+              });
             }
-
+            
             console.log(this.eventsHistorial);
 
           });
