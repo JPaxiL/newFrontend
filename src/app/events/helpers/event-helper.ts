@@ -236,7 +236,21 @@ export const getContentPopup = (event: any, d: any = '...') => {
       'assets/images/events-icons/frenada_brusca.svg',
     );
 
-  } else if (event.tipo == 'aceleracion-brusca') {
+  } else if (event.tipo == 'sos') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre??event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/sos.svg',
+    );
+
+  }else if (event.tipo == 'aceleracion-brusca') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre??event.name,
