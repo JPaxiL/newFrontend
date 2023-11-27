@@ -65,6 +65,7 @@ export class EventService {
   public strUnreadCount: string = '0';
   public socketEvents: any[] = [];
   public enableSocketEvents: boolean = true;
+  public statusLoadPlate: boolean = false;
   audio = new Audio();
 
   new_notif_stack: number[] = [];
@@ -153,7 +154,7 @@ export class EventService {
     show_in_page: number = 15,
     page: number = 1
   ) {
-    // console.log('Cargando eventos...');
+    console.log('[event.service] getAll()');
     await this.http
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
@@ -190,7 +191,7 @@ export class EventService {
           if(!event.viewed){
             this.unreadCount++;
           }
-          
+
           return event;
         });
         // return;
@@ -215,6 +216,10 @@ export class EventService {
 
   public getData() {
     console.log("get data desde eventService",this.events);
+    if(!this.statusLoadPlate){
+      this.getVehiclesPlate();
+      this.statusLoadPlate = true;
+    }
     return this.events;
   }
 
@@ -517,7 +522,7 @@ export class EventService {
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
         console.log("EVENTS_FILTERED: ",this.eventsFiltered);
-        
+
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
         console.log('Ocultar Spinner');
