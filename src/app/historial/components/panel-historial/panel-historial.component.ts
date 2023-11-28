@@ -1,4 +1,4 @@
-import { Component, OnInit ,OnDestroy} from '@angular/core';
+import { Component, OnInit ,OnDestroy, ComponentRef, ViewContainerRef, ComponentFactoryResolver} from '@angular/core';
 import { DialogModule } from 'primeng-lts/dialog';
 import { ItemHistorial } from 'src/app/historial/models/vehicle';
 
@@ -16,6 +16,7 @@ import { EventService } from 'src/app/events/services/event.service';
 import { HistorialService } from '../../services/historial.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
+import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
 
 
 
@@ -106,6 +107,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     { label: 'No', value: false },
   ];
 
+
+  //mostrarAllEvents = false;
+
   selectedEvents: any = [];
   chkAllEvents: boolean = false;
   chkMostrarRuta: boolean = false;
@@ -131,7 +135,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       label: 'Evento Plataforma',
       items: [
         { name: 'Zona de Entrada', value: 'zona-de-entrada' },
-        { name: 'Zona de Salida', value: 'Zona de salida' },
+        { name: 'Zona de Salida', value: 'zona-de-salida' },
         // { name: 'Tiempo de Estadía en Zona', value: false },
         // { name: 'Parad en Zona no Autorizada', value: false },
         // { name: 'Vehículo en Movimiento Sin Programación', value: false },
@@ -224,7 +228,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     public historialService: HistorialService,
     private VehicleService : VehicleService,
     private spinner: NgxSpinnerService,
-    private EventService: EventService
+    private EventService: EventService,
+    private resolver: ComponentFactoryResolver, 
+    private container: ViewContainerRef
     ) {
 
 
@@ -425,7 +431,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // this.eventList = map;
     
     // console.log(this.eventList,map);
-    
+    this.EventService.pinPopupStream.subscribe(event => {
+      this.clearMultimedia(event);
+      this.addMultimediaComponent(event);
+    })
   }
 
   changeNameEvent (name:string){
@@ -461,9 +470,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // this.historialService.icoGplay = this.icoGplay;
     // this.historialService.icoGclick = this.icoGclick;
 
-    this.mapService.map.removeLayer(this.historialService.icoGplay);
-    this.mapService.map.removeLayer(this.historialService.icoGclick);
+    if (this.historialService.icoGplay == null) {}else{
+      this.mapService.map.removeLayer(this.historialService.icoGplay);
+    }
 
+    if (this.historialService.icoGclick == null) {}else {
+      this.mapService.map.removeLayer(this.historialService.icoGclick);
+    }
 
   }
 
@@ -535,7 +548,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     //this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items].length;
     // this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items].length;
-    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items].length;
+    //this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items].length;
 
     // console.log(this.chkAllEvents);
     // console.log(this.selectedEvents);
@@ -1435,7 +1448,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
               var kilometrajeTotal = this.get_distancia_movimiento(dH, 0, 'FIN');//'100 gal.';
 
 
-
+                console.log("dH",dH);
+                
                 this.historialService.arrayRecorridos.push({
                     key: this.nombreUnidad+'_'+M1+'_'+M2,
                     icono: icono,
@@ -2183,14 +2197,38 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             EventosAll = this.historialService.arrayRecorridos[idx].eventos;
           }
-          console.log(":::: LOS EVENTOS ::::");
-          console.log(EventosAll);
+          // console.log(":::: LOS EVENTOS ::::");
+          // console.log(EventosAll);
+          // console.log(this.selectedEvents);
+          
           
           for (let index = 0; index < EventosAll.length; index++) {
 
             //const item = this.EventService.eventsHistorial[index];
             const item = EventosAll[index];
-            var activar = true;// false;
+            //var activar = true;// false;
+            var activar = false;
+            
+            // console.log("========================C");
+            // console.log(this.chkAllEvents);
+            
+            if (this.chkAllEvents) {
+                activar = true;
+            } else {
+
+                for (let j = 0; j < this.selectedEvents.length; j++) {
+    
+                    const opEve = this.selectedEvents[j];
+                    //console.log(EventosAll[index].tipo+" -  "+opEve.value);
+                    
+                    if (EventosAll[index].tipo == opEve.value) {
+                        //console.log("SII APARECE");
+                        var activar = true;// false;
+                        
+                    }
+                }
+            }
+
 
             // for (let j = 0; j < this.selectedEvents.length; j++) {
             //   const opEve = this.selectedEvents[j];
@@ -2282,8 +2320,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   
   clickLocate(row:any, key:any=-1) {
-    // console.log(row);
-    // console.log(key);
+    console.log(row);
+    console.log(key);
     
     //console.log("-----movimiento ----");
     if (key == -1) {
@@ -2353,8 +2391,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       // console.log(trama);
 
     if (row.icono == "assets/images/eventos/pin_point.svg") {
-
+      this.clearMultimedia(trama);
       trama.layer.openPopup();
+      this.addMultimediaComponent(trama);
       this.mapService.map.setView([trama.lat, trama.lng], 15);
 
     } else if (row.icono == "assets/images/start.png") {
@@ -2985,10 +3024,54 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
   onChkAllEvents(){
+    //this.mostrarAllEvents = true;
+    // if (this.chkAllEvents) {
+    //   this.changeShowingParadasHistorial()
+    // }
     // this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items]: [];
-    this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
+    //this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
 
   }
+  addMultimediaComponent(event:any){
+    if(event.parametros && event.parametros.gps == "cipia" && (event.parametros.has_video != "0" || event.parametros.has_image != "0")){
+      console.log("adding multimedia: ", event);
+      
+      const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
+      const componentRef: ComponentRef<any> = this.container.createComponent(factory);
+      const params:any = {
+        'event': event, 
+        'driver': this.VehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'showMultimediaFirst': true,
+        'hasMultimedia':true,
+        'showTitle':false
+      };
+      // Asignar datos al componente si existen
+      
+      Object.keys(
+        params
+        ).forEach((key) => {
+          componentRef.instance[key] = params[key];
+        });
+        // Agregar el componente directamente al contenedor del popup
+        console.log("componentRef.location.nativeElement",componentRef.location.nativeElement);
+        
+      const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
+      console.log("divContainer",divContainer);
+      divContainer.appendChild(componentRef.location.nativeElement);
+    }
+  }
 
-
+  clearMultimedia(event :any){
+    if (this.EventService.activeEvent) {
+      if(this.EventService.activeEvent.id == event.id && event.layer.isPopupOpen()){
+        console.log("no hacer nada");
+        return;
+      }
+      this.EventService.activeEvent.layer.closePopup();
+      this.EventService.activeEvent.layer.unbindPopup();
+      this.EventService.activeEvent.layer.off()
+      this.mapService.map.removeLayer(event.layer);
+      this.EventService.activeEvent = false;
+    }
+  }
 }
