@@ -234,6 +234,18 @@ export class FormComponent implements OnInit {
 
       OtroTodos:false,
       OtroExVelocidad:false,
+
+      //==========================
+
+      evConductorAdormitado360:false,
+      evConductorSomnoliento360:false,
+      evDistraccionDetectada360:false,
+      evCinturonNoDetectado360:false,
+      evCigarroDetectado:false,
+      evCelularDetectado360:false,
+      evErrorDeCamara:false,
+      evDeteccionDeManipulacion360:false,
+
     };
 
 
@@ -1204,6 +1216,20 @@ export class FormComponent implements OnInit {
 
       OtroTodos:this.eV.OtroTodos,
       OtroExVelocidad:this.eV.OtroTodos,
+
+
+      //==========================
+
+      evConductorAdormitado360: this.eV.evConductorAdormitado360,
+      evConductorSomnoliento360: this.eV.evConductorSomnoliento360,
+      evDistraccionDetectada360: this.eV.evDistraccionDetectada360,
+      evCinturonNoDetectado360: this.eV.evCinturonNoDetectado360,
+      evCigarroDetectado: this.eV.evCigarroDetectado,
+      evCelularDetectado360: this.eV.evCelularDetectado360,
+      evErrorDeCamara: this.eV.evErrorDeCamara,
+      evDeteccionDeManipulacion360: this.eV.evDeteccionDeManipulacion360,
+
+
     };
   }
 
@@ -1423,6 +1449,18 @@ export class FormComponent implements OnInit {
 
       OtroTodos:false,
       OtroExVelocidad:false,
+
+      //==========================
+
+      evConductorAdormitado360:false,
+      evConductorSomnoliento360:false,
+      evDistraccionDetectada360:false,
+      evCinturonNoDetectado360:false,
+      evCigarroDetectado:false,
+      evCelularDetectado360:false,
+      evErrorDeCamara:false,
+      evDeteccionDeManipulacion360:false,
+      
     };
 
     //Reporte 10

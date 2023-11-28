@@ -6323,7 +6323,10 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td></td>
+                    
+                    <td>
+                      <a href="{{row.enlaceCIPIA}}" target="_blank">Descargar Video</a>
+                    </td>
 
                 </tr>
               </tbody>
@@ -6409,7 +6412,10 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td></td>
+                    
+                    <td>
+                      <a href="{{row.enlaceCIPIA}}" target="_blank">Descargar Video</a>
+                    </td>
 
                 </tr>
               </tbody>
@@ -6458,8 +6464,8 @@
       <button *ngIf="report_data.num_rep == 'R034'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCoordenadasGeopuntos');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R035'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCoordenadasGeocercasCirculares');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R036'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R037'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R038'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R037'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R038'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>
 
 
       <!-- <button *ngIf="report_data.num_rep == 'R028'" class="btn btn-gl btn-success btn-dark-hover" (click)="">EXPORTAR EXCEL</button> -->
