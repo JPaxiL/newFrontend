@@ -1220,14 +1220,14 @@ export class FormComponent implements OnInit {
 
       //==========================
 
-      evConductorAdormitado360: this.eV.evConductorAdormitado360,
-      evConductorSomnoliento360: this.eV.evConductorSomnoliento360,
-      evDistraccionDetectada360: this.eV.evDistraccionDetectada360,
-      evCinturonNoDetectado360: this.eV.evCinturonNoDetectado360,
-      evCigarroDetectado: this.eV.evCigarroDetectado,
-      evCelularDetectado360: this.eV.evCelularDetectado360,
-      evErrorDeCamara: this.eV.evErrorDeCamara,
-      evDeteccionDeManipulacion360: this.eV.evDeteccionDeManipulacion360,
+      evConductorAdormitado360: this.eV.OtroTodos,
+      evConductorSomnoliento360: this.eV.OtroTodos,
+      evDistraccionDetectada360: this.eV.OtroTodos,
+      evCinturonNoDetectado360: this.eV.OtroTodos,
+      evCigarroDetectado: this.eV.OtroTodos,
+      evCelularDetectado360: this.eV.OtroTodos,
+      evErrorDeCamara: this.eV.OtroTodos,
+      evDeteccionDeManipulacion360: this.eV.OtroTodos,
 
 
     };
@@ -1258,6 +1258,16 @@ export class FormComponent implements OnInit {
     if(!this.eV.evDesvioCarrilIzquierda) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evDesvioCarrilDerecha) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evBloqueoVisionMobileye) { this.eV.OtroTodos = false; return; }
+
+    //ULTIMOS CHANGES CIPIA
+    if(!this.eV.evConductorAdormitado360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evConductorSomnoliento360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDistraccionDetectada360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evCinturonNoDetectado360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evCigarroDetectado) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evCelularDetectado360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evErrorDeCamara) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDeteccionDeManipulacion360) { this.eV.OtroTodos = false; return; }
 
     this.eV.OtroTodos = true;
   }
