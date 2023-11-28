@@ -604,7 +604,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/infraccion.png',
     );
-  }else if (event.tipo == 'uso-del-celular-360') {
+  }else if (event.tipo == 'uso-de-celular-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre??event.name,
