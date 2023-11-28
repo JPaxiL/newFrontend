@@ -230,7 +230,7 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
   }
 
   addMultimediaComponent(event:any){
-    if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
+    if(event.parametros && event.parametros.gps == "cipia" && (event.parametros.has_video != "0" || event.parametros.has_image != "0")){
       console.log("adding multimedia: ", event);
       
       const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
