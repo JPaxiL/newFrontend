@@ -1264,7 +1264,11 @@
                       <th *ngIf="reportTableDropdownData[2].fServidor && chkDateHour">Hora Servidor</th>
 
                       <th *ngIf="reportTableDropdownData[2].ubicacion" >Ubicación</th>
-                      <th *ngIf="reportTableDropdownData[2].velGPS" >Velocidad GPS</th>
+
+                      <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep != 'R036'" >Velocidad GPS</th>
+                      <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep == 'R036'" >Velocidad 360</th>
+
+
                       <th *ngIf="reportTableDropdownData[2].velECO" >Velocidad ECO</th>
                       <th *ngIf="reportTableDropdownData[2].velGPS_speed" >Velocidad GPS speed</th>
                       <th *ngIf="reportTableDropdownData[2].velMobileye_ME460" >Velocidad Mobileye</th>
@@ -1443,7 +1447,11 @@
                       <th *ngIf="v_table[2].fServidor && chkDateHour">Hora Servidor</th>
 
                       <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
-                      <th *ngIf="v_table[2].velGPS" >Velocidad GPS</th>
+                      <th *ngIf="v_table[2].velGPS && report_data.num_rep != 'R036'" >Velocidad GPS</th>
+                      <th *ngIf="v_table[2].velGPS && report_data.num_rep == 'R036'" >Velocidad 360</th>
+
+
+
                       <th *ngIf="v_table[2].velECO" >Velocidad ECO</th>
                       <th *ngIf="v_table[2].velGPS_speed" >Velocidad GPS speed</th>
                       <th *ngIf="v_table[2].velMobileye_ME460" >Velocidad Mobileye</th>

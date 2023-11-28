@@ -3453,12 +3453,15 @@ export class ResultComponent implements OnDestroy, OnInit {
         // console.log(this.selectedVehicles.length);
         console.log(typeof data);
         console.log(data);
+        // console.log("---> "+this.report_data.num_rep);
+        
         this.reportService.modalActive = true;
 
         this.reportService.objGeneral.data = data;
         this.reportService.objGeneral.periodo = periodo;//this.period;
         this.reportService.objGeneral.vehiculo = vehiculo;//this.period;
         this.reportService.objGeneral.dateHour = dateHour;//this.period;
+        this.reportService.objGeneral.numRep = this.report_data.num_rep;
 
 
         console.log(this.reportService.objGeneral);
