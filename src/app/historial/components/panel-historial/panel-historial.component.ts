@@ -107,6 +107,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     { label: 'No', value: false },
   ];
 
+
+  //mostrarAllEvents = false;
+
   selectedEvents: any = [];
   chkAllEvents: boolean = false;
   chkMostrarRuta: boolean = false;
@@ -132,7 +135,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       label: 'Evento Plataforma',
       items: [
         { name: 'Zona de Entrada', value: 'zona-de-entrada' },
-        { name: 'Zona de Salida', value: 'Zona de salida' },
+        { name: 'Zona de Salida', value: 'zona-de-salida' },
         // { name: 'Tiempo de Estadía en Zona', value: false },
         // { name: 'Parad en Zona no Autorizada', value: false },
         // { name: 'Vehículo en Movimiento Sin Programación', value: false },
@@ -467,9 +470,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // this.historialService.icoGplay = this.icoGplay;
     // this.historialService.icoGclick = this.icoGclick;
 
-    this.mapService.map.removeLayer(this.historialService.icoGplay);
-    this.mapService.map.removeLayer(this.historialService.icoGclick);
+    if (this.historialService.icoGplay == null) {}else{
+      this.mapService.map.removeLayer(this.historialService.icoGplay);
+    }
 
+    if (this.historialService.icoGclick == null) {}else {
+      this.mapService.map.removeLayer(this.historialService.icoGclick);
+    }
 
   }
 
@@ -541,7 +548,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     //this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items].length;
     // this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items].length;
-    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items].length;
+    //this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items].length;
 
     // console.log(this.chkAllEvents);
     // console.log(this.selectedEvents);
@@ -2190,14 +2197,38 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             EventosAll = this.historialService.arrayRecorridos[idx].eventos;
           }
-          console.log(":::: LOS EVENTOS ::::");
-          console.log(EventosAll);
+          // console.log(":::: LOS EVENTOS ::::");
+          // console.log(EventosAll);
+          // console.log(this.selectedEvents);
+          
           
           for (let index = 0; index < EventosAll.length; index++) {
 
             //const item = this.EventService.eventsHistorial[index];
             const item = EventosAll[index];
-            var activar = true;// false;
+            //var activar = true;// false;
+            var activar = false;
+            
+            // console.log("========================C");
+            // console.log(this.chkAllEvents);
+            
+            if (this.chkAllEvents) {
+                activar = true;
+            } else {
+
+                for (let j = 0; j < this.selectedEvents.length; j++) {
+    
+                    const opEve = this.selectedEvents[j];
+                    //console.log(EventosAll[index].tipo+" -  "+opEve.value);
+                    
+                    if (EventosAll[index].tipo == opEve.value) {
+                        //console.log("SII APARECE");
+                        var activar = true;// false;
+                        
+                    }
+                }
+            }
+
 
             // for (let j = 0; j < this.selectedEvents.length; j++) {
             //   const opEve = this.selectedEvents[j];
@@ -2993,8 +3024,12 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
   onChkAllEvents(){
+    //this.mostrarAllEvents = true;
+    // if (this.chkAllEvents) {
+    //   this.changeShowingParadasHistorial()
+    // }
     // this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items]: [];
-    this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
+    //this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
 
   }
   addMultimediaComponent(event:any){
