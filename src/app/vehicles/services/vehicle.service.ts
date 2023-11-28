@@ -372,8 +372,9 @@ export class VehicleService {
         }
     }
     else {
-
-      if ((vehicle.v_vel > 3) && (vehicle.v_on == 1)) {
+      console.log("cipia entró else") ;
+      //vehicle.v_vel = 10;
+      if ((vehicle.v_vel > 3) && (vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1))) {
                 if( vehicle.c_01 > 300 ) {
                     //mayor a 5 minutos //==>5
                     // img_url = "/images/objects/arrow-5-orange.svg"; //==>5 Zona de no cobertura
@@ -389,7 +390,7 @@ export class VehicleService {
                     vehicle.m5 = setTimeout(() => {
                         // //console.log("MAS DE 5 MINUTOS SIN TRANSMISION, EN MOVIMIENTO , ZONA DE NO COBERTURA: " + item.name);
                         vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
-                        if ((vehicle.v_vel > 3) && (vehicle.v_on == 1) && (vehicle.c_02 >= 300)) {
+                        if ((vehicle.v_vel > 3) && (vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1)) && (vehicle.c_02 >= 300) ) {
                                 //mayor a 5 minutos //==>5
                                 // if (userConfig.icono == "arrow2") {
                                 //     var img_url_02 = "/images/objects/arrow-5-orange.svg"; //==>5 Zona de no cobertura
@@ -407,7 +408,7 @@ export class VehicleService {
                         vehicle.m5 = 0;
                     }, (300 - vehicle.c_01)*1000 );
                 }
-        } else if ( (vehicle.v_vel <= 3) && ( vehicle.v_on == 1 ) ) {
+        } else if ( (vehicle.v_vel <= 3) && ( vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1) ) ) {
                 // img_url = "/images/objects/arrow-2-blue.svg"; //==>2 Parada (Prendida)
                 vehicle.point_color = 20; //grey
         }
@@ -419,7 +420,7 @@ export class VehicleService {
         vehicle.m2h = setTimeout(() => {
             // //console.log("MAS DE 2 HORAS SIN TRANSMISION : " + item.name);
             vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
-            if( vehicle.c_02 >= 7200 && vehicle.v_on == 0 ) {
+            if( vehicle.c_02 >= 7200 && (vehicle.v_on == 0 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1)) ) {
                 // if (userConfig.icono == "arrow2") {
                 //     var img_url_02 = "/images/objects/arrow-4-black.svg"; //==>4 Sin transmisión
                 //     var icon = new L.Icon({

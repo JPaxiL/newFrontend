@@ -39,7 +39,7 @@ export class SocketWebService extends Socket {
       //
       // }
       if(this.whitelist.includes(data.IMEI.toString())){
-        //console.log('envio ====>',data);
+        console.log('envio ====>',data);
         this.callback.emit(data)
 
       }
