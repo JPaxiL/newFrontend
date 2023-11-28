@@ -372,8 +372,7 @@ export class VehicleService {
         }
     }
     else {
-      console.log("cipia entró else") ;
-      //vehicle.v_vel = 10;
+      //console.log("cipia entró else") ;
       if ((vehicle.v_vel > 3) && (vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1))) {
                 if( vehicle.c_01 > 300 ) {
                     //mayor a 5 minutos //==>5
