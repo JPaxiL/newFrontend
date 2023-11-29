@@ -38,7 +38,7 @@ export class UserDataService {
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);
         this.geopointsPrivileges.emit(true);
-        await this.getTypeVehicles();
+        await this.getTypeVehiclesForUser();
         await this.getUserConfigData();
 
       },
@@ -47,11 +47,12 @@ export class UserDataService {
       }});
   }
 
-  async getTypeVehicles(): Promise<void> {
+  async getTypeVehiclesForUser(): Promise<void> {
     // console.log('Getting Type Vehicles');
-    this.http.get<any>(`${this.apiUrl}/api/typevehicleId`).subscribe({
+    this.http.get<any>(`${this.apiUrl}/api/typeVehiclesUser`).subscribe({
       next: data => {
         this.typeVehicles = data.data;
+        console.log(data);
       },
       error: (errorMsg) => {
         console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
@@ -113,7 +114,7 @@ export class UserDataService {
       // console.log(var_icono,var_color);
     }
 
-    const svgContent = this.getSVGContent(var_icono);
+    const svgContent = await this.getSVGContent(var_icono);
     return this.modifySVGColor(svgContent, var_color,var_icono);
   }
 
@@ -130,18 +131,22 @@ export class UserDataService {
         // console.log('Se ecnontra una carga.svg -->',div.innerHTML);
       } else {
         bodyElements = div.querySelectorAll('.body') as NodeListOf<HTMLElement>;
+        // Cambiar el color del elemento
+         bodyElements.forEach((bodyElement: HTMLElement) => {
+          bodyElement.style.fill = color;
+        });
       }
-      // Cambiar el color del elemento
-      bodyElements.forEach((bodyElement: HTMLElement) => {
-        bodyElement.style.fill = color;
-      });
+      
+    }else{
+      const def = document.createElement('div');
+      return def.innerHTML=svgContent;
     }
-    
-    // console.log('DIV.innerHTML ---> -->',div.innerHTML);
-    // Devolver el SVG modificado
-    // console.log('DESPUEs ......',div.innerHTML);
+    // Obtener el string del SVG modificado
+    const modifiedSVGString = new XMLSerializer().serializeToString(div);
+    // console.log(modifiedSVGString);
 
-    return div.innerHTML;
+    return modifiedSVGString;
+    // return div.innerHTML;
   }
 
 

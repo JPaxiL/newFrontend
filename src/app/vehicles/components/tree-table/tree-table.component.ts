@@ -83,6 +83,8 @@ export class TreeTableComponent implements OnInit {
     sort: 'asc'
   }
 
+  svgContentType: any;
+
   @ViewChild('tt') tt!:any;
 
   constructor(
@@ -147,9 +149,15 @@ export class TreeTableComponent implements OnInit {
     screen.orientation.addEventListener('change', this.treeTableResizing);
     // console.log(this.vehicleService.vehicles);
     
-    this.clearSVGContainer();
-    this.verifyContent();
+    // this.clearSVGContainer();
+    // this.verifyContent();
     // this.inyectVehicles();
+
+    // this.svgContentType = this.userDataService.svgContents['auto.svg'];
+
+    
+    this.svgContentType =  this.userDataService.getSVGContent('auto.svg');
+    console.log('loading -->',this.svgContentType);
 
   }
 

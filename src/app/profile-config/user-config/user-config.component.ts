@@ -64,15 +64,13 @@ export class UserConfigComponent implements OnInit {
   ngOnInit(): void {
     this.usersForm = this.initForm();
     this.typeVehiclesList = this.userDataService.typeVehicles;
-    // this.typeVehiclesList.forEach((item: { var_color: string; var_galon: string; }) => {
-    //   item.var_color = ''; // Asignar un valor inicial a var_color
-    //   item.var_galon = ''; // Asignar un valor inicial a var_galon
-    // });
+
+
     //OJO FILTRAR POR SOLO TIPO DE VEHICULOS QUE TIENE EL USER...
 
-    // console.log(this.userDataService.typeVehicles);
     //CONFIGURACION DE TIPO VEHICULOS GUARDADA DEL USUARIO
     this.initFormTableVehicles();
+    console.log(this.typeVehiclesList);
   }
 
   initForm(): FormGroup{
