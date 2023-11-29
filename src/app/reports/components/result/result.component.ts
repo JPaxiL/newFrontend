@@ -12330,8 +12330,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     var exportFileEx = [];
     var bol_datos_ex = false;
     var column_config:Columns[];
-    var table_width = 12 + (this.chkDateHour? 2: 1) -1;
-    var vehiculo_width = (this.chkDateHour? 5: 4) -1;
+    var table_width = 12 + (this.chkDateHour? 2: 1) +1;
+    var vehiculo_width = (this.chkDateHour? 5: 4) +1;
 
     var evento_cell_ch_width = "Evento".length;
 
@@ -12343,8 +12343,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var tramo_cell_ch_width = "Tramo o Geocerca".length;
     var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
-    var enlace_cell_ch_width = "Enlace a Archivo".length;
-
+    var enlace_cell_ch_width = "Archivo".length; //Enlace a Archivo
     // var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
 
 
@@ -12408,12 +12407,13 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Enlace a Archivo", colSpan: 2, ...this.colHeaderConfig },
 
             ],
             height: this.colsHeaderHeight
           });
 
-          data[1].forEach((item: {descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+          data[1].forEach((item: {enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             //var fh = item.fecha.split(" ");
             var ubicacion = item.latitud + "," + item.longitud;
@@ -12449,6 +12449,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
                 // { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig }
 
               ],
               height: this.bodyRowsHeight
@@ -12473,13 +12475,14 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Tramo", ...this.colHeaderConfig },
               { value: "Punto Cercano", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Enlace a Archivo", colSpan: 2, ...this.colHeaderConfig },
 
             ],
             height: this.colsHeaderHeight
           });
 
 
-          data[1].forEach((item: {descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+          data[1].forEach((item: {enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
             // if (item.di4x > 0) {
@@ -12519,6 +12522,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.PC, ...this.bodyRowsConfig },
                 { value: ubicacion, ...this.bodyRowsConfig },
                 // { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig }
 
               ],
               height: this.bodyRowsHeight
@@ -12662,6 +12667,378 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
 
+
+  exportExcelEventosEvaluacionCIPIA(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+    var column_config:Columns[];
+    var table_width = 12 + (this.chkDateHour? 2: 1) +3;
+    var vehiculo_width = (this.chkDateHour? 5: 4) +3;
+
+    var evento_cell_ch_width = "Evento".length;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+
+    var criterio_evaluacion_cell_ch_width = "Criterio de Evaluacion".length;
+    var observacion_evaluacion_cell_ch_width = "Observacion".length;
+    var vel_360_cell_ch_width = "Vel. 360".length;
+
+    var tramo_cell_ch_width = "Tramo o Geocerca".length;
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+    var enlace_cell_ch_width = "Archivo".length; //Enlace a Archivo
+
+    // var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+        {
+          cells: [
+            { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+    ];
+
+    this.sortedData.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {
+            cells: [
+              { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+          {
+            cells: [
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
+          },
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
+        ];
+
+        if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Evento", ...this.colHeaderConfig },
+              { value: "Fecha Evento", ...this.colHeaderConfig },
+              { value: "Hora Evento", ...this.colHeaderConfig },
+              { value: "Fecha Servidor", ...this.colHeaderConfig },
+              { value: "Hora Servidor", ...this.colHeaderConfig },
+
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
+
+              { value: "Criterio de Evaluación", ...this.colHeaderConfig },
+              { value: "Observación", ...this.colHeaderConfig },
+              { value: "Vel.360", ...this.colHeaderConfig },
+
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Enlace a Archivo", colSpan: 2, ...this.colHeaderConfig },
+
+            ],
+            height: this.colsHeaderHeight
+          });
+
+          data[1].forEach((item: {enlaceVideoCIPIA:any, enlaceImageCIPIA:any, observacion_evaluacion:any, criterio_evaluacion:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud + "," + item.longitud;
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+
+            criterio_evaluacion_cell_ch_width = Math.max(criterio_evaluacion_cell_ch_width, (item.criterio_evaluacion??'').toString().length);
+            observacion_evaluacion_cell_ch_width = Math.max(observacion_evaluacion_cell_ch_width, (item.observacion_evaluacion??'').toString().length);
+            vel_360_cell_ch_width = Math.max(vel_360_cell_ch_width, (item.vel_gps??'').toString().length);
+
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+
+
+            rows.push({
+              cells: [
+
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: item.descripcion_evento, ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha_tracker), format: "hh:mm:ss", ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_servidor), format: "yyyy/mm/dd", ...this.bodyRowsConfig },
+                { value: this.isChs(item.fecha_servidor), format: "hh:mm:ss", ...this.bodyRowsConfig },
+
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
+
+                { value: item.criterio_evaluacion, ...this.bodyRowsConfig },
+                { value: item.observacion_evaluacion, ...this.bodyRowsConfig },
+                { value: item.vel_gps +" Km/h", ...this.bodyRowsConfig },
+
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
+                // { value: item.sonidoEnCabina, ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig }
+
+              ],
+              height: this.bodyRowsHeight
+            });
+          });
+
+        } else {
+
+          rows.push({
+            cells: [
+
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Evento", ...this.colHeaderConfig },
+              { value: "Fecha Evento", ...this.colHeaderConfig },
+              { value: "Fecha Servidor", ...this.colHeaderConfig },
+
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+              { value: "Tipo de Unidad", ...this.colHeaderConfig },
+
+              { value: "Criterio de Evaluación", ...this.colHeaderConfig },
+              { value: "Observación", ...this.colHeaderConfig },
+              { value: "Vel.360", ...this.colHeaderConfig },
+
+              { value: "Tramo", ...this.colHeaderConfig },
+              { value: "Punto Cercano", ...this.colHeaderConfig },
+              { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Enlace a Archivo", colSpan: 2, ...this.colHeaderConfig },
+              
+            ],
+            height: this.colsHeaderHeight
+          });
+
+
+          data[1].forEach((item: {enlaceVideoCIPIA:any, enlaceImageCIPIA:any, observacion_evaluacion:any, criterio_evaluacion:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+            // if (item.di4x > 0) {
+            // 	var acc = "Activado (" + item.di4x + ")";
+            // } else {
+            // 	var acc = "Desactivado (" + item.di4x + ")";
+            // }
+            var ubicacion = item.latitud + "," + item.longitud;
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+
+            criterio_evaluacion_cell_ch_width = Math.max(criterio_evaluacion_cell_ch_width, (item.criterio_evaluacion??'').toString().length);
+            observacion_evaluacion_cell_ch_width = Math.max(observacion_evaluacion_cell_ch_width, (item.observacion_evaluacion??'').toString().length);
+            vel_360_cell_ch_width = Math.max(vel_360_cell_ch_width, (item.vel_gps??'').toString().length);
+
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.PC??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+            //<a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+
+
+            rows.push({
+
+              cells: [
+
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: item.descripcion_evento, ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+                { value: this.isChe(item.fecha_servidor), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig },
+
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+                { value: item.tipo_unidad, ...this.bodyRowsConfig },
+
+                { value: item.criterio_evaluacion, ...this.bodyRowsConfig },
+                { value: item.observacion_evaluacion, ...this.bodyRowsConfig },
+                { value: item.vel_gps +" Km/h", ...this.bodyRowsConfig },
+
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.PC, ...this.bodyRowsConfig },
+                { value: ubicacion, ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig },
+                { formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig }
+
+              ],
+              height: this.bodyRowsHeight
+            });
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(evento_cell_ch_width) },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+          { width: this.w_date_and_hour },
+
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+
+        { width: this.calculateColWidth(criterio_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(observacion_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(vel_360_cell_ch_width) },
+
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(enlace_cell_ch_width) },
+
+      );
+
+
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+        },
+      columns: column_config,
+      title: data[0][1],
+      rows: rows
+      });
+
+      evento_cell_ch_width = "Evento".length;
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      tipo_unidad_cell_ch_width = "Tipo unidad".length;
+
+      criterio_evaluacion_cell_ch_width = "Criterio de Evaluacion".length;
+      observacion_evaluacion_cell_ch_width = "Observacion".length;
+      vel_360_cell_ch_width = "Vel. 360".length;
+
+      tramo_cell_ch_width = "Tramo o Geocerca".length;
+      pc_cell_ch_width = "Punto Cercano".length;
+      ubicacion_cell_ch_width = "Ubicacion".length;
+      enlace_cell_ch_width = "Enlace a Archivo".length;
+
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(evento_cell_ch_width) },
+      ];
+      if(this.chkDateHour){
+        column_config.push(
+          { width: this.w_date },
+          { width: this.w_hour },
+          { width: this.w_date },
+          { width: this.w_hour },
+        );
+      } else {
+        column_config.push(
+          { width: this.w_date_and_hour },
+          { width: this.w_date_and_hour },
+
+        );
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+
+        { width: this.calculateColWidth(criterio_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(observacion_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(vel_360_cell_ch_width) },
+
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(pc_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(enlace_cell_ch_width) },
+
+      );
+
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: this.headerRowSpan
+        },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteEventos_.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
 
 
   exportExcelCoordenadasGeocercas(vrs: number) {
