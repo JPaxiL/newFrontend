@@ -387,7 +387,17 @@ export class EventService {
             // console.log("data show historial event",response.data);
             this.eventsHistorial = response.data;
 
+
+
             for (let index = 0; index < this.eventsHistorial.length; index++) {
+
+              let data = this.filterImei(this.vehicleService.vehicles, this.eventsHistorial[index].imei);
+              // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
+              // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
+              if (data != undefined) {
+                //console.log("name ====",data.name);
+                this.eventsHistorial[index].nombre_objeto = data.name;
+              }
 
               let icon = L.icon({
                 iconUrl: this.img_icon,
@@ -405,6 +415,7 @@ export class EventService {
               var eventClass:any = this.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
               eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
 
+              //nombre_objeto
               // // this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
               // event.layer.bindPopup(getContentPopup(event), {
               //   className: eventClass,
@@ -439,6 +450,21 @@ export class EventService {
             console.log(this.eventsHistorial);
 
           });
+    }
+
+    private filterImei(data: any, imei: any) {
+      // console.log("imei",imei);
+      for (const index in data) {
+        // console.log("IMEI",data[index].IMEI);
+        if (String(data[index].IMEI) == String(imei)) {
+  
+          console.log("return true");
+          return data[index];
+        }
+      }
+      console.log("return false");
+      return undefined;
+  
     }
 
     public attachClassesToEvents(single_event?: any){

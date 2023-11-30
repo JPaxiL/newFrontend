@@ -296,12 +296,18 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
   clickbtnPlayConsola(): void {
     console.log(" click a clickbtnPlayConsola ");
-
     this.consolahistorialPlay();
+    $('#btnPlayConsola').css({"color":"#00f034"});
+    $('#btnPauseConsola').css({"color":"#495057"});
+    $('#btnStopConsola').css({"color":"#495057"});
+
   }
 
   clickbtnPauseConsola(): void {
     clearTimeout(this.cl.temporizadorConsola);
+    $('#btnPlayConsola').css({"color":"#495057"});
+    $('#btnPauseConsola').css({"color":"#00f034"});
+    $('#btnStopConsola').css({"color":"#495057"});
   }
 
   clickbtnStopConsola(): void {
@@ -309,6 +315,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
     this.cl.position = 0;
     this.mapService.map.removeLayer(this.icoGplay);
     //this.mapService.map.removeLayer(this.icoGplay_popup);
+    $('#btnPlayConsola').css({"color":"#495057"});
+    $('#btnPauseConsola').css({"color":"#495057"});
+    $('#btnStopConsola').css({"color":"#00f034"});
   }
 
     // $("#btnIzqConsola").click(() => {
