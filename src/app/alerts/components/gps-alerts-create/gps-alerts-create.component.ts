@@ -98,11 +98,12 @@ export class GpsAlertsCreateComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.AlertService.getEventsByType('Gps');
+    this.events = await this.AlertService.getEventsByType('gps');
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;
     this.hideLoadingSpinner();
+    console.log("alertas cargadas",this.events);
   }
 
   setDataVehicles() {
@@ -223,6 +224,10 @@ export class GpsAlertsCreateComponent implements OnInit {
     }
 
     if (this.alertForm.value.vehicles.length != 0) {
+
+      console.log("data enviada al backend",this.alertForm.value);
+      // return;
+
       Swal.fire({
         title: '¿Desea guardar los cambios?',
         //text: 'Espere un momento...',
@@ -234,9 +239,11 @@ export class GpsAlertsCreateComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           const res = await this.AlertService.create(this.alertForm.value);
+          console.log("res",res);
           this.clickShowPanel('ALERTS-GPS');
         },
       }).then((data) => {
+        console.log("data de retorno",data);
         if (data.isConfirmed) {
           Swal.fire(
             'Datos guardados',

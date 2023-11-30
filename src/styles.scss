@@ -87,6 +87,7 @@
   --pm-configuracion-header-height: var( --pm-general-header-height);
 
   --navbar-height: 4.75rem;
+  --footbar-height: 2rem;
   //--row-busqueda-height: 4.375rem;
   //--panel-monitoreo-header-height: 3.5rem;
   //--row-busqueda-height: 3.5rem;
@@ -899,4 +900,9 @@ p-inputswitch{
   margin-left: auto; /* Mueve la "x" hacia la derecha */
   margin-right: 10px;
   cursor: pointer;
+}
+
+.multimedia-slider {
+  height: 15rem;
+  padding-top: 1rem;
 }

@@ -2,14 +2,8 @@
   <div class="grid-section" [id]="container" #MapView>
   
   </div>
-  <div class="display-menu">
-    <button #btn type="button" pButton pRipple icon="pi pi-ellipsis-v" label="" class="p-button-rounded shadow-lg" (click)="menu.toggle($event)"></button>
-    <p-slideMenu [appendTo]="'body'" #menu [model]="itemsMenu" [popup]="true" [viewportHeight]="250"></p-slideMenu>
-  </div>
-  <app-screen-recorder [display]="showScreenRecorder" (onClose)="closeScreenRecorder();">
-  </app-screen-recorder>
 </div>
-<div class="popup-container" id="popupContainer"></div>
+
 <p-dialog header="Mostrar Punto" [(visible)]="mapServicesService.display" id="grebo">
     <table cellspacing="0" border="0">
         <tbody>

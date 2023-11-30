@@ -156,7 +156,7 @@ export class PopupService {
 
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>' + vehicle.name + '</strong></div><div class="col-6" align="right"><strong>' + vehicle.speed + ' km/h</strong></div></div>' +
       '<aside #popupText class="">' +
-      '<small>CONVOY: ' + vehicle.convoy + '</small><br>' +
+      '<small>CONVOY: ' + vehicle.nameconvoy + '</small><br>' +
       '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
       '<small>REFERENCIA: ' + 'NN' + '</small><br>' +
       '<small>FECHA DE TRANSMISION: ' + vehicle.dt_tracker + '</small><br>' +

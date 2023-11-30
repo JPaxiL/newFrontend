@@ -41,7 +41,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   loadingEventSelectInput: boolean = true;
 
   public disabledWhatsapp = true;
-  
+
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
@@ -137,7 +137,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   public async loadData() {
-    this.events = await this.AlertService.getEventsByType('Plataforma');
+    this.events = await this.AlertService.getEventsByType('platform');
     this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();
@@ -349,7 +349,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   changeAlertType() {
-    console.log(this.alertForm.value.tipoAlerta);
+    // console.log(this.alertForm.value.tipoAlerta);
     switch (this.alertForm.value.tipoAlerta) {
       case 'Zona de entrada':
       case 'Zona de salida':

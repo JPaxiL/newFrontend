@@ -41,17 +41,7 @@
         }
       }
     }
-    .display-menu {
-      z-index: 999999 !important;
-      position: fixed;
-      bottom: 5px;
-      right: 5px;
-    }
-    
-    .display-menu button {
-        background-color: var(--gl-blue-dark);
-        border: 1px solid var(--gl-blue-dark) !important;
-    }
+  
 
     .view-container {
       height: 100%;
@@ -134,6 +124,39 @@
     }
 
 
+    .conductor-adormitado, .conductor-adormitado{
+      --event-main-color: #287b72;
+    }
+
+    .conductor-somnoliento, .conductor-somnoliento{
+      --event-main-color: #488ac8;
+    }
+
+    .distraccion-detectada, .distraccion-detectada{
+      --event-main-color: #4668ee;
+    }
+
+    .conductor-somnoliento, .conductor-somnoliento{
+      --event-main-color: #5ee699;
+    }
+
+    .cinturon-NoDetectado, .cinturon-NoDetectado{
+      --event-main-color: #af78ed;
+    }
+
+    .celular-detectado, .celular-detectado{
+      --event-main-color: #e47953;
+    }
+
+    .cigarro-detectado, .cigarro-detectado{
+      --event-main-color: #4fc8ca;
+    }
+    .deteccion-manipulacion, .deteccion-manipulacion{
+      --event-main-color: #dd6243;
+    }
+    .error-camara, .error-camara{
+      --event-main-color: #80ea2f;
+    }
     /* COLORES DEFINIDOS */
     .zona-entrada, .zona-de-entrada{
       --event-main-color: #F58634;
@@ -216,6 +239,15 @@
     .distraccion,
     .no-rostro,
 
+    .conductor-adormitado, .conductor-adormitado,
+    .conductor-somnoliento, .conductor-somnoliento,
+    .distraccion-detectada, .distraccion-detectada,
+    .cinturon-NoDetectado, .cinturon-NoDetectado,
+    .celular-detectado, .celular-detectado,
+    .cigarro-detectado, .cigarro-detectado,
+    .deteccion-manipulacion, .deteccion-manipulacion,
+    .error-camara, .error-camara,
+    
     /* DEFINIDOS */
     .zona-entrada, .zona-de-entrada,
     .zona-salida, .zona-de-salida,
@@ -254,11 +286,13 @@
     /* Nombres de vehículos */
     .leaflet-tooltip.vehicle-tooltip{
       border: none;
-      color: #fff;
-      border-radius: 0.5rem;
-      background-color: var(--gl-blue-dark);
+      color: var(--gl-blue-dark);
+      text-shadow: 0 0 3px white;
+      //border-radius: 0.5rem;
+      background-color: transparent !important;
       font-weight: bold;
       line-height: 1rem;
+      box-shadow: none !important;
       //-webkit-text-stroke: 0.75px black;
       &::before{
         display: none;

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { GridItem, StructureGrid } from '../models/interfaces';
+import { MinimapService } from '../services/minimap.service';
 
 @Component({
   selector: 'app-grid',
@@ -13,7 +14,7 @@ export class GridComponent implements OnInit {
   @Output() itemsChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDeleteGrid: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() { }
+  constructor(private minimapService: MinimapService) { }
 
   ngOnInit(): void {
   }
@@ -30,6 +31,9 @@ export class GridComponent implements OnInit {
     //SOlo envo los drops que intercambiaron
     //{current_item: current, exchanged_item: exchanged }
     this.itemsChange.emit(event);
+    setTimeout(() => {
+      this.minimapService.resizeMaps();
+    }, 300);
   }
   deleteGrid(idContainer: string){
     console.log("CURRENT GRIDS?", this.items.length);

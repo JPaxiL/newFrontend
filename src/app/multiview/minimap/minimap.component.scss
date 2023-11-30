@@ -5,6 +5,7 @@
     height: 4rem;
     border-radius: 1rem 1rem 0 0;
 }
+
 .minimap-content {
     border-radius: 0 0 1rem 1rem;
     height: 100%;
@@ -51,4 +52,55 @@
         font-weight: bold;
         padding: 0.125rem 0.625rem;
     }
+}
+
+
+::ng-deep{
+    .leaflet-popup-content{
+      .infovehiculos{
+        margin: -0.125rem 0rem;
+        font-size: 0.875rem;
+        td > .dot-vehicle{
+          border-radius: 50%;
+          width: 10px;
+          height: 10px;
+          margin-right: 0.375rem;
+          &.green{
+            background-color: #45e845;
+          }
+          &.blue{
+            background-color: #2cadf2;
+          }
+          &.purple{
+            background-color: #b23ccf;
+          }
+          &.black{
+            background-color: #000;
+          }
+          &.orange{
+            background-color: #ffb300;
+          }
+          &.red{
+            background-color: #cc1013;
+          }
+          &.transm-color-not-defined{
+            background-color: #ABABAB;
+          }
+        }
+      }
+    }
+  .leaflet-tooltip.vehicle-tooltip{
+    border: none;
+    color: var(--gl-blue-dark);
+    text-shadow: 0 0 3px white;
+    //border-radius: 0.5rem;
+    background-color: transparent !important;
+    font-weight: bold;
+    line-height: 1rem;
+    box-shadow: none !important;
+    //-webkit-text-stroke: 0.75px black;
+    &::before{
+      display: none;
+    }
+  }
 }

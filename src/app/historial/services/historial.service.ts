@@ -31,6 +31,8 @@ export class HistorialService {
   }
   //----------------- FIN mensaje entre componentes ------------------
 
+  public icoGplay:any;
+  public icoGclick:any;
 
 
   public tramasHistorial: any = [];
@@ -42,7 +44,9 @@ export class HistorialService {
   public inicio = true;
 
   public nombreUnidad = '';
-
+  public icono = '';
+  public nameoperation = "";
+  
   modalActive:boolean = false;
 
   //---------------------------  Multi Historial --------------------------------------------------
@@ -94,6 +98,11 @@ export class HistorialService {
 
       pngFechaIni: new Date(moment( Date.now() ).format('YYYY-MM-DDTHH:mm')),
       pngFechaFin: new Date(moment( Date.now() ).add(1, 'days').format('YYYY-MM-DDTHH:mm')),
+
+      // pngFechaIni: new Date(moment( "2023-10-03" ).format('YYYY-MM-DDTHH:mm')),
+      // pngFechaFin: new Date(moment( "2023-10-03" ).format('YYYY-MM-DDTHH:mm')),
+
+
       // pngHoraIni2: 0,
       // pngMinIni: 0,
       // pngHoraFin2: 0,
@@ -102,6 +111,8 @@ export class HistorialService {
       pngHoraIni2 : new Date('2018-03-12T00:00'),
       pngHoraFin2 : new Date('2018-03-12T00:00'),
 
+      // pngHoraIni2 : new Date('2018-03-12T12:00'),
+      // pngHoraFin2 : new Date('2018-03-12T12:30'),
 
 
       colorHistorial : "#FF0000",//dataUser.his_color,//"#00FFFF",//dataUser.map_rc,//"#FF0000",
@@ -230,7 +241,108 @@ export class HistorialService {
   //   return response.data;
   // }
 
+  async getReference(lat: any, lng: any){
+    const response:ResponseInterface = await this.http
+      .get<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-reference`, {
+        params:
+        {
+          latitud:lat,
+          longitud:lng
+        }
+      })
+      .toPromise();
+
+      // console.log("===============================");
+      // console.log(response);
+      
+      return response.data;
+  }
+
+
+  async getStreetViewImg(lat: any, lng: any){
+    //const response:ResponseInterface 
+    var urlReference = "https://api.openstreetcam.org/2.0/photo/?lat="+lat+"&lng="+lng+"&radius=20000";
+    // console.log(urlReference);
+    
+    //.get<ResponseInterface>(`https://api.openstreetcam.org/2.0/photo/?lat=-18.073114&lng=-70.294772`, {})
+    var response:any = await this.http
+      .get<ResponseInterface>(urlReference, {})
+      .toPromise();
+
+      // console.log("===============================getStreetViewImg");
+      // console.log(response);
+      // console.log(response.status.httpCode);
+      // console.log(response.result.data[0].filepathTh);
+      if (response.status.httpCode == 200 && response.status.apiCode == 600) {
+          // apiCode = 601
+          // apiMessage = "The request has an empty response"
+          //RESULTADO VACIO
+          // console.log(response.result.data[0].lat);
+          // console.log(response.result.data[0].lng);
+
+          var distancia_min = 10000000;
+          var id_min = 0;
+          for (let i = 0; i < response.result.data.length; i++) {
+              var distanciaEnKilometros = this.calcularDistanciaEntreDosCoordenadas(lat, lng, response.result.data[i].lat, response.result.data[i].lng);
+              if (distanciaEnKilometros < distancia_min) {
+                  distancia_min = distanciaEnKilometros
+                  id_min = i;
+              }
+          }
+
+          //var distanciaEnKilometros = this.calcularDistanciaEntreDosCoordenadas(lat, lng, response.result.data[0].lat, response.result.data[0].lng);
+          // console.log("DISTANCIA : ");
+          // console.log(distancia_min);
+
+          var objDistancia = {
+              lat1:lat,
+              lng1:lng,
+              lat2:parseFloat(response.result.data[id_min].lat),
+              lng2:parseFloat(response.result.data[id_min].lng),
+              distancia:distancia_min,
+          }
+          
+          return [response.result.data[id_min].fileurlLTh,response.result.data[id_min].fileurlProc, objDistancia]
+          
+          // ["https://storage13.openstreetcam.org/files/photo/" + response.result.data[0].filepathTh,
+          //  "https://storage13.openstreetcam.org/files/photo/" + response.result.data[0].fileurlProc ];
+          // https://storage13.openstreetcam.org/files/photo/2023/10/2/th/7849961_6df4362f2b4205a96fff49a9d21d61e2.jpg  ->filepathTh
+          // https://storage13.openstreetcam.org/files/photo/2023/10/2/proc/7849961_6df4362f2b4205a96fff49a9d21d61e2.jpg  ->fileurlProc
+          // 2023/10/2/th/7849961_6df4362f2b4205a96fff49a9d21d61e2.jpg
+          
+      } else {
+          if (response.status.httpCode == 200 && response.status.apiCode == 601) {
+              // apiCode = 601
+              // apiMessage = "The request has an empty response"
+              console.log("601 => The request has an empty response");
+          } else {
+              console.log(" -- ERROR DESCONOCIDO -- ");
+              console.log(response);
+          }
+          return false;
+      }
+      //return response.result.data[0].filepathTh;
+      //return response.data;
+  }
+
+  calcularDistanciaEntreDosCoordenadas = (lat1:any, lon1:any, lat2:any, lon2:any) => {
+    // Convertir todas las coordenadas a radianes
+    lat1 = this.gradosARadianes(lat1);
+    lon1 = this.gradosARadianes(lon1);
+    lat2 = this.gradosARadianes(lat2);
+    lon2 = this.gradosARadianes(lon2);
+    // Aplicar fórmula
+    const RADIO_TIERRA_EN_KILOMETROS = 6371;
+    let diferenciaEntreLongitudes = (lon2 - lon1);
+    let diferenciaEntreLatitudes = (lat2 - lat1);
+    let a = Math.pow(Math.sin(diferenciaEntreLatitudes / 2.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(diferenciaEntreLongitudes / 2.0), 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return RADIO_TIERRA_EN_KILOMETROS * c;
+  };
+
+  gradosARadianes = (grados:any) => {
+      return grados * Math.PI / 180;
+  };
+
+
 }
-
-
-

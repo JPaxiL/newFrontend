@@ -86,7 +86,7 @@ export class CircularGeofencesService {
     }
     this.tblDataGeoFiltered = this.getTableData();
 
-    console.log(this.tblDataGeoFiltered);
+    // console.log(this.tblDataGeoFiltered);
     
   }
 
@@ -197,7 +197,7 @@ export class CircularGeofencesService {
   }
 
   getUserPrivileges(){
-    console.log('(Circular Geofences Service) Esperando privliegios...');
+    // console.log('(Circular Geofences Service) Esperando privliegios...');
     if(!this.userDataService.userDataInitialized){
       console.log('(Circular Geofences Service) User Data no está listo. Subscribiendo para obtener privilegios...');
       this.userDataService.geofencesPrivileges.subscribe({

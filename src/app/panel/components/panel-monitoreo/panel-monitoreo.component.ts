@@ -10,7 +10,6 @@ declare var $: any;
 })
 export class PanelMonitoreoComponent implements OnInit {
 
-
   constructor( public panelService: PanelService ) { }
 
   ngOnInit(): void {

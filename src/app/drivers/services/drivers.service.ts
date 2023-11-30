@@ -5,7 +5,8 @@ import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
 
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +22,17 @@ export class DriversService {
   public action:string = "add"; //[add,edit,delete]
 
   tblDataDriver: any = [];
+  tblDataDriverSearch: any = [];
   initializingDriver: boolean = false;
 
   modalActive:boolean = false;
   isRowDataEmpty: boolean = false;
+
+  private URL_HISTORY = environment.apiUrl;
+  //HISOTIRAL
+  historyDriverActive:boolean =false;
+
+  historyType: string = 'driver';
 
 
   constructor(
@@ -36,8 +44,8 @@ export class DriversService {
   public async initialize() {
     this.spinner.show('loadingDrivers');
     await this.getAll();
-
   }
+  
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1) {
 
@@ -56,7 +64,6 @@ export class DriversService {
 
   }
 
-
   initializeTable() {
     this.tblDataDriver = [];
     console.log('drivers: ', this.drivers);
@@ -65,8 +72,21 @@ export class DriversService {
     }
     this.isRowDataEmpty = this.tblDataDriver.length == 0;
     this.spinner.hide('loadingDrivers');
+    //MANDA UNA COPIA
+    this.tblDataDriverSearch = this.tblDataDriver;
 
+  }
 
+  public getTableDataDriver(){
+    return this.tblDataDriver;
+  }
+
+  public getTableAllData(){
+    return this.tblDataDriverSearch;
+  }
+
+  getHistoryAll(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/historyAll`);
   }
 
   // getDataIbuttons(id: string) {
@@ -96,5 +116,7 @@ export class DriversService {
     console.log(response);
     return response;//[1,0]
   }
+
+  
 
 }

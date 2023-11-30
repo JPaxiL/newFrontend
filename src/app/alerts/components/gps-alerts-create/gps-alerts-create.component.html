@@ -15,7 +15,7 @@
                         <label>ALERTA:</label>
                     </div>
                     <div class="col-12">
-                        <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="name" [appendTo]="'body'"></p-dropdown>
+                        <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="id" [appendTo]="'body'"></p-dropdown>
                         <!-- <div class="row">
                             <div class="col-1 text-end d-flex flex-column justify-content-center" *ngIf="loadingEventSelectInput">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -27,14 +27,14 @@
                                     </select>
                                     <select class="form-select" aria-label="Alerta" formControlName="tipoAlerta" *ngIf="!loadingEventSelectInput">
                                         <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
-                                        <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
+                                        <option *ngFor="let event of events" [value]="eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??event.name,,,,">{{ eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??eventtipo: event.nombre??event.name,,,, }}</option>
                                     </select>
                                 </div>
                             </div>
                         </div> -->
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>NOMBRE:</label>
@@ -46,7 +46,7 @@
                         </div> -->
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>VEHÍCULOS:</label>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="gl-middleline gl-permanent-middleline gl-row-underline">
                     <div class="row">
                         <div class="col p-field">
@@ -169,7 +169,7 @@
 
                 <br>
                 <!-- whatsapps: -->
-                <div class="row d-flex justify-content-center">
+                <!-- <div class="row d-flex justify-content-center">
                     <div class="col-5">
                         <label class="row">
                             <span class="col-9 form-check-label">WhatsApp:</span>
@@ -205,7 +205,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- fin whatsapps: -->
                 <div class="row justify-content-center mt-4 panel-izq-container-footer">
                     <div class="col-6">
@@ -218,6 +218,6 @@
             </form>
 
         </div>
- 
+
     </div>
 </div>

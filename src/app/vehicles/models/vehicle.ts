@@ -7,7 +7,7 @@ export class Vehicle {
     public bol_correctivo_fin: boolean,
     public bol_correctivo_ini: boolean,
     public operation: string | null,
-    public convoy: string | null,
+    public nameconvoy: string | null,
     public dat_correctivo_fin: string,
     public dat_correctivo_ini: string,
     public dt_server: string,
@@ -37,6 +37,8 @@ export class Vehicle {
     public speed: number,
     public tanque: string,
     public tipo: string,
-    public tolva: string
+    public nametype_vehicle: string | null,
+    public tolva: string,
+    public cod_interno: string | null
   ){}
 }

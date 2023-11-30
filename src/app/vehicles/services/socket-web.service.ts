@@ -26,11 +26,11 @@ export class SocketWebService extends Socket {
     if(!this.vehicleService.statusDataVehicle){
       this.vehicleService.dataCompleted.subscribe(vhs => {
         this.whitelist = vhs.map((vh:any) => vh.IMEI.toString());
-      })
+      });
     }else{
       this.whitelist = this.vehicleService.vehicles.map((vh:any) => vh.IMEI.toString());
     }
-  } 
+  }
 
   listen = ()=>{
     this.ioSocket.on('envio', (res:string, data: any) => {
@@ -41,6 +41,7 @@ export class SocketWebService extends Socket {
       if(this.whitelist.includes(data.IMEI.toString())){
         //console.log('envio ====>',data);
         this.callback.emit(data)
+
       }
     });
   }

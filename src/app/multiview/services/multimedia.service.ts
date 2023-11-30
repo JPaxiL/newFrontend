@@ -1,14 +1,21 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import * as RecordRTC from 'recordrtc';
 import html2canvas from 'html2canvas';
-import { Subject } from 'rxjs';
+import { Observable, Subject, throwError, timer } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { catchError, delay, filter, map, mergeMap, take, timeout } from 'rxjs/operators';
+import { MediaRequest } from '../models/interfaces';
+import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
+import { SocketWebService } from 'src/app/vehicles/services/socket-web.service';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MultimediaService {
 
-  constructor() { }
+  constructor(private http: HttpClient, private wsService:SocketWebService) { }
 
   private mediaStream:any;
   private canvasStream:any;
@@ -26,29 +33,6 @@ export class MultimediaService {
 
   private captureInterval: any;
   public isRecording = false;
-  /* [****]
-  private async updateCanvas(element:any) {
-    if (!element || !this.ctx || !this.canvas) {
-      console.log("nose");
-      
-      return;
-    }
-
-    const width = element.clientWidth;
-    const height = element.clientHeight;
-
-    this.canvas.width = width;
-    this.canvas.height = height;
-
-    // Capturar el contenido del contenedor como una imagen usando html2canvas
-    const containerImage = await html2canvas(element);
-
-    // Dibujar la imagen en el canvas
-    this.ctx.drawImage(containerImage, 0, 0, width, height);
-
-    // Solicitar el siguiente cuadro de animación
-    requestAnimationFrame(() => this.updateCanvas(element));
-  }*/
   getMediaStream(){
     return this._mediaStream.asObservable();
   }
@@ -164,11 +148,6 @@ export class MultimediaService {
       };
       await this.recorder.startRecording();
       this.isRecording = true;
-      /*await this.recorder.on('stopped', async () => {
-        // Realiza acciones cuando se detiene la grabación
-        console.log('La grabación se detuvo.');
-        this.onStop.emit(true);
-      });*/
     } catch (error) {
       this.isRecording = false;
     }
@@ -258,5 +237,169 @@ export class MultimediaService {
     // Simula un clic en el enlace para iniciar la descarga
     a.click();
     this.canvas2d!.remove();
+  }
+
+  getMediaFromEvent(imei: string, eventId: string, type: string = "video", source: string = "CABIN", index: number = 0, time_before_call = 0, maxRetries = 2, retryInterval = 5000): Observable<any> {
+    return timer(time_before_call * 500).pipe(
+      mergeMap(() => {
+        return this.tryGetMedia(imei, eventId, type, source, index, maxRetries, retryInterval);
+      }),
+      catchError((e) => {
+        console.log("ERRORRRSS: ",e);
+        
+        if(e.status == 403){
+          Swal.fire("Error","El dispositivo no existe",'warning');
+        }
+        else if(e.status == 500){
+          Swal.fire("Error","No se pudo conectar al servidor",'warning');
+        }
+        else if(e.status == 401){
+          Swal.fire("Error","No tienes permisos suficientes",'warning');
+        }
+        else if(e.status == 422){
+          Swal.fire("Error","Parámetros incorrectos",'warning');
+        }
+        else if(e.status == 408){
+          Swal.fire("Error","El dispositivo no se encuentra disponible",'warning');
+        }else{
+          Swal.fire("Error","El archivo aun no se encuentra disponible",'warning');
+        }
+        return throwError(e);
+      })
+    );
+  }
+
+  private tryGetMedia(imei: string, eventId: string, type: string, source: string, index: number, maxRetries: number, retryInterval: number): Observable<any> {
+    const endpoint = environment.apiUrl + '/api/media/' + type + '/' + imei + '/' + eventId + '/' + source + '/' + parseInt(index.toString());
+  
+    return this.http.get(endpoint, { responseType: 'blob' }).pipe(
+      map(blob => URL.createObjectURL(blob)),
+      catchError((e) => {
+        if(e.status != 404){
+          return throwError(e);
+        }
+        if (maxRetries > 0) {
+          maxRetries -= 1;
+          // Reintentar después de un intervalo de tiempo
+          return timer(retryInterval).pipe(
+            mergeMap(() => this.tryGetMedia(imei, eventId, type, source, index, maxRetries, retryInterval))
+          );
+        } else {
+          return throwError(e);
+        }
+      })
+    );
+  }
+
+
+  retrieveVideoFrom(mediaRequest: MediaRequest): Observable<string> {
+    return new Observable((observer) => {
+      if(mediaRequest.seconds>60 || mediaRequest.seconds<10){
+        Swal.fire('Error', 'La duración del video debe estar entre 10 y 60 segundos.', 'error');
+        observer.complete();
+      }
+      const endpoint = environment.apiUrl + '/api/media/retrieve';
+      this.http.post<ResponseInterface>(endpoint, mediaRequest).subscribe(resp => {
+        console.log("respuesta de retrieve: ", resp);
+        if (resp.success) {
+          // Si la solicitud fue exitosa, escucharemos las tramas que llegan esperando la que tenga el video/imagen solicitado
+          const videoSubscription = this.wsService.callback.pipe(
+            filter(frame => {
+              console.log("frame",frame);
+              return mediaRequest.device_id === frame.IMEI.toString() && frame.Parametros.includes("ExternalEvent")
+            }),
+            mergeMap(frame => {
+              console.log("frame",frame);
+              const objParams: any = {};
+              frame.Parametros.split('|').forEach((item:string) => {
+                const [key, value] = item.split('=');
+                objParams[key] = value;
+              });
+              frame.Parametros = objParams;
+              return this.getMediaFromEvent(mediaRequest.device_id, frame.Parametros.eventId, "video", mediaRequest.source, 0, mediaRequest.seconds<31?15:30);
+            }),
+            take(1) // Solo toma la primera URL válida y completa la suscripción
+          );
+          // Aplicar timeout al Observable
+          videoSubscription.pipe(
+            timeout(mediaRequest.seconds * 3 * 1000) // Multiplicamos por 2 para obtener el doble de segundos
+          ).subscribe(
+            video_url => {
+              observer.next(video_url);
+              observer.complete();
+            },
+            error => {
+              console.error('Error en la función getMediaFromEvent:', error);
+              observer.next("");
+              observer.complete();
+            }
+          );
+        } else {
+          Swal.fire('Error', resp.message, 'error');
+          observer.complete();
+        }
+      },
+      error => {
+        Swal.fire('Error', error.error.messages, 'error');
+        console.error('Error al llamar al endpoint /api/media/retrieve:', error);
+        observer.complete();
+      });
+    });
+  }
+
+  recordVideo(mediaRequest: MediaRequest): Observable<string> {
+    return new Observable((observer) => {
+      if(mediaRequest.seconds>60 || mediaRequest.seconds<10){
+        Swal.fire('Error', 'La duración del video debe estar entre 10 y 60 segundos.', 'error');
+        observer.complete();
+      }
+      // Only for video
+      const endpoint = environment.apiUrl + '/api/media/record';
+      this.http.post<ResponseInterface>(endpoint, mediaRequest).subscribe(resp => {
+        console.log("respuesta de record: ", resp);
+        if (resp.success) {
+          // Si la solicitud fue exitosa, escucharemos las tramas que llegan esperando la que tenga el video/imagen solicitado
+          const videoSubscription = this.wsService.callback.pipe(
+            filter(frame => {
+              console.log("frame",frame);
+              return mediaRequest.device_id === frame.IMEI.toString() && frame.Parametros.includes("ExternalEvent")
+            }),
+            mergeMap(frame => {
+              console.log("frame",frame);
+              const objParams: any = {};
+              frame.Parametros.split('|').forEach((item:string) => {
+                const [key, value] = item.split('=');
+                objParams[key] = value;
+              });
+              frame.Parametros = objParams;
+              return this.getMediaFromEvent(mediaRequest.device_id, frame.Parametros.eventId, "video", mediaRequest.source, 0, mediaRequest.seconds+10);
+            }),
+            take(1) // Solo toma la primera URL válida y completa la suscripción
+          );
+          // Aplicar timeout al Observable
+          videoSubscription.pipe(
+            timeout(mediaRequest.seconds * 3 * 1000) // Multiplicamos por 2 para obtener el doble de segundos
+          ).subscribe(
+            video_url => {
+              observer.next(video_url);
+              observer.complete();
+            },
+            error => {
+              console.error('Error en la función getMediaFromEvent:', error);
+              observer.next("");
+              observer.complete();
+            }
+          );
+        } else {
+          Swal.fire('Error', resp.message, 'error');
+          observer.complete();
+        }
+      },
+      error => {
+        Swal.fire('Error', error.error.messages, 'error');
+        console.error('Error al llamar al endpoint /api/media/retrieve:', error);
+        observer.complete();
+      });
+    });
   }
 }

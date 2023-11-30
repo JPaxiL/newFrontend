@@ -162,6 +162,7 @@ export class TreeTableComponent implements OnInit {
     /* console.log('--navbar-height: ', Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''))); */
 
     const navbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
+    const footbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--footbar-height').replace('rem', ''));
     const rowBusquedaHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--row-busqueda-height').replace('rem', ''));
     const panelMonitoreoVehiclesHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', ''));
     const treetableHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--treetable-header-height').replace('rem', ''));
@@ -173,7 +174,7 @@ export class TreeTableComponent implements OnInit {
     //0.125rem es tolerancia para evitar overflow
     //Le quité la tolerancia porque el cálculo ahora es exacto.
     //12.125 era 9.375 + 2.75 (previa altura del navbar)
-    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (rowBusquedaHeight + panelMonitoreoVehiclesHeaderHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
+    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (rowBusquedaHeight + panelMonitoreoVehiclesHeaderHeight + footbarHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
     //$('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr("style", '');
     $('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
     //console.log('treeTable altura en px:' + treeTable_height_in_px);
@@ -336,13 +337,15 @@ export class TreeTableComponent implements OnInit {
         if(data.id==vehicles[key]['idconvoy']){
           aux2.push(vehicles[key]);
           //filtrar por idoperacion del grupo
-          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idgrupo==vehicles[key]['idgrupo']&&vehicle.idconvoy==0);
+          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation==vehicles[key]['idoperation']&&vehicle.idgrupo==vehicles[key]['idgrupo']&&vehicle.idconvoy==0);
         }
       }
     }
 
     this.list2 = aux2;
     this.list1 = aux1;
+    console.log('LISTA --> 1',this.list1);
+    console.log('LISTA --> 2',this.list2);
 
   }
   
@@ -350,12 +353,45 @@ export class TreeTableComponent implements OnInit {
     this.textDelete = data['type'];
     if(data['id']==null){
       console.log('no hay id');
+      Swal.fire({
+        title: 'Error',
+        text: 'No existe Agrupación, recarge la página ...',
+        icon: 'error',
+      });
     }else{
       this.idDelete = data['id'];
       this.typeDelete = data['type'];
       console.log('en proceso de borrado',this.idDelete,this.typeDelete);
     }
 
+    // SI EXISTE UN CONVOY DEBE ENVIAR UN MENSAJE DE ANTES DESCOMPONER EL GRUPO 
+    if(this.textDelete=='grupo'){
+      const existsElement = this.vehicleService.vehicles.some((vehicle: any) => {
+        return vehicle.idgrupo === data['id'] && vehicle.idconvoy !== 0;
+      }); 
+      if(existsElement){
+        Swal.fire({
+          title: 'Error',
+          text: 'Primero Debe Eliminar los convoy que tiene el grupo ...',
+          icon: 'error',
+        });
+        return;
+
+      }
+    // SI EXISTE UN CONVOY/GRUPO DEBE ENVIAR UN MENSAJE DE ANTES DESCOMPONER LA OPERACION
+    }else if(this.textDelete == 'operacion'){
+      const existsElement = this.vehicleService.vehicles.some((vehicle: any) => {
+        return vehicle.idoperation == data['id'] && (vehicle.idgrupo != 0 || vehicle.idconvoy != 0);
+      }); 
+      if(existsElement){
+        Swal.fire({
+          title: 'Error',
+          text: 'Primero Debe Eliminar los grupos y/o convoys que tiene la operación ...',
+          icon: 'error',
+        });
+        return;
+      }
+    }
 
     Swal.fire({
       title: 'Confirmación',
@@ -509,16 +545,16 @@ export class TreeTableComponent implements OnInit {
     if(resultado){
       const index = vehicles.indexOf( resultado);
 
-      vehicles[index].id_conductor = res.id_conductor;
-      vehicles[index].idgrupo = res.idgrupo;
       vehicles[index].name  = res.name;
-      vehicles[index].model = res.model;
-      vehicles[index].sim_number  = res.sim_number;
-      vehicles[index].plate_number  = res.plate_number;
-      vehicles[index].tolva  = res.tolva;
-      vehicles[index].empresa  = res.empresa;
-      vehicles[index].tipo  = res.tipo;
-      vehicles[index].icon  = res.icon;
+      // vehicles[index].id_conductor = res.id_conductor;
+      // vehicles[index].idgrupo = res.idgrupo;
+      // vehicles[index].model = res.model;
+      // vehicles[index].sim_number  = res.sim_number;
+      // vehicles[index].plate_number  = res.plate_number;
+      // vehicles[index].tolva  = res.tolva;
+      // vehicles[index].empresa  = res.empresa;
+      // vehicles[index].tipo  = res.tipo;
+      // vehicles[index].icon  = res.icon;
 
       this.vehicleService.vehicles = vehicles;
 
@@ -566,7 +602,7 @@ export class TreeTableComponent implements OnInit {
     this.vehicleService.onClickIcon(IMEI);
   }
   onSort(data: any){
-    // //console.log("sort desde tree", data);
+    console.log("sort desde tree", data);
     this.sortOrder=data;
   }
   onClickTag(IMEI: string){
@@ -590,6 +626,7 @@ export class TreeTableComponent implements OnInit {
   onClickFollow(rowData: any){
     rowData.follow = !rowData.follow;
     this.followService.add(rowData);
+    console.log('SEGUIR VEHICULO -->',rowData);
   }
 
   public onQuickFilterChanged(data: any) {

@@ -109,34 +109,34 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   selectedEvents: any = [];
   chkAllEvents: boolean = false;
   chkMostrarRuta: boolean = false;
-
+  typeEvents :any = [];
    eventList = [
-    {
-      label: 'Evento GPS',
-      items: [
-        // { name: 'Batería baja', value: false },
-        { name: 'Batería Desconectada', value: false },
-        { name: 'Aceleración Brusca', value: false },
-        { name: 'Frenada Brusca', value: false },
-        // { name: 'Bloqueo de Transmisión', value: false },
-        { name: 'SOS', value: false },
-        // { name: 'Remolque', value: false },
-        // { name: 'Parada', value: false },
-        { name: 'Motor Apagado', value: false },
-        { name: 'Motor Encendido', value: false },
+    // {
+    //   label: 'Evento GPS',
+    //   items: [
+    //     // { name: 'Batería baja', value: false },
+    //     { name: 'Batería Desconectada', value: false },
+    //     { name: 'Aceleración Brusca', value: false },
+    //     { name: 'Frenada Brusca', value: false },
+    //     // { name: 'Bloqueo de Transmisión', value: false },
+    //     { name: 'SOS', value: false },
+    //     // { name: 'Remolque', value: false },
+    //     // { name: 'Parada', value: false },
+    //     { name: 'Motor Apagado', value: false },
+    //     { name: 'Motor Encendido', value: false },
 
-      ]
-    },
+    //   ]
+    // },
     {
       label: 'Evento Plataforma',
       items: [
-        { name: 'Zona de Entrada', value: false },
-        { name: 'Zona de Salida', value: false },
-        { name: 'Tiempo de Estadía en Zona', value: false },
-        { name: 'Parad en Zona no Autorizada', value: false },
-        { name: 'Vehículo en Movimiento Sin Programación', value: false },
-        { name: 'Infracción', value: false },
-        { name: 'Exceso de Velocidad', value: false },
+        { name: 'Zona de Entrada', value: 'zona-de-entrada' },
+        { name: 'Zona de Salida', value: 'Zona de salida' },
+        // { name: 'Tiempo de Estadía en Zona', value: false },
+        // { name: 'Parad en Zona no Autorizada', value: false },
+        // { name: 'Vehículo en Movimiento Sin Programación', value: false },
+        // { name: 'Infracción', value: false },
+        { name: 'Exceso de Velocidad', value: 'exceso-velocidad' },
         // { name: 'Anticolisión frontal', value: false },
         // { name: 'Colisión con Peatones', value: false },
         // { name: 'No Rostro', value: false },
@@ -146,20 +146,33 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         // { name: 'Bloqueo de visión del mobileye', value: false },
       ]
     },
+    // {
+    //   label: 'Evento Seguridad Vehicular',
+    //   items: [
+    //     { name: 'Ausencia de Rostro', value: false },// { name: 'No Rostro', value: false },
+    //     { name: 'Fatiga Extrema', value: false },
+    //     { name: 'Posible Fatiga', value: false },
+    //     { name: 'Distracción', value: false },
+    //     { name: 'Detección de Alcohol', value: false },//  { name: 'Alcoholemia', value: false },
+    //     { name: 'Anticolisión Frontal', value: false },
+    //     { name: 'Colisión con Peatones', value: false },
+    //     { name: 'Desvío de Carril Hacia la Izquierda', value: false },
+    //     { name: 'Desvío de Carril Hacia la Derecha', value: false },
+    //     { name: 'Bloqueo de Visión del Mobileye', value: false },
+    //   ]
+    // }
     {
-      label: 'Evento Seguridad Vehicular',
-      items: [
-        { name: 'Ausencia de Rostro', value: false },// { name: 'No Rostro', value: false },
-        { name: 'Fatiga Extrema', value: false },
-        { name: 'Posible Fatiga', value: false },
-        { name: 'Distracción', value: false },
-        { name: 'Detección de Alcohol', value: false },//  { name: 'Alcoholemia', value: false },
-        { name: 'Anticolisión Frontal', value: false },
-        { name: 'Colisión con Peatones', value: false },
-        { name: 'Desvío de Carril Hacia la Izquierda', value: false },
-        { name: 'Desvío de Carril Hacia la Derecha', value: false },
-        { name: 'Bloqueo de Visión del Mobileye', value: false },
-      ]
+      label: 'Eventos 360º',
+        items: [
+          { name: 'Conductor Adormitado 360°', value: 'conductor-adormitado-360' },
+          { name: 'Conductor Somnoliento 360', value: 'conductor-somnoliento-360' },
+          { name: 'Distracción Detectada 360°', value: 'conductor-distraido-360' },
+          { name: 'Cinturón no Detectado 360°', value: 'cinturon-desabrochado-360' },
+          { name: 'Celular Detectado 360°', value: 'uso-de-celular-360' },
+          { name: 'Cigarro Detectado 360°', value: 'conductor-fumando-360' },
+          { name: 'Detección de Manipulación 360°', value: 'deteccion-manipulacion-360' },
+          { name: 'Error de Cámara 360°', value: 'error-de-camara-360' },
+        ]
     }
     // ,
     // {
@@ -361,6 +374,73 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     //   $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
 
     // });
+
+
+
+
+
+    //CHANGES FOR HISTORIAL *********************
+    // SE VA CAMBIAR TODO EL API DEL SERVICIO PARA JALAR DE USUARIOS DETALLES 
+
+    // console.log('TESTING OPEN HISTORY');
+    // let status_event = false;
+    // let map: any=[];
+
+    // this.EventService.getEventName().subscribe(data => {
+    //   console.log(data.data.event_id); // Aquí deberías ver los valores reales devueltos por el Observable
+    //   for (let event of data.data) {
+    //     status_event= false;
+    //     event.event_type = this.changeNameEvent(event.event_type);
+        
+    //     const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_type);
+
+    //     if (existingTypeEvent) {
+    //       // El tipo de evento ya existe en el mapa
+    //       const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.event_id);
+
+    //       if (!existingEvent) {
+    //         // El id_event no existe para este tipo de evento, lo agregamos
+    //         existingTypeEvent.items.push({
+    //           name: event.name_event,
+    //           value: event.event_id
+    //         });
+    //       }
+    //     } else {
+    //       // El tipo de evento no existe en el mapa, lo añadimos
+    //       map.push({
+    //         label: event.event_type,
+    //         items: [
+    //           {
+    //             name: event.name_event,
+    //             value: event.event_id,
+    //           }
+    //         ]
+    //       });
+    //     }
+
+    //   }
+    // });
+    // // LIMPIAMOS EVENTOS LIST
+    // this.eventList = [];
+    // this.eventList = map;
+    
+    // console.log(this.eventList,map);
+    
+  }
+
+  changeNameEvent (name:string){
+    if (name == 'gps'){
+      return 'EVENTOS GPS';
+    }else if(name == 'platform'){
+      return 'EVENTOS PLATAFORMA';
+    }else if (name == 'accessories'){
+      return 'EVENTOS FATIGA 360º'
+    }else {
+      return 'EVENTOS '+name.toUpperCase();
+    }
+  }
+  clickTest(){
+    console.log('Eventos seleccionados:', this.selectedEvents);
   }
 
   ngOnDestroy(){
@@ -378,15 +458,27 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     this.VehicleService.dataCompleted.unsubscribe;
 
+    // this.historialService.icoGplay = this.icoGplay;
+    // this.historialService.icoGclick = this.icoGclick;
+
+    this.mapService.map.removeLayer(this.historialService.icoGplay);
+    this.mapService.map.removeLayer(this.historialService.icoGclick);
+
+
   }
 
   getCars(vehicles: any){
+    console.log("======================== icono == getCars");
+    console.log(vehicles);
+    
+    
     for (let i = 0; i < vehicles.length; i++) {
-      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
+      let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI, icon:vehicles[i].icon , nameoperation:vehicles[i].nameoperation };
       this.cars.push(gaa);
     }
   }
 
+  
 
   // function changeColorHistorial() {
   //   //console.log("********  ACTUALIZANDO VALORES  *******");
@@ -442,7 +534,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     //console.log(this.form.chckEvento);
 
     //this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items].length;
-    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items].length;
+    // this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items].length;
+    this.chkAllEvents = this.selectedEvents.length == [...this.eventList[0].items, ...this.eventList[1].items].length;
 
     // console.log(this.chkAllEvents);
     // console.log(this.selectedEvents);
@@ -608,8 +701,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         }
       } 
 
+      //eventos
+      console.log("=======================================");
+      // console.log(this.historialService.arrayRecorridos);
+      // console.log(idx);
+      // console.log(this.historialService.arrayRecorridos[idx]);
 
+      var EventosAll = this.historialService.arrayRecorridos[key].eventos;
 
+      for (let index = 0; index < EventosAll.length; index++) {
+        EventosAll[index].layer.addTo(this.mapService.map);
+      }
 
 
       dH[0].layer0.addTo(this.mapService.map);
@@ -740,14 +842,17 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
-  clickVerGrafico(index:any, key:any) {
+  async clickVerGrafico(index:any, key:any) {
     console.log("-----------------clickVerGrafico");
     console.log("-----------index");
     console.log(index);
     console.log("-----------key");
     console.log(key);
 
-    
+    // this.historialService.modalActive=false;
+    // console.log("GAAAAAAA");
+    // await new Promise(f => setTimeout(f, 500));
+
     this.historialService.modalActive=true;
 
 
@@ -795,7 +900,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
   }
-
+  
 
   async clickCargarHistorial() {
     this.spinner.show('loadingHistorial');
@@ -862,11 +967,16 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
     this.historialService.nombreUnidad = this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+    this.historialService.icono = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].icon;
+    this.historialService.nameoperation = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nameoperation;
 
+
+    
 
     var au = this.historialService.arrayRecorridos;
     var key = this.nombreUnidad+'_'+M1+'_'+M2;
-
+    var icono = this.historialService.icono;
+    var nameoperation = this.historialService.nameoperation;
     //verificar q no existan keys repetidas :
     for (let i = 0; i < au.length; i++) {
       console.log(au[i].key+' - '+key);
@@ -892,7 +1002,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     var param = {
                 fecha_desde:M1, fecha_hasta:M2,
-                imei:this.form.selectedCar
+                imei:this.form.selectedCar,
+                user_id:localStorage.getItem('user_id')
 
                 // , duracionParada:vm.form.duracionParada.id,
                 // conParada:vm.form.verParadasHistorial, nombreUnidad:vm.form.selectedUnidad.value.name,
@@ -900,15 +1011,19 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                 // icono : values[0].icon
               };
     console.log(param);
+    // console.log("ID DEL USUARIO");
+    // console.log(localStorage.getItem('user_id'));
+    
+    
 
 
     this.historialService.get_tramas_recorrido(param).then( res => {
 
       this.EventService.ShowAllHistorial(param).then( res1 => {
 
-          // console.log("=== VERDADERO EVENTOS HISTORIAL");
-          // console.log(res1);
-
+          console.log("=== VERDADERO EVENTOS HISTORIAL");
+          console.log(res1);
+          console.log(this.EventService.eventsHistorial);
 
 
           const duracion = parseInt(this.form.duracionParada);
@@ -1314,10 +1429,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
                       //{ offset: 12, repeat: 25, symbol: L.Symbol.dash({pixelSize: 10, pathOptions: {color: 'black', weight: 2}})},
                       { offset: 2, repeat: 30, symbol: L.Symbol.arrowHead({pixelSize: 4.3,polygon: false,pathOptions: {stroke: true,weight: 1.4,color: 'black',opacity: 1}})}
                   ]
-                }).addTo(this.mapService.map);
-
-
-;
+                }).addTo(this.mapService.map);;
 
               var combustibleTotal = this.get_combustible_movimiento(dH, 0, 'FIN');//'100 gal.';
               var kilometrajeTotal = this.get_distancia_movimiento(dH, 0, 'FIN');//'100 gal.';
@@ -1326,6 +1438,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
                 this.historialService.arrayRecorridos.push({
                     key: this.nombreUnidad+'_'+M1+'_'+M2,
+                    icono: icono,
+                    nameoperation: nameoperation,
                     nombre: this.nombreUnidad,
                     f_ini: M1str,
                     f_fin: M2str,
@@ -1591,10 +1705,33 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
 
-  add_geocerca_movimineto(trama:any,trama2trama:any) {
+  add_geocerca_movimineto(trama:any,trama2trama:any, key:any) {
     console.log("____________add_geocerca_movimineto");
-    console.log(trama);
-    console.log(trama2trama);
+    // console.log(key);
+    // console.log(trama);
+    // console.log(trama2trama);
+    // console.log(trama2trama.cc);
+    // console.log(trama2trama.cc[0]);
+    // console.log(trama2trama.cc[1]);
+    var recorrido_unidad = this.historialService.arrayRecorridos.filter(function( obj:any ) {
+      return obj.key == key;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    });
+    // console.log(recorrido_unidad[0]);
+    //var dH =  this.historialService.tramasHistorial; // Data Historial
+    // console.log(recorrido_unidad[0].recorrido);
+
+    var LL = recorrido_unidad[0].recorrido;
+    var arrCoordenadas = [];
+    for (let i = trama2trama.cc[0]; i <= trama2trama.cc[1]; i++) {
+      arrCoordenadas.push({lat:LL[i].lat,lng:LL[i].lng, speed:LL[i].speed});
+    }
+    console.log("==== arrCoordenadas");
+    console.log(arrCoordenadas);
+    
+
+    // console.log(recorrido_unidad[0].recorrido[trama2trama.cc[0]]);
+    // console.log(recorrido_unidad[0].recorrido[trama2trama.cc[1]]);
+
   }
 
 
@@ -1654,26 +1791,26 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   changeShowingParadasHistorial() {
 
-    if (this.conHistorial) {
-      var dH =  this.historialService.tramasHistorial; // Data Historial
-      var iH  = dH[0].index_historial; //indices de paradas y movimientos
+    // if (this.conHistorial) {
+    //   var dH =  this.historialService.tramasHistorial; // Data Historial
+    //   var iH  = dH[0].index_historial; //indices de paradas y movimientos
 
-      if (this.form.chckParada) {
-        for (let i = 0; i < dH.length; i++) {
-          if (dH[i].layer != null) {
-            dH[i].layer.addTo(this.mapService.map);
-          }
-        }
-      } else {
-        for (let i = 0; i < dH.length; i++) {
-          if (dH[i].layer != null) {
-            this.mapService.map.removeLayer(dH[i].layer);
-          }
-        }
-      }
+    //   if (this.form.chckParada) {
+    //     for (let i = 0; i < dH.length; i++) {
+    //       if (dH[i].layer != null) {
+    //         dH[i].layer.addTo(this.mapService.map);
+    //       }
+    //     }
+    //   } else {
+    //     for (let i = 0; i < dH.length; i++) {
+    //       if (dH[i].layer != null) {
+    //         this.mapService.map.removeLayer(dH[i].layer);
+    //       }
+    //     }
+    //   }
 
-      this.mostrar_tabla(dH,iH);
-    }
+    //   this.mostrar_tabla(dH,iH);
+    // } 
 
     //===================================  ARRAY DE HISTORIALES ============================================
     
@@ -1772,52 +1909,52 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             for (let index = 0; index < this.EventService.eventsHistorial.length; index++) {
 
               const item = this.EventService.eventsHistorial[index];
-              var activar = false;
+              var activar = true;//false;
 
-              for (let j = 0; j < this.selectedEvents.length; j++) {
-                const opEve = this.selectedEvents[j];
-                // console.log(opEve.name + " -- " +item.evento);
-                // if (opEve.name == item.evento) { activar = true; }
+              // for (let j = 0; j < this.selectedEvents.length; j++) {
+              //   const opEve = this.selectedEvents[j];
+              //   // console.log(opEve.name + " -- " +item.evento);
+              //   // if (opEve.name == item.evento) { activar = true; }
 
-                //Nombres de eventos que cambiaron
-                var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
+              //   //Nombres de eventos que cambiaron
+              //   var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
 
-                // if (opEve.name == 'Batería desconectada' && item.evento.toUpperCase() == 'BATERÍA DESCONECTADA') { activar = true; }
+              //   // if (opEve.name == 'Batería desconectada' && item.evento.toUpperCase() == 'BATERÍA DESCONECTADA') { activar = true; }
 
-                if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
-                if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
-                if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
-                if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
-                if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
-                if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
+              //   if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
+              //   if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
+              //   if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
+              //   if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
+              //   if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
+              //   if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
 
-                if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
-                if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
-                if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
+              //   if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
+              //   if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
+              //   if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
 
-                if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
-                if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
-                if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
-                if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
+              //   if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
+              //   if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
+              //   if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
+              //   if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
 
-                if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
-                if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
-                if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
-                if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
+              //   if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
+              //   if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
+              //   if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
+              //   if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
 
-                if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
+              //   if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
 
-                if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
-                if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
-                if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
+              //   if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
+              //   if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
+              //   if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
 
 
-                if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
-                if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
-                if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
-                if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
+              //   if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
+              //   if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
+              //   if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
+              //   if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
 
-              }
+              // }
 
               // eventsClassList = [
               //   { tipo: 'Zona de entrada', clase: 'zona-entrada' },
@@ -2002,6 +2139,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
   mostrar_tabla2(dH:any, iH:any , idx:any=-1) {
+    console.log("==== mostrar_tabla2 ===>>");
+    
     if (this.conHistorial) {
 
           this.transfers = [];
@@ -2044,53 +2183,55 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             EventosAll = this.historialService.arrayRecorridos[idx].eventos;
           }
-
+          console.log(":::: LOS EVENTOS ::::");
+          console.log(EventosAll);
+          
           for (let index = 0; index < EventosAll.length; index++) {
 
             //const item = this.EventService.eventsHistorial[index];
             const item = EventosAll[index];
-            var activar = false;
+            var activar = true;// false;
 
-            for (let j = 0; j < this.selectedEvents.length; j++) {
-              const opEve = this.selectedEvents[j];
+            // for (let j = 0; j < this.selectedEvents.length; j++) {
+            //   const opEve = this.selectedEvents[j];
 
-              //Nombres de eventos que cambiaron
-              var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
+            //   //Nombres de eventos que cambiaron
+            //   var tEvento = item.evento.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); //en mayusculas y sin tildes
               
-              if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
-              if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
-              if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
-              if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
-              if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
-              if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
+            //   if (opEve.name == 'Batería desconectada' && tEvento == 'BATERIA DESCONECTADA') { activar = true; }
+            //   if (opEve.name == 'Aceleración brusca'   && tEvento == 'ACELERACION BRUSCA') { activar = true; }
+            //   if (opEve.name == 'Frenada brusca'       && tEvento == 'FRENADA BRUSCA') { activar = true; }
+            //   if (opEve.name == 'SOS'                  && tEvento == 'SOS') { activar = true; }
+            //   if (opEve.name == 'Motor Apagado'        && tEvento == 'MOTOR APAGADO') { activar = true; }
+            //   if (opEve.name == 'Motor Encendido'      && tEvento == 'MOTOR ENCENDIDO') { activar = true; }
 
-              if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
-              if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
-              if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
+            //   if (opEve.name == 'Zona de Entrada'           && tEvento == 'ZONA DE ENTRADA') { activar = true; }
+            //   if (opEve.name == 'Zona de Salida'            && tEvento == 'ZONA DE SALIDA') { activar = true; }
+            //   if (opEve.name == 'Tiempo de Estadía en Zona' && tEvento == 'TIEMPO DE ESTADIA EN ZONA') { activar = true; }
 
-              if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
-              if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
-              if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
-              if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
+            //   if (opEve.name == 'Parada en Zona no Autorizada'            && tEvento == 'PARADA EN ZONA NO AUTORIZADA') { activar = true; }
+            //   if (opEve.name == 'Vehículo en movimiento sin programación' && tEvento == 'VEHICULO SIN PROGRAMACION') { activar = true; }
+            //   if (opEve.name == 'Infracción'                              && tEvento == 'INFRACCION') { activar = true; }
+            //   if (opEve.name == 'Exceso de Velocidad'                     && tEvento == 'EXCESO DE VELOCIDAD') { activar = true; }
 
-              if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
-              if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
-              if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
-              if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
+            //   if (opEve.name == 'Ausencia de rostro' && tEvento == 'NO ROSTRO') { activar = true; }
+            //   if (opEve.name == 'Fatiga Extrema'     && tEvento == 'FATIGA EXTREMA') { activar = true; }
+            //   if (opEve.name == 'Posible Fatiga'     && tEvento == 'SOMNOLENCIA') { activar = true; }
+            //   if (opEve.name == 'Posible Fatiga'     && tEvento == 'POSIBLE FATIGA') { activar = true; }
 
-              if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
+            //   if (opEve.name == 'Distracción'        && tEvento == 'DISTRACCION') { activar = true; }
 
-              if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
-              if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
-              if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
+            //   if (opEve.name == 'Detección de alcohol' && tEvento == 'ALCOHOLEMIA') { activar = true; }
+            //   if (opEve.name == 'Anticolisión frontal' && tEvento == 'ANTICOLISION FRONTAL') { activar = true; }
+            //   if (opEve.name == 'Anticolisión frontal' && tEvento == 'COLISION DELANTERA') { activar = true; }
 
 
-              if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
-              if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
-              if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
-              if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
+            //   if (opEve.name == 'Colisión con Peatones'               && tEvento == 'COLISION CON PEATONES') { activar = true; }
+            //   if (opEve.name == 'Desvío de carril hacia la izquierda' && tEvento == 'DESVIO DE CARRIL HACIA LA IZQUIERDA') { activar = true; }
+            //   if (opEve.name == 'Desvío de carril hacia la derecha'   && tEvento == 'DESVIO DE CARRIL HACIA LA DERECHA') { activar = true; }
+            //   if (opEve.name == 'Bloqueo de visión del Mobileye'      && tEvento == 'BLOQUEO DE VISION DEL MOBILEYE') { activar = true; }
 
-            }
+            // }
 
             if (activar) {
 
@@ -2139,9 +2280,10 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
+  
   clickLocate(row:any, key:any=-1) {
-    console.log(row);
-    console.log(key);
+    // console.log(row);
+    // console.log(key);
     
     //console.log("-----movimiento ----");
     if (key == -1) {
@@ -2181,7 +2323,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       var rdH = this.historialService.arrayRecorridos;
 
       for (let i = 0; i < rdH.length; i++) {
-          console.log(rdH[i].key+"  -  -  "+key);
+          //console.log(rdH[i].key+"  -  -  "+key);
           if ( rdH[i].key == key ) {
             var dH = rdH[i].recorrido;
           }
@@ -2207,8 +2349,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
 
     let trama = row.trama;
-      console.log("click en el tr");
-      console.log(trama);
+      // console.log("click en el tr");
+      // console.log(trama);
 
     if (row.icono == "assets/images/eventos/pin_point.svg") {
 

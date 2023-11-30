@@ -23,7 +23,7 @@ declare var $: any;
   styleUrls: ['./alert-accessories-edit.component.scss'],
 })
 export class AlertAccessoriesEditComponent implements OnInit {
-  options = new Array({ id: 'ALERTS-ACCESSORIES', name: 'Alertas Seguridad Vehicular' });
+  options = new Array({ id: 'ALERTS-ACCESSORIES', name: 'Alertas 360' });
 
   public alertForm!: FormGroup;
   public events: any = [];
@@ -36,7 +36,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
   overlay = false;
   loadingEventSelectInput: boolean = true;
   audio = new Audio();
-  
+
 
   booleanOptions = [
     { label: 'Sí', value: true },
@@ -131,7 +131,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.alertService.getEventsByType('Accesorios');
+    this.events = await this.alertService.getEventsByType('accessories');
     this.alertForm.patchValue({
       tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
     });
@@ -295,7 +295,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
     //console.log(this.events);
     for(let i = 0; i < this.events.length; i++){
       if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
-        console.log('Se encontro match');
+        // console.log('Se encontro match');
         return this.events[i].name;
       }
     }

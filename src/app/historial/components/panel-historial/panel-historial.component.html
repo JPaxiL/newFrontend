@@ -15,7 +15,8 @@
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingHistorialForm" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Cargando información... </p></ngx-spinner>
 
 <div *ngIf="(historialService.modalActive)">
-  <app-panel-historial-recorrido-modal></app-panel-historial-recorrido-modal>
+  <!-- <app-panel-historial-recorrido-modal></app-panel-historial-recorrido-modal> -->
+  <app-panel-historial-grafico></app-panel-historial-grafico>
 </div>
 
   <div id="panel_historial" class="modal-body p-fluid p-0 overflow-auto" style="position: relative;">
@@ -501,6 +502,85 @@
               </div>
             </div>
 
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-12">
+                <label class="">Evento 360º</label>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.ConductorAdormitado360">
+                  Conductor Adormitado 360°</label>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.ConductorSomnoliento360">
+                    Conductor Somnoliento 360°</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.DistraccionDetectada360">
+                  Distracción Detectada 360°</label>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.CinturonNoDetectado360">
+                    Cinturón no Detectado 360°</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                  <div class="p-field">
+                    <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.CelularDetectado360">
+                    Celular Detectado 360°</label>
+                  </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.CigarroDetectado">
+                    Cigarro Detectado 360°</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                  <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.DeteccionDeManipulacion360">
+                  Detección de Manipulación 360°</label>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="p-field">
+                  <label>
+                    <input class="form-check-input"  (change)="changeShowingEventos()" type="checkbox" [(ngModel)]="form.eventos.ErrorDeCamara">
+                    Error de Cámara 360°</label>
+                </div>
+              </div>
+            </div>
+              
+
 
             <div class="row" style="margin: 1rem 0rem 1rem 0.3rem; padding: 0px 0.3rem 0px 0px;">
               <div class="col-12">
@@ -527,8 +607,6 @@
             </div>
 
           </div>
-
-
         </div>
 
         <div class="row justify-content-center mt-4 panel-izq-container-footer">
@@ -538,6 +616,9 @@
           <div class="col-6">
               <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="clickCargarHistorial()" [disabled]="form.selectedCar == null">Mostrar</button>
           </div>
+          <div class="col-6">
+            <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnTest" ui-sref="alertas-accesorios" (click)="clickTest()">TESTING</button>
+        </div>
         </div>
 
       </div>
@@ -735,7 +816,7 @@
                                       <!-- <th class="text-center" style="width: 25%" *ngIf="recorrido.kilometrajeTotal != '-'" >Kilometraje </th> -->
 
                                       <th class="text-center" style="width: 20%">Duración </th>
-                                      <th class="text-center" style="width: 8%"> </th>
+                                      <!-- <th class="text-center" style="width: 8%"> </th> -->
                                       <!-- <th >Status <p-sortIcon field="status"></p-sortIcon></th> -->
                                       <!-- <th style="width: 4rem"></th> -->
                                   </tr>
@@ -789,12 +870,12 @@
                                       <td *ngIf="rowIndex!=0 && rowIndex==recorrido.tramas.length-1" class="text-center">x</td>
 
 
-                                      <td *ngIf="trama.tooltip == 'Movimiento' " class="text-center">
-                                          <button type="button" class="btn-gl-blue btn-dark-hover flex-none" title="Crear geocerca" (click)="add_geocerca_movimineto(trama,trama.trama)">
+                                      <!-- <td *ngIf="trama.tooltip == 'Movimiento' " class="text-center">
+                                          <button type="button" class="btn-gl-blue btn-dark-hover flex-none" title="Crear geocerca" (click)="add_geocerca_movimineto(trama, trama.trama, recorrido.key)">
                                               <i class="fa fa-plus" aria-hidden="true"></i>
                                           </button>
                                       </td>
-                                      <td *ngIf="trama.tooltip != 'Movimiento' " class="text-center">-</td>
+                                      <td *ngIf="trama.tooltip != 'Movimiento' " class="text-center">-</td> -->
 
                                       <!-- <td>{{order.amount | currency:'USD'}}</td> -->
                                       <!-- <td><span [class]="'order-badge order-' + order.status.toLowerCase()">{{order.status}}</span></td> -->
@@ -892,4 +973,5 @@
         [rowData]="rowData"
         [columnDefs]="columnDefs">
     </ag-grid-angular> -->
+
 

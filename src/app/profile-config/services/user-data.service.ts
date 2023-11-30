@@ -1,7 +1,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -13,6 +13,9 @@ export class UserDataService {
   userName: string = '';
   userEmail: string = '';
   userDataInitialized: boolean = false;
+  apiUrl = environment.apiUrl; 
+  typeVehicles: any = {};
+  typeVehiclesUserData: any = {};
 
   @Output() userDataCompleted = new EventEmitter<any>();
   @Output() geofencesPrivileges = new EventEmitter<any>();
@@ -24,6 +27,9 @@ export class UserDataService {
 
   getUserData(){
     console.log('Getting User Data');
+    //tambien llamamos los tipos de vehicles
+    this.getTypeVehicles();
+    this.getUserConfigData();
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
       next: data => {
         //this.userData = this.panelService.userData = data[0];

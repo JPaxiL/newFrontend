@@ -9,35 +9,41 @@
         border-radius: 50%;
     }
 
-    button.picture-update{
-        position: absolute;
-        border: none;
-        bottom: 0.5rem;
-        left: -0.5rem;
-        width: 2.75rem;
-        height: 2.75rem;
-        border-radius: 50%;
-        background-color: var(--gl-blue);
+  .profile-picture{
+      width: 8rem;
+      height: 8rem;
+      border-radius: 50%;
+  }
 
-        &.btn-dark-hover::after{
-            border-radius: 50%;
-        }
+  button.picture-update{
+      position: absolute;
+      border: none;
+      bottom: 0.5rem;
+      left: -0.5rem;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      background-color: var(--gl-blue);
 
-        svg{
-            fill: #fff;
-        }
-    }
+      &.btn-dark-hover::after{
+          border-radius: 50%;
+      }
 
-    span{
-        user-select: none;
-        font-size: 6rem;
-        line-height: 7.75rem;
-    }
+      svg{
+          fill: #fff;
+      }
+  }
 
-    img{
-        height: 100%;
-        width: 100%;
-    }
+  span{
+      user-select: none;
+      font-size: 6rem;
+      line-height: 7.75rem;
+  }
+
+  img{
+      height: 100%;
+      width: 100%;
+  }
 }
 
 .one-character-circled {

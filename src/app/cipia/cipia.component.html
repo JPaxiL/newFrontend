@@ -1,0 +1,17 @@
+<div class="d-flex flex-column  mt-2">
+    <div class="d-flex">
+      <button 
+          (click)="getMediaTest()" _ngcontent-cic-c118="" type="button" 
+          class="btn-gl-save btn-dark-hover btn-sm w-25 my-4" 
+>
+          Load Video From
+      </button>
+      <button 
+        (click)="recordMediaTest()" _ngcontent-cic-c118="" type="button" 
+        class="btn-gl-save btn-dark-hover btn-sm w-25 my-4" 
+>
+        Record Video Now
+    </button>
+    </div>
+    <video [src]="videoUrl" width="300px" height="250px" controls type="video/mp4"></video>
+</div>

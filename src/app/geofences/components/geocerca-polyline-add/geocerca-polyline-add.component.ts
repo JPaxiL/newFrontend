@@ -5,7 +5,7 @@ import { PolylineGeogencesService } from '../../services/polyline-geogences.serv
 import * as L from 'leaflet';
 import 'leaflet-paintpolygon';
 import Swal from 'sweetalert2';
-
+import * as simplify from 'simplify-js';
 
 @Component({
   selector: 'app-geocerca-polyline-add',
@@ -73,11 +73,10 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
       
       console.log(geo);
 
-      if (geo.zone_visible == 'true') {
+      if (geo.zone_visible == true) {
 
         console.log('Eliminando geocerca porque era visible');
         this.mapService.map.removeLayer(geo.geo_elemento);
-
       }
 
       geo.geo_elemento = new L.Polygon( this.polylineGeofenceService.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ), {
@@ -103,6 +102,8 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
       // });
 
       this.polylineGeofenceService.paintpolygonControl.stop();
+      console.log("---------------INICIAR DIBUJO");
+      
       this.polylineGeofenceService.paintpolygonControl.startDraw();
       //this.changeGeoColor(this.form.id);
     }
@@ -296,9 +297,11 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
   }
 
   layerToPoints(object:any, type:string, action: string) {
+    
     var geoElement = '';
-    let latlngs;
+    let latlngs: any[];
     let lat,lng;
+    const tolerance = [2,2,1,1,0.5,0.1,0.01,0.01,0.01,0.001,0.001,0.001,0.0001,0.00007,0.00005,0.00003,0.00002,0.00001,0.00001]
 
     switch (type) {
       case 'POLYGON':
@@ -315,19 +318,66 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
           lng=1;
         }
 
-        for (var i = 0, total = latlngs.length; i < total; i++) {
-          geoElement += ` ${latlngs[i][lng]} ${latlngs[i][lat]}`;
+        //const n1 = Math.round(latlngs.length/2);
+        // const part1 = latlngs.slice(0,n1).map(item => {
+        //   return {x:item[0],y:item[1]}
+        // });
+        console.log("inicial-------",latlngs);
+        const part2 = latlngs.map(item => {
+          return {x:item[0],y:item[1]}
+        });
+        console.log("ZOOM: ",this.mapService.map.getZoom()," TOLERANCE: ",tolerance[this.mapService.map.getZoom()]);
+        let simplifiedLatlngs1 = simplify(part2, tolerance[this.mapService.map.getZoom()], true);
+        console.log("final-------",simplifiedLatlngs1);
+        // simplifiedLatlngs1 = simplify(part1, 0.001, true);
+        // console.log("simplifiedLatlngs1-------",simplifiedLatlngs1);
+        // simplifiedLatlngs2 = simplify(part2, 0.001, true);
+        // console.log("simplifiedLatlngs2-------",simplifiedLatlngs2);
+
+        // console.log("----------------tolerance: 0.0001");
+        
+        // simplifiedLatlngs1 = simplify(part1, 0.0001, true);
+        // console.log("simplifiedLatlngs1-------",simplifiedLatlngs1);
+        // simplifiedLatlngs2 = simplify(part2, 0.0001, true);
+        // console.log("simplifiedLatlngs2-------",simplifiedLatlngs2);
+
+        // console.log("----------------tolerance: 0.00001");
+        
+        // simplifiedLatlngs1 = simplify(part1, 0.00001, true);
+        // console.log("simplifiedLatlngs1-------",simplifiedLatlngs1);
+        // simplifiedLatlngs2 = simplify(part2, 0.00001, true);
+        // console.log("simplifiedLatlngs2-------",simplifiedLatlngs2);
+
+        // console.log("----------------tolerance: 0.000001");
+        
+        // simplifiedLatlngs1 = simplify(part1, 0.000001, true);
+        // console.log("simplifiedLatlngs1-------",simplifiedLatlngs1);
+        // simplifiedLatlngs2 = simplify(part2, 0.000001, true);
+        // console.log("simplifiedLatlngs2-------",simplifiedLatlngs2);
+
+        // console.log("----------------tolerance: 0.0000001");
+        
+        // simplifiedLatlngs1 = simplify(part1, 0.0000001, true);
+        // console.log("simplifiedLatlngs1-------",simplifiedLatlngs1);
+        // simplifiedLatlngs2 = simplify(part2, 0.0000001, true);
+        // console.log("simplifiedLatlngs2-------",simplifiedLatlngs2);
+
+        for (var i = 0, total = simplifiedLatlngs1.length; i < total; i++) {
+          geoElement += ` ${simplifiedLatlngs1[i].y} ${simplifiedLatlngs1[i].x}`;
           if (i < total-1) {
             geoElement += ',';
           }else {
-            geoElement += `,${latlngs[0][lng]} ${latlngs[0][lat]}`;
+            geoElement += `,${simplifiedLatlngs1[0].y} ${simplifiedLatlngs1[0].x}`;
           }
         }
 
         geoElement = `(${geoElement})`;
         break;
-    }
+      }
+      
+      console.log("geoElement-------",geoElement);
     return geoElement;
+
    }
 
   clickCancelar(id:number){
@@ -379,7 +429,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       geo0.geo_elemento.editing.disable();
 
-      console.log(this.form.geo_geometry)
+      // console.log(this.form.geo_geometry);
 
       this.polylineGeofenceService.edit(this.form).subscribe(res1 => {
 

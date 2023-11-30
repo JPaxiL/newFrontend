@@ -76,19 +76,20 @@ export class DriversModalComponent implements OnInit {
     // });
 
     if ( this.driversService.action == "edit" ) {
-      var sub = this.driversService.drivers.filter((item:any)=> item.id_conductor == this.driversService.idDriverEdit)[0];
-      // console.log(sub);
+      //solo para el caso de EDIT su ibutton debe mostrarse
+      var sub = this.driversService.drivers.filter((item:any)=> item.id == this.driversService.idDriverEdit);
+      console.log('PRUEBA EDIT ->',sub);
       this.driversForm = this.fb.group({
-              id:         [sub.id_conductor],
-              nombre:     [sub.nombre_conductor],
-              dni:        [sub.dni_conductor],
-              nro_llave:      [sub.nro_llave],
-              nro_licencia:   [sub.nro_licencia],
-              tracker_imei:   [sub.tracker_imei],
-              tracker_nombre: [sub.tracker_nombre],
-              tipo_identificacion: [sub.tipo_identificacion],
+              id:         [sub[0].id],
+              nombre:     [sub[0].nombre_conductor],
+              dni:        [sub[0].dni_conductor],
+              nro_llave:      [sub[0].id_keyIbutton],
+              nro_licencia:   [sub[0].nro_licencia],
+              tracker_imei:   [sub[0].tracker_imei],
+              tracker_nombre: [sub[0].tracker_nombre],
+              tipo_identificacion: [sub[0].tipo_identificacion],
             });
-      
+        // console.log(this.driversForm);
 
     } else {
         //this.nuevo_formulario();
@@ -103,6 +104,7 @@ export class DriversModalComponent implements OnInit {
 
   getCars(vehicles: any){
     for (let i = 0; i < vehicles.length; i++) {
+      // let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
       let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
       this.cars.push(gaa);
     }
@@ -115,9 +117,6 @@ export class DriversModalComponent implements OnInit {
 
     this.tipo_identificacion = this.driversForm.value.tipo_identificacion;
 
-    
-    
-    
   }
 
   initForm(): FormGroup {
@@ -226,7 +225,7 @@ export class DriversModalComponent implements OnInit {
         var res:any;
         if ( this.driversService.action == "edit" ) {
           var sub = this.driversService.drivers.filter((item:any)=> item.id_conductor == this.driversService.idDriverEdit)[0];
-          console.log(sub);
+          // console.log(sub);
           res = await this.driversService.edit(this.driversForm.value);
         } else {
           res = await this.driversService.create(this.driversForm.value);
@@ -247,6 +246,9 @@ export class DriversModalComponent implements OnInit {
             this.driversService.modalActive = false;
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
+            if(res.dataInsert.tipo_identificacion == 'imei'){
+              this.VehicleService.updateDriverAndId(res.dataInsert);
+            }
 
         } else if(res.text == 'editado') {
             Swal.fire(
@@ -257,11 +259,21 @@ export class DriversModalComponent implements OnInit {
             this.driversService.modalActive = false;
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
+            if(res.driver.tipo_identificacion == 'imei' || res.driver_old.tipo_identificacion == 'imei'){
+              //VERIFICAR IMEI IGUALEs
+              if(res.driver_old.tracker_imei == res.driver.tracker_imei){
+                console.log('IMEI IGUALES SOLO ACTUALIZAR UNO');
+                this.VehicleService.updateDriverAndId(res.driver);
+              }else{
+                this.VehicleService.updateDriverAndId(res.driver_old);
+                this.VehicleService.updateDriverAndId(res.driver);
+              }
+            }
 
         } else if(res.text == 'llave_existe') {
           Swal.fire(
             '',
-            'Llave ya se encuentra registrada.',
+            'Llave ya se encuentra registrada, seleccione otra.',
             'warning'
           );
           // this.driversService.modalActive = false;

@@ -18,8 +18,8 @@ export class PanelService {
     { id:'ALERTS-GPS-CREATE', name:"Alertas GPS"},
     { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
     { id:'ALERTS-PLATFORM-CREATE', name:"Alertas Plataforma"},
-    { id:'ALERTS-ACCESSORIES', name:"Alertas Seguridad Vehicular"},
-    { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas Seguridad Vehicular"},
+    { id:'ALERTS-ACCESSORIES', name:"Alertas 360"},
+    { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas 360"},
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'CIRCULAR-GEOFENCE', name:"Circular Geofences"},
     { id:'POLYLINE-GEOFENCE', name:"Polyline Geofences"},
@@ -44,12 +44,12 @@ export class PanelService {
   clickShowPanel( nomComponent:string ){
     console.log("-----clickShowPanel");
     console.log(this.activePanelClass());
-    
+
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
 
       console.log(nomComponent);
       console.log(this.nombreComponente );
-      
+
       $("#panelMonitoreo").hide( "slow" );
       this.nombreComponente = '';
     } else {

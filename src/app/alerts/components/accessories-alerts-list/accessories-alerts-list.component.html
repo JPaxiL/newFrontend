@@ -1,6 +1,6 @@
 <div class="table-content-component-panel-monitoreo" style="position: relative;">
 
-  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAccesoriesAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando Alertas Seguridad Vehicular... </p></ngx-spinner>
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAccesoriesAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando Alertas 360°... </p></ngx-spinner>
 
   <div class="card-body p-fluid" id="rowBusqueda">
     <div class="d-flex">
@@ -23,14 +23,15 @@
           <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS')">
             <span>Todas las Alertas</span>
           </div>
-          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">
+          <!-- <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">
             <span>Alertas GPS</span>
-          </div>
+          </div> -->
+          <!-- ocultarAlertsGPS -->
           <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-PLATFORMS')">
             <span>Alertas Plataforma</span>
           </div>
           <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">
-            <span>Alertas Seg. Vehicular</span>
+            <span>Alertas 360°</span>
           </div> 
         </div>
       </div>

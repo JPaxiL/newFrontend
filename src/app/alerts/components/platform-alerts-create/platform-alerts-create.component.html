@@ -15,10 +15,10 @@
                         <label>ALERTA:</label>
                     </div>
                     <div class="col-12">
-                        <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="name" [appendTo]="'body'" (onChange)="changeAlertType()"></p-dropdown>
+                        <p-dropdown [options]="events" formControlName="tipoAlerta" optionLabel="name" placeholder="Selecciona el tipo de alerta" optionValue="id" [appendTo]="'body'" (onChange)="changeAlertType()"></p-dropdown>
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>NOMBRE:</label>
@@ -30,7 +30,7 @@
                         </div> -->
                     </div>
                 </div>
-    
+
                 <div class="gl-row-underline">
                     <div class="col-12">
                         <label>VEHÍCULOS:</label>
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div *ngIf="showGeocercas" class="gl-row-underline">
                     <div class="col-12">
                         <label>GEOCERCAS:</label>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="gl-middleline gl-permanent-middleline gl-row-underline">
                     <div class="row">
                         <div class="col p-field">
@@ -129,8 +129,8 @@
                         </div>
                     </div>
                 </div>
-    
-    
+
+
                 <div class="gl-row-underline" *ngIf='showTiempoLimite'>
                     <div class="row">
                         <div class="col-12">
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <!--INFRACCION -->
                 <div *ngIf="showInfraccion" class="gl-middleline gl-permanent-middleline gl-row-underline">
                     <div class="row">
@@ -179,8 +179,8 @@
                         </div>
                     </div>
                 </div>
-    
-                
+
+
                 <!--INFRACCION -->
     <br>
                 <!-- emails -->
@@ -226,7 +226,7 @@
 
                 <br>
                 <!-- whatsapps: -->
-                <div class="row d-flex justify-content-center">
+                <!-- <div class="row d-flex justify-content-center">
                     <div class="col-5">
                         <label class="row">
                             <span class="col-9 form-check-label">WhatsApp:</span>
@@ -262,9 +262,9 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- fin whatsapps: -->
-    
+
                 <div class="row justify-content-center mt-4 panel-izq-container-footer">
                     <div class="col-6">
                         <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios"  (click)="clickShowPanel('ALERTS-PLATFORMS')">Cancelar</button>
@@ -277,6 +277,6 @@
 
         </div>
 
-        
+
     </div>
 </div>
