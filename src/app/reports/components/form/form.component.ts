@@ -234,6 +234,18 @@ export class FormComponent implements OnInit {
 
       OtroTodos:false,
       OtroExVelocidad:false,
+
+      //==========================
+
+      evConductorAdormitado360:false,
+      evConductorSomnoliento360:false,
+      evDistraccionDetectada360:false,
+      evCinturonNoDetectado360:false,
+      evCigarroDetectado:false,
+      evCelularDetectado360:false,
+      evErrorDeCamara:false,
+      evDeteccionDeManipulacion360:false,
+
     };
 
 
@@ -1204,6 +1216,20 @@ export class FormComponent implements OnInit {
 
       OtroTodos:this.eV.OtroTodos,
       OtroExVelocidad:this.eV.OtroTodos,
+
+
+      //==========================
+
+      evConductorAdormitado360: this.eV.OtroTodos,
+      evConductorSomnoliento360: this.eV.OtroTodos,
+      evDistraccionDetectada360: this.eV.OtroTodos,
+      evCinturonNoDetectado360: this.eV.OtroTodos,
+      evCigarroDetectado: this.eV.OtroTodos,
+      evCelularDetectado360: this.eV.OtroTodos,
+      evErrorDeCamara: this.eV.OtroTodos,
+      evDeteccionDeManipulacion360: this.eV.OtroTodos,
+
+
     };
   }
 
@@ -1232,6 +1258,16 @@ export class FormComponent implements OnInit {
     if(!this.eV.evDesvioCarrilIzquierda) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evDesvioCarrilDerecha) { this.eV.OtroTodos = false; return; }
     if(!this.eV.evBloqueoVisionMobileye) { this.eV.OtroTodos = false; return; }
+
+    //ULTIMOS CHANGES CIPIA
+    if(!this.eV.evConductorAdormitado360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evConductorSomnoliento360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDistraccionDetectada360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evCinturonNoDetectado360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evCigarroDetectado) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evCelularDetectado360) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evErrorDeCamara) { this.eV.OtroTodos = false; return; }
+    if(!this.eV.evDeteccionDeManipulacion360) { this.eV.OtroTodos = false; return; }
 
     this.eV.OtroTodos = true;
   }
@@ -1423,6 +1459,18 @@ export class FormComponent implements OnInit {
 
       OtroTodos:false,
       OtroExVelocidad:false,
+
+      //==========================
+
+      evConductorAdormitado360:false,
+      evConductorSomnoliento360:false,
+      evDistraccionDetectada360:false,
+      evCinturonNoDetectado360:false,
+      evCigarroDetectado:false,
+      evCelularDetectado360:false,
+      evErrorDeCamara:false,
+      evDeteccionDeManipulacion360:false,
+      
     };
 
     //Reporte 10

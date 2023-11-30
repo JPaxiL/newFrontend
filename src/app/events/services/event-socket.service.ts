@@ -70,16 +70,20 @@ export class EventSocketService extends Socket {
       // console.log("recibiendo evento........",this.vehicleService.vehicles);
       // return;
       // let even = JSON.parse(event);
+      console.log("Nuevo evento llegado: ", event);
+      
       let even = event;
 
       // console.log(' getAlertById =====> ', this.AlertService.getAlertById(even.id), this.user_id, even.usuario_id);
       // console.log("this.vehicleService.vehicles,even.tracker_imei ========> ", this.vehicleService.vehicles,even.tracker_imei);
-      // if (this.user_id == even.usuario_id) {
+      console.log("EVENT User ID",this.user_id);
+      console.log("users.indexOf(parseInt(this.user_id))",users.indexOf(parseInt(this.user_id)));
       if(users.indexOf(parseInt(this.user_id))>=0){
         //this.count = this.count + 1;
         let data = this.filterImei(this.vehicleService.vehicles, even.tracker_imei);
         // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
         // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
+        console.log("----data",data);
         if (data != undefined) {
           // console.log("name ====",data.name);
           even.nombre_objeto = data.name;
@@ -95,6 +99,8 @@ export class EventSocketService extends Socket {
           }
 
           even.imei = even.tracker_imei;
+          console.log("----even",even);
+          console.log("----this.AlertService.alertsForEventSocket.length",this.AlertService.alertsForEventSocket.length);
 
           //Si las alertas ya cargaron
           if (this.AlertService.alertsForEventSocket.length > 0) {
@@ -109,16 +115,19 @@ export class EventSocketService extends Socket {
               even['ruta_sonido'] = 'WhatsappSound9.mp3';
             }
           }
-
+          
           let newEvent = this.setLayer(even);
+          console.log("----newEvent",newEvent);
           this.eventService.addNewEvent(newEvent);
 
-          this.eventService.new_notif_stack.push(even.id);
+          this.eventService.new_notif_stack.push(even.evento_id);
           this.eventService.sortEventsTableData();
 
-          let alert = this.AlertService.getAlertById(even.id);
+          let alert = this.AlertService.getAlertById(even.evento_id);
+          console.log("----alert",alert);
 
           if (alert) {
+            console.log("----alert.ventana_emergente",alert.ventana_emergente);
             if (alert.ventana_emergente) {
               this.eventPopup.emit({event: {...newEvent}, tracker: {...this.vehicleService.getVehicle(even.tracker_imei)}})
               //this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
@@ -131,8 +140,8 @@ export class EventSocketService extends Socket {
         // this.eventService.checkDuplicates(); // deprecado se controla desde el server
       }else{
         console.log("evento no pertenece al usuario ...");
-        console.log("event-->",event);
-        console.log("users-->",users);
+        //console.log("event-->",event);
+        //console.log("users-->",users);
       }
     });
   }

@@ -270,6 +270,34 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.getCars(vehicles);
     }
 
+    //CHANGES FOR HISTORIAL *********************
+    // SE VA CAMBIAR TODO EL API DEL SERVICIO PARA JALAR DE USUARIOS DETALLES 
+
+    // console.log(this.eventList,map);
+    if (this.EventService.eventsUserLoaded == false){
+      this.spinner.show('loadingHistorialForm');
+      this.EventService.getEventsForUser().subscribe(
+        async (data) => {
+          // Aquí puedes trabajar con los datos obtenidos
+          console.log('EVENTOS DEL USUARIO OBTENIDOS:', data);
+          // Realiza cualquier acción con los datos recibidos
+          if (data.success){
+            await this.createEventList(data.data); 
+            this.spinner.hide('loadingHistorialForm');
+            this.EventService.eventsUserLoaded = true;
+          }else{
+            console.log('EL USUARIO NO TIENE EVENTOS');
+            this.spinner.hide('loadingHistorialForm');
+          }
+        },
+        (error) => {
+          // Maneja los errores si ocurre alguno durante la solicitud
+          console.error('Error al obtener los eventos:', error);
+        }
+      );
+    }
+    
+
     // this.historialService.initializeForm();
 
     // const hoy = Date.now();
@@ -379,64 +407,53 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // $(function(){
     //   $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
 
-    // });
+    // });    
 
-
-
-
-
-    //CHANGES FOR HISTORIAL *********************
-    // SE VA CAMBIAR TODO EL API DEL SERVICIO PARA JALAR DE USUARIOS DETALLES 
-
-    // console.log('TESTING OPEN HISTORY');
-    // let status_event = false;
-    // let map: any=[];
-
-    // this.EventService.getEventName().subscribe(data => {
-    //   console.log(data.data.event_id); // Aquí deberías ver los valores reales devueltos por el Observable
-    //   for (let event of data.data) {
-    //     status_event= false;
-    //     event.event_type = this.changeNameEvent(event.event_type);
-        
-    //     const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_type);
-
-    //     if (existingTypeEvent) {
-    //       // El tipo de evento ya existe en el mapa
-    //       const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.event_id);
-
-    //       if (!existingEvent) {
-    //         // El id_event no existe para este tipo de evento, lo agregamos
-    //         existingTypeEvent.items.push({
-    //           name: event.name_event,
-    //           value: event.event_id
-    //         });
-    //       }
-    //     } else {
-    //       // El tipo de evento no existe en el mapa, lo añadimos
-    //       map.push({
-    //         label: event.event_type,
-    //         items: [
-    //           {
-    //             name: event.name_event,
-    //             value: event.event_id,
-    //           }
-    //         ]
-    //       });
-    //     }
-
-    //   }
-    // });
-    // // LIMPIAMOS EVENTOS LIST
-    // this.eventList = [];
-    // this.eventList = map;
-    
-    // console.log(this.eventList,map);
     this.EventService.pinPopupStream.subscribe(event => {
       this.clearMultimedia(event);
       this.addMultimediaComponent(event);
     })
   }
 
+  createEventList (data:any){
+    let status_event = false;
+    let map: any=[];
+    for (let event of data) {
+      status_event= false;
+      event.event_category = this.changeNameEvent(event.event_category);
+      
+      const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_category);
+
+      if (existingTypeEvent) {
+        // El tipo de evento ya existe en el mapa
+        const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.slug);
+
+        if (!existingEvent) {
+          // El id_event no existe para este tipo de evento, lo agregamos
+          existingTypeEvent.items.push({
+            name: event.name_event,
+            value: event.slug
+          });
+        }
+      } else {
+        // El tipo de evento no existe en el mapa, lo añadimos
+        map.push({
+          label: event.event_category,
+          items: [
+            {
+              name: event.name_event,
+              value: event.slug,
+            }
+          ]
+        });
+      }
+
+    }
+    console.log(map);
+    // LIMPIAMOS EVENTOS LIST
+    this.eventList = [];
+    this.eventList = map;
+  }
   changeNameEvent (name:string){
     if (name == 'gps'){
       return 'EVENTOS GPS';
@@ -447,9 +464,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     }else {
       return 'EVENTOS '+name.toUpperCase();
     }
-  }
-  clickTest(){
-    console.log('Eventos seleccionados:', this.selectedEvents);
   }
 
   ngOnDestroy(){
@@ -3029,8 +3043,16 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     //   this.changeShowingParadasHistorial()
     // }
     // this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items, ...this.eventList[3].items]: [];
-    //this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
-
+    // this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items, ...this.eventList[2].items]: [];
+    
+    // this.selectedEvents = this.chkAllEvents? [...this.eventList[0].items, ...this.eventList[1].items]: []; // SOLO PARA LA DEMO
+    if (this.chkAllEvents) {
+      this.selectedEvents = this.eventList.reduce((accumulator: { name: string; value: string; }[], currentValue) => {
+        return accumulator.concat(currentValue.items);
+      }, []);
+    } else {
+      this.selectedEvents = [];
+    }
   }
   addMultimediaComponent(event:any){
     if(event.parametros && event.parametros.gps == "cipia" && (event.parametros.has_video != "0" || event.parametros.has_image != "0")){

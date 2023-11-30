@@ -32,7 +32,10 @@ export class AlertService {
     { id: 10, ruta: '', label: 'Sin Sonido' },
   ];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    console.log("INICIANDO-----ALERTSERVICE");
+    
+  }
 
   public async get(id:string):Promise <Alert[]> {
     const response: ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts/${id}`).toPromise();
@@ -162,6 +165,8 @@ export class AlertService {
   }
 
   public getAlertById(id:string){
-    return this.alerts[0];
+    console.log("id----", id);
+    console.log("Alerts----", this.alerts);
+    return this.alerts.find(alert => alert.id == id.toString());
   }
 }

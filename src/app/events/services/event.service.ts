@@ -70,6 +70,8 @@ export class EventService {
 
   new_notif_stack: number[] = [];
 
+ public eventsUserLoaded: boolean = false;
+
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -124,6 +126,13 @@ export class EventService {
   public getEventName(): Observable<any>{
     return this.http.get(this.URL_NAME);
   }
+
+  // EVENTS for History
+  
+  public getEventsForUser(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/getPermissEvents`);
+  }
+  
   public loadNameEvent(event: any){
     // console.log("buscando evento "+event.tipo,this.eventsCommon.indexOf(event.tipo));
     if(this.eventsCommon.indexOf(event.tipo)<0){
@@ -223,7 +232,7 @@ export class EventService {
   }
 
   public getData() {
-    console.log("get data desde eventService",this.events);
+    //console.log("get data desde eventService",this.events);
     return this.events;
   }
 
@@ -510,7 +519,7 @@ export class EventService {
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
-        console.log("EVENTS_FILTERED: ",this.eventsFiltered);
+        //console.log("EVENTS_FILTERED: ",this.eventsFiltered);
         
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
