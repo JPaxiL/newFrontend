@@ -1,10 +1,13 @@
-<div class="d-flex justify-content-between w-100 h-100 gap-2 align-items-center">
-    <div></div>
+<div class="d-flex justify-content-between w-100 h-100 gap-2 align-items-center px-4">
+    <div class="d-flex justify-content-end  gap-2 align-items-center ps-2">
+        <img [pTooltip]="showPanel?'Ocultar':'Mostrar'" [tooltipPosition]="'top'" appendTo="body" alt="logo" src="assets/images/on_off_workspace.png" class="footer-icon" (click)="hidePanel()" />
+    </div>
     <app-screen-recorder [display]="showScreenRecorder" (onClose)="closeScreenRecorder();">
     </app-screen-recorder>
     <div class="d-flex justify-content-around gap-2 align-items-center">
-        <img src="assets/images/separator.svg" alt="" class="footer-icon separator" style="width: 1rem; height:1.25rem">
-        <img pTooltip="Mostrar/Ocultar Popups" alt="logo" src="assets/images/on_off_popups.png" class="footer-icon" (click)="showPopupDialog = !showPopupDialog" />
+        <img src="assets/images/separator.svg" alt="" class=" separator" style="width: 1rem; height:1.25rem">
+        <i *ngIf="carousel.qtyItems > 0" pTooltip="Mostrar/Ocultar Popups" class="pi pi-window-minimize footer-icon" pBadge severity="danger" badgeClass="p-badge-danger" (click)="showPopupDialog = !showPopupDialog" ></i>
+        <i *ngIf="carousel.qtyItems == 0" pTooltip="Mostrar/Ocultar Popups" class="pi pi-window-minimize footer-icon" (click)="showPopupDialog = !showPopupDialog" ></i>
         <img pTooltip="Limpiar Popups" alt="logo" src="assets/images/delete_popups.png" class="footer-icon" (click)="clearPopups()" />
         <button #btn type="button" pButton pRipple icon="pi pi-ellipsis-h" label="" class="p-button-text p-button-secondary p-0" (click)="menu.toggle($event)"></button>
         <p-slideMenu [appendTo]="'body'" #menu [model]="itemsMenu" [popup]="true" [viewportHeight]="250"></p-slideMenu>
