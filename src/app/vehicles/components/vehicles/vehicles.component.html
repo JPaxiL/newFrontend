@@ -28,7 +28,7 @@
             </div>
             <div>
               <label>
-                <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
+                <p-checkbox [(ngModel)]="vehicleIconState" (change)="verifyVehicles()" [binary]="true"></p-checkbox>
                 Ícono de Vehículo
               </label>
             </div>

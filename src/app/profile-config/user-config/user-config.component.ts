@@ -12,7 +12,6 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
   styleUrls: ['./user-config.component.scss']
 })
 export class UserConfigComponent implements OnInit {
-  @Output() eventDisplay = new EventEmitter<boolean>();
   
   usersForm!: FormGroup;
   form :any = {};
@@ -28,9 +27,12 @@ export class UserConfigComponent implements OnInit {
   bol_vehicle!:boolean;
 
   typeVehiclesForm: any = [];
+  originalValues: any[] | undefined;
+
   constructor(       
     private fb: FormBuilder,
-    private userDataService: UserDataService) {
+    private userDataService: UserDataService,
+    private panelService: PanelService) {
   }
 
   onSubmit(){
@@ -60,16 +62,26 @@ export class UserConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usersForm = this.initForm();
+    this.userDataService.spinner.show('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
     this.typeVehiclesList = this.userDataService.typeVehicles;
-    // this.typeVehiclesList.forEach((item: { var_color: string; var_galon: string; }) => {
-    //   item.var_color = ''; // Asignar un valor inicial a var_color
-    //   item.var_galon = ''; // Asignar un valor inicial a var_galon
-    // });
-    //OJO FILTRAR POR SOLO TIPO DE VEHICULOS QUE TIENE EL USER...
+    this.usersForm = this.initForm();
+    console.log(this.typeVehiclesList);
+    this.initFormTableVehicles();
+    this.userDataService.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
 
-    // console.log(this.userDataService.typeVehicles);
-    //CONFIGURACION DE TIPO VEHICULOS GUARDADA DEL USUARIO
+  }
+
+  initForm(): FormGroup{
+    return this.fb.group({
+      newPass: [''],
+      newPassRepeat: [''],
+      bol_ondas: [this.userDataService.userData.bol_ondas],
+      bol_cursor:[this.userDataService.userData.bol_cursor],
+      bol_vehicle:[this.userDataService.userData.bol_vehicle],
+    })
+  }
+
+  initFormTableVehicles(){
     let aux = this.userDataService.typeVehiclesUserData;
     for (const userDataItem of this.typeVehiclesList) {
       const itemVehicle = aux.find((item: { type_vehicle_id: any; }) => item.type_vehicle_id === userDataItem.id);
@@ -81,16 +93,9 @@ export class UserConfigComponent implements OnInit {
         userDataItem.var_galon = '';
       }
     }
-  }
+    this.originalValues = JSON.parse(JSON.stringify(this.typeVehiclesList)); // Guardar una copia profunda de los valores originales
 
-  initForm(): FormGroup{
-    return this.fb.group({
-      newPass: [''],
-      newPassRepeat: [''],
-      bol_ondas: [this.userDataService.userData.bol_ondas],
-      bol_cursor:[this.userDataService.userData.bol_cursor],
-      bol_vehicle:[this.userDataService.userData.bol_vehicle],
-    })
+
   }
 
   switchActive(switchNumber: number){
@@ -112,7 +117,15 @@ export class UserConfigComponent implements OnInit {
   }
 
   onClickCancel(){
-    this.eventDisplay.emit(false);
+    this.usersForm.get('newPass')?.setValue('');    
+    this.usersForm.get('newPassRepeat')?.setValue('');    
+    this.usersForm.get('bol_ondas')?.setValue(this.userDataService.userData.bol_ondas);    
+    this.usersForm.get('bol_cursor')?.setValue(this.userDataService.userData.bol_cursor);    
+    this.usersForm.get('bol_vehicle')?.setValue(this.userDataService.userData.bol_vehicle);    
+    this.typeVehiclesList = JSON.parse(JSON.stringify(this.originalValues)); // Restaurar los valores originales
+    this.panelService.nombreComponente = '';
+    $("#panelMonitoreo").hide( "slow" );
+
   }
 
   confirm(){
@@ -167,6 +180,7 @@ export class UserConfigComponent implements OnInit {
     }).then((data) => {
       // console.log('testing respuesta...',data);
       this.loading=false;
+      this.userDataService.getUserData();
     });
   }
 
