@@ -147,7 +147,7 @@ export class TreeTableComponent implements OnInit {
     // console.log(this.vehicleService.vehicles);
     
 
-    console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
+    // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
 
   }
 
@@ -162,7 +162,7 @@ export class TreeTableComponent implements OnInit {
     }else{
       var_color = "#c4c2c1"; // GRIS DEFAULT
     }
-    console.log('loading SVGS -->',this.userDataService.svgContents);
+    // console.log('loading SVGS -->',this.userDataService.svgContents);
     for (const vehicle of this.vehicleService.vehicles) {
       const idElement = 'div_svg_'+vehicle.id;
       console.log(idElement);
