@@ -122,7 +122,7 @@
               </div>
               <div>
                 <label>
-                  <p-checkbox [(ngModel)]="vehicleIconState" (change)="verifyContent()" [binary]="true"></p-checkbox>
+                  <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
                   Ícono de Vehículo
                 </label>
               </div>
@@ -351,9 +351,10 @@
           <td *ngIf="setting['vehicle']" style="min-width: 215px;" class="vehicle-column">
             <div class="d-flex justify-content-center align-items-center mx-2" (click)="onClickIcon(rowData['IMEI'])">
               <div class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}" title="{{hint[rowData['point_color']]}}" data-bs-toggle="tooltip" data-bs-placement="top" container="body"></div>
-              <div class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState" class="change-color" style="width: 25px; height: 25px">
-                <div [innerHTML]="svgContentType"></div>
+              <div id="div_svg_{{rowData['id']}}" [innerHTML]="userDataService.svgContentsSafe[rowData['icon']]" class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState" style="width: 25px; height: 25px">
               </div>
+
+              <!-- <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}"> -->
               <!-- Imprime el SVG directamente para verificar su contenido -->
                 <!-- {{userDataService.svgContents['auto.svg']}} -->
                 <!-- <div #svgContainer id="svgContainer_{{ rowData['id'] }}" border="0" style="width: 25px; height: 25px">

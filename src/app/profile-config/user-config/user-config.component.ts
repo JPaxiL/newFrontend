@@ -62,15 +62,13 @@ export class UserConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usersForm = this.initForm();
+    this.userDataService.spinner.show('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
     this.typeVehiclesList = this.userDataService.typeVehicles;
-
-
-    //OJO FILTRAR POR SOLO TIPO DE VEHICULOS QUE TIENE EL USER...
-
-    //CONFIGURACION DE TIPO VEHICULOS GUARDADA DEL USUARIO
-    this.initFormTableVehicles();
+    this.usersForm = this.initForm();
     console.log(this.typeVehiclesList);
+    this.initFormTableVehicles();
+    this.userDataService.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
+
   }
 
   initForm(): FormGroup{

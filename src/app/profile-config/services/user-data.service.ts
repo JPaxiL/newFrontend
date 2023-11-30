@@ -1,18 +1,23 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter, ElementRef  } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserDataService {
   svgContents: { [key: string]: string } = {}; // Almacena los contenidos de los SVG
+  svgContentsSafe: { [key: string]: SafeHtml } = {}; // Almacena los contenidos seguros de los SVG
 
   userData: any = {};
   userName: string = '';
   userEmail: string = '';
   userDataInitialized: boolean = false;
+  userConfigDataInitialized: boolean = false;
   apiUrl = environment.apiUrl; 
   typeVehicles: any = {};
   typeVehiclesUserData: any = {};
@@ -21,7 +26,7 @@ export class UserDataService {
   @Output() geofencesPrivileges = new EventEmitter<any>();
   @Output() geopointsPrivileges = new EventEmitter<any>();
 
-  constructor(private http: HttpClient,) {}
+  constructor(private http: HttpClient,private sanitizer: DomSanitizer,public spinner: NgxSpinnerService) {}
 
   getUserData(){
     console.log('Getting User Data');
@@ -31,6 +36,8 @@ export class UserDataService {
         //this.userData = this.panelService.userData = data[0];
         //console.log('User Data obtenida: ',data[0]);
         console.log('User Data obtenida ======> ',  data.data);
+        await this.getTypeVehiclesForUser();
+        await this.getUserConfigData();
         this.userData = data.data;
         this.userName = data.data.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
         this.userEmail = data.data.email;
@@ -38,9 +45,6 @@ export class UserDataService {
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);
         this.geopointsPrivileges.emit(true);
-        await this.getTypeVehiclesForUser();
-        await this.getUserConfigData();
-
       },
       error: (errorMsg) => {
         console.log('No se pudo obtener datos del usuario', errorMsg);
@@ -53,6 +57,8 @@ export class UserDataService {
       next: data => {
         this.typeVehicles = data.data;
         console.log(data);
+        this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
+
       },
       error: (errorMsg) => {
         console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
@@ -66,6 +72,8 @@ export class UserDataService {
       next: async data => {
         this.typeVehiclesUserData = data.data;
         await this.preloadSVGs();
+        this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
+        this.userDataInitialized = false;
       },
       error: (errorMsg) => {
         console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
@@ -87,15 +95,50 @@ export class UserDataService {
     svgNames.forEach(async (svgName) => {
       const svgPath = `assets/images/objects/nuevo/${svgName}`;
       const svgContent = await this.http.get(svgPath, { responseType: 'text' }).toPromise();
+      
+      // Obtener el color correspondiente para este SVG
+      const svgUserData = this.typeVehiclesUserData.find((vehicle: any) => vehicle.var_icono == svgName);
+      const userColor = svgUserData ? svgUserData.var_color : '#FF0000'; // Color por defecto si no se encuentra
+      //c3c4c4 color gris
+      const modifiedSVG = await this.modifyUserSVG(svgContent, userColor); // Modificar el SVG cargado con el color
+      const sanitizedSVG = await this.sanitizer.bypassSecurityTrustHtml(modifiedSVG); // Sanitizar el SVG
       this.svgContents[svgName] = svgContent;
-      // console.log(`Contenido de ${svgName}:`, svgContent); // Mostrar contenido del SVG cargado en la consola
+      this.svgContentsSafe[svgName] = sanitizedSVG; // Almacenar el SVG sanitizado
+
+      // console.log(`Contenido de ${svgName}:`, modifiedSVG); // Mostrar contenido del SVG cargado en la consola
     });
   }
+
   
   
+  async modifyUserSVG(svgContent: string, color: string): Promise<string> {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+    const svgElement = doc.documentElement;
+  
+    // Buscar todos los elementos que tienen la clase .body dentro del SVG
+    const bodyElements = svgElement.querySelectorAll('.body');
+  
+    if (bodyElements) {
+      // Modificar el color de todos los elementos con la clase .body
+      bodyElements.forEach(async (bodyElement) => {
+       await bodyElement.setAttribute('style', `fill: ${color}`);
+      });
+    }
+
+    return svgElement.outerHTML;
+  }
+
+  getSVGContentSafe(svgName: string): SafeHtml | undefined {
+    const svgRaw = this.svgContents[svgName];
+    if (svgRaw) {
+      return this.sanitizer.bypassSecurityTrustHtml(svgRaw);
+    }
+    return ''; // En caso de que el SVG no esté disponible
+  }
 
   getSVGContent(svgName: string): string {
-    return this.svgContents[svgName] || ''; // Retorna el contenido del SVG, si está cargado
+    return this.svgContents[svgName]; // Retorna el contenido del SVG, si está cargado
   }
 
   async colorTypeVehicleDefault(typeVehicleId: string): Promise<string> {

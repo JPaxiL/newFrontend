@@ -98,7 +98,7 @@ export class VehicleConfigComponent implements OnInit {
     { name: "52.png", code: "52", type: "2" },
   ];
   dropdownIcons: any = [];
-  svgContent: string | undefined;
+  svgContent: any;
 
   constructor(
     private configService: VehicleConfigService,
@@ -114,6 +114,7 @@ export class VehicleConfigComponent implements OnInit {
 
     this.clearSVGContainer(); // Limpiar contenedor antes de cargar el SVG
     try {
+      // this.svgContent = await this.userDataService.getSVGContentSafe(this.config.tipo);
       this.svgContent = await this.userDataService.colorTypeVehicleDefault(this.config.tipo);
       this.injectSVG(this.svgContent);
     } catch (error) {

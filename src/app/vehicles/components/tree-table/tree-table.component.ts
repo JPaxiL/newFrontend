@@ -19,8 +19,6 @@ import Swal from 'sweetalert2';
 export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
-  @ViewChild('svgContainer', { read: ElementRef }) svgContainer!: ElementRef;
-  svgContent: string | undefined;
 
   vehicleIconState: boolean = false;
 
@@ -83,9 +81,9 @@ export class TreeTableComponent implements OnInit {
     sort: 'asc'
   }
 
-  svgContentType: any;
 
   @ViewChild('tt') tt!:any;
+
 
   constructor(
     private vehicleService:VehicleService,
@@ -122,7 +120,6 @@ export class TreeTableComponent implements OnInit {
 
     });
 
-
   }
 
   ngOnInit(): void {
@@ -149,74 +146,55 @@ export class TreeTableComponent implements OnInit {
     screen.orientation.addEventListener('change', this.treeTableResizing);
     // console.log(this.vehicleService.vehicles);
     
-    // this.clearSVGContainer();
-    // this.verifyContent();
-    // this.inyectVehicles();
 
-    // this.svgContentType = this.userDataService.svgContents['auto.svg'];
+    console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
 
+  }
+
+  changeColor(name:string) {
+    let var_color:string;
+    if (name=='excesoVelocidad'){
+      var_color = "#FF0000"; // ROJO EXCESO DE VELOCIDAD
+    }else if(name=='relenti'){
+      var_color = "#0000FF"; // AZUL RELENTI 
+    }else if(name=='movimiento'){
+      var_color = "#008000"; // VERDE MOVIEMIENTO
+    }else{
+      var_color = "#c4c2c1"; // GRIS DEFAULT
+    }
+    console.log('loading SVGS -->',this.userDataService.svgContents);
+    for (const vehicle of this.vehicleService.vehicles) {
+      const idElement = 'div_svg_'+vehicle.id;
+      console.log(idElement);
+      const svgElement = document.getElementById(idElement);
+      if (svgElement) {
+        console.log('ECNONTRO ELEMENTOS? ...');
+        const bodyElements = svgElement.querySelectorAll('.body') as NodeListOf<HTMLElement>;
+        // Verificar el data-type y cambiar el color si hay coincidencia
+        if (bodyElements) {
+          const dataType = svgElement.getAttribute('data-type');
+          const vehicleFound = this.userDataService.typeVehiclesUserData.find((vehicle: any) => {
+            return vehicle.var_icono == dataType;
+          });
+          bodyElements.forEach((bodyElement: HTMLElement) => {
+            // solo para cuando manda default se debe buscar su var_color definido
+            if(var_color == "#c4c2c1"){
+              console.log('entro a buscar color');
+              if (vehicleFound) {
+                bodyElement.style.fill = vehicleFound.var_color;
+                // Haces lo que necesites con el vehículo encontrado
+              } else {
+                bodyElement.style.fill = var_color;
+              }
+            }else{
+              bodyElement.style.fill = var_color;
+            }
+            
+          });
+        }
+      }
+    }
     
-    this.svgContentType =  this.userDataService.getSVGContent('auto.svg');
-    console.log('loading -->',this.svgContentType);
-
-  }
-
-  
-  async injectVehicles(type:any,id:any) {
-    try {
-      // for (const vehicle of this.vehicleService.vehicles) {
-        // const tipo = vehicle.tipo;
-        // const Vh_id = vehicle.id;
-        const svgContent = await this.userDataService.colorTypeVehicleDefault(type!);
-        const svgHtml =  document.getElementById('svgContainer_' + id);
-        if (svgHtml) {
-          // console.log('EXISTE SVGHTML y SVG CONTENT-->',svgHtml);
-          this.injectSVG(svgContent, svgHtml);
-          // const div = document.createElement('div');
-          // div.innerHTML = svgContent;
-          // svgHtml.appendChild(div.firstChild!);
-        }else {
-          console.log('El elemento no existe en el DOM');
-        }
-      // }
-    } catch (error) {
-      console.error('Error al cargar los SVG:', error);
-      // Manejar el error según tus necesidades
-    }
-  }
-
-  injectSVG(svgContent: string, svgHtml: HTMLElement): void {
-    const div = document.createElement('div');
-    div.innerHTML = svgContent;
-    svgHtml.appendChild(div.firstChild!);
-  }
-  
-  clearSVGContainer(): void {
-    for (const vehicle of this.vehicleService.vehicles) {
-      const Vh_id = vehicle.id;
-      const svgContainer = document.getElementById('svgContainer_' + Vh_id);
-      if (svgContainer) {
-        while (svgContainer.firstChild) {
-          console.log('REMOVED Child ...');
-          svgContainer.removeChild(svgContainer.lastChild!);
-        }
-      }
-    }
-  }
-  verifyContent() {
-    for (const vehicle of this.vehicleService.vehicles) {
-      const Vh_id = vehicle.id;
-      const type = vehicle.tipo;
-      const svgContainer = document.getElementById('svgContainer_' + Vh_id);
-
-      if (svgContainer) {
-        while (svgContainer.firstChild) {
-          console.log('REMOVED Child ...');
-          svgContainer.removeChild(svgContainer.lastChild!);
-        }
-        this.injectVehicles(type,Vh_id);
-      }
-    }
   }
   
 
