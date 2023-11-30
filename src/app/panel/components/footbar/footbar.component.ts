@@ -7,6 +7,7 @@ import { LayersService } from 'src/app/multiview/services/layers.service';
 import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 import { CarouselComponent } from 'src/app/shared/components/carousel/carousel.component';
 import { CarouselService } from 'src/app/shared/services/carousel.service';
+import { PanelService } from '../../services/panel.service';
 
 @Component({
   selector: 'app-footbar',
@@ -20,7 +21,9 @@ export class FootbarComponent implements OnInit {
   showScreenRecorder = false;
   showCipiaExample = false;
   showPopupDialog = true;
-
+  showPanel = true;
+  currentPanelName = "";
+  lastPanelName = "";
   @ViewChild('MapView') mapView!: ElementRef;
   @ViewChild('carousel') carousel!: CarouselComponent;
 
@@ -31,7 +34,7 @@ export class FootbarComponent implements OnInit {
     private layersService: LayersService,
     private eventSocketService: EventSocketService,
     private carouselService: CarouselService,
-    private changeDetector: ChangeDetectorRef
+    private panelService: PanelService
   ) { }
 
   ngOnInit(): void {
@@ -90,5 +93,23 @@ export class FootbarComponent implements OnInit {
 
   trackByFn(index: number, item: any): any {
     return item.id; 
+  }
+
+  hidePanel(){
+    console.log("Ocultar/Mostrar panel");
+    if (this.lastPanelName){
+      this.showPanel = !this.showPanel;
+    }
+    const currentActivePanel = this.panelService.activePanelClass();
+    console.log("currentActivePanel", currentActivePanel);
+    if(currentActivePanel){
+      this.currentPanelName = this.panelService.getComponentNameFromPanelName(currentActivePanel);
+      console.log("panelName", this.currentPanelName);
+      this.panelService.clickShowPanel(this.currentPanelName);
+      this.lastPanelName = this.currentPanelName;
+    }else{
+      console.log("using LASTPANELNAME");
+      this.panelService.clickShowPanel(this.lastPanelName);
+    }
   }
 }

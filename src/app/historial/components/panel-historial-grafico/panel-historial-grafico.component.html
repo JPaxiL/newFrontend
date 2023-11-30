@@ -1,4 +1,8 @@
-<p-dialog [(visible)]="historialService.modalActive" [modal]="false" [resizable]="true" [style]="{'width':'850px', 'height':'550px'}" >
+<!-- <p-dialog id="modal-grafico" [(visible)]="historialService.modalActive" [modal]="false" [resizable]="true" [style]="{'width':'500px', 'height':'500px'}" > -->
+<p-dialog id="modal-grafico" [(visible)]="historialService.modalActive" [modal]="false" [resizable]="true" [style.width]="width_modal" [style.height]="height_modal" >
+
+
+
 
   <ng-template class="p-dialog-title" pTemplate="header">
       <div >
@@ -15,8 +19,9 @@
       </div>
   </ng-template>
 
-
-  <div class="row p-3">
+  <br>
+  
+  <div class="row p-1">
     <div class="col p-field">
       <div class="row ">
         <div class="col-5 d-flex align-items-center justify-content-start text-start">
@@ -47,11 +52,11 @@
 
 
 
-  <div class="row p-3">
+  <div class="row p-1">
 
       <div class="col-11 p-field">
     
-          <div class="d-flex align-items-center justify-content-start text-start">
+          <div class="d-flex align-items-center justify-content-start text-start" [style]="{'width':'350px'}">
             <label for="nameCreate">
               {{sliderValueReferencia}}
             </label>
@@ -86,7 +91,7 @@
   </div>
 
 
-  <div class="row p-3">
+  <div class="row p-1">
 
     <div class="col p-field">
         <div class="row ">
@@ -143,20 +148,16 @@
     </div>
   </div> -->
 
-  <div class="row p-3">
-    <div class="col-7 p-field">
-      <table style="width: 790px;">
+  <div class="row p-1">
+    <div class="p-field">
+      <table style="width: 100%;">
         <tbody>
           <tr>
-            <td width="200px">
-
-
-            <select class="claseinputs" id="opcionGraficoConsola" (change)="changeOpcionGraficoConsola()" [(ngModel)]="opcionGraficoConsola" title="Tipo de Gráfico"  data-bs-toggle="tooltip" data-bs-placement="top">
-              <option [value]="item.id" *ngFor="let item of availableOpcionGraficoConsola">{{item.name}}</option>
-            </select>
-
-
-            </td>
+            <!-- <td width="200px">
+              <select class="claseinputs" id="opcionGraficoConsola" (change)="changeOpcionGraficoConsola()" [(ngModel)]="opcionGraficoConsola" title="Tipo de Gráfico"  data-bs-toggle="tooltip" data-bs-placement="top">
+                <option [value]="item.id" *ngFor="let item of availableOpcionGraficoConsola">{{item.name}}</option>
+              </select>
+            </td> -->
             <td class="claseicon" id="btnPlayConsola" title="Iniciar recorrido" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnPlayConsola()" ><span class="fa fa-play"></span></td>
             <td class="claseicon" id="btnPauseConsola" title="Pausar recorrido" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnPauseConsola()" ><span class="fa fa-pause"></span></td>
             <td class="claseicon" id="btnStopConsola" title="Terminar recorrido" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnStopConsola()" ><span class="fa fa-stop"></span></td>
@@ -165,10 +166,6 @@
             <td class="claseicon" id="btnAumentarVelocidadConsola" title="Aumentar Velocidad de recorrido" data-bs-toggle="tooltip" data-bs-placement="top" (click)="modalhistorialBtnRapido()" ><span class="fa fa fa-step-forward"></span></td>
 
 
-
-
-          
-
             <td width="80px">
 
               <select class="claseinputs" id="opcionVelocidadGraficoConsola" (change)="changeOpcionVelocidadGraficoConsola()" [(ngModel)]="opcionVelocidadGraficoConsola" title="Velocidad de Recorrido" data-bs-toggle="tooltip" data-bs-placement="top"  >
@@ -176,27 +173,19 @@
               </select>
 
             </td>
-            <!-- <td width="60px">
-
-              <select class="claseinputs" id="opcionTamanoConsola" (change)="changeOpcionTamanoConsola()" [(ngModel)]="opcionTamanoConsola" title="Tamaño de Consola" data-bs-toggle="tooltip" data-bs-placement="top" >
-                <option [value]="item.id" *ngFor="let item of availableOpcionTamanoConsola">{{item.name}}</option>
-              </select>
-
-
-            </td> -->
+   
             <td id="choices" width="20px" align="left" style="padding-left: 40px;"></td>
-            <td id="datoslegend" width="400px" align="left" [innerHTML]="datosLegend" >
-            </td>
-            <td class="claseicon" id="btnIzqConsola" title="Desplazar a la Izquierda" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnIzqConsola()" ><span class="fa fa-chevron-left"></span></td>
+            <!-- <td id="datoslegend" width="400px" align="left" [innerHTML]="datosLegend" >
+            </td> -->
+            <!-- <td class="claseicon" id="btnIzqConsola" title="Desplazar a la Izquierda" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnIzqConsola()" ><span class="fa fa-chevron-left"></span></td>
             <td class="claseicon" id="btnDerConsola" title="Desplazar a la Derecha" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnDerConsola()" ><span class="fa fa-chevron-right"></span></td>
             <td class="claseicon" id="btnZoomInConsola" title="Zoom +" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnZoomInConsola()" ><span class="fa fa-search-plus"></span></td>
-            <td class="claseicon" id="btnZoomOutConsola" title="Zoom -" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnZoomOutConsola()" ><span class="fa fa-search-minus"></span></td>
+            <td class="claseicon" id="btnZoomOutConsola" title="Zoom -" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnZoomOutConsola()" ><span class="fa fa-search-minus"></span></td> -->
 
             <td width="35px" align="center">
                 <div>
-                    <button id="botonverconsola" (click)="clickVerTablaRecorrido()" title="Ver Tabla del Recorrido" data-bs-toggle="tooltip" data-bs-placement="top" type="button" class="btn btn-success btn-sm btn-xss">Ver Tramas</button>
-                    <button id="botonocultarconsola" (click)="clickOcultarTablaRecorrido()" title="Ocultar Tabla del Recorrido" data-bs-toggle="tooltip" data-bs-placement="top" type="button" style="display : none;" class="btn btn-primary btn-sm btn-xss">Ocultar Tramas</button>
-                    <!-- <button (click)="newMessage()">New Message</button> -->
+                    <button id="botonverconsola" (click)="clickVerTablaRecorrido()" title="Ver Tabla del Recorrido" data-bs-toggle="tooltip" data-bs-placement="top" type="button" class="btn btn-success btn-sm btn-xss">Ver Grafico</button>
+                    <button id="botonocultarconsola" (click)="clickOcultarTablaRecorrido()" title="Ocultar Tabla del Recorrido" data-bs-toggle="tooltip" data-bs-placement="top" type="button" style="display : none;" class="btn btn-primary btn-sm btn-xss">Ocultar Grafico</button>
                   </div>
             </td>
 
@@ -216,8 +205,34 @@
 
 
 
-      <div class="row p-3">
+      <div class="row p-1" *ngIf="verTabla">
         <div id="graficohistorial" class="col-md-9">
+
+
+          <table style="width: 100%;">
+            <tbody>
+              <tr>
+                <td width="200px">
+                    <select class="claseinputs" id="opcionGraficoConsola" (change)="changeOpcionGraficoConsola()" [(ngModel)]="opcionGraficoConsola" title="Tipo de Gráfico"  data-bs-toggle="tooltip" data-bs-placement="top">
+                        <option [value]="item.id" *ngFor="let item of availableOpcionGraficoConsola">{{item.name}}</option>
+                    </select>
+                </td>
+
+                <td id="choices" width="20px" align="left" style="padding-left: 40px;"></td>
+                <td id="datoslegend" width="400px" align="left" [innerHTML]="datosLegend" ></td>
+                <td class="claseicon" id="btnIzqConsola" title="Desplazar a la Izquierda" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnIzqConsola()" ><span class="fa fa-chevron-left"></span></td>
+                <td class="claseicon" id="btnDerConsola" title="Desplazar a la Derecha" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnDerConsola()" ><span class="fa fa-chevron-right"></span></td>
+                <td class="claseicon" id="btnZoomInConsola" title="Zoom +" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnZoomInConsola()" ><span class="fa fa-search-plus"></span></td>
+                <td class="claseicon" id="btnZoomOutConsola" title="Zoom -" data-bs-toggle="tooltip" data-bs-placement="top" (click)="clickbtnZoomOutConsola()" ><span class="fa fa-search-minus"></span></td>
+    
+              </tr>
+            </tbody>
+          </table>
+
+
+
+
+
           <!-- <table>
             <tbody>
               <tr>
@@ -269,7 +284,7 @@
             </tbody>
           </table> -->
 
-          <div id="placeholder" style="margin-top: 5px; border: black 1px solid;height: 160px;width: 790px;" class="demo-placeholder"></div>
+          <div id="placeholder" style="margin-top: 5px; border: black 1px solid;height: 160px;width: 100%;" class="demo-placeholder"></div>
           <!-- <div id="placeholder" style="width:600px;height:300px"></div> -->
           <!-- <div id="tab-mensaje"></div> -->
 
@@ -327,9 +342,9 @@
         </div>
       </div>
 
-  <!-- <ng-template pTemplate="footer">
+  <ng-template pTemplate="footer">
   
-  </ng-template> -->
+  </ng-template>
 
 </p-dialog>
 

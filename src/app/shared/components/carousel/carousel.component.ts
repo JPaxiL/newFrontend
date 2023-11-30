@@ -19,7 +19,16 @@ export class CarouselComponent implements OnInit, AfterViewInit {
 
   private subscription! : Subscription;
   scrollDiv!: ElementRef;
+  _qtyItems= 0;
+  get qtyItems(): number {
+    return this._qtyItems;
+  }
 
+  set qtyItems(newValue) {
+      if (0 <= newValue) {
+          this._qtyItems = newValue;
+      }
+  }
   ngOnInit(): void {
     
   }
@@ -46,6 +55,7 @@ export class CarouselComponent implements OnInit, AfterViewInit {
         });
       }
       document.querySelector('.carousel-wrapper')!.insertBefore(divContainer,document.querySelector('.carousel-wrapper')!.firstChild);
+      this.qtyItems++;
       this.updateButtonVisibility();
       if (componentRef.instance instanceof EventPopupComponent) {
         componentRef.instance.onDelete.subscribe((valor) => {
@@ -71,6 +81,7 @@ export class CarouselComponent implements OnInit, AfterViewInit {
         this.carouselWrapper.nativeElement.style.width = `${currentWrapperWidth - extraWidth}px`;
         this.carouselSection.nativeElement.style.width = `${carouselSectionWidth - extraWidth}px`;
       }
+      this.qtyItems--;
       this.updateButtonVisibility();
     }
   }

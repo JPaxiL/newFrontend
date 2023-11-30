@@ -20,6 +20,7 @@ export class EventService {
   private URL_NAME = environment.apiUrl+'/api/event-name';
   @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() debugEventStream: EventEmitter<any> = new EventEmitter<any>();
+  @Output() pinPopupStream: EventEmitter<any> = new EventEmitter<any>();
   componentKey = new Subject<Number>();
   public eventDeveloperCount = 0;
   public eventDeveloperStatus = false;
@@ -70,6 +71,8 @@ export class EventService {
 
   new_notif_stack: number[] = [];
 
+ public eventsUserLoaded: boolean = false;
+
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -104,17 +107,33 @@ export class EventService {
     this.getAll();
   }
 
-  public getVehiclesPlate(): void {
-    for (const index in this.events) {
-      // console.log(this.events[index].imei);
-      this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
-      // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
+  public getVehiclesPlate(data_events?:any): void {
+    if(data_events){
+      for (const index in data_events) {
+        // console.log(this.events[index].imei);
+        data_events[index].nombre_objeto = this.vehicleService.getVehicle(data_events[index].imei).name;
+        // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
+      }
+    }else{
+      for (const index in this.events) {
+        // console.log(this.events[index].imei);
+        this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+        // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
+      }
     }
+    
   }
 
   public getEventName(): Observable<any>{
     return this.http.get(this.URL_NAME);
   }
+
+  // EVENTS for History
+  
+  public getEventsForUser(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/getPermissEvents`);
+  }
+  
   public loadNameEvent(event: any){
     // console.log("buscando evento "+event.tipo,this.eventsCommon.indexOf(event.tipo));
     if(this.eventsCommon.indexOf(event.tipo)<0){
@@ -374,14 +393,24 @@ export class EventService {
             // console.log("data show historial event",response.data);
             this.eventsHistorial = response.data;
 
+
+
             for (let index = 0; index < this.eventsHistorial.length; index++) {
+
+              let data = this.filterImei(this.vehicleService.vehicles, this.eventsHistorial[index].imei);
+              // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
+              // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
+              if (data != undefined) {
+                //console.log("name ====",data.name);
+                this.eventsHistorial[index].nombre_objeto = data.name;
+              }
 
               let icon = L.icon({
                 iconUrl: this.img_icon,
                 iconSize: this.img_iconSize, // size of the icon
                 iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
               });
-
+              this.getVehiclesPlate(this.eventsHistorial);
               const event = this.eventsHistorial[index];
               event.layer = L.marker([event.latitud, event.longitud], {
                 icon: icon,
@@ -392,6 +421,7 @@ export class EventService {
               var eventClass:any = this.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
               eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
 
+              //nombre_objeto
               // // this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
               // event.layer.bindPopup(getContentPopup(event), {
               //   className: eventClass,
@@ -411,36 +441,36 @@ export class EventService {
               }
               //console.log("eventosssss");
 
-              if(event.parametros && event.parametros.gps == "cipia" && event.parametros.has_video != "0"){
-                  // console.log("EVENTO CIPIA ---  ");
-                  // console.log(event);
+              event.layer.bindPopup(getContentPopup(event), {
+                className: eventClass,
+                minWidth: 250,
+                maxWidth: 350,
+              });
 
-                  // obtengo la url del video o imagen
-                  this.multimediaService.getMediaFromEvent(event.imei,event.parametros.eventId,"video","CABIN",0).subscribe((data: any) => {
-                    // Añado la url del video/imagen como atributo del evento
-                    event.videoUrl = data;
-                    event.layer.bindPopup(getContentPopup(event), {
-                      className: eventClass,
-                      minWidth: 250,
-                      maxWidth: 350,
-                    });
-
-                  });
-              }else{
-                  // console.log("EVENTO NORMAL ---  ");
-                  // console.log(event);
-                  // caso contrario ejecuto la via normal
-                  event.layer.bindPopup(getContentPopup(event), {
-                    className: eventClass,
-                    minWidth: 250,
-                    maxWidth: 350,
-                  });
-              }
+              event.layer.on('click', () => {
+                console.log("CLIIIIICK");
+                this.pinPopupStream.emit(event);
+              });
             }
-
+            
             console.log(this.eventsHistorial);
 
           });
+    }
+
+    private filterImei(data: any, imei: any) {
+      // console.log("imei",imei);
+      for (const index in data) {
+        // console.log("IMEI",data[index].IMEI);
+        if (String(data[index].IMEI) == String(imei)) {
+  
+          console.log("return true");
+          return data[index];
+        }
+      }
+      console.log("return false");
+      return undefined;
+  
     }
 
     public attachClassesToEvents(single_event?: any){
@@ -521,8 +551,8 @@ export class EventService {
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
-        console.log("EVENTS_FILTERED: ",this.eventsFiltered);
-
+        //console.log("EVENTS_FILTERED: ",this.eventsFiltered);
+        
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
         console.log('Ocultar Spinner');
@@ -594,6 +624,9 @@ export class EventService {
       })
       .toPromise();
 
+      // console.log("===============================");
+      // console.log(response);
+      
       return response.data;
   }
 

@@ -7,7 +7,11 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 module.exports = __webpack_require__(/*! /home/jonathan/Documentos/proyectos/newFrontend/src/polyfills.ts */"hN/g");
+=======
+module.exports = __webpack_require__(/*! /Users/ti/Documents/GLTracker/NewPlatform/newFrontend/src/polyfills.ts */"hN/g");
+>>>>>>> 4732e9d1543bdfca4fbc3960af4fe8c341a3a7e0
 
 
 /***/ }),
