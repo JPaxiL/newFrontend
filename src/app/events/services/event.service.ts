@@ -106,12 +106,21 @@ export class EventService {
     this.getAll();
   }
 
-  public getVehiclesPlate(): void {
-    for (const index in this.events) {
-      // console.log(this.events[index].imei);
-      this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
-      // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
+  public getVehiclesPlate(data_events?:any): void {
+    if(data_events){
+      for (const index in data_events) {
+        // console.log(this.events[index].imei);
+        data_events[index].nombre_objeto = this.vehicleService.getVehicle(data_events[index].imei).name;
+        // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
+      }
+    }else{
+      for (const index in this.events) {
+        // console.log(this.events[index].imei);
+        this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+        // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
+      }
     }
+    
   }
 
   public getEventName(): Observable<any>{
@@ -223,7 +232,7 @@ export class EventService {
   }
 
   public getData() {
-    console.log("get data desde eventService",this.events);
+    //console.log("get data desde eventService",this.events);
     return this.events;
   }
 
@@ -395,7 +404,7 @@ export class EventService {
                 iconSize: this.img_iconSize, // size of the icon
                 iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
               });
-
+              this.getVehiclesPlate(this.eventsHistorial);
               const event = this.eventsHistorial[index];
               event.layer = L.marker([event.latitud, event.longitud], {
                 icon: icon,
@@ -536,7 +545,7 @@ export class EventService {
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
-        console.log("EVENTS_FILTERED: ",this.eventsFiltered);
+        //console.log("EVENTS_FILTERED: ",this.eventsFiltered);
         
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
