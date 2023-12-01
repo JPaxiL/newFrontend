@@ -13,6 +13,7 @@ import { VehicleService } from './vehicle.service';
 import { FollowService } from './follow.service';
 import { TabService } from 'src/app/panel/services/tab.service';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/takeWhile';
@@ -67,6 +68,7 @@ export class MapService {
     private followService:FollowService,
     private socketWebService: SocketWebService,
     private tabService: TabService,
+    private userDataService: UserDataService,
   ) {
     // this.interval = setInterval(function(this){
     //   // this.localStorage
@@ -1143,7 +1145,8 @@ export class MapService {
 
   private drawIcon(data:any, map: any): void{
     // assets/images/objects/nuevo/{{ rowData['icon']
-    //console.log("dataaaaa---",data);
+    console.log("dataaaaa---",data);
+    console.log(this.userDataService.svgContentsSafe['camioneta.svg']);
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
     if(data.speed>0){
       iconUrl = './assets/images/accbrusca.png';
@@ -1154,6 +1157,13 @@ export class MapService {
       iconAnchor: [25, 40],
       popupAnchor:  [-3, -40]
     });
+
+    // const iconMarker = L.icon({
+    //   iconUrl: iconUrl,
+    //   iconSize: [40, 40],
+    //   iconAnchor: [25, 40],
+    //   popupAnchor:  [-3, -40]
+    // });
     //console.log('data.name',data.name);
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+

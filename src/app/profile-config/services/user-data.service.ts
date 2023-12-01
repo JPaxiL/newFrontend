@@ -56,7 +56,7 @@ export class UserDataService {
     this.http.get<any>(`${this.apiUrl}/api/typeVehiclesUser`).subscribe({
       next: data => {
         this.typeVehicles = data.data;
-        console.log(data);
+        console.log(data);                                             
         this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
 
       },
