@@ -6,6 +6,7 @@ export class Geofences implements IGeofences {
     public treeTableStatus: boolean = false;
     public operations: any = [];
     public groups: any = [];
+    public tags:any = [];
     public getGeofences (){
         return ;
     }
@@ -19,12 +20,13 @@ export class Geofences implements IGeofences {
     }
     
     public createTreeNode(): TreeNode[]{
-        let aux = "testSenial";
         let map: any=[];
         this.operations = [];
         this.groups = [];
+        this.tags = [];
         let status_operation = false;
         let status_group = false;
+        let status_tags = false;
         let prueba = [];
     
         for(const index in this.geofences){

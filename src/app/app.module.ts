@@ -140,7 +140,6 @@ import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
-import { ChangeColorComponent } from './profile-config/change-color/change-color.component';
 import { GeofenceTableComponent } from './geofences/components/geofence-table/geofence-table.component';
 import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
@@ -233,7 +232,6 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     ScreenViewComponent,
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
-    ChangeColorComponent,
     GeofenceTableComponent,
     AlphaNumericDashDirective,
     ScreenRecorderComponent,

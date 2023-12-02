@@ -55,8 +55,9 @@
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col style="width: 2.5rem;" />
-          <col style="width: 18%;"/>
-          <col style="width: 185px;" />
+          <col style="width: 16%;"/>
+          <col style="width: 20%;"/>
+          <col style="width: 55%;" />
           <col style="width: 16%;"/>
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
@@ -69,6 +70,7 @@
           <th>
             <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEyeAll()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
           </th>
+          <th > <i class="fas fa-crosshairs ag-grid-header-icon"></i></th>
           <th style="text-align: center; white-space: nowrap;">Geocerca</th>
           <th>
             <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEyeAll()">
@@ -225,10 +227,12 @@
                     </g>
                   </svg>
                 </div>
-                <div class="flex-grow-1 d-flex flex-column text-start geofence-data">
-                  <strong>{{rowData['zone_name']}}</strong>
-                </div>
             </button>
+          </td>
+          <td>
+            <div class="flex-grow-1 d-flex flex-column text-start geofence-data">
+              <strong>{{rowData['zone_name']}}</strong>
+            </div>
           </td>
           <td class="inline-png-checkbox">
             <span class="btn-label" title="Mostrar nombre">
@@ -253,6 +257,7 @@
         </tr>
       </ng-template>
     </p-treeTable>
+    <!-- view General -->
     <p-treeTable *ngIf="viewOptions=='viewGen'" [value]="geofences" [loading]="loading"
       scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name"
       [resizableColumns]="true"
@@ -267,8 +272,9 @@
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col style="width: 2.5rem;" />
-          <col style="width: 18%;"/>
-          <col style="width: 50%;" />
+          <col style="width: 16%;"/>
+          <col style="width: 20%;"/>
+          <col style="width: 55%;" />
           <col style="width: 16%;"/>
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
@@ -281,6 +287,7 @@
           <th>
             <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEyeAll()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
           </th>
+          <th > <i class="fas fa-crosshairs ag-grid-header-icon"></i></th>
           <th style="text-align: center; white-space: nowrap;">Geocerca</th>
           <th>
             <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEyeAll()">
@@ -426,10 +433,12 @@
                     </g>
                   </svg>
                 </div>
-                <div class="flex-grow-1 d-flex flex-column text-start geofence-data">
-                  <strong>{{rowData['zone_name']}}</strong>
-                </div>
             </button>
+          </td>
+          <td>
+            <div class="flex-grow-1 d-flex flex-column text-start geofence-data">
+              <strong>{{rowData['zone_name']}}</strong>
+            </div>
           </td>
           <td class="inline-png-checkbox">
             <span class="btn-label" title="Mostrar nombre">

@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <span class="col-12 text-center w-100 mt-2">
-                            tracker@gltracker.pe
+                            <!-- tracker@gltracker.pe -->
                         </span>
                     </div>
                     <div class="gl-row-underline">
@@ -48,7 +48,7 @@
                             <label>NUEVA CONTRASEÑA:</label>
                         </div>
                         <div class="col-12">
-                            <input type="text" pInputText formControlName="password" [(ngModel)]="pngNewPass"/>
+                            <input type="password" formControlName="newPass" pInputText pTooltip="Ingrese una contraseña segura..." tooltipPosition="right"/>
                         </div>
                     </div>
                     <div class="gl-row-underline">
@@ -56,68 +56,63 @@
                             <label>REPITE LA NUEVA CONTRASEÑA:</label>
                         </div>
                         <div class="col-12">
-                            <input type="text" pInputText [(ngModel)]="pngNewPassR"/>
+                            <input type="password" formControlName="newPassRepeat" pInputText pTooltip="Recuerde que las contraseñas deben ser iguales" tooltipPosition="right"/>
                         </div>
                     </div>
-                    <div class="row gl-row-underline">
-                        <div class="col-7 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <label for="tipo-unidad">Tipo de Unidad :</label>
+                    <!-- <div class="panel-izq-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Tipo de vehiculo</th>
+                                    <th style="width: 25%;">Color</th>
+                                    <th style="width: 40%;">Consumo Combustible (Gal)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor=" let item of typeVehiclesList; let i=index">
+                                    <tr>
+                                        <td>
+                                            <span class="d-flex text-start">{{item.var_nombre}}</span>
+                                            <input type="hidden" value="{{item.id}}">
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-12 d-flex">
+                                                  <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" id="'text_color_picker_{{item.id}}" value="{{item.var_color}}" title="Elige un color">
+                                                  
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" value="{{item.var_galon}}" pInputText placeholder="galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right"/>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div> -->
+                    <!-- <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
+                        <div class="col-12 d-flex">
+                            <label class="me-2">Habilitar cambio de color según su estado:</label>
                         </div>
-                        <div class="col-7">
-                            <p-dropdown inputId="tipo-unidad" [options]="types" formControlName="type_vehicle" [(ngModel)]="selectedType" placeholder="Select" optionLabel="name" [appendTo]="'body'" (onChange)="updateIconsDropdown()" placeholder="Selecciona un tipo de unidad">
-                                <ng-template pTemplate="selectedItem">
-                                <div class="type-item type-item-value" *ngIf="selectedType">
-                                    <div>{{selectedType.name}}</div>
-                                </div>
-                                </ng-template>
-                                <ng-template let-type pTemplate="item">
-                                <div class="type-item">
-                                    <div>{{type.name}}</div>
-                                </div>
-                                </ng-template>
-                            </p-dropdown>
-                        </div>
-                    </div>
-                    <div class="gl-row-underline">
-                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <form [formGroup]="perfileConfigForm">
-                                <label for="color">Color del ícono del vehículo:</label>
-                            </form>
-                        </div>
-                        <div class="col-7">
-                            <!-- <app-change-color (colorSelected)="onColorSelected($event)"></app-change-color> -->
-                        </div>
-                    </div>
-                    <div class="gl-row-underline">
-                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <label>Calculador de combustible:</label>
-                        </div>
-                        <div class="col-12">
-                            <input type="text" formControlName="indGalon" text="galones aproximados"/>
-                        </div>
-                    </div>               
-                    <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
-                        <div class="col-12">
-                            <label>Habilitar item en los vehículos según su estado:</label>
-                        </div>
-                        <div class="align-items-center h-5 column" >
+                        <div class="flex align-items h-5 column" >
                             <div class="">
-                                <img src="">
+                                <object data="assets/images/user_config/circulo_movimiento.svg"></object>
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input type="checkbox" [(ngModel)]="switchCircle" (change)="switchActive(1)" >
+                                    <input formControlName="bol_ondas" type="checkbox" (change)="switchActive(1)" >
                                     <span class="slider"></span>
                                 </label>
                             </div>
                         </div>
-                        <div class="align-items-center h-5 column">
+                        <div class="flex align-items h-5 column">
                             <div class="">
-                                <object data="assets/images/arrowLeft.svg"></object>
+                                <object data="assets/images/user_config/flecha_movimiento.png"></object>
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input type="checkbox" [(ngModel)]="switchPoint" (change)="switchActive(2)">
+                                    <input formControlName="bol_cursor" type="checkbox" (change)="switchActive(2)">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -128,26 +123,12 @@
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input type="checkbox" [(ngModel)]="switchMobile" (change)="switchActive(3)">
+                                    <input formControlName="bol_vehicle" type="checkbox" (change)="switchActive(3)">
                                     <span class="slider"></span>
                                 </label>
                             </div>
                         </div>
-                        <p-footer>
-                            <div class="row d-flex justify-content-center">
-                            <div class="col-6">
-                                <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
-                            </div>
-                            <div class="col-6">
-                                <button _ngcontent-cic-c118="" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading" type="submit" >Guardar</button>
-                            </div>
-                            </div>
-                            <div class="" *ngIf="loading">
-                    
-                            </div>
-                        </p-footer>
-
-                    </div>
+                    </div> -->
                     <p-footer>
                         <div class="row d-flex justify-content-center">
                             <div class="col-6">
@@ -164,181 +145,4 @@
             </div>
         </form>
     </div> 
-
-        <!-- <div class="modal-body panel-izq-container p-fluid">
-            <form [formGroup]="profileConfigForm">
-                <div class="row">
-                    <legend class="col-12">Contraseña</legend>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Contraseña actual:</span>
-                            <div class="col-8">
-                                <input
-                                <input
-                                id="actual_pass"
-                                [class.is-invalid]="profileConfigForm.get('actual_pass')?.touched && profileConfigForm.get('actual_pass')?.invalid"
-                                type="password"
-                                class="form-control"
-                                type="password"
-                                class="form-control"
-                                formControlName="actual_pass"
-                                maxlength="25">
-                                <div class="invalid-feedback">
-                                    Este campo no puede quedar vacío
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Nueva contraseña:</span>
-                            <div class="col-8">
-                                <input
-                                <input
-                                    id="new_pass_1"
-                                    [class.is-invalid]="profileConfigForm.get('new_pass_1')?.touched && profileConfigForm.get('new_pass_1')?.invalid"
-                                    type="password"
-                                    class="form-control"
-                                    type="password"
-                                    class="form-control"
-                                    formControlName="new_pass_1"
-                                    maxlength="25">
-                                <div class="invalid-feedback">
-                                    Este campo no puede quedar vacío
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Repetir nueva contraseña:</span>
-                            <div class="col-8">
-                                <input
-                                <input
-                                    id="new_pass_2"
-                                    [class.is-invalid]="profileConfigForm.get('new_pass_2')?.touched && (profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value)"
-                                    type="password"
-                                    class="form-control"
-                                    type="password"
-                                    class="form-control"
-                                    formControlName="new_pass_2"
-                                    maxlength="25">
-                                <div
-                                    *ngIf="!(profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value) &&profileConfigForm.get('new_pass_2')?.touched && profileConfigForm.get('new_pass_2')?.invalid"
-                                <div
-                                    *ngIf="!(profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value) &&profileConfigForm.get('new_pass_2')?.touched && profileConfigForm.get('new_pass_2')?.invalid"
-                                    class="invalid-feedback">
-                                    Este campo no puede quedar vacío
-                                </div>
-                                <div
-                                    *ngIf="profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value"
-                                <div
-                                    *ngIf="profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value"
-                                    class="invalid-feedback">
-                                    La nueva contraseña debe coincidir
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-
-                <div class="row"></div>
-
-
-                <div class="modal-footer">
-                    <div class="row w-100 justify-content-around">
-                        <div class="col-5">
-                          <button type="button" class="btn btn-success w-100 not-cancel" [disabled]="profileConfigForm.get('actual_pass')?.invalid || profileConfigForm.get('new_pass_1')?.invalid || profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value">Actualizar Contraseña</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <div class="panel-izq-form">
-
-                <div class="row">
-                    <legend class="col-12">Mapa</legend>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Mostrar dirección de vehículo</span>
-                            <div class="col-8">
-                                <p-dropdown
-                                    [options]="showVehicleDirOptions"
-                                    optionLabel="name"
-                                <p-dropdown
-                                    [options]="showVehicleDirOptions"
-                                    optionLabel="name"
-                                    optionValue="id"
-                                    [(ngModel)]="mostrarDirVehicle"
-                                    [showClear]="false"
-                                    [appendTo]="'body'"
-                                    [showClear]="false"
-                                    [appendTo]="'body'"
-                                    (onChange)="consoleMostrar()"
-                                    placeholder="Seleccione una opción..."></p-dropdown>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Mostrar ícono de vehículo</span>
-                            <div class="col-8">
-                                <p-dropdown
-                                    [options]="configIconOptions"
-                                    optionLabel="name"
-                                <p-dropdown
-                                    [options]="configIconOptions"
-                                    optionLabel="name"
-                                    optionValue="id"
-                                    [(ngModel)]="mostrarIcono"
-                                    [showClear]="false"
-                                    [appendTo]="'body'"
-                                    [showClear]="false"
-                                    [appendTo]="'body'"
-                                    (onChange)="consoleMostrar()"
-                                    placeholder="Seleccione una opción..."></p-dropdown>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Tamaño de ícono de vehículo</span>
-                            <div class="col-8">
-                                <p-dropdown
-                                    [options]="sizeIconOptions"
-                                    optionLabel="name"
-                                <p-dropdown
-                                    [options]="sizeIconOptions"
-                                    optionLabel="name"
-                                    optionValue="id"
-                                    [(ngModel)]="sizeIcono"
-                                    [showClear]="false"
-                                    [appendTo]="'body'"
-                                    [showClear]="false"
-                                    [appendTo]="'body'"
-                                    (onChange)="consoleMostrar()"
-                                    placeholder="Seleccione una opción..."></p-dropdown>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="modal-footer">
-                <div class="row w-100 justify-content-around">
-                  <div class="col-5 d-flex justify-content-center flex-column">
-                    <button type="button" class="btn btn-success w-100">Cancelar</button>
-                  </div>
-                  <div class="col-5">
-                    <button type="button" class="btn btn-success w-100">Guardar Cambios</button>
-                  </div>
-                </div>
-              </div>
-
-
-        </div> -->
-
 </div>

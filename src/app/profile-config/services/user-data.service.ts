@@ -3,8 +3,6 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { BehaviorSubject, Observable } from 'rxjs';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -22,8 +20,6 @@ export class UserDataService {
   @Output() geopointsPrivileges = new EventEmitter<any>();
 
   constructor(private http: HttpClient,) {}
-  private api_url = environment.apiUrl;
-
 
   getUserData(){
     console.log('Getting User Data');
@@ -47,10 +43,34 @@ export class UserDataService {
         console.log('No se pudo obtener datos del usuario', errorMsg);
       }});
   }
-  changeColor(color: string){
-    
+
+  getTypeVehicles(): void {
+    // console.log('Getting Type Vehicles');
+    this.http.get<any>(`${this.apiUrl}/api/typevehicleId`).subscribe({
+      next: data => {
+        this.typeVehicles = data.data;
+      },
+      error: (errorMsg) => {
+        console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
+      }
+    });
   }
-  putConfig(vehicle: any): Observable<any>{
-    return this.http.put(this.api_url+"/api/tracker/"+vehicle.IMEI,vehicle);
+
+  getUserConfigData(): void {
+    // return this.http.get<any>(`${this.apiUrl}/api/userdataconfig`);
+    this.http.get<any>(`${this.apiUrl}/api/userdataconfig`).subscribe({
+      next: data => {
+        this.typeVehiclesUserData = data.data;
+      },
+      error: (errorMsg) => {
+        console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
+      }
+    });
   }
+
+  updateUserConfig(updatedUserConfig: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/userconfig`, updatedUserConfig);
+  }
+
+
 }
