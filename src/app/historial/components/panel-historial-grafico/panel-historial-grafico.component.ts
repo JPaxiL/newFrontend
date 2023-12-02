@@ -28,6 +28,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
     HM:any;  // historial que aparecera en el modal
     urlGS = "https://www.google.com/";
 
+    width_modal = 500;
+    height_modal = 400;
+
   options_grafico = {
     xaxis: {
         mode: "time",
@@ -198,8 +201,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
     var encontrado = false;
 
     // $("#placeholder").width(790).height(160);
-    $("#placeholder").css("width", "790px");
-    $("#placeholder").css("height", "160px");
+    // $("#placeholder").css("width", "790px");
+    // $("#placeholder").css("height", "160px");
 
 
     for (let i = 0; i < this.historialService.arrayRecorridos.length; i++) {
@@ -293,12 +296,18 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
   clickbtnPlayConsola(): void {
     console.log(" click a clickbtnPlayConsola ");
-
     this.consolahistorialPlay();
+    $('#btnPlayConsola').css({"color":"#00f034"});
+    $('#btnPauseConsola').css({"color":"#495057"});
+    $('#btnStopConsola').css({"color":"#495057"});
+
   }
 
   clickbtnPauseConsola(): void {
     clearTimeout(this.cl.temporizadorConsola);
+    $('#btnPlayConsola').css({"color":"#495057"});
+    $('#btnPauseConsola').css({"color":"#00f034"});
+    $('#btnStopConsola').css({"color":"#495057"});
   }
 
   clickbtnStopConsola(): void {
@@ -306,6 +315,9 @@ export class PanelHistorialGraficoComponent implements OnInit {
     this.cl.position = 0;
     this.mapService.map.removeLayer(this.icoGplay);
     //this.mapService.map.removeLayer(this.icoGplay_popup);
+    $('#btnPlayConsola').css({"color":"#495057"});
+    $('#btnPauseConsola').css({"color":"#495057"});
+    $('#btnStopConsola').css({"color":"#00f034"});
   }
 
     // $("#btnIzqConsola").click(() => {
@@ -474,13 +486,10 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
 
 
-    $("#placeholder").width(790).height(160);
-    $("#placeholder").css("width", "790px");
-    $("#placeholder").css("height", "160px");
+    // $("#placeholder").width(790).height(160);
+    // $("#placeholder").css("width", "790px");
+    // $("#placeholder").css("height", "160px");
 
-    this.plot_historial = $j.plot($("#placeholder"), [{
-        data: this.cl.sin
-    }], this.options_grafico);
 
 
     // $("#btnIzqConsola").click(() => {
@@ -519,9 +528,31 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
     
 
+    this.icoGclick.on('popupclose', (e) => {
+        setTimeout(() => {
+                this.mapService.map.removeLayer(this.icoGclick);
+        },300);
+    });
+
+    this.icoGplay.on('popupclose', () => {
+      setTimeout(() => {
+        this.mapService.map.removeLayer(this.icoGplay);
+      },300);
+    });
 
 
-      this.functionMapa();
+
+    // if (this.verTabla) {
+
+    //     this.plot_historial = $j.plot($("#placeholder"), [{
+    //         data: this.cl.sin
+    //     }], this.options_grafico);
+
+    //     this.functionMapa();
+        
+    // }
+
+
   }
 
   //
@@ -790,17 +821,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     });
     //================== FIN ZOOM A LA PARTE DELECCIONADA ==================
 
-    this.icoGclick.on('popupclose', (e) => {
-        setTimeout(() => {
-                this.mapService.map.removeLayer(this.icoGclick);
-        },300);
-    });
 
-    this.icoGplay.on('popupclose', () => {
-      setTimeout(() => {
-        this.mapService.map.removeLayer(this.icoGplay);
-      },300);
-    });
 
     
   }
@@ -1389,7 +1410,11 @@ export class PanelHistorialGraficoComponent implements OnInit {
         var c = dH[this.cl.position].dt_js.getTime();
         var pos = this.cl.position;
 
-        this.consolaSetCrosshair(c);
+        // Existe la tabla
+        if (this.verTabla) {
+            this.consolaSetCrosshair(c);
+        }
+        
         //console.log("position : "+this.cl.position);
         ////console.log("--1");
 
@@ -1586,14 +1611,31 @@ getContentHis(item:any, nombre:any) {
 // }
 
 clickVerTablaRecorrido() {
-  this.verTabla = true;
+    this.verTabla = true;
 
-  this.tConsola =  this.historialService.tramasHistorial; // Data Historial
+    this.tConsola =  this.historialService.tramasHistorial; // Data Historial
 
-  $("#botonverconsola").css( "display", "none" );
-  $("#botonocultarconsola").css( "display", "block" );
+    $("#botonverconsola").css( "display", "none" );
+    $("#botonocultarconsola").css( "display", "block" );
 
-  // tConsola = new Array();
+    setTimeout(() => {
+        if (this.verTabla) {
+            this.plot_historial = $j.plot($("#placeholder"), [{
+                data: this.cl.sin
+            }], this.options_grafico);
+            this.functionMapa();
+        }
+    }, 500);
+
+    
+    // $("#modal-grafico").css('height', '700px');
+
+    // this.width_modal = 600;
+    this.height_modal = 700;
+
+    
+
+    
 }
 
 clickOcultarTablaRecorrido() {
@@ -1601,6 +1643,11 @@ clickOcultarTablaRecorrido() {
 
   $("#botonverconsola").css( "display", "block" );
   $("#botonocultarconsola").css( "display", "none" );
+
+  //$("#modal-grafico").css('height', '500px');
+  this.width_modal = 500;
+  this.height_modal = 500;
+
 
 }
 

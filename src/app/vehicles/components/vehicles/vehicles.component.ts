@@ -155,6 +155,10 @@ export class VehiclesComponent implements OnInit {
     var config = { attributes: true };
     this.mutationObserver.observe(observerTarget, config);
   }
+  verifyVehicles(){
+    console.log('MOSTRAR ICONOS...');
+    console.log(this.rowData);
+  }
 
   ngOnDestroy(): void {
     //console.log("destroy component table...");

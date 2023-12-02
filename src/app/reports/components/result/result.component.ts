@@ -414,6 +414,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   dataTableStartingIndex: number = -1;
   dataTableEndingIndex: number = -1;
+  user_id: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -428,6 +429,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.tabService.setCurrentTab('result-tab');
     }
   }
+
 
   ngOnInit(){
     // console.log("=======================================");
@@ -684,6 +686,12 @@ export class ResultComponent implements OnDestroy, OnInit {
         this.isChrome = false;
     }
 
+    // console.log("========");
+    // console.log(localStorage);
+    this.user_id = Number(localStorage.getItem('user_id'));
+    // console.log(this.user_id);
+
+    
   }
 
   setDataTablesConfig(isIndependentWindow: boolean, numberOfTables: number){
@@ -3453,12 +3461,15 @@ export class ResultComponent implements OnDestroy, OnInit {
         // console.log(this.selectedVehicles.length);
         console.log(typeof data);
         console.log(data);
+        // console.log("---> "+this.report_data.num_rep);
+        
         this.reportService.modalActive = true;
 
         this.reportService.objGeneral.data = data;
         this.reportService.objGeneral.periodo = periodo;//this.period;
         this.reportService.objGeneral.vehiculo = vehiculo;//this.period;
         this.reportService.objGeneral.dateHour = dateHour;//this.period;
+        this.reportService.objGeneral.numRep = this.report_data.num_rep;
 
 
         console.log(this.reportService.objGeneral);
@@ -12313,6 +12324,784 @@ export class ResultComponent implements OnDestroy, OnInit {
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
         fileName: nom_excel
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+
+  exportExcelEventosCIPIA(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+    var column_config:Columns[];
+    var table_width = 12 + (this.chkDateHour? 2: 1) +1 + (this.user_id == 923? -2: 0);
+    var vehiculo_width = (this.chkDateHour? 5: 4) +1 + (this.user_id == 923? -2: 0);
+
+    var evento_cell_ch_width = "Evento".length;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+    var vel_360_cell_ch_width = "Vel. 360".length;
+
+    var tramo_cell_ch_width = "Tramo o Geocerca".length;
+    // var pc_cell_ch_width = "Punto Cercano".length;
+    var referencia_cell_ch_width = "Referencia".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+    var enlace_cell_ch_width = "Archivo".length; //Enlace a Archivo
+    // var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+        {
+          cells: [
+            { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+    ];
+
+    this.sortedData.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {
+            cells: [
+              { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+          {
+            cells: [
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
+          },
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
+        ];
+
+        if(this.chkDateHour) {
+
+          var array_campos_cabecera = [];
+
+          array_campos_cabecera.push({ value: "Item", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Fecha Evento", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Hora Evento", ...this.colHeaderConfig });
+  
+          if (this.user_id != 923) {
+            array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig });
+            array_campos_cabecera.push({ value: "Hora Servidor", ...this.colHeaderConfig });
+          }
+
+          array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Vel.360", ...this.colHeaderConfig });
+  
+          array_campos_cabecera.push({ value: "Tramo o Geocerca", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Referencia", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Ubicación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Enlace a Archivo",colSpan: 2, ...this.colHeaderConfig });
+
+
+          rows.push({
+            cells: array_campos_cabecera ,height: this.colsHeaderHeight
+          });
+
+          data[1].forEach((item: {referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud + "," + item.longitud;
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            vel_360_cell_ch_width = Math.max(vel_360_cell_ch_width, (item.vel_gps??'').toString().length);
+
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+
+
+            var array_campos_cuerpo= [];
+
+
+            array_campos_cuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.descripcion_evento, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: this.isChs(item.fecha_tracker), format: "hh:mm:ss", ...this.bodyRowsConfig });
+
+            if (this.user_id != 923) {
+              array_campos_cuerpo.push({ value: this.isChe(item.fecha_servidor), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+              array_campos_cuerpo.push({ value: this.isChs(item.fecha_servidor), format: "hh:mm:ss", ...this.bodyRowsConfig });
+            }
+
+            array_campos_cuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.vel_gps +" Km/h", ...this.bodyRowsConfig });
+
+            array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });
+
+            rows.push({
+              cells: array_campos_cuerpo, height: this.bodyRowsHeight
+            });
+
+          });
+
+        } else {
+
+          var array_campos_cabecera = [];
+
+          array_campos_cabecera.push({ value: "Item", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Fecha Evento", ...this.colHeaderConfig });
+  
+          if (this.user_id != 923) {
+            array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig });
+          }
+
+          array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Vel.360", ...this.colHeaderConfig });
+  
+          array_campos_cabecera.push({ value: "Tramo o Geocerca", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Referencia", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Ubicación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Enlace a Archivo",colSpan: 2, ...this.colHeaderConfig });
+
+          rows.push({
+            cells: array_campos_cabecera ,height: this.colsHeaderHeight
+          });
+
+
+          data[1].forEach((item: {referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+
+            var ubicacion = item.latitud + "," + item.longitud;
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+            vel_360_cell_ch_width = Math.max(vel_360_cell_ch_width, (item.vel_gps??'').toString().length);
+
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+
+            var array_campos_cuerpo= [];
+
+            array_campos_cuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.descripcion_evento, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+
+            if (this.user_id != 923) {
+              array_campos_cuerpo.push({ value: this.isChe(item.fecha_servidor), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+            }
+
+            array_campos_cuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.vel_gps +" Km/h", ...this.bodyRowsConfig });
+
+            array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });
+
+            rows.push({
+              cells: array_campos_cuerpo, height: this.bodyRowsHeight
+            });
+
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(evento_cell_ch_width) },
+      ];
+      if (this.user_id != 923) {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+              { width: this.w_date_and_hour },
+
+            );
+          }
+      } else {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+            );
+          }
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(vel_360_cell_ch_width) },
+
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(referencia_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(enlace_cell_ch_width) },
+
+      );
+
+
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+        },
+      columns: column_config,
+      title: data[0][1],
+      rows: rows
+      });
+
+      evento_cell_ch_width = "Evento".length;
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      tipo_unidad_cell_ch_width = "Tipo unidad".length;
+      vel_360_cell_ch_width = "Vel. 360".length;
+  
+      tramo_cell_ch_width = "Tramo o Geocerca".length;
+      referencia_cell_ch_width = "Referencia".length;
+      ubicacion_cell_ch_width = "Ubicacion".length;
+      enlace_cell_ch_width = "Enlace a Archivo".length;
+
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+        allRows[0].cells![0].colSpan = table_width;
+
+        column_config = [
+          { width: this.w_item },
+          { width: this.calculateColWidth(evento_cell_ch_width) },
+        ];
+        if (this.user_id != 923) {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+              { width: this.w_date_and_hour },
+
+            );
+          }
+      } else {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+            );
+          }
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+        { width: this.calculateColWidth(vel_360_cell_ch_width) },
+
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(referencia_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(enlace_cell_ch_width) },
+
+      );
+
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: this.headerRowSpan
+        },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteEventos_.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+
+  exportExcelEventosEvaluacionCIPIA(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+    var column_config:Columns[];
+    var table_width = 12 + (this.chkDateHour? 2: 1) +3 + (this.user_id == 923? -2: 0);
+    var vehiculo_width = (this.chkDateHour? 5: 4) +3 + (this.user_id == 923? -2: 0);
+
+    var evento_cell_ch_width = "Evento".length;
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var tipo_unidad_cell_ch_width = "Tipo unidad".length;
+
+    var criterio_evaluacion_cell_ch_width = "Criterio de Evaluacion".length;
+    var observacion_evaluacion_cell_ch_width = "Observacion".length;
+    var vel_360_cell_ch_width = "Vel. 360".length;
+
+    var tramo_cell_ch_width = "Tramo o Geocerca".length;
+    var referencia_cell_ch_width = "Referencia".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
+    var enlace_cell_ch_width = "Archivo".length; //Enlace a Archivo
+
+    // var sonido_en_cabina_cell_ch_width = "Sonido en Cabina".length;
+
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+        {
+          cells: [
+            { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+    ];
+
+    this.sortedData.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {
+            cells: [
+              { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+          {
+            cells: [
+              { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
+          },
+          {
+            cells: [
+              { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
+        ];
+
+        if(this.chkDateHour) {
+
+          var array_campos_cabecera = [];
+
+          array_campos_cabecera.push({ value: "Item", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Fecha Evento", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Hora Evento", ...this.colHeaderConfig });
+  
+          if (this.user_id != 923) {
+            array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig });
+            array_campos_cabecera.push({ value: "Hora Servidor", ...this.colHeaderConfig });
+          }
+
+          array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
+
+          array_campos_cabecera.push({ value: "Criterio de Evaluación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Observación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Vel.360", ...this.colHeaderConfig });
+  
+          array_campos_cabecera.push({ value: "Tramo o Geocerca", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Referencia", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Ubicación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Enlace a Archivo",colSpan: 2, ...this.colHeaderConfig });
+
+          rows.push({
+            cells: array_campos_cabecera ,height: this.colsHeaderHeight
+          });
+
+
+          data[1].forEach((item: {referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, observacion_evaluacion:any, criterio_evaluacion:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud + "," + item.longitud;
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+
+            criterio_evaluacion_cell_ch_width = Math.max(criterio_evaluacion_cell_ch_width, (item.criterio_evaluacion??'').toString().length);
+            observacion_evaluacion_cell_ch_width = Math.max(observacion_evaluacion_cell_ch_width, (item.observacion_evaluacion??'').toString().length);
+            vel_360_cell_ch_width = Math.max(vel_360_cell_ch_width, (item.vel_gps??'').toString().length);
+
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+
+            var array_campos_cuerpo= [];
+
+            array_campos_cuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.descripcion_evento, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: this.isChs(item.fecha_tracker), format: "hh:mm:ss", ...this.bodyRowsConfig });
+
+            if (this.user_id != 923) {
+              array_campos_cuerpo.push({ value: this.isChe(item.fecha_servidor), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+              array_campos_cuerpo.push({ value: this.isChs(item.fecha_servidor), format: "hh:mm:ss", ...this.bodyRowsConfig });
+            }
+
+            array_campos_cuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
+
+            array_campos_cuerpo.push({ value: item.criterio_evaluacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.observacion_evaluacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.vel_gps +" Km/h", ...this.bodyRowsConfig });
+
+            array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });
+
+            rows.push({
+              cells: array_campos_cuerpo, height: this.bodyRowsHeight
+            });
+
+
+          });
+
+        } else {
+
+          var array_campos_cabecera = [];
+
+          array_campos_cabecera.push({ value: "Item", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Fecha Evento", ...this.colHeaderConfig });
+  
+          if (this.user_id != 923) {
+            array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig });
+          }
+
+          array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
+
+          array_campos_cabecera.push({ value: "Criterio de Evaluación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Observación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Vel.360", ...this.colHeaderConfig });
+  
+          array_campos_cabecera.push({ value: "Tramo o Geocerca", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Referencia", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Ubicación", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Enlace a Archivo", colSpan: 2, ...this.colHeaderConfig });
+
+          rows.push({
+            cells: array_campos_cabecera ,height: this.colsHeaderHeight
+          });
+
+
+          data[1].forEach((item: {referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, observacion_evaluacion:any, criterio_evaluacion:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+  
+            var ubicacion = item.latitud + "," + item.longitud;
+            evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
+            
+            codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+            tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
+
+            criterio_evaluacion_cell_ch_width = Math.max(criterio_evaluacion_cell_ch_width, (item.criterio_evaluacion??'').toString().length);
+            observacion_evaluacion_cell_ch_width = Math.max(observacion_evaluacion_cell_ch_width, (item.observacion_evaluacion??'').toString().length);
+            vel_360_cell_ch_width = Math.max(vel_360_cell_ch_width, (item.vel_gps??'').toString().length);
+
+            tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
+            referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+            //<a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+
+            var array_campos_cuerpo= [];
+
+            array_campos_cuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.descripcion_evento, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: this.isChe(item.fecha_tracker), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+
+            if (this.user_id != 923) {
+              array_campos_cuerpo.push({ value: this.isChe(item.fecha_servidor), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
+            }
+
+            array_campos_cuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
+
+            array_campos_cuerpo.push({ value: item.criterio_evaluacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.observacion_evaluacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.vel_gps +" Km/h", ...this.bodyRowsConfig });
+
+            array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
+            array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });
+
+            rows.push({
+              cells: array_campos_cuerpo, height: this.bodyRowsHeight
+            });
+
+
+            
+          });
+
+        }
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+
+        column_config = [
+          { width: this.w_item },
+          { width: this.calculateColWidth(evento_cell_ch_width) },
+        ];
+        if (this.user_id != 923) {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+              { width: this.w_date_and_hour },
+
+            );
+          }
+      } else {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+            );
+          }
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+
+        { width: this.calculateColWidth(criterio_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(observacion_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(vel_360_cell_ch_width) },
+
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(referencia_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(enlace_cell_ch_width) },
+
+      );
+
+
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+        },
+      columns: column_config,
+      title: data[0][1],
+      rows: rows
+      });
+
+      evento_cell_ch_width = "Evento".length;
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      tipo_unidad_cell_ch_width = "Tipo unidad".length;
+
+      criterio_evaluacion_cell_ch_width = "Criterio de Evaluacion".length;
+      observacion_evaluacion_cell_ch_width = "Observacion".length;
+      vel_360_cell_ch_width = "Vel. 360".length;
+
+      tramo_cell_ch_width = "Tramo o Geocerca".length;
+      referencia_cell_ch_width = "Referencia".length;
+      ubicacion_cell_ch_width = "Ubicacion".length;
+      enlace_cell_ch_width = "Enlace a Archivo".length;
+
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+        allRows[0].cells![0].colSpan = table_width;
+
+        column_config = [
+          { width: this.w_item },
+          { width: this.calculateColWidth(evento_cell_ch_width) },
+        ];
+        if (this.user_id != 923) {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+              { width: this.w_date_and_hour },
+
+            );
+          }
+      } else {
+          if(this.chkDateHour){
+            column_config.push(
+              { width: this.w_date },
+              { width: this.w_hour },
+            );
+          } else {
+            column_config.push(
+              { width: this.w_date_and_hour },
+            );
+          }
+      }
+      column_config.push(
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.calculateColWidth(tipo_unidad_cell_ch_width) },
+
+        { width: this.calculateColWidth(criterio_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(observacion_evaluacion_cell_ch_width) },
+        { width: this.calculateColWidth(vel_360_cell_ch_width) },
+
+        { width: this.calculateColWidth(tramo_cell_ch_width) },
+        { width: this.calculateColWidth(referencia_cell_ch_width) },
+        { width: this.calculateColWidth(ubicacion_cell_ch_width) },
+        { width: this.calculateColWidth(enlace_cell_ch_width) },
+
+      );
+
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: this.headerRowSpan
+        },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteEventos_.xlsx"
       });
 
     } else {

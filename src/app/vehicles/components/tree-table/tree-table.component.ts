@@ -8,6 +8,7 @@ import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FollowService } from '../../services/follow.service';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -80,13 +81,16 @@ export class TreeTableComponent implements OnInit {
     sort: 'asc'
   }
 
+
   @ViewChild('tt') tt!:any;
+
 
   constructor(
     private vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private spinner: NgxSpinnerService,
+    private userDataService: UserDataService,
     private followService:FollowService,
   ) {
     // this.vehicleService.listTable=1;
@@ -116,7 +120,6 @@ export class TreeTableComponent implements OnInit {
 
     });
 
-
   }
 
   ngOnInit(): void {
@@ -142,7 +145,58 @@ export class TreeTableComponent implements OnInit {
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
     // console.log(this.vehicleService.vehicles);
+    
+
+    // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
+
   }
+
+  changeColor(name:string) {
+    let var_color:string;
+    if (name=='excesoVelocidad'){
+      var_color = "#FF0000"; // ROJO EXCESO DE VELOCIDAD
+    }else if(name=='relenti'){
+      var_color = "#0000FF"; // AZUL RELENTI 
+    }else if(name=='movimiento'){
+      var_color = "#008000"; // VERDE MOVIEMIENTO
+    }else{
+      var_color = "#c4c2c1"; // GRIS DEFAULT
+    }
+    // console.log('loading SVGS -->',this.userDataService.svgContents);
+    for (const vehicle of this.vehicleService.vehicles) {
+      const idElement = 'div_svg_'+vehicle.id;
+      console.log(idElement);
+      const svgElement = document.getElementById(idElement);
+      if (svgElement) {
+        console.log('ECNONTRO ELEMENTOS? ...');
+        const bodyElements = svgElement.querySelectorAll('.body') as NodeListOf<HTMLElement>;
+        // Verificar el data-type y cambiar el color si hay coincidencia
+        if (bodyElements) {
+          const dataType = svgElement.getAttribute('data-type');
+          const vehicleFound = this.userDataService.typeVehiclesUserData.find((vehicle: any) => {
+            return vehicle.var_icono == dataType;
+          });
+          bodyElements.forEach((bodyElement: HTMLElement) => {
+            // solo para cuando manda default se debe buscar su var_color definido
+            if(var_color == "#c4c2c1"){
+              console.log('entro a buscar color');
+              if (vehicleFound) {
+                bodyElement.style.fill = vehicleFound.var_color;
+                // Haces lo que necesites con el vehículo encontrado
+              } else {
+                bodyElement.style.fill = var_color;
+              }
+            }else{
+              bodyElement.style.fill = var_color;
+            }
+            
+          });
+        }
+      }
+    }
+    
+  }
+  
 
   headerScrollHandler(){
     setTimeout(()=> {
@@ -595,6 +649,9 @@ export class TreeTableComponent implements OnInit {
     }
     // //console.log("colmun = ",this.column);
   }
+
+  
+  
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
   }

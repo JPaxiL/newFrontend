@@ -156,27 +156,11 @@
                   <label for="state">Icono:</label>
                 </div>
                 <div class="col-7">
-                  <img [src]="iconUrl"  class="vehicle-icon flag flag-vehicle-edit" />
-                  <!-- <img src="assets/images/objects/nuevo/{{config.icon}}"  class="vehicle-icon flag flag-vehicle-edit" /> -->
-                  <!-- <p-dropdown inputId="state" [options]="dropdownIcons" [(ngModel)]="selectedIcon" placeholder="Select" [appendTo]="'body'" optionLabel="name" filterBy="name" placeholder="Selecciona un ícono">
-                    <ng-template pTemplate="selectedItem">
-                      <div class="icon-item icon-item-value"  *ngIf="selectedIcon">
-                        <label for="">
-                          {{selectedIcon.code}} .-
-                        </label>
-                        <img src="assets/images/objects/nuevo/{{selectedIcon.name}}" [class]="'vehicle-icon flag flag-' + selectedIcon.code.toLowerCase()" />
-                      </div>
-                    </ng-template>
-                    <ng-template let-icon pTemplate="item">
-                      <div class="icon-item">
-                        <label for="">
-                          {{icon.code}}
-                        </label> .-
-                        <img src="assets/images/objects/nuevo/{{icon.name}}"  [class]="'vehicle-icon flag flag-' + icon.code.toLowerCase()" />
-                      </div>
-                    </ng-template>
-                  </p-dropdown> -->
+                  <div  id="svgContainer" style="width: 40px; height: 40px;" #svgContainer>
+                    <!-- <img [src]="iconUrl"  class="vehicle-icon flag flag-vehicle-edit" /> -->
+                  </div>
                 </div>
+                
               </div>
             </div>
             

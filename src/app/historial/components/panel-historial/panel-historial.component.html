@@ -616,10 +616,6 @@
           <div class="col-6">
               <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnMostrarHistorial" ui-sref="alertas-accesorios" (click)="clickCargarHistorial()" [disabled]="form.selectedCar == null">Mostrar</button>
           </div>
-          <div class="col-6">
-            <button type="button" class="btn-gl-save btn-dark-hover w-100" id="btnTest" ui-sref="alertas-accesorios" (click)="clickTest()">TESTING</button>
-        </div>
-        </div>
 
       </div>
 
@@ -823,7 +819,6 @@
                               </ng-template>
                               <ng-template pTemplate="body" let-trama let-rowIndex="rowIndex">
                                   <tr (click)="clickLocate(trama,recorrido.key)">
-
                                       <!-- <td class="text-center">
                                         <div [title]="trama.tooltip" data-bs-toggle="tooltip" data-bs-placement="top" >
                                           <img class="icon-car" [src]="trama.icono" [style.height]="trama.icono_height" [style.width]="trama.icono_width"  />

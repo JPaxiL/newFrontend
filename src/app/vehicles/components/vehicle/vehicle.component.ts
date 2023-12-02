@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 import { VehicleService } from '../../services/vehicle.service';
 
@@ -12,8 +14,11 @@ export class VehicleComponent implements OnInit {
   params: any;
   public nameColor: string="red";
   public tooltipText: string="Sin señal";
+  svgContentsSafe: { [key: string]: SafeHtml } = {}; // Almacena los contenidos seguros de los SVG
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService,private userDataService : UserDataService) {
+    this.svgContentsSafe =this.userDataService.svgContentsSafe;
+   }
 
   ngOnInit(): void {
   }

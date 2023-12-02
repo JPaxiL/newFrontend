@@ -594,7 +594,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.velGPS" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Velocidad GPS</label>
+                  Velocidad 360°</label>
               </div>
             </div>
             <div class="col-6">
@@ -613,7 +613,7 @@
       </div>
 
 
-      <div class="row two-column-checkbox-container" *ngIf="showEvents">
+      <div class="row two-column-checkbox-container" *ngIf="showEvents || showEventsCipia">
         <div class="col-12">
           <label class="bg-subtitle">Seleccione los eventos a incluir en el reporte:</label>
         </div>
@@ -926,46 +926,6 @@
           </div> 
 
         
-
-        </div>
-
-      </div>
-
-      
-      <div class="row two-column-checkbox-container" *ngIf="showEventsCipia">
-        <div class="col-12">
-          <label class="bg-subtitle">Seleccione los eventos a incluir en el reporte:</label>
-        </div>
-
-        <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
-
-  
-          <div class="row">
-            <div class="col-12">
-              <label class="bg-subtitle bg-subtitle-light mt-2">Otros</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary" (onChange)="onChkAllEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Todos</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-              </div>
-            </div>
-            <!-- <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eV.OtroExVelocidad" [binary]="true" inputId="binary"></p-checkbox>
-                  Exceso de Velocidad</label>
-              </div>
-            </div> -->
-          </div>
 
         </div>
 

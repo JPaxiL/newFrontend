@@ -84,20 +84,20 @@ export class SliderMultimediaComponent implements OnInit {
     
     if(params["gps"] && params["gps"]=="cipia" && (params["has_video"]=="1" || params["has_image"] == "1")){
       this.hasMultimedia = true
-      if(params["has_video"]=="1"){
-        if(params["cabin_video"] == "1"){
-          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"CABIN"}, url:""})
-        }
-        if(params["road_video"] == "1"){
-          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"ROAD"}, url:""})
-        }
-      }
       if(params["has_image"]=="1"){
         if(params["cabin_image"] == "1"){
           this.multimedias.push({type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"CABIN"}, url:""})
         }
         if(params["road_image"] == "1"){
           this.multimedias.push({type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"ROAD"}, url:""})
+        }
+      }
+      if(params["has_video"]=="1"){
+        if(params["cabin_video"] == "1"){
+          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"CABIN"}, url:""})
+        }
+        if(params["road_video"] == "1"){
+          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"ROAD"}, url:""})
         }
       }
     }

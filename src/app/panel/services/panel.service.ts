@@ -47,8 +47,8 @@ export class PanelService {
 
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
 
-      console.log(nomComponent);
-      console.log(this.nombreComponente );
+      //console.log(nomComponent);
+      //console.log(this.nombreComponente );
 
       $("#panelMonitoreo").hide( "slow" );
       this.nombreComponente = '';
@@ -56,7 +56,7 @@ export class PanelService {
       $("#panelMonitoreo").show( "slow" );
       this.nombreComponente = nomComponent;
       this.clasePanelActivo = this.activePanelClass();
-      console.log(this.nombreComponente);
+      //console.log(this.nombreComponente);
 
       const item = this.options.filter((item)=> item.id == nomComponent);
       this.nombreCabecera = item[0].name;
@@ -106,6 +106,42 @@ export class PanelService {
         return '';
     }
   }
+
+  getComponentNameFromPanelName(panelActive:string){
+    switch(panelActive){
+      case "vehiculos":
+        return 'VEHICLES';
+      case "alertas":
+        return 'ALERTS';
+      case "geocercas":
+        return 'GEOFENCES';
+      case "circular-geofences":
+        return 'CIRCULAR-GEOFENCE';
+      case "polyline-geofences":
+        return 'POLYLINE-GEOFENCE';
+      case "geopuntos":
+        return 'GEOPOINTS';
+      case "historial":
+        return 'HISTORIAL';
+      case "notificaciones":
+        return 'EVENT-USER';
+      case "configuracion":
+        return 'USER-CONFIG';
+      case "dashboard":
+        return 'DASHBOARD';
+      case "auditoria":
+        return 'AUDITORIA';
+      case "subcuentas":
+        return 'SUBCUENTAS';
+      case "drivers":
+        return 'DRIVERS';
+      case "multiview":
+        return 'MULTIVIEW';
+      default:
+        return '';
+    }
+  }
+
   public async activity_logout(user: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/logout`,user).toPromise();
     return response.data;
