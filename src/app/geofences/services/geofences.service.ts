@@ -51,7 +51,7 @@ export class GeofencesService {
   showBtnAdd = true;
   showBtnEdit = true;
   showBtnImportExport = true;
-
+  listTag: any = [];
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -65,6 +65,7 @@ export class GeofencesService {
   public async initialize() {
     this.getUserPrivileges();
     await this.getAll();
+    await this.getTags();
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){
@@ -84,6 +85,24 @@ export class GeofencesService {
       console.log(this.geofences);
       this.dataCompleted.emit(this.geofences);
     });
+  }
+
+  public async getTags(){
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
+    .then(response => {
+      console.log("ress", response);
+      this.listTag = response.data;
+      console.log("lisstagg", this.listTag);
+    });
+
+  }
+  public async storeTag(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTag`,zone).toPromise();
+    return response.data;
+  }
+  public async deleteTag(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
+    return response.data;
   }
 
   public clearDrawingsOfGeofence(geofence: any){

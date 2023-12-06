@@ -64,7 +64,7 @@ export class GeofenceTableComponent implements OnInit {
 
   ngOnInit(): void {    
     if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges || !this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
-      this.geofencesService.spinner.show('loadingGeofencesSpinner');
+      //this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
     // if(!this.polylineGeofenceService.initializingPolylineGeofences || !this.polylineGeofenceService.initializingUserPrivleges){
     //   this.geofencesService.spinner.show('loadingGeofencesSpinner');

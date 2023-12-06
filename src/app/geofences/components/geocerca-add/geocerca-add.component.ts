@@ -14,6 +14,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { CircularGeofencesService } from '../../services/circular-geofences.service';
 import { PolylineGeogencesService } from '../../services/polyline-geogences.service';
 import { id } from '@swimlane/ngx-charts';
+import { Geofences } from '../../models/geofences';
+
 declare var $: any;
 @Component({
   selector: 'app-geocerca-add',
@@ -28,8 +30,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   nameComponentCir= "ADD GEOCIR";
   operations : any = [];
   groups : any = [];
+  tags : any = [];
   selectedGroup: any={};
   selectedOperation: any={};
+  selectedTag: any={};
   disabledOperation = false;
 	disabledGroup = true;
   geoOptions = 'poligon';
@@ -47,6 +51,12 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     { label: 'Sí', value: true },
     { label: 'No', value: false },
   ];
+
+  tempTag = [
+    { var_name: 'prueba', id: '1'},
+    { var_name: 'prueba2', id: '2'},
+    { var_name: 'prueba3', id: '3'},
+  ]
 
   fontSizeOptions = [
     { label: '8px', value: 8 },
@@ -164,6 +174,17 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   }
       this.operations.sort((a: { idoperation: number; }, b: { idoperation: number; }) => a.idoperation - b.idoperation);
           console.log('Operations: ',this.operations);
+  }
+  optionsTags(){
+    let aux:  any [] = [];
+    //aux = this.g;
+  }
+  onSelecTags(){
+    console.log('etiwuetasSell',this.selectedTag);
+
+  }
+  deleteTag(){
+    
   }
 
   selectBtn(btn: number): void {

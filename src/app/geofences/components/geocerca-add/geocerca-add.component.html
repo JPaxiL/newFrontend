@@ -176,12 +176,12 @@
       </div> -->
       <div class="gl-middleline gl-permanent-middleline gl-row-underline">
         <div class="row">
-          <div class="col-6">
+          <!-- <div class="col-6">
             <div class="p-field">
               <label class="" id="filtrado_label">SELECCIONE:</label>
               <p-dropdown [options]="listOptions" [(ngModel)]="listOptionCheckbox" [showClear]="false" optionLabel="idOption" optionValue="valueOption" (onChange)="onOptionSelected();"></p-dropdown>
             </div>
-          </div>
+          </div> -->
           <div class="col-6" *ngIf="listOptionCheckbox=='operacion'">
             <div class="p-field">
               <label class="" id="operation_label">OPERACIONES:</label>
@@ -190,7 +190,30 @@
           </div>
         </div>
       </div>
-      <div *ngIf="listOptionCheckbox=='grupo'" class="gl-middleline gl-permanent-middleline gl-row-underline">
+      <div>
+        <div>
+          <div class="card flex justify-content-center">
+            <label class="" id="operation_label">Etiquetas:</label>
+            <p-multiSelect
+              class="mb-4"
+              [options]="tempTag" 
+              [(ngModel)]="selectedTag"
+              filterBy="nameTags"
+              placeholder="Seleccionar o añadir" 
+              (onChange)="onSelecTags()"
+              optionLabel="var_name"
+              optionValue="id">
+              <ng-template let-country pTemplate="item">
+                <div>
+                  <div></div>
+                  <p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger p-button-text" (click)="deleteTag(country.name);"></p-button>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+        </div>
+        </div>
+      </div>
+      <!-- <div *ngIf="listOptionCheckbox=='grupo'" class="gl-middleline gl-permanent-middleline gl-row-underline">
         <div class="row">
           <div class="col-6" >
             <div class="p-field">
@@ -205,7 +228,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="">
         <div *ngIf="geoOptions=='poligon' || geoOptions=='line'" class="row justify-content-center mt-4 panel-izq-container-footer">
           <div class="col-6" >
