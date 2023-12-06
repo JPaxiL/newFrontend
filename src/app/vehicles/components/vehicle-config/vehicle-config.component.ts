@@ -43,15 +43,20 @@ export class VehicleConfigComponent implements OnInit {
     {id: '4', name: 'CONCENTRADO'},
     {id: '5', name: 'OTROS'},
   ];
-  /*
 
-  campos bloqueadoes
-  imei
-  Conductor
-  GRUPO
-  tamque
+  selectedColor: any; // Variable para almacenar el color seleccionado
 
-  */
+  colorsVehicles: any[] = [
+    { name: 'Celeste', code: '#add8e6' }, // Celeste
+    { name: 'Morado', code: '#9370db' }, // Morado
+    { name: 'Naranja', code: '#ffa500' }, // Naranja
+    { name: 'Amarillo', code: '#ffff00' }, // Amarillo
+    { name: 'Verde Claro', code: '#90ee90' }, // Verde Claro
+    { name: 'Guinda', code: '#800000' }, // Guinda
+    { name: 'Dorado', code: '#ffd700' }, // Dorado
+    { name: 'Plateado', code: '#c0c0c0' }, // Plateado
+  ];
+
   groups: any = [
     { name: "CLIENTES TACNA", id:'0'},
     { name: "GPSTEL", id:'1'},
@@ -112,34 +117,12 @@ export class VehicleConfigComponent implements OnInit {
   }
   async onShow(){
 
-    this.clearSVGContainer(); // Limpiar contenedor antes de cargar el SVG
-    try {
-      // this.svgContent = await this.userDataService.getSVGContentSafe(this.config.tipo);
-      this.svgContent = await this.userDataService.colorTypeVehicleDefault(this.config.tipo);
-      this.injectSVG(this.svgContent);
-    } catch (error) {
-      console.error('Error al cargar el SVG:', error);
-      // Manejar el error según tus necesidades
-    }
-    
     console.log(this.config);
     // console.log("vehicle config = ",this.config);
     this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
     
   }
-  clearSVGContainer(): void {
-    const svgContainer = this.svgContainer!.nativeElement;
-    while (svgContainer.firstChild) {
-      svgContainer.removeChild(svgContainer.lastChild);
-    }
-  }
-
-  injectSVG(svgContent: string): void {
-    const svgContainer = this.svgContainer!.nativeElement;
-    const div = document.createElement('div');
-    div.innerHTML = svgContent;
-    svgContainer.appendChild(div.firstChild);
-  }
+  
 
   onClickCancel(){
     this.eventDisplay.emit(false);
