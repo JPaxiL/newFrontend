@@ -193,22 +193,25 @@
       <div>
         <div>
           <div class="card flex justify-content-center">
-            <label class="" id="operation_label">Etiquetas:</label>
+            <label for="" id="operation_label">Etiquetas:</label>
             <p-multiSelect
               class="mb-4"
-              [options]="tempTag" 
+              [filter]="true"
+              [options]="geofencesService.getTagss()" 
               [(ngModel)]="selectedTag"
               filterBy="nameTags"
+              [filterValue]="filterTag"
               placeholder="Seleccionar o añadir" 
               (onChange)="onSelecTags()"
               optionLabel="var_name"
-              optionValue="id">
-              <ng-template let-country pTemplate="item">
+              [optionValue]="'id'"
+              >
+              <!-- <ng-template let-tag pTemplate="item">
                 <div>
-                  <div></div>
                   <p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger p-button-text" (click)="deleteTag(country.name);"></p-button>
+                  {{tag.var_name}}
                 </div>
-              </ng-template>
+              </ng-template> -->
             </p-multiSelect>
         </div>
         </div>

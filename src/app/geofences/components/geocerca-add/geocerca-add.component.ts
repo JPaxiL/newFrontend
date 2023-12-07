@@ -33,7 +33,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   tags : any = [];
   selectedGroup: any={};
   selectedOperation: any={};
-  selectedTag: any={};
+  selectedTag: any=[];
   disabledOperation = false;
 	disabledGroup = true;
   geoOptions = 'poligon';
@@ -53,9 +53,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   ];
 
   tempTag = [
-    { var_name: 'prueba', id: '1'},
-    { var_name: 'prueba2', id: '2'},
-    { var_name: 'prueba3', id: '3'},
+    { var_name: 'prueba', id: 1},
+    { var_name: 'prueba2', id: 2},
+    { var_name: 'prueba3', id: 3},
   ]
 
   fontSizeOptions = [
@@ -74,6 +74,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     { label: '20px', value: 20 },
   ]
 
+  filterTag: string = '';
   constructor(
     public geofencesService: GeofencesService,
     public mapService: MapServicesService,
@@ -180,7 +181,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     //aux = this.g;
   }
   onSelecTags(){
-    console.log('etiwuetasSell',this.selectedTag);
+    console.log('etiquetasSelect',this.selectedTag);
+    this.form.tags = this.selectedTag;
+    console.log(this.form.tags);
 
   }
   deleteTag(){

@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { ITags } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,7 @@ export class GeofencesService {
   showBtnAdd = true;
   showBtnEdit = true;
   showBtnImportExport = true;
-  listTag: any = [];
+  listTag: ITags [] = [];
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -95,6 +96,9 @@ export class GeofencesService {
       console.log("lisstagg", this.listTag);
     });
 
+  }
+  public getTagss(){
+    return this.listTag.filter(item=>item.var_name != "deafault");
   }
   public async storeTag(zone: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTag`,zone).toPromise();
