@@ -59,7 +59,7 @@
                                         <td style="width: 30%;">
                                             <span>{{item.var_nombre}}</span>
                                             <!-- <input type="hidden" value="{{item.id}}"> -->
-                                            <input type="hidden" [(ngModel)]="typeVehiclesList.id" name="id_{{i}}" />
+                                            <input type="hidden" [(ngModel)]="item.id" name="id_{{i}}" />
 
                                         </td>
                                         <td style="width: 40%;">
@@ -69,21 +69,22 @@
                                                         <p-dropdown
                                                           [options]="colorsVehicles"
                                                           optionLabel="name"
+                                                          optionValue="code"
                                                           name="var_color_{{i}}"
-                                                          [(ngModel)]="typeVehiclesList.var_color"
+                                                          [(ngModel)]="item.var_color"
                                                           [showClear]="false"
                                                           [appendTo]="'body'"
                                                           [style]="{ 'display': 'flex', 'align-items': 'center' }"
                                                         >
                                                         <ng-template let-color pTemplate="selectedItem">
                                                             <div class="color-option">
-                                                              <div class="color-box" [style.background-color]="color.code"></div>
+                                                              <div class="color-box" [style.background-color]="color.color"></div>
                                                               <span>{{ color.name }}</span>
                                                             </div>
                                                         </ng-template>
                                                         <ng-template let-color pTemplate="item">
                                                             <div class="color-option">
-                                                              <div class="color-box" [style.background-color]="color.code"></div>
+                                                              <div class="color-box" [style.background-color]="color.color"></div>
                                                               <span>{{ color.name }}</span>
                                                             </div>
                                                           </ng-template>
@@ -93,7 +94,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" name="var_galon_{{i}}" [(ngModel)]="typeVehiclesList.var_galon" pInputText placeholder="Galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right" />
+                                            <input type="text" name="var_galon_{{i}}" [(ngModel)]="item.var_galon" pInputText placeholder="Galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right" />
                                             <!-- <input type="text" value="{{item.var_galon}}" pInputText placeholder="galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right"/> -->
                                         </td>
                                     </tr>

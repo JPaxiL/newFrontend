@@ -27,14 +27,14 @@ export class UserConfigComponent implements OnInit {
   originalValues: any[] | undefined;
 
   colorsVehicles: any[] = [
-    { name: 'Por defecto', code: '#c4c2c1' }, // Celeste
-    { name: 'Celeste', code: '#00AAE4' }, // Celeste
-    { name: 'Morado', code: '#9370db' }, // Morado
-    { name: 'Naranja', code: '#ffa500' }, // Naranja
-    { name: 'Amarillo', code: '#ffff00' }, // Amarillo
-    { name: 'Verde Claro', code: '#17d244' }, // Verde Claro
-    { name: 'Guinda', code: '#800000' }, // Guinda
-    { name: 'Dorado', code: '#ffd700' }, // Dorado
+    { name: 'Por defecto', code: 'c4c2c1',color: '#c4c2c1' }, // Celeste
+    { name: 'Celeste', code: '00AAE4',color: '#00AAE4' }, // Celeste
+    { name: 'Morado', code: '9370db',color: '#9370db' }, // Morado
+    { name: 'Naranja', code: 'ffa500',color: '#ffa500' }, // Naranja
+    { name: 'Amarillo', code: 'ffff00',color: '#ffff00' }, // Amarillo
+    { name: 'Verde', code: '17d244',color: '#17d244' }, // Verde Claro
+    { name: 'Guinda', code: '800000',color: '#800000' }, // Guinda
+    { name: 'Dorado', code: 'ffd700',color: '#ffd700' }, // Dorado
   ];
   constructor(       
     private userDataService: UserDataService,
@@ -109,19 +109,31 @@ export class UserConfigComponent implements OnInit {
 
   }
   onSubmit(){
+  
     // Limpiar el array antes de agregar los datos actualizados
     this.userForm.vehicles = [];
     
     // Iterar sobre la lista de vehículos y agregarlos al array userForm.Vehicle
-    for (const item of this.typeVehiclesList) {
-      this.userForm.vehicles.push({
-        id: item.id,
-        var_nombre: item.var_nombre,
-        var_color: item.var_color,
-        var_galon: item.var_galon
-      });
-    }
-
+    this.typeVehiclesList.forEach((item: any) => {
+      const existingIndex = this.userForm.vehicles.findIndex((vehicle: any) => vehicle.id === item.id);
+      
+      if (existingIndex !== -1) {
+        console.log('NUNCA VA ENCONTRAR');
+        this.userForm.vehicles[existingIndex] = {
+          id: item.id,
+          var_nombre: item.var_nombre,
+          var_color: item.var_color,
+          var_galon: item.var_galon
+        };
+      } else {
+        this.userForm.vehicles.push({
+          id: item.id,
+          var_nombre: item.var_nombre,
+          var_color: item.var_color,
+          var_galon: item.var_galon
+        });
+      }
+    });
     console.log(this.userForm); // Información del formulario general
 
 
