@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Alert } from '../../models/alert.interface';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { Select2Data } from 'ng-select2-component';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { PanelService } from 'src/app/panel/services/panel.service';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { GeofencesService } from 'src/app/geofences/services/geofences.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -31,15 +29,16 @@ export class PlatformAlertsCreateComponent implements OnInit {
   public geocircles: Select2Data = [];
 
   public disabledEventSoundActive = false;
-  public disabledEmail = false;
+  public disabledEmail = true;
   public expirationDate = true;
   public showInfraccion = false;
+  public showInfraccionGeocerca = false;
   public showTiempoLimite = false;
   public showFechaCaducidad = true;
   public showGeocercas = true;
   public disabledTimeLimit = true;
   loadingEventSelectInput: boolean = true;
-
+  alertSelected: any;
   public disabledWhatsapp = true;
 
   booleanOptions = [
@@ -98,7 +97,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       tipoAlerta: ['', [Validators.required]],
       chkEventoActivado: [true],
       chkSonido: [true],
-      chkCorreo: [true],
+      chkCorreo: [false],
       sonido: [
         {
           value: 'sonidos/alarm8.mp3',
@@ -107,8 +106,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
       ],
       nombre: [''],
       lista_emails: [[]],
-      fecha_desde: [dateCurrent],
-      fecha_hasta: [dateCurrent],
+      //fecha_desde: [dateCurrent],
+      //fecha_hasta: [dateCurrent],
       email: [
         { value: '', disabled: this.disabledEmail },
         [Validators.required, Validators.email],
@@ -138,6 +137,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   public async loadData() {
     this.events = await this.AlertService.getEventsByType('platform');
+    console.log("EVENTSSS:::::",this.events);
+    
     this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();
@@ -223,22 +224,22 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.alertForm.value.geocercas = JSON.stringify(
       this.alertForm.value.geocercas
     );
-    this.alertForm.value.geocercascirculares = JSON.stringify(
+    /*this.alertForm.value.geocercascirculares = JSON.stringify(
       this.alertForm.value.geocercascirculares
-    );
-    this.alertForm.value.fecha_desde = this.setDate(
+    );*/
+    /*this.alertForm.value.fecha_desde = this.setDate(
       this.alertForm.value.fecha_desde
     );
     this.alertForm.value.fecha_hasta = this.setDate(
       this.alertForm.value.fecha_hasta
-    );
+    );*/
 
     if (this.alertForm.value.duracion_formato_parada == '') {
       this.alertForm.value.duracion_formato_parada = 'S';
     }
 
     if (typeof this.alertForm.value.tiempo_limite_infraccion == 'undefined') {
-      this.alertForm.value.tiempo_limite_infraccion = 10;
+      this.alertForm.value.tiempo_limite_infraccion = 0;
     }
 
     if (
@@ -258,7 +259,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
 
     if (this.alertForm.value.vehiculos.length != 0) {
-
+      console.log("ANTES DE GUARDAR: ",this.alertForm.value);
       Swal.fire({
         title: '¿Desea guardar los cambios?',
         //text: 'Espere un momento...',
@@ -349,36 +350,65 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   changeAlertType() {
-    // console.log(this.alertForm.value.tipoAlerta);
-    switch (this.alertForm.value.tipoAlerta) {
-      case 'Zona de entrada':
-      case 'Zona de salida':
+    console.log(this.alertForm.value.tipoAlerta);
+    const alert = this.events.find((event:any) => event.id.toString() == this.alertForm.value.tipoAlerta.toString());
+    this.alertSelected = alert;
+    console.log("alerttt",alert);
+    this.alertForm.value.velocidad_limite_infraccion = 0;
+    if(this.alertSelected.slug == 'infraccion'){
+      this.alertForm.controls['velocidad_limite_infraccion'].enable();
+      this.alertForm.value.chkFijarLimiteVelocidad = [true];
+    }else{
+      this.alertForm.controls['velocidad_limite_infraccion'].disable();
+    }
+    switch (alert.slug) {
+      case 'zona-de-entrada':
+      case 'zona-de-salida':
         this.showTiempoLimite = false;
-        this.showFechaCaducidad = true;
+        this.showFechaCaducidad = false;
         this.showGeocercas = true;
         this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
         break;
 
-      case 'Tiempo de estadia en zona':
-      case 'Parada en zona no autorizada':
+      case 'tiempo-estadio-zona':
+      case 'parada-en-zona-no-autorizada':
         this.showTiempoLimite = true;
-        this.showFechaCaducidad = true;
+        this.showFechaCaducidad = false;
         this.showGeocercas = true;
         this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
         break;
-      case 'Infracción':
-      case 'Infraccion':
+      case 'infraccion':
         this.showTiempoLimite = false;
         this.showFechaCaducidad = false;
         this.showGeocercas = false;
         this.showInfraccion = true;
+        this.showInfraccionGeocerca = false;
         break;
 
+      case 'infraccion-geocerca':
+        this.showTiempoLimite = false;
+        this.showFechaCaducidad = false;
+        this.showGeocercas = true;
+        this.showInfraccion = false;
+        this.showInfraccionGeocerca = true;
+        break;
+      case 'exceso-velocidad':
+        this.showTiempoLimite = false;
+        this.showFechaCaducidad = false;
+        this.showGeocercas = true;
+        this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
+        break;
       default:
         break;
     }
   }
 
+  resetForm(){
+    this.alertForm.reset();
+  }
   changechkFijarTiempo() {
     if (this.alertForm.value.chkFijarTiempo) {
       this.alertForm.controls['tiempo_limite_infraccion'].enable();

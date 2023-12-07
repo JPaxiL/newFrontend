@@ -1,7 +1,7 @@
 <div class="loading-gral" *ngIf="loading"></div>
 <div class="d-flex flex-column pm-config-w-header-rb">
     <div class="card-body p-fluid bg-gl-blue-dark pt-2" id="rowBusqueda">
-        Editar Alerta 360°
+        Editar {{type == "security"? "Alerta Seguridad Vehicular":(type == "mobile" ? "Alerta Solución Móvil" : "Alerta Fatiga 360")}}
     </div>
 
     <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
@@ -194,7 +194,7 @@
     
                 <div class="row justify-content-center mt-4 panel-izq-container-footer">
                     <div class="col-6">
-                        <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickShowPanel('ALERTS-ACCESSORIES')">Cancelar</button>
+                        <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickShowPanel()">Cancelar</button>
                     </div>
                     <div class="col-6">
                         <button type="submit" class="btn-gl-save btn-dark-hover w-100" [disabled]="loadingEventSelectInput">Guardar</button>

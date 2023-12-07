@@ -1,7 +1,7 @@
 <div class="w-100 h-100 d-flex flex-column shadow-lg">
      <div class="popup-header d-flex justify-content-between align-items-center px-1">
           <span class="popup-title ms-2">
-               {{configuration.vehicles![0].plate_number}} {{configuration.vehicles![0].operation? ' - ('+configuration.vehicles![0].operation+')' : ''}}
+               {{((configuration.vehicles![0].name ? configuration.vehicles![0].name : configuration.vehicles![0].plate_number)+' '+ (configuration.vehicles![0].operation? ' - ('+configuration.vehicles![0].operation+')' : '')) | shorten:20}}
           </span>
           <div class="d-flex gap-1 align-items-center">
                <img *ngIf="has_multimedia" pTooltip="Ver Multimedia" alt="logo" src="assets/images/ver_cipia.svg" class="popup-icon pe-auto" (click)="showMultimedia()"/>

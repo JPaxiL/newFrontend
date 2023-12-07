@@ -63,7 +63,7 @@ export class MapService {
   @Output() changeEye = new EventEmitter<any>();
 
   constructor(
-    private vehicleService:VehicleService,
+    public vehicleService:VehicleService,
     private followService:FollowService,
     private socketWebService: SocketWebService,
     private tabService: TabService,

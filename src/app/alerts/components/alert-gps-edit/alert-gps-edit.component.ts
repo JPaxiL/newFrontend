@@ -15,7 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class AlertGpsEditComponent implements OnInit {
 
   options = new Array(
-    { id:'ALERTS-GPS', name:"Alertas GPS"},
+    { id:'ALERTS-GPS', name:"Alertas GPS Tracker"},
   );
 
   public alertForm!: FormGroup;

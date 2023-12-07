@@ -1,6 +1,6 @@
 <div class="table-content-component-panel-monitoreo" style="position: relative;">
 
-  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAccesoriesAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando Alertas 360°... </p></ngx-spinner>
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAccesoriesAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando Alertas ... </p></ngx-spinner>
 
   <div class="card-body p-fluid" id="rowBusqueda">
     <div class="d-flex">
@@ -11,7 +11,7 @@
         </span>
       </div>
 
-      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickShowPanel('ALERTS-ACCESSORIE-CREATE')">
+      <button type="button" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickShowPanel()">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
 
@@ -27,12 +27,21 @@
             <span>Alertas GPS</span>
           </div> -->
           <!-- ocultarAlertsGPS -->
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">
+            <span>Alertas GPS Tracker</span>
+          </div>
           <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-PLATFORMS')">
             <span>Alertas Plataforma</span>
           </div>
-          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">
-            <span>Alertas 360°</span>
-          </div> 
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-SECURITY')">
+            <span>Alertas Seguridad Vehicular</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-MOBILE')">
+            <span>Alertas Soluciones Móviles</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-360')">
+            <span>Alertas Fatiga 360</span>
+          </div>
         </div>
       </div>
     </div>

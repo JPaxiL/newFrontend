@@ -76,6 +76,9 @@ export class PanelMonitoreoComponent implements OnInit {
       case "ALERTS-GPS":
       case "ALERTS-PLATFORMS":
       case "ALERTS-ACCESSORIES":
+      case "ALERTS-SECURITY":
+      case "ALERTS-MOBILE":
+      case "ALERTS-360":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-alertas-header-height').replace('rem', '')) != 0;
       case "GEOFENCES":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geocercas-header-height').replace('rem', '')) != 0;

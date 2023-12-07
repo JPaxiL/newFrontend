@@ -148,6 +148,7 @@ import { EventPopupComponent } from './events/components/event-popup/event-popup
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
 import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
+import { ShortenPipe } from './core/pipes/shorten.pipe';
 
 @NgModule({
   declarations: [
@@ -178,6 +179,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     GpsComponent,
     GsmComponent,
     SettingComponent,
+    ShortenPipe,
     TagComponent,
     FollowComponent,
     VehicleHeaderComponent,
