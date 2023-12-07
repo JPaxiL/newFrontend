@@ -80,7 +80,9 @@ export class TreeTableComponent implements OnInit {
     sort: 'asc'
   }
 
+
   @ViewChild('tt') tt!:any;
+
 
   constructor(
     private vehicleService:VehicleService,
@@ -116,7 +118,6 @@ export class TreeTableComponent implements OnInit {
 
     });
 
-
   }
 
   ngOnInit(): void {
@@ -142,7 +143,12 @@ export class TreeTableComponent implements OnInit {
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
     // console.log(this.vehicleService.vehicles);
+    
+
+    // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
+
   }
+
 
   headerScrollHandler(){
     setTimeout(()=> {
@@ -595,6 +601,9 @@ export class TreeTableComponent implements OnInit {
     }
     // //console.log("colmun = ",this.column);
   }
+
+  
+  
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
   }

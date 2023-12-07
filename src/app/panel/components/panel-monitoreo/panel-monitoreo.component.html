@@ -131,6 +131,10 @@
         <app-user-config></app-user-config>
       </ng-container>
 
+      <ng-container *ngIf="(panelService.nombreComponente == 'USER-INFO')">
+        <app-user-info></app-user-info>
+      </ng-container>
+
       <ng-container *ngIf="(panelService.nombreComponente == 'DASHBOARD')">
         <app-panal-dashboard></app-panal-dashboard>
       </ng-container>

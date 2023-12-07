@@ -1,8 +1,10 @@
-import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter, AfterViewInit } from '@angular/core';
 
 import { VehicleConfigService } from '../../services/vehicle-config.service';
+import { HttpClient } from '@angular/common/http';
 
 import Swal from 'sweetalert2';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 @Component({
   selector: 'app-vehicle-config',
@@ -21,6 +23,7 @@ export class VehicleConfigComponent implements OnInit {
   @ViewChild('placa',{ static:true}) placa!: ElementRef;
   @ViewChild('tolva',{ static:true}) tolva!: ElementRef;
   @ViewChild('empresa',{ static:true}) empresa!: ElementRef;
+  @ViewChild('svgContainer') svgContainer: ElementRef | undefined;
 
   loading : boolean = false;
   formDisplay : string = "flex";
@@ -40,15 +43,20 @@ export class VehicleConfigComponent implements OnInit {
     {id: '4', name: 'CONCENTRADO'},
     {id: '5', name: 'OTROS'},
   ];
-  /*
 
-  campos bloqueadoes
-  imei
-  Conductor
-  GRUPO
-  tamque
+  selectedColor: any; // Variable para almacenar el color seleccionado
 
-  */
+  colorsVehicles: any[] = [
+    { name: 'Celeste', code: '#add8e6' }, // Celeste
+    { name: 'Morado', code: '#9370db' }, // Morado
+    { name: 'Naranja', code: '#ffa500' }, // Naranja
+    { name: 'Amarillo', code: '#ffff00' }, // Amarillo
+    { name: 'Verde Claro', code: '#90ee90' }, // Verde Claro
+    { name: 'Guinda', code: '#800000' }, // Guinda
+    { name: 'Dorado', code: '#ffd700' }, // Dorado
+    { name: 'Plateado', code: '#c0c0c0' }, // Plateado
+  ];
+
   groups: any = [
     { name: "CLIENTES TACNA", id:'0'},
     { name: "GPSTEL", id:'1'},
@@ -95,41 +103,27 @@ export class VehicleConfigComponent implements OnInit {
     { name: "52.png", code: "52", type: "2" },
   ];
   dropdownIcons: any = [];
+  svgContent: any;
 
   constructor(
-    private configService: VehicleConfigService, 
+    private configService: VehicleConfigService,
+    private userDataService: UserDataService,
+    private http: HttpClient, 
   ) {}
 
 
   ngOnInit(): void {
 
   }
-  onShow(){
-    
-    // for (const key in this.icons) {
-    //   if (this.icons[key].name==this.config.icon) {
-    //     this.selectedIcon = {
-    //       name: this.icons[key].name,
-    //       code: this.icons[key].code,
-    //       type: this.icons[key].type,
-    //     }
-    //   }
-    // }
-    // for(let i = 0; i < this.types.length; i++){
-    //   if(this.types[i].id == this.selectedIcon.type){
-    //     this.selectedType = this.types[i];
-    //     this.updateIconsDropdown();
-    //     i = this.types.length;
-    //   }
-    // }
-    /* this.selectedType = {
-      name: this.types[this.config.tipo]['name'],
-      id: this.config.tipo,
-    }; */
+  async onShow(){
+
     console.log(this.config);
     // console.log("vehicle config = ",this.config);
     this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
+    
   }
+  
+
   onClickCancel(){
     this.eventDisplay.emit(false);
   }

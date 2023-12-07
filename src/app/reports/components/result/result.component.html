@@ -6277,8 +6277,8 @@
                     <th *ngIf="chkDateHour">Fecha Evento</th>
                     <th *ngIf="chkDateHour">Hora Evento</th>
                     <th *ngIf="!chkDateHour">Fecha/Hora Servidor</th>
-                    <th *ngIf="chkDateHour">Fecha Servidor</th>
-                    <th *ngIf="chkDateHour">Hora Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923">Fecha Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923">Hora Servidor</th>
                     <th>Código</th>
                     <th>Placa</th>
                     <th>Tipo de Unidad</th>
@@ -6286,7 +6286,8 @@
                     <th>Vel.360</th>
 
                     <th>Tramo o Geocerca</th>
-                    <th>Punto Cercano</th>
+                    <!-- <th>Punto Cercano</th> -->
+                    <th>Referencia</th>
                     <th>Ubicación</th>
                     <th>Enlace a Archivo</th>
 
@@ -6304,8 +6305,8 @@
                     <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
 
                     <td *ngIf="!chkDateHour">{{row.fecha_servidor}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[1]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[1]}}</td>
 
 
                     <td>{{row.codigo}}</td>
@@ -6319,7 +6320,7 @@
                     <td>{{row.vel_can}} Km/h</td> -->
 
                     <td>{{row.tramo}}</td>
-                    <td>{{row.PC}}</td>
+                    <td>{{row.referencia}}</td>
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
@@ -6365,8 +6366,8 @@
                   <th *ngIf="chkDateHour">Fecha Evento</th>
                   <th *ngIf="chkDateHour">Hora Evento</th>
                   <th *ngIf="!chkDateHour">Fecha/Hora Servidor</th>
-                  <th *ngIf="chkDateHour">Fecha Servidor</th>
-                  <th *ngIf="chkDateHour">Hora Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923">Fecha Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923">Hora Servidor</th>
                   <th>Código</th>
                   <th>Placa</th>
                   <th>Tipo de Unidad</th>
@@ -6374,7 +6375,8 @@
                   <th>Vel.360</th>
 
                   <th>Tramo o Geocerca</th>
-                  <th>Punto Cercano</th>
+                  <!-- <th>Punto Cercano</th> -->
+                  <th>Referencia</th>
                   <th>Ubicación</th>
                   <th>Enlace a Archivo</th>
 
@@ -6392,8 +6394,8 @@
                     <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
 
                     <td *ngIf="!chkDateHour">{{row.fecha_servidor}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[1]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[1]}}</td>
 
 
                     <td>{{row.codigo}}</td>
@@ -6408,7 +6410,7 @@
                     <td>{{row.vel_can}} Km/h</td> -->
 
                     <td>{{row.tramo}}</td>
-                    <td>{{row.PC}}</td>
+                    <td>{{row.referencia}}</td>
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
@@ -6474,8 +6476,8 @@
                     <th *ngIf="chkDateHour">Fecha Evento</th>
                     <th *ngIf="chkDateHour">Hora Evento</th>
                     <th *ngIf="!chkDateHour">Fecha/Hora Servidor</th>
-                    <th *ngIf="chkDateHour">Fecha Servidor</th>
-                    <th *ngIf="chkDateHour">Hora Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923">Fecha Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923">Hora Servidor</th>
 
                     <th>Código</th>
                     <th>Placa</th>
@@ -6486,7 +6488,7 @@
                     <th>Vel.360</th>
 
                     <th>Tramo o Geocerca</th>
-                    <th>Punto Cercano</th>
+                    <th>Referencia</th>
                     <th>Ubicación</th>
                     <th>Enlace a Archivo</th>
 
@@ -6504,8 +6506,8 @@
                     <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
 
                     <td *ngIf="!chkDateHour">{{row.fecha_servidor}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[1]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[1]}}</td>
 
                     <td>{{row.codigo}}</td>
                     <td>{{row.placa}}</td>
@@ -6520,7 +6522,7 @@
                     <td>{{row.vel_can}} Km/h</td> -->
 
                     <td>{{row.tramo}}</td>
-                    <td>{{row.PC}}</td>
+                    <td>{{row.referencia}}</td>
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
@@ -6565,8 +6567,8 @@
                   <th *ngIf="chkDateHour">Fecha Evento</th>
                   <th *ngIf="chkDateHour">Hora Evento</th>
                   <th *ngIf="!chkDateHour">Fecha/Hora Servidor</th>
-                  <th *ngIf="chkDateHour">Fecha Servidor</th>
-                  <th *ngIf="chkDateHour">Hora Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923">Fecha Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923">Hora Servidor</th>
                   
                   <th>Código</th>
                   <th>Placa</th>
@@ -6577,7 +6579,7 @@
                   <th>Vel.360</th>
 
                   <th>Tramo o Geocerca</th>
-                  <th>Punto Cercano</th>
+                  <th>Referencia</th>
                   <th>Ubicación</th>
                   <th>Enlace a Archivo</th>
 
@@ -6595,8 +6597,8 @@
                     <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
 
                     <td *ngIf="!chkDateHour">{{row.fecha_servidor}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_servidor.split(' ')[1]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[1]}}</td>
 
 
                     <td>{{row.codigo}}</td>
@@ -6612,7 +6614,7 @@
                     <td>{{row.vel_can}} Km/h</td> -->
 
                     <td>{{row.tramo}}</td>
-                    <td>{{row.PC}}</td>
+                    <td>{{row.referencia}}</td>
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>

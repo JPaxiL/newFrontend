@@ -108,6 +108,7 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
+import { UserInfoComponent } from './profile-config/user-info/user-info.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard/panal-dashboard.component';
@@ -202,6 +203,7 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     ListGeopointsComponent,
     ModalComponent,
     UserConfigComponent,
+    UserInfoComponent,
     Dashboard2Component,
     AreagraphsComponent,
     PanalDashboardComponent,

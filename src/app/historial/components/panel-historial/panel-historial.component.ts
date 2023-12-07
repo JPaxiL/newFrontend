@@ -11,6 +11,7 @@ import { VehicleService } from '../../../vehicles/services/vehicle.service';
 
 import { MapServicesService } from '../../../map/services/map-services.service';
 import { EventService } from 'src/app/events/services/event.service';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 
 import { HistorialService } from '../../services/historial.service';
@@ -62,6 +63,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   conHistorial = false;
   showEventos = false;
   nombreUnidad = '';
+  imei = '';
 
   form : any = {};
 
@@ -226,6 +228,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   constructor(
     public mapService: MapServicesService,
     public historialService: HistorialService,
+    private UserDataService: UserDataService,
     private VehicleService : VehicleService,
     private spinner: NgxSpinnerService,
     private EventService: EventService,
@@ -385,6 +388,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     if (!(this.form.selectedCarC == null)) {
       this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+      this.imei = this.form.selectedCar;
       //console.log("unidad diferente de null");
     } else {
       //console.log("unidad es igual a null");
@@ -413,6 +417,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.clearMultimedia(event);
       this.addMultimediaComponent(event);
     })
+    
   }
 
   createEventList (data:any){
@@ -1100,6 +1105,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             dH[0].primero = h; // guardar el numero de elementos en la primera trama.
             dH[0].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
+            dH[0].imei  = this.imei = this.form.selectedCar,
+
 
             dH[h].ultimo  = h; // guardar el numero de elementos en la ultima trama.
             dH[h].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
@@ -1667,6 +1674,19 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   get_combustible_movimiento(dH:any, a1:any, a2:any) {
 
+      console.log("==get_combustible_movimiento");
+      console.log(dH);
+      console.log(a1);
+      console.log(a2);
+
+      if (dH.length > 0) {
+        console.log("== el imei");
+        console.log(dH[0].imei);
+      }
+
+
+
+      
       if (a2 == 'FIN') {
             
           var h = dH.length - 1; //Ultimo indice del array
@@ -1679,6 +1699,47 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           // console.log(x2-x1);
           if (x1 == '-' || x2 == '-') {
               kilometrajeTotal = '-';
+
+              // console.log("========= localStorage ========");
+              // console.log(this.UserDataService.typeVehicles);
+              // console.log(this.UserDataService.typeVehiclesUserData);
+              // console.log(this.UserDataService.typeVehicles[0].var_galon);
+              // console.log("=========");
+              // console.log( this.cars );
+              // console.log( this.VehicleService.getVehiclesData() );
+              //let vehicles = this.VehicleService.getVehiclesData();
+
+              var tipoUnidad = (this.VehicleService.getVehiclesData().filter((item:any)=> item.IMEI == dH[0].imei))[0].tipo;
+              // console.log(tipoUnidad);
+              // console.log(parseInt(tipoUnidad));
+              var tipoU = (this.UserDataService.typeVehiclesUserData.filter((item:any)=> item.type_vehicle_id == parseInt(tipoUnidad)))[0];
+              // console.log(tipoU);
+              // console.log(tipoU.var_galon);
+              // console.log(parseInt(tipoU.var_galon));
+
+              if (tipoU.var_galon == null) {
+                  kilometrajeTotal = '-.';
+              } else {
+
+                  // galones x kilometros
+                  var distancia = this.get_distancia_movimiento(dH, a1, a2); // en km
+                  if (distancia == '-') {
+                      var distancia_nueva = 0;
+                      for (let i = 1; i < dH.length; i++) {
+                          if (dH[i].speed > 1) {
+                              distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                          }
+                      }
+                      kilometrajeTotal = ( distancia_nueva * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  } else {
+                      kilometrajeTotal = ( parseFloat(distancia) * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  }
+
+              }
+              
+              // this.historialService.icono = (this.cars.filter((item:any)=> item.imei == dH[0].imei))[0].icon;
+
+              
           } else {
               kilometrajeTotal = ((x2-x1)*0.2641).toFixed(2) + 'gal. (' + (x2-x1).toFixed(2) + 'l.)';
           }
@@ -1691,6 +1752,31 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           var kilometrajeTotal = '-';
           if (x1 == '-' || x2 == '-') {
               kilometrajeTotal = '';
+
+              var tipoUnidad = (this.VehicleService.getVehiclesData().filter((item:any)=> item.IMEI == dH[0].imei))[0].tipo;
+              var tipoU = (this.UserDataService.typeVehiclesUserData.filter((item:any)=> item.type_vehicle_id == parseInt(tipoUnidad)))[0];
+
+              if (tipoU.var_galon == null) {
+                  kilometrajeTotal = '-.';
+              } else {
+
+                  var distancia = this.get_distancia_movimiento(dH, a1, a2); // en km
+                  if (distancia == '-') {
+                      var distancia_nueva = 0;
+                      for (let i = a1; i <= a2; i++) {
+                          if (dH[i].speed > 1) {
+                              distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                          }
+                      }
+                      kilometrajeTotal = ( distancia_nueva * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  } else {
+                      kilometrajeTotal = ( parseFloat(distancia) * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  }
+
+              }
+
+
+
           } else {
               kilometrajeTotal = ((x2-x1)*0.2641).toFixed(2) + 'gal. (' + (x2-x1).toFixed(2) + 'l.)';
           }
@@ -1712,8 +1798,18 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         // console.log(x1+' - '+x2);
         // console.log(x2-x1);
         if (x1 == '-' || x2 == '-') {
+
             kilometrajeTotal = '-';
+
+            var distancia_nueva = 0;
+            for (let i = 1; i < dH.length; i++) {
+                if (dH[i].speed > 1) {
+                    distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                }
+            }
+            kilometrajeTotal = (distancia_nueva).toFixed(2) + ' km';
         } else {
+
             kilometrajeTotal = (x2-x1).toFixed(2) + ' km';
         }
         return kilometrajeTotal;
@@ -1723,12 +1819,22 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         var x2 = (dH[a2].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[a2].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
         var kilometrajeTotal = '-';
         if (x1 == '-' || x2 == '-') {
-            kilometrajeTotal = '';
+            kilometrajeTotal = '-';
+
+            var distancia_nueva = 0;
+            for (let i = a1; i <= a2; i++) {
+                if (dH[i].speed > 1) {
+                    distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                }
+            }
+            kilometrajeTotal = (distancia_nueva).toFixed(2) + ' km';
+
         } else {
             kilometrajeTotal = (x2-x1).toFixed(2) + 'km';
         }
         return kilometrajeTotal;
     }
+
   }
 
 
