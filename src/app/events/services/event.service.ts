@@ -180,9 +180,9 @@ export class EventService {
         this.getEventName().subscribe(name=>{
           // console.log("consiguiendo los nombres de los eventos",name.data);
           this.events_names = name.data;
-          for (const index in this.events) {
+          /*for (const index in this.events) {
             this.events[index].nombre=this.loadNameEvent(this.events[index]);
-          }
+          }*/
           console.log("vehicles cargo antes que eventos ...");
           this.getVehiclesPlate();
         });
