@@ -3,6 +3,7 @@ import { PanelService } from 'src/app/panel/services/panel.service';
 import { BrowserModule } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 
 @Component({
   selector: 'app-user-config',
@@ -38,7 +39,8 @@ export class UserConfigComponent implements OnInit {
   ];
   constructor(       
     private userDataService: UserDataService,
-    private panelService: PanelService) {
+    private panelService: PanelService,
+    private vehicleService: VehicleService) {
   }
 
   ngOnInit(): void {
@@ -201,7 +203,7 @@ export class UserConfigComponent implements OnInit {
     }).then((data) => {
       // console.log('testing respuesta...',data);
       this.loading=false;
-      this.userDataService.getUserData();
+      this.vehicleService.initialize();
     });
   }
 

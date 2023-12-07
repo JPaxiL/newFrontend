@@ -595,6 +595,8 @@ export class VehicleService {
       vehicle.follow = false;
       vehicle.tag = true;
       vehicle.eye = true;
+    }else{ //EN DUDA SI VA SEGUIR ESTA COSA
+      vehicle.eye = true;
     }
     vehicle.arrayPrueba = [];
     vehicle.arrayPruebaParada = [];

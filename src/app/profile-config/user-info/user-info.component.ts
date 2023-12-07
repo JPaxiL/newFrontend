@@ -195,7 +195,6 @@ export class UserInfoComponent implements OnInit {
     }).then((data) => {
       // console.log('testing respuesta...',data);
       this.loading=false;
-      // this.userDataService.getUserData();
     });
   }
 
