@@ -141,6 +141,7 @@ import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
+import { GeofenceTableComponent } from './geofences/components/geofence-table/geofence-table.component';
 import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 import { CipiaComponent } from './cipia/cipia.component';
@@ -235,6 +236,7 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     ScreenViewComponent,
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
+    GeofenceTableComponent,
     AlphaNumericDashDirective,
     ScreenRecorderComponent,
     CipiaComponent,

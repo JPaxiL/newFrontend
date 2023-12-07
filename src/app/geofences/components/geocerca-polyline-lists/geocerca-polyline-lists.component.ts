@@ -3,6 +3,8 @@ import * as L from 'leaflet';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import Swal from 'sweetalert2';
 import { PolylineGeogencesService } from '../../services/polyline-geogences.service';
+import { Geofences } from '../../models/geofences';
+import { IGeofence } from '../../models/interfaces';
 
 @Component({
   selector: 'app-geocerca-polyline-lists',
@@ -13,6 +15,8 @@ export class GeocercaPolylineListsComponent implements OnInit {
 
   NomBusqueda: string = "";
   noResults: boolean = false;
+  objGeofences= new Geofences();
+  treeGeofences: any;
 
   constructor(private mapService: MapServicesService,
             private polylineGeofenceService: PolylineGeogencesService) { }
@@ -21,6 +25,14 @@ export class GeocercaPolylineListsComponent implements OnInit {
     if(!this.polylineGeofenceService.initializingPolylineGeofences || !this.polylineGeofenceService.initializingUserPrivleges){
       this.polylineGeofenceService.spinner.show('loadingPolylineGeofencesSpiner');
     }
+    if(this.polylineGeofenceService.initializingPolylineGeofences){
+      this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[], 'lin');
+    }else{
+      this.polylineGeofenceService.dataCompleted.subscribe((data:IGeofence[])=>{
+        this.objGeofences.setGeofences(data,'lin');
+      })
+    }
+    this.treeGeofences = this.objGeofences.createTreeNode();
   }
 
 
@@ -180,13 +192,13 @@ export class GeocercaPolylineListsComponent implements OnInit {
   }
 
   clickAgregarGeocerca() {
-    this.polylineGeofenceService.nombreComponente = "AGREGAR";
+    this.polylineGeofenceService.nameComponentLin = "AGREGAR";
     this.polylineGeofenceService.action = "add";
 
   }
 
   clickConfigurarGeocerca(id:number) {
-    this.polylineGeofenceService.nombreComponente = "AGREGAR";
+    this.polylineGeofenceService.nameComponentLin = "AGREGAR";
     this.polylineGeofenceService.action         = "edit";
     this.polylineGeofenceService.idGeocercaEdit = id;
   }

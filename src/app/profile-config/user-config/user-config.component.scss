@@ -1,7 +1,13 @@
 .profile-picture-container{
-  display: flex;
-  justify-content: center;
-  position: relative;
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .profile-picture{
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+    }
 
   .profile-picture{
       width: 8rem;
@@ -41,90 +47,90 @@
 }
 
 .one-character-circled {
-  text-align: center;
-  background-color: var(--gl-danger-red);
-  color: #fff;
-  border-radius: 50%;
+    text-align: center;
+    background-color: var(--gl-danger-red);
+    color: #fff;
+    border-radius: 50%;
 }
 
 .column {
-display: flex;
-flex-direction: column;
-justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 //Here is the switch
 
 .switch.switch-blue{
---gl-light-blue: var(--gl-light-blue);
+  --gl-light-blue: var(--gl-light-blue);
 }
 
 .switch {
-font-size: 0.75rem;
-position: relative;
-display: inline-block;
-width: 3.75em;
-height: 2.125em;
+  font-size: 0.75rem;
+  position: relative;
+  display: inline-block;
+  width: 3.75em;
+  height: 2.125em;
 }
 
 .switch.switch-sm{
-font-size: 0.625rem;
+  font-size: 0.625rem;
 }
 
 .switch input {
-opacity: 0;
-width: 0;
-height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
-position: absolute;
-cursor: pointer;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-border-radius: 2.125em;
-background-color: #ccc;
--webkit-transition: .4s;
-transition: .4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 2.125em;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 
 .slider:before {
-position: absolute;
-content: "";
-height: 1.625em;
-width: 1.625em;
-left: 0.25em;
-bottom: 0.25em;
-background-color: white;
-border-radius: 50%;
--webkit-transition: .4s;
-transition: 0.4s;
+  position: absolute;
+  content: "";
+  height: 1.625em;
+  width: 1.625em;
+  left: 0.25em;
+  bottom: 0.25em;
+  background-color: white;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-background-color: var(--gl-light-blue);
+  background-color: var(--gl-light-blue);
 }
 input:focus + .slider {
-box-shadow: 0 0 1px var(--gl-light-blue);
+  box-shadow: 0 0 1px var(--gl-light-blue);
 }
 input:checked + .slider:before {
--webkit-transform: translateX(1.625em);
--ms-transform: translateX(1.625em);
-transform: translateX(1.625em);
+  -webkit-transform: translateX(1.625em);
+  -ms-transform: translateX(1.625em);
+  transform: translateX(1.625em);
 }
 
 //The box align
 
 .icon-box{
-display: flex;
-justify-content: space-between;
-width: 25rem;
-margin: 0 auto;
-i{
-  font-size: 24rem;
-}
+  display: flex;
+  justify-content: space-between;
+  width: 25rem;
+  margin: 0 auto;
+  i{
+    font-size: 24rem;
+  }
 }
 
 //other

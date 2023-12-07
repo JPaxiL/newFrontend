@@ -1,34 +1,68 @@
 <div class="d-flex flex-column" style="height: 100%;">
-  <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca Poligonal' "></div>
-
+  <div *ngIf="geoOptions=='poligon'|| geoOptions=='line'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca' "></div>
+  <div *ngIf="geoOptions=='circ'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.circularGeofencesService.action == 'edit' ? 'Configurar Geocerca Circular' : 'Nueva Geocerca Circular' "></div>
   <div class="modal-body panel-izq-container p-fluid overflow-auto" style="position: relative;">
-
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="spinnerLoading" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Guardando cambios... </p></ngx-spinner>
-
     <div class="panel-izq-form">
-
       <div class="gl-row-underline">
-        <div class="col-12">
-            <label>NOMBRE:</label>
+        <div class="flex container" >
+          <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 1" (click)="selectBtn(1)">
+            <button type="button" *ngIf="geofencesService.showBtnAdd" (click)="selectBtn(1)" class="pentagon btn">
+            </button>
+            <span>Poligonales</span>
+          </div>
+          <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 2" (click)="selectBtn(2)">
+            <button type="button" *ngIf="circularGeofencesService.showBtnAdd" (click)="selectBtn(2)" class="circle btn">
+            </button>
+            <span>Circulares</span>
+          </div>
+          <!-- <div disabled class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 3" (click)="selectBtn(3)">
+            <button class="btnGeo" type="button" *ngIf="geofencesService.showBtnAdd"  (click)="selectBtn(3)">
+              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                  width="30.000000pt" height="30.000000pt" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" fill="#c4c2c1" stroke="none">
+                  <path d="M103 265 c-70 -46 -79 -78 -33 -115 44 -36 36 -68 -25 -110 -25 -17
+                  -45 -33 -45 -35 0 -3 63 -5 139 -5 l140 0 11 55 c15 74 1 102 -68 136 -85 41
+                  -85 43 -17 93 19 15 18 15 -15 15 -23 0 -53 -12 -87 -34z"/>
+                  </g>
+              </svg>
+            </button>
+            <span>Polilineas</span>
+          </div> -->
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" id="geofence-name" name="nombre" [(ngModel)]="form.nombre" required pInputText>
+          <div>
+            <label>NOMBRE:</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <input *ngIf="geoOptions=='poligon'|| geoOptions=='line'" type="text" class="form-control" id="geofence-name" name="nombre" [(ngModel)]="form.nombre" required pInputText>
+          <input *ngIf="geoOptions=='circ'" type="text" class="form-control" id="circular-geofence-name" name="nombre" [(ngModel)]="form.nombre" required pInputText>
         </div>
       </div>
-
       <div class="gl-middleline gl-permanent-middleline gl-row-underline">
         <div class="row">
-            <div class="col p-field">
+            <div class="col p-field" *ngIf="geoOptions=='poligon' || geoOptions=='line'">
                 <div class="col-12">
                     <label>PERÍMETRO:</label>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                      <p-inputNumber [(ngModel)]="form.perimetro" suffix=" km" [disabled]="true"></p-inputNumber>
+                      <p-inputNumber [(ngModel)]="form.perimetro" suffix=" km&#178;" [disabled]="true"></p-inputNumber>
                     </div>
                 </div>
             </div>
-            <div class="col p-field">
+            <div class="col p-field" *ngIf="geoOptions=='circ'">
+              <div class="col-12">
+                  <label>RADIO:</label>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                    <p-inputNumber [ngModel]="form.radio" suffix=" km" [disabled]="true"></p-inputNumber>
+                </div>
+            </div>
+            </div>
+              <div class="col p-field">
                 <div class="col-12">
                     <label>ÁREA:</label>
                 </div>
@@ -40,26 +74,6 @@
             </div>
         </div>
       </div>
-
-      <!-- <div>
-        <div class="col-12">
-          <div class="row">
-            <div class="col-6 d-flex flex-column justify-content-center text-start">
-              <div class="input-group">
-                <input type="text" class="form-control text-end" [(ngModel)]="form.perimetro" readonly>
-                <span class="input-group-text">km</span>
-              </div>
-            </div>
-            <div class="col-6 d-flex flex-column justify-content-center text-start">
-              <div class="input-group">
-                <input type="text" class="form-control text-end" [(ngModel)]="form.area"  readonly>
-                <span class="input-group-text">km<sup>2</sup></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
       <div class="gl-middleline gl-permanent-middleline gl-row-underline">
         <div class="row">
             <div class="col p-field">
@@ -68,7 +82,8 @@
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex">
-                      <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" [(ngModel)]="form.color" id="color_picker" title="Elige un color">
+                      <input *ngIf="geoOptions=='poligon' || geoOptions=='line'" type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColor(form.id)" [(ngModel)]="form.color" id="color_picker" title="Elige un color">
+                      <input *ngIf="geoOptions=='circ'" type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" (change)="changeGeoColorCir(form.id)" [(ngModel)]="form.color" id="color_picker" title="Elige un color">
                       <label role="button" class="p-dropdown-trigger flex-none d-flex align-items-center custom-chevron" for="color_picker">
                         <span class="p-dropdown-trigger-icon pi pi-chevron-down" style="color: #6c757d;"></span>
                       </label>
@@ -87,7 +102,6 @@
             </div>
         </div>
       </div>
-
       <div class="gl-middleline gl-permanent-middleline gl-row-underline">
         <div class="row">
             <div class="col p-field">
@@ -127,7 +141,7 @@
           </span>
         </div>
       </div>
-      <div class="gl-row-underline">
+      <!-- <div class="gl-row-underline">
         <div class="col-12">
             <label>TOLERABLE:</label>
         </div>
@@ -159,181 +173,83 @@
             <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un exceso de velocidad muy grave al sobrepasar el límite establecido en el presente campo. No posee un siguiente límite de velocidad."></i>
           </span>
         </div>
-      </div> 
-
-      <div class="row justify-content-center mt-4 panel-izq-container-footer">
-        <div class="col-6">
-            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelar(form.id)">Cancelar</button>
-        </div>
-        <div class="col-6">
-            <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickGuardar(form.id)">Guardar</button>
-        </div>
-      </div>
-
-      
-
-      <!-- <label class="row">
-        <span class="col-4">Nombre:</span>
-        <div class="col-8">
-          <input type="text" class="form-control claseinputs" id="geofence-name" name="nombre" [(ngModel)]="form.nombre" [ngModelOptions]="{standalone: true}" required>
-        </div>
-      </label>
-
-      <div class="row"></div>
-
-      <label class="row">
-        <span class="col-12">Descripción:</span>
-        <div class="col-12">
-          <textarea id="geocerca-descripcion" class="form-control" rows="3" name="descripcion" [(ngModel)]="form.descripcion"></textarea>
-        </div>
-      </label>
-
-      <div class="row"></div>
-
-      <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-6 d-flex flex-column justify-content-center text-start">
-              Perímetro
+      </div> -->
+      <div class="gl-middleline gl-permanent-middleline gl-row-underline">
+        <div class="row">
+          <!-- <div class="col-6">
+            <div class="p-field">
+              <label class="" id="filtrado_label">SELECCIONE:</label>
+              <p-dropdown [options]="listOptions" [(ngModel)]="listOptionCheckbox" [showClear]="false" optionLabel="idOption" optionValue="valueOption" (onChange)="onOptionSelected();"></p-dropdown>
             </div>
-            <div class="col-6 d-flex flex-column justify-content-center text-start">
-              Área
-            </div>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="row">
-            <div class="col-6 d-flex flex-column justify-content-center text-start">
-              <div class="input-group">
-                <input type="text" class="form-control text-end" [(ngModel)]="form.perimetro" readonly>
-                <span class="input-group-text">km</span>
-              </div>
-            </div>
-            <div class="col-6 d-flex flex-column justify-content-center text-start">
-              <div class="input-group">
-                <input type="text" class="form-control text-end" [(ngModel)]="form.area"  readonly>
-                <span class="input-group-text">km<sup>2</sup></span>
-              </div>
+          </div> -->
+          <div class="col-6" *ngIf="listOptionCheckbox=='operacion'">
+            <div class="p-field">
+              <label class="" id="operation_label">OPERACIONES:</label>
+              <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation"></p-dropdown>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="row"></div>
-
-      <div class="row d-flex justify-content-center">
-        <div class="col-5 d-flex flex-column justify-content-center">
-          <label class="row">
-            <span class="col-9 form-check-label align-middle">Mostrar geocerca</span>
-            <div class="col-2 d-flex flex-column justify-content-center">
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="" icheck [(ngModel)]="form.checkZoneVisible">
-              </div>
+      <div>
+        <div>
+          <div class="card flex justify-content-center">
+            <label for="" id="operation_label">Etiquetas:</label>
+            <p-multiSelect
+              class="mb-4"
+              [filter]="true"
+              [options]="geofencesService.getTagss()" 
+              [(ngModel)]="selectedTag"
+              filterBy="nameTags"
+              [filterValue]="filterTag"
+              placeholder="Seleccionar o añadir" 
+              (onChange)="onSelecTags()"
+              optionLabel="var_name"
+              [optionValue]="'id'"
+              >
+              <!-- <ng-template let-tag pTemplate="item">
+                <div>
+                  <p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger p-button-text" (click)="deleteTag(country.name);"></p-button>
+                  {{tag.var_name}}
+                </div>
+              </ng-template> -->
+            </p-multiSelect>
+        </div>
+        </div>
+      </div>
+      <!-- <div *ngIf="listOptionCheckbox=='grupo'" class="gl-middleline gl-permanent-middleline gl-row-underline">
+        <div class="row">
+          <div class="col-6" >
+            <div class="p-field">
+              <label class="" id="grupo_label">OPERACIONES:</label>
+              <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation"></p-dropdown>
             </div>
-          </label>
-        </div>
-        <div class="col-5 d-flex flex-column justify-content-center">
-          <label class="row">
-            <span class="col-9 form-check-label align-middle">Mostrar nombre</span>
-            <div class="col-2 d-flex flex-column justify-content-center">
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="" icheck [(ngModel)]="form.checkNameVisible">
-              </div>
+          </div>
+          <div class="col-6" >
+            <div class="p-field">
+              <label class="" id="grupo_label">GRUPOS:</label>
+              <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" [showClear]="true" optionLabel="namegrupo" optionValue="idgrupo"  (onChange)="onChangeGrupo();" [placeholder]="placeholderGroup" [disabled]="disabledGroup"></p-dropdown>
             </div>
-          </label>
+          </div>
         </div>
-      </div>
-
-      <div class="row"></div>
-
-      <div class="row">
-        <span class="col-4">Color:</span>
-        <div class="col-8">
-          <input type="color" class="form-control form-control-color form-control-color-gl" id="geoColor" (change)="changeGeoColor(form.id)" [(ngModel)]="form.color"  title="Elige un color">
+      </div> -->
+      <div class="">
+        <div *ngIf="geoOptions=='poligon' || geoOptions=='line'" class="row justify-content-center mt-4 panel-izq-container-footer">
+          <div class="col-6" >
+            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelPol(form.id)">Cancelar</button>
+          </div>
+          <div class="col-6">
+            <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickSavePol(form.id)">Guardar</button>
+          </div>
         </div>
-      </div>
-
-      <div class="row"></div>
-
-      <label class="row">
-        <div class="col-4">Categoría:</div>
-        <div class="col-8">
-          <select class="form-control" id="opcionGraficoConsola" [(ngModel)]="form.categoria" title="Tipo de Gráfico" data-bs-toggle="tooltip" data-bs-placement="top">
-            <option [value]="item.id" *ngFor="let item of availableOptionsCategoria">{{item.name}}</option>
-          </select>
-        </div>
-      </label>
-
-      <div class="row"></div>
-
-      <div class="row d-flex justify-content-center">
-        <div class="col-5 d-flex flex-column justify-content-center">
-          <label class="row">
-            <span class="col-9 form-check-label align-middle">Velocidad</span>
-            <div class="col-2 d-flex flex-column justify-content-center">
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="chckActivarVelocidad" [(ngModel)]="form.checkVelocidad">
-              </div>
-            </div>
-          </label>
-        </div>
-        <div class="col-5"></div>
-      </div>
-
-      <div class="row"></div>
-
-      <div class="row">
-        <span class="col-4 text-end">Límite de Velocidad:</span>
-        <div class="col-8">
-          <div class="input-group">
-            <input min="10" type="number" class="form-control claseinputs text-center" [(ngModel)]="form.limite_velocidad" [disabled]="!form.checkVelocidad">
-            <span class="input-group-text claseinputs">km/h</span>
+        <div *ngIf="geoOptions=='circ'" class="row justify-content-center mt-4 panel-izq-container-footer">
+          <div class="col-6">
+            <button type="button" class="btn-gl-cancel btn-dark-hover w-100" ui-sref="alertas-accesorios" (click)="clickCancelCir(form.id)">Cancelar</button>
+          </div>
+          <div class="col-6">
+            <button type="submit" class="btn-gl-save btn-dark-hover w-100" (click)="clickSaveCir(form.id)">Guardar</button>
           </div>
         </div>
       </div>
-      <div class="row">
-        <span class="col-4 text-end">Tolerable:</span>
-        <div class="col-8">
-          <div class="input-group">
-            <input type="number" [min]="form.limite_velocidad + 1" class="form-control claseinputs text-center" [(ngModel)]="form.limite_tolerable" [disabled]="!form.checkVelocidad">
-            <span class="input-group-text claseinputs">km/h</span>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <span class="col-4 text-end">Grave:</span>
-        <div class="col-8">
-          <div class="input-group">
-            <input type="number" [min]="form.limite_tolerable + 1" class="form-control claseinputs text-center" [(ngModel)]="form.limite_grave" [disabled]="!form.checkVelocidad">
-            <span class="input-group-text claseinputs">km/h</span>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <span class="col-4 text-end">Muy Grave:</span>
-        <div class="col-8">
-          <div class="input-group">
-            <input type="number" [min]="form.limite_grave + 1" class="form-control  claseinputs text-center" [(ngModel)]="form.limite_muy_grave" [disabled]="!form.checkVelocidad">
-            <span class="input-group-text claseinputs">km/h</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="row"></div>
-      <div class="row"></div>
-    </div>
-
-    <div class="modal-footer">
-      <div class="row w-100 justify-content-around">
-        <div class="col-5">
-          <button type="button" (click)="clickCancelar(form.id)" class="btn btn-success w-100" >Cancelar</button>
-        </div>
-        <div class="col-5">
-          <button type="submit" (click)="clickGuardar(form.id)" class="btn btn-success w-100" >Guardar</button>
-        </div>
-      </div>
-    </div> -->
-
   </div>
 </div>
 
