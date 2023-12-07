@@ -24,6 +24,7 @@ export class PanelService {
     { id:'CIRCULAR-GEOFENCE', name:"Circular Geofences"},
     { id:'POLYLINE-GEOFENCE', name:"Polyline Geofences"},
     { id:'EVENT-USER', name:'Eventos'},
+    { id:'USER-INFO', name:'Información del Usuario'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
     { id:'DASHBOARD', name: 'Dashboard'},
     { id:'AUDITORIA', name: 'Auditoría'},
@@ -90,6 +91,8 @@ export class PanelService {
         return 'historial';
       case "EVENT-USER":
         return 'notificaciones';
+      case "USER-INFO":
+        return 'informacion';
       case "USER-CONFIG":
         return 'configuracion';
       case "DASHBOARD":
@@ -125,6 +128,8 @@ export class PanelService {
         return 'HISTORIAL';
       case "notificaciones":
         return 'EVENT-USER';
+      case "informacion":
+        return 'USER-INFO';
       case "configuracion":
         return 'USER-CONFIG';
       case "dashboard":

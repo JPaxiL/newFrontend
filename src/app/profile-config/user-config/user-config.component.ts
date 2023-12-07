@@ -1,7 +1,5 @@
 import { Component, Output, EventEmitter, OnInit, NgModule } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PanelService } from 'src/app/panel/services/panel.service';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
@@ -13,8 +11,7 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
 })
 export class UserConfigComponent implements OnInit {
   
-  usersForm!: FormGroup;
-  form :any = {};
+  userForm :any = {};
 
   isUnderConstruction: boolean = true;
   selectedType: any = {};
@@ -29,59 +26,41 @@ export class UserConfigComponent implements OnInit {
   typeVehiclesForm: any = [];
   originalValues: any[] | undefined;
 
+  colorsVehicles: any[] = [
+    { name: 'Por defecto', code: '#c4c2c1' }, // Celeste
+    { name: 'Celeste', code: '#00AAE4' }, // Celeste
+    { name: 'Morado', code: '#9370db' }, // Morado
+    { name: 'Naranja', code: '#ffa500' }, // Naranja
+    { name: 'Amarillo', code: '#ffff00' }, // Amarillo
+    { name: 'Verde Claro', code: '#17d244' }, // Verde Claro
+    { name: 'Guinda', code: '#800000' }, // Guinda
+    { name: 'Dorado', code: '#ffd700' }, // Dorado
+  ];
   constructor(       
-    private fb: FormBuilder,
     private userDataService: UserDataService,
     private panelService: PanelService) {
-  }
-
-  onSubmit(){
-    this.typeVehiclesForm = [];
-    const tableRows = document.querySelectorAll('table tbody tr');
-    tableRows.forEach((row: any) => {
-      const id = row.querySelector('input[type="hidden"]').value;
-      const color = row.querySelector('input[type="color"]').value;
-      const galon = row.querySelector('input[type="text"]').value;
-
-      this.typeVehiclesForm.push({ id, var_color: color, var_galon: galon });
-    });
-
-    console.log(this.usersForm.value);
-    console.log(this.typeVehiclesForm);
-    // VARIABLE para enviar DATOS 
-    let req = {
-      vehicles : this.typeVehiclesForm,
-      newPass : this.usersForm.value.newPass,
-      newCopyPass : this.usersForm.value.newPassRepeat,
-      bol_ondas : this.usersForm.value.bol_ondas,
-      bol_cursor: this.usersForm.value.bol_cursor,
-      bol_vehicle: this.usersForm.value.bol_vehicle,
-      // }
-    };
-    return req;
   }
 
   ngOnInit(): void {
     this.userDataService.spinner.show('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
     this.typeVehiclesList = this.userDataService.typeVehicles;
-    this.usersForm = this.initForm();
-    console.log(this.typeVehiclesList);
-    this.initFormTableVehicles();
-    this.userDataService.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
+    this.initForm();
+    console.log(this.typeVehiclesList,this.userDataService.userData);
+    this.initFormTableVehiclesDefault();
 
   }
 
-  initForm(): FormGroup{
-    return this.fb.group({
-      newPass: [''],
-      newPassRepeat: [''],
-      bol_ondas: [this.userDataService.userData.bol_ondas],
-      bol_cursor:[this.userDataService.userData.bol_cursor],
-      bol_vehicle:[this.userDataService.userData.bol_vehicle],
-    })
+  initForm() {
+    this.userForm.oldPass = ''; 
+    this.userForm.newPass = ''; 
+    this.userForm.newPassRepeat = '';
+    this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
+    this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
+    this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
+    this.userForm.vehicles = this.typeVehiclesList ?? [];
   }
-
-  initFormTableVehicles(){
+  
+  initFormTableVehiclesDefault(){
     let aux = this.userDataService.typeVehiclesUserData;
     for (const userDataItem of this.typeVehiclesList) {
       const itemVehicle = aux.find((item: { type_vehicle_id: any; }) => item.type_vehicle_id === userDataItem.id);
@@ -93,44 +72,74 @@ export class UserConfigComponent implements OnInit {
         userDataItem.var_galon = '';
       }
     }
+    this.userDataService.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
+
     this.originalValues = JSON.parse(JSON.stringify(this.typeVehiclesList)); // Guardar una copia profunda de los valores originales
-
-
   }
 
   switchActive(switchNumber: number){
     if (switchNumber === 1) {
-      this.usersForm.get('bol_ondas')?.setValue(true);
-      this.usersForm.get('bol_cursor')?.setValue(false);
-      this.usersForm.get('bol_vehicle')?.setValue(false);
+      this.userForm.bol_ondas = true;
+      this.userForm.bol_cursor = false;
+      this.userForm.bol_vehicle = false;
       
     } else if (switchNumber === 2) {
-      this.usersForm.get('bol_ondas')?.setValue(false);
-      this.usersForm.get('bol_cursor')?.setValue(true);
-      this.usersForm.get('bol_vehicle')?.setValue(false);
+      this.userForm.bol_ondas = false;
+      this.userForm.bol_cursor = true;
+      this.userForm.bol_vehicle = false;
       
     } else if (switchNumber === 3) {
-      this.usersForm.get('bol_ondas')?.setValue(false);
-      this.usersForm.get('bol_cursor')?.setValue(false);
-      this.usersForm.get('bol_vehicle')?.setValue(true);
+      this.userForm.bol_ondas = false;
+      this.userForm.bol_cursor = false;
+      this.userForm.bol_vehicle = true;
     }
   }
 
   onClickCancel(){
-    this.usersForm.get('newPass')?.setValue('');    
-    this.usersForm.get('newPassRepeat')?.setValue('');    
-    this.usersForm.get('bol_ondas')?.setValue(this.userDataService.userData.bol_ondas);    
-    this.usersForm.get('bol_cursor')?.setValue(this.userDataService.userData.bol_cursor);    
-    this.usersForm.get('bol_vehicle')?.setValue(this.userDataService.userData.bol_vehicle);    
+    this.userForm.oldPass = '';
+    this.userForm.newPass = '';
+    this.userForm.newPassRepeat = '';
+    this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
+    this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
+    this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
+
     this.typeVehiclesList = JSON.parse(JSON.stringify(this.originalValues)); // Restaurar los valores originales
     this.panelService.nombreComponente = '';
     $("#panelMonitoreo").hide( "slow" );
 
   }
+  onSubmit(){
+    // Limpiar el array antes de agregar los datos actualizados
+    this.userForm.vehicles = [];
+    
+    // Iterar sobre la lista de vehículos y agregarlos al array userForm.Vehicle
+    for (const item of this.typeVehiclesList) {
+      this.userForm.vehicles.push({
+        id: item.id,
+        var_nombre: item.var_nombre,
+        var_color: item.var_color,
+        var_galon: item.var_galon
+      });
+    }
+
+    console.log(this.userForm); // Información del formulario general
+
+
+    // Preparación de la solicitud para enviar datos
+    let req = {
+      vehicles: this.userForm.vehicles,
+      oldPass: this.userForm.oldPass,
+      newPass: this.userForm.newPass,
+      newCopyPass: this.userForm.newPassRepeat,
+      bol_ondas: this.userForm.bol_ondas,
+      bol_cursor: this.userForm.bol_cursor,
+      bol_vehicle: this.userForm.bol_vehicle
+    };
+    return req;
+  }
 
   confirm(){
     this.loading=true;
-
     Swal.fire({
       title: '¿Está seguro?',
       text: 'Se aplicarán los cambios',
