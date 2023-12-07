@@ -49,6 +49,8 @@ export class GeofenceTableComponent implements OnInit {
   alreadyLoaded: boolean = false;
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   @ViewChild('tt') tt!:any;
+  @Output() eventDisplayGroup = new EventEmitter<boolean>();
+
   treeGeofences: any;
  
   public column: number = 6; //posible order
@@ -150,6 +152,11 @@ export class GeofenceTableComponent implements OnInit {
   params: any;
   agInit(params: any){
     this.params = params;
+  }
+  onClickGroup(){
+    // this.displayGroup=true;
+    this.eventDisplayGroup.emit(true);
+    console.log('displaygroup true');
   }
 
   headerScrollHandler(){

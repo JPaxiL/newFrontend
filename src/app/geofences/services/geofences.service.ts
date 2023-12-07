@@ -28,6 +28,7 @@ export class GeofencesService {
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
+  @Output() displayOn = new EventEmitter<any>();
 
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];

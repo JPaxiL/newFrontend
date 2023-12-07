@@ -183,8 +183,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   onSelecTags(){
     console.log('etiquetasSelect',this.selectedTag);
     this.form.tags = this.selectedTag;
-    console.log(this.form.tags);
-
+    this.form.tags = this.form.tags.join(',');
   }
   deleteTag(){
     
@@ -908,7 +907,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
       if(this.poligonAdd._latlngs[0].length != 0){
         this.poligonAdd.editing.disable();
-        console.log(this.form);
+        
         this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
         this.geofencesService.store(this.form).then( (res1) => {
           //console.log("---clickGuardar NUEVO----");

@@ -18,6 +18,7 @@ export class GeocercaMainComponent implements OnInit {
     { id:'EDITAR' , name:"Editar"},
   );
 
+  displayGroup: boolean = false;
   constructor(
     // public mapService: MapServicesService,
     public geofencesService: GeofencesService
@@ -25,6 +26,15 @@ export class GeocercaMainComponent implements OnInit {
 
   ngOnInit(): void {
     this.geofencesService.nameComponentPol =  "LISTAR";
+  }
+
+  onHideDisplayGroup(event : boolean){
+    // //console.log('hide group panel...',event);
+    this.displayGroup = event;
+  }
+  eventDisplayGroup(event : boolean){
+    // //console.log('desde panel',event);
+    this.displayGroup = event;
   }
 
 }

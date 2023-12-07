@@ -12,9 +12,24 @@
       <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickImportGeocerca()" title="Importar o exportar">
         <i class="fas fa-file-import" aria-hidden="true"></i>
       </button>
-      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-      </button>
+      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
+        <button type="button"  class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" ngbDropdownToggle>
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior">
+          <div class="text-center">
+            Crear
+          </div>
+          <div class="dropdown-item"  style="padding: 0.125rem 0.75rem;">
+            <i *ngIf="geofencesService.showBtnAdd" class="fa fa-plus" style="width: 20px;"></i>
+            <span  (click)="clickAgregarGeocercaPol()" title="Crear geocerca">Crear Geocerca</span>
+          </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <i class="fa fa-plus" style="width: 20px;" data-bs-placement="auto" container="body" onclick="this.blur();"></i>
+            <span (click)="onClickGroup()" aria-hidden="true" type="button">Crear Etiqueta</span>
+          </div>
+        </div>
+      </div>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
         <button class="btn-gl-gray-blue btn-dark-hover btn-circle" ngbDropdownToggle>
           <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
