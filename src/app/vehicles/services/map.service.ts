@@ -492,7 +492,7 @@ export class MapService {
               let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
               if (this.userDataService.changeItemIcon == 'vehicles'){
                 //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
-                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('custom_ign=1')) {
+                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) {
                   // Si la cadena contiene |di4=1| o custom_ign=1
                   
                   if(vehicles[index].speed != 0){
@@ -504,8 +504,8 @@ export class MapService {
                   console.log('ICONO Corresponse -->',iconUrl);
                 } 
               }else if (this.userDataService.changeItemIcon == 'ondas'){
-                //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON
-                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('custom_ign=1')) {
+                //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
+                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) {
                   // Si la cadena contiene |di4=1| o custom_ign=1
                   //ONDAS
                   // if(vehicles[index].speed != 0){
