@@ -197,7 +197,7 @@
             <p-multiSelect
               class="mb-4"
               [filter]="true"
-              [options]="geofencesService.getTagss()" 
+              [options]="geofencesService.listTag" 
               [(ngModel)]="selectedTag"
               filterBy="nameTags"
               [filterValue]="filterTag"
