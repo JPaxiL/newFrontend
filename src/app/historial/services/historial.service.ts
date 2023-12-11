@@ -325,6 +325,16 @@ export class HistorialService {
       //return response.data;
   }
 
+  async enviarCorreoExcel() {
+    console.log(" ============ services enviarCorreoExcel =============");
+    
+    //this.tramasHistorial = await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise();
+    await this.http.post(`${environment.apiUrl}/api/enviarCorreoExcel`,{}).toPromise();
+
+  }
+
+
+
   calcularDistanciaEntreDosCoordenadas = (lat1:any, lon1:any, lat2:any, lon2:any) => {
     // Convertir todas las coordenadas a radianes
     lat1 = this.gradosARadianes(lat1);

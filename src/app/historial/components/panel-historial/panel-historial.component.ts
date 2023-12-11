@@ -1671,6 +1671,12 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
+  clickEnviarCorreoExcel() {
+      console.log(' =========== clickEnviarCorreoExcel 1 =============== ');
+      this.historialService.enviarCorreoExcel();
+      console.log(' =========== clickEnviarCorreoExcel 2 =============== ');
+
+  }
 
   get_combustible_movimiento(dH:any, a1:any, a2:any) {
 
