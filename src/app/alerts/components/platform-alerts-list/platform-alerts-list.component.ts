@@ -28,9 +28,10 @@ export class PlatformAlertsListComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.spinner.show('loadingPlatformAlertsSpinner');
-    this.loadData();
+    await this.loadData();
+    console.log("alerts Platform", this.alerts);
   }
 
   ngOnDestoy(){

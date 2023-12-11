@@ -18,7 +18,7 @@ declare var $: any;
 })
 export class AlertAccessoriesCreateComponent implements OnInit {
   options = new Array({ id: 'ALERTS-ACCESSORIES', name: 'Alertas 360' });
-
+  type = "";
   public alertForm!: FormGroup;
   public events: any = [];
   public loading: boolean = true;
@@ -57,7 +57,9 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show('loadingAlertData');
-
+    this.type = this.panelService.nombreComponente == "ALERTS-SECURITY-CREATE"? "security" : (this.panelService.nombreComponente == "ALERTS-MOBILE-CREATE"? "mobile":"360");
+    console.log("TYPE:   ",this.type);
+    
     this.alertForm = this.formBuilder.group({
       vehicles: ['', [Validators.required]],
       // geocercas: [[]],
@@ -81,7 +83,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         { value: '', disabled: this.disabledEmail },
         [Validators.required, Validators.email],
       ],
-      eventType: ['accessories'],
+      eventType: [this.type],
 
       lista_whatsapp: [[]],
       whatsapp: [
@@ -97,7 +99,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.AlertService.getEventsByType('accessories');
+    this.events = await this.AlertService.getEventsByType(this.type);
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;
@@ -234,7 +236,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           const res = await this.AlertService.create(this.alertForm.value);
-          this.clickShowPanel('ALERTS-ACCESSORIES');
+          this.clickShowPanel();
         },
       }).then((data) => {
         if (data.isConfirmed) {
@@ -250,12 +252,18 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     }
   }
 
-  clickShowPanel(nomComponent: string): void {
+  clickShowPanel(): void {
     $('#panelMonitoreo').show('slow');
-    this.panelService.nombreComponente = nomComponent;
-
-    const item = this.options.filter((item) => item.id == nomComponent);
-    this.panelService.nombreCabecera = item[0].name;
+    if(this.type == "security"){;
+      this.panelService.nombreComponente = "ALERTS-SECURITY";
+      this.panelService.nombreCabecera =   "Alertas Seguridad Vehicular";
+    }else if(this.type == "mobile"){
+      this.panelService.nombreComponente = "ALERTS-MOBILE";
+      this.panelService.nombreCabecera =   "Alertas Solución Móvil";
+    }else{
+      this.panelService.nombreComponente = "ALERTS-360";
+      this.panelService.nombreCabecera =   "Alertas Fatiga 360";
+    }
   }
 
   hideLoadingSpinner() {

@@ -108,6 +108,7 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
+import { UserInfoComponent } from './profile-config/user-info/user-info.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard/panal-dashboard.component';
@@ -140,6 +141,7 @@ import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
+import { GeofenceTableComponent } from './geofences/components/geofence-table/geofence-table.component';
 import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 import { CipiaComponent } from './cipia/cipia.component';
@@ -148,6 +150,7 @@ import { EventPopupComponent } from './events/components/event-popup/event-popup
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
 import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
+import { ShortenPipe } from './core/pipes/shorten.pipe';
 
 @NgModule({
   declarations: [
@@ -178,6 +181,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     GpsComponent,
     GsmComponent,
     SettingComponent,
+    ShortenPipe,
     TagComponent,
     FollowComponent,
     VehicleHeaderComponent,
@@ -200,6 +204,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     ListGeopointsComponent,
     ModalComponent,
     UserConfigComponent,
+    UserInfoComponent,
     Dashboard2Component,
     AreagraphsComponent,
     PanalDashboardComponent,
@@ -231,6 +236,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     ScreenViewComponent,
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
+    GeofenceTableComponent,
     AlphaNumericDashDirective,
     ScreenRecorderComponent,
     CipiaComponent,

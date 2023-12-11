@@ -1,7 +1,7 @@
 <div class="d-flex" style="height: 100%; overflow:auto;">
     <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
         <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
-        <form [formGroup]="usersForm" (submit)="confirm()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
+        <form (submit)="confirm()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
             <div class="panel-izq-container h-100" >
                 <div class="panel-izq-form">
                     <div class="row my-3">
@@ -40,70 +40,62 @@
                             </div>
                         </div>
                         <span class="col-12 text-center w-100 mt-2">
-                            soporte"&#64;"gltracker.pe
+                            soporte&#64;gltracker.pe
                         </span>
                     </div>
-                    <div class="gl-row-underline">
-                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <label>NUEVA CONTRASEÑA:</label>
-                        </div>
-                        <div class="col-12">
-                            <input type="password" formControlName="newPass" pInputText pTooltip="Ingrese una contraseña segura..." tooltipPosition="right"/>
-                        </div>
-                    </div>
-                    <div class="gl-row-underline">
-                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
-                            <label>REPITE LA NUEVA CONTRASEÑA:</label>
-                        </div>
-                        <div class="col-12">
-                            <input type="password" formControlName="newPassRepeat" pInputText pTooltip="Recuerde que las contraseñas deben ser iguales" tooltipPosition="right"/>
-                        </div>
-                    </div>
+                    
                     <div class="panel-izq-table-container">
                         <table>
                             <thead>
                                 <tr>
                                     <th style="width: 35%;">Tipo de vehiculo</th>
-                                    <th style="width: 25%;">Color</th>
+                                    <th style="width: 25%;">Color de Icono</th>
                                     <th style="width: 40%;">Consumo Combustible (Gal)</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <ng-container *ngFor=" let item of typeVehiclesList; let i=index">
+                                <ng-container *ngFor="let item of typeVehiclesList; let i = index">
                                     <tr>
-                                        <td>
-                                            <span class="d-flex text-start">{{item.var_nombre}}</span>
-                                            <input type="hidden" value="{{item.id}}">
+                                        <td style="width: 30%;">
+                                            <span>{{item.var_nombre}}</span>
+                                            <!-- <input type="hidden" value="{{item.id}}"> -->
+                                            <input type="hidden" [(ngModel)]="item.id" name="id_{{i}}" />
+
                                         </td>
-                                        <td>
+                                        <td style="width: 40%;">
                                             <div class="row">
-                                                
                                                 <div class="col-12 d-flex">
-                                                  <input type="color" class="form-control form-control-color form-control-color-gl flex-grow-1" id="'text_color_picker_{{item.id}}" value="{{item.var_color}}" title="Elige un color">
-                                                  <!-- <input type="color" class="form-control" id="text_color_picker_{{item.id}}" title="Elige un color" list="colorList">
-                                                    <datalist id="colorList">
-                                                        <option value="#FF0000">Rojo</option>
-                                                        <option value="#FFA500">Naranja</option>
-                                                        <option value="#FFFF00">Amarillo</option>
-                                                        <option value="#00FF00">Verde</option>
-                                                        <option value="#00FFFF">Celeste</option>
-                                                        <option value="#0000FF">Azul</option>
-                                                        <option value="#800080">Morado</option>
-                                                        <option value="#FFC0CB">Rosado</option>
-                                                        
-                                                        <option value="#FF6347">Tomate</option>
-                                                        <option value="#FF4500">Naranja rojizo</option>
-                                                        <option value="#FFD700">Amarillo oro</option>
-                                                        <option value="#9ACD32">Verde oliva</option>
-                                                        <option value="#20B2AA">Azul verdoso</option>
-                                                        <option value="#9370DB">Púrpura medio</option>
-                                                        <option value="#DB7093">Rosado claro</option>
-                                                    </datalist> -->
+                                                    <div class="col-12">
+                                                        <p-dropdown
+                                                          [options]="colorsVehicles"
+                                                          optionLabel="name"
+                                                          optionValue="code"
+                                                          name="var_color_{{i}}"
+                                                          [(ngModel)]="item.var_color"
+                                                          [showClear]="false"
+                                                          [appendTo]="'body'"
+                                                          [style]="{ 'display': 'flex', 'align-items': 'center' }"
+                                                        >
+                                                        <ng-template let-color pTemplate="selectedItem">
+                                                            <div class="color-option">
+                                                              <div class="color-box" [style.background-color]="color.color"></div>
+                                                              <span>{{ color.name }}</span>
+                                                            </div>
+                                                        </ng-template>
+                                                        <ng-template let-color pTemplate="item">
+                                                            <div class="color-option">
+                                                              <div class="color-box" [style.background-color]="color.color"></div>
+                                                              <span>{{ color.name }}</span>
+                                                            </div>
+                                                          </ng-template>
+                                                        </p-dropdown>
+                                                      </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" value="{{item.var_galon}}" pInputText placeholder="galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right"/>
+                                            <input type="text" name="var_galon_{{i}}" [(ngModel)]="item.var_galon" pInputText placeholder="Galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right" />
+                                            <!-- <input type="text" value="{{item.var_galon}}" pInputText placeholder="galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right"/> -->
                                         </td>
                                     </tr>
                                 </ng-container>
@@ -112,7 +104,7 @@
                     </div> 
                     <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
                         <div class="col-12 d-flex">
-                            <label class="me-2">Habilitar cambio de color según su estado:</label>
+                            <label class="me-2">Habilitar cambio de color según su estado: (En movimiento: VERDE, Exceso de Límite de velocidad: ROJO, Relenti: AZUL</label>
                         </div>
                         <div class="flex align-items h-5 column" >
                             <div class="">
@@ -120,7 +112,7 @@
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input formControlName="bol_ondas" type="checkbox" (change)="switchActive(1)" >
+                                    <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox" (change)="switchActive(1)" >
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -131,7 +123,7 @@
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input formControlName="bol_cursor" type="checkbox" (change)="switchActive(2)">
+                                    <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2)">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -142,7 +134,7 @@
                             </div>
                             <div>
                                 <label class="switch" >
-                                    <input formControlName="bol_vehicle" type="checkbox" (change)="switchActive(3)">
+                                    <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox" (change)="switchActive(3)">
                                     <span class="slider"></span>
                                 </label>
                             </div>

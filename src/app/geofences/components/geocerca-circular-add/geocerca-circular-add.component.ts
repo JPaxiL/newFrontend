@@ -56,7 +56,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
       var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == this.circularGeofencesService.idGeocercaEdit)[0];
 
-      if (geo.zone_visible == true) {
+      if (geo.zone_visible == 'true') {
 
         // console.log('Eliminando geocerca porque era visible');
         this.mapService.map.removeLayer(geo.geo_elemento);
@@ -119,7 +119,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
           this.circularGeofencesService.bindMouseEvents(geo);
 
-          if (geo.zone_visible == true) {
+          if (geo.zone_visible == 'true') {
             geo.geo_elemento.addTo(this.mapService.map);
           }
 
@@ -279,7 +279,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
   clickCancelar(id:number){
 
-    this.circularGeofencesService.nombreComponente = "LISTAR";
+    this.circularGeofencesService.nameComponentCir = "LISTAR";
 
     var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
     if ( this.action == "edit" ) {
@@ -294,7 +294,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
       this.circularGeofencesService.bindMouseEvents(geo);
 
-      if (geo.zone_visible == true) {
+      if (geo.zone_visible == 'true') {
         geo.geo_elemento.addTo(this.mapService.map);
       }
 
@@ -334,7 +334,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
       this.circularGeofencesService.edit(this.form).subscribe((res) => {
 
-        this.circularGeofencesService.nombreComponente =  "LISTAR";
+        this.circularGeofencesService.nameComponentCir =  "LISTAR";
 
         let gEdit = res[2];
         let gEdit2 = res[3][0];
@@ -346,7 +346,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
         geo.tag_name_color = gEdit.tag_name_color;
         geo.tag_name_font_size = gEdit.tag_name_font_size;
         geo.zone_name_visible = gEdit.bol_mostrar_nombre;
-        geo.zone_name_visible_bol = (gEdit.zone_name_visible === true);
+        geo.zone_name_visible_bol = (gEdit.zone_name_visible == 'true');
         geo.zone_visible = gEdit.bol_mostrar;
         geo.geo_coordenadas = gEdit.geo_coordenadas;
         geo.zone_color = gEdit.var_color;
@@ -372,7 +372,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
         this.circularGeofencesService.bindMouseEvents(geo);
 
-        if (geo.zone_visible == true) {
+        if (geo.zone_visible == 'true') {
           geo.geo_elemento.addTo(this.mapService.map);
         }
 
@@ -395,7 +395,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
                 className: 'leaflet-tooltip-own',
           });
         
-        if (geo.zone_name_visible == true) {
+        if (geo.zone_name_visible == 'true') {
           geo.marker_name.addTo(this.mapService.map);
         }
   
@@ -411,7 +411,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
 
         this.circularGeofencesService.store(this.form).subscribe( (resp: any) => {
 
-          this.circularGeofencesService.nombreComponente =  "LISTAR";
+          this.circularGeofencesService.nameComponentCir =  "LISTAR";
 
           let gNew = resp[2];
           let gNew2 = resp[3][0];
@@ -424,7 +424,7 @@ export class GeocercaCircularAddComponent implements OnInit, OnDestroy {
           geo.tag_name_color = gNew.tag_name_color;
           geo.tag_name_font_size = gNew.tag_name_font_size;
           geo.zone_name_visible = gNew.bol_mostrar_nombre;
-          geo.zone_name_visible_bol = (gNew.zone_name_visible === true);
+          geo.zone_name_visible_bol = (gNew.zone_name_visible == 'true');
           geo.zone_visible = gNew.bol_mostrar;
           geo.geo_coordenadas = gNew2.geo_coordenadas;
           geo.zone_color = gNew.var_color;

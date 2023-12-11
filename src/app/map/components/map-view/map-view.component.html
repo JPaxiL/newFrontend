@@ -29,3 +29,32 @@
       </p-footer>
 </p-dialog>
 
+<p-dialog *ngIf="vehiclesIsLoaded" 
+  [(visible)]="mapServicesService.showSearch" 
+  id="searchItems"
+  [showHeader]="false"
+  [closable]="false"
+  [position]="'top-right'"
+  [contentStyle]="{padding:'0', background:'transparent'}"
+  [style]="{'margin-right':'45px', 'margin-top':'calc(var(--navbar-height) + 270px)'}"
+  [dismissableMask]="true"
+>
+  <ng-template let-vehicle pTemplate="content">
+    <p-dropdown 
+      [options]="mapService.vehicleService.vehicles" 
+      (onChange)="searchItem($event)" 
+      optionLabel="plate_number" 
+      [filter]="true" 
+      filterBy="plate_number,name,empresa,IMEI" 
+      [showClear]="true" 
+      placeholder="Búsqueda" 
+      appendTo="body"
+      [style]="{width:'14rem'}"
+    >
+      <ng-template let-vehicle pTemplate="item">
+        <div>{{vehicle.name.toLowerCase() == vehicle.plate_number.toLowerCase() ? vehicle.name : vehicle.name + ' - ' +vehicle.plate_number}}</div>
+      </ng-template>
+    </p-dropdown>
+  </ng-template>
+</p-dialog>
+

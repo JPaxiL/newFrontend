@@ -12,6 +12,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class UserDataService {
   svgContents: { [key: string]: string } = {}; // Almacena los contenidos de los SVG
   svgContentsSafe: { [key: string]: SafeHtml } = {}; // Almacena los contenidos seguros de los SVG
+  svgContentsGreenSafe: { [key: string]: SafeHtml } = {}; // Almacena los contenidos seguros de los SVG
+  svgContentsBlueSafe: { [key: string]: SafeHtml } = {}; // Almacena los contenidos seguros de los SVG
+  svgContentsRedSafe: { [key: string]: SafeHtml } = {}; // Almacena los contenidos seguros de los SVG
 
   userData: any = {};
   userName: string = '';
@@ -21,6 +24,11 @@ export class UserDataService {
   apiUrl = environment.apiUrl; 
   typeVehicles: any = {};
   typeVehiclesUserData: any = {};
+  changeItemIcon :string = '';
+
+  reportsUser : any;
+  eventsUser : any;
+  reportsUserLoaded: boolean = false;  
 
   @Output() userDataCompleted = new EventEmitter<any>();
   @Output() geofencesPrivileges = new EventEmitter<any>();
@@ -34,59 +42,45 @@ export class UserDataService {
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
       next: async data => {
         //this.userData = this.panelService.userData = data[0];
-        //console.log('User Data obtenida: ',data[0]);
-        console.log('User Data obtenida ======> ',  data.data);
-        await this.getTypeVehiclesForUser();
-        await this.getUserConfigData();
-        this.userData = data.data;
+        console.log('User DataFULL obtenida: ',data);
+        // console.log('User Data obtenida ======> ',  data.data);
+        // console.log('User VEHICLES obtenida ======> ',  data.data2);
+        // console.log('User CONFIG DATA obtenida ======> ',  data.data3);
+        this.typeVehicles = await data.data2;
+        this.typeVehiclesUserData = await data.data3;
+        // await this.getTypeVehiclesForUser();
+        // await this.getUserConfigData();
+        this.userData = await data.data;
         this.userName = data.data.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
         this.userEmail = data.data.email;
         this.userDataInitialized = true;
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);
         this.geopointsPrivileges.emit(true);
+        this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
+        // await this.preloadSVGs();
+        this.changeItemIcon = this.getChangeItemColor();
+
       },
       error: (errorMsg) => {
         console.log('No se pudo obtener datos del usuario', errorMsg);
       }});
   }
 
-  async getTypeVehiclesForUser(): Promise<void> {
-    // console.log('Getting Type Vehicles');
-    this.http.get<any>(`${this.apiUrl}/api/typeVehiclesUser`).subscribe({
-      next: data => {
-        this.typeVehicles = data.data;
-        console.log(data);
-        this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
 
-      },
-      error: (errorMsg) => {
-        console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
-      }
-    });
-  }
-
-  async getUserConfigData(): Promise<void> {
-    // return this.http.get<any>(`${this.apiUrl}/api/userdataconfig`);
-    this.http.get<any>(`${this.apiUrl}/api/userdataconfig`).subscribe({
-      next: async data => {
-        this.typeVehiclesUserData = data.data;
-        await this.preloadSVGs();
-        this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
-        this.userDataInitialized = false;
-      },
-      error: (errorMsg) => {
-        console.error('Error al obtener IDs de tipos de vehículos:', errorMsg);
-      }
-    });
+  public getReportsForUser(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/getPermissReports`);
   }
 
   updateUserConfig(updatedUserConfig: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/userconfig`, updatedUserConfig);
   } 
+  changePasswordUser(infoUser: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/api/changePassword`, infoUser);
+  } 
 
   //PARA ICONOS SVG PRELOAD
-  async preloadSVGs(): Promise<void> {
+  async preloadSVGs() {
     console.log('INICIANDO Preload SVGS ...');
     let svgNames: string[] = this.typeVehiclesUserData.map((vehicle: any) => vehicle.var_icono);
     if (!svgNames.length || !this.typeVehiclesUserData.length){
@@ -98,15 +92,26 @@ export class UserDataService {
       
       // Obtener el color correspondiente para este SVG
       const svgUserData = this.typeVehiclesUserData.find((vehicle: any) => vehicle.var_icono == svgName);
-      const userColor = svgUserData ? svgUserData.var_color : '#FF0000'; // Color por defecto si no se encuentra
+      const userColor = svgUserData ? svgUserData.var_color : '#c3c4c4'; // Color por defecto si no se encuentra
       //c3c4c4 color gris
       const modifiedSVG = await this.modifyUserSVG(svgContent, userColor); // Modificar el SVG cargado con el color
-      const sanitizedSVG = await this.sanitizer.bypassSecurityTrustHtml(modifiedSVG); // Sanitizar el SVG
+      const sanitizedSVG = this.sanitizer.bypassSecurityTrustHtml(modifiedSVG); // Sanitizar el SVG
       this.svgContents[svgName] = svgContent;
       this.svgContentsSafe[svgName] = sanitizedSVG; // Almacenar el SVG sanitizado
-
-      // console.log(`Contenido de ${svgName}:`, modifiedSVG); // Mostrar contenido del SVG cargado en la consola
+      // console.log(`Contenido de `, svgNames); // Mostrar contenido del SVG cargado en la consola
     });
+  }
+
+
+  //FUNCION PARA SABER SI EL VEHICULO CAMBIA ESTADO O NO
+  getChangeItemColor(){
+    if (this.userData.bol_ondas){
+      return 'ondas';
+    }else if (this.userData.bol_vehicle){
+      return 'vehicles';
+    }else{
+      return 'cursor';
+    }
   }
 
   

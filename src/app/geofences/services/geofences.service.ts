@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
+import {TreeNode} from 'primeng-lts/api';
 
 import { MapServicesService } from '../../map/services/map-services.service';
-
+import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { ITags } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +18,16 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
 export class GeofencesService {
 
   public geofences:any = [];
-  public nombreComponente:string = "LISTAR";
-
+  public nameComponentPol:string = "LISTAR";
+  public geofencesTree: TreeNode[]=[];
+  public treeTableStatus: boolean = false;
   public idGeocercaEdit:number = 0;
+  public type: string = 'polig'; //[polig, cir, line]
   public action:string = "add"; //[add,edit,delete]
+
+  @Output() dataTreeCompleted = new EventEmitter<any>();
+  @Output() dataCompleted = new EventEmitter<any>();
+  @Output() clickEye = new EventEmitter<any>();
 
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];
@@ -42,7 +51,8 @@ export class GeofencesService {
   initializingUserPrivleges: boolean = false;
   showBtnAdd = true;
   showBtnEdit = true;
-
+  showBtnImportExport = true;
+  listTag: ITags [] = [];
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -56,12 +66,14 @@ export class GeofencesService {
   public async initialize() {
     this.getUserPrivileges();
     await this.getAll();
+    //await this.getTags(); //COMENTADO POR FALTA DE API Y CONTROLADOR
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/zone`).toPromise()
     .then(response => {
       this.geofences = response.data;
+      console.log("Polygonalessss",response.data);
       this.initializeTable();
       this.drawGeofencesOnMap();
       this.updateGeoCounters();
@@ -72,19 +84,41 @@ export class GeofencesService {
       this.initializingGeofences = true;
       this.attemptToHideSpinner();
       console.log(this.geofences);
+      this.dataCompleted.emit(this.geofences);
     });
+  }
+
+  public async getTags(){
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
+    .then(response => {
+      console.log("ress", response);
+      this.listTag = response.data;
+      console.log("lisstagg", this.listTag);
+    });
+
+  }
+  public getTagss(){
+    return this.listTag.filter(item=>item.var_name != "deafault");
+  }
+  public async storeTag(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTag`,zone).toPromise();
+    return response.data;
+  }
+  public async deleteTag(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
+    return response.data;
   }
 
   public clearDrawingsOfGeofence(geofence: any){
     if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
-      && geofence.zone_visible == "true" ){
+      && geofence.zone_visible == 'true' ){
 
       //Si la geocerca ya existe y es visible, entonces remover la capa
       //console.log('Geocerca visible, eliminar', geofence);
       this.mapService.map.removeLayer(geofence.geo_elemento);
     }
     if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
-      && geofence.zone_name_visible == "true" ){
+      && geofence.zone_name_visible == 'true' ){
 
       //Si el nombre de la geocerca ya existe y es visible, entonces removerla
       //console.log('Nombre de geocerca visible, eliminar', geofence);
@@ -93,14 +127,14 @@ export class GeofencesService {
   }
 
   public showDrawingsOfGeofence(geofence: any){
-    if (geofence.zone_visible == "true") {
+    if (geofence.zone_visible == 'true') {
       geofence.geo_elemento.addTo(this.mapService.map);
     }
 
-    if (geofence.zone_name_visible == "true") {
+    if (geofence.zone_name_visible == 'true') {
       geofence.marker_name.addTo(this.mapService.map);
     }
-    
+
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // // tempMarker.bindLabel("My Label");
     // tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
@@ -201,6 +235,10 @@ export class GeofencesService {
     return this.tblDataGeo;
   }
 
+  public onClickEye(geofence: string):void{
+    this.clickEye.emit(geofence);
+  }
+
   initializeTable(newGeofenceId?: number) {
     this.tblDataGeo = [];
     for(let i = 0; i < this.geofences.length; i++){
@@ -212,7 +250,7 @@ export class GeofencesService {
       this.tblDataGeo.push({trama:this.geofences[i]});
     }
     this.tblDataGeoFiltered = this.getTableData();
-    
+
     //this.spinner.hide('loadingGeofencesSpinner');
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
   }
@@ -235,12 +273,12 @@ export class GeofencesService {
       console.log('(Geofences Service) User Data está listo. Obteniendo privilegios...');
       this.verifyPrivileges();
     }
-    
+
   }
 
   attemptToHideSpinner(){
-    console.log('Attempt to hide Geofences Spinner: ', { 
-      isTableReady: this.initializingGeofences, 
+    console.log('Attempt to hide Geofences Spinner: ', {
+      isTableReady: this.initializingGeofences,
       isUserDataReady: this.initializingUserPrivleges } );
     if(this.initializingGeofences && this.initializingUserPrivleges){
       this.spinner.hide('loadingGeofencesSpinner');

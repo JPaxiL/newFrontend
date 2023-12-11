@@ -17,7 +17,6 @@ export class ToolbarMapService {
   toolbar: any;
   showDialog:boolean = false;
 
-
   showDistance:boolean = false;
 
   measureControl = new L.control.measure(
@@ -39,9 +38,9 @@ export class ToolbarMapService {
   );
 
   @Output() change: EventEmitter<boolean> = new EventEmitter();
+  @Output() searchClick: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private vehicleService: VehicleService,
-              private mapService: MapService) {}
+  constructor(private mapService: MapService) {}
 
   createToolbar(map: L.Map) {
     this.map = map;
@@ -55,6 +54,7 @@ export class ToolbarMapService {
         this.createLocation();
         this.createCoordinate();
         this.createDistance();
+        this.createSearchItems();
         return this.container;
       },
     };
@@ -154,6 +154,18 @@ export class ToolbarMapService {
     };
   }
 
+  createSearchItems(){
+    var coordinate = L.DomUtil.create('a', 'leaflet-link', this.container);
+
+    coordinate.title = "Búsqueda";
+
+    L.DomUtil.create('i', 'fa fa-search', coordinate);
+
+    coordinate.onclick = () => {
+      this.searchClick.emit(true);
+    };
+  }
+
   createDistance(){
 
     var distance = L.DomUtil.create('a', 'leaflet-link', this.container);
@@ -172,7 +184,6 @@ export class ToolbarMapService {
           this.map.removeControl(this.measureControl);
           this.showDistance = false;
        }
-
     };
   }
 }

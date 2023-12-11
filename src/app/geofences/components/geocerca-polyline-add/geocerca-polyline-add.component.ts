@@ -65,16 +65,17 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-
     if(this.action == "edit"){
 
       this.llenar_formulario();
 
       var geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == this.polylineGeofenceService.idGeocercaEdit)[0];
       
-      // console.log(geo);
+      console.log(geo);
+
       if (geo.zone_visible == true) {
-        // console.log('Eliminando geocerca porque era visible');
+
+        console.log('Eliminando geocerca porque era visible');
         this.mapService.map.removeLayer(geo.geo_elemento);
       }
 
@@ -89,7 +90,6 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
       this.poligonAdd = geo.geo_elemento.addTo(this.mapService.map);
       geo.geo_elemento.addTo(this.mapService.map);
       geo.geo_elemento.editing.enable();
-
 
     }else{
 
@@ -106,12 +106,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
       
       this.polylineGeofenceService.paintpolygonControl.startDraw();
       //this.changeGeoColor(this.form.id);
-
-
     }
-
-
-
   }
 
   ngOnDestroy(){
@@ -132,7 +127,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
           this.polylineGeofenceService.bindMouseEvents(geo);
 
-          if (geo.zone_visible == true) {
+          if (geo.zone_visible == 'true') {
             geo.geo_elemento.addTo(this.mapService.map);
           }
 
@@ -150,29 +145,21 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
     for(let i = 0; i < this.polylineGeofenceService.polyline_geofences.length; i++){
       this.polylineGeofenceService.showDrawingsOfGeofence(this.polylineGeofenceService.polyline_geofences[i]);
     }
-
-
   }
-
 
   get action(){
 
     return this.polylineGeofenceService.action;
   }
 
-
   // changeGeoColor(id:number) {
-
   //   let newColor = this.form.color;
-
   //   if ( this.action == "edit" ) {
   //       var geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == id)[0];
   //       geo.geo_elemento.setStyle({opacity: 1, color: newColor });
-
   //   } else {
   //       this.poligonAdd.setStyle({opacity: 1, color: newColor });
   //   }
-
   // }
 
   llenar_formulario(){
@@ -195,7 +182,6 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
     } else {
       this.form.perimetro = 0;
       this.form.area = 0;
-
     }
 
     this.form.zone_type = 'POLYGON';
@@ -303,8 +289,8 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
     this.form.limite_grave = 0;
     this.form.limite_muy_grave = 0;
 
-    this.form.visible_zona         = true;
-    this.form.nombre_visible_zona  = true;
+    this.form.visible_zona         = 'true';
+    this.form.nombre_visible_zona  = 'true';
 
     this.form.geo_geometry          = "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)";
     
@@ -391,11 +377,12 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
       
       console.log("geoElement-------",geoElement);
     return geoElement;
+
    }
 
   clickCancelar(id:number){
 
-    this.polylineGeofenceService.nombreComponente = "LISTAR";
+    this.polylineGeofenceService.nameComponentLin = "LISTAR";
 
     var geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == id)[0];
     if ( this.action == "edit" ) {
@@ -410,7 +397,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       this.polylineGeofenceService.bindMouseEvents(geo);
 
-      if (geo.zone_visible == true) {
+      if (geo.zone_visible == 'true') {
         geo.geo_elemento.addTo(this.mapService.map);
       }
 
@@ -438,7 +425,6 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       var geo0 = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == id)[0];
       
-      
       this.form.geo_geometry = this.layerToPoints(geo0.geo_elemento,'POLYGON','edit');
 
       geo0.geo_elemento.editing.disable();
@@ -447,8 +433,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
       this.polylineGeofenceService.edit(this.form).subscribe(res1 => {
 
-        this.polylineGeofenceService.nombreComponente =  "LISTAR";
-
+        this.polylineGeofenceService.nameComponentLin =  "LISTAR";
 
         let gEdit = res1[2];
         let gEdit2 = res1[3][0];
@@ -466,7 +451,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
         geo.zone_color = gEdit.color_zona;
         geo.zone_name = gEdit.nombre_zona;
         geo.zone_name_visible = gEdit.nombre_visible_zona;
-        geo.zone_name_visible_bol = (geo.zone_name_visible === true);
+        geo.zone_name_visible_bol = (geo.zone_name_visible == 'true');
         geo.zone_visible = gEdit.visible_zona;
         geo.tag_name_color = gEdit.tag_name_color;
         geo.tag_name_font_size = gEdit.tag_name_font_size;
@@ -484,7 +469,7 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
         this.polylineGeofenceService.bindMouseEvents(geo);
 
-        if (geo.zone_visible == true) {
+        if (geo.zone_visible == 'true') {
           geo.geo_elemento.addTo(this.mapService.map);
         }
 
@@ -513,15 +498,13 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
             });
 
 
-        if (geo.zone_name_visible == true) {
+        if (geo.zone_name_visible == 'true') {
           geo.marker_name.addTo(this.mapService.map);
         }
 
         this.spinner.hide('spinnerLoading');
 
       })
-
-
 
     } else {
 
@@ -535,13 +518,9 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
         let cont = 0;
 
         if(coordinates.length <= 200){
-
           step = 1;
-
         }else{
-
           step = Math.round((coordinates.length/200));
-
         }
 
         for (let index = 0; index < coordinates.length; index += step) {
@@ -551,10 +530,9 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
 
         this.form.geo_geometry = this.layerToPoints(new_coordinates,'POLYGON','add');
 
-
         this.polylineGeofenceService.store(this.form).subscribe(res => {
 
-          this.polylineGeofenceService.nombreComponente =  "LISTAR";
+          this.polylineGeofenceService.nameComponentLin =  "LISTAR";
 
           let gNew = res[2];
           let gNew2 = res[3][0];
@@ -573,12 +551,10 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
           geo.zone_color = gNew.color_zona;
           geo.zone_name = gNew.nombre_zona;
           geo.zone_name_visible = gNew.nombre_visible_zona;
-          geo.zone_name_visible_bol = (geo.zone_name_visible == true);
+          geo.zone_name_visible_bol = (geo.zone_name_visible == 'true');
           geo.zone_visible = gNew.visible_zona;
-
           geo.tag_name_color = gNew.tag_name_color;
           geo.tag_name_font_size = gNew.tag_name_font_size;
-
           geo.geo_coordenadas = gNew2.geo_coordenadas;
 
           this.polylineGeofenceService.paintpolygonControl.eraseAll();
@@ -598,7 +574,6 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
           let txt_color = this.polylineGeofenceService.tooltipBackgroundTransparent? (geo.tag_name_color == ''? this.polylineGeofenceService.defaultTagNameColor: geo.tag_name_color): this.mapService.hexToRGBA(geo.zone_color);
           let font_size = (geo.tag_name_font_size == 0? this.polylineGeofenceService.defaultTagNameFontSize: geo.tag_name_font_size) + 'px';
 
-
           geo.marker_name = L.circleMarker(centerPoligon, {
             // pane: 'markers1',
             "radius": 0,
@@ -617,7 +592,6 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
               });
 
           geo.marker_name.addTo(this.mapService.map);
-
 
           this.polylineGeofenceService.polyline_geofences.push(geo);
           this.spinner.hide('spinnerLoading');
@@ -644,7 +618,6 @@ export class GeocercaPolylineAddComponent implements OnInit, OnDestroy {
     this.polylineGeofenceService.polyline_geofences.sort(function (a:any, b:any){
       return a.orden.localeCompare(b.orden, 'en', { numeric: true })
     });
-
   }
 
   draw(action: string){

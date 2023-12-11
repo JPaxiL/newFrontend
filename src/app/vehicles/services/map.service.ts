@@ -13,6 +13,7 @@ import { VehicleService } from './vehicle.service';
 import { FollowService } from './follow.service';
 import { TabService } from 'src/app/panel/services/tab.service';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/takeWhile';
@@ -63,10 +64,11 @@ export class MapService {
   @Output() changeEye = new EventEmitter<any>();
 
   constructor(
-    private vehicleService:VehicleService,
+    public vehicleService:VehicleService,
     private followService:FollowService,
     private socketWebService: SocketWebService,
     private tabService: TabService,
+    private userDataService: UserDataService,
   ) {
     // this.interval = setInterval(function(this){
     //   // this.localStorage
@@ -488,6 +490,35 @@ export class MapService {
               // //console.log('aux = ', aux['_latlng']);
               //_popup
               let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
+              if (this.userDataService.changeItemIcon == 'vehicles'){
+                //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
+                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) {
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  
+                  if(vehicles[index].speed != 0){
+                    iconUrl = './assets/images/objects/nuevo/state_moved/movimiento_'+vehicles[index].icon_def;
+                  }else{
+                    iconUrl = './assets/images/objects/nuevo/state_relenti/relenti_'+vehicles[index].icon_def;
+                  }
+                  console.log('Test monitor vehicles--->',vehicles[index]);
+                  console.log('ICONO Corresponse -->',iconUrl);
+                } 
+              }else if (this.userDataService.changeItemIcon == 'ondas'){
+                //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
+                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) {
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  //ONDAS
+                  // if(vehicles[index].speed != 0){
+                  //   iconUrl = './assets/images/objects/nuevo/state_moved/movimiento_'+vehicles[index].icon_def;
+                  // }else{
+                  //   iconUrl = './assets/images/objects/nuevo/state_relenti/relenti_'+vehicles[index].icon_def;
+                  // }
+                  // console.log('Test monitor vehicles--->',vehicles[index]);
+                  console.log('ICONO Corresponse ONDAS -->',iconUrl);
+                } 
+              }
+              
+              
               this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
                 '<aside class="">'+
                   '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
@@ -1143,17 +1174,23 @@ export class MapService {
 
   private drawIcon(data:any, map: any): void{
     // assets/images/objects/nuevo/{{ rowData['icon']
-    //console.log("dataaaaa---",data);
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
-    if(data.speed>0){
-      iconUrl = './assets/images/accbrusca.png';
-    }
+    //ESTO NO SE HACE AL INICIO PORQUE LA DATA ES PASADA...
+    // if(data.parametrosGet['di4']==1 || data.parametrosGet['Custom_ign']==1 ){
+    //   if(data.speed>0){
+    //   iconUrl = './assets/images/objects/nuevo/state_moved/movimiento_'+data.icon;
+    //   // iconUrl = './assets/images/accbrusca.png';
+    //   }else{
+    //   iconUrl = './assets/images/objects/nuevo/state_relenti/relenti_'+data.icon;
+    //   }
+    // }
     const iconMarker = L.icon({
       iconUrl: iconUrl,
       iconSize: [40, 40],
       iconAnchor: [25, 40],
       popupAnchor:  [-3, -40]
     });
+
     //console.log('data.name',data.name);
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+

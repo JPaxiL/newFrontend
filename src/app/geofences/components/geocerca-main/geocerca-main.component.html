@@ -1,8 +1,7 @@
 
-<div class="h-100" *ngIf="(geofencesService.nombreComponente == 'LISTAR')">
-  <app-geocerca-lists></app-geocerca-lists>
+<div class="h-100" *ngIf="(geofencesService.nameComponentPol == 'LISTAR')">
+  <app-geofence-table></app-geofence-table>
 </div>
-
-<div class="h-100" *ngIf="(geofencesService.nombreComponente == 'AGREGAR')">
+<div class="h-100" *ngIf="(geofencesService.nameComponentPol == 'ADD GEOPOL')">
   <app-geocerca-add></app-geocerca-add>
 </div>

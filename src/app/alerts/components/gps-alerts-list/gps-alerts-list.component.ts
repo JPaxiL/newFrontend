@@ -24,8 +24,8 @@ export class GpsAlertsListComponent implements OnInit {
 
   options = new Array(
     { id:'ALERTS', name:"Alertas"},
-    { id:'ALERTS-GPS', name:"Alertas GPS"},
-    { id:'ALERTS-GPS-CREATE', name:"Alertas GPS"},
+    { id:'ALERTS-GPS', name:"Alertas GPS Tracker"},
+    { id:'ALERTS-GPS-CREATE', name:"Alertas GPS Tracker"},
   );
 
   constructor(

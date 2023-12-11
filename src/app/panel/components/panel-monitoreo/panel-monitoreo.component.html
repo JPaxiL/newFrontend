@@ -69,15 +69,45 @@
         <app-platform-alerts-edit></app-platform-alerts-edit>
       </ng-container>
 
-      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIES')">
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIES')
+      ">
         <app-panel-alerts-accessories></app-panel-alerts-accessories>
       </ng-container>
 
-      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-CREATE')">
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-SECURITY')">
+        <app-panel-alerts-accessories></app-panel-alerts-accessories>
+      </ng-container>
+
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-MOBILE')">
+        <app-panel-alerts-accessories></app-panel-alerts-accessories>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-360')">
+        <app-panel-alerts-accessories></app-panel-alerts-accessories>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-SECURITY-CREATE')">
         <app-alert-accessories-create></app-alert-accessories-create>
       </ng-container>
 
-      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-ACCESSORIE-EDIT')">
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-MOBILE-CREATE')">
+        <app-alert-accessories-create></app-alert-accessories-create>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-360-CREATE')">
+        <app-alert-accessories-create></app-alert-accessories-create>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-SECURITY-EDIT')">
+        <app-alert-accessories-edit></app-alert-accessories-edit>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-MOBILE-EDIT')">
+        <app-alert-accessories-edit></app-alert-accessories-edit>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'ALERTS-360-EDIT')">
         <app-alert-accessories-edit></app-alert-accessories-edit>
       </ng-container>
 
@@ -99,6 +129,10 @@
 
       <ng-container *ngIf="(panelService.nombreComponente == 'USER-CONFIG')">
         <app-user-config></app-user-config>
+      </ng-container>
+
+      <ng-container *ngIf="(panelService.nombreComponente == 'USER-INFO')">
+        <app-user-info></app-user-info>
       </ng-container>
 
       <ng-container *ngIf="(panelService.nombreComponente == 'DASHBOARD')">
