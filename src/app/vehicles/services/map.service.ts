@@ -60,6 +60,10 @@ export class MapService {
   // }
   // setInvterval = setInterval;
 
+  timeNow:any = []; // Array para almacenar los tiempos
+  timeWait:number = 7200000; // 7200 segundos en milisegundos
+
+
   @Output() sendData = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
 
@@ -489,33 +493,36 @@ export class MapService {
               // //console.log('coord',coord);
               // //console.log('aux = ', aux['_latlng']);
               //_popup
+              // vehicles[index].limit_speed = 100; //COMENTAR SOLO PARA PRUEBAS
               let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
-              if (this.userDataService.changeItemIcon == 'vehicles'){
+              if (this.userDataService.changeItemIcon == 'vehicles' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
                 //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
-                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) {
-                  // Si la cadena contiene |di4=1| o custom_ign=1
+                // Si la cadena contiene |di4=1| o custom_ign=1
+                if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
+                  iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_def;
+                }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed!){
+                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_def;
+                }else{
+                  iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_def;
+                }
+
+                this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
+
+                //FALTA AGREGAR LAS DIRECCIONES AQUI UNA FUNCION
                   
-                  if(vehicles[index].speed != 0){
-                    iconUrl = './assets/images/objects/nuevo/state_moved/movimiento_'+vehicles[index].icon_def;
-                  }else{
-                    iconUrl = './assets/images/objects/nuevo/state_relenti/relenti_'+vehicles[index].icon_def;
-                  }
-                  console.log('Test monitor vehicles--->',vehicles[index]);
-                  console.log('ICONO Corresponse -->',iconUrl);
-                } 
-              }else if (this.userDataService.changeItemIcon == 'ondas'){
+              }else if (this.userDataService.changeItemIcon == 'ondas' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
                 //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
-                if (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) {
-                  // Si la cadena contiene |di4=1| o custom_ign=1
-                  //ONDAS
-                  // if(vehicles[index].speed != 0){
-                  //   iconUrl = './assets/images/objects/nuevo/state_moved/movimiento_'+vehicles[index].icon_def;
-                  // }else{
-                  //   iconUrl = './assets/images/objects/nuevo/state_relenti/relenti_'+vehicles[index].icon_def;
-                  // }
-                  // console.log('Test monitor vehicles--->',vehicles[index]);
-                  console.log('ICONO Corresponse ONDAS -->',iconUrl);
-                } 
+                // Si la cadena contiene |di4=1| o custom_ign=1
+                //ONDAS
+                if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
+                  iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed! ){
+                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_def;
+                }else{
+                  iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                }
+                this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
+
               }
               
               
@@ -751,7 +758,8 @@ export class MapService {
 
               // }
 
-              if(vehicles[index].speed != 0){
+              // if(vehicles[index].speed != 0){
+              if((vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) && vehicles[index].speed != 0){ //ESTA EN MOVIMIENTO 
 
                 this.dif_mayor = 0.00;
                 this.dif_divide = 0.00;
@@ -830,20 +838,26 @@ export class MapService {
                   }
 
                   //this.changePositionArrow(this.final_direction,key);
-
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                }
-                else{
+                  if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! < vehicles[index].limit_speed!){
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }else{
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }
+                }else{
                   if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
 
                     let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
                     //this.changePositionArrow(old_direction[1],key);
-
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
+                    if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! < vehicles[index].limit_speed!){
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${old_direction[1]}`;
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                  }
-                  else{
+                    }else{
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                    }
+                  }else{
 
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
                     //console.log('se borra la flecha', vehicles[index].name);
@@ -853,9 +867,21 @@ export class MapService {
 
                 }
 
+              }else if (this.userDataService.changeItemIcon == 'cursor'){
+
+                if ((vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) && vehicles[index].speed == 0){
+                  if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+                    let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_${old_direction[1]}`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }else{
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_down-left.svg`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }
+                } //FALTA AGREGAR EXCESO DE VELOCIDAD
+                
               }else{
                 this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-
               }
 
               this.markerClusterGroup.getLayers()[key].setLatLng(coord);
@@ -1273,6 +1299,27 @@ export class MapService {
   public get getClustering(): boolean{
 
     return this.clustering;
+  }
+  public timeChangeIconUrl(imei:string,icon:string,key:any){
+    // this.timeWait = 15000; // 150 segundos en milisegundos
+
+    if (this.timeNow[imei]) {
+      clearTimeout(this.timeNow[imei]); // Limpia el temporizador existente si hay uno para este índice
+      // console.log('SE LIMPIO EL TEMPORIZADOR del -->',imei);
+    }
+    const tiempoUltimaActualizacion = Date.now(); // Actualiza el tiempo de la última actualización para este índice
+    // console.log('CREANDO TEMPORIZADOR NUEVO -->',imei);
+    this.timeNow[imei] = setTimeout(() => {
+      // Verifica si ha pasado el tiempo especificado desde la última actualización
+      const tiempoActual = Date.now();
+      const tiempoTranscurrido = tiempoActual - tiempoUltimaActualizacion;
+      if (tiempoTranscurrido >= this.timeWait) {
+        // Realiza la acción si ha pasado el tiempo especificado sin actualización
+        console.log('*************** PASO 2 Horas Cambiando color a default ---->', imei);
+        const iconUrl = './assets/images/objects/nuevo/' + icon;
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl'] = iconUrl;
+      }
+    }, this.timeWait);
   }
 
 }
