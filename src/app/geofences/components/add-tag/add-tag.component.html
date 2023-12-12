@@ -7,77 +7,45 @@
     </ng-template>
 
     <div class="dialog-body-container">
-
       <div class="p-fluid p-formgrid p-grid">
-
         <div class="dialog-form-container">
-
-          <div class="gl-middleline gl-permanent-middleline mt-2">
+          <div class="gl-permanent-middleline mt-2">
             <div class="row">
-              <div class="col p-field">
-                <div class="row gl-row-underline">
-                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                    <label>Creación de:</label>
-                  </div>
-                  <div class="col-7">
-                    <p-dropdown (onChange)="onOption(option)" [options]="stateOptions" [(ngModel)]="option" optionLabel="label" optionValue="value" placeholder="Seleccione...">
-                      <ng-template let-option pTemplate="item">
-                        <div>
-                            {{option.label}}
-                        </div>
-                    </ng-template>
-                    </p-dropdown>
-                  </div>
-                </div>
-              </div>
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                     <label for="gv_name">Nombre:</label>
                   </div>
                   <div class="col-7">
-                    <input (keyup)="onName($event)" #name id="gv_name" type="text" pInputText [disabled]="loading" (change)="validateFormsInputs()">
+                    <input (keyup)="onName($event)" #name id="gv_name" type="text" pInputText [disabled]="loading" (change)="validateFormsInputs()" placeholder="Nombre de la etiqueta" >
                   </div>
                 </label>
               </div>
             </div>
           </div>
-
           <div class="row gl-out-middleline">
-            <div class="col p-field p-0" *ngIf="option=='grupo' || option=='convoy'">
+            <div class="col p-field p-0" >
               <div class="row gl-row-underline m-0 w-100">
                 <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
                   <label>Seleccione Operación:</label>
                 </div>
                 <div class="col-7">
-                  <p-dropdown (onChange)="onChangeOperation(option)" [options]="operations" [(ngModel)]="selectedOperation" optionLabel="nameoperation" optionValue="idoperation" placeholder="Seleccione una Operación" [disabled]="loading"></p-dropdown>
+                  <p-dropdown (onChange)="onChangeOperation()" [options]="operations" [(ngModel)]="selectedOperation" optionLabel="nameoperation" optionValue="idoperation" placeholder="Seleccione una Operación" [disabled]="loading"></p-dropdown>
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="row gl-out-middleline">
-            <div class="col p-field p-0" *ngIf="option=='convoy'">
-              <div class="row gl-row-underline m-0 w-100">
-                <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                  <label>Seleccione Grupo:</label>
-                </div>
-                <div class="col-7">
-                  <p-dropdown (onChange)="onChangeGroup(option)" [options]="groups" [(ngModel)]="selectedGroup" optionLabel="namegrupo" optionValue="idgrupo" [placeholder]="placeholder_groups" [disabled]="loading"></p-dropdown>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div class="flex-column mt-3">
             <div class="row gl-listbox-container">
                 <div class="col">
-                  <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
-                    <ng-template let-car pTemplate="item">
+                  <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar geocerca" optionLabel="zone_name" [listStyle]="{'height':'200px'}" [disabled]="loading">
+                    <ng-template let-geo pTemplate="item">
                       <div class="car-item">
-                        <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                        <label>{{car.name}}</label>
+                        <div *ngIf="(geo['type'])=='polig'"  width="25" height="25" class="pentagon me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                        <div *ngIf="(geo['type'])=='circ'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                        <div *ngIf="(geo['type'])=='lin'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
                       </div>
+                      <div><label>{{geo.zone_name}}</label></div>
                     </ng-template>
                   </p-listbox>
                 </div>
@@ -100,18 +68,18 @@
                   </div>
                 </div>
                 <div class="col">
-                  <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
-                    <ng-template let-car pTemplate="item">
+                  <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar geocerca" optionLabel="zone_name" [listStyle]="{'height':'200px'}" [disabled]="loading">
+                    <ng-template let-geo pTemplate="item">
                       <div class="car-item">
-                        <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                        <label>{{car.name}}</label>
+                        <div *ngIf="(geo['type'])=='polig'"  width="25" height="25" class="pentagon me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                        <div *ngIf="(geo['type'])=='circ'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                        <div *ngIf="(geo['type'])=='lin'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
                       </div>
+                      <div><label>{{geo.zone_name}}</label></div>
                     </ng-template>
                   </p-listbox>
                 </div>
-
               </div>
-
           </div>
         </div>
       </div>

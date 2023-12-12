@@ -11,6 +11,7 @@ import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { ITags } from '../models/interfaces';
+import { Geofences } from '../models/geofences';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,8 @@ export class GeofencesService {
   public type: string = 'polig'; //[polig, cir, line]
   public action:string = "add"; //[add,edit,delete]
 
+  public compTags: string = "MOSTRAR";
+  public actionTag: string = "addTag"
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
@@ -53,6 +56,8 @@ export class GeofencesService {
   showBtnAdd = true;
   showBtnEdit = true;
   showBtnImportExport = true;
+  showBtnTags = true;
+  listGeofences: any = [];
   listTag: ITags [] = [];
   constructor(
     private http: HttpClient,
@@ -88,7 +93,6 @@ export class GeofencesService {
       this.dataCompleted.emit(this.geofences);
     });
   }
-
   public async getTags(){
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
     .then(response => {
@@ -101,7 +105,7 @@ export class GeofencesService {
   public getTagss(){
     return this.listTag.filter(item=>item.var_name != "deafault");
   }
-  public async storeTag(zone: any){
+  public async storeTagAssign(zone: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTag`,zone).toPromise();
     return response.data;
   }

@@ -13,12 +13,13 @@ import { GeofencesService } from '../../services/geofences.service';
 export class GeocercaMainComponent implements OnInit {
   //alerts:Alert[] = [];
   options = new Array(
-    { id:'LISTAR' , name:"Listar"},
+    { id:'LISTAR' ,     name:"Listar"},
     { id:'ADD GEOPOL' , name:"Agregar"},
-    { id:'EDITAR' , name:"Editar"},
+    { id:'EDITAR' ,     name:"Editar"},
+    { id:'ADD TAG',     name: "addTag"}
   );
 
-  displayGroup: boolean = false;
+  displayGroup: boolean = true;
   constructor(
     // public mapService: MapServicesService,
     public geofencesService: GeofencesService
@@ -29,11 +30,11 @@ export class GeocercaMainComponent implements OnInit {
   }
 
   onHideDisplayGroup(event : boolean){
-    // //console.log('hide group panel...',event);
+    console.log('hide tagss panel...',event);
     this.displayGroup = event;
   }
   eventDisplayGroup(event : boolean){
-    // //console.log('desde panel',event);
+    console.log('desde panel',event);
     this.displayGroup = event;
   }
 

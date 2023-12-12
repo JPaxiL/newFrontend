@@ -25,8 +25,8 @@
             <span  (click)="clickAgregarGeocercaPol()" title="Crear geocerca">Crear Geocerca</span>
           </div>
           <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
-            <i class="fa fa-plus" style="width: 20px;" data-bs-placement="auto" container="body" onclick="this.blur();"></i>
-            <span (click)="onClickGroup()" aria-hidden="true" type="button">Crear Etiqueta</span>
+            <i *ngIf="geofencesService.showBtnTags" class="fa fa-plus" style="width: 20px;" data-bs-placement="auto" container="body" onclick="this.blur();"></i>
+            <span (click)="onClickTags()" aria-hidden="true" type="button">Crear Etiqueta</span>
           </div>
         </div>
       </div>
@@ -230,8 +230,8 @@
           </td>
           <td style="min-width: 215px;" class="geofence-column">
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
-                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" style="background-color: {{rowData['zone_color']}}"></div>
-                <div *ngIf="(rowData['type'])=='circ'" class="circle" style="background-color: {{rowData['zone_color']}}"></div>
+                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [ngStyle]="{'background-color': rowData.zone_color}"></div>
+                <div *ngIf="(rowData['type'])=='circ'" class="circle" [ngStyle]="{'background-color': rowData.zone_color}"></div>
                 <div *ngIf="(rowData['type'])=='lin'" class="" > 
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
@@ -436,8 +436,8 @@
           </td>
           <td style="min-width: 215px;" class="geofence-column">
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
-                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" style="background-color: {{rowData['zone_color']}}"></div>
-                <div *ngIf="(rowData['type'])=='circ'" class="circle" style="background-color: {{rowData['zone_color']}}"></div>
+                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [ngStyle]="{'background-color': rowData.zone_color}"></div>
+                <div *ngIf="(rowData['type'])=='circ'" class="circle" [ngStyle]="{'background-color': rowData.zone_color}"></div>
                 <div *ngIf="(rowData['type'])=='lin'" class="" > 
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">

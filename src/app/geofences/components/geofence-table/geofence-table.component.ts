@@ -49,10 +49,8 @@ export class GeofenceTableComponent implements OnInit {
   alreadyLoaded: boolean = false;
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   @ViewChild('tt') tt!:any;
-  @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
   treeGeofences: any;
- 
   public column: number = 6; //posible order
   constructor(
     public geofencesService: GeofencesService,
@@ -100,6 +98,7 @@ export class GeofenceTableComponent implements OnInit {
     this.geofences = this.objGeofences.createTreeNode();
     this.geofencesFilter = this.geofences;
     this.objGeofencesFilter = this.objGeofences;
+    this.geofencesService.listGeofences = this.objGeofences.geofences;
   }
 
   onBusqueda(gaaa?:any) {
@@ -153,10 +152,10 @@ export class GeofenceTableComponent implements OnInit {
   agInit(params: any){
     this.params = params;
   }
-  onClickGroup(){
-    // this.displayGroup=true;
-    this.eventDisplayGroup.emit(true);
-    console.log('displaygroup true');
+  onClickTags(){
+    this.geofencesService.compTags = "ADD TAG";
+    this.geofencesService.actionTag = "addTag"
+    console.log('displayTags true');
   }
 
   headerScrollHandler(){
