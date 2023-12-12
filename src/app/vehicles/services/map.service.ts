@@ -191,7 +191,7 @@ export class MapService {
             tiempoParada: tiempoParada,
           };
 
-          console.log('DATA en MAP SERVICE ---------------->',data);
+          // console.log('DATA en MAP SERVICE ---------------->',data);
           this.imeiPopup = data.imei;
           this.time_stop = tiempoParada;
           this.printPopup(aux);
@@ -489,7 +489,6 @@ export class MapService {
                 lng : vehicles[index].longitud
               };
 
-
               // //console.log('coord',coord);
               // //console.log('aux = ', aux['_latlng']);
               //_popup
@@ -517,7 +516,7 @@ export class MapService {
                 if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
                   iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
                 }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed! ){
-                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_def;
+                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
                 }else{
                   iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
                 }
@@ -838,7 +837,7 @@ export class MapService {
                   }
 
                   //this.changePositionArrow(this.final_direction,key);
-                  if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! < vehicles[index].limit_speed!){
+                  if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                   }else{
@@ -850,7 +849,7 @@ export class MapService {
 
                     let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
                     //this.changePositionArrow(old_direction[1],key);
-                    if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! < vehicles[index].limit_speed!){
+                    if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${old_direction[1]}`;
                     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                     }else{
@@ -867,18 +866,16 @@ export class MapService {
 
                 }
 
-              }else if (this.userDataService.changeItemIcon == 'cursor'){
+              }else if (this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed == 0 && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
 
-                if ((vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) && vehicles[index].speed == 0){
-                  if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-                    let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_${old_direction[1]}`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                  }else{
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_down-left.svg`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                  }
-                } //FALTA AGREGAR EXCESO DE VELOCIDAD
+                if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+                  let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_${old_direction[1]}`;
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                }else{
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_down-left.svg`;
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                }
                 
               }else{
                 this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
@@ -1318,6 +1315,8 @@ export class MapService {
         console.log('*************** PASO 2 Horas Cambiando color a default ---->', imei);
         const iconUrl = './assets/images/objects/nuevo/' + icon;
         this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl'] = iconUrl;
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+
       }
     }, this.timeWait);
   }

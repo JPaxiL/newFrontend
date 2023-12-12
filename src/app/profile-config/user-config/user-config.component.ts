@@ -30,14 +30,14 @@ export class UserConfigComponent implements OnInit {
   colorsVehicles: any[] = [
     { name: 'Por defecto', code: 'c4c2c1',color: '#c4c2c1' }, // Celeste
     { name: 'Celeste', code: '00FFFF',color: '#00FFFF' }, // Celeste
+    { name: 'Verde', code: '1DA80E',color: '#1DA80E' }, // Verde 
     { name: 'Azul', code: '45A9FF',color: '#45A9FF' }, // Azul
+    { name: 'Guinda', code: '800000',color: '#800000' }, // Guinda
+    { name: 'Morado', code: '9370DB',color: '#9370DB' }, // Morado
     { name: 'Rosado', code: 'BA00FF',color: '#BA00FF' }, // Rosado
-    { name: 'Morado', code: '9370db',color: '#9370db' }, // Morado
+    { name: 'Dorado', code: 'F1C700',color: '#F1C700' }, // Dorado
     { name: 'Naranja', code: 'FFA500',color: '#FFA500' }, // Naranja
     { name: 'Amarillo', code: 'FFFF00',color: '#FFFF00' }, // Amarillo
-    { name: 'Verde', code: '1DA80E',color: '#1DA80E' }, // Verde 
-    { name: 'Guinda', code: '800000',color: '#800000' }, // Guinda
-    { name: 'Dorado', code: 'F1C700',color: '#F1C700' }, // Dorado
   ];
   constructor(       
     private userDataService: UserDataService,
