@@ -67,7 +67,7 @@
                                                 <div class="col-12 d-flex">
                                                     <div class="col-12">
                                                         <p-dropdown
-                                                          [options]="colorsVehicles"
+                                                          [options]="filteredColorsVehicles"
                                                           optionLabel="name"
                                                           optionValue="code"
                                                           name="var_color_{{i}}"
@@ -105,7 +105,7 @@
                     <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
                         <div class="col-12 d-flex">
                             <label>
-                                <p-checkbox [(ngModel)]="showChangeItem" (onChange)="changeItemCheckbox()" name="checkbox_changeItem" [binary]="true" inputId="binary"></p-checkbox>
+                                <p-checkbox [(ngModel)]="showChangeItem" (onChange)="changeItemCheckbox();" name="checkbox_changeItem" [binary]="true" inputId="binary"></p-checkbox>
                                 &nbsp;&nbsp;<span>{{ showChangeItem ? 'Desactivar' : 'Activar' }}</span> Cambio de Color según Estado
                                 (En movimiento: VERDE, Exceso de Límite de velocidad: ROJO, Relenti: AZUL)
                             </label>
@@ -118,7 +118,7 @@
                                 </div>
                                 <div>
                                     <label class="switch" >
-                                        <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox" (change)="switchActive(1)" >
+                                        <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox"  (change)="switchActive(1);" >
                                         <span class="slider"></span>
                                     </label>
                                 </div>
@@ -129,7 +129,7 @@
                                 </div>
                                 <div>
                                     <label class="switch" >
-                                        <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2)">
+                                        <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2);">
                                         <span class="slider"></span>
                                     </label>
                                 </div>
@@ -140,7 +140,7 @@
                                 </div>
                                 <div>
                                     <label class="switch" >
-                                        <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox" (change)="switchActive(3)">
+                                        <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox"  (change)="switchActive(3);">
                                         <span class="slider"></span>
                                     </label>
                                 </div>
