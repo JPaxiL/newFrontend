@@ -83,7 +83,7 @@ export class UserInfoComponent implements OnInit {
       this.EventService.getEventsForUser().subscribe(
         async (data) => {
           // Aquí puedes trabajar con los datos obtenidos
-          // console.log('EVENTOS DEL USUARIO OBTENIDOS: 1vez', data);
+          console.log('EVENTOS DEL USUARIO OBTENIDOS: 1vez', data);
           // Realiza cualquier acción con los datos recibidos
           if (data.success){
             this.userDataService.eventsUser = data.data;

@@ -104,41 +104,50 @@
                     </div> 
                     <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
                         <div class="col-12 d-flex">
-                            <label class="me-2">Habilitar cambio de color según su estado: (En movimiento: VERDE, Exceso de Límite de velocidad: ROJO, Relenti: AZUL</label>
+                            <label>
+                                <p-checkbox [(ngModel)]="showChangeItem" (onChange)="changeItemCheckbox()" name="checkbox_changeItem" [binary]="true" inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<span>{{ showChangeItem ? 'Desactivar' : 'Activar' }}</span> Cambio de Color según Estado
+                                (En movimiento: VERDE, Exceso de Límite de velocidad: ROJO, Relenti: AZUL)
+                            </label>
                         </div>
-                        <div class="flex align-items h-5 column" >
-                            <div class="">
-                                <object data="assets/images/user_config/circulo_movimiento.svg"></object>
+                        
+                        <ng-container *ngIf="showChangeItem == true">
+                            <div class="flex align-items h-5 column" >
+                                <div class="">
+                                    <object data="assets/images/user_config/circulo_movimiento.svg"></object>
+                                </div>
+                                <div>
+                                    <label class="switch" >
+                                        <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox" (change)="switchActive(1)" >
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
                             </div>
-                            <div>
-                                <label class="switch" >
-                                    <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox" (change)="switchActive(1)" >
-                                    <span class="slider"></span>
-                                </label>
+                            <div class="flex align-items h-5 column">
+                                <div class="">
+                                    <object data="assets/images/user_config/flecha_movimiento.png"></object>
+                                </div>
+                                <div>
+                                    <label class="switch" >
+                                        <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2)">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="flex align-items h-5 column">
-                            <div class="">
-                                <object data="assets/images/user_config/flecha_movimiento.png"></object>
+                            <div class="flex align-items h-5 column">
+                                <div class="">
+                                    <object data="assets/images/objects/nuevo/auto.svg "></object>
+                                </div>
+                                <div>
+                                    <label class="switch" >
+                                        <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox" (change)="switchActive(3)">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
                             </div>
-                            <div>
-                                <label class="switch" >
-                                    <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2)">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="flex align-items h-5 column">
-                            <div class="">
-                                <object data="assets/images/objects/nuevo/auto.svg "></object>
-                            </div>
-                            <div>
-                                <label class="switch" >
-                                    <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox" (change)="switchActive(3)">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        </div>
+                        </ng-container>
+                        
+                        
                     </div> 
                     <p-footer>
                         <div class="row d-flex justify-content-center">

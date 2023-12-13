@@ -19,7 +19,7 @@ export class UserConfigComponent implements OnInit {
   loading : boolean = false;
   typeVehiclesList:any = {};
   userTypeVehicleConfig: any = {};
-  
+  showChangeItem:boolean = false;
   bol_ondas!:boolean;
   bol_cursor!:boolean;
   bol_vehicle!:boolean;
@@ -49,15 +49,18 @@ export class UserConfigComponent implements OnInit {
     this.userDataService.spinner.show('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
     this.typeVehiclesList = this.userDataService.typeVehicles;
     this.initForm();
-    console.log(this.typeVehiclesList,this.userDataService.userData);
+    // console.log(this.typeVehiclesList,this.userDataService.userData);
     this.initFormTableVehiclesDefault();
-
+    if (this.userDataService.changeItemIcon){
+      this.showChangeItem = true;
+      console.log('VALOR DE CHANGE ITEM ->',this.userDataService.changeItemIcon);
+    }
   }
 
   initForm() {
-    this.userForm.oldPass = ''; 
-    this.userForm.newPass = ''; 
-    this.userForm.newPassRepeat = '';
+    // this.userForm.oldPass = ''; 
+    // this.userForm.newPass = ''; 
+    // this.userForm.newPassRepeat = '';
     this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
     this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
     this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
@@ -81,6 +84,17 @@ export class UserConfigComponent implements OnInit {
     this.originalValues = JSON.parse(JSON.stringify(this.typeVehiclesList)); // Guardar una copia profunda de los valores originales
   }
 
+  changeItemCheckbox(){
+    if (this.showChangeItem == false){
+      this.userForm.bol_ondas = false;
+      this.userForm.bol_cursor = false;
+      this.userForm.bol_vehicle = false;
+    }else{
+      this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
+      this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
+      this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
+    }
+  }
   switchActive(switchNumber: number){
     if (switchNumber === 1) {
       this.userForm.bol_ondas = true;
@@ -100,9 +114,9 @@ export class UserConfigComponent implements OnInit {
   }
 
   onClickCancel(){
-    this.userForm.oldPass = '';
-    this.userForm.newPass = '';
-    this.userForm.newPassRepeat = '';
+    // this.userForm.oldPass = '';
+    // this.userForm.newPass = '';
+    // this.userForm.newPassRepeat = '';
     this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
     this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
     this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
