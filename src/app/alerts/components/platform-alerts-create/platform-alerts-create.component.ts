@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
-import { Select2Data } from 'ng-select2-component';
+import { Select2Data, Select2Option } from 'ng-select2-component';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { PanelService } from 'src/app/panel/services/panel.service';
@@ -26,6 +26,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   public vehicles: Select2Data = [];
   public geocercas: Select2Data = [];
+  public geocercasFiltradas: Select2Data = [];
   public geocircles: Select2Data = [];
 
   public disabledEventSoundActive = false;
@@ -147,6 +148,19 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.hideLoadingSpinner();
   }
 
+  changeVehicles(event:any){
+    console.log("event::::",event);
+    const operations = new Set();
+    this.alertForm.value.vehicles.forEach((objeto:any) => {
+      const vh = this.vehicles.find((vh:any) => vh.value == objeto);
+      console.log("vh:",vh);
+      operations.add(vh?.templateId);
+    });
+    console.log("OPERATIONS::::",operations);
+    this.geocercasFiltradas = this.geocercas.filter(geofence => operations.has(geofence.templateId));
+    //console.log("geocercasFiltradas::::",this.geocercasFiltradas.length);
+
+  }
   setDataVehicles() {
     let vehicles = this.VehicleService.getVehiclesData();
 
@@ -154,6 +168,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       return {
         value:vehicle.IMEI,
         label: vehicle.name,
+        templateId: vehicle.idoperation
       };
     });
 
@@ -167,9 +182,10 @@ export class PlatformAlertsCreateComponent implements OnInit {
       return {
         value: geocerca.id,
         label: geocerca.zone_name,
+        templateId: geocerca.idoperation,
       };
     });
-
+    this.geocercasFiltradas = this.geocercas;
     this.loadingGeofencesMultiselectReady = true;
     this.hideLoadingSpinner();
   }

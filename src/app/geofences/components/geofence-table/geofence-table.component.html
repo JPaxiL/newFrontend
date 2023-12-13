@@ -1,7 +1,7 @@
 <div class="table-content-component-panel-monitoreo" style="position: relative; height: 100%;">
   <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGeofencesSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Geocercas... </p></ngx-spinner>
   <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda">
-    <div class="d-flex">
+    <div class="d-flex justify-content-around">
       <div class="d-flex flex-grow-1">
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
@@ -9,7 +9,7 @@
           <!-- <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
         </span>
       </div>
-      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
+      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none ">
         <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-gray-blue btn-dark-hover btn-circle" title="Importar o exportar" ngbDropdownToggle>
           <i class="fas fa-file-import" aria-hidden="true"></i>
         </button>
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
+      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">

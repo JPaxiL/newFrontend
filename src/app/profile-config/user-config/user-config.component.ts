@@ -174,7 +174,7 @@ export class UserConfigComponent implements OnInit {
         this.userDataService.updateUserConfig(response).subscribe(
           (response) => {
             // Manejar la respuesta del servidor si es necesario
-            // console.log('Actualización exitosa:', response);
+            console.log('Actualización exitosa:', response);  
             if (!response.res){
               Swal.fire(
                 'Error',
@@ -203,6 +203,7 @@ export class UserConfigComponent implements OnInit {
     }).then((data) => {
       // console.log('testing respuesta...',data);
       this.loading=false;
+      this.userDataService.getUserData();
       this.vehicleService.initialize();
     });
   }

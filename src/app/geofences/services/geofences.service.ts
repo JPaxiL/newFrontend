@@ -66,7 +66,7 @@ export class GeofencesService {
   public async initialize() {
     this.getUserPrivileges();
     await this.getAll();
-    await this.getTags();
+    //await this.getTags(); //COMENTADO POR FALTA DE API Y CONTROLADOR
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){

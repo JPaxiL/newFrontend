@@ -43,9 +43,9 @@ export class UserDataService {
       next: async data => {
         //this.userData = this.panelService.userData = data[0];
         console.log('User DataFULL obtenida: ',data);
-        console.log('User Data obtenida ======> ',  data.data);
-        console.log('User VEHICLES obtenida ======> ',  data.data2);
-        console.log('User CONFIG DATA obtenida ======> ',  data.data3);
+        // console.log('User Data obtenida ======> ',  data.data);
+        // console.log('User VEHICLES obtenida ======> ',  data.data2);
+        // console.log('User CONFIG DATA obtenida ======> ',  data.data3);
         this.typeVehicles = await data.data2;
         this.typeVehiclesUserData = await data.data3;
         // await this.getTypeVehiclesForUser();
@@ -108,7 +108,7 @@ export class UserDataService {
     if (this.userData.bol_ondas){
       return 'ondas';
     }else if (this.userData.bol_vehicle){
-      return 'vehicle';
+      return 'vehicles';
     }else{
       return 'cursor';
     }

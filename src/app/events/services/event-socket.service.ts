@@ -29,11 +29,14 @@ export class EventSocketService extends Socket {
     public vehicleService: VehicleService,
     private AlertService: AlertService) {
     super({
-      url: environment.socketEvent
+      url: environment.socketEvent,
       //url: 'http://23.29.124.173',
-      // options: {
-      //   transports: ["websocket"]
-      // }
+      options: {
+        query: {
+          userId: localStorage.getItem('user_id'),
+          secret: environment.secretClient,
+        },
+      },
     });
 
     // this.ioSocket.on('res', (info: any) => {
