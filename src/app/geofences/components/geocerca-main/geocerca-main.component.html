@@ -1,10 +1,10 @@
 
 <div class="h-100" *ngIf="(geofencesService.nameComponentPol == 'LISTAR')">
-  <app-geofence-table></app-geofence-table>
+  <app-geofence-table (eventDisplayTags)="eventDisplayTags($event)"></app-geofence-table>
 </div>
 <div class="h-100" *ngIf="(geofencesService.nameComponentPol == 'ADD GEOPOL')">
   <app-geocerca-add></app-geocerca-add>
 </div>
-<div *ngIf="(geofencesService.compTags == 'ADD TAG')">
-  <app-add-tag></app-add-tag>
+<div>
+  <app-add-tag (onHideEvent)="closeModal($event)" [display]="displayTags"></app-add-tag>
 </div>

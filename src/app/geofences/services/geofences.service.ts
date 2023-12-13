@@ -26,12 +26,13 @@ export class GeofencesService {
   public type: string = 'polig'; //[polig, cir, line]
   public action:string = "add"; //[add,edit,delete]
 
-  public compTags: string = "MOSTRAR";
-  public actionTag: string = "addTag"
+  // public compTags: string = "MOSTRAR";
+  // public actionTag: string = "addTag"
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
   @Output() displayOn = new EventEmitter<any>();
+  modalCloseEvent = new EventEmitter();
 
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];
@@ -112,6 +113,11 @@ export class GeofencesService {
   public async deleteTag(zone: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
     return response.data;
+  }
+
+  closeModal() {
+    // Envía evento al padre para cerrarse
+    this.modalCloseEvent.emit();
   }
 
   public clearDrawingsOfGeofence(geofence: any){

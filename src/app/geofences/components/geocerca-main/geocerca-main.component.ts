@@ -19,7 +19,7 @@ export class GeocercaMainComponent implements OnInit {
     { id:'ADD TAG',     name: "addTag"}
   );
 
-  displayGroup: boolean = true;
+  displayTags: boolean = false;
   constructor(
     // public mapService: MapServicesService,
     public geofencesService: GeofencesService
@@ -31,11 +31,24 @@ export class GeocercaMainComponent implements OnInit {
 
   onHideDisplayGroup(event : boolean){
     console.log('hide tagss panel...',event);
-    this.displayGroup = event;
+    this.displayTags = event;
   }
   eventDisplayGroup(event : boolean){
     console.log('desde panel',event);
-    this.displayGroup = event;
+    this.displayTags = event;
+  }
+
+  // openModal() {
+  //   this.displayTags = true;
+  // }
+  
+  closeModal(event : boolean) {
+    //this.displayTags= false;
+    this.displayTags = event;
+  }
+  
+  eventDisplayTags(event : boolean){
+    this.displayTags = event;
   }
 
 }

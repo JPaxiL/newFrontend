@@ -11,7 +11,7 @@ import  { VehicleService } from '../../../vehicles/services/vehicle.service';
   styleUrls: ['./add-tag.component.scss']
 })
 export class AddTagComponent implements OnInit {
-  @Input('display') display: boolean = true;
+  @Input('display') display: boolean = false;
   @Output() onHideEvent = new EventEmitter<boolean>();
   @ViewChild('name',{ static:true}) name!: ElementRef;
   @ViewChild('description',{ static:true}) description!: ElementRef;
@@ -42,9 +42,12 @@ export class AddTagComponent implements OnInit {
   ngOnDestroy(){
 
   }
+
+  close() {
+    this.geofecesService.closeModal(); 
+  }
   onHide(){
     this.onHideEvent.emit(false);
-    this.display = false;
   }
   onShow(){
     this.onOption(this.option);

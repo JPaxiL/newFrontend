@@ -49,6 +49,7 @@ export class GeofenceTableComponent implements OnInit {
   alreadyLoaded: boolean = false;
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   @ViewChild('tt') tt!:any;
+  @Output() eventDisplayTags = new EventEmitter<boolean>();
 
   treeGeofences: any;
   public column: number = 6; //posible order
@@ -153,9 +154,10 @@ export class GeofenceTableComponent implements OnInit {
     this.params = params;
   }
   onClickTags(){
-    this.geofencesService.compTags = "ADD TAG";
-    this.geofencesService.actionTag = "addTag"
+    // this.geofencesService.compTags = "ADD TAG";
+    // this.geofencesService.actionTag = "addTag"
     console.log('displayTags true');
+    this.eventDisplayTags.emit(true);
   }
 
   headerScrollHandler(){
