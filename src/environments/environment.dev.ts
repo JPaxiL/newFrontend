@@ -9,5 +9,5 @@ export const environment = {
   socketUrl: 'https://escucha.glmonitoreo.com/',
   grant_type: 'client_credentials',
   // socketEvent: 'http://23.29.124.173',
-  socketEvent: 'https://events.glmonitoreo.com/'
+  socketEvent: 'https://eventos.glmonitoreo.com/'
 };
