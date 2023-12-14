@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
-import { ITags } from '../models/interfaces';
+import { ITag } from '../models/interfaces';
 import { Geofences } from '../models/geofences';
 
 @Injectable({
@@ -26,8 +26,6 @@ export class GeofencesService {
   public type: string = 'polig'; //[polig, cir, line]
   public action:string = "add"; //[add,edit,delete]
 
-  // public compTags: string = "MOSTRAR";
-  // public actionTag: string = "addTag"
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
@@ -59,7 +57,7 @@ export class GeofencesService {
   showBtnImportExport = true;
   showBtnTags = true;
   listGeofences: any = [];
-  listTag: ITags [] = [];
+  listTag: ITag [] = [];
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -73,36 +71,33 @@ export class GeofencesService {
   public async initialize() {
     this.getUserPrivileges();
     await this.getAll();
-    await this.getTags();
+    
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/zone`).toPromise()
-    .then(response => {
+    .then(async (response) => {
       this.geofences = response.data;
-      console.log("Polygonalessss",response.data);
-      this.initializeTable();
-      this.drawGeofencesOnMap();
-      this.updateGeoCounters();
-      this.updateGeoTagCounters();
-      this.eyeInputSwitch = this.geofenceCounters.visible != 0;
-      this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
-      console.log('Geocercas Cargadas');
-      this.initializingGeofences = true;
-      this.attemptToHideSpinner();
-      console.log(this.geofences);
-      this.dataCompleted.emit(this.geofences);
-    });
-  }
-  public async getTags(){
-    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
-    .then(response => {
-      console.log("ress", response);
-      this.listTag = response.data;
-      console.log("lisstagg", this.listTag);
-    });
+      await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
+      .then(response => {
+        console.log("ress", response);
+        this.listTag = response.data;
+        console.log("lisstagg", this.listTag);
 
+        console.log("Polygonalessss",response.data);
+        this.initializeTable();
+        this.drawGeofencesOnMap();
+        this.updateGeoCounters();
+        this.updateGeoTagCounters();
+        this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+        this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
+        this.initializingGeofences = true;
+        this.attemptToHideSpinner();
+        this.dataCompleted.emit(this.geofences);
+      });;
+    });
   }
+ 
   public getTagss(){
     return this.listTag.filter(item=>item.var_name != "deafault");
   }

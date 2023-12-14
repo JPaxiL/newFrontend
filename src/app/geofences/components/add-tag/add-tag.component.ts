@@ -215,11 +215,12 @@ export class AddTagComponent implements OnInit {
   }
   
   async onSubmit(){
-    let zone = {};
-    zone= {
+    let req = {};
+    req= {
       geofences : this.list2,
-      name : this.nameTarget,
+      var_name : this.nameTarget,
     };
+    console.log('req==>',req);
       // await this.geofecesService.storeTagAssign(zone).toPromise()
       // .then((info: { res: any; }) => {
       //   // console.log("post group res =",info);

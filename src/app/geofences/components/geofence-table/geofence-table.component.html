@@ -210,13 +210,13 @@
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-        <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'operacion', 'row-header-convoy': rowData['type'] === 'grupo'}">
+        <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'operacion', 'row-header-convoy': rowData['type'] === 'etiqueta'}">
           <td></td>
           <td [attr.colspan]="column">
             <div class="d-flex justify-content-between align-items-center">
               <div class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header">
                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                {{rowData['type'] === 'operacion' && rowData['name']!='Geocercas Sin Operacion'? 'Operacion: ': rowData['type'] === 'grupo' && rowData['name']!='Geocercas Sin Grupo'? 'Grupo: ': ''}}{{rowData['name']}}
+                {{rowData['type'] === 'operacion' && rowData['name']!='Geocercas Sin Operacion'? 'Operacion: ': rowData['type'] === 'etiqueta' && rowData['name']!='Geocercas Sin Etiqueta'? 'Etiqueta: ': ''}}{{rowData['name']}}
               </div>
             </div>
           </td>

@@ -895,7 +895,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         // //console.log(geo);
         console.log("mostrar Swalllll");
         Swal.fire(
-            'Modoficado',
+            'Modificado',
             'Se modificó correctamente!!',
             'success'
         );

@@ -12,7 +12,7 @@ import * as L from 'leaflet';
 import 'leaflet-draw';
 import { forkJoin } from 'rxjs';
 import { Geofences } from '../../models/geofences';
-import { IGeofence } from '../../models/interfaces';
+import { IGeofence, ITag } from '../../models/interfaces';
 import moment from 'moment';
 interface Column {
   field: string;
@@ -63,7 +63,7 @@ export class GeofenceTableComponent implements OnInit {
     private configDropdown: NgbDropdownConfig,
   ) { }
 
-  ngOnInit(): void {    
+  async ngOnInit(): Promise <void> {    
     if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges || !this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
       //this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
@@ -76,9 +76,11 @@ export class GeofenceTableComponent implements OnInit {
     
     if(this.geofencesService.initializingGeofences){
       this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[], 'polig');
+      await this.objGeofences.setTags(this.geofencesService.listTag as ITag[]);
     }else{
-      this.geofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
+      this.geofencesService.dataCompleted.subscribe(async (data:IGeofence[])=>{
         this.objGeofences.setGeofences(data, 'polig');      
+        await this.objGeofences.setTags(this.geofencesService.listTag as ITag[]);
       })
     }
     if(this.circularGeofencesService.initializingCircularGeofences){
@@ -96,7 +98,7 @@ export class GeofenceTableComponent implements OnInit {
     //   })
     // }
     //this.objGeofences = this.addDataGeofence(this.objGeofences);
-    this.geofences = this.objGeofences.createTreeNode();
+     this.geofences = await this.objGeofences.createTreeNode();
     this.geofencesFilter = this.geofences;
     this.objGeofencesFilter = this.objGeofences;
     this.geofencesService.listGeofences = this.objGeofences.geofences;
@@ -156,7 +158,6 @@ export class GeofenceTableComponent implements OnInit {
   onClickTags(){
     // this.geofencesService.compTags = "ADD TAG";
     // this.geofencesService.actionTag = "addTag"
-    console.log('displayTags true');
     this.eventDisplayTags.emit(true);
   }
 
@@ -205,7 +206,6 @@ export class GeofenceTableComponent implements OnInit {
   onClickEyeAll(){
       this.onClickEyePol();
       this.onClickEyeCir();
-      console.log("holaaa");
       //this.clickShowGeoLin();
   }
   onClickEyePol(){
@@ -645,7 +645,7 @@ export class GeofenceTableComponent implements OnInit {
     });
   }
 
-  updateOperation(){
+  async updateOperation(){
     const geofences = this.geofencesService.geofences;
     if(this.dataEdit.type=='operation'){
       for (const key in this.list1) {
@@ -683,7 +683,7 @@ export class GeofenceTableComponent implements OnInit {
       }
     }
     this.geofencesService.geofences = geofences;
-    this.geofencesService.geofencesTree = this.objGeofences.createTreeNode();
+    this.geofencesService.geofencesTree = await this.objGeofences.createTreeNode();
   }
 
   btnSelected: number = 1;
