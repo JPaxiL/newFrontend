@@ -48,6 +48,14 @@ export class EventSocketService extends Socket {
 
     //console.log('Panel notif first key on service', this.eventService.panelNotifKey);
   }
+  initializeSocket(userId: string): void {
+    if (this.ioSocket.connected) {
+      this.ioSocket.disconnect();
+    }
+    this.user_id = userId;
+    this.ioSocket.io.opts.query.userId = userId;
+    this.ioSocket.connect();
+  }
   public debug(imei: string) {
     // console.log("desde event socket | debug imei:",imei);
     let data = {

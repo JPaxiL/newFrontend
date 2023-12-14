@@ -118,6 +118,7 @@ export class LoginComponent implements OnInit {
       }
     });
     this.eventSocketService.user_id = localStorage.getItem('user_id');
+    this.eventSocketService.initializeSocket(this.eventSocketService.user_id);
     this.vehicleService.initialize();
     this.eventService.getAll();
     this.eventSocketService.listen();
