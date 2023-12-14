@@ -181,7 +181,8 @@ export class UserConfigComponent implements OnInit {
       newCopyPass: this.userForm.newPassRepeat,
       bol_ondas: this.userForm.bol_ondas,
       bol_cursor: this.userForm.bol_cursor,
-      bol_vehicle: this.userForm.bol_vehicle
+      bol_vehicle: this.userForm.bol_vehicle,
+      itemChanges: this.showChangeItem
     };
     return req;
   }
