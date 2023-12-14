@@ -57,6 +57,8 @@ export class PlatformAlertsListComponent implements OnInit {
 
   edit(id:string){
     let alert = this.alerts.find( (alert: Alert) => alert.id == id);
+    console.log("ALERT TO EDIT:::",alert);
+    
     this.AlertService.alertEdit = alert;
 
     $("#panelMonitoreo").show( "slow" );
