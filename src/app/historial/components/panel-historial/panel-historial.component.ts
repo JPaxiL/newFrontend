@@ -262,6 +262,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
+
+    this.UserDataService.getUserData();
+    console.log("=================================");
+    console.log(this.UserDataService.typeVehicles);
+    console.log(this.UserDataService.typeVehiclesUserData);
+
+
+
     if(!this.VehicleService.statusDataVehicle){
       this.spinner.show('loadingHistorialForm');
       this.VehicleService.dataCompleted.subscribe( vehicles => {
@@ -944,6 +952,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // var dH =  this.historialService.tramasHistorial; // Data Historial
 
 
+    console.log("=================================");
+    console.log(this.UserDataService.typeVehicles);
+    console.log(this.UserDataService.typeVehiclesUserData);
+
+    
     /* let MDstr = "" + this.form.fecha_desde.month;
     let DDstr = "" + this.form.fecha_desde.day;
     console.log('Form', MDstr);
@@ -1759,6 +1772,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           if (x1 == '-' || x2 == '-') {
               kilometrajeTotal = '';
 
+              console.log("================= XXX =================");
+              
+              console.log(this.UserDataService.typeVehiclesUserData);
               var tipoUnidad = (this.VehicleService.getVehiclesData().filter((item:any)=> item.IMEI == dH[0].imei))[0].tipo;
               var tipoU = (this.UserDataService.typeVehiclesUserData.filter((item:any)=> item.type_vehicle_id == parseInt(tipoUnidad)))[0];
 
