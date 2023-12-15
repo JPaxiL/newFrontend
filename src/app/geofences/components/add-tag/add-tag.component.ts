@@ -28,13 +28,13 @@ export class AddTagComponent implements OnInit {
   listTagsEmpty: boolean = false; //para validar si el array de list2 esta vacio en la creacion
   
   constructor(
-    private geofecesService: GeofencesService,
+    private geofencesService: GeofencesService,
     private vehicleService: VehicleService,
   ) {}
 
   ngOnInit(): void {
     this.getOperations();
-    console.log("hereee", this.geofecesService.listGeofences);
+    console.log("hereee", this.geofencesService.listGeofences);
     this.list1 = [];
     this.list2 = [];
   }
@@ -43,7 +43,7 @@ export class AddTagComponent implements OnInit {
   }
 
   close() {
-    this.geofecesService.closeModal(); 
+    this.geofencesService.closeModal(); 
   }
   onHide(){
     this.onHideEvent.emit(false);
@@ -55,8 +55,8 @@ export class AddTagComponent implements OnInit {
     let aux2:any[] = [];
     this.list1 = [];
     this.list2 = [];
-    console.log("hereee", this.geofecesService.listGeofences);
-    aux2 = this.geofecesService.listGeofences.filter((geo: any)=>geo.idoperation == this.selectedOperation);
+    console.log("hereee", this.geofencesService.listGeofences);
+    aux2 = this.geofencesService.listGeofences.filter((geo: any)=>geo.idoperation == this.selectedOperation);
     console.log("listaa of Geoos",aux2);
     this.list1 = aux2;
   }
@@ -150,7 +150,7 @@ export class AddTagComponent implements OnInit {
   }
   validateRepeatName (name: string){
     this.isExistTag = false;
-    let aux = this.geofecesService.listTag.some((tg:any)=> tg.var_name == name);
+    let aux = this.geofencesService.listTag.some((tg:any)=> tg.var_name == name);
     console.log("auxx", aux);
   
     return false;
@@ -168,29 +168,18 @@ export class AddTagComponent implements OnInit {
     return false;
   }
 
-  addTag(info: any){
-    //console.log('addTag info =',info);
-    const vehicles = this.vehicleService.vehicles;
+  addTag(){
+    //console.log();
+    const geofences = this.geofencesService.geofences;
     for (const key in this.list2) {
-      const index = vehicles.indexOf(this.list2[key])
+      const index = geofences.indexOf(this.list2[key])
     }
-    this.vehicleService.vehicles = vehicles;
+    this.geofencesService.geofences = geofences;
     // //console.log('new vehicles',vehicles);
-    //reload talbe
-    if(this.vehicleService.listTable==0){
-      this.vehicleService.reloadTable.emit();
-    }else{
-      this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
-      this.vehicleService.reloadTableTree.emit();
-    }
+    //this.geofencesService.geofencesTree = this.Geofences.createTreeNode(geofences);
     this.onHideEvent.emit(false);
-    //update data local
-    //mensaje de exito
-    // this.eventUpdate.emit(this.vehicle);
-    // this.eventDisplay.emit(false);
     this.list2=[];
     this.name.nativeElement.value = "";
-    //this.description.nativeElement.value = "";
   }
   
   async onSubmit(){
@@ -200,14 +189,13 @@ export class AddTagComponent implements OnInit {
       var_name : this.nameTarget,
     };
     console.log('req==>',req);
-      // await this.geofecesService.storeTagAssign(zone).toPromise()
+      // await this.geofencesService.storeTagAndAssingGeo(req).()
       // .then((info: { res: any; }) => {
-      //   // console.log("post group res =",info);
       //   if(info.res){
-      //     this.addGroup(info);  
+      //     this.addTag();  
       //   }else{
       //     //mensaje de error
-      //     console.log('EXISTE UN ERROR',info);
+      //     console.log('EXISTE UN ERROR');
       //   }
       // }).catch(errorMsg => {
       //   console.log(`Falló la asignación de etiqueras (promise): `, errorMsg);

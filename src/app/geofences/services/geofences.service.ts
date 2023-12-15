@@ -109,6 +109,10 @@ export class GeofencesService {
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
     return response.data;
   }
+  public async storeTagAndAssingGeo(req: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTagAndAssigGeos`,req).toPromise();
+    return response.data;
+  }
 
   closeModal() {
     // Envía evento al padre para cerrarse
