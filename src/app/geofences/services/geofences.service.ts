@@ -29,6 +29,8 @@ export class GeofencesService {
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
+  @Output() displayOn = new EventEmitter<any>();
+  modalCloseEvent = new EventEmitter();
 
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];
@@ -69,7 +71,6 @@ export class GeofencesService {
   public async initialize() {
     this.getUserPrivileges();
     await this.getAll();
-    //await this.getTags(); //COMENTADO POR FALTA DE API Y CONTROLADOR
     
   }
 
