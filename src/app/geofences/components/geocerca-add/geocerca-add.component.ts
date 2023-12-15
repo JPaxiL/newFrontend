@@ -183,8 +183,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   onSelecTags(){
     console.log('etiquetasSelect',this.selectedTag);
     this.form.tags = this.selectedTag;
-    console.log(this.form.tags);
-
+    this.form.tags = this.form.tags.join(',');
   }
   deleteTag(){
     
@@ -841,10 +840,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.tag_name_font_size = gEdit.tag_name_font_size;
 
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
-        geo.idgrupo = gEdit.grupo_convoy_id ?? '0';
         geo.idoperation = gEdit.operation_grupo_id ?? '0';
         geo.nameoperation = this.getNameOperation(geo.idoperation);
-        geo.namegrupo = this.getNameGrupo(geo.idgrupo);
+        console.log('etiqeutas editadas', gEdit.geoTag)
+        geo.tags = gEdit.geo_tags;
 
         this.mapService.map.removeLayer(geo.geo_elemento);
         this.mapService.map.removeLayer(geo.marker_name);
@@ -896,7 +895,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         // //console.log(geo);
         console.log("mostrar Swalllll");
         Swal.fire(
-            'Modoficado',
+            'Modificado',
             'Se modificó correctamente!!',
             'success'
         );
@@ -908,7 +907,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
       if(this.poligonAdd._latlngs[0].length != 0){
         this.poligonAdd.editing.disable();
-        console.log(this.form);
+        
         this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
         this.geofencesService.store(this.form).then( (res1) => {
           //console.log("---clickGuardar NUEVO----");

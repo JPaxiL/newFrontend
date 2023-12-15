@@ -6,7 +6,7 @@ export interface IGeofence {
     nameoperation: string,
     user_id?: string,
     orden: string,
-    tag?: string,
+    tags?: number[],
     tag_name_color: string,
     geo_coordenadas: string,
     tiempo_act_zone?: string,
@@ -28,11 +28,17 @@ export interface IGeofence {
 
 export interface IGeofences {
     geofences: IGeofence[],
-    createTreeNode(data: IGeofence[]): any[],
+    createTreeNode(data: IGeofence[]): Promise <any[]>,
 }
 
-export interface ITags{
+export interface ITag{
     id: string,
-    bol_eliminado?: boolean,
     var_name: string,
 }
+
+export interface IOperation{
+    idoperation: string,
+    nameoperation: string,
+    idgrupo: string,
+    namegrupo: string,
+} 

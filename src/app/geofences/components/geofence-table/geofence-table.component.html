@@ -9,31 +9,6 @@
           <!-- <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
         </span>
       </div>
-      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none ">
-        <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-gray-blue btn-dark-hover btn-circle" title="Importar o exportar" ngbDropdownToggle>
-          <i class="fas fa-file-import" aria-hidden="true"></i>
-        </button>
-        <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior">
-          <div class="text-center">
-            Opciones
-          </div>
-          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
-            <span (click)="import('kml')">Importar de KML/KMZ</span>
-          </div>
-          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
-            <span (click)="export('kml')">Exportar a KML/KMZ</span>
-          </div>
-          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
-            <span (click)="import('csv')">Importar de CSV</span>
-          </div>
-          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
-            <span (click)="export('csv')">Exportar a CSV</span>
-          </div>
-        </div>
-      </div>
-      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-      </button>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
         <button class="btn-gl-gray-blue btn-dark-hover btn-circle" ngbDropdownToggle>
           <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
@@ -215,13 +190,13 @@
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-        <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-grupo': rowData['type'] === 'operacion', 'row-header-convoy': rowData['type'] === 'grupo'}">
+        <tr *ngIf="rowData['col']==3" [ngClass]="{'row-header-operation': rowData['type'] === 'operacion', 'row-header-tag': rowData['type'] === 'etiqueta'}">
           <td></td>
           <td [attr.colspan]="column">
             <div class="d-flex justify-content-between align-items-center">
               <div class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header">
                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                {{rowData['type'] === 'operacion' && rowData['name']!='Geocercas Sin Operacion'? 'Operacion: ': rowData['type'] === 'grupo' && rowData['name']!='Geocercas Sin Grupo'? 'Grupo: ': ''}}{{rowData['name']}}
+                {{rowData['type'] === 'operacion' && rowData['name']!='Geocercas Sin Operacion'? 'Operación: ': rowData['type'] === 'etiqueta' && rowData['name']!='Geocercas Sin Etiqueta'? 'Etiqueta: ' : ''}}{{rowData['name']}}
               </div>
             </div>
           </td>
@@ -235,8 +210,8 @@
           </td>
           <td style="min-width: 215px;" class="geofence-column">
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
-                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [style]="{'background-color': rowData['zone_color']}"></div>
-                <div *ngIf="(rowData['type'])=='circ'" class="circle" [style]="{'background-color': rowData['zone_color']}"></div>
+                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [ngStyle]="{'background-color': rowData.zone_color}"></div>
+                <div *ngIf="(rowData['type'])=='circ'" class="circle" [ngStyle]="{'background-color': rowData.zone_color}"></div>
                 <div *ngIf="(rowData['type'])=='lin'" class="" > 
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
@@ -441,8 +416,8 @@
           </td>
           <td style="min-width: 215px;" class="geofence-column">
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
-                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [style]="{'background-color': rowData['zone_color']}"></div>
-                <div *ngIf="(rowData['type'])=='circ'" class="circle" [style]="{'background-color': rowData['zone_color']}"></div>
+              <div *ngIf="(rowData['type'])=='polig'" class="pentagon" style="background-color: {{rowData['zone_color']}}"></div>
+              <div *ngIf="(rowData['type'])=='circ'" class="circle" style="background-color: {{rowData['zone_color']}}"></div>
                 <div *ngIf="(rowData['type'])=='lin'" class="" > 
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">

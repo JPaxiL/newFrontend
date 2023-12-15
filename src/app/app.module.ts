@@ -151,6 +151,7 @@ import { CarouselComponent } from './shared/components/carousel/carousel.compone
 import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
 import { ShortenPipe } from './core/pipes/shorten.pipe';
+import { AddTagComponent } from './geofences/components/add-tag/add-tag.component';
 
 @NgModule({
   declarations: [
@@ -244,7 +245,8 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     EventPopupComponent,
     CarouselComponent,
     DriversHistoryComponent,
-    SliderMultimediaComponent
+    SliderMultimediaComponent,
+    AddTagComponent
   ],
   imports: [
     ToastrModule.forRoot({
