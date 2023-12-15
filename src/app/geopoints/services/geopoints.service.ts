@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable,EventEmitter, Output } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
@@ -15,6 +15,7 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
   providedIn: 'root'
 })
 export class GeopointsService {
+  @Output() geopointsCompleted = new EventEmitter<any>();
 
   initializingGeopoints: boolean = false;
   tblDataGeo = new Array();
@@ -227,6 +228,7 @@ export class GeopointsService {
       this.tagNamesEyeState = this.geopointTagCounters.visible != 0;
       console.log('Geopuntos Cargados');
       console.log('Geopuntos:', this.geopoints);
+      this.geopointsCompleted.emit(this.geopoints);
       this.initializingGeopoints = true;
       this.attemptToHideSpinner();
 

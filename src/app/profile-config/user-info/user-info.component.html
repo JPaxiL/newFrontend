@@ -160,7 +160,7 @@
                             <label for="vehicles">Nº Vehículos:</label>
                           </div>
                           <div class="col-4 d-flex justify-content-start">
-                            <input id="vehicles" type="text" value="5" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                            <input id="vehicles" type="text" [value]="userInfoForm.vehiclesLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
                           </div>
                         </div>
                         <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
@@ -176,7 +176,7 @@
                             <label for="geopuntos">Nº Geopuntos:</label>
                           </div>
                           <div class="col-4 d-flex justify-content-start">
-                            <input id="geopuntos" type="text" value="5" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                            <input id="geopuntos" type="text" [value]="userInfoForm.geopointsLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
                           </div>
                         </div>
                         <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
@@ -195,7 +195,7 @@
                             <label for="geopol">Nº Geocercas Poligonales:</label>
                           </div>
                           <div class="col-4 d-flex justify-content-end">
-                            <input id="geopol" type="text" value="5" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                            <input id="geopol" type="text" [value]="userInfoForm.geocercaPoligLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
                           </div>
                         </div>
                         <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
@@ -211,7 +211,7 @@
                             <label for="geocir">Nº Geocercas Circulares:</label>
                           </div>
                           <div class="col-4 d-flex justify-content-end">
-                            <input id="geocir" type="text" value="5" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                            <input id="geocir" type="text" [value]="userInfoForm.geocercaCircLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
                           </div>
                         </div>
                         <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">

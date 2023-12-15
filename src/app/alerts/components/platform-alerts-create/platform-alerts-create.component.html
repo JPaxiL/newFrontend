@@ -46,6 +46,7 @@
                             [appendTo]="'body'"
                             [maxSelectedLabels]="3"
                             [selectedItemsLabel]="'{0} vehiculos seleccionados'"
+                            (onChange)="changeVehicles($event)"
                             ></p-multiSelect>
                         </div>
                     </div>
@@ -58,7 +59,7 @@
                     <div class="col-12">
                         <div class="p-field">
                             <p-multiSelect
-                            [options]="geocercas"
+                            [options]="geocercasFiltradas"
                             optionLabel="label"
                             optionValue="value"
                             formControlName="geocercas"

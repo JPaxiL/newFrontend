@@ -19,7 +19,7 @@ export class UserConfigComponent implements OnInit {
   loading : boolean = false;
   typeVehiclesList:any = {};
   userTypeVehicleConfig: any = {};
-  
+  showChangeItem:boolean = false;
   bol_ondas!:boolean;
   bol_cursor!:boolean;
   bol_vehicle!:boolean;
@@ -27,15 +27,18 @@ export class UserConfigComponent implements OnInit {
   typeVehiclesForm: any = [];
   originalValues: any[] | undefined;
 
+  filteredColorsVehicles: any[] = [];
   colorsVehicles: any[] = [
     { name: 'Por defecto', code: 'c4c2c1',color: '#c4c2c1' }, // Celeste
-    { name: 'Celeste', code: '00AAE4',color: '#00AAE4' }, // Celeste
-    { name: 'Morado', code: '9370db',color: '#9370db' }, // Morado
-    { name: 'Naranja', code: 'ffa500',color: '#ffa500' }, // Naranja
-    { name: 'Amarillo', code: 'ffff00',color: '#ffff00' }, // Amarillo
-    { name: 'Verde', code: '17d244',color: '#17d244' }, // Verde Claro
+    { name: 'Celeste', code: '00FFFF',color: '#00FFFF' }, // Celeste
+    { name: 'Verde', code: '1DA80E',color: '#1DA80E' }, // Verde 
+    { name: 'Azul', code: '45A9FF',color: '#45A9FF' }, // Azul
     { name: 'Guinda', code: '800000',color: '#800000' }, // Guinda
-    { name: 'Dorado', code: 'ffd700',color: '#ffd700' }, // Dorado
+    { name: 'Morado', code: '9370DB',color: '#9370DB' }, // Morado
+    { name: 'Rosado', code: 'BA00FF',color: '#BA00FF' }, // Rosado
+    { name: 'Dorado', code: 'F1C700',color: '#F1C700' }, // Dorado
+    { name: 'Naranja', code: 'FFA500',color: '#FFA500' }, // Naranja
+    { name: 'Amarillo', code: 'FFFF00',color: '#FFFF00' }, // Amarillo
   ];
   constructor(       
     private userDataService: UserDataService,
@@ -47,15 +50,24 @@ export class UserConfigComponent implements OnInit {
     this.userDataService.spinner.show('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
     this.typeVehiclesList = this.userDataService.typeVehicles;
     this.initForm();
-    console.log(this.typeVehiclesList,this.userDataService.userData);
+    // console.log(this.typeVehiclesList,this.userDataService.userData);
+    if (this.userDataService.changeItemIcon){
+      this.showChangeItem = true;
+      console.log('VALOR DE CHANGE ITEM ->',this.userDataService.changeItemIcon);
+    }
+    if(this.userForm.bol_ondas == true || this.userForm.bol_vehicle == true){
+      this.hideStateColors(true)
+    }else{
+      this.hideStateColors(false)
+    }
     this.initFormTableVehiclesDefault();
 
   }
 
   initForm() {
-    this.userForm.oldPass = ''; 
-    this.userForm.newPass = ''; 
-    this.userForm.newPassRepeat = '';
+    // this.userForm.oldPass = ''; 
+    // this.userForm.newPass = ''; 
+    // this.userForm.newPassRepeat = '';
     this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
     this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
     this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
@@ -70,7 +82,7 @@ export class UserConfigComponent implements OnInit {
         userDataItem.var_color = itemVehicle.var_color;
         userDataItem.var_galon = itemVehicle.var_galon;
       } else {
-        userDataItem.var_color = '#c3c4c4';
+        userDataItem.var_color = '#c4c2c1';
         userDataItem.var_galon = '';
       }
     }
@@ -79,28 +91,50 @@ export class UserConfigComponent implements OnInit {
     this.originalValues = JSON.parse(JSON.stringify(this.typeVehiclesList)); // Guardar una copia profunda de los valores originales
   }
 
-  switchActive(switchNumber: number){
-    if (switchNumber === 1) {
-      this.userForm.bol_ondas = true;
-      this.userForm.bol_cursor = false;
-      this.userForm.bol_vehicle = false;
-      
-    } else if (switchNumber === 2) {
-      this.userForm.bol_ondas = false;
-      this.userForm.bol_cursor = true;
-      this.userForm.bol_vehicle = false;
-      
-    } else if (switchNumber === 3) {
+  changeItemCheckbox(){
+    if (this.showChangeItem == false){
       this.userForm.bol_ondas = false;
       this.userForm.bol_cursor = false;
-      this.userForm.bol_vehicle = true;
+      this.userForm.bol_vehicle = false;
+      this.hideStateColors(false);
+    }else{
+      this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
+      this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
+      this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
+      if(this.userForm.bol_ondas == true || this.userForm.bol_vehicle == true){
+        this.hideStateColors(true)
+      }else{
+        this.hideStateColors(false)
+      }
     }
+  }
+  switchActive(option:number){
+    if (option == 1) {
+      this.userForm.bol_cursor = false;
+      this.userForm.bol_vehicle = false;
+      this.hideStateColors(this.userForm.bol_cursor);
+    } else if (option == 2) {
+      this.userForm.bol_ondas = false;
+      this.userForm.bol_vehicle = false;
+      this.hideStateColors(false);
+      
+    } else if (option == 3) {
+      this.userForm.bol_ondas = false;
+      this.userForm.bol_cursor = false;
+      this.hideStateColors(this.userForm.bol_vehicle);
+    }else{
+      this.userForm.bol_ondas = false;
+      this.userForm.bol_cursor = false;
+      this.userForm.bol_vehicle = false;
+      this.hideStateColors(false);
+    }
+    // console.log('Mostrando changes...',this.userForm);
   }
 
   onClickCancel(){
-    this.userForm.oldPass = '';
-    this.userForm.newPass = '';
-    this.userForm.newPassRepeat = '';
+    // this.userForm.oldPass = '';
+    // this.userForm.newPass = '';
+    // this.userForm.newPassRepeat = '';
     this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
     this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
     this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
@@ -147,7 +181,8 @@ export class UserConfigComponent implements OnInit {
       newCopyPass: this.userForm.newPassRepeat,
       bol_ondas: this.userForm.bol_ondas,
       bol_cursor: this.userForm.bol_cursor,
-      bol_vehicle: this.userForm.bol_vehicle
+      bol_vehicle: this.userForm.bol_vehicle,
+      itemChanges: this.showChangeItem
     };
     return req;
   }
@@ -206,6 +241,25 @@ export class UserConfigComponent implements OnInit {
       this.userDataService.getUserData();
       this.vehicleService.initialize();
     });
+  }
+
+  hideStateColors(hideColor:boolean){
+    if (hideColor == true) {
+      // console.log('CAMBIOS EN TRUE');
+      //ACTUALIZAR COLORES SELECCIONADOS
+      this.typeVehiclesList.forEach((vehicle: { var_color: string; }) => {
+        if (vehicle.var_color === '45A9FF' || vehicle.var_color === '1DA80E') {
+          vehicle.var_color = 'c4c2c1'; // Cambiar al color por defecto c4c2c1
+        }
+      });
+      //FILTRAR LISTA DE COLORES
+      this.filteredColorsVehicles = this.colorsVehicles.filter(
+        (color) => color.code !== '45A9FF' && color.code !== '1DA80E'
+      );
+    } else {
+      // console.log('CAMBIOS EN FALSE');
+      this.filteredColorsVehicles = this.colorsVehicles;
+    }
   }
 
 }

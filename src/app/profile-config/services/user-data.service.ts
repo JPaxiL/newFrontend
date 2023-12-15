@@ -109,8 +109,10 @@ export class UserDataService {
       return 'ondas';
     }else if (this.userData.bol_vehicle){
       return 'vehicles';
-    }else{
+    }else if (this.userData.bol_cursor){
       return 'cursor';
+    }else{
+      return '';
     }
   }
 

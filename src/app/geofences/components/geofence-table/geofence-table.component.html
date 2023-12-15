@@ -1,7 +1,7 @@
 <div class="table-content-component-panel-monitoreo" style="position: relative; height: 100%;">
   <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGeofencesSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Geocercas... </p></ngx-spinner>
   <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda">
-    <div class="d-flex">
+    <div class="d-flex justify-content-around">
       <div class="d-flex flex-grow-1">
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
@@ -9,10 +9,29 @@
           <!-- <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
         </span>
       </div>
-      <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickImportGeocerca()" title="Importar o exportar">
-        <i class="fas fa-file-import" aria-hidden="true"></i>
-      </button>
-      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
+      <div ngbDropdown container="body" placement="right-top left-top" class="flex-none ">
+        <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-gray-blue btn-dark-hover btn-circle" title="Importar o exportar" ngbDropdownToggle>
+          <i class="fas fa-file-import" aria-hidden="true"></i>
+        </button>
+        <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior">
+          <div class="text-center">
+            Opciones
+          </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <span (click)="import('kml')">Importar de KML/KMZ</span>
+          </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <span (click)="export('kml')">Exportar a KML/KMZ</span>
+          </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <span (click)="import('csv')">Importar de CSV</span>
+          </div>
+          <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
+            <span (click)="export('csv')">Exportar a CSV</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocercaPol()" title="Crear geocerca">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
@@ -38,6 +57,7 @@
 
         </div>
       </div>
+      
     </div>
   </div>
   <div class="">
@@ -215,12 +235,12 @@
           </td>
           <td style="min-width: 215px;" class="geofence-column">
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
-                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" style="background-color: {{rowData['zone_color']}}"></div>
-                <div *ngIf="(rowData['type'])=='circ'" class="circle" style="background-color: {{rowData['zone_color']}}"></div>
+                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [style]="{'background-color': rowData['zone_color']}"></div>
+                <div *ngIf="(rowData['type'])=='circ'" class="circle" [style]="{'background-color': rowData['zone_color']}"></div>
                 <div *ngIf="(rowData['type'])=='lin'" class="" > 
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
-                    <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" style="fill: {{rowData['zone_color']}}" stroke="none">
+                    <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" [style]="{fill: rowData['zone_color']}" stroke="none">
                     <path d="M103 265 c-70 -46 -79 -78 -33 -115 44 -36 36 -68 -25 -110 -25 -17
                     -45 -33 -45 -35 0 -3 63 -5 139 -5 l140 0 11 55 c15 74 1 102 -68 136 -85 41
                     -85 43 -17 93 19 15 18 15 -15 15 -23 0 -53 -12 -87 -34z"/>
@@ -421,12 +441,12 @@
           </td>
           <td style="min-width: 215px;" class="geofence-column">
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
-                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" style="background-color: {{rowData['zone_color']}}"></div>
-                <div *ngIf="(rowData['type'])=='circ'" class="circle" style="background-color: {{rowData['zone_color']}}"></div>
+                <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [style]="{'background-color': rowData['zone_color']}"></div>
+                <div *ngIf="(rowData['type'])=='circ'" class="circle" [style]="{'background-color': rowData['zone_color']}"></div>
                 <div *ngIf="(rowData['type'])=='lin'" class="" > 
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
-                    <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" style="fill: {{rowData['zone_color']}}" stroke="none">
+                    <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" [style]="{fill: rowData['zone_color']}" stroke="none">
                     <path d="M103 265 c-70 -46 -79 -78 -33 -115 44 -36 36 -68 -25 -110 -25 -17
                     -45 -33 -45 -35 0 -3 63 -5 139 -5 l140 0 11 55 c15 74 1 102 -68 136 -85 41
                     -85 43 -17 93 19 15 18 15 -15 15 -23 0 -53 -12 -87 -34z"/>

@@ -689,4 +689,12 @@ export class GeofenceTableComponent implements OnInit {
     }
   }
 
+  import(type:string){
+    console.log("import from ",type);
+  }
+
+  export(type:string){
+    console.log("export to ",type);
+  }
+
 }

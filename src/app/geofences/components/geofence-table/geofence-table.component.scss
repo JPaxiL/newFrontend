@@ -156,12 +156,13 @@ p {
     &.dropdown-customize-vehicle-panel{
         margin-left: 1.875rem; //Padding de rowBusqueda + ancho de dragbar + espacio adicional 0.375
         margin-right: 0.625rem;
-        background: linear-gradient(0deg, #fff 50%, var(--gl-purple-blue) 50%);
+        background: linear-gradient(0deg, #fff 90%, var(--gl-purple-blue) 50%);
 
         > div:first-child{
             color: #fff;
             padding-top: 0.25rem;
             padding-bottom: 0.75rem;
+            background: var(--gl-purple-blue);
         }
 
         > .container {

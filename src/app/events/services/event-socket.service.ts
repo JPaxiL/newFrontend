@@ -29,11 +29,14 @@ export class EventSocketService extends Socket {
     public vehicleService: VehicleService,
     private AlertService: AlertService) {
     super({
-      url: environment.socketEvent
+      url: environment.socketEvent,
       //url: 'http://23.29.124.173',
-      // options: {
-      //   transports: ["websocket"]
-      // }
+      options: {
+        query: {
+          userId: localStorage.getItem('user_id'),
+          secret: environment.secretClient,
+        },
+      },
     });
 
     // this.ioSocket.on('res', (info: any) => {
@@ -44,6 +47,14 @@ export class EventSocketService extends Socket {
     this.user_id = localStorage.getItem('user_id');
 
     //console.log('Panel notif first key on service', this.eventService.panelNotifKey);
+  }
+  initializeSocket(userId: string): void {
+    if (this.ioSocket.connected) {
+      this.ioSocket.disconnect();
+    }
+    this.user_id = userId;
+    this.ioSocket.io.opts.query.userId = userId;
+    this.ioSocket.connect();
   }
   public debug(imei: string) {
     // console.log("desde event socket | debug imei:",imei);
