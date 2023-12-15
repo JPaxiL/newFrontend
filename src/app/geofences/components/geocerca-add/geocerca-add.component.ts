@@ -840,10 +840,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.tag_name_font_size = gEdit.tag_name_font_size;
 
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
-        geo.idgrupo = gEdit.grupo_convoy_id ?? '0';
         geo.idoperation = gEdit.operation_grupo_id ?? '0';
         geo.nameoperation = this.getNameOperation(geo.idoperation);
-        geo.namegrupo = this.getNameGrupo(geo.idgrupo);
+        console.log('etiqeutas editadas', gEdit.geoTag)
+        geo.tags = gEdit.geo_tags;
 
         this.mapService.map.removeLayer(geo.geo_elemento);
         this.mapService.map.removeLayer(geo.marker_name);

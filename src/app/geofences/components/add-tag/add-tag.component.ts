@@ -26,7 +26,6 @@ export class AddTagComponent implements OnInit {
   isFormName: boolean = false; //para validar NameObligatorio en Tag
   isExistTag: boolean = false; //para validar NameExistente en Tag
   listTagsEmpty: boolean = false; //para validar si el array de list2 esta vacio en la creacion
-  option: string="operacion";
   
   constructor(
     private geofecesService: GeofencesService,
@@ -48,17 +47,6 @@ export class AddTagComponent implements OnInit {
   }
   onHide(){
     this.onHideEvent.emit(false);
-  }
-  onShow(){
-    this.onOption(this.option);
-  }
-
-  onOption(e : string){
-    this.list1 = [];
-    this.list2 = [];
-    if(e=='operacion'){
-      this.list1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == 0);
-    }
   }
 
   onChangeOperation(){
@@ -185,13 +173,6 @@ export class AddTagComponent implements OnInit {
     const vehicles = this.vehicleService.vehicles;
     for (const key in this.list2) {
       const index = vehicles.indexOf(this.list2[key])
-      if(this.option=='operacion'){
-        vehicles[index].idoperation=info.data['id'];
-        vehicles[index].nameoperation=info.data['nombre'];
-      }else if(this.option=='grupo'){
-        vehicles[index].idgrupo=info.data['id'];
-        vehicles[index].namegrupo=info.data['nombre'];
-      }
     }
     this.vehicleService.vehicles = vehicles;
     // //console.log('new vehicles',vehicles);
@@ -208,8 +189,6 @@ export class AddTagComponent implements OnInit {
     // this.eventUpdate.emit(this.vehicle);
     // this.eventDisplay.emit(false);
     this.list2=[];
-    //this.option = "nada";
-    this.option = "operacion";
     this.name.nativeElement.value = "";
     //this.description.nativeElement.value = "";
   }
@@ -237,13 +216,12 @@ export class AddTagComponent implements OnInit {
 
   onConfirmTag(){
     this.loading = true;
-    let currOption = this.option;
     let currName = this.nameTarget;
 
     if (!this.isFormName) {
       Swal.fire({
         title: 'Error',
-        text: `La creación de ${currOption} debe tener un nombre.`,
+        text: `La creación de Etiqueta debe tener un nombre.`,
         icon: 'error',
       }).then(() => {
         this.loading = false; // Restablece el estado de carga en caso de error.
@@ -268,14 +246,14 @@ export class AddTagComponent implements OnInit {
       if (this.isExistTag){
         Swal.fire({
             title: 'Error',
-            text: `Ya existe ${currOption} con ese nombre, ingrese otro distinto.`,
+            text: `Ya existe una etiqueta con ese nombre, ingrese otro distinto.`,
           icon: 'error',
         }).then(() => {
           this.loading = false; // Restablece el estado de carga en caso de error.
         });
         return;
       }
-    //verificar cantidad de vehiculos en la lista
+    //verificar cantidad de geocercas en la lista
     this.listTagsEmpty = this.verifyEmptyList();
     if (this.listTagsEmpty){
       Swal.fire({
@@ -302,19 +280,18 @@ export class AddTagComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        // await this.onSubmit();
         await this.onSubmit();
       },
     }).then((data) => {
       if(data.isConfirmed) {
         Swal.fire(
           'Éxito',
-          `El ${currOption} ${currName} se creó exitosamente`,
+          `El ${currName} se creó exitosamente`,
           'success',
         );
         console.log(data);
       } else {
-        console.log(`(Vehicle Group) Hubo un error al crear el nuevo ${currOption}`);
+        console.log(`(geo Group) Hubo un error al crear la nueva etiqueta }`);
       }
       this.loading=false;
     });

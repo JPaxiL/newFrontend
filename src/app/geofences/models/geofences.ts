@@ -42,123 +42,127 @@ export class Geofences implements IGeofences {
       let prueba = [];
   
       for(const index in this.geofences){
-        console.log('id OPERATION', this.geofences[index]['idoperation'])
-        if(this.operations.includes(this.geofences[index]['idoperation'])){
-        }else{
-          console.log('id OPERATION new', this.geofences[index]['idoperation'])
-          this.operations.push(this.geofences[index]['idoperation']);
-          status_operation= true;
-        }
-        if(status_operation){
-          //console.log('case : 1 1');
-          map.push(
-            {
-              data:{name: this.geofences[index]['nameoperation'], col:3, type:'operacion', id:this.geofences[index]['idoperation']},
+        status_operation = false;
+        status_tags= false;
+        console.log('id GEO', this.geofences[index]);
+        if(this.geofences[index].tags?.length == 0){
+          if(this.operations.includes(this.geofences[index]['idoperation'])){
+          }else{
+            this.operations.push(this.geofences[index]['idoperation']);
+            status_operation= true;
+          }
+          if(this.tagGroups.includes(this.geofences[index]['idoperation']+'_0')){
+          }else{
+            this.tagGroups.push(this.geofences[index]['idoperation']+'_0');
+            status_tags= true;
+          } //lógica para agregar a map
+          if(status_operation&&status_tags){
+            console.log('case defoult:1_1');
+            map.push(
+              {
+                data:{id:this.geofences[index]['idoperation'],name: this.geofences[index]['nameoperation'], col:3, type:'operacion' },
+                expanded: true,
+                children:[
+                  {
+                    data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
+                    expanded: true,
+                    children: [
+                      {
+                        data:this.geofences[index],
+                      }
+                    ]
+                  }
+                ]
+              }
+            );
+          }else if(!status_operation&&status_tags){
+            console.log('case defoult:0_1');
+            const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.geofences[index]['idoperation']);
+            const newTag = {
+              data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
               expanded: true,
-              children:[
+              children: [
                 {
-                  data:this.geofences[index]
+                  data:this.geofences[index],
                 }
-              ]
-            }
-          );
-  
-        }else if(!status_operation){
-          //recuperar el id del operation
-          let index_operation = this.operations.indexOf(this.geofences[index]["idoperation"]);
-          //recuperar id del group
-          // let index_convoy = map[index_group]['children']['data']
-          map[index_operation]['children'].push(
-            {
-              data:this.geofences[index]
-            }
-          );
-          // //console.log("index_group",index_group)
-          // map[data]
-        }
-        status_operation=false;
-      }
-
-      console.log("geocercas con operaciones", map);
-
-      for(const index in this.operations){
-        console.log("id OPERATION", this.operations[index]);
-        let aux = this.geofences.filter((ope: any)=> ope.idoperation == this.operations[index])
-        for(const indexGeo of aux){
-          console.log('nombre geocerca',indexGeo.zone_name);
-          if(!indexGeo.tags){
-            //console.log('Geocercas sin etiquetas');
-            //agregar a un 
-            if(this.tagGroups.includes(0)){
-              //console.log('etiqueta sin nombre ya existe');
+              ],
+            };
+            existingOperation.children.push(newTag);
+            
+          }else if(status_operation&&!status_tags){
+            console.log('case defoult:1_0');
+          }else if(!status_operation&&!status_tags){
+            console.log('case defoult:0_0');
+            const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.geofences[index]['idoperation']);
+            const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id == 0);
+            existingTag.children.push({
+              data: this.geofences[index]
+            });
+          }
+        }else{
+          for(const indexTag of this.geofences[index].tags!){
+            const tagName = this.getNameTag(indexTag);
+            
+            if(this.operations.includes(this.geofences[index]['idoperation'])){
             }else{
-              this.tagGroups.push(0);
-              //console.log('etiqueta sin nombre nuevaa');
+              this.operations.push(this.geofences[index]['idoperation']);
+              status_operation= true;
+            }
+            if(this.tagGroups.includes(this.geofences[index]['idoperation']+'_'+indexTag)){
+            }else{
+              this.tagGroups.push(this.geofences[index]['idoperation']+'_'+indexTag);
               status_tags= true;
             }
-            if(status_tags){
-              //agregar tags y geocerca a operation
-              console.log('Tags caso nueva etiqueta');
-              const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.operations[index]);
+            //
+            if(status_operation&&status_tags){
+              console.log('case:1_1');
+              map.push(
+                {
+                  data:{id:this.geofences[index]['idoperation'],name: this.geofences[index]['nameoperation'], col:3, type:'operacion' },
+                  expanded: true,
+                  children:[
+                    {
+                      data:{id:indexTag, name: tagName, col:3, type:'etiqueta' },
+                      expanded: true,
+                      children: [
+                        {
+                          data:this.geofences[index],
+                        }
+                      ]
+                    }
+                  ]
+                }
+              );
+            }else if(!status_operation&&status_tags){
+              console.log('case:0_1');
+              const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.geofences[index]['idoperation']);
               const newTag = {
-                data: {id: 0, name: 'Geocercas Sin Etiqueta', col: 3, type: 'etiqueta' },
+                data:{id:indexTag, name: tagName, col:3, type:'etiqueta' },
                 expanded: true,
                 children: [
                   {
-                    data: indexGeo,
-                  },
+                    data:this.geofences[index],
+                  }
                 ],
               };
               existingOperation.children.push(newTag);
-            }else{
-              //agreagar geoerca a etiqueta de la operacion
-              const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.operations[index]);
-              const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id == 0);
+              
+            }else if(status_operation&&!status_tags){
+              console.log('case:1_0');
+            }else if(!status_operation&&!status_tags){
+              console.log('case:0_0');
+              const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.geofences[index]['idoperation']);
+              const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id === indexTag);
               existingTag.children.push({
-                data: indexGeo,
+                data: this.geofences[index]
               });
             }
-          }else{
-            let aux2 = indexGeo.tags;
-            console.log('Geocercas con etiquetas', aux2);
-            for(const indexTag of aux2){
-              console.log('ID ETIQUETA', indexTag);
-              const tagName = this.getNameTag(indexTag);
-              console.log(tagName);
-              if(this.tagGroups.includes(indexTag)){
-                console.log('etiqueta ya existe');
-              }else{
-                this.tagGroups.push(indexTag);
-                console.log('etiqueta nuevaa', tagName);
-                status_tags= true;
-              }
-              if(status_tags){
-                //agregar tags y geocerca a operation
-                console.log('Tags caso nueva etiqueta');
-                const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.operations[index]);
-                const newTag = {
-                  data: {id: indexTag, name: tagName, col: 3, type: 'etiqueta' },
-                  expanded: true,
-                  children: [
-                    {
-                      data: indexGeo,
-                    },
-                  ],
-                };
-                existingOperation.children.push(newTag);
-              }else{
-                //agreagar geoerca a etiqueta de la operacion
-                const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.operations[index]);
-                const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id === indexTag);
-                existingTag.children.push({
-                  data: indexGeo,
-                });
-              }
-            }
+            status_tags= false;
+            status_operation = false;
           }
         }
-        this.tagGroups = [];
       }
+      console.log("tagss", this.tags);
       console.log('arbol de etiquetas',map);
       return Promise.resolve(map);
   }
@@ -168,7 +172,6 @@ export class Geofences implements IGeofences {
     //     let map: any=[];
     //     this.operations = [];
     //     this.groups = [];
-    //     this.tags = [];
     //     let status_operation = false;
     //     let status_group = false;
     //     let status_tags = false;
