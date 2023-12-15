@@ -223,6 +223,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   pngVelFecha: boolean = true;
   pngGrafico: boolean = false;
 
+  soloParaMi: boolean= false;
+
   isHistorialTableLoaded: boolean = false;
 
   constructor(
@@ -265,9 +267,15 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     this.UserDataService.getUserData();
     console.log("=================================");
+    console.log(this.UserDataService);
     console.log(this.UserDataService.typeVehicles);
     console.log(this.UserDataService.typeVehiclesUserData);
+    console.log(this.UserDataService.userName);
 
+    if (this.UserDataService.userName == 'percy') {
+      this.soloParaMi = true;
+    }
+    
 
 
     if(!this.VehicleService.statusDataVehicle){
@@ -1778,16 +1786,24 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
               var tipoUnidad = (this.VehicleService.getVehiclesData().filter((item:any)=> item.IMEI == dH[0].imei))[0].tipo;
               var tipoU = (this.UserDataService.typeVehiclesUserData.filter((item:any)=> item.type_vehicle_id == parseInt(tipoUnidad)))[0];
 
+              console.log(tipoUnidad+ " ================ " +tipoU);
+
               if (tipoU.var_galon == null) {
                   kilometrajeTotal = '-.';
               } else {
 
+                console.log(" ================ 111");
+
                   var distancia = this.get_distancia_movimiento(dH, a1, a2); // en km
+                  console.log(" ================ 222");
+
                   if (distancia == '-') {
                       var distancia_nueva = 0;
-                      for (let i = a1; i <= a2; i++) {
+                      for (let i = a1 +1; i <= a2; i++) {
                           if (dH[i].speed > 1) {
                               distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                              console.log(" ================ " +distancia_nueva);
+
                           }
                       }
                       kilometrajeTotal = ( distancia_nueva * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
@@ -1808,9 +1824,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   }
   
+  
   get_distancia_movimiento(dH:any, a1:any, a2:any) {
-
+    // console.log("------- 11");
     if (a2 == 'FIN') {
+      // console.log("------- 12 fin");
         var h = dH.length - 1; //Ultimo indice del array
         var x1 = (dH[0].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[0].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
         var x2 = (dH[h].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[h].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
@@ -1826,6 +1844,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             var distancia_nueva = 0;
             for (let i = 1; i < dH.length; i++) {
                 if (dH[i].speed > 1) {
+                    console.log(dH[i-1]);
+
+
                     distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
                 }
             }
@@ -1836,6 +1857,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         }
         return kilometrajeTotal;
     } else {
+      // console.log("------- 22 fin");
 
         var x1 = (dH[a1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[a1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
         var x2 = (dH[a2].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[a2].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
@@ -1844,8 +1866,13 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
             kilometrajeTotal = '-';
 
             var distancia_nueva = 0;
-            for (let i = a1; i <= a2; i++) {
+        
+            for (let i = a1 +1 ; i <= a2; i++) {
                 if (dH[i].speed > 1) {
+                  // console.log(a1);
+                  // console.log(a2);
+                  // console.log(dH);
+
                     distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
                 }
             }

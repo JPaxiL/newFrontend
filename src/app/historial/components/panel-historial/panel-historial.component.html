@@ -24,7 +24,7 @@
     <div class="panel-izq-container">
       <div class="panel-izq-form">
 
-        <div class="modal-footer">
+        <div *ngIf="soloParaMi" class="modal-footer">
           <div class="row w-100 justify-content-around">
             <div class="col-5">
               <button type="button" (click)="clickEnviarCorreoExcel()" class="btn btn-success not-cancel w-100" >Enviar Correo EXCEL</button>
