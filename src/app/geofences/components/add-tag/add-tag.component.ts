@@ -184,22 +184,22 @@ export class AddTagComponent implements OnInit {
   
   async onSubmit(){
     let req = {};
-    req= {
+    req = {
       geofences : this.list2,
       var_name : this.nameTarget,
     };
     console.log('req==>',req);
-      // await this.geofencesService.storeTagAndAssingGeo(req).()
-      // .then((info: { res: any; }) => {
-      //   if(info.res){
-      //     this.addTag();  
-      //   }else{
-      //     //mensaje de error
-      //     console.log('EXISTE UN ERROR');
-      //   }
-      // }).catch(errorMsg => {
-      //   console.log(`Falló la asignación de etiqueras (promise): `, errorMsg);
-      // });
+    req = await this.geofencesService.storeTagAndAssingGeo(req);
+    // .then((info: { res: any; }) => {
+    //   if(info.res){
+    //     this.addTag();  
+    //   }else{
+    //     //mensaje de error
+    //     console.log('EXISTE UN ERROR');
+    //   }
+    // }).catch(errorMsg => {
+    //   console.log(`Falló la asignación de etiqueras (promise): `, errorMsg);
+    // });
   }
 
   onConfirmTag(){
@@ -216,7 +216,7 @@ export class AddTagComponent implements OnInit {
       });
       return;
     }
-    console.log(this.selectedOperation);
+    console.log('sin operacion==>',this.selectedOperation);
     if (this.selectedOperation >= 0) {
       
     }else {
