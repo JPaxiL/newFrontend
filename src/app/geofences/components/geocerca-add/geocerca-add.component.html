@@ -179,7 +179,7 @@
           <div class="col-6" *ngIf="listOptionCheckbox=='operacion'">
             <div class="p-field">
               <label class="" id="operation_label">OPERACIONES:</label>
-              <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation"></p-dropdown>
+              <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation" [ngModelOptions]="{standalone: true}"></p-dropdown>
             </div>
           </div>
           <div class="col-6">
@@ -194,6 +194,7 @@
                 [filterValue]="filterTag"
                 placeholder="Seleccionar etiquetas" 
                 (onChange)="onSelecTags()"
+                [ngModelOptions]="{standalone: true}"
                 optionLabel="var_name"
                 [optionValue]="'id'"
                 display="chip">

@@ -4,6 +4,7 @@ import { GeofencesService } from '../../services/geofences.service';
 import { Geofences } from '../../models/geofences';
 import { IGeofence } from '../../models/interfaces';
 import  { VehicleService } from '../../../vehicles/services/vehicle.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-tag',
@@ -15,6 +16,7 @@ export class AddTagComponent implements OnInit {
   @Output() onHideEvent = new EventEmitter<boolean>();
   @ViewChild('name',{ static:true}) name!: ElementRef;
   @ViewChild('description',{ static:true}) description!: ElementRef;
+  tagsForm!: FormGroup;
   selectedOperation: any={};
   operations: any=[];
   loading : boolean = false;
@@ -30,6 +32,7 @@ export class AddTagComponent implements OnInit {
   constructor(
     private geofencesService: GeofencesService,
     private vehicleService: VehicleService,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
@@ -37,9 +40,16 @@ export class AddTagComponent implements OnInit {
     console.log("hereee", this.geofencesService.listGeofences);
     this.list1 = [];
     this.list2 = [];
+    this.tagsForm = this.initForm();
   }
   ngOnDestroy(){
 
+  }
+  initForm(): FormGroup {
+    return this.fb.group({
+      id:[''],
+      var_nombre: [''],
+    })
   }
 
   close() {
@@ -151,8 +161,7 @@ export class AddTagComponent implements OnInit {
   validateRepeatName (name: string){
     this.isExistTag = false;
     let aux = this.geofencesService.listTag.some((tg:any)=> tg.var_name == name);
-    console.log("auxx", aux);
-  
+    console.log("se repite el nombre", aux);
     return false;
   }
   validateFormsInputs(){
@@ -189,10 +198,10 @@ export class AddTagComponent implements OnInit {
       var_name : this.nameTarget,
     };
     console.log('req==>',req);
-    req = await this.geofencesService.storeTagAndAssingGeo(req);
-    // .then((info: { res: any; }) => {
-    //   if(info.res){
-    //     this.addTag();  
+    // await this.geofencesService.storeTagAndAssingGeo(req).toPromise()
+    // .then((info) => {
+    //   if(info){
+    //     //this.addTag();  
     //   }else{
     //     //mensaje de error
     //     console.log('EXISTE UN ERROR');
@@ -216,9 +225,8 @@ export class AddTagComponent implements OnInit {
       });
       return;
     }
-    console.log('sin operacion==>',this.selectedOperation);
     if (this.selectedOperation >= 0) {
-      
+      console.log('sin operacion==>',this.selectedOperation);      
     }else {
       Swal.fire({
         title: 'Error',
@@ -253,6 +261,13 @@ export class AddTagComponent implements OnInit {
       });
       return;
     }
+    let req = {};
+    req = {
+      geofences : this.list2,
+      var_name : this.nameTarget,
+    };
+    console.log('req==>',req);
+    
     Swal.fire({
       title: '¿Está seguro?',
       text: 'Se aplicarán los cambios',
@@ -268,7 +283,14 @@ export class AddTagComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        await this.onSubmit();
+        let res: any;
+        //await this.onSubmit();
+        
+      
+        // var sub = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeoEdit)[0];
+        // res = await this.geofencesService.edit(this.geoForm.value);
+        res = await this.geofencesService.storeTagAndAssingGeo(req);
+
       },
     }).then((data) => {
       if(data.isConfirmed) {

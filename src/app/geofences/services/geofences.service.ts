@@ -18,6 +18,7 @@ import { Geofences } from '../models/geofences';
 })
 export class GeofencesService {
 
+  private api_url = environment.apiUrl;
   public geofences:any = [];
   public nameComponentPol:string = "LISTAR";
   public geofencesTree: TreeNode[]=[];
@@ -111,8 +112,12 @@ export class GeofencesService {
   }
   public async storeTagAndAssingGeo(req: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTagAndAssigGeos`,req).toPromise();
+    console.log(response);
     return response.data;
   }
+  // storeTagAndAssingGeo(req: any): Observable<any>{
+  //   return this.http.post(this.api_url+"/api/storeTagAndAssigGeos",req);
+  // }
 
   closeModal() {
     // Envía evento al padre para cerrarse
