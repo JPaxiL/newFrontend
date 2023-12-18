@@ -261,12 +261,11 @@ export class AddTagComponent implements OnInit {
       });
       return;
     }
-    let req = {};
-    req = {
-      geofences : this.list2,
-      var_name : this.nameTarget,
+    let req = {
+      geofences: this.list2.map((item: { id: any; }) => item.id), // Extraer solo los IDs de this.list2
+      var_name: this.nameTarget,
     };
-    console.log('req==>',req);
+    console.log('req ==>', req);
     
     Swal.fire({
       title: '¿Está seguro?',

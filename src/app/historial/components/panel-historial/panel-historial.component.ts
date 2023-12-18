@@ -477,11 +477,15 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
   changeNameEvent (name:string){
     if (name == 'gps'){
-      return 'EVENTOS GPS';
+      return 'EVENTOS GPS TRACKER';
     }else if(name == 'platform'){
       return 'EVENTOS PLATAFORMA';
     }else if (name == 'accessories'){
       return 'EVENTOS FATIGA 360º'
+    }else if (name == 'security'){
+      return 'EVENTOS SEGURIDAD VEHICULAR'
+    }else if (name == 'mobile'){
+      return 'EVENTOS SOLUCIONES MÓVILES´'
     }else {
       return 'EVENTOS '+name.toUpperCase();
     }
