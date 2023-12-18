@@ -42,9 +42,10 @@ export class UserInfoComponent implements OnInit {
   ];
   reports: any;
   events: any;
-  
+  email_user: string = '';
+  company_name: string = '';
   constructor(       
-    private userDataService: UserDataService,
+    public userDataService: UserDataService,
     private panelService: PanelService,
     private http: HttpClient,
     private geopointsService: GeopointsService,
