@@ -52,12 +52,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     { label: 'No', value: false },
   ];
 
-  tempTag = [
-    { var_name: 'prueba', id: 1},
-    { var_name: 'prueba2', id: 2},
-    { var_name: 'prueba3', id: 3},
-  ]
-
   fontSizeOptions = [
     { label: '8px', value: 8 },
     { label: '9px', value: 9 },
@@ -86,12 +80,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   measurementUnits = [
     {id: 'm', factor: 1},
     {id: 'km', factor: 0.001}
-  ];
-
-  availableOptionsCategoria = [
-    {id: '0', name: 'No Asignado'},
-    {id: '1', name: 'Pasajeros'},
-    {id: '2', name: 'Concentrado'}
   ];
 
   ngOnInit(): void {
@@ -714,7 +702,17 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       return;
     }
-    console.log(this.form.id_operation, this.form.id_grupo);
+
+    if(this.listOptionCheckbox == 'operacion'){
+      if(this.selectedOperation == null){
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe selccionar una operación.',
+          icon: 'warning',
+        });
+        return;
+      }
+    }
    
     this.spinner.show('spinnerLoading');
 
@@ -740,7 +738,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         let gEdit2 = res1[3][0];
 
         var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
-
         // geo.merge(res1[2]);
         // geo = Object.assign(geo, res1[2]);
         geo.descripcion = gEdit.descripcion;
@@ -762,7 +759,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
         geo.idoperation = gEdit.operation_grupo_id ?? '0';
         geo.nameoperation = this.getNameOperation(geo.idoperation);
-        console.log('etiqeutas editadas', gEdit.geoTag)
         geo.tags = gEdit.geo_tags;
 
         this.mapService.map.removeLayer(geo.geo_elemento);
@@ -822,16 +818,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         return;
       });
     } else {
-      if(this.listOptionCheckbox == 'operacion'){
-        if(this.form.id_operation == null){
-          Swal.fire({
-            title: 'Error',
-            text: 'Debe selccionar una operación.',
-            icon: 'warning',
-          });
-          return;
-        }
-      }
       if(this.poligonAdd._latlngs[0].length != 0){
         this.poligonAdd.editing.disable();
         
