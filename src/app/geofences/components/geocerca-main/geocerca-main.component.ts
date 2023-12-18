@@ -13,11 +13,13 @@ import { GeofencesService } from '../../services/geofences.service';
 export class GeocercaMainComponent implements OnInit {
   //alerts:Alert[] = [];
   options = new Array(
-    { id:'LISTAR' , name:"Listar"},
+    { id:'LISTAR' ,     name:"Listar"},
     { id:'ADD GEOPOL' , name:"Agregar"},
-    { id:'EDITAR' , name:"Editar"},
+    { id:'EDITAR' ,     name:"Editar"},
+    { id:'ADD TAG',     name: "addTag"}
   );
 
+  displayTags: boolean = false;
   constructor(
     // public mapService: MapServicesService,
     public geofencesService: GeofencesService
@@ -25,6 +27,28 @@ export class GeocercaMainComponent implements OnInit {
 
   ngOnInit(): void {
     this.geofencesService.nameComponentPol =  "LISTAR";
+  }
+
+  onHideDisplayGroup(event : boolean){
+    console.log('hide tagss panel...',event);
+    this.displayTags = event;
+  }
+  eventDisplayGroup(event : boolean){
+    console.log('desde panel',event);
+    this.displayTags = event;
+  }
+
+  // openModal() {
+  //   this.displayTags = true;
+  // }
+  
+  closeModal(event : boolean) {
+    //this.displayTags= false;
+    this.displayTags = event;
+  }
+  
+  eventDisplayTags(event : boolean){
+    this.displayTags = event;
   }
 
 }

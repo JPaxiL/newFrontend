@@ -10,13 +10,15 @@ import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
-import { ITags } from '../models/interfaces';
+import { ITag } from '../models/interfaces';
+import { Geofences } from '../models/geofences';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeofencesService {
 
+  private api_url = environment.apiUrl;
   public geofences:any = [];
   public nameComponentPol:string = "LISTAR";
   public geofencesTree: TreeNode[]=[];
@@ -28,6 +30,8 @@ export class GeofencesService {
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
+  @Output() displayOn = new EventEmitter<any>();
+  modalCloseEvent = new EventEmitter();
 
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];
@@ -52,7 +56,9 @@ export class GeofencesService {
   showBtnAdd = true;
   showBtnEdit = true;
   showBtnImportExport = true;
-  listTag: ITags [] = [];
+  showBtnTags = true;
+  listGeofences: any = [];
+  listTag: ITag [] = [];
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -66,47 +72,56 @@ export class GeofencesService {
   public async initialize() {
     this.getUserPrivileges();
     await this.getAll();
-    //await this.getTags(); //COMENTADO POR FALTA DE API Y CONTROLADOR
+    
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/zone`).toPromise()
-    .then(response => {
+    .then(async (response) => {
       this.geofences = response.data;
-      console.log("Polygonalessss",response.data);
-      this.initializeTable();
-      this.drawGeofencesOnMap();
-      this.updateGeoCounters();
-      this.updateGeoTagCounters();
-      this.eyeInputSwitch = this.geofenceCounters.visible != 0;
-      this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
-      console.log('Geocercas Cargadas');
-      this.initializingGeofences = true;
-      this.attemptToHideSpinner();
-      console.log(this.geofences);
-      this.dataCompleted.emit(this.geofences);
+      await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
+      .then(response => {
+        console.log("ress", response);
+        this.listTag = response.data;
+        console.log("lisstagg", this.listTag);
+
+        console.log("Polygonalessss",response.data);
+        this.initializeTable();
+        this.drawGeofencesOnMap();
+        this.updateGeoCounters();
+        this.updateGeoTagCounters();
+        this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+        this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
+        this.initializingGeofences = true;
+        this.attemptToHideSpinner();
+        this.dataCompleted.emit(this.geofences);
+      });;
     });
   }
-
-  public async getTags(){
-    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
-    .then(response => {
-      console.log("ress", response);
-      this.listTag = response.data;
-      console.log("lisstagg", this.listTag);
-    });
-
-  }
+ 
   public getTagss(){
     return this.listTag.filter(item=>item.var_name != "deafault");
   }
-  public async storeTag(zone: any){
+  public async storeTagAssign(zone: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTag`,zone).toPromise();
     return response.data;
   }
   public async deleteTag(zone: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
     return response.data;
+  }
+  public async storeTagAndAssingGeo(req: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTagAndAssigGeos`,req).toPromise();
+    console.log(response);
+    return response.data;
+  }
+  // storeTagAndAssingGeo(req: any): Observable<any>{
+  //   return this.http.post(this.api_url+"/api/storeTagAndAssigGeos",req);
+  // }
+
+  closeModal() {
+    // Envía evento al padre para cerrarse
+    this.modalCloseEvent.emit();
   }
 
   public clearDrawingsOfGeofence(geofence: any){
