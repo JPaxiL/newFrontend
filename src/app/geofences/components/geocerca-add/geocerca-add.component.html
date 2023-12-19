@@ -1,6 +1,6 @@
 <div class="d-flex flex-column" style="height: 100%;">
   <div *ngIf="geoOptions=='poligon'|| geoOptions=='line'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca' "></div>
-  <div *ngIf="geoOptions=='circ'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.circularGeofencesService.action == 'edit' ? 'Configurar Geocerca Circular' : 'Nueva Geocerca Circular' "></div>
+  <div *ngIf="geoOptions=='circ'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.circularGeofencesService.action == 'edit' ? 'Configurar Geocerca Circular' : 'Nueva Geocerca' "></div>
   <div class="modal-body panel-izq-container p-fluid overflow-auto" style="position: relative;">
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="spinnerLoading" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Guardando cambios... </p></ngx-spinner>
     <div class="panel-izq-form">
@@ -176,7 +176,7 @@
       </div>
       <div class="gl-middleline gl-permanent-middleline gl-row-underline">
         <div class="row">
-          <div class="col-6" *ngIf="listOptionCheckbox=='operacion'">
+          <div class="col-6">
             <div class="p-field">
               <label class="" id="operation_label">OPERACIONES:</label>
               <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation" [ngModelOptions]="{standalone: true}"></p-dropdown>

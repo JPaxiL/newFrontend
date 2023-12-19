@@ -10,7 +10,7 @@
         </span>
       </div>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none ">
-        <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-gray-blue btn-dark-hover btn-circle me-2" title="Importar o exportar" ngbDropdownToggle>
+        <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle me-2" title="Importar o exportar" ngbDropdownToggle>
           <i class="fas fa-file-import" aria-hidden="true"></i>
         </button>
         <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior">
@@ -244,7 +244,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="stroke-width:1.5;" viewBox="0 0 16 16" class="dropdown-toggle bi bi-list" aria-expanded="false"><path _ngcontent-atd-c211="" fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
                       </span>
                       <div ngbDropdownMenu class="gl-custom-dropdown treetable-dropdown">
-                        <div *ngIf="rowData['name']!='Geocercas Sin Etiqueta'" (click)="showEditGroup(rowData)" ngbDropdownItem>
+                        <div *ngIf="rowData['name']!='Geocercas Sin Etiqueta'" (click)="showEditTag(rowData)" ngbDropdownItem>
                         <span class="btn-label">
                             Editar {{rowData['type']}}
                           </span>
@@ -309,7 +309,7 @@
             <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
               <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
               <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
-                <div ngbDropdownItem (click)="clickConfigGeocercaPol(rowData['id'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
                 <div ngbDropdownItem (click)="clickEliminarGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
               </div>
             </div>

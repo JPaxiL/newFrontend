@@ -1,6 +1,6 @@
 
 <div class="h-100" *ngIf="(geofencesService.nameComponentPol == 'LISTAR')">
-  <app-geofence-table (eventDisplayTags)="eventDisplayTags($event)"></app-geofence-table>
+  <app-geofence-table (eventDisplayTags)="eventDisplayTags($event)" (onDeleteItem)="handleDeleteItem()"></app-geofence-table>
 </div>
 <div class="h-100" *ngIf="(geofencesService.nameComponentPol == 'ADD GEOPOL')">
   <app-geocerca-add></app-geocerca-add>

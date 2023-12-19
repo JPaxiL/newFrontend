@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PolylineGeogencesService } from '../../services/polyline-geogences.service';
-import { CircularGeofencesService } from '../../services/circular-geofences.service';
 // import { MapServicesService } from '../../../map/services/map-services.service';
 import { GeofencesService } from '../../services/geofences.service';
 
@@ -28,27 +26,18 @@ export class GeocercaMainComponent implements OnInit {
   ngOnInit(): void {
     this.geofencesService.nameComponentPol =  "LISTAR";
   }
-
-  onHideDisplayGroup(event : boolean){
-    console.log('hide tagss panel...',event);
-    this.displayTags = event;
-  }
-  eventDisplayGroup(event : boolean){
-    console.log('desde panel',event);
-    this.displayTags = event;
-  }
-
-  // openModal() {
-  //   this.displayTags = true;
-  // }
   
   closeModal(event : boolean) {
-    //this.displayTags= false;
     this.displayTags = event;
   }
   
   eventDisplayTags(event : boolean){
     this.displayTags = event;
+  }
+
+  handleDeleteItem(): void {
+    this.geofencesService.nameComponentPol =  "LISTAR";
+    console.log('llego al comp padre');
   }
 
 }
