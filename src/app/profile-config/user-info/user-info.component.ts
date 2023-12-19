@@ -9,6 +9,7 @@ import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { GeopointsService } from 'src/app/geopoints/services/geopoints.service';
 import { GeofencesService } from 'src/app/geofences/services/geofences.service';
 import { CircularGeofencesService } from 'src/app/geofences/services/circular-geofences.service';
+import { filter } from 'lodash';
 
 
 @Component({
@@ -266,5 +267,6 @@ export class UserInfoComponent implements OnInit {
       this.loading=false;
     });
   }
+  userName: string='';
 
 }

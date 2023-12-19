@@ -7,7 +7,7 @@
                   <div class="row my-3">
                       <div class="col-12 d-flex justify-content-center">
                           <div class="profile-picture-container">
-                              <span class="one-character-circled profile-picture">{{ 'U' }}</span>
+                              <span class="one-character-circled profile-picture">{{ userDataService.firstLetter }}</span>
                               <!-- <img src="assets/images/login/iso.png" class="profile-picture" alt="profile-pic"> -->
                               <button class="picture-update btn-dark-hover" type="button" pTooltip="Cambiar Imagen de Perfil" tooltipPosition="right">
                                   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -40,7 +40,7 @@
                           </div>
                       </div>
                       <span class="col-12 text-center w-100 mt-2">
-                          soporte&#64;gltracker.pe
+                          {{userDataService.userEmail}}
                       </span>
                   </div>
                   <div class="col p-field">
@@ -50,7 +50,7 @@
                       </div>
                       <div class="col-7">
                         <!-- <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled> -->
-                        <input id="empresa" type="text" [value]="" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                        <input id="empresa" type="text" value="{{userDataService.companyName}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                       </div>
                     </div>
                   </div>
@@ -62,7 +62,7 @@
                       </div>
                       <div class="col-7">
                         <!-- <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled> -->
-                        <input id="correo" type="text" value="gltracker@gltracker.pe" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                        <input id="correo" type="text" value="{{userDataService.userEmail}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                       </div>
                     </div>
                   </div>
@@ -73,7 +73,7 @@
                       </div>
                       <div class="col-7">
                         <!-- <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled> -->
-                        <input id="usuario" type="text" value="DEMOCDS" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                        <input id="usuario" type="text" value="{{userDataService.userName}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
                       </div>
                     </div>
                     <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">

@@ -19,6 +19,7 @@ export class UserDataService {
   userData: any = {};
   userName: string = '';
   userEmail: string = '';
+  companyName: string = '';
   userDataInitialized: boolean = false;
   userConfigDataInitialized: boolean = false;
   apiUrl = environment.apiUrl; 
@@ -53,6 +54,7 @@ export class UserDataService {
         this.userData = await data.data;
         this.userName = data.data.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
         this.userEmail = data.data.email;
+        this.companyName = data.data.company_name;
         this.userDataInitialized = true;
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);
@@ -100,6 +102,15 @@ export class UserDataService {
       this.svgContentsSafe[svgName] = sanitizedSVG; // Almacenar el SVG sanitizado
       // console.log(`Contenido de `, svgNames); // Mostrar contenido del SVG cargado en la consola
     });
+  }
+
+  get firstLetter(){
+    let letter = this.userName.charAt(0);
+    if(letter === letter.toLowerCase()){
+      return letter.toUpperCase();
+    }else{
+      return letter;
+    }
   }
 
 
