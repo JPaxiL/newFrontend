@@ -169,6 +169,67 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   deleteTag(){
     
   }
+  updateFilter(event:any){
+    console.log(event.filter);
+    this.filterTag = event.filter;
+  }
+  addNewTag(){
+    if(this.filterTag){
+      // console.log('PROCESO DE CREAR ETIQUETA->',this.filterTag);
+      let req = {
+        var_name: this.filterTag,
+      };
+      Swal.fire({
+        title: '¿Está seguro?',
+        text: 'Se creará la etiqueta con nombre: '+this.filterTag,
+        showLoaderOnConfirm: true,
+        showCancelButton: true,
+        allowOutsideClick: false,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No',
+        customClass: {
+          actions: 'w-100',
+          cancelButton: 'col-4',
+          confirmButton: 'col-4',
+        },
+        preConfirm: async () => {
+          //await this.onSubmit();
+          var res:any;
+          // console.log(sub);
+          res = await this.geofencesService.storeTag(req);
+          console.log('Respuesta de storeTag->',res);
+          if(res.text == 'insert'){
+            // console.log(res.data);
+            const nuevaEtiqueta = { id: res.data.id, var_name: res.data.var_name }; // Ajusta la estructura de la etiqueta según tus datos
+            this.geofencesService.listTag.push(nuevaEtiqueta);
+            this.filterTag = '';
+            Swal.fire(
+              '',
+              'La etiqueta se creó correctamente.',
+              'success'
+            );
+
+          }else if(res.text == 'repeat'){
+            Swal.fire(
+              '',
+              'La etiqueta ingresa ya existe, ingrese otra...',
+              'warning'
+            );
+          }else if(res.text == 'error'){
+            Swal.fire(
+              '',
+              'Ocurrió un error al crear la etiqueta.',
+              'warning'
+            );
+          }
+        },
+      }).then((data) => {
+        // console.log(data);
+      });
+    }else{
+      console.log('Ingrese un valor en el filtro...');
+    }
+  }
 
   selectBtn(btn: number): void {
     this.btnSelected = btn;

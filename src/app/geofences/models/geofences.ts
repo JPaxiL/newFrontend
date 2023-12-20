@@ -44,8 +44,8 @@ export class Geofences implements IGeofences {
       for(const index in this.geofences){
         status_operation = false;
         status_tags= false;
-        console.log('id GEO', this.geofences[index]);
-        if(this.geofences[index].tags?.length == 0 || this.geofences[index].tags == null || this.geofences[index].tags){
+        console.log('id GEO TAGS->', this.geofences[index].tags);
+        if(this.geofences[index].tags?.length == 0 || this.geofences[index].tags == null || !this.geofences[index].tags){
           if(this.operations.includes(this.geofences[index]['idoperation'])){
           }else{
             this.operations.push(this.geofences[index]['idoperation']);

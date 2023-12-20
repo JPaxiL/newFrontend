@@ -174,15 +174,17 @@
           </span>
         </div>
       </div>
-      <div class="gl-middleline gl-permanent-middleline gl-row-underline">
-        <div class="row">
-          <div class="col-6">
-            <div class="p-field">
-              <label class="" id="operation_label">OPERACIONES:</label>
-              <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation" [ngModelOptions]="{standalone: true}"></p-dropdown>
-            </div>
+      <div class="gl-row-underline">
+        <div class="col-12">
+          <div class="p-field">
+            <label class="" id="operation_label">OPERACIONES:</label>
+            <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation" [ngModelOptions]="{standalone: true}"></p-dropdown>
           </div>
-          <div class="col-6">
+        </div>
+      </div>
+      <div class="gl-row-underline">
+        <div class="row">
+          <div class="col-10">
             <div class="p-field">
               <label for="" id="operation_label">ETIQUETAS:</label>
               <p-multiSelect
@@ -192,6 +194,7 @@
                 [(ngModel)]="selectedTag"
                 filterBy='var_name'
                 [filterValue]="filterTag"
+                (onFilter)="updateFilter($event)"
                 placeholder="Seleccionar etiquetas" 
                 (onChange)="onSelecTags()"
                 [ngModelOptions]="{standalone: true}"
@@ -199,6 +202,13 @@
                 [optionValue]="'id'"
                 display="chip">
               </p-multiSelect>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-center align-items-center">
+              <button (click)="addNewTag()" type="button" class="btn-gl-blue btn-circle" title="Agregar Etiqueta" data-bs-toggle="tooltip" data-bs-placement="auto" onclick="this.blur();">
+                <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+              </button>
             </div>
           </div>
         </div>
