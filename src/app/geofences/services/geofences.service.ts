@@ -102,7 +102,7 @@ export class GeofencesService {
   public getTagss(){
     return this.listTag.filter(item=>item.var_name != "deafault");
   }
-  public async storeTagAssign(zone: any){
+  public async storeTag(zone: any){
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTag`,zone).toPromise();
     return response.data;
   }
@@ -110,14 +110,15 @@ export class GeofencesService {
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
     return response.data;
   }
-  public async storeTagAndAssingGeo(req: any){
-    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTagAndAssigGeos`,req).toPromise();
-    console.log(response);
-    return response.data;
-  }
-  // storeTagAndAssingGeo(req: any): Observable<any>{
-  //   return this.http.post(this.api_url+"/api/storeTagAndAssigGeos",req);
+  // public async storeTagAndAssingGeo(req: any){
+  //   const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTagAndAssigGeos`,req).toPromise();
+  //   console.log(response);
+  //   return response.data;
   // }
+  storeTagAndAssingGeo(req: any): Observable<any> {
+    return this.http.post<any>(`${this.api_url}/api/storeTagAndAssigGeos`, req);
+  } 
+ 
 
   closeModal() {
     // Envía evento al padre para cerrarse

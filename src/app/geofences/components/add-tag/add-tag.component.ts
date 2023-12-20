@@ -262,7 +262,7 @@ export class AddTagComponent implements OnInit {
       return;
     }
     let req = {
-      geofences: this.list2.map((item: { id: any; }) => item.id), // Extraer solo los IDs de this.list2
+      geofences: this.list2.map((item: { id: any; type: any; }) => ({ id: item.id, type: item.type })),
       var_name: this.nameTarget,
     };
     console.log('req ==>', req);
@@ -282,27 +282,53 @@ export class AddTagComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        let res: any;
         //await this.onSubmit();
-        
+        this.geofencesService.storeTagAndAssingGeo(req).subscribe(
+          (req) => {
+            // Manejar la respuesta del servidor si es necesario
+            console.log('Actualización exitosa:', req);  
+            if (!req.res){
+              Swal.fire(
+                'Error',
+                req.message,
+                'warning'
+              );
+            }else if (req.res){
+              Swal.fire(
+                '',
+                'Los datos se guardaron correctamente!!',
+                'success'
+              );
+            }
+          },
+          (error) => {
+            // Manejar errores si la actualización falla
+            console.error('Error al guardar la información:', error);
+            Swal.fire(
+              'Error',
+              'Ocurrió un error...',
+              'warning'
+            );
+          }
+        );
       
         // var sub = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeoEdit)[0];
         // res = await this.geofencesService.edit(this.geoForm.value);
-        res = await this.geofencesService.storeTagAndAssingGeo(req);
-
       },
     }).then((data) => {
-      if(data.isConfirmed) {
-        Swal.fire(
-          'Éxito',
-          `El ${currName} se creó exitosamente`,
-          'success',
-        );
-        console.log(data);
-      } else {
-        console.log(`(geo Group) Hubo un error al crear la nueva etiqueta }`);
-      }
+      // if(data.isConfirmed) {
+      //   Swal.fire(
+      //     'Éxito',
+      //     `El ${currName} se creó exitosamente`,
+      //     'success',
+      //   );
+      //   console.log(data);
+      // } else {
+      //   console.log(`(geo Group) Hubo un error al crear la nueva etiqueta }`);
+      // }
+      this.geofencesService.closeModal(); 
       this.loading=false;
+      //REINICIAR ARBOL DE ETIQUETAS
     });
   }
 
