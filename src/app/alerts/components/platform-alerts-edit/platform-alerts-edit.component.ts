@@ -78,6 +78,10 @@ export class PlatformAlertsEditComponent implements OnInit {
     { label: '2 Min.', value: 120 },
   ];
 
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
 
   constructor(
     private AlertService: AlertService,
@@ -191,7 +195,8 @@ export class PlatformAlertsEditComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[ventana_emergente]
+      chkVentanaEmergente:[ventana_emergente],
+      chkEvaluation:[alert.bol_evaluation]
     });
     console.log("ALERTFORM:::", this.alertForm);
     this.events = await this.AlertService.getEventsByType('platform');

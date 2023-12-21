@@ -162,6 +162,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-6 p-field">
+                            <div class="col-12">
+                                <label>ATENCIÓN DE EVENTOS:</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p-dropdown [options]="booleanOptionsAtencionEventos" formControlName="chkEvaluation"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!--INFRACCION -->
@@ -194,7 +204,24 @@
                         </div>
                     </div>
                 </div>
+                
                 <!--INFRACCION GEOCERCA-->
+
+                <div *ngIf="!showInfraccion" class="gl-middleline gl-permanent-middleline gl-row-underline">
+                    <div class="row">
+                        <div class="col-6 p-field">
+                            <div class="col-12">
+                                <label>ATENCIÓN DE EVENTOS:</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p-dropdown [options]="booleanOptionsAtencionEventos" formControlName="chkEvaluation"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <br>
                 <!-- emails -->
                 <div class="row d-flex justify-content-center">

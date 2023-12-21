@@ -17,6 +17,8 @@ export class AlertService {
   public alertsByType: any = [];
   public panelAlertKey: Number = 0;
 
+  dataCompleted = false;
+
   public alertsForEventSocket: any[] = [];
 
   public listaSonidos = [
@@ -67,6 +69,7 @@ export class AlertService {
     this.alertsForEventSocket = alerts_for_events_socket;
     // console.log('Alertas obtenidas');
     //console.log(this.alertsForEventSocket);
+    this.dataCompleted = true;
     return this.alerts;
   }
 
