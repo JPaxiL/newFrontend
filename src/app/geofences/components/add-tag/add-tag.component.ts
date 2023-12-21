@@ -254,7 +254,7 @@ export class AddTagComponent implements OnInit {
     if (this.listTagsEmpty){
       Swal.fire({
         title: 'Error',
-        text: `La lista debe contener minimó una geocerca.`,
+        text: `La lista debe contener mínimo una geocerca.`,
         icon: 'error',
       }).then(() => {
         this.loading = false; // Restablece el estado de carga en caso de error.
@@ -283,7 +283,7 @@ export class AddTagComponent implements OnInit {
       },
       preConfirm: async () => {
         //await this.onSubmit();
-        this.geofencesService.storeTagAndAssingGeo(req).subscribe(
+        await this.geofencesService.storeTagAndAssingGeo(req).subscribe(
           (req) => {
             // Manejar la respuesta del servidor si es necesario
             console.log('Actualización exitosa:', req);  
@@ -326,7 +326,8 @@ export class AddTagComponent implements OnInit {
       // } else {
       //   console.log(`(geo Group) Hubo un error al crear la nueva etiqueta }`);
       // }
-      this.geofencesService.closeModal(); 
+      this.onHideEvent.emit(false);
+      //this.geofencesService.closeModal(); 
       this.loading=false;
       //REINICIAR ARBOL DE ETIQUETAS
     });

@@ -95,10 +95,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       geo.geo_elemento.addTo(this.mapService.map);
       geo.geo_elemento.editing.enable();
-      this.optionsOperationsGroups();
+      this.optionsOperations();
       } else {
       this.nuevo_formulario();
-      this.optionsOperationsGroups();
+      this.optionsOperations();
       this.poligonAdd = this.mapService.map.editTools.startPolygon();
       this.changeGeoColor(this.form.id);
       this.poligonAdd.editing.enable();
@@ -119,13 +119,13 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         });
         this.poligonAddCir = geo.geo_elemento.addTo(this.mapService.map);
         this.poligonAddCir.enableEdit();
-        this.optionsOperationsGroups();
+        this.optionsOperations();
 
       }else{
         this.nuevo_formularioCir();
         this.poligonAddCir = this.mapService.map.editTools.startCircle();
         this.changeGeoColorCir(this.form.id);
-        this.optionsOperationsGroups();
+        this.optionsOperations();
       }
       this.poligonAddCir.on('editable:editing', (event) => {
         let radio = (event.layer.getRadius()/1000).toFixed(2);
@@ -139,21 +139,19 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.mapService.map.editTools.stopDrawing();
   }
 
-  optionsOperationsGroups(){
+  optionsOperations(){
     let aux: any [] = [];
       aux = this.vehicleService.vehicles;
-      //console.log("lista de vehivulossssssss", aux);
       for (const vehicle of aux) {
         const id_operation = vehicle.idoperation;
-        // const id_grupo = vehicle.idgrupo;
         const filteredOperation = {
           idoperation: vehicle.idoperation,
           nameoperation: vehicle.nameoperation,
         };
-  if (!this.operations.some((op:any) => op.idoperation === id_operation)) {
+        if (!this.operations.some((op:any) => op.idoperation === id_operation)) {
           this.operations.push(filteredOperation);
         }
-  }
+      }
       this.operations.sort((a: { idoperation: number; }, b: { idoperation: number; }) => a.idoperation - b.idoperation);
           console.log('Operations: ',this.operations);
   }
@@ -285,7 +283,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
   onChangeOperation(){
     let aux2: any[]=[];
-    console.log(this.selectedOperation);
+    console.log('opSelec',this.selectedOperation);
     aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
     this.form.id_operation = this.selectedOperation;
       // console.log('auxliar2 POST:',this.groups);
@@ -324,10 +322,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         return 'Geocercas Sin Grupo';
       }
     }
-  }
-
-  onChangeGrupo(){
-    this.form.id_grupo = this.selectedGroup;
   }
 
   getLatLngCenter(latLngInDegr:any) {
@@ -506,8 +500,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.nombre_visible_zona  = geo.zone_name_visible;
     this.form.geo_geometry         = geo.zone_vertices;
     this.selectedTag               = geo.tags;
+    this.form.tags                 = this.selectedTag;
     this.selectedOperation         = geo.idoperation;
-
+    this.form.id_operation         = this.selectedOperation;
     this.form.tag_name_color = /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(geo.tag_name_color)? geo.tag_name_color : this.geofencesService.defaultTagNameColor;
     this.form.tag_name_font_size = this.geofencesService.defaultTagNameFontSize; //px
     for(let i = 0; i< this.fontSizeOptions.length; i++){
@@ -552,14 +547,18 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         checkVelocidad = false;
         break;
     }
-    this.form.checkVelocidad = checkVelocidad;
-    this.form.limite_velocidad = geo.int_limite_velocidad_0;
-    this.form.limite_tolerable = geo.int_limite_velocidad_1;
-    this.form.limite_grave = geo.int_limite_velocidad_2;
-    this.form.limite_muy_grave = geo.int_limite_velocidad_3;
-    this.form.visible_zona         = geo.zone_visible;
+    this.form.checkVelocidad    = checkVelocidad;
+    this.form.limite_velocidad  = geo.int_limite_velocidad_0;
+    this.form.limite_tolerable  = geo.int_limite_velocidad_1;
+    this.form.limite_grave      = geo.int_limite_velocidad_2;
+    this.form.limite_muy_grave  = geo.int_limite_velocidad_3;
+    this.form.visible_zona      = geo.zone_visible;
     this.form.nombre_visible_zona  = geo.zone_name_visible;
-    this.form.geo_geometry          = geo.geo_coordenadas;
+    this.form.geo_geometry      = geo.geo_coordenadas;
+    this.selectedTag            = geo.tags;
+    this.form.tags              = this.selectedTag;
+    this.selectedOperation      = geo.idoperation;
+    this.form.id_operation      = this.selectedOperation;
 
     // this.form.fill = geo.fill;
     this.form.zone_no_int_color = geo.zone_no_int_color;
@@ -619,6 +618,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.nombre_visible_zona = "true";
     this.form.geo_geometry = "<(-2.98692739333486,-69.43359375),671103.240326455>";
     this.form.zone_no_int_color = true;
+    this.form.tags = null;
   }
 
   geodesicArea (latLngs:any) {
@@ -720,14 +720,14 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       return;
     }
 
-    if(this.selectedOperation == undefined || this.selectedOperation == null){
-      Swal.fire({
-        title: 'Error',
-        text: 'Debe selccionar una operación.',
-        icon: 'warning',
-      });
-      return;
-    }
+    // if(this.selectedOperation == undefined || this.selectedOperation == null){
+    //   Swal.fire({
+    //     title: 'Error',
+    //     text: 'Debe selccionar una operación.',
+    //     icon: 'warning',
+    //   });
+    //   return;
+    // }
    
     this.spinner.show('spinnerLoading');
 
@@ -771,7 +771,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.tag_name_color = gEdit.tag_name_color;
         geo.tag_name_font_size = gEdit.tag_name_font_size;
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
-        geo.idoperation = gEdit.operation_grupo_id ?? '0';
+        geo.idoperation = gEdit.operation_grupo_id ?? 0;
         geo.nameoperation = this.getNameOperation(geo.idoperation);
         geo.tags = gEdit.geo_tags;
 
@@ -857,10 +857,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
           geo.geo_coordenadas = gNew2.geo_coordenadas;
           //geo.idgrupo = gNew.grupo_convoy_id ?? '0';
-          geo.idoperation = gNew.operation_grupo_id ?? '0';
+          geo.idoperation = gNew.operation_grupo_id ?? 0;
           geo.nameoperation = this.getNameOperation(geo.idoperation);
           geo.tags = gNew.geo_tags;
-          //console.log(geo);
           this.mapService.map.removeLayer(this.poligonAdd);
           geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(gNew2.geo_coordenadas).coordinates[0] ), {
             weight: 3,
@@ -938,16 +937,17 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       return;
     }
-    if(this.selectedOperation == undefined || this.selectedOperation == null){
-      Swal.fire({
-        title: 'Error',
-        text: 'Debe selccionar una operación.',
-        icon: 'warning',
-      });
-      return;
-    }
+    // if(this.selectedOperation == undefined || this.selectedOperation == null){
+    //   Swal.fire({
+    //     title: 'Error',
+    //     text: 'Debe selccionar una operación.',
+    //     icon: 'warning',
+    //   });
+    //   return;
+    // }
     this.spinner.show('spinnerLoading');
     this.form.radio = (this.poligonAddCir.getRadius()/1000).toFixed(2);
+    console.log('NewCirc', this.form);
     if ( this.action == "edit" ) {
       var geo0 = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
       this.form.geo_geometry = this.createGeometryString(this.poligonAddCir);
@@ -976,7 +976,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.int_limite_velocidad_2 = gEdit.int_limite_velocidad_2;
         geo.int_limite_velocidad_3 = gEdit.int_limite_velocidad_3;
         geo.zone_no_int_color = gEdit.bol_sin_relleno;
-        geo.idoperation = gEdit.operation_grupo_id ?? '0';
+        geo.idoperation = gEdit.operation_grupo_id ?? 0;
         geo.nameoperation = this.getNameOperation(geo.idoperation);
         geo.tags = gEdit.geo_tags;
 
@@ -1056,7 +1056,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           geo.int_limite_velocidad_3 = gNew.int_limite_velocidad_3;
           geo.zone_no_int_color = true;
           //geo.idgrupo = gNew.grupo_convoy_id ?? '0';
-          geo.idoperation = gNew.operation_grupo_id ?? '0';
+          geo.idoperation = gNew.operation_grupo_id ?? 0;
           geo.nameoperation = this.getNameOperation(geo.idoperation);
           geo.tags = gNew.geo_tags;
           this.mapService.map.removeLayer(this.poligonAddCir);

@@ -1,7 +1,7 @@
 export interface IGeofence {
     id: string,
     idgrupo: string,
-    idoperation: string,
+    idoperation: number,
     namegrupo: string,
     nameoperation: string,
     user_id?: string,

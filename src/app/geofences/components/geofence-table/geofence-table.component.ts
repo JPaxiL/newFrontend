@@ -219,16 +219,22 @@ export class GeofenceTableComponent implements OnInit {
     $('p-treetable.geofence-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
   }
 
-  showGeoTags(){
-    var geoList = this.geofencesService.geofences.map((geo: { id: number, zone_visible: string, tags: []})=>
-    {
-      return {id: geo.id, visible: geo.zone_visible, tag: geo.tags }
-    });
-    geoList.forEach((geo: {id: number, visible: string, tag: []}) => {
-      if((geo.visible == 'true') != this.geofencesService.eyeInputSwitch){
-        this.clickShowGeoPol(geo.id, true)
-      }
-    });
+  showGeos(type: string, id: string ){
+    if(type == ''){
+  
+    }else {
+      
+    }
+  
+    // var geoList = this.geofencesService.geofences.map((geo: { id: number, zone_visible: string, tags: []})=>
+    // {
+    //   return {id: geo.id, visible: geo.zone_visible, tag: geo.tags }
+    // });
+    // geoList.forEach((geo: {id: number, visible: string, tag: []}) => {
+    //   if((geo.visible == 'true') != this.geofencesService.eyeInputSwitch){
+    //     this.clickShowGeoPol(geo.id, true)
+    //   }
+    // });
   }
 
   onClickEyeAll(){
