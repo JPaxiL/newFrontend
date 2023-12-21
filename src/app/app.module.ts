@@ -17,6 +17,7 @@ import { InputNumberModule } from 'primeng-lts/inputnumber';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api';
 import {SelectButtonModule} from 'primeng-lts/selectbutton';
+import {RatingModule} from 'primeng-lts/rating';
 import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {PickListModule} from 'primeng-lts/picklist';
 import {ListboxModule} from 'primeng-lts/listbox';
@@ -271,6 +272,7 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     TreeTableModule,
     DropdownModule,
     DialogModule,
+    RatingModule,
     ScrollPanelModule,
     InputTextModule,
     InputSwitchModule,
