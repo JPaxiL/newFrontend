@@ -72,6 +72,11 @@ export class PlatformAlertsCreateComponent implements OnInit {
     { label: '2 Min.', value: 120 },
   ];
 
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
+
   constructor(
     private AlertService: AlertService,
     private VehicleService: VehicleService,
@@ -130,7 +135,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[false]
+      chkVentanaEmergente:[false],
+      chkEvaluation:[false]
     });
     this.loading = false;
     this.loadData();
@@ -158,7 +164,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
     });
     console.log("OPERATIONS::::",operations);
     this.geocercasFiltradas = this.geocercas.filter(geofence => operations.has(geofence.templateId));
-    //console.log("geocercasFiltradas::::",this.geocercasFiltradas.length);
+    console.log("geocercasFiltradas::::",this.geocercasFiltradas.length);
 
   }
   setDataVehicles() {
@@ -240,9 +246,9 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.alertForm.value.geocercas = JSON.stringify(
       this.alertForm.value.geocercas
     );
-    /*this.alertForm.value.geocercascirculares = JSON.stringify(
+    this.alertForm.value.geocercascirculares = JSON.stringify(
       this.alertForm.value.geocercascirculares
-    );*/
+    );
     /*this.alertForm.value.fecha_desde = this.setDate(
       this.alertForm.value.fecha_desde
     );

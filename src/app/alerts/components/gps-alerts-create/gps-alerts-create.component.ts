@@ -43,6 +43,11 @@ export class GpsAlertsCreateComponent implements OnInit {
     { label: 'Desactivado', value: false },
   ];
 
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
+
   listaSonidos: any = [];
   audio = new Audio();
 
@@ -89,7 +94,9 @@ export class GpsAlertsCreateComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[false]
+      chkVentanaEmergente:[false],
+      chkEvaluation:[false]
+
     });
     this.loading = false;
     console.log('Lista Emails', this.alertForm.value.lista_emails);

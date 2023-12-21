@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PolylineGeogencesService } from '../../services/polyline-geogences.service';
-import { CircularGeofencesService } from '../../services/circular-geofences.service';
 // import { MapServicesService } from '../../../map/services/map-services.service';
 import { GeofencesService } from '../../services/geofences.service';
 
@@ -13,11 +11,13 @@ import { GeofencesService } from '../../services/geofences.service';
 export class GeocercaMainComponent implements OnInit {
   //alerts:Alert[] = [];
   options = new Array(
-    { id:'LISTAR' , name:"Listar"},
+    { id:'LISTAR' ,     name:"Listar"},
     { id:'ADD GEOPOL' , name:"Agregar"},
-    { id:'EDITAR' , name:"Editar"},
+    { id:'EDITAR' ,     name:"Editar"},
+    { id:'ADD TAG',     name: "addTag"}
   );
 
+  displayTags: boolean = false;
   constructor(
     // public mapService: MapServicesService,
     public geofencesService: GeofencesService
@@ -25,6 +25,19 @@ export class GeocercaMainComponent implements OnInit {
 
   ngOnInit(): void {
     this.geofencesService.nameComponentPol =  "LISTAR";
+  }
+  
+  closeModal(event : boolean) {
+    this.displayTags = event;
+  }
+  
+  eventDisplayTags(event : boolean){
+    this.displayTags = event;
+  }
+
+  handleDeleteItem(): void {
+    this.geofencesService.nameComponentPol =  "LISTAR";
+    console.log('llego al comp padre');
   }
 
 }

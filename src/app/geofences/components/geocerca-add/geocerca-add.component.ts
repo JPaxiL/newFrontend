@@ -32,7 +32,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   groups : any = [];
   tags : any = [];
   selectedGroup: any={};
-  selectedOperation: any={};
+  selectedOperation: number | undefined;
   selectedTag: any=[];
   disabledOperation = false;
 	disabledGroup = true;
@@ -40,23 +40,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   action:string = "add";
   poligonAdd:any;
   placeholderOperation = 'Seleccione una Operación ...';
-  placeholderGroup = 'Seleccione una Operación Primero...';
-  listOptions: any= [
-    { idOption: 'Operación', valueOption: 'operacion' },
-    { idOption: 'Grupo', valueOption: 'grupo' },  
-  ];
-  
-  listOptionCheckbox = 'operacion';
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
   ];
-
-  tempTag = [
-    { var_name: 'prueba', id: 1},
-    { var_name: 'prueba2', id: 2},
-    { var_name: 'prueba3', id: 3},
-  ]
 
   fontSizeOptions = [
     { label: '8px', value: 8 },
@@ -86,12 +73,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   measurementUnits = [
     {id: 'm', factor: 1},
     {id: 'km', factor: 0.001}
-  ];
-
-  availableOptionsCategoria = [
-    {id: '0', name: 'No Asignado'},
-    {id: '1', name: 'Pasajeros'},
-    {id: '2', name: 'Concentrado'}
   ];
 
   ngOnInit(): void {
@@ -183,11 +164,71 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   onSelecTags(){
     console.log('etiquetasSelect',this.selectedTag);
     this.form.tags = this.selectedTag;
-    console.log(this.form.tags);
-
+    this.form.tags = this.form.tags.join(',');
   }
   deleteTag(){
     
+  }
+  updateFilter(event:any){
+    console.log(event.filter);
+    this.filterTag = event.filter;
+  }
+  addNewTag(){
+    if(this.filterTag){
+      // console.log('PROCESO DE CREAR ETIQUETA->',this.filterTag);
+      let req = {
+        var_name: this.filterTag,
+      };
+      Swal.fire({
+        title: '¿Está seguro?',
+        text: 'Se creará la etiqueta con nombre: '+this.filterTag,
+        showLoaderOnConfirm: true,
+        showCancelButton: true,
+        allowOutsideClick: false,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No',
+        customClass: {
+          actions: 'w-100',
+          cancelButton: 'col-4',
+          confirmButton: 'col-4',
+        },
+        preConfirm: async () => {
+          //await this.onSubmit();
+          var res:any;
+          // console.log(sub);
+          res = await this.geofencesService.storeTag(req);
+          console.log('Respuesta de storeTag->',res);
+          if(res.text == 'insert'){
+            // console.log(res.data);
+            const nuevaEtiqueta = { id: res.data.id, var_name: res.data.var_name }; // Ajusta la estructura de la etiqueta según tus datos
+            this.geofencesService.listTag.push(nuevaEtiqueta);
+            this.filterTag = '';
+            Swal.fire(
+              '',
+              'La etiqueta se creó correctamente.',
+              'success'
+            );
+
+          }else if(res.text == 'repeat'){
+            Swal.fire(
+              '',
+              'La etiqueta ingresa ya existe, ingrese otra...',
+              'warning'
+            );
+          }else if(res.text == 'error'){
+            Swal.fire(
+              '',
+              'Ocurrió un error al crear la etiqueta.',
+              'warning'
+            );
+          }
+        },
+      }).then((data) => {
+        // console.log(data);
+      });
+    }else{
+      console.log('Ingrese un valor en el filtro...');
+    }
   }
 
   selectBtn(btn: number): void {
@@ -241,49 +282,12 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.circularGeofencesService.nameComponentCir = "ADD GEOCIR";
     this.circularGeofencesService.action = "add";
   }
-  onOptionSelected(){
-    let option = this.listOptionCheckbox;
-    if(option=='grupo'){
-      this.selectedGroup = {};
-      this.disabledGroup = true;
-      this.placeholderGroup = 'Seleccione una operacion primero...';
-    }else if(option=='operacion'){
-      this.selectedOperation = {};
-      this.selectedGroup = {};
-      this.disabledOperation = false;
-      this.placeholderOperation = 'Seleccione una operacion...';
-    }else{
-      this.selectedOperation = {};
-      this.selectedGroup = {};
-    }
-    this.selectedOperation = {};
-    this.selectedGroup = {};
-    this.form.id_operation = '';
-    this.form.id_grupo = '';
-  }
 
   onChangeOperation(){
     let aux2: any[]=[];
     console.log(this.selectedOperation);
     aux2 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation == this.selectedOperation);
-
-      for (const vehicle of aux2) {
-        const idgroup = vehicle.idgrupo;
-        const filteredGroup = {
-          idgrupo: vehicle.idgrupo,
-          namegrupo: vehicle.namegrupo
-        };
-        if (!this.groups.some((v: { idgrupo: any; }) => v.idgrupo === idgroup)) {
-          this.groups.push(filteredGroup);
-        }
-      }
-      this.groups.sort((a: { idgrupo: number; }, b: { idgrupo: number; }) => a.idgrupo - b.idgrupo);
-      if(this.listOptionCheckbox == 'grupo'){
-        this.selectedGroup = {};
-        this.disabledGroup = false;
-        this.placeholderGroup = 'Seleccione un grupo...';
-      }
-      this.form.id_operation = this.selectedOperation;
+    this.form.id_operation = this.selectedOperation;
       // console.log('auxliar2 POST:',this.groups);
   }
   
@@ -302,7 +306,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       } else {
         return 'Geocercas Sin Operacion';
       }
-            // aux = this.vehicleService.vehicles.find{{}}
     }
   }
   getNameGrupo(idGrupo: any){
@@ -320,7 +323,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       } else {
         return 'Geocercas Sin Grupo';
       }
-            // aux = this.vehicleService.vehicles.find{{}}
     }
   }
 
@@ -343,11 +345,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         sumY += Math.cos(lat) * Math.sin(lng);
         sumZ += Math.sin(lat);
     }
-
     var avgX = sumX / latLngInDegr.length;
     var avgY = sumY / latLngInDegr.length;
     var avgZ = sumZ / latLngInDegr.length;
-
     // convert average x, y, z coordinate to latitude and longtitude
     var lng = Math.atan2(avgY, avgX);
     var hyp = Math.sqrt(avgX * avgX + avgY * avgY);
@@ -360,13 +360,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   degr2rad(degr:any) { return degr * Math.PI / 180; }
 
   ngOnDestroy(){
-
     if(this.btnSelected ==1){
       this.mapService.map.editTools.stopDrawing();
-
       //console.log('SALDRE DE LA EDICION DE GEOCERCA');
       if ( this.geofencesService.action == "edit" ) {
-
         //var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
         var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
 
@@ -389,7 +386,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       } else {
         this.mapService.map.removeLayer(this.poligonAdd);
       }
-
       for(let i = 0; i < this.geofencesService.geofences.length; i++){
         this.geofencesService.clearDrawingsOfGeofence(this.geofencesService.geofences[i]);
       }
@@ -418,7 +414,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
             if (geo.zone_visible == 'true') {
               geo.geo_elemento.addTo(this.mapService.map);
             }
-
       } else {
         this.mapService.map.removeLayer(this.poligonAddCir);
       }
@@ -431,7 +426,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         this.circularGeofencesService.showDrawingsOfGeofence(this.circularGeofencesService.circular_geofences[i]);
       }
     }
-    
   }
 
   layerToPoints(figure:any, type:string) {
@@ -456,14 +450,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
    }
 
   fin_editar() {
-
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
-
     geo.geo_elemento.editing.disable();
-
-    //console.log('<<<<<latlngs');
     var geoElement = this.layerToPoints(geo.geo_elemento,'POLYGON');
-    //console.log("============================ XXXX");
     //console.log(geoElement);
   }
 
@@ -471,10 +460,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
     //console.log(geo);
     this.mapService.map.fitBounds(geo.geo_elemento.getBounds());
-    //geo.geo_elemento.editing.enable();
-            // updatePerimeterAndArea(vm.polygon.getLatLngs());
-    // //console.log( "factorArea = "+factorArea );
-    // //console.log( geo.geo_elemento.getLatLngs() );
 
     this.form.id = geo.id;
     this.form.nombre = geo.zone_name;
@@ -519,7 +504,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 
     this.form.visible_zona         = geo.zone_visible;
     this.form.nombre_visible_zona  = geo.zone_name_visible;
-    this.form.geo_geometry          = geo.zone_vertices;
+    this.form.geo_geometry         = geo.zone_vertices;
+    this.selectedTag               = geo.tags;
+    this.selectedOperation         = geo.idoperation;
 
     this.form.tag_name_color = /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(geo.tag_name_color)? geo.tag_name_color : this.geofencesService.defaultTagNameColor;
     this.form.tag_name_font_size = this.geofencesService.defaultTagNameFontSize; //px
@@ -528,16 +515,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         this.form.tag_name_font_size = geo.tag_name_font_size;
       }
     }
-    // if(!L.GeometryUtil){
-    //   import('leaflet-geometryutil')
-    //      .then( GeometryUtil => {
-    //         //console.log('all good')
-    //      })
-    //      .catch( err => {throw(err)} )
-    // }
-    // //console.log(this.geodesicArea(geo.geo_elemento.getLatLngs()[0]));
-    // //console.log(this.geodesicArea(geo.geo_elemento.getLatLngs()[0]) * factorArea);
-    // //console.log(this.getPerimeter(geo.geo_elemento.getLatLngs()[0]));
   }
 
   llenar_formularioCir(){
@@ -576,12 +553,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         break;
     }
     this.form.checkVelocidad = checkVelocidad;
-
     this.form.limite_velocidad = geo.int_limite_velocidad_0;
     this.form.limite_tolerable = geo.int_limite_velocidad_1;
     this.form.limite_grave = geo.int_limite_velocidad_2;
     this.form.limite_muy_grave = geo.int_limite_velocidad_3;
-
     this.form.visible_zona         = geo.zone_visible;
     this.form.nombre_visible_zona  = geo.zone_name_visible;
     this.form.geo_geometry          = geo.geo_coordenadas;
@@ -609,22 +584,16 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.area = area.toFixed(2);
     this.form.color = "#ff0000";
     this.form.categoria = 0;
-
     this.form.checkVelocidad = false;
-
     this.form.zone_type = 'POLYGON';
-
     this.form.tag_name_color = this.geofencesService.defaultTagNameColor;
     this.form.tag_name_font_size = this.geofencesService.defaultTagNameFontSize; //px
-
     this.form.limite_velocidad = 0;
     this.form.limite_tolerable = 0;
     this.form.limite_grave = 0;
     this.form.limite_muy_grave = 0;
-
     this.form.visible_zona         = "true";
     this.form.nombre_visible_zona  = "true";
-
     this.form.geo_geometry          = "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)";
   }
 
@@ -632,32 +601,23 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.id = 0;
     this.form.nombre = '';
     this.form.descripcion = '';
-
     let radio = 0;
     this.form.radio = radio.toFixed(2);
-
     var factorArea = Math.pow(this.measurementUnits[1].factor, 2); //km2
     let area = 0;
     this.form.area = area.toFixed(2);
-
     this.form.color = "#ff0000";
     this.form.categoria = 0;
-
     this.form.checkVelocidad = false;
-
     this.form.tag_name_color = this.circularGeofencesService.defaultTagNameColor;
     this.form.tag_name_font_size = this.circularGeofencesService.defaultTagNameFontSize; //px
-
     this.form.limite_velocidad = 0;
     this.form.limite_tolerable = 0;
     this.form.limite_grave = 0;
     this.form.limite_muy_grave = 0;
-
     this.form.visible_zona = "true";
     this.form.nombre_visible_zona = "true";
-
     this.form.geo_geometry = "<(-2.98692739333486,-69.43359375),671103.240326455>";
-   
     this.form.zone_no_int_color = true;
   }
 
@@ -683,7 +643,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   getPerimeter(latLngs:any) {
     if (latLngs.length > 0) {
       var perimeter = 0;
-
       if (latLngs[0] instanceof Array) {
         latLngs.forEach((latLng:any) => {
           perimeter += this.getPerimeter(latLng);
@@ -707,7 +666,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     console.log("---3");
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
     if ( this.geofencesService.action == "edit" ) {
-
         this.mapService.map.removeLayer(geo.geo_elemento);
         geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ), {
           weight: 3,
@@ -715,7 +673,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           color: geo.zone_color //'#000000'
         });//.addTo(this.mapService.map);
         this.geofencesService.bindMouseEvents(geo);
-
         if (geo.zone_visible == 'true') {
           geo.geo_elemento.addTo(this.mapService.map);
         }
@@ -724,8 +681,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       //console.log("CREACION DE GEOCERCA");
       this.mapService.map.removeLayer(this.poligonAdd);
     }
-
-    //geo.geo_elemento.setLatLngs( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ));
   }
   clickCancelCir(id:number){
     //this.mapService.map.editTools.stopDrawing();
@@ -742,24 +697,17 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         fill: geo.zone_no_int_color,
         color: geo.zone_color,
       });
-
       this.circularGeofencesService.bindMouseEvents(geo);
-
       if (geo.zone_visible == 'true') {
         geo.geo_elemento.addTo(this.mapService.map);
       }
     } else {
       this.mapService.map.removeLayer(this.poligonAddCir);
     }
-
   }
 
   createGeometryString(figure: L.Circle){
-
-    //"<(-2.98692739333486,-69.43359375),671103.240326455>"
-    //"<(-7.466705320402595,-76.33300781250001),189685.38698446512>"
     return `<(${figure.getLatLng().lat},${figure.getLatLng().lng}),${figure.getRadius()}>`
-
   }
 
   clickSavePol(id:number){
@@ -771,43 +719,27 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       return;
     }
-    console.log(this.form.id_operation, this.form.id_grupo);
-    if(this.listOptionCheckbox == 'operacion'){
-      if(this.form.id_operation == null){
-        Swal.fire({
-          title: 'Error',
-          text: 'Debe selccionar una operación.',
-          icon: 'warning',
-        });
-        return;
-      }
-    }
-    if (this.listOptionCheckbox == 'grupo'){
-      if(this.form.id_operation == null && this.form.id_grupo == null){
-        Swal.fire({
-          title: 'Error',
-          text: 'Debe selccionar una operación y un grupo.',
-          icon: 'warning',
-        });
-        return;
-      }
-    }
 
-    //console.log("---clickGuardar");
+    if(this.selectedOperation == undefined || this.selectedOperation == null){
+      Swal.fire({
+        title: 'Error',
+        text: 'Debe selccionar una operación.',
+        icon: 'warning',
+      });
+      return;
+    }
+   
     this.spinner.show('spinnerLoading');
 
     if ( this.geofencesService.action == "edit" ) {
-
       var geo0 = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
       this.form.geo_geometry = this.layerToPoints(geo0.geo_elemento,'POLYGON');
-
       geo0.geo_elemento.editing.disable();
       console.log(this.form);
       this.geofencesService.edit(this.form).then( (res1) => {
         //console.log("---clickGuardar----");
         console.log("revisarrrrr",res1);
         if(res1[1] != "Registro modificado"){
-          console.log("mostrar Swalllll");
           Swal.fire(
             'Error',
             'No se pudo modificar!!',
@@ -821,7 +753,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         let gEdit2 = res1[3][0];
 
         var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
-
         // geo.merge(res1[2]);
         // geo = Object.assign(geo, res1[2]);
         geo.descripcion = gEdit.descripcion;
@@ -839,12 +770,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.zone_visible = gEdit.visible_zona;
         geo.tag_name_color = gEdit.tag_name_color;
         geo.tag_name_font_size = gEdit.tag_name_font_size;
-
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
-        geo.idgrupo = gEdit.grupo_convoy_id ?? '0';
         geo.idoperation = gEdit.operation_grupo_id ?? '0';
         geo.nameoperation = this.getNameOperation(geo.idoperation);
-        geo.namegrupo = this.getNameGrupo(geo.idgrupo);
+        geo.tags = gEdit.geo_tags;
 
         this.mapService.map.removeLayer(geo.geo_elemento);
         this.mapService.map.removeLayer(geo.marker_name);
@@ -860,7 +789,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         if (geo.zone_visible == 'true') {
           geo.geo_elemento.addTo(this.mapService.map);
         }
-
         //================= nombre de la geocerca
         var centerPoligon = geo.geo_elemento.getBounds().getCenter();
 
@@ -878,11 +806,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           "opacity": 1
 
         }).bindTooltip(
-            // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-            // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+geo.zone_color+';">'+geo.zone_name+'</b>',
             '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: ' + font_size + '">'+geo.zone_name+'</b>',
             { permanent: true,
-              // offset: [-100, 0],
               direction: 'center',
               className: 'leaflet-tooltip-own geofence-tooltip',
             });
@@ -890,28 +815,19 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         if (geo.zone_name_visible == 'true') {
           geo.marker_name.addTo(this.mapService.map);
         }
-        this.spinner.hide('spinnerLoading');
-        // geo.geo_elemento.setLatLngs( this.getCoordenadas( JSON.parse(geo.geo_coordenadas).coordinates[0] ));
-        // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
-        // //console.log(geo);
-        console.log("mostrar Swalllll");
         Swal.fire(
-            'Modoficado',
+            'Modificado',
             'Se modificó correctamente!!',
             'success'
         );
         this.spinner.hide('spinnerLoading');
         return;
       });
-
     } else {
-
       if(this.poligonAdd._latlngs[0].length != 0){
         this.poligonAdd.editing.disable();
-        console.log(this.form);
         this.form.geo_geometry = this.layerToPoints(this.poligonAdd,'POLYGON');
         this.geofencesService.store(this.form).then( (res1) => {
-          //console.log("---clickGuardar NUEVO----");
           console.log("mensage ", res1);
           this.geofencesService.nameComponentPol =  "LISTAR";
           if(res1[1]=='Registro Guardados'){
@@ -919,9 +835,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           }
           let gNew = res1[2];
           let gNew2 = res1[3][0];
-          // var geo = this.geofencesService.geofences.filter((item:any)=> item.id == gEdit.id)[0];
-          // geo.merge(res1[2]);
-          // geo = Object.assign(geo, res1[2]);
           var geo:any = {};
           geo.id = gNew.id;
 
@@ -937,29 +850,24 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           geo.zone_name = gNew.nombre_zona;
           geo.zone_name_visible = gNew.nombre_visible_zona;
           geo.zone_name_visible_bol = (geo.zone_name_visible === 'true');
-          // geo.zone_vertices: "( -71.5331196784973 -16.40000880639486, -71.53320550918579 -16.400255801861498, -71.53292655944824 -16.400358724922672, -71.53284072875977 -16.40011170948444,-71.5331196784973 -16.40000880639486)"
           geo.zone_visible = gNew.visible_zona;
 
           geo.tag_name_color = gNew.tag_name_color;
           geo.tag_name_font_size = gNew.tag_name_font_size;
 
           geo.geo_coordenadas = gNew2.geo_coordenadas;
-          geo.idgrupo = gNew.grupo_convoy_id ?? '0';
+          //geo.idgrupo = gNew.grupo_convoy_id ?? '0';
           geo.idoperation = gNew.operation_grupo_id ?? '0';
           geo.nameoperation = this.getNameOperation(geo.idoperation);
-          geo.namegrupo = this.getNameGrupo(geo.idgrupo);
-
+          geo.tags = gNew.geo_tags;
           //console.log(geo);
-
           this.mapService.map.removeLayer(this.poligonAdd);
           geo.geo_elemento = new L.Polygon( this.getCoordenadas( JSON.parse(gNew2.geo_coordenadas).coordinates[0] ), {
             weight: 3,
             fill: true,
             color: geo.zone_color //'#000000'
           }).addTo(this.mapService.map);
-
           this.geofencesService.bindMouseEvents(geo);
-
           var centerPoligon = geo.geo_elemento.getBounds().getCenter();
 
           let bg_color = this.geofencesService.tooltipBackgroundTransparent? this.geofencesService.defaultTagNameBackground: this.mapService.hexToRGBA(geo.zone_color);
@@ -976,8 +884,6 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
             "opacity": 1
 
           }).bindTooltip(
-              // "<div style='background:blue;'><b>" + this.geofences[i].zone_name+ "</b></div>",//,
-              // '<b class="" style="-webkit-text-stroke: 0.5px black; color: '+this.geofences[i].zone_color+';">'+this.geofences[i].zone_name+'</b>',
               '<b class="" style="background-color: '+ bg_color +'; color : '+ txt_color +'; font-size: '+ font_size  +'">'+geo.zone_name+'</b>',
               { permanent: true,
                 // offset: [-100, 0],
@@ -1002,16 +908,12 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           );
           this.spinner.hide('spinnerLoading');
           return;
-
         });
       }else{
-
         this.spinner.hide('spinnerLoading');
-
         this.poligonAdd = this.mapService.map.editTools.startPolygon();
         this.changeGeoColor(this.form.id);
         this.poligonAdd.editing.enable();
-
         Swal.fire({
           title: 'Error',
           text: 'La geocerca no puede quedar vacía.',
@@ -1020,12 +922,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         return;
       }
     }
-
     //Despues de agregar o editar, ordena el array de geocercas por el atributo orden(nombre de la geocerca en mayuscula)
     this.geofencesService.geofences.sort(function (a:any, b:any){
       return a.orden.localeCompare(b.orden, 'en', { numeric: true })
     });
-
     // PUT|PATCH | api/zone/{zone}                         | zone.update                       | App\Http\Controllers\Api\V1\ZoneController@update
   }
 
@@ -1038,24 +938,26 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       return;
     }
-
+    if(this.selectedOperation == undefined || this.selectedOperation == null){
+      Swal.fire({
+        title: 'Error',
+        text: 'Debe selccionar una operación.',
+        icon: 'warning',
+      });
+      return;
+    }
     this.spinner.show('spinnerLoading');
-
     this.form.radio = (this.poligonAddCir.getRadius()/1000).toFixed(2);
-
     if ( this.action == "edit" ) {
-
       var geo0 = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
       this.form.geo_geometry = this.createGeometryString(this.poligonAddCir);
 
       this.circularGeofencesService.edit(this.form).subscribe((res) => {
-
         this.geofencesService.nameComponentPol = "LISTAR";
 
         let gEdit = res[2];
         let gEdit2 = res[3][0];
         var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == gEdit.id)[0];
-
 
         geo.descripcion = gEdit.descripcion;
         geo.orden = gEdit.var_nombre;
@@ -1074,11 +976,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.int_limite_velocidad_2 = gEdit.int_limite_velocidad_2;
         geo.int_limite_velocidad_3 = gEdit.int_limite_velocidad_3;
         geo.zone_no_int_color = gEdit.bol_sin_relleno;
-        geo.idgrupo = gEdit.grupo_convoy_id ?? '0';
         geo.idoperation = gEdit.operation_grupo_id ?? '0';
         geo.nameoperation = this.getNameOperation(geo.idoperation);
-        geo.namegrupo = this.getNameGrupo(geo.idgrupo);
-
+        geo.tags = gEdit.geo_tags;
 
         this.mapService.map.removeLayer(geo.geo_elemento);
         this.mapService.map.removeLayer(geo.marker_name);
@@ -1089,9 +989,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           fill: geo.zone_no_int_color,
           color: geo.zone_color,
         });
-
         this.circularGeofencesService.bindMouseEvents(geo);
-
         if (geo.zone_visible == 'true') {
           geo.geo_elemento.addTo(this.mapService.map);
         }
@@ -1114,19 +1012,20 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
                 direction: 'center',
                 className: 'leaflet-tooltip-own',
           });
-        
         if (geo.zone_name_visible == 'true') {
           geo.marker_name.addTo(this.mapService.map);
         }
-  
+        Swal.fire(
+            'Modificado',
+            'Se modificó correctamente!!',
+            'success'
+        );
         this.spinner.hide('spinnerLoading');
-
+        return;
       });
-
     } else {
       //creacion de geocercacircular
       if(this.poligonAddCir.getRadius() != 10){
-
         this.form.geo_geometry = this.createGeometryString(this.poligonAddCir);
         this.circularGeofencesService.store(this.form).subscribe( (resp: any) => {
           console.log(resp);
@@ -1134,10 +1033,8 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           if(resp[1]=='Registro Guardados'){
             console.log('suseed');
           }
-
           let gNew = resp[2];
           let gNew2 = resp[3][0];
-
           var geo:any = {};
           geo.id = gNew.id;
         
@@ -1158,11 +1055,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           geo.int_limite_velocidad_2 = gNew.int_limite_velocidad_2;
           geo.int_limite_velocidad_3 = gNew.int_limite_velocidad_3;
           geo.zone_no_int_color = true;
-          geo.idgrupo = gNew.grupo_convoy_id ?? '0';
+          //geo.idgrupo = gNew.grupo_convoy_id ?? '0';
           geo.idoperation = gNew.operation_grupo_id ?? '0';
           geo.nameoperation = this.getNameOperation(geo.idoperation);
-          geo.namegrupo = this.getNameGrupo(geo.idgrupo);
-
+          geo.tags = gNew.geo_tags;
           this.mapService.map.removeLayer(this.poligonAddCir);
 
           geo.geo_elemento = new L.Circle( this.circularGeofencesService.getCoordenadas(geo.geo_coordenadas), {
@@ -1202,16 +1098,19 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           this.circularGeofencesService.updateGeoTagCounters();
           this.circularGeofencesService.eyeInputSwitch = (this.circularGeofencesService.circularGeofenceCounters.visible != 0);
           this.circularGeofencesService.tagNamesEyeState = (this.circularGeofencesService.circularGeofenceCounters.visible != 0);
-
-        })
+          Swal.fire(
+            'Creado',
+            'Se creó correctamente!!',
+            'success'
+          );
+          this.spinner.hide('spinnerLoading');
+          return;
+        });
 
       }else{
-
         this.spinner.hide('spinnerLoading');
-
         this.poligonAddCir = this.mapService.map.editTools.startCircle();
         this.changeGeoColorCir(this.form.id);
-
         Swal.fire({
           title: 'Error',
           text: 'La geocerca no puede quedar vacía.',
@@ -1220,21 +1119,16 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         return;
       }
     }
-
     this.circularGeofencesService.circular_geofences.sort(function (a:any, b:any){
       return a.orden.localeCompare(b.orden, 'en', { numeric: true })
     });
-
   }
 
   changeGeoColor(id:number) {
-
     let newColor = this.form.color;
-
     if ( this.geofencesService.action == "edit" ) {
         var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
         geo.geo_elemento.setStyle({opacity: 1, color: newColor });
-
     } else {
         // //console.log("CREACION DE GEOCERCA");
         this.poligonAdd.setStyle({opacity: 1, color: newColor });
@@ -1273,5 +1167,3 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   };
 
 }
-
-

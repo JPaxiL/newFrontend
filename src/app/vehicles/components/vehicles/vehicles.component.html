@@ -28,6 +28,12 @@
             </div>
             <div>
               <label>
+                <p-checkbox [(ngModel)]="vehicleTransmissionStatus" [binary]="true"></p-checkbox>
+                Estado de Transmisión
+              </label>
+            </div>
+            <div>
+              <label>
                 <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
                 Ícono de Vehículo
               </label>
@@ -42,6 +48,12 @@
               <span (click)="onClickSetting('vehicle')">
                 <p-checkbox [(ngModel)]="!setting['vehicle']" [binary]="true"></p-checkbox>
                 Vehículos
+              </span>
+            </div>
+            <div>
+              <span (click)="onClickSetting('tag_driver')">
+                <p-checkbox [(ngModel)]="!setting['tag_driver']" [binary]="true"></p-checkbox>
+                Mostrar Conductor
               </span>
             </div>
             <div>
@@ -111,7 +123,7 @@
 
 </div>
 <app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
-<div class="ag-theme-alpine" [ngClass]="{'show-vehicle-icon': vehicleIconState }" style="width: 100%; height: calc(100% - var(--row-busqueda-height));">
+<div class="ag-theme-alpine" [ngClass]="{'show-vehicle-icon': vehicleIconState,'show-vehicle-status': vehicleTransmissionStatus }" style="width: 100%; height: calc(100% - var(--row-busqueda-height));">
     <ag-grid-angular
     #agGrid
     style="width: 100%; height: 100%; font-size: 14px; overflow: auto;"

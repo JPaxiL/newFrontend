@@ -53,6 +53,7 @@ export class VehicleService {
   @Output() clickEye = new EventEmitter<any>();
   @Output() clickEyeAll = new EventEmitter<any>();
   @Output() clickTag = new EventEmitter<any>();
+  @Output() clickDriver = new EventEmitter<any>();
   @Output() clickListTable = new EventEmitter<any>();
   @Output() calcTimeStop = new EventEmitter<any>();
 
@@ -143,6 +144,9 @@ export class VehicleService {
   }
   public onClickIcon(IMEI: string):void{
     this.clickIcon.emit(IMEI);
+  }
+  public onClickDriver(IMEI: string): void{
+    this.clickDriver.emit(IMEI);
   }
   public onClickTag(IMEI: string): void{
     this.clickTag.emit(IMEI);
@@ -589,7 +593,7 @@ export class VehicleService {
 
           return paramsObj;
   }
-
+ 
   private addSelect(vehicle: any){
     if(this.statusDataVehicle==false){
       vehicle.follow = false;
@@ -597,6 +601,11 @@ export class VehicleService {
       vehicle.eye = true;
     }else{ //EN DUDA SI VA SEGUIR ESTA COSA
       vehicle.eye = true;
+    }
+    if(vehicle.id_conductor){
+      vehicle.tag_driver = true;
+    }else{
+      vehicle.tag_driver = false;
     }
     vehicle.arrayPrueba = [];
     vehicle.arrayPruebaParada = [];

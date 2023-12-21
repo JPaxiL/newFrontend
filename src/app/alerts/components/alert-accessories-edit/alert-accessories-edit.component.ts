@@ -52,7 +52,10 @@ export class AlertAccessoriesEditComponent implements OnInit {
     { label: 'Activado', value: true },
     { label: 'Desactivado', value: false },
   ];
-
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
 
   listaSonidos: any = [];
 
@@ -68,14 +71,14 @@ export class AlertAccessoriesEditComponent implements OnInit {
     private spinner: NgxSpinnerService,
   ) {
     this.listaSonidos = this.alertService.listaSonidos;
+    this.type = this.panelService.nombreComponente == "ALERTS-SECURITY-EDIT"? "security" : (this.panelService.nombreComponente == "ALERTS-MOBILE-EDIT"? "mobile":"360");
     this.loadData();
   }
 
   ngOnInit(): void {
     this.spinner.show('loadingAlertData');
-    this.type = this.panelService.nombreComponente == "ALERTS-SECURITY-EDIT"? "security" : (this.panelService.nombreComponente == "ALERTS-MOBILE-EDIT"? "mobile":"360");
     let alert = this.alertService.getAlertEditData();
-
+    console.log("ALERT:::::", alert);
     this.vehiclesSelected = alert.imei ==''? []: alert.imei.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
     let notificacion_system =
@@ -97,6 +100,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
     }
 
     let ventana_emergente = alert.ventana_emergente.toLowerCase() === 'true';
+    let evaluation = alert.bol_evaluation;
 
     this.alertForm = this.formBuilder.group({
       vehicles: [this.vehiclesSelected, [Validators.required]],
@@ -120,7 +124,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
         { value: '', disabled: this.disabledEmail },
         [Validators.required, Validators.email],
       ],
-      eventType: ['accessories'],
+      eventType: [this.type],
       id: [alert.id],
       chkwhatsapp: [notificacion_whatsapp],
       lista_whatsapp: [whatsapps],
@@ -128,7 +132,8 @@ export class AlertAccessoriesEditComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[ventana_emergente]
+      chkVentanaEmergente:[ventana_emergente],
+      chkEvaluation:[evaluation]
     });
 
     this.loading = false;
@@ -136,7 +141,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.alertService.getEventsByType('accessories');
+    this.events = await this.alertService.getEventsByType(this.type);
     this.alertForm.patchValue({
       tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
     });

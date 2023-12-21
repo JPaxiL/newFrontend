@@ -12,6 +12,7 @@ import { MapService } from '../../services/map.service';
 
 import { EyeHeaderComponent } from '../../components/eye-header/eye-header.component';
 import { TagHeaderComponent } from '../../components/tag-header/tag-header.component';
+import { TagDriverHeaderComponent } from '../../components/tag-driver-header/tag-driver-header.component';
 import { FollowHeaderComponent } from '../../components/follow-header/follow-header.component';
 import { LimitHeaderComponent } from '../../components/limit-header/limit-header.component';
 import { TransmissionHeaderComponent } from '../../components/transmission-header/transmission-header.component';
@@ -25,6 +26,7 @@ import { SettingComponent } from '../../components/setting/setting.component';
 import { GpsComponent } from '../../components/gps/gps.component';
 import { GsmComponent } from '../../components/gsm/gsm.component';
 import { TagComponent } from '../../components/tag/tag.component';
+import { TagDriverComponent } from '../../components/tag-driver/tag-driver.component';
 import { FollowComponent } from '../../components/follow/follow.component';
 import { VehicleHeaderComponent } from '../../components/vehicle-header/vehicle-header.component';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
@@ -47,12 +49,14 @@ export class VehiclesComponent implements OnInit {
   config: any=[];
   mutationObserver: any;
 
-  vehicleIconState: boolean = false;
+  vehicleIconState: boolean = true;
+  vehicleTransmissionStatus: boolean = true;
 
   public setting: any = {
     eye: false,
     imei: true,
     vehicle: false,
+    tag_driver: true,//HASTA QUE SE IMPLEMENTE DRIVERS
     tag: false,
     follow: false,
     limit: false,
@@ -64,8 +68,8 @@ export class VehiclesComponent implements OnInit {
   }
 
   rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
-  panelPaddingLeft = Number(getComputedStyle(document.documentElement).getPropertyValue('--gl-panel-padding-left').replace('rem', '')) * this.rem_to_px;
-  vehicleWidth = 12.3 * this.rem_to_px;
+  panelPaddingLeft = (Number(getComputedStyle(document.documentElement).getPropertyValue('--gl-panel-padding-left').replace('rem', '')) * this.rem_to_px )*0.25; //NO ESTOY SEGURO
+  vehicleWidth = 12.1 * this.rem_to_px;
 
    columnDefs: ColDef[] = [
        { headerName: '', field: '', width: this.panelPaddingLeft, minWidth: this.panelPaddingLeft, maxWidth: this.panelPaddingLeft, suppressAutoSize: true,  },
@@ -73,12 +77,13 @@ export class VehiclesComponent implements OnInit {
        { headerName: 'IMEI',  colId: "imei", field: 'IMEI', sortable: true, filter: true, resizable: true, width: 130, minWidth: 100, maxWidth: 140, cellStyle: { 'font-size': '10px', 'text-align': 'left'}, hide: true},
        { headerName: 'VehículoHide', field: 'name', filter: true, suppressMenu: true, width: 150, minWidth: 110, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, hide: true},
        { headerName: 'Vehículo', colId: "vehicle" , field: 'name', filter: true, suppressMenu: true, width: this.vehicleWidth, minWidth: this.vehicleWidth, valueGetter: params=>{return params.data}, sortable: true, resizable: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: VehicleComponent, headerComponentFramework: VehicleHeaderComponent },
-       { headerName: 'Monstrar Nombre', colId:"tag", field: 'tag', sortable: false, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },
-       { headerName: 'Seguir', colId:"follow", field: 'follow', sortable: true, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
-       { headerName: 'Limite de velocidad', colId:"limit", sort: 'desc', field: 'speed', sortable: true, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
-       { headerName: 'GPS', colId:"gps", field: 'activo', sortable: true, filter: false, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GpsComponent, headerComponentFramework: GpsHeaderComponent, hide: true },
-       { headerName: 'GSM', colId:"gsm", field: 'activo', sortable: true, filter: false, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GsmComponent, headerComponentFramework: GsmHeaderComponent, hide: true },
-       { headerName: 'Configurar', colId:"config", field: 'activo', sortable: true, filter: true, resizable: true, width: 50, minWidth: 50, maxWidth: 50, cellStyle: { 'font-size': '10px'}, cellRendererFramework: SettingComponent, headerComponentFramework: SettingHeaderComponent }
+       { headerName: 'Monstrar Conductor', colId:"tag_driver", field: 'tag_driver', sortable: false, filter: true, resizable: true, width: 45, minWidth: 45, maxWidth: 45, hide: true, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagDriverComponent, headerComponentFramework: TagDriverHeaderComponent },
+       { headerName: 'Monstrar Nombre', colId:"tag", field: 'tag', sortable: false, filter: true, resizable: true, width: 45, minWidth: 45, maxWidth: 45, cellStyle: { 'font-size': '10px'}, cellRendererFramework: TagComponent, headerComponentFramework: TagHeaderComponent },
+       { headerName: 'Seguir', colId:"follow", field: 'follow', sortable: true, filter: true, resizable: true, width: 45, minWidth: 45, maxWidth: 45, cellStyle: { 'font-size': '10px'}, cellRendererFramework: FollowComponent, headerComponentFramework: FollowHeaderComponent },
+       { headerName: 'Limite de velocidad', colId:"limit", sort: 'desc', field: 'speed', sortable: true, filter: true, resizable: true, width: 45, minWidth: 45, maxWidth: 45, cellStyle: { 'font-size': '10px'}, headerComponentFramework: LimitHeaderComponent },
+       { headerName: 'GPS', colId:"gps", field: 'activo', sortable: true, filter: false, resizable: true, width: 45, minWidth: 45, maxWidth: 45, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GpsComponent, headerComponentFramework: GpsHeaderComponent, hide: true },
+       { headerName: 'GSM', colId:"gsm", field: 'activo', sortable: true, filter: false, resizable: true, width: 45, minWidth: 45, maxWidth: 45, cellStyle: { 'font-size': '8px'}, cellRendererFramework: GsmComponent, headerComponentFramework: GsmHeaderComponent, hide: true },
+       { headerName: 'Configurar', colId:"config", field: 'activo', sortable: true, filter: true, resizable: true, width: 45, minWidth: 45, maxWidth: 45, cellStyle: { 'font-size': '10px'}, cellRendererFramework: SettingComponent, headerComponentFramework: SettingHeaderComponent }
     ];
 
    // public rowData: any = RefData.data;
@@ -141,7 +146,6 @@ export class VehiclesComponent implements OnInit {
   ngOnInit(): void {
     //console.log("ngOnInit table ag GRID status table = ",this.statusTable);
     //this.onVehicleIcon();
-
     var observerTarget = document.querySelector('#dragbar')!;
     this.mutationObserver = new MutationObserver( mutationList => {
         mutationList.forEach( mutation => {
@@ -267,4 +271,12 @@ export class VehiclesComponent implements OnInit {
     }
     this.vehicleIconState = !this.vehicleIconState;
   }
+  // onVehicleTransmissionStatus(){
+  //   if(this.vehicleTransmissionStatus){
+  //     $('.ag-body-viewport2').addClass('show-vehicle-statusTransmission');
+  //   } else {
+  //     $('.ag-body-viewport2').removeClass('show-vehicle-statusTransmission');
+  //   }
+  //   this.vehicleTransmissionStatus = !this.vehicleTransmissionStatus;
+  // }
 }

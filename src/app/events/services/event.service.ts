@@ -12,6 +12,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { VehicleService } from '../../vehicles/services/vehicle.service';
 import { MultimediaService } from '../../multiview/services/multimedia.service';
+import { AlertService } from 'src/app/alerts/service/alert.service';
+import { Evaluation } from 'src/app/alerts/models/alert.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -78,7 +80,6 @@ export class EventService {
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
     public vehicleService: VehicleService,
-    private multimediaService:MultimediaService
     ) {
       this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("evento cargo antes que vehicles ...");
@@ -102,8 +103,11 @@ export class EventService {
     }
 
 
-  initialize(): void {
+  async initialize() {
     // console.log("inicializando service events ....");
+    // if(!this.alertService.dataCompleted){
+    //   await this.alertService.getAll();
+    // }
     this.getAll();
   }
 
@@ -210,7 +214,24 @@ export class EventService {
           if(!event.viewed){
             this.unreadCount++;
           }
-
+          //event.bol_evaluation = this.alertService.alerts.find(alert => alert.slug)
+          event.evaluations = [
+            {
+              event_id: event.evento_id,
+              usuario_id: event.usuario_id,
+              imei: event.imei,
+              fecha: event.fecha_tracker,
+              nombre: event.nombre_objeto,
+              tipo_evento: event.name,
+              uuid_event: event.uuid_event,
+              criterio_evaluacion: '',
+              identificacion_video: '',
+              valoracion_evento: '0',
+              observacion_evaluacion: '',
+              senales_posible_fatiga: false,
+              operador_monitoreo: ''
+            } as Evaluation
+          ];
           return event;
         });
         // return;
@@ -220,6 +241,25 @@ export class EventService {
           let last_event = this.socketEvents.pop();
           if(this.events.findIndex(event => event.id == last_event.id) == -1){
             // this.events.nombre="XDDD";
+            if(last_event.bol_evaluation){
+              last_event.evaluations = [
+                {
+                  event_id: last_event.evento_id,
+                  usuario_id: last_event.usuario_id,
+                  imei: last_event.imei,
+                  fecha: last_event.fecha_tracker,
+                  nombre: last_event.nombre_objeto,
+                  tipo_evento: last_event.name,
+                  uuid_event: last_event.uuid_event,
+                  criterio_evaluacion: '',
+                  identificacion_video: '',
+                  valoracion_evento: '0',
+                  observacion_evaluacion: '',
+                  senales_posible_fatiga: false,
+                  operador_monitoreo: ''
+                } as Evaluation
+              ];
+            }
             this.events.unshift(last_event);
             //this.increaseUnreadCounter();
           } else {
@@ -257,6 +297,25 @@ export class EventService {
       this.socketEvents.unshift(event);
     } else {
       // console.log("event ---XD");
+      if(event.bol_evaluation){
+        event.evaluations = [
+          {
+            event_id: event.evento_id,
+            usuario_id: event.usuario_id,
+            imei: event.imei,
+            fecha: event.fecha_tracker,
+            nombre: event.nombre_objeto,
+            tipo_evento: event.name,
+            uuid_event: event.uuid_event,
+            criterio_evaluacion: '',
+            identificacion_video: '',
+            valoracion_evento: '0',
+            observacion_evaluacion: '',
+            senales_posible_fatiga: false,
+            operador_monitoreo: ''
+          } as Evaluation
+        ];
+      }
       this.events.unshift(event);
       this.updateUnreadCounter();
       if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
@@ -511,6 +570,20 @@ export class EventService {
       return response.data;
     }
 
+    async getEvaluations(id: string){
+      const response:ResponseInterface = await this.http
+      .get<ResponseInterface>(`${environment.apiUrl}/api/evaluations/event-user/${id}`)
+      .toPromise();
+      return response.data;
+    }
+
+    async saveEvaluations(evaluation: Evaluation){
+      const response:ResponseInterface = await this.http
+      .post<ResponseInterface>(`${environment.apiUrl}/api/evaluation`,evaluation)
+      .toPromise();
+      return response.data;
+    }
+
     async getEventsByImeisAndEventType(imeis:any,to:any,from:any, event_type:any){
       const response:ResponseInterface = await this.http
       .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {
@@ -551,7 +624,6 @@ export class EventService {
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
-        //console.log("EVENTS_FILTERED: ",this.eventsFiltered);
         
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');

@@ -17,6 +17,7 @@ import { InputNumberModule } from 'primeng-lts/inputnumber';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api';
 import {SelectButtonModule} from 'primeng-lts/selectbutton';
+import {RatingModule} from 'primeng-lts/rating';
 import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {PickListModule} from 'primeng-lts/picklist';
 import {ListboxModule} from 'primeng-lts/listbox';
@@ -71,6 +72,8 @@ import { LimitHeaderComponent } from './vehicles/components/limit-header/limit-h
 import { FollowHeaderComponent } from './vehicles/components/follow-header/follow-header.component';
 import { TransmissionHeaderComponent } from './vehicles/components/transmission-header/transmission-header.component';
 import { TagHeaderComponent } from './vehicles/components/tag-header/tag-header.component';
+import { TagDriverComponent } from './vehicles/components/tag-driver/tag-driver.component';
+import { TagDriverHeaderComponent } from './vehicles/components/tag-driver-header/tag-driver-header.component';
 import { SettingHeaderComponent } from './vehicles/components/setting-header/setting-header.component';
 import { EyeComponent } from './vehicles/components/eye/eye.component';
 import { GpsHeaderComponent } from './vehicles/components/gps-header/gps-header.component';
@@ -151,6 +154,7 @@ import { CarouselComponent } from './shared/components/carousel/carousel.compone
 import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
 import { ShortenPipe } from './core/pipes/shorten.pipe';
+import { AddTagComponent } from './geofences/components/add-tag/add-tag.component';
 
 @NgModule({
   declarations: [
@@ -172,6 +176,8 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     FollowHeaderComponent,
     TransmissionHeaderComponent,
     TagHeaderComponent,
+    TagDriverComponent,
+    TagDriverHeaderComponent,
     SettingHeaderComponent,
     EyeComponent,
     GpsHeaderComponent,
@@ -244,7 +250,8 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     EventPopupComponent,
     CarouselComponent,
     DriversHistoryComponent,
-    SliderMultimediaComponent
+    SliderMultimediaComponent,
+    AddTagComponent
   ],
   imports: [
     ToastrModule.forRoot({
@@ -271,6 +278,7 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     TreeTableModule,
     DropdownModule,
     DialogModule,
+    RatingModule,
     ScrollPanelModule,
     InputTextModule,
     InputSwitchModule,
@@ -306,6 +314,8 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
     AgGridModule.withComponents([
       EyeComponent,
       TagHeaderComponent,
+      TagDriverComponent,
+      TagDriverHeaderComponent,
       FollowHeaderComponent,
       EyeHeaderComponent,
       LimitHeaderComponent,

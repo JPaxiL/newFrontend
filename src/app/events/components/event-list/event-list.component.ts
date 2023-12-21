@@ -3,15 +3,14 @@ import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
 import { getContentPopup } from '../../helpers/event-helper';
-import { forEachChild } from 'typescript';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { PanelService } from 'src/app/panel/services/panel.service';
-
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
+import { AlertService } from 'src/app/alerts/service/alert.service';
+import { Alert, Evaluation } from 'src/app/alerts/models/alert.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-event-list',
@@ -26,12 +25,53 @@ export class EventListComponent implements OnInit {
   activeEvent: any = false;
 
   noResults: boolean = false;
-
+  expanded = false;
   public events:any[] = [];
   public placa:string = '';
 
   public imei_debug: string ='864200050708453';
   public data_debug: any = ['-','-','-','-']
+
+  evaluation_criteria = [
+    {
+        label: 'Señales de posible fatiga',
+        items: [
+            {label: 'Inclinación de la cabeza hacia adelante y hacia atrás', value: 'Inclinación de la cabeza hacia adelante y hacia atrás'},
+            {label: 'Parpadeo involuntario', value: 'Parpadeo involuntario'},
+            {label: 'Gestos o movimientos a manera de autogestión', value: 'Gestos o movimientos a manera de autogestión'},
+            {label: 'Bostezo continuo (>3 en 30 seg.)', value: 'Bostezo continuo (>3 en 30 seg.)'},
+            {label: 'Mano con acción de frotación en el ojo', value: 'Mano con acción de frotación en el ojo'}
+        ]
+    },
+    {
+        label: 'Sin señal de posible fatiga',
+        items: [
+          {label: 'Característica física de ojos "Rasgos asiáticos"', value: 'Característica física de ojos "Rasgos asiáticos"'},
+          {label: 'Cobertura de rostro con bufanda y/o chalina', value: 'Cobertura de rostro con bufanda y/o chalina'},
+          {label: 'Existe mirada del Conductor al tablero', value: 'Existe mirada del Conductor al tablero'},
+          {label: 'Lentes correctores mal puestos', value: 'Lentes correctores mal puestos'},
+          {label: 'Lentes correctores con marco reducido', value: 'Lentes correctores con marco reducido'},
+          {label: 'Lentes de seguridad mal puestos', value: 'Lentes de seguridad mal puestos'},
+          {label: 'Otro tipo de lentes', value: 'Otro tipo de lentes'},
+          {label: 'Presencia de deslumbramientos', value: 'Presencia de deslumbramientos'},
+          {label: 'Uso de chullo, gorra con vísera o casco', value: 'Uso de chullo, gorra con vísera o casco'},
+          {label: 'Uso de sobrelentes', value: 'Uso de sobrelentes'},
+          {label: 'Uso de maquillaje en el rostro', value: 'Uso de maquillaje en el rostro'}
+        ]
+    }
+  ];
+
+  operators = [
+    {label: 'HANCCO DIAZ, Gary Maurizio', value: 'HANCCO DIAZ, Gary Maurizio'},
+    {label: 'HUACHO OCHOA, Gonzalo Joe', value: 'HUACHO OCHOA, Gonzalo Joe'},
+    {label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel'},
+    {label: 'ROJAS RONDON, Carla Alejandra', value: 'ROJAS RONDON, Carla Alejandra'}
+  ]
+
+  loading_evaluation = false;
+  expandedRows: { [s: string]: boolean } = {};
+  submitting = false;
+
 
   constructor(
     public eventService: EventService,
@@ -41,7 +81,7 @@ export class EventListComponent implements OnInit {
     private http:HttpClient,
     private resolver: ComponentFactoryResolver,
     private container: ViewContainerRef,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
     ) {
       // this.tipoEvento = [
       //   { id: 0, option: 'Todos los Eventos', tipo: '' },
@@ -79,8 +119,9 @@ export class EventListComponent implements OnInit {
       // ];
     }
 
-  ngOnInit(): void {
-    console.log("event list on init ========================================================================");
+  async ngOnInit(){
+    
+  //console.log("event list on init ========================================================================");
     this.selectedEvent = null;
     if(!this.eventService.eventsLoaded || !this.eventService.filterLoaded){
       this.spinner.show('loadingEventList');
@@ -96,6 +137,7 @@ export class EventListComponent implements OnInit {
       this.searchByPlate();
       this.changeTypeEvent();
     });
+
   }
 
   ngOnDestroy(){
@@ -112,10 +154,10 @@ export class EventListComponent implements OnInit {
     this.data_debug = ['-','-','-','-'];
   }
   clickEventPanel(): void {
-    console.log(this.eventService.eventDeveloperStatus);
+  //console.log(this.eventService.eventDeveloperStatus);
     if(this.eventService.eventDeveloperCount > 5){
       this.eventService.eventDeveloperStatus = true;
-      console.log("eres desarrollador ...",this.eventService.eventDeveloperStatus);
+    //console.log("eres desarrollador ...",this.eventService.eventDeveloperStatus);
     }else{
       this.eventService.eventDeveloperCount++;
     }
@@ -124,11 +166,11 @@ export class EventListComponent implements OnInit {
   async loadFilterData(){
     if(!this.eventService.hasEventPanelBeenOpened){
       this.eventService.hasEventPanelBeenOpened = true;
-      console.log('Cargando Filtros...');
+    //console.log('Cargando Filtros...');
       //this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
       await this.eventService.getAllEventsForTheFilter();
       this.eventService.filterLoaded = true;
-      console.log('Filtros cargados');
+    //console.log('Filtros cargados');
     }
     this.tipoEvento = this.eventService.getFilters();
     this.eventService.showEventPanel();
@@ -152,11 +194,11 @@ export class EventListComponent implements OnInit {
       event.parametros = objParams;
     }
 
-    console.log("desde show events - componente event list ...",event);
-    console.log("has popup opened", event.layer.isPopupOpen());
+  //console.log("desde show events - componente event list ...",event);
+  //console.log("has popup opened", event.layer.isPopupOpen());
     if (this.eventService.activeEvent) {
       if(this.eventService.activeEvent.id == event.id && event.layer.isPopupOpen()){
-        console.log("no hacer nada");
+      //console.log("no hacer nada");
         return;
       }
       this.eventService.activeEvent.layer.closePopup();
@@ -194,7 +236,7 @@ export class EventListComponent implements OnInit {
 
   addMultimediaComponent(event:any){
     if(event.parametros && event.parametros.gps == "cipia" && (event.parametros.has_video != "0" || event.parametros.has_image != "0")){
-      console.log("adding multimedia: ", event);
+    //console.log("adding multimedia: ", event);
 
       const factory = this.resolver.resolveComponentFactory(SliderMultimediaComponent);
       const componentRef: ComponentRef<any> = this.container.createComponent(factory);
@@ -213,10 +255,10 @@ export class EventListComponent implements OnInit {
           componentRef.instance[key] = params[key];
         });
         // Agregar el componente directamente al contenedor del popup
-        console.log("componentRef.location.nativeElement",componentRef.location.nativeElement);
+      //console.log("componentRef.location.nativeElement",componentRef.location.nativeElement);
 
       const divContainer = document.getElementById('multimedia-'+event.parametros.eventId)!;
-      console.log("divContainer",divContainer);
+    //console.log("divContainer",divContainer);
       divContainer.appendChild(componentRef.location.nativeElement);
     }
   }
@@ -227,28 +269,28 @@ export class EventListComponent implements OnInit {
   }
 
   private markAsRead(event_id: any){
-    console.log('desde event list Marking ' + event_id + ' as read...');
+  //console.log('desde event list Marking ' + event_id + ' as read...');
     //this.eventService.decreaseUnreadCounter();
     this.eventService.updateUnreadCounter();
     this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
       next: data => {
-        console.log('desde event list Mark ' + event_id + ' as read Success? : ', data.success);
+      //console.log('desde event list Mark ' + event_id + ' as read Success? : ', data.success);
       },
       error: () => {
-        console.log(event_id + ': Hubo un error al marcar como leído');
+      //console.log(event_id + ': Hubo un error al marcar como leído');
       }
     });
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement){
-    console.log("click event....",event);
+  //console.log("click event....",event);
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if(false){
       // this.hideEvent(this.eventService.activeEvent);
     } else {
       currentRow.classList.add('watched-event');
-      console.log('Mostrando evento con ID: ', event.evento_id);
+    //console.log('Mostrando evento con ID: ', event.evento_id);
       let reference = await this.eventService.getReference(event.latitud, event.longitud);
       event.referencia = reference.referencia;
       this.showEvent(event);
@@ -264,12 +306,15 @@ export class EventListComponent implements OnInit {
     /* if(this.selectedEvent == ''){ */
     if(this.selectedEvent === null && this.placa == ''){
       this.eventService.eventsFiltered = this.eventService.getData();
+    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
+      
       this.noResults = false;
     }else{
       // console.log("this.selectedEvent ??????",this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
         return this.eventFilter(event);
       });
+    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
       // console.log("get data",this.eventService.eventsFiltered);
       this.noResults = this.eventService.eventsFiltered.length == 0;
     }
@@ -296,6 +341,92 @@ export class EventListComponent implements OnInit {
     // console.log("tipo select",event.tipo +"=="+ this.selectedEvent);
     return (event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase()) || this.placa == '')
           && (event.tipo == this.selectedEvent || this.selectedEvent === null);
+  }
+
+  rowExpandend(event:any){
+    if (event.data) {
+      this.expandedRows[event.data.uuid_event] = !this.expandedRows[event.data.uuid_event];
+    }
+    this.loading_evaluation = true;
+  //console.log("event.data", event.data);
+    
+    if(event.data.id){
+      this.eventService.getEvaluations(event.data.id).then( evaluations => {
+        if(evaluations.length > 0){
+          //console.log(" EVALUATIONS GETS ", evaluations);
+          let auxEvent = this.eventService.eventsFiltered.find((ev:any) => ev.id == event.data.id);
+          auxEvent.evaluations = evaluations as Evaluation[];
+        //console.log("EVENTS EVALUATIONS GETS ", auxEvent);
+        }
+        
+      }).finally( () => {
+        this.loading_evaluation = false;
+      });
+    }else{
+      this.loading_evaluation = false;
+    }
+  }
+
+  submitEvaluation(evaluation: Evaluation, event : Alert) {
+    if(evaluation.criterio_evaluacion == '' && evaluation.observacion_evaluacion == ''){
+      Swal.fire('Espera!','Seleccione un criterio de evaluación o ingrese su observación.','info');
+      return;
+    }
+    if(evaluation.operador_monitoreo == ''){
+      Swal.fire('Espera!','Ingrese o seleccione el nombre del operador.','info');
+      return;
+    }
+
+    if(evaluation.senales_posible_fatiga == true && (evaluation.valoracion_evento == '0')){
+      Swal.fire('Espera!','Debe valorar la precisión del evento (1-5 estrellas)','info');
+      return;
+    }
+
+  //console.log("Submitting evaluation: ",evaluation, event);
+    if(!evaluation.senales_posible_fatiga){
+      evaluation.valoracion_evento = '0';
+      evaluation.identificacion_video = '';
+    }
+    this.submitting = true;
+    this.eventService.saveEvaluations(evaluation).then(response => {
+      //console.log("response after saveEvaluations", response);
+      let realEvent = this.eventService.eventsFiltered.find(event => event.uuid_event == evaluation.uuid_event);
+      realEvent.evaluations = response as Evaluation[];
+      realEvent.evaluated += 1;
+    //console.log("realEvent after response-->>",realEvent);
+      Swal.fire('Éxito','Los cambios se guardaron exitosamente','success');
+    }).catch(error => {
+      Swal.fire('Error','No se pudo guardar la evaluación','error');
+    }).finally(()=>{
+      this.submitting = false;
+    })
+  }
+
+  clearEvaluation(evaluation : Evaluation){
+  //console.log("evaluation to clean", evaluation);
+    
+    if(!evaluation.id){
+      evaluation.criterio_evaluacion = '';
+      evaluation.identificacion_video = '';
+      evaluation.observacion_evaluacion = '';
+      evaluation.operador_monitoreo = '';
+      evaluation.valoracion_evento = '0';
+      evaluation.senales_posible_fatiga = false;
+    }
+  }
+
+  criteriaSelected(event:any, evaluation: Evaluation){
+    evaluation.senales_posible_fatiga = false;
+    this.evaluation_criteria[0].items.forEach( criteria => {
+      if(criteria.value == event.value){
+        evaluation.senales_posible_fatiga = true;
+      }
+    });
+  }
+  
+  closeEvaluationExpanded(evaluation: Evaluation){
+    this.clearEvaluation(evaluation);
+    this.expandedRows = {};
   }
 
 }

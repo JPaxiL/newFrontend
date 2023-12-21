@@ -9,6 +9,7 @@ import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { GeopointsService } from 'src/app/geopoints/services/geopoints.service';
 import { GeofencesService } from 'src/app/geofences/services/geofences.service';
 import { CircularGeofencesService } from 'src/app/geofences/services/circular-geofences.service';
+import { filter } from 'lodash';
 
 
 @Component({
@@ -42,9 +43,10 @@ export class UserInfoComponent implements OnInit {
   ];
   reports: any;
   events: any;
-  
+  email_user: string = '';
+  company_name: string = '';
   constructor(       
-    private userDataService: UserDataService,
+    public userDataService: UserDataService,
     private panelService: PanelService,
     private http: HttpClient,
     private geopointsService: GeopointsService,
@@ -265,5 +267,6 @@ export class UserInfoComponent implements OnInit {
       this.loading=false;
     });
   }
+  userName: string='';
 
 }

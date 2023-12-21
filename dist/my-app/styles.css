@@ -35564,6 +35564,7 @@ textarea.form-control-lg {
   --gl-lighter-gray: #e3e3e3;
   --gl-lighter-gray-disabled: #f5f5f6;
   --gl-light-blue-alpha: rgba(33,150,243,0.1);
+  --gl-light-green-alpha: rgb(123 245 46 / 50%);
   --gl-light-blue-selected-alpha: #bcdffb;
   --gl-light-gray: #f2f2f2;
   --gl-light-gray-hover: #dedede;
