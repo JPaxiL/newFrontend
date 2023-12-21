@@ -151,8 +151,7 @@ export class UserConfigComponent implements OnInit {
     
     // Iterar sobre la lista de vehículos y agregarlos al array userForm.Vehicle
     this.typeVehiclesList.forEach((item: any) => {
-      const existingIndex = this.userForm.vehicles.findIndex((vehicle: any) => vehicle.id === item.id);
-      
+      const existingIndex = this.userForm.vehicles.findIndex((vehicle: any) => vehicle.id == item.id);
       if (existingIndex !== -1) {
         console.log('NUNCA VA ENCONTRAR');
         this.userForm.vehicles[existingIndex] = {
@@ -162,6 +161,9 @@ export class UserConfigComponent implements OnInit {
           var_galon: item.var_galon
         };
       } else {
+        if(item.var_color == "#c4c2c1"){
+          item.var_color = "c4c2c1";
+        }
         this.userForm.vehicles.push({
           id: item.id,
           var_nombre: item.var_nombre,
@@ -170,20 +172,20 @@ export class UserConfigComponent implements OnInit {
         });
       }
     });
-    console.log(this.userForm); // Información del formulario general
 
 
     // Preparación de la solicitud para enviar datos
     let req = {
       vehicles: this.userForm.vehicles,
-      oldPass: this.userForm.oldPass,
-      newPass: this.userForm.newPass,
-      newCopyPass: this.userForm.newPassRepeat,
+      // oldPass: this.userForm.oldPass,
+      // newPass: this.userForm.newPass,
+      // newCopyPass: this.userForm.newPassRepeat,
       bol_ondas: this.userForm.bol_ondas,
       bol_cursor: this.userForm.bol_cursor,
       bol_vehicle: this.userForm.bol_vehicle,
       itemChanges: this.showChangeItem
     };
+    console.log(req); // Información del formulario general
     return req;
   }
 
