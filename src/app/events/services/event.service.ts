@@ -318,7 +318,9 @@ export class EventService {
       }
       this.events.unshift(event);
       this.updateUnreadCounter();
+      console.log("SONARAA?",event);
       if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
+        console.log("SI SINOoooo");
         this.playNotificationSound(event.ruta_sonido);
       }
       this.attachClassesToEvents();
@@ -339,7 +341,7 @@ export class EventService {
 
       if (audioPromise !== undefined) {
         audioPromise.then(() => {
-          //console.log('Playing notification sound')
+          console.log('Playing notification sound')
         })
         .catch((error: any) => {
           //console.log(error);

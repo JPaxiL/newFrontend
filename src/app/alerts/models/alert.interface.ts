@@ -34,7 +34,7 @@ export interface Alert {
   sonido_sistema_bol?:boolean,
   notificacion_email_bol?:boolean,
   activo_bol?:boolean,
-  ventana_emergente?:boolean,
+  ventana_emergente?:string,
   bol_evaluation?:boolean,
   type_evaluation?: TypeEvaluation,
   event_id?: string,

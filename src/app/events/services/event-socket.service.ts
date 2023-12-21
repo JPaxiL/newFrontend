@@ -94,7 +94,6 @@ export class EventSocketService extends Socket {
         let data = this.filterImei(this.vehicleService.vehicles, even.tracker_imei);
         // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
         // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
-        console.log("----data",data);
         if (data != undefined) {
           // console.log("name ====",data.name);
           console.log(even.nombre_objeto+" ========================================== "+data.name);
@@ -112,9 +111,6 @@ export class EventSocketService extends Socket {
           }
 
           even.imei = even.tracker_imei;
-          console.log("----even",even);
-          console.log("----this.AlertService.alertsForEventSocket.length",this.AlertService.alertsForEventSocket.length);
-
           //Si las alertas ya cargaron
           if (this.AlertService.alertsForEventSocket.length > 0) {
             //console.log(this.AlertService.alertsForEventSocket);
@@ -128,9 +124,8 @@ export class EventSocketService extends Socket {
               even['ruta_sonido'] = 'WhatsappSound9.mp3';
             }
           }
-          
+
           let newEvent = this.setLayer(even);
-          console.log("----newEvent",newEvent);
           this.eventService.addNewEvent(newEvent);
 
           this.eventService.new_notif_stack.push(even.evento_id);
@@ -140,8 +135,7 @@ export class EventSocketService extends Socket {
           console.log("----alert",alert);
 
           if (alert) {
-            console.log("----alert.ventana_emergente",alert.ventana_emergente);
-            if (alert.ventana_emergente) {
+            if (alert.ventana_emergente?.toLowerCase() == 'true') {
               this.eventPopup.emit({event: {...newEvent}, tracker: {...this.vehicleService.getVehicle(even.tracker_imei)}})
               //this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
             }
