@@ -325,11 +325,10 @@ export class HistorialService {
       //return response.data;
   }
 
-  async enviarCorreoExcel() {
+  async enviarCorreoExcel(params:any) {
     console.log(" ============ services enviarCorreoExcel =============");
-    
     //this.tramasHistorial = await this.http.post(`${environment.apiUrl}/api/historial`,param).toPromise();
-    await this.http.post(`${environment.apiUrl}/api/enviarCorreoExcel`,{}).toPromise();
+    await this.http.post(`${environment.apiUrl}/api/enviarCorreoExcel`,params).toPromise();
 
   }
 
