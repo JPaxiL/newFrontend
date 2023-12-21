@@ -122,6 +122,12 @@
               </div>
               <div>
                 <label>
+                  <p-checkbox [(ngModel)]="vehicleTransmissionStatus" [binary]="true"></p-checkbox>
+                  Estado de Transmisión
+                </label>
+              </div>
+              <div>
+                <label>
                   <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
                   Ícono de Vehículo
                 </label>
@@ -136,6 +142,12 @@
                 <span (click)="onClickSetting('vehicle')">
                   <p-checkbox [(ngModel)]="setting['vehicle']" [binary]="true"></p-checkbox>
                   Vehículos
+                </span>
+              </div>
+              <div>
+                <span (click)="onClickSetting('tag_driver')">
+                  <p-checkbox [(ngModel)]="setting['tag_driver']" [binary]="true"></p-checkbox>
+                  Mostrar Conductor
                 </span>
               </div>
               <div>
@@ -227,10 +239,11 @@
       </ng-template> -->
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col style="width: 2.5rem;">
-          <col style="width: 45px;" *ngIf="setting['eye']">
+          <col style="width: 0.5rem;">
+          <col style="width: 40px;" *ngIf="setting['eye']">
           <col style="width: 100%;" *ngIf="setting['vehicle']">
           <col style="width: 50%;" *ngIf="setting['imei']">
+          <col style="width: 40px;" *ngIf="setting['tag_driver']">
           <col style="width: 45px;" *ngIf="setting['tag']">
           <col style="width: 45px;" *ngIf="setting['follow']">
           <col style="width: 45px;" *ngIf="setting['limit']">
@@ -248,6 +261,7 @@
           <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
           <th *ngIf="setting['vehicle']"></th>
           <th *ngIf="setting['imei']" style="text-align: center; white-space: nowrap;">IMEI</th>
+          <th *ngIf="setting['tag_driver']" ><app-tag-driver-header></app-tag-driver-header></th>
           <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
           <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
           <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
@@ -350,7 +364,7 @@
           </td>
           <td *ngIf="setting['vehicle']" style="min-width: 215px;" class="vehicle-column">
             <div class="d-flex justify-content-center align-items-center mx-2" (click)="onClickIcon(rowData['IMEI'])">
-              <div class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}" title="{{hint[rowData['point_color']]}}" data-bs-toggle="tooltip" data-bs-placement="top" container="body"></div>
+              <div *ngIf="vehicleTransmissionStatus" class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}" title="{{hint[rowData['point_color']]}}" data-bs-toggle="tooltip" data-bs-placement="top" container="body"></div>
               <!-- <div id="div_svg_{{rowData['id']}}" [innerHTML]="userDataService.svgContentsSafe[rowData['icon']]" class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState" style="width: 25px; height: 25px">
               </div> -->
               <div class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState">
@@ -377,6 +391,11 @@
           </td>
           <td *ngIf="setting['imei']">
             {{rowData['IMEI']}}
+          </td>
+          <td *ngIf="setting['tag_driver']" class="inline-png-checkbox disable-chkbox-behavior">
+            <span class="btn-label" title="{{(rowData.tag_driver? 'Ocultar': 'Mostrar') + 'conductor'}}" (click)="onClickDriver(rowData['IMEI'])">
+              <p-checkbox [(ngModel)]="rowData.tag_driver" [binary]="true"></p-checkbox>
+            </span>
           </td>
           <td *ngIf="setting['tag']" class="inline-png-checkbox disable-chkbox-behavior">
             <!-- <input type="checkbox" name="" value="" checked> -->

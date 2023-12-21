@@ -72,6 +72,8 @@ import { LimitHeaderComponent } from './vehicles/components/limit-header/limit-h
 import { FollowHeaderComponent } from './vehicles/components/follow-header/follow-header.component';
 import { TransmissionHeaderComponent } from './vehicles/components/transmission-header/transmission-header.component';
 import { TagHeaderComponent } from './vehicles/components/tag-header/tag-header.component';
+import { TagDriverComponent } from './vehicles/components/tag-driver/tag-driver.component';
+import { TagDriverHeaderComponent } from './vehicles/components/tag-driver-header/tag-driver-header.component';
 import { SettingHeaderComponent } from './vehicles/components/setting-header/setting-header.component';
 import { EyeComponent } from './vehicles/components/eye/eye.component';
 import { GpsHeaderComponent } from './vehicles/components/gps-header/gps-header.component';
@@ -174,6 +176,8 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
     FollowHeaderComponent,
     TransmissionHeaderComponent,
     TagHeaderComponent,
+    TagDriverComponent,
+    TagDriverHeaderComponent,
     SettingHeaderComponent,
     EyeComponent,
     GpsHeaderComponent,
@@ -310,6 +314,8 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
     AgGridModule.withComponents([
       EyeComponent,
       TagHeaderComponent,
+      TagDriverComponent,
+      TagDriverHeaderComponent,
       FollowHeaderComponent,
       EyeHeaderComponent,
       LimitHeaderComponent,
