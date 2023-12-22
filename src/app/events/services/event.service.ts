@@ -292,6 +292,7 @@ export class EventService {
 // evento_id: 19
     event.event_user_id = event.evento_id;
     event.nombre=this.loadNameEvent(event);
+    event.evaluated = 0;
     if(!this.eventsLoaded || this.enableSocketEvents){
       // console.log("event socket");
       this.socketEvents.unshift(event);
@@ -312,7 +313,7 @@ export class EventService {
             valoracion_evento: '0',
             observacion_evaluacion: '',
             senales_posible_fatiga: false,
-            operador_monitoreo: ''
+            operador_monitoreo: '',
           } as Evaluation
         ];
       }

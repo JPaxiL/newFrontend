@@ -59,7 +59,7 @@
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-event let-expanded="expanded">
-          <tr #currRow (click)="switchEventOnMap(event, currRow)" [style]="{'font-size':'0.75rem'}" [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.id == eventService.activeEvent.id , 'evaluated-event': event.evaluated>0}" [class]="event.clase" [pRowToggler]="event.bol_evaluation?event:''">
+          <tr #currRow (click)="switchEventOnMap(event, currRow)" [style]="{'font-size':'0.75rem'}" [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.uuid_event == eventService.activeEvent.uuid_event , 'evaluated-event': event.evaluated>0}" [class]="event.clase" [pRowToggler]="event.bol_evaluation?event:''">
               <td>
                   <button *ngIf="event.bol_evaluation" type="button" pButton pRipple 
                     class="p-button-rounded p-button-plain p-button-text"
@@ -110,9 +110,18 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <label class="col-5" for="lastname4" class="">Criterio de Evaluación</label>
                             <div class="col-7">
-                              <p-dropdown [appendTo]="'body'" [disabled]="evaluation.id" [options]="evaluation_criteria" [(ngModel)]="evaluation.criterio_evaluacion" placeholder="Selecciona un criterio" [group]="true" (onChange)="criteriaSelected($event, evaluation)" [style]="{'max-width':'15rem'}">
+                              <p-dropdown 
+                                [appendTo]="'body'" 
+                                [disabled]="evaluation.id" 
+                                [options]="evaluation_criteria" 
+                                [(ngModel)]="evaluation.criterio_evaluacion" 
+                                placeholder="Selecciona un criterio" 
+                                [group]="true" 
+                                (onChange)="criteriaSelected($event, evaluation)" 
+                                [style]="{'max-width':'15rem'}"
+                              >
                                 <ng-template let-group pTemplate="group">
-                                    <div class="p-d-flex p-ai-center">
+                                    <div class="p-d-flex p-ai-center d-flex justify-content-center ">
                                         <span>{{group.label}}</span>
                                     </div>
                                 </ng-template>
@@ -124,7 +133,13 @@
                           <div class="col-7">
                             <span class="p-input-icon-left">
                                 <i class="pi pi-link"></i>
-                                <input [disabled]="evaluation.id" type="text" pInputText placeholder="url" [(ngModel)]="evaluation.identificacion_video" />
+                                <input 
+                                  [disabled]="evaluation.id" 
+                                  type="text" 
+                                  pInputText 
+                                  placeholder="url" 
+                                  [(ngModel)]="evaluation.identificacion_video"
+                                />
                             </span>
                           </div>
                         </div>
@@ -143,7 +158,17 @@
                         <div class="d-flex justify-content-between align-items-center">
                           <label class="col-5" for="lastname4" class="">Operador de Monitoreo</label>
                           <div class="col-7">
-                            <p-dropdown [appendTo]="'body'" [disabled]="evaluation.id" [options]="operators" [(ngModel)]="evaluation.operador_monitoreo" editable="true" [optionLabel]="'label'" [optionValue]="'value'" [dataKey]="'value'" [style]="{'max-width':'15rem'}"></p-dropdown>
+                            <p-dropdown 
+                              [appendTo]="'body'" 
+                              [disabled]="evaluation.id" 
+                              [options]="operators" 
+                              [(ngModel)]="evaluation.operador_monitoreo" 
+                              placeholder="Selecciona un operador" 
+                              editable="true" 
+                              [group]="true"
+                              [style]="{'max-width':'15rem'}"
+                            >
+                            </p-dropdown>
                           </div>
                         </div>
                         <div class="d-flex justify-content-center gap-4 pt-2">
