@@ -64,7 +64,7 @@ export class Geofences implements IGeofences {
                 expanded: true,
                 children:[
                   {
-                    data:{id:'0', name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
+                    data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
                     expanded: true,
                     children: [
                       {
@@ -79,7 +79,7 @@ export class Geofences implements IGeofences {
             console.log('case defoult:0_1');
             const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.geofences[index]['idoperation']);
             const newTag = {
-              data:{id:'0', name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
+              data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
               expanded: true,
               children: [
                 {
@@ -94,15 +94,15 @@ export class Geofences implements IGeofences {
           }else if(!status_operation&&!status_tags){
             console.log('case defoult:0_0');
             const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.geofences[index]['idoperation']);
-            const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id == '0');
+            const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id == 0);
             existingTag.children.push({
               data: this.geofences[index]
             });
           }
         }else{
+          console.log('ERROR', this.geofences[index]);
           for(const indexTag of this.geofences[index].tags!){
             const tagName = this.getNameTag(indexTag);
-            console.log('ENTRO AQUI?');
             if(this.operations.includes(this.geofences[index]['idoperation'])){
             }else{
               this.operations.push(this.geofences[index]['idoperation']);

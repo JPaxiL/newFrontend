@@ -1698,7 +1698,16 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   clickEnviarCorreoExcel() {
       console.log(' =========== clickEnviarCorreoExcel 1 =============== ');
-      this.historialService.enviarCorreoExcel();
+      // var fecha_hoy  = moment( Date.now() ).format('YYYY-MM-DD HH:mm:ss');
+      // var fecha_fin = moment( Date.now() ).format('YYYY-MM-DD 00:00:00');
+      // var fecha_ini = moment( Date.now() ).add(-1, 'days').format('YYYY-MM-DD 00:00:00');
+      // var params = { 
+      //   fecha_hoy : fecha_hoy,
+      //   fecha_fin : fecha_fin,
+      //   fecha_ini : fecha_ini
+      // };
+      // console.log(params);
+      this.historialService.enviarCorreoExcel({});
       console.log(' =========== clickEnviarCorreoExcel 2 =============== ');
 
   }

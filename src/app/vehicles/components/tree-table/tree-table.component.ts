@@ -19,8 +19,8 @@ export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
-  vehicleIconState: boolean = false;
-
+  vehicleIconState: boolean = true;
+  vehicleTransmissionStatus: boolean = true;
   sortOrder: number=1;
   display: boolean = false;
   displayDelete: boolean = false;
@@ -70,6 +70,7 @@ export class TreeTableComponent implements OnInit {
     eye: true,
     imei: false,
     vehicle: true,
+    tag_driver: false,//HASTA QUE SE IMPLEMENTE DRIVERS
     tag: true,
     follow: true,
     limit: true,
@@ -613,6 +614,9 @@ export class TreeTableComponent implements OnInit {
   onSort(data: any){
     console.log("sort desde tree", data);
     this.sortOrder=data;
+  }
+  onClickDriver(IMEI: string){
+    this.vehicleService.onClickDriver(IMEI);
   }
   onClickTag(IMEI: string){
     this.vehicleService.onClickTag(IMEI);

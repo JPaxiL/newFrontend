@@ -178,7 +178,17 @@
         <div class="col-12">
           <div class="p-field">
             <label class="" id="operation_label">OPERACIONES:</label>
-            <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation" [ngModelOptions]="{standalone: true}"></p-dropdown>
+            <p-dropdown 
+              [options]="operations" 
+              [(ngModel)]="selectedOperation" 
+              [showClear]="true" 
+              optionLabel="nameoperation" 
+              optionValue="idoperation" 
+              (onChange)="onChangeOperation();"  
+              [placeholder]="placeholderOperation" 
+              [disabled]="disabledOperation" 
+              [ngModelOptions]="{standalone: true}">
+            </p-dropdown>
           </div>
         </div>
       </div>
@@ -196,7 +206,7 @@
                 [filterValue]="filterTag"
                 (onFilter)="updateFilter($event)"
                 placeholder="Seleccionar etiquetas" 
-                (onChange)="onSelecTags()"
+                (onChange)="onSelecTags();"
                 [ngModelOptions]="{standalone: true}"
                 optionLabel="var_name"
                 [optionValue]="'id'"
@@ -206,7 +216,7 @@
           </div>
           <div class="col-2">
             <div class="d-flex justify-content-center align-items-center">
-              <button (click)="addNewTag()" type="button" class="btn-gl-blue btn-circle" title="Agregar Etiqueta" data-bs-toggle="tooltip" data-bs-placement="auto" onclick="this.blur();">
+              <button (click)="addNewTag()" type="button" class="flex-none center-icon neutral-icon-color btn-circle" title="Agregar Etiqueta" data-bs-toggle="tooltip" data-bs-placement="auto" onclick="this.blur();">
                 <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
               </button>
             </div>

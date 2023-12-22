@@ -104,6 +104,13 @@
             display: none;
         }
     }
+    .ag-body-viewport[ref="eBodyViewport"] {
+        text-align: center;
+        
+        .vehicle-status-column{
+            display: none;
+        }
+    }
     .dropdown-toggle::after {
         display:none;
     }
@@ -113,6 +120,11 @@
     }
 
     .show-vehicle-icon .ag-body-viewport[ref="eBodyViewport"] .vehicle-icon-column{
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+    }
+    .show-vehicle-status .ag-body-viewport[ref="eBodyViewport"] .vehicle-status-column{
         display: flex;
         align-items: center;
         margin-top: 5px;
