@@ -60,14 +60,11 @@ export class AddTagComponent implements OnInit {
   }
 
   onChangeOperation(){
-    //getTag
     let aux: any[] = [];
     let aux2:any[] = [];
     this.list1 = [];
     this.list2 = [];
-    console.log("hereee", this.geofencesService.listGeofences);
     aux2 = this.geofencesService.listGeofences.filter((geo: any)=>geo.idoperation == this.selectedOperation);
-    console.log("listaa of Geoos",aux2);
     this.list1 = aux2;
   }
 
@@ -299,6 +296,7 @@ export class AddTagComponent implements OnInit {
                 'Los datos se guardaron correctamente!!',
                 'success'
               );
+              this.onHideEvent.emit(false);
             }
           },
           (error) => {
@@ -308,10 +306,9 @@ export class AddTagComponent implements OnInit {
               'Error',
               'Ocurrió un error...',
               'warning'
-            );
+              );
           }
         );
-      
         // var sub = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeoEdit)[0];
         // res = await this.geofencesService.edit(this.geoForm.value);
       },
@@ -326,8 +323,6 @@ export class AddTagComponent implements OnInit {
       // } else {
       //   console.log(`(geo Group) Hubo un error al crear la nueva etiqueta }`);
       // }
-      this.onHideEvent.emit(false);
-      //this.geofencesService.closeModal(); 
       this.loading=false;
       //REINICIAR ARBOL DE ETIQUETAS
     });

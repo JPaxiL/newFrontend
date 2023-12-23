@@ -112,11 +112,7 @@ export class GeofencesService {
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
     return response;
   }
-  // public async storeTagAndAssingGeo(req: any){
-  //   const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTagAndAssigGeos`,req).toPromise();
-  //   console.log(response);
-  //   return response.data;
-  // }
+  
   storeTagAndAssingGeo(req: any): Observable<any> {
     return this.http.post<any>(`${this.api_url}/api/storeTagAndAssigGeos`, req);
   } 

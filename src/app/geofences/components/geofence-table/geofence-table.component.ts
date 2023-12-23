@@ -10,7 +10,7 @@ import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 import { MapServicesService } from '../../../map/services/map-services.service';
 import * as L from 'leaflet';
 import 'leaflet-draw';
-import { forkJoin } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { Geofences } from '../../models/geofences';
 import { IGeofence, ITag } from '../../models/interfaces';
 import moment from 'moment';
@@ -25,7 +25,7 @@ interface Column {
   templateUrl: './geofence-table.component.html',
   styleUrls: ['./geofence-table.component.scss']
 })
-export class GeofenceTableComponent implements OnInit {
+export class GeofenceTableComponent implements OnInit, OnDestroy {
   files!: TreeNode[];
   cols!: Column[];
   btnSelected: number = 1;
@@ -100,28 +100,14 @@ export class GeofenceTableComponent implements OnInit {
     //     this.objGeofences.setGeofences(data, 'lin');
     //   })
     // }
-    //this.objGeofences = this.addDataGeofence(this.objGeofences);
     this.geofencesService.listGeofences = this.objGeofences.geofences;
     this.geofences  = await this.geofencesService.createTreeNode();
-
-    // this.geofences = await this.objGeofences.createTreeNode();
-    // this.geofencesFilter = this.geofences;
-    // this.objGeofencesFilter = this.objGeofences;
-    // this.geofencesService.listGeofences = this.objGeofences.geofences;
     
   }
 
-  mgOnDestroy(){
-
+  ngOnDestroy() {
   }
 
-  private async updateTable(){
-    // const newGeofences = await this.objGeofences.createTreeNode();
-    // this.geofences = newGeofences;
-    // this.geofencesFilter = this.geofences;
-    // this.objGeofencesFilter = this.objGeofences;
-    // this.geofencesService.listGeofences = this.objGeofences.geofences;
-  }
   onBusqueda(gaaa?:any) {
     if(this.NomBusqueda == ''){
       this.geofencesService.tblDataGeoFiltered = this.geofencesService.getTableData();
@@ -344,7 +330,6 @@ export class GeofenceTableComponent implements OnInit {
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
     }
-
     this.geofencesService.updateGeoCounters();
     this.geofencesService.updateGeoTagCounters();
 
@@ -413,10 +398,8 @@ export class GeofenceTableComponent implements OnInit {
     let geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == id)[0];
 
     if (geo.zone_visible == 'true') {
-
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
-
       if(geo.zone_name_visible == 'true'){
         this.clickShowNameGeoLin(id);
       }
@@ -434,23 +417,18 @@ export class GeofenceTableComponent implements OnInit {
       this.polylineGeofenceService.eyeInputSwitch = (this.polylineGeofenceService.polylineGeofenceCounters.visible != 0);
 
       if(geo.zone_visible == 'true'){
-
         for(let i = this.polylineGeofenceService.polyline_geofences.length - 1; i > -1; i--){
-
           this.polylineGeofenceService.clearDrawingsOfGeofence(this.polylineGeofenceService.polyline_geofences[i]);
           if(this.polylineGeofenceService.polyline_geofences[i].id == id){
             auxIndex = i;
             i = -1;
           }
         }
-
         for(let i = auxIndex; i < this.polylineGeofenceService.polyline_geofences.length; i++){
           this.polylineGeofenceService.showDrawingsOfGeofence(this.polylineGeofenceService.polyline_geofences[i]);
-          
         }
       }
     }
-
   }
 
   clickShowNameGeoAll(id: number, type: string){
@@ -479,9 +457,7 @@ export class GeofenceTableComponent implements OnInit {
 
       geo.marker_name.addTo(this.mapService.map);
     }
-
     this.geofencesService.updateGeoTagCounters();
-
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
       this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
     }
@@ -518,7 +494,6 @@ export class GeofenceTableComponent implements OnInit {
       geo.zone_name_visible_bol = true;
       geo.marker_name.addTo(this.mapService.map);
     }
-
     this.polylineGeofenceService.updateGeoTagCounters();
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
       this.polylineGeofenceService.tagNamesEyeState = (this.polylineGeofenceService.polylineGeofenceTagCounters.visible != 0);
