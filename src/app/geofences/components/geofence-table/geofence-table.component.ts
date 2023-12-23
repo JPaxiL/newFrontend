@@ -14,6 +14,7 @@ import { forkJoin } from 'rxjs';
 import { Geofences } from '../../models/geofences';
 import { IGeofence, ITag } from '../../models/interfaces';
 import moment from 'moment';
+import { GeocercaAddComponent } from '../geocerca-add/geocerca-add.component';
 interface Column {
   field: string;
   header: string;
@@ -27,6 +28,7 @@ interface Column {
 export class GeofenceTableComponent implements OnInit {
   files!: TreeNode[];
   cols!: Column[];
+  btnSelected: number = 1;
   viewOptions = 'viewGroup';
   datosCargados: boolean = false;
   NomBusqueda: string = "";
@@ -45,6 +47,7 @@ export class GeofenceTableComponent implements OnInit {
     name : "",
     type : ""
   };
+  geofencesTree: TreeNode[]=[];
   
   alreadyLoaded: boolean = false;
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
@@ -65,8 +68,8 @@ export class GeofenceTableComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise <void> {    
-    if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges || !this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
-      //this.geofencesService.spinner.show('loadingGeofencesSpinner');
+    if(!this.geofencesService.initializingGeofences || !this.circularGeofencesService.initializingCircularGeofences){
+      this.geofencesService.spinner.show('loadingGeofencesSpinner');
     }
     // if(!this.polylineGeofenceService.initializingPolylineGeofences || !this.polylineGeofenceService.initializingUserPrivleges){
     //   this.geofencesService.spinner.show('loadingGeofencesSpinner');
@@ -74,23 +77,22 @@ export class GeofenceTableComponent implements OnInit {
     // if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
     //   // this.geofencesService.spinner.show('loadingGeofencesSpinner');
     // }
-    
+    console.log('objinit:==>', this.objGeofences);
     if(this.geofencesService.initializingGeofences){
-      this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[], 'polig');
-      await this.objGeofences.setTags(this.geofencesService.listTag as ITag[]);
+      await this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[], 'polig');
     }else{
       this.geofencesService.dataCompleted.subscribe(async (data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data, 'polig');      
-        await this.objGeofences.setTags(this.geofencesService.listTag as ITag[]);
+        await this.objGeofences.setGeofences(data, 'polig');      
       })
     }
     if(this.circularGeofencesService.initializingCircularGeofences){
-      this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[], 'circ');
+      await this.objGeofences.setGeofences(this.circularGeofencesService.circular_geofences as IGeofence[], 'circ');
     }else{
-      this.circularGeofencesService.dataCompleted.subscribe((data:IGeofence[])=>{
-        this.objGeofences.setGeofences(data, 'circ');
+      this.circularGeofencesService.dataCompleted.subscribe(async (data:IGeofence[])=>{
+        await this.objGeofences.setGeofences(data, 'circ');
       })
     }
+    console.log('objinit:==>', this.objGeofences);
     // if(this.polylineGeofenceService.initializingPolylineGeofences){
     //   this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[], 'lin');
     // }else{
@@ -99,27 +101,26 @@ export class GeofenceTableComponent implements OnInit {
     //   })
     // }
     //this.objGeofences = this.addDataGeofence(this.objGeofences);
-    this.geofences = await this.objGeofences.createTreeNode();
-    this.geofencesFilter = this.geofences;
-    this.objGeofencesFilter = this.objGeofences;
     this.geofencesService.listGeofences = this.objGeofences.geofences;
+    this.geofences  = await this.geofencesService.createTreeNode();
+
+    // this.geofences = await this.objGeofences.createTreeNode();
+    // this.geofencesFilter = this.geofences;
+    // this.objGeofencesFilter = this.objGeofences;
+    // this.geofencesService.listGeofences = this.objGeofences.geofences;
+    
+  }
+
+  mgOnDestroy(){
+
   }
 
   private async updateTable(){
-    // if(!this.geofencesService.initializingGeofences || !this.geofencesService.initializingUserPrivleges || !this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
-    //   //this.geofencesService.spinner.show('loadingGeofencesSpinner');
-    // }
-    // if(!this.polylineGeofenceService.initializingPolylineGeofences || !this.polylineGeofenceService.initializingUserPrivleges){
-    //   this.geofencesService.spinner.show('loadingGeofencesSpinner');
-    // }
-    // if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
-    //   // this.geofencesService.spinner.show('loadingGeofencesSpinner');
-    // }
-    const newGeofences = await this.objGeofences.createTreeNode();
-    this.geofences = newGeofences;
-    this.geofencesFilter = this.geofences;
-    this.objGeofencesFilter = this.objGeofences;
-    this.geofencesService.listGeofences = this.objGeofences.geofences;
+    // const newGeofences = await this.objGeofences.createTreeNode();
+    // this.geofences = newGeofences;
+    // this.geofencesFilter = this.geofences;
+    // this.objGeofencesFilter = this.objGeofences;
+    // this.geofencesService.listGeofences = this.objGeofences.geofences;
   }
   onBusqueda(gaaa?:any) {
     if(this.NomBusqueda == ''){
@@ -553,8 +554,8 @@ export class GeofenceTableComponent implements OnInit {
   }
 
   clickAgregarGeocercaPol() {
-    this.geofencesService.nameComponentPol = "ADD GEOPOL";
-    this.geofencesService.action         = "add";
+    this.geofencesService.nameComponentPol = "ADD GEO";
+    this.geofencesService.action         = 'add';
   }
 
   clickConfigGeocerca(id:number, type:string){
@@ -568,17 +569,17 @@ export class GeofenceTableComponent implements OnInit {
   }
 
   clickConfigGeocercaPol(id:number) {
-    this.geofencesService.nameComponentPol = "ADD GEOPOL";
-    this.geofencesService.action         = "edit";
+    this.geofencesService.nameComponentPol = "ADD GEO";
+    this.geofencesService.action         = 'edit pol';
     this.geofencesService.idGeocercaEdit = id;
+    //this.geofencesService.disableBtn = false;
   }
 
   clickConfigGeocercaCir(id:number) {
-    this.geofencesService.nameComponentPol = "ADD GEOPOL";
-    this.geofencesService.action         = "edit";
-    this.circularGeofencesService.idGeocercaEdit = id;
+    this.geofencesService.nameComponentPol = "ADD GEO";
+    this.geofencesService.action         = 'edit cir';
+    this.geofencesService.idGeocercaEdit = id;
   }
-
   
   clickEliminarGeocerca(id:number , type: string){
     if(type=='polig'){
@@ -591,7 +592,7 @@ export class GeofenceTableComponent implements OnInit {
   }
 
   async clickEliminarGeocercaPol(id:number) {
-    this.geofencesService.action = "delete";
+    this.geofencesService.action = 'delete';
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
 
     Swal.fire({
@@ -619,12 +620,11 @@ export class GeofenceTableComponent implements OnInit {
           this.geofencesService.eyeInputSwitch = this.geofencesService.geofenceCounters.visible != 0;
           this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
           this.onBusqueda();
-          //const aux = this.objGeofences.filter((item: { id: number; }) => item.id ==id);
+          this.objGeofences.geofences = [];
+          this.ngOnInit();
         }
       }).then(async data => {
         if(data.isConfirmed){
-        this.updateTable();
-        //this.onDeleteItem.emit();
         Swal.fire(
           'Eliminado',
           'Los datos se eliminaron correctamente!!',
@@ -662,6 +662,8 @@ export class GeofenceTableComponent implements OnInit {
             this.circularGeofencesService.eyeInputSwitch = this.circularGeofencesService.circularGeofenceCounters.visible != 0;
             this.circularGeofencesService.tagNamesEyeState = this.circularGeofencesService.circularGeofenceTagCounters.visible != 0;
             this.onBusqueda();
+            this.objGeofences.geofences = [];
+            this.ngOnInit();
         }
     }).then(data => {
       if(data.isConfirmed){
@@ -673,49 +675,6 @@ export class GeofenceTableComponent implements OnInit {
       }
     });
   }
-
-  async updateOperation(){
-    const geofences = this.geofencesService.geofences;
-    if(this.dataEdit.type=='operation'){
-      for (const key in this.list1) {
-        let index = geofences.indexOf(this.list1[key]);
-        geofences[index].idgrupo = null;
-        geofences[index].grupo = "geocercas Sin Operacion";
-      }
-
-      for (const key in this.list2){
-        let index = geofences.indexOf(this.list2[key]);
-        geofences[index].idgrupo = this.dataEdit.id;
-        geofences[index].grupo = this.nameEdit.nativeElement.value;
-      }
-      for(const key in geofences){
-        if(geofences[key].idgrupo==this.dataEdit.id){
-          geofences[key].grupo=this.nameEdit.nativeElement.value
-        }
-      }
-    }else{
-      for (const key in this.list1) {
-        let index = geofences.indexOf(this.list1[key]);
-        geofences[index].idconvoy = null;
-        geofences[index].convoy = "geocercas Sin Grupo";
-      }
-
-      for (const key in this.list2){
-        let index = geofences.indexOf(this.list2[key]);
-        geofences[index].idconvoy = this.dataEdit.id;
-        geofences[index].convoy = this.nameEdit.nativeElement.value;
-      }
-      for(const key in geofences){
-        if(geofences[key].idconvoy==this.dataEdit.id){
-          geofences[key].convoy=this.nameEdit.nativeElement.value;
-        }
-      }
-    }
-    this.geofencesService.geofences = geofences;
-    this.geofencesService.geofencesTree = await this.objGeofences.createTreeNode();
-  }
-
-  btnSelected: number = 1;
 
   tableView(btn: number): void {
     this.btnSelected = btn;
