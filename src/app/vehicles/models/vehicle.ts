@@ -28,7 +28,7 @@ export class Vehicle {
     public longitud: string,
     public model: string | null,
     public name: string,
-    public nombre_conductor: string | null,
+    public namedriver: string | null,
     public parametros: string,
     public plate_number: string,
     public señal_gps: number,

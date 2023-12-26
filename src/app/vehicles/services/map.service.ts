@@ -111,6 +111,9 @@ export class MapService {
     this.vehicleService.clickTag.subscribe(res=>{
       this.tagClick(res);
     });
+    this.vehicleService.clickDriver.subscribe(res=>{
+      this.tagDriver(res);
+    });
     this.vehicleService.calcTimeStop.subscribe(data=>{
       // console.log("event time stop res = ",data);
 
@@ -184,6 +187,9 @@ export class MapService {
             name: data.name,
             dt_tracker: data.dt_tracker,
             nameconvoy: data.nameconvoy,
+            namegrupo: data.namegrupo,
+            nameoperation: data.nameoperation,
+            namedriver: data.namedriver,
             longitud: data.longitud,
             latitud: data.latitud,
             speed:data.speed,
@@ -191,7 +197,7 @@ export class MapService {
             tiempoParada: tiempoParada,
           };
 
-          // console.log('DATA en MAP SERVICE ---------------->',data);
+          // console.log('DATA en MAP SERVICE ---------------->',data,aux);
           this.imeiPopup = data.imei;
           this.time_stop = tiempoParada;
           this.printPopup(aux);
@@ -203,26 +209,54 @@ export class MapService {
 
 
   }
+  setNameGroup(nameOpe:string,nameGru:string,nameCon:string): string{
+    if (nameOpe != 'Unidades Sin Operacion'){
+      if (nameGru != 'Unidades Sin Grupo'){
+        if (nameCon != 'Unidades Sin Convoy'){
+          return 'OPERACION/GRUPO/CONVOY: '+nameOpe+' / '+nameGru+' / '+nameCon;
+        }else{
+          return 'OPERACION/GRUPO:'+nameOpe+' / '+nameGru;
+        }
+      }else{
+        return 'OPERACION: '+nameOpe;
+      }
+    }else{
+      return '';
+      // return 'Vehículo Sin Agrupación';
+    }
+  }
   printPopup(data: any): void{
 
 
-    // console.log("data final",data);
 
     let object = this.markerClusterGroup.getLayers();
     //   let cont = 0;
       for (const key in object) {
-
         if(object[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
-          // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
-
+          const nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+          if (nameGroup){
             this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
             '<aside class="">'+
-            '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+            // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+            '<small>'+nameGroup+'</small><br>'+
+            '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
             '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
             '<small>REFERENCIA: '+data.ref+'</small><br>'+
             '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
             '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
             '</aside>');
+          }else{
+            this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+            '<aside class="">'+
+            '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+            '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+            '<small>REFERENCIA: '+data.ref+'</small><br>'+
+            '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+            '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
+            '</aside>');
+          }
+          // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
+            
         }
 
 
@@ -293,6 +327,22 @@ export class MapService {
   }
 
   tagClick(IMEI: string, comesFromCheckbox?: boolean){
+    let vehicle = undefined;
+    for (const i in this.vehicleService.vehicles){
+      if(this.vehicleService.vehicles[i].IMEI==IMEI){
+        if(comesFromCheckbox != false){
+          this.vehicleService.vehicles[i].tag=!this.vehicleService.vehicles[i].tag;
+        }
+        vehicle = this.vehicleService.vehicles[i];
+      }
+    }
+    if(vehicle!.tag!){
+      this.marker[IMEI].openTooltip();
+    } else {
+      this.marker[IMEI].closeTooltip();
+    }
+  }
+  tagDriver(IMEI: string, comesFromCheckbox?: boolean){
     let vehicle = undefined;
     for (const i in this.vehicleService.vehicles){
       if(this.vehicleService.vehicles[i].IMEI==IMEI){
@@ -404,6 +454,9 @@ export class MapService {
             imei: data.IMEI,
             name: vehicles[index].name,
             nameconvoy: vehicles[index].nameconvoy,
+            namegrupo: vehicles[index].namegrupo,
+            nameoperation: vehicles[index].nameoperation,
+            namedriver: vehicles[index].namedriver,
             longitud: data.Longitud,
             latitud: data.Latitud,
             speed: data.Velocidad,
@@ -524,15 +577,29 @@ export class MapService {
 
               }
               
-              
-              this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
+              const nameGroup = this.setNameGroup(vehicles[index].nameoperation!,vehicles[index].namegrupo!,vehicles[index].nameconvoy!);
+              if (nameGroup){
+                this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
                 '<aside class="">'+
-                  '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
+                  '<small>'+nameGroup+'</small><br>'+
+                  // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
+                  '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
                   '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
                   '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                   '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
                   '<small>TIEMPO DE PARADA: Calculando ...</small>'+
                 '</aside>';
+                
+              }else{
+                this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
+                '<aside class="">'+
+                  '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
+                  '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                  '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                  '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
+                  '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                '</aside>';
+              }
               // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
               this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
 
@@ -1082,38 +1149,7 @@ export class MapService {
     }
     return group;
   }
-
-  // private drawIconUpdate(data : any, map : any){
-  //   let iconUrl = './assets/images/objects/nuevo/'+data.icon;
-  //   // if(data.speed>0){
-  //   //   iconUrl = './assets/images/accbrusca.png';
-  //   // }
-  //   const iconMarker = L.icon({
-  //     iconUrl: iconUrl,
-  //     iconSize: [30, 30],
-  //     iconAnchor: [15, 30],
-  //     popupAnchor:  [-3, -40]
-  //   });
-  //
-  //   const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
-  //     '<aside class="">'+
-  //       '<small>CONVOY: '+data.convoy+'</small><br>'+
-  //       '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-  //       '<small>REFERENCIA: '+'NN'+'</small><br>'+
-  //       '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-  //       '<small>TIEMPO DE PARADA: </small>'+
-  //     '</aside>';
-  //
-  //   // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
-  //   const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
-  //   // tempMarker.bindLabel("My Label");
-  //   // tempMarker.bindTooltip("text here", { permanent: true, offset: [0, 12] });
-  //   // // this
-  //
-  //   this.markerClusterGroup.addLayer(tempMarker);
-  //   // this.markerClusterGroup.addTo(this.map);
-  //   this.marker[data.IMEI]=tempMarker;
-  // }
+ 
   private mensaje(){
     //console.log("mensaje");
   }
@@ -1140,6 +1176,9 @@ export class MapService {
       imei: data.imei,
       name: data.name,
       nameconvoy: data.nameconvoy,
+      namegrupo: data.namegrupo,
+      nameoperation: data.nameoperation,
+      namedriver: data.namedriver,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,
@@ -1181,6 +1220,9 @@ export class MapService {
       imei: this.imei,
       name: this.name,
       nameconvoy: this.nameconvoy,
+      namegrupo: this.namegrupo,
+      nameoperation: this.nameoperation,
+      namedriver: this.namedriver,
       longitud: this.longitud,
       latitud: this.latitud,
       speed: this.speed,
@@ -1198,44 +1240,61 @@ export class MapService {
   private drawIcon(data:any, map: any): void{
     // assets/images/objects/nuevo/{{ rowData['icon']
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
-    //ESTO NO SE HACE AL INICIO PORQUE LA DATA ES PASADA...
-    // if(data.parametrosGet['di4']==1 || data.parametrosGet['Custom_ign']==1 ){
-    //   if(data.speed>0){
-    //   iconUrl = './assets/images/objects/nuevo/state_moved/movimiento_'+data.icon;
-    //   // iconUrl = './assets/images/accbrusca.png';
-    //   }else{
-    //   iconUrl = './assets/images/objects/nuevo/state_relenti/relenti_'+data.icon;
-    //   }
-    // }
+    
     const iconMarker = L.icon({
       iconUrl: iconUrl,
       iconSize: [40, 40],
       iconAnchor: [25, 40],
       popupAnchor:  [-3, -40]
     });
-
-    //console.log('data.name',data.name);
-    const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+    
+    let nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+    if (nameGroup){
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div>'+
+      '<div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
-        '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+        '<small>'+nameGroup+'</small><br>'+
+        // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
         '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
       '</aside>';
+    }else{
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div>'+
+      '<div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      '<aside #popupText class="">'+
+        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small>REFERENCIA: '+'NN'+'</small><br>'+
+        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+        '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
+      '</aside>';
+    }
+    
 
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
+    
     tempMarker.bindTooltip(`<span>${data.name}</span>`, {
       permanent: true,
       offset: [0, 12],
       className: 'vehicle-tooltip', });
+    // tempMarker.bindTooltip(`<span>${data.name}</span><br><span>${data.namedriver}</span>`, {
+    //   permanent: true,
+    //   offset: [0, 0],
+    //   className: 'vehicle-tooltip', });
+   
     let options = {
       imei: data.IMEI,
       name: data.name,
       nameconvoy: data.nameconvoy,
+      namegrupo: data.namegrupo,
+      nameoperation: data.nameoperation,
+      namedriver: data.namedriver,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,

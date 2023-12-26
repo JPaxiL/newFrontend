@@ -173,6 +173,9 @@ export class VehicleService {
           imei: data.imei,
           name: data.name,
           nameconvoy: data.nameconvoy,
+          namegrupo: data.namegrupo,
+          nameoperation: data.nameoperation,
+          namedriver: data.namedriver,
           longitud: data.longitud,
           latitud: data.latitud,
           speed: data.speed,
@@ -226,7 +229,7 @@ export class VehicleService {
       console.log('Encontratdo vehicle ....',vehicles[index]);
 
       vehicles[index].id_conductor  = data.id;
-      vehicles[index].nombre_conductor  = data.nombre_conductor;
+      vehicles[index].namedriver  = data.namedriver;
 
       this.vehicles = vehicles;
       console.log('actualizando el anterior....',vehicles[index]);

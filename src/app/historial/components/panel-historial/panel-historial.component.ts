@@ -3230,7 +3230,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       const componentRef: ComponentRef<any> = this.container.createComponent(factory);
       const params:any = {
         'event': event, 
-        'driver': this.VehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'driver': this.VehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.namedriver??'',
         'showMultimediaFirst': true,
         'hasMultimedia':true,
         'showTitle':false
