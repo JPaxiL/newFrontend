@@ -115,6 +115,8 @@ export class EventSocketService extends Socket {
           if (this.AlertService.alertsForEventSocket.length > 0) {
             //console.log(this.AlertService.alertsForEventSocket);
             let alert_data = this.AlertService.alertsForEventSocket.find(alert => alert.evento_id == even.evento_id);
+            console.log("ALERTA CORRESPONDIENTE::::", alert_data);
+            
             if (typeof alert_data != 'undefined') {
               even['sonido_sistema_bol'] = alert_data.sonido_sistema_bol;
               even['ruta_sonido'] = alert_data.ruta_sonido;
