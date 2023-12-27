@@ -55,6 +55,7 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
 
   public async loadData(){
     this.spinner.show('loadingAccesoriesAlertsSpinner');
+    console.log("TYPE222:::",this.type);
     this.alerts = await this.AlertService.getAlertsByType(this.type);
     this.isRowDataEmpty = this.alerts.length == 0;
     this.spinner.hide('loadingAccesoriesAlertsSpinner');
