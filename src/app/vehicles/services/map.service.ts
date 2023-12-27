@@ -545,438 +545,213 @@ export class MapService {
               // //console.log('coord',coord);
               // //console.log('aux = ', aux['_latlng']);
               //_popup
-              // vehicles[index].limit_speed = 100; //COMENTAR SOLO PARA PRUEBAS
-              let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
-              if (this.userDataService.changeItemIcon == 'vehicles' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
-                //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
-                // Si la cadena contiene |di4=1| o custom_ign=1
-                if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
-                  iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_def;
-                }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed!){
-                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_def;
-                }else{
-                  iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_def;
+              // vehicles[index].limit_speed = 10; //COMENTAR SOLO PARA PRUEBAS
+              // console.log('INFO VEHICLE--> ,',vehicles[index]);
+              if (vehicles[index].parametros!.includes('di4=') || vehicles[index].parametros!.includes('Custom_ign=')){
+                let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
+                // console.log('ENTRO VEHICLE A EVALUAR ESTADO ->',vehicles[index].name,vehicles[index].parametros,vehicles[index].speed);
+                if (this.userDataService.changeItemIcon == 'vehicles' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
+                  //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  // console.log('CHANGE STATE VEHICLE ->>');
+                  if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_def;
+                    // console.log('PINTADO MOVED',vehicles[index].name);
+                  }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed!){
+                    iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_def;
+                    // console.log('PINTADO EXCESS',vehicles[index].name);
+                  }else{
+                    iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_def;
+                    // console.log('PINTADO RELENTI',vehicles[index].name,iconUrl);
+                  }
+                  // this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
+                  //FALTA AGREGAR LAS DIRECCIONES AQUI UNA FUNCION
+                }else if (this.userDataService.changeItemIcon == 'ondas' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
+                  //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  //ONDAS
+                  if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  }else{
+                    iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  }
+  
                 }
-
                 this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
-
-                //FALTA AGREGAR LAS DIRECCIONES AQUI UNA FUNCION
+                // CREA EL MARKERCLUSTER
+                const nameGroup = this.setNameGroup(vehicles[index].nameoperation!,vehicles[index].namegrupo!,vehicles[index].nameconvoy!);
+                if (nameGroup){
+                  this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
+                  '<aside class="">'+
+                    '<small>'+nameGroup+'</small><br>'+
+                    // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
+                    '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
+                    '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                    '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
+                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                  '</aside>';
                   
-              }else if (this.userDataService.changeItemIcon == 'ondas' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
-                //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
-                // Si la cadena contiene |di4=1| o custom_ign=1
-                //ONDAS
-                if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
-                  iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
-                }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed! ){
-                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
                 }else{
-                  iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
+                  '<aside class="">'+
+                    '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
+                    '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                    '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
+                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                  '</aside>';
                 }
-                this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
+                // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
+                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
+                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
+                // AÑADE LA FLECHA DE DIRECCION
+                // if(vehicles[index].speed != 0){
+                if((vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) && vehicles[index].speed != 0){ //ESTA EN MOVIMIENTO 
 
-              }
-              
-              const nameGroup = this.setNameGroup(vehicles[index].nameoperation!,vehicles[index].namegrupo!,vehicles[index].nameconvoy!);
-              if (nameGroup){
-                this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
-                '<aside class="">'+
-                  '<small>'+nameGroup+'</small><br>'+
-                  // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
-                  '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
-                  '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                  '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                  '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
-                  '<small>TIEMPO DE PARADA: Calculando ...</small>'+
-                '</aside>';
-                
-              }else{
-                this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
-                '<aside class="">'+
-                  '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
-                  '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                  '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                  '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
-                  '<small>TIEMPO DE PARADA: Calculando ...</small>'+
-                '</aside>';
-              }
-              // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
-              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
+                  this.dif_mayor = 0.00;
+                  this.dif_divide = 0.00;
+                  this.dif_X = 0.00;
+                  this.dif_Y = 0.00;
+                  this.direction = '';
+                  this.final_direction = '';
+                  this.direction_X = '';
+                  this.direction_Y = '';
 
-              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
+                  if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
+                  {
+                    if(coord.lat! > oldCoords.lat){
+                      //arriba
+                      this.direction_Y = 'up';
+                      this.dif_Y = parseFloat(coord.lat!)-oldCoords.lat;
+                      if(this.dif_Y >= this.dif_mayor){
+                        this.dif_mayor = this.dif_Y;
+                        this.direction = 'up';
+                        this.dif_divide = this.dif_Y/2;
+                      }
+                    }else{
+                      //abajo
+                      this.direction_Y = 'down';
+                      this.dif_Y = oldCoords.lat-parseFloat(coord.lat!);
+                      if(this.dif_Y >= this.dif_mayor){
+                        this.dif_mayor = this.dif_Y;
+                        this.direction = 'down';
+                        this.dif_divide = this.dif_Y/2;
 
-              // if(vehicles[index].speed != 0){
-
-              //   let prueba = this.coords_vehicle.find(term => term.name == vehicles[index].name);
-
-              //   let prueba2 = {...prueba};
-
-              //   if(prueba){
-
-              //     prueba.moreOldCoords = {...prueba.oldCoord};
-              //     prueba.oldCoord = {...prueba.coords};
-              //     prueba.coords = {
-              //       lat : vehicles[index].latitud,
-              //       lng : vehicles[index].longitud
-              //     };
-
-              //   }else{
-
-              //     this.coords_vehicle.push({
-              //       name: vehicles[index].name,
-              //       coords: {
-              //         lat : vehicles[index].latitud,
-              //         lng : vehicles[index].longitud
-              //       },
-              //       oldCoord: this.markerClusterGroup.getLayers()[key].getLatLng(),
-              //       moreOldCoords: this.markerClusterGroup.getLayers()[key].getLatLng(),
-              //     })
-              //   }
-
-
-
-              //   this.dif_mayor = 0.00;
-              //   this.dif_divide = 0.00;
-              //   this.dif_X = 0.00;
-              //   this.dif_Y = 0.00;
-              //   this.direction = '';
-              //   this.final_direction = '';
-              //   this.direction_X = '';
-              //   this.direction_Y = '';
-
-              //   if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
-              //   {
-              //     if(coord.lat > oldCoords.lat){
-              //       //arriba
-              //       this.direction_Y = 'up';
-              //       this.dif_Y = coord.lat-oldCoords.lat;
-              //       if(this.dif_Y >= this.dif_mayor){
-              //         this.dif_mayor = this.dif_Y;
-              //         this.direction = 'up';
-              //         this.dif_divide = this.dif_Y/2;
-              //       }
-              //     }else{
-              //       //abajo
-              //       this.direction_Y = 'down';
-              //       this.dif_Y = oldCoords.lat-coord.lat;
-              //       if(this.dif_Y >= this.dif_mayor){
-              //         this.dif_mayor = this.dif_Y;
-              //         this.direction = 'down';
-              //         this.dif_divide = this.dif_Y/2;
-
-              //       }
-              //     }
-
-              //     if(coord.lng > oldCoords.lng){
-              //       //derecha
-              //       this.direction_X = 'right';
-              //       this.dif_X = coord.lng-oldCoords.lng;
-              //       if(this.dif_X >= this.dif_mayor){
-              //         this.dif_mayor = this.dif_X;
-              //         this.direction = 'right';
-              //         this.dif_divide = this.dif_X/2;
-              //       }
-              //     }else{
-              //       //izquierda
-              //       this.direction_X = 'left';
-              //       this.dif_X = oldCoords.lng-coord.lng;
-              //       if(this.dif_X >= this.dif_mayor){
-              //         this.dif_mayor = this.dif_X;
-              //         this.direction = 'left';
-              //         this.dif_divide = this.dif_X/2;
-              //       }
-              //     }
-
-              //     if(this.direction == 'up' || this.direction == 'down'){
-
-              //       if(this.dif_X >= this.dif_divide){
-
-              //         this.final_direction = `${this.direction}-${this.direction_X}`;
-
-              //       }else{
-
-              //         this.final_direction = `${this.direction}`;
-
-              //       }
-
-              //     }else{
-
-              //       if(this.dif_Y >= this.dif_divide){
-
-              //         this.final_direction = `${this.direction_Y}-${this.direction}`;
-              //       }else{
-
-              //         this.final_direction = `${this.direction}`;
-
-              //       }
-              //     }
-
-              //     this.changePositionArrow(this.final_direction,key);
-
-              //     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-
-              //   }
-              //   else{
-
-              //     if(prueba2.moreOldCoords){
-
-              //       if(coord.lat != prueba2.moreOldCoords.lat && coord.lng != prueba2.moreOldCoords.lng)
-              //       {
-              //         if(coord.lat > prueba2.moreOldCoords.lat){
-              //           //arriba
-              //           this.direction_Y = 'up';
-              //           this.dif_Y = coord.lat-prueba2.moreOldCoords.lat;
-              //           if(this.dif_Y >= this.dif_mayor){
-              //             this.dif_mayor = this.dif_Y;
-              //             this.direction = 'up';
-              //             this.dif_divide = this.dif_Y/2;
-              //           }
-              //         }else{
-              //           //abajo
-              //           this.direction_Y = 'down';
-              //           this.dif_Y = prueba2.moreOldCoords.lat-coord.lat;
-              //           if(this.dif_Y >= this.dif_mayor){
-              //             this.dif_mayor = this.dif_Y;
-              //             this.direction = 'down';
-              //             this.dif_divide = this.dif_Y/2;
-
-              //           }
-              //         }
-
-              //         if(coord.lng > prueba2.moreOldCoords.lng){
-              //           //derecha
-              //           this.direction_X = 'right';
-              //           this.dif_X = coord.lng-prueba2.moreOldCoords.lng;
-              //           if(this.dif_X >= this.dif_mayor){
-              //             this.dif_mayor = this.dif_X;
-              //             this.direction = 'right';
-              //             this.dif_divide = this.dif_X/2;
-              //           }
-              //         }else{
-              //           //izquierda
-              //           this.direction_X = 'left';
-              //           this.dif_X = prueba2.moreOldCoords.lng-coord.lng;
-              //           if(this.dif_X >= this.dif_mayor){
-              //             this.dif_mayor = this.dif_X;
-              //             this.direction = 'left';
-              //             this.dif_divide = this.dif_X/2;
-              //           }
-              //         }
-
-              //         if(this.direction == 'up' || this.direction == 'down'){
-
-              //           if(this.dif_X >= this.dif_divide){
-
-              //             this.final_direction = `${this.direction}-${this.direction_X}`;
-
-              //           }else{
-
-              //             this.final_direction = `${this.direction}`;
-
-              //           }
-
-              //         }else{
-
-              //           if(this.dif_Y >= this.dif_divide){
-
-              //             this.final_direction = `${this.direction_Y}-${this.direction}`;
-              //           }else{
-
-              //             this.final_direction = `${this.direction}`;
-
-              //           }
-              //         }
-
-              //         this.changePositionArrow(this.final_direction,key);
-
-              //         this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-
-              //       }
-              //       else{
-              //         if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-
-              //           let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-
-              //           this.changePositionArrow(old_direction[1],key);
-
-              //           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
-
-              //         }
-              //         else{
-
-              //           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-              //           console.log('sin flecha',vehicles[index].name,prueba2);
-              //           //console.log(vehicles[index].name);
-
-              //         }
-
-              //       }
-              //     }else{
-              //       console.log('no tiene modeCoordsData', vehicles[index].name,prueba2)
-              //     }
-
-
-              //   }
-
-              // }else{
-              //   this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-              //   console.log('sin velocidad', vehicles[index].name);
-
-              // }
-
-              // if(vehicles[index].speed != 0){
-              if((vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) && vehicles[index].speed != 0){ //ESTA EN MOVIMIENTO 
-
-                this.dif_mayor = 0.00;
-                this.dif_divide = 0.00;
-                this.dif_X = 0.00;
-                this.dif_Y = 0.00;
-                this.direction = '';
-                this.final_direction = '';
-                this.direction_X = '';
-                this.direction_Y = '';
-
-                if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
-                {
-                  if(coord.lat! > oldCoords.lat){
-                    //arriba
-                    this.direction_Y = 'up';
-                    this.dif_Y = parseFloat(coord.lat!)-oldCoords.lat;
-                    if(this.dif_Y >= this.dif_mayor){
-                      this.dif_mayor = this.dif_Y;
-                      this.direction = 'up';
-                      this.dif_divide = this.dif_Y/2;
+                      }
                     }
-                  }else{
-                    //abajo
-                    this.direction_Y = 'down';
-                    this.dif_Y = oldCoords.lat-parseFloat(coord.lat!);
-                    if(this.dif_Y >= this.dif_mayor){
-                      this.dif_mayor = this.dif_Y;
-                      this.direction = 'down';
-                      this.dif_divide = this.dif_Y/2;
 
+                    if(coord.lng! > oldCoords.lng){
+                      //derecha
+                      this.direction_X = 'right';
+                      this.dif_X = parseFloat(coord.lng!)-oldCoords.lng;
+                      if(this.dif_X >= this.dif_mayor){
+                        this.dif_mayor = this.dif_X;
+                        this.direction = 'right';
+                        this.dif_divide = this.dif_X/2;
+                      }
+                    }else{
+                      //izquierda
+                      this.direction_X = 'left';
+                      this.dif_X = oldCoords.lng-parseFloat(coord.lng!);
+                      if(this.dif_X >= this.dif_mayor){
+                        this.dif_mayor = this.dif_X;
+                        this.direction = 'left';
+                        this.dif_divide = this.dif_X/2;
+                      }
                     }
-                  }
 
-                  if(coord.lng! > oldCoords.lng){
-                    //derecha
-                    this.direction_X = 'right';
-                    this.dif_X = parseFloat(coord.lng!)-oldCoords.lng;
-                    if(this.dif_X >= this.dif_mayor){
-                      this.dif_mayor = this.dif_X;
-                      this.direction = 'right';
-                      this.dif_divide = this.dif_X/2;
-                    }
-                  }else{
-                    //izquierda
-                    this.direction_X = 'left';
-                    this.dif_X = oldCoords.lng-parseFloat(coord.lng!);
-                    if(this.dif_X >= this.dif_mayor){
-                      this.dif_mayor = this.dif_X;
-                      this.direction = 'left';
-                      this.dif_divide = this.dif_X/2;
-                    }
-                  }
+                    if(this.direction == 'up' || this.direction == 'down'){
 
-                  if(this.direction == 'up' || this.direction == 'down'){
+                      if(this.dif_X >= this.dif_divide){
 
-                    if(this.dif_X >= this.dif_divide){
+                        this.final_direction = `${this.direction}-${this.direction_X}`;
 
-                      this.final_direction = `${this.direction}-${this.direction_X}`;
+                      }else{
+
+                        this.final_direction = `${this.direction}`;
+
+                      }
 
                     }else{
 
-                      this.final_direction = `${this.direction}`;
+                      if(this.dif_Y >= this.dif_divide){
 
+                        this.final_direction = `${this.direction_Y}-${this.direction}`;
+                      }else{
+
+                        this.final_direction = `${this.direction}`;
+
+                      }
                     }
 
-                  }else{
-
-                    if(this.dif_Y >= this.dif_divide){
-
-                      this.final_direction = `${this.direction_Y}-${this.direction}`;
-                    }else{
-
-                      this.final_direction = `${this.direction}`;
-
-                    }
-                  }
-
-                  //this.changePositionArrow(this.final_direction,key);
-                  if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                  }else{
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                  }
-                }else{
-                  if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-
-                    let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-                    //this.changePositionArrow(old_direction[1],key);
+                    //this.changePositionArrow(this.final_direction,key);
                     if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${old_direction[1]}`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                     }else{
-                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
                       this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                     }
                   }else{
+                    if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
 
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                    //console.log('se borra la flecha', vehicles[index].name);
-                    //console.log(vehicles[index].name);
+                      let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                      //this.changePositionArrow(old_direction[1],key);
+                      if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${old_direction[1]}`;
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                      }else{
+                        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
+                        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                      }
+                    }else{
+
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                      //console.log('se borra la flecha', vehicles[index].name);
+                      //console.log(vehicles[index].name);
+
+                    }
 
                   }
 
-                }
+                }else if (this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed == 0 && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
 
-              }else if (this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed == 0 && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
-
-                if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-                  let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_${old_direction[1]}`;
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+                    let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_${old_direction[1]}`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }else{
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_down-left.svg`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }
+                  
                 }else{
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_down-left.svg`;
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
                 }
-                
+                this.markerClusterGroup.getLayers()[key].setLatLng(coord);
+                let aux = this.markerClusterGroup.getLayers()[key];
+                // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+                //follow true
+                this.dataFitBounds = [];
+                for (const i in vehicles){
+                  if(vehicles[i].follow){
+                    const aux2: [string, string] = [vehicles[i].latitud!, vehicles[i].longitud!];
+                    this.dataFitBounds.push(aux2);
+                  }
+                }
+                if(this.dataFitBounds.length>0){
+                  map.fitBounds(this.dataFitBounds);
+                }
               }else{
-                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-              }
-
-              this.markerClusterGroup.getLayers()[key].setLatLng(coord);
-              let aux = this.markerClusterGroup.getLayers()[key];
-              // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
-              //follow true
-              this.dataFitBounds = [];
-              for (const i in vehicles){
-
-                if(vehicles[i].follow){
-                  const aux2: [string, string] = [vehicles[i].latitud!, vehicles[i].longitud!];
-                  this.dataFitBounds.push(aux2);
-                }
-              }
-
-              if(this.dataFitBounds.length>0){
-                map.fitBounds(this.dataFitBounds);
+                // console.log('TRAMA IGNORADA NO CAMBIA ESTADO VEHICULO ----->');
               }
             }
           }
-          //console.log('se econtraron '+cont+' resultados');
-          // //console.log('aux = ', aux.getLatLng());
-
-          // iconUrl = './assets/images/accbrusca.png';
-
-          // //console.log('markerClusterGroup',this.markerClusterGroup);
         }
-
       } //end if index vehicle
-
-
     }
   }
 
@@ -1027,7 +802,6 @@ export class MapService {
   // }
 
   onDrawIcon(map: any): void{
-    //console.log("onDrawIcon");
     this.map = map;
     let group : any[]= [];
     const e = this.vehicleService.vehicles;
@@ -1071,32 +845,30 @@ export class MapService {
     this.markerClusterGroup.on('clusterclick',function(a : any){
       //console.log('click cluster...........');
       var coords = a.layer.getLatLng();
-                      //console.log(a.layer.getAllChildMarkers());
-                      var lista = '<table class="infovehiculos"><tbody>';
-                      var array = a.layer.getAllChildMarkers();
-                      //console.log('array'+array);
-                      for (const i in array) {
-                        var aaa = array[i]['_tooltip']['_content'];
-                        //console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
-                        var vehicleData = e.find((vehicle:UserTracker) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
-                        var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color!]: 'transm-color-not-defined'
-                        lista = lista + '<tr><td><div class="dot-vehicle ' + transmissionColorClass + '"></div></td><td>' + aaa + '</td></tr>';
-                      }
-                      // for (var i=0; i<array.length; i++){
-                      //     var aaa = array[i].label._content.split(' <');
-                      //     // //console.log(aaa[0]);
-                      //     var bbb = array[i].label._content.split('color:');
-                      //     var ccc = bbb[1].split(';');
-                      //     //console.log(aaa[0]+" - color css : "+ccc[0]);
-                      //     lista = lista + '<tr style="margin:10px;"><td><div style="border-radius: 50%; width: 10px; height: 10px; background-color:' + ccc[0] + ';"></div></td><td style="font-size: 14px;">' + aaa[0] + '</td></tr>';
-                      // }
-
-                      lista = lista + '</tbody></table>';
-
-                      var popupMarker = L.popup({maxHeight: 400, closeButton: false, closeOnClick: true, autoClose: true, className: 'popupList'})
-                          .setLatLng([coords.lat, coords.lng])
-                          .setContent(lista)
-                          .openOn(map);
+      //console.log(a.layer.getAllChildMarkers());
+      var lista = '<table class="infovehiculos"><tbody>';
+      var array = a.layer.getAllChildMarkers();
+      //console.log('array'+array);
+      for (const i in array) {
+        var aaa = array[i]['_tooltip']['_content'];
+        //console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+        var vehicleData = e.find((vehicle:UserTracker) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+        var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color!]: 'transm-color-not-defined'
+        lista = lista + '<tr><td><div class="dot-vehicle ' + transmissionColorClass + '"></div></td><td>' + aaa + '</td></tr>';
+      }
+      // for (var i=0; i<array.length; i++){
+      //     var aaa = array[i].label._content.split(' <');
+      //     // //console.log(aaa[0]);
+      //     var bbb = array[i].label._content.split('color:');
+      //     var ccc = bbb[1].split(';');
+      //     //console.log(aaa[0]+" - color css : "+ccc[0]);
+      //     lista = lista + '<tr style="margin:10px;"><td><div style="border-radius: 50%; width: 10px; height: 10px; background-color:' + ccc[0] + ';"></div></td><td style="font-size: 14px;">' + aaa[0] + '</td></tr>';
+      // }
+      lista = lista + '</tbody></table>';
+      var popupMarker = L.popup({maxHeight: 400, closeButton: false, closeOnClick: true, autoClose: true, className: 'popupList'})
+        .setLatLng([coords.lat, coords.lng])
+        .setContent(lista)
+        .openOn(map);
     });
   }
   // private
@@ -1381,3 +1153,222 @@ export class MapService {
   }
 
 }
+//OLD CONFIGURATION
+ // if(vehicles[index].speed != 0){
+
+              //   let prueba = this.coords_vehicle.find(term => term.name == vehicles[index].name);
+
+              //   let prueba2 = {...prueba};
+
+              //   if(prueba){
+
+              //     prueba.moreOldCoords = {...prueba.oldCoord};
+              //     prueba.oldCoord = {...prueba.coords};
+              //     prueba.coords = {
+              //       lat : vehicles[index].latitud,
+              //       lng : vehicles[index].longitud
+              //     };
+
+              //   }else{
+
+              //     this.coords_vehicle.push({
+              //       name: vehicles[index].name,
+              //       coords: {
+              //         lat : vehicles[index].latitud,
+              //         lng : vehicles[index].longitud
+              //       },
+              //       oldCoord: this.markerClusterGroup.getLayers()[key].getLatLng(),
+              //       moreOldCoords: this.markerClusterGroup.getLayers()[key].getLatLng(),
+              //     })
+              //   }
+
+
+
+              //   this.dif_mayor = 0.00;
+              //   this.dif_divide = 0.00;
+              //   this.dif_X = 0.00;
+              //   this.dif_Y = 0.00;
+              //   this.direction = '';
+              //   this.final_direction = '';
+              //   this.direction_X = '';
+              //   this.direction_Y = '';
+
+              //   if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
+              //   {
+              //     if(coord.lat > oldCoords.lat){
+              //       //arriba
+              //       this.direction_Y = 'up';
+              //       this.dif_Y = coord.lat-oldCoords.lat;
+              //       if(this.dif_Y >= this.dif_mayor){
+              //         this.dif_mayor = this.dif_Y;
+              //         this.direction = 'up';
+              //         this.dif_divide = this.dif_Y/2;
+              //       }
+              //     }else{
+              //       //abajo
+              //       this.direction_Y = 'down';
+              //       this.dif_Y = oldCoords.lat-coord.lat;
+              //       if(this.dif_Y >= this.dif_mayor){
+              //         this.dif_mayor = this.dif_Y;
+              //         this.direction = 'down';
+              //         this.dif_divide = this.dif_Y/2;
+
+              //       }
+              //     }
+
+              //     if(coord.lng > oldCoords.lng){
+              //       //derecha
+              //       this.direction_X = 'right';
+              //       this.dif_X = coord.lng-oldCoords.lng;
+              //       if(this.dif_X >= this.dif_mayor){
+              //         this.dif_mayor = this.dif_X;
+              //         this.direction = 'right';
+              //         this.dif_divide = this.dif_X/2;
+              //       }
+              //     }else{
+              //       //izquierda
+              //       this.direction_X = 'left';
+              //       this.dif_X = oldCoords.lng-coord.lng;
+              //       if(this.dif_X >= this.dif_mayor){
+              //         this.dif_mayor = this.dif_X;
+              //         this.direction = 'left';
+              //         this.dif_divide = this.dif_X/2;
+              //       }
+              //     }
+
+              //     if(this.direction == 'up' || this.direction == 'down'){
+
+              //       if(this.dif_X >= this.dif_divide){
+
+              //         this.final_direction = `${this.direction}-${this.direction_X}`;
+
+              //       }else{
+
+              //         this.final_direction = `${this.direction}`;
+
+              //       }
+
+              //     }else{
+
+              //       if(this.dif_Y >= this.dif_divide){
+
+              //         this.final_direction = `${this.direction_Y}-${this.direction}`;
+              //       }else{
+
+              //         this.final_direction = `${this.direction}`;
+
+              //       }
+              //     }
+
+              //     this.changePositionArrow(this.final_direction,key);
+
+              //     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
+
+              //   }
+              //   else{
+
+              //     if(prueba2.moreOldCoords){
+
+              //       if(coord.lat != prueba2.moreOldCoords.lat && coord.lng != prueba2.moreOldCoords.lng)
+              //       {
+              //         if(coord.lat > prueba2.moreOldCoords.lat){
+              //           //arriba
+              //           this.direction_Y = 'up';
+              //           this.dif_Y = coord.lat-prueba2.moreOldCoords.lat;
+              //           if(this.dif_Y >= this.dif_mayor){
+              //             this.dif_mayor = this.dif_Y;
+              //             this.direction = 'up';
+              //             this.dif_divide = this.dif_Y/2;
+              //           }
+              //         }else{
+              //           //abajo
+              //           this.direction_Y = 'down';
+              //           this.dif_Y = prueba2.moreOldCoords.lat-coord.lat;
+              //           if(this.dif_Y >= this.dif_mayor){
+              //             this.dif_mayor = this.dif_Y;
+              //             this.direction = 'down';
+              //             this.dif_divide = this.dif_Y/2;
+
+              //           }
+              //         }
+
+              //         if(coord.lng > prueba2.moreOldCoords.lng){
+              //           //derecha
+              //           this.direction_X = 'right';
+              //           this.dif_X = coord.lng-prueba2.moreOldCoords.lng;
+              //           if(this.dif_X >= this.dif_mayor){
+              //             this.dif_mayor = this.dif_X;
+              //             this.direction = 'right';
+              //             this.dif_divide = this.dif_X/2;
+              //           }
+              //         }else{
+              //           //izquierda
+              //           this.direction_X = 'left';
+              //           this.dif_X = prueba2.moreOldCoords.lng-coord.lng;
+              //           if(this.dif_X >= this.dif_mayor){
+              //             this.dif_mayor = this.dif_X;
+              //             this.direction = 'left';
+              //             this.dif_divide = this.dif_X/2;
+              //           }
+              //         }
+
+              //         if(this.direction == 'up' || this.direction == 'down'){
+
+              //           if(this.dif_X >= this.dif_divide){
+
+              //             this.final_direction = `${this.direction}-${this.direction_X}`;
+
+              //           }else{
+
+              //             this.final_direction = `${this.direction}`;
+
+              //           }
+
+              //         }else{
+
+              //           if(this.dif_Y >= this.dif_divide){
+
+              //             this.final_direction = `${this.direction_Y}-${this.direction}`;
+              //           }else{
+
+              //             this.final_direction = `${this.direction}`;
+
+              //           }
+              //         }
+
+              //         this.changePositionArrow(this.final_direction,key);
+
+              //         this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
+
+              //       }
+              //       else{
+              //         if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+
+              //           let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+
+              //           this.changePositionArrow(old_direction[1],key);
+
+              //           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
+
+              //         }
+              //         else{
+
+              //           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+              //           console.log('sin flecha',vehicles[index].name,prueba2);
+              //           //console.log(vehicles[index].name);
+
+              //         }
+
+              //       }
+              //     }else{
+              //       console.log('no tiene modeCoordsData', vehicles[index].name,prueba2)
+              //     }
+
+
+              //   }
+
+              // }else{
+              //   this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+              //   console.log('sin velocidad', vehicles[index].name);
+
+              // }
