@@ -238,11 +238,17 @@ export class UserConfigComponent implements OnInit {
           }
         );
       },
-    }).then((data) => {
+    }).then(async (data) => {
       // console.log('testing respuesta...',data);
       this.loading=false;
       this.userDataService.getUserData();
-      this.vehicleService.initialize();
+
+      this.userDataService.userDataCompleted.subscribe(async (completed: boolean) => {
+        if (completed) {
+          this.vehicleService.initialize();
+          console.log('INICIADO VEHICLE LueGO DE GEt USER DATA');
+        }
+      });
     });
   }
 
