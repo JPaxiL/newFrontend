@@ -186,9 +186,9 @@ export class EventService {
         this.getEventName().subscribe(name=>{
           // console.log("consiguiendo los nombres de los eventos",name.data);
           this.events_names = name.data;
-          for (const index in this.events) {
-            this.events[index].nombre=this.loadNameEvent(this.events[index]);
-          }
+          // for (const index in this.events) {
+          //   this.events[index].nombre=this.loadNameEvent(this.events[index]);
+          // }
           console.log("vehicles cargo antes que eventos ...");
           this.getVehiclesPlate();
         });
@@ -291,7 +291,7 @@ export class EventService {
 //     evento: "motor-encendido"
 // evento_id: 19
     event.event_user_id = event.evento_id;
-    event.nombre=this.loadNameEvent(event);
+    //event.nombre=this.loadNameEvent(event);
     event.evaluated = 0;
     if(!this.eventsLoaded || this.enableSocketEvents){
       // console.log("event socket");

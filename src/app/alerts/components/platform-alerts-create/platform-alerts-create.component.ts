@@ -264,6 +264,10 @@ export class PlatformAlertsCreateComponent implements OnInit {
       this.alertForm.value.tiempo_limite_infraccion = 0;
     }
 
+    if(typeof this.alertForm.value.sonido == "undefined"){
+      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
+    }
+
     if (
       typeof this.alertForm.value.velocidad_limite_infraccion == 'undefined'
     ) {
