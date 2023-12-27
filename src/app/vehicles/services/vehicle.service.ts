@@ -353,7 +353,7 @@ export class VehicleService {
     //   console.log('vehicle color init = ',vehicle);
     //   console.log("point_color ",vehicle.point_color);
     // }
-    console.log('INFO VEHICLE->',vehicle);
+    // console.log('INFO VEHICLE->',vehicle);
     if(vehicle.parametrosGet["sat"] == 0 || ( vehicle.v_vel > 3 && vehicle.v_on == 0 ) || (vehicle.v_ac < 5)){
       vehicle.point_color = 60; //ROJO - UNaIDAD CON ERROR DE GPS
     }else if ( vehicle.v_on == 0 ){// DI4 o CUSTOM IGN = 0

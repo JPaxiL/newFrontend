@@ -1015,8 +1015,8 @@ export class MapService {
     
     const iconMarker = L.icon({
       iconUrl: iconUrl,
-      iconSize: [40, 40],
-      iconAnchor: [25, 40],
+      iconSize: [45, 45],
+      iconAnchor: [30, 45],
       popupAnchor:  [-3, -40]
     });
     

@@ -191,6 +191,8 @@ export class UserConfigComponent implements OnInit {
 
   confirm(){
     this.loading=true;
+    var response:any;
+    response = this.onSubmit();
     Swal.fire({
       title: '¿Está seguro?',
       text: 'Se aplicarán los cambios',
@@ -206,8 +208,7 @@ export class UserConfigComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        var response:any;
-        response = await this.onSubmit();
+        
         this.userDataService.updateUserConfig(response).subscribe(
           (response) => {
             // Manejar la respuesta del servidor si es necesario
