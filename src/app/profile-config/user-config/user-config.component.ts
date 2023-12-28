@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-config',
@@ -12,6 +13,8 @@ import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 })
 export class UserConfigComponent implements OnInit {
   
+  private userDataCompletedSubscription: Subscription | undefined;
+
   userForm :any = {};
 
   isUnderConstruction: boolean = true;
@@ -214,22 +217,42 @@ export class UserConfigComponent implements OnInit {
             // Manejar la respuesta del servidor si es necesario
             console.log('Actualización exitosa:', response);  
             if (!response.res){
+              this.loading=false;
               Swal.fire(
                 'Error',
                 response.message,
                 'warning'
               );
             }else if (response.res){
-              Swal.fire(
-                '',
-                'Los datos se guardaron correctamente!!',
-                'success'
-              );
+              // console.log('INICIANDO USER DATA SERVICE PRIMERO');
+              this.userDataService.getUserData();
+              // Desuscribe el observador anterior si existe
+              if (this.userDataCompletedSubscription) {
+                this.userDataCompletedSubscription.unsubscribe();
+              }
+              // Crea una nueva suscripción y guárdala en la variable para poder desuscribirte luego
+              this.userDataCompletedSubscription = this.userDataService.userDataCompleted.subscribe(async (completed: boolean) => {
+                if (completed) {
+                  this.vehicleService.initialize();
+                  this.vehicleService.vehicleCompleted.subscribe(async (vehicleComplete: boolean)=>{
+                    if (vehicleComplete){
+                      this.loading=false;
+                      Swal.fire(
+                        '',
+                        'Los datos se guardaron y actualizaron correctamente!!',
+                        'success'
+                      );
+                    }
+                  })
+                }
+              });
+              
             }
           },
           (error) => {
             // Manejar errores si la actualización falla
             console.error('Error al actualizar:', error);
+            this.loading=false;
             Swal.fire(
               'Error',
               'Ocurrió un error...',
@@ -240,15 +263,6 @@ export class UserConfigComponent implements OnInit {
       },
     }).then(async (data) => {
       // console.log('testing respuesta...',data);
-      this.loading=false;
-      this.userDataService.getUserData();
-
-      this.userDataService.userDataCompleted.subscribe(async (completed: boolean) => {
-        if (completed) {
-          this.vehicleService.initialize();
-          console.log('INICIADO VEHICLE LueGO DE GEt USER DATA');
-        }
-      });
     });
   }
 

@@ -42,6 +42,7 @@ export class VehicleService {
 
   public vehicleLoadingError: boolean = false;
 
+  @Output() vehicleCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() dataTreeCompleted = new EventEmitter<any>();
 
@@ -68,7 +69,7 @@ export class VehicleService {
         cargar data,
         emitir evento de carga a demas componentes
     */
-   console.log('Iniciando vehicleService');
+   console.log('VEHICLE SERVICE LOADING');
     if(this.demo){
       setTimeout(()=>{
         // //console.log("carga de data");
@@ -99,7 +100,7 @@ export class VehicleService {
         this.listOperations = this.generatedListOperations();
         this.dataCompleted.emit(this.vehicles);
         this.dataTreeCompleted.emit(this.vehiclesTree);
-
+        this.vehicleCompleted.emit(true);
         //InputSwitch EyeHeader behavior
         for(let i = 0; i < this.vehicles.length; i++){
           if(this.vehicles[i].eye){
@@ -107,6 +108,7 @@ export class VehicleService {
           }
         }
         this.allEyes.state = this.countOpenEyes > 0;
+        console.log('VEHICLE SERVICE LOADED');
       },
       () => {
         console.log('Error al obtener los vehículos')
@@ -734,7 +736,7 @@ export class VehicleService {
     // map.forEach((node: { data: { id: any; }; }) => {
     //   console.log(node.data.id);
     // });
-    console.log("mapa:",map);
+    // console.log("mapa:",map);
     // console.log("prueba:",prueba);
 
     return map;
