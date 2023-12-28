@@ -12,7 +12,7 @@ export class GeocercaMainComponent implements OnInit {
   //alerts:Alert[] = [];
   options = new Array(
     { id:'LISTAR' ,     name:"Listar"},
-    { id:'ADD GEOPOL' , name:"Agregar"},
+    { id:'ADD GEO' , name:"Agregar"},
     { id:'EDITAR' ,     name:"Editar"},
     { id:'ADD TAG',     name: "addTag"}
   );

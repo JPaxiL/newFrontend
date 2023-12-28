@@ -24,6 +24,7 @@
             placeholder="Seleccione mapa"
             (onChange)="onSelectElement($event)"
             [appendTo]="'body'"
+            [disabled]="play"
         >
         </p-dropdown>
         <div *ngIf="videoReady" class="d-flex justify-content-center gap-4">

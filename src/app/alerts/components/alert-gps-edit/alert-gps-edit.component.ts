@@ -264,6 +264,7 @@ export class AlertGpsEditComponent implements OnInit {
             cancelButtonText: 'Cancelar',
             preConfirm:async () => {
               const res = await this.alertService.edit(this.alertForm.value);
+              this.alertService.getAll();
               this.clickShowPanel('ALERTS-GPS');
             }
         }).then(data => {

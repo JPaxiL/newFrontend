@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-config',
@@ -12,6 +13,8 @@ import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 })
 export class UserConfigComponent implements OnInit {
   
+  private userDataCompletedSubscription: Subscription | undefined;
+  private vehicleCompletedSubscription: Subscription | undefined;
   userForm :any = {};
 
   isUnderConstruction: boolean = true;
@@ -30,15 +33,15 @@ export class UserConfigComponent implements OnInit {
   filteredColorsVehicles: any[] = [];
   colorsVehicles: any[] = [
     { name: 'Por defecto', code: 'c4c2c1',color: '#c4c2c1' }, // Celeste
-    { name: 'Celeste', code: '00FFFF',color: '#00FFFF' }, // Celeste
-    { name: 'Verde', code: '1DA80E',color: '#1DA80E' }, // Verde 
-    { name: 'Azul', code: '45A9FF',color: '#45A9FF' }, // Azul
+    { name: 'Celeste', code: '00ffff',color: '#00FFFF' }, // Celeste
+    { name: 'Verde', code: '1da80e',color: '#1DA80E' }, // Verde 
+    { name: 'Azul', code: '45a9ff',color: '#45A9FF' }, // Azul
     { name: 'Guinda', code: '800000',color: '#800000' }, // Guinda
-    { name: 'Morado', code: '9370DB',color: '#9370DB' }, // Morado
-    { name: 'Rosado', code: 'BA00FF',color: '#BA00FF' }, // Rosado
-    { name: 'Dorado', code: 'F1C700',color: '#F1C700' }, // Dorado
-    { name: 'Naranja', code: 'FFA500',color: '#FFA500' }, // Naranja
-    { name: 'Amarillo', code: 'FFFF00',color: '#FFFF00' }, // Amarillo
+    { name: 'Morado', code: '9370db',color: '#9370DB' }, // Morado
+    { name: 'Rosado', code: 'ba00ff',color: '#BA00FF' }, // Rosado
+    { name: 'Dorado', code: 'f1c700',color: '#F1C700' }, // Dorado
+    { name: 'Naranja', code: 'ffa500',color: '#FFA500' }, // Naranja
+    { name: 'Amarillo', code: 'ffff00',color: '#FFFF00' }, // Amarillo
   ];
   constructor(       
     private userDataService: UserDataService,
@@ -151,8 +154,7 @@ export class UserConfigComponent implements OnInit {
     
     // Iterar sobre la lista de vehículos y agregarlos al array userForm.Vehicle
     this.typeVehiclesList.forEach((item: any) => {
-      const existingIndex = this.userForm.vehicles.findIndex((vehicle: any) => vehicle.id === item.id);
-      
+      const existingIndex = this.userForm.vehicles.findIndex((vehicle: any) => vehicle.id == item.id);
       if (existingIndex !== -1) {
         console.log('NUNCA VA ENCONTRAR');
         this.userForm.vehicles[existingIndex] = {
@@ -162,6 +164,9 @@ export class UserConfigComponent implements OnInit {
           var_galon: item.var_galon
         };
       } else {
+        if(item.var_color == "#c4c2c1"){
+          item.var_color = "c4c2c1";
+        }
         this.userForm.vehicles.push({
           id: item.id,
           var_nombre: item.var_nombre,
@@ -170,25 +175,27 @@ export class UserConfigComponent implements OnInit {
         });
       }
     });
-    console.log(this.userForm); // Información del formulario general
 
 
     // Preparación de la solicitud para enviar datos
     let req = {
       vehicles: this.userForm.vehicles,
-      oldPass: this.userForm.oldPass,
-      newPass: this.userForm.newPass,
-      newCopyPass: this.userForm.newPassRepeat,
+      // oldPass: this.userForm.oldPass,
+      // newPass: this.userForm.newPass,
+      // newCopyPass: this.userForm.newPassRepeat,
       bol_ondas: this.userForm.bol_ondas,
       bol_cursor: this.userForm.bol_cursor,
       bol_vehicle: this.userForm.bol_vehicle,
       itemChanges: this.showChangeItem
     };
+    console.log(req); // Información del formulario general
     return req;
   }
 
   confirm(){
     this.loading=true;
+    var response:any;
+    response = this.onSubmit();
     Swal.fire({
       title: '¿Está seguro?',
       text: 'Se aplicarán los cambios',
@@ -204,29 +211,57 @@ export class UserConfigComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        var response:any;
-        response = await this.onSubmit();
+        
         this.userDataService.updateUserConfig(response).subscribe(
           (response) => {
             // Manejar la respuesta del servidor si es necesario
             console.log('Actualización exitosa:', response);  
             if (!response.res){
+              this.loading=false;
               Swal.fire(
                 'Error',
                 response.message,
                 'warning'
               );
             }else if (response.res){
-              Swal.fire(
-                '',
-                'Los datos se guardaron correctamente!!',
-                'success'
-              );
+              // console.log('INICIANDO USER DATA SERVICE PRIMERO');
+              // Desuscribe el observador anterior si existe
+              if (this.userDataCompletedSubscription) {
+                console.log('DESUSCRIPCION USERDATA ...');
+                this.userDataCompletedSubscription.unsubscribe();
+              }
+              // Llamas a getUserData y esperas a que se complete
+              this.userDataService.getUserData();
+              // Crea una nueva suscripción y guárdala en la variable para poder desuscribirte luego
+              this.userDataCompletedSubscription = this.userDataService.userDataCompleted.subscribe(async (completed: boolean) => {
+                if (completed) {
+                  // Desuscribe el observador anterior si existe
+                  if (this.vehicleCompletedSubscription) {
+                    console.log('DESUSCRIPCION VEHICLE...');
+                    this.vehicleCompletedSubscription.unsubscribe();
+                  }
+                  // Inicializa vehicleService después de que userDataService esté completo
+                  this.vehicleService.initialize();
+                  // Suscripción a vehicleCompleted para mostrar el mensaje una vez que vehicleService se inicializa
+                  this.vehicleCompletedSubscription = this.vehicleService.vehicleCompleted.subscribe(async (vehicleComplete: boolean) => {
+                    if (vehicleComplete) {
+                      this.loading = false;
+                      Swal.fire(
+                        '',
+                        'Los datos se guardaron y actualizaron correctamente!!',
+                        'success'
+                      );
+                    }
+                  });
+                }
+              });
+              
             }
           },
           (error) => {
             // Manejar errores si la actualización falla
             console.error('Error al actualizar:', error);
+            this.loading=false;
             Swal.fire(
               'Error',
               'Ocurrió un error...',
@@ -235,11 +270,8 @@ export class UserConfigComponent implements OnInit {
           }
         );
       },
-    }).then((data) => {
+    }).then(async (data) => {
       // console.log('testing respuesta...',data);
-      this.loading=false;
-      this.userDataService.getUserData();
-      this.vehicleService.initialize();
     });
   }
 

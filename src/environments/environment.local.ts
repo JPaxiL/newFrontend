@@ -11,7 +11,7 @@ export const environment = {
   socketUrl: 'https://escucha.glmonitoreo.com/',
   // socketUrl: 'http://localhost:3030',
   socketEvent: 'https://eventos.glmonitoreo.com/'
-  // socketEvent: 'http://localhost:5000'
+  //socketEvent: 'http://localhost:5000'
 };
 
 /*

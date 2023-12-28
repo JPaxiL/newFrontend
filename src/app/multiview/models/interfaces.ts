@@ -84,7 +84,7 @@ export interface UserTracker {
     int_correctivo_h?: number,
     int_preventivo_h?: number,
     model?: string | null,
-    nombre_conductor?: string | null,
+    namedriver?: string | null,
     plate_number?: string,
     sim_number?: string,
     tipo?: string,

@@ -62,10 +62,15 @@ export class EventListComponent implements OnInit {
   ];
 
   operators = [
-    {label: 'HANCCO DIAZ, Gary Maurizio', value: 'HANCCO DIAZ, Gary Maurizio'},
-    {label: 'HUACHO OCHOA, Gonzalo Joe', value: 'HUACHO OCHOA, Gonzalo Joe'},
-    {label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel'},
-    {label: 'ROJAS RONDON, Carla Alejandra', value: 'ROJAS RONDON, Carla Alejandra'}
+    {
+       label: 'Operadores',
+        items: [
+            {label: 'HANCCO DIAZ, Gary Maurizio', value: 'HANCCO DIAZ, Gary Maurizio'},
+            {label: 'HUACHO OCHOA, Gonzalo Joe', value: 'HUACHO OCHOA, Gonzalo Joe'},
+            {label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel'},
+            {label: 'ROJAS RONDON, Carla Alejandra', value: 'ROJAS RONDON, Carla Alejandra'}
+        ]
+    }
   ]
 
   loading_evaluation = false;
@@ -242,7 +247,7 @@ export class EventListComponent implements OnInit {
       const componentRef: ComponentRef<any> = this.container.createComponent(factory);
       const params:any = {
         'event': event,
-        'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.namedriver??'',
         'showMultimediaFirst': true,
         'hasMultimedia':true,
         'showTitle':false
@@ -283,7 +288,7 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement){
-  //console.log("click event....",event);
+  console.log("click event....",event);
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if(false){
@@ -389,7 +394,7 @@ export class EventListComponent implements OnInit {
     }
     this.submitting = true;
     this.eventService.saveEvaluations(evaluation).then(response => {
-      //console.log("response after saveEvaluations", response);
+      console.log("response after saveEvaluations", response);
       let realEvent = this.eventService.eventsFiltered.find(event => event.uuid_event == evaluation.uuid_event);
       realEvent.evaluations = response as Evaluation[];
       realEvent.evaluated += 1;

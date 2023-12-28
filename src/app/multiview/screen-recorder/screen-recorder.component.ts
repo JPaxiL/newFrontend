@@ -88,6 +88,7 @@ export class ScreenRecorderComponent implements OnInit, AfterViewInit, AfterCont
         this.showReplaceDialog = true;
         return;
       }
+      this.videoBlobUrl = "";
       if(this.type == "general"){
         await this.multimediaService.startRecordingWindow();
       }else{

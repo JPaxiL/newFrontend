@@ -111,6 +111,9 @@ export class MapService {
     this.vehicleService.clickTag.subscribe(res=>{
       this.tagClick(res);
     });
+    this.vehicleService.clickDriver.subscribe(res=>{
+      this.tagDriver(res);
+    });
     this.vehicleService.calcTimeStop.subscribe(data=>{
       // console.log("event time stop res = ",data);
 
@@ -184,6 +187,9 @@ export class MapService {
             name: data.name,
             dt_tracker: data.dt_tracker,
             nameconvoy: data.nameconvoy,
+            namegrupo: data.namegrupo,
+            nameoperation: data.nameoperation,
+            namedriver: data.namedriver,
             longitud: data.longitud,
             latitud: data.latitud,
             speed:data.speed,
@@ -191,7 +197,7 @@ export class MapService {
             tiempoParada: tiempoParada,
           };
 
-          // console.log('DATA en MAP SERVICE ---------------->',data);
+          // console.log('DATA en MAP SERVICE ---------------->',data,aux);
           this.imeiPopup = data.imei;
           this.time_stop = tiempoParada;
           this.printPopup(aux);
@@ -203,26 +209,54 @@ export class MapService {
 
 
   }
+  setNameGroup(nameOpe:string,nameGru:string,nameCon:string): string{
+    if (nameOpe != 'Unidades Sin Operacion'){
+      if (nameGru != 'Unidades Sin Grupo'){
+        if (nameCon != 'Unidades Sin Convoy'){
+          return 'OPERACION/GRUPO/CONVOY: '+nameOpe+' / '+nameGru+' / '+nameCon;
+        }else{
+          return 'OPERACION/GRUPO:'+nameOpe+' / '+nameGru;
+        }
+      }else{
+        return 'OPERACION: '+nameOpe;
+      }
+    }else{
+      return '';
+      // return 'Vehículo Sin Agrupación';
+    }
+  }
   printPopup(data: any): void{
 
 
-    // console.log("data final",data);
 
     let object = this.markerClusterGroup.getLayers();
     //   let cont = 0;
       for (const key in object) {
-
         if(object[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
-          // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
-
+          const nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+          if (nameGroup){
             this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
             '<aside class="">'+
-            '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+            // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+            '<small>'+nameGroup+'</small><br>'+
+            '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
             '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
             '<small>REFERENCIA: '+data.ref+'</small><br>'+
             '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
             '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
             '</aside>');
+          }else{
+            this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+            '<aside class="">'+
+            '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+            '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+            '<small>REFERENCIA: '+data.ref+'</small><br>'+
+            '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+            '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
+            '</aside>');
+          }
+          // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
+            
         }
 
 
@@ -293,6 +327,22 @@ export class MapService {
   }
 
   tagClick(IMEI: string, comesFromCheckbox?: boolean){
+    let vehicle = undefined;
+    for (const i in this.vehicleService.vehicles){
+      if(this.vehicleService.vehicles[i].IMEI==IMEI){
+        if(comesFromCheckbox != false){
+          this.vehicleService.vehicles[i].tag=!this.vehicleService.vehicles[i].tag;
+        }
+        vehicle = this.vehicleService.vehicles[i];
+      }
+    }
+    if(vehicle!.tag!){
+      this.marker[IMEI].openTooltip();
+    } else {
+      this.marker[IMEI].closeTooltip();
+    }
+  }
+  tagDriver(IMEI: string, comesFromCheckbox?: boolean){
     let vehicle = undefined;
     for (const i in this.vehicleService.vehicles){
       if(this.vehicleService.vehicles[i].IMEI==IMEI){
@@ -404,6 +454,9 @@ export class MapService {
             imei: data.IMEI,
             name: vehicles[index].name,
             nameconvoy: vehicles[index].nameconvoy,
+            namegrupo: vehicles[index].namegrupo,
+            nameoperation: vehicles[index].nameoperation,
+            namedriver: vehicles[index].namedriver,
             longitud: data.Longitud,
             latitud: data.Latitud,
             speed: data.Velocidad,
@@ -492,53 +545,616 @@ export class MapService {
               // //console.log('coord',coord);
               // //console.log('aux = ', aux['_latlng']);
               //_popup
-              // vehicles[index].limit_speed = 100; //COMENTAR SOLO PARA PRUEBAS
-              let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
-              if (this.userDataService.changeItemIcon == 'vehicles' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
-                //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
-                // Si la cadena contiene |di4=1| o custom_ign=1
-                if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
-                  iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_def;
-                }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed!){
-                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_def;
-                }else{
-                  iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_def;
+              // vehicles[index].limit_speed = 10; //COMENTAR SOLO PARA PRUEBAS
+              // console.log('INFO VEHICLE--> ,',vehicles[index]);
+              if (vehicles[index].parametros!.includes('di4=') || vehicles[index].parametros!.includes('Custom_ign=')){
+                let iconUrl = './assets/images/objects/nuevo/'+vehicles[index].icon;
+                // console.log('ENTRO VEHICLE A EVALUAR ESTADO ->',vehicles[index].name,vehicles[index].parametros,vehicles[index].speed);
+                if (this.userDataService.changeItemIcon == 'vehicles' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
+                  //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  // console.log('CHANGE STATE VEHICLE ->>');
+                  if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_def;
+                    // console.log('PINTADO MOVED',vehicles[index].name);
+                  }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed!){
+                    iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_def;
+                    // console.log('PINTADO EXCESS',vehicles[index].name);
+                  }else{
+                    iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_def;
+                    // console.log('PINTADO RELENTI',vehicles[index].name,iconUrl);
+                  }
+                  // this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
+                  //FALTA AGREGAR LAS DIRECCIONES AQUI UNA FUNCION
+                }else if (this.userDataService.changeItemIcon == 'ondas' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
+                  //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  //ONDAS
+                  if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  }else{
+                    iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  }
+  
                 }
-
                 this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
-
-                //FALTA AGREGAR LAS DIRECCIONES AQUI UNA FUNCION
+                // CREA EL MARKERCLUSTER
+                const nameGroup = this.setNameGroup(vehicles[index].nameoperation!,vehicles[index].namegrupo!,vehicles[index].nameconvoy!);
+                if (nameGroup){
+                  this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
+                  '<aside class="">'+
+                    '<small>'+nameGroup+'</small><br>'+
+                    // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
+                    '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
+                    '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                    '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
+                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                  '</aside>';
                   
-              }else if (this.userDataService.changeItemIcon == 'ondas' && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
-                //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
-                // Si la cadena contiene |di4=1| o custom_ign=1
-                //ONDAS
-                if(vehicles[index].speed != 0 && vehicles[index].speed! < vehicles[index].limit_speed! ){
-                  iconUrl = './assets/images/objects/nuevo/state_moved/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
-                }else if(vehicles[index].speed != 0 && vehicles[index].speed! > vehicles[index].limit_speed! ){
-                  iconUrl = './assets/images/objects/nuevo/state_excess/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
                 }else{
-                  iconUrl = './assets/images/objects/nuevo/state_relenti/'+vehicles[index].icon_color+'/'+vehicles[index].icon_name+'.webp';
+                  this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
+                  '<aside class="">'+
+                    '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
+                    '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                    '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
+                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                  '</aside>';
                 }
-                this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
+                // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
+                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
+                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
+                // AÑADE LA FLECHA DE DIRECCION
+                // if(vehicles[index].speed != 0){
+                if((vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) && vehicles[index].speed != 0){ //ESTA EN MOVIMIENTO 
 
+                  this.dif_mayor = 0.00;
+                  this.dif_divide = 0.00;
+                  this.dif_X = 0.00;
+                  this.dif_Y = 0.00;
+                  this.direction = '';
+                  this.final_direction = '';
+                  this.direction_X = '';
+                  this.direction_Y = '';
+
+                  if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
+                  {
+                    if(coord.lat! > oldCoords.lat){
+                      //arriba
+                      this.direction_Y = 'up';
+                      this.dif_Y = parseFloat(coord.lat!)-oldCoords.lat;
+                      if(this.dif_Y >= this.dif_mayor){
+                        this.dif_mayor = this.dif_Y;
+                        this.direction = 'up';
+                        this.dif_divide = this.dif_Y/2;
+                      }
+                    }else{
+                      //abajo
+                      this.direction_Y = 'down';
+                      this.dif_Y = oldCoords.lat-parseFloat(coord.lat!);
+                      if(this.dif_Y >= this.dif_mayor){
+                        this.dif_mayor = this.dif_Y;
+                        this.direction = 'down';
+                        this.dif_divide = this.dif_Y/2;
+
+                      }
+                    }
+
+                    if(coord.lng! > oldCoords.lng){
+                      //derecha
+                      this.direction_X = 'right';
+                      this.dif_X = parseFloat(coord.lng!)-oldCoords.lng;
+                      if(this.dif_X >= this.dif_mayor){
+                        this.dif_mayor = this.dif_X;
+                        this.direction = 'right';
+                        this.dif_divide = this.dif_X/2;
+                      }
+                    }else{
+                      //izquierda
+                      this.direction_X = 'left';
+                      this.dif_X = oldCoords.lng-parseFloat(coord.lng!);
+                      if(this.dif_X >= this.dif_mayor){
+                        this.dif_mayor = this.dif_X;
+                        this.direction = 'left';
+                        this.dif_divide = this.dif_X/2;
+                      }
+                    }
+
+                    if(this.direction == 'up' || this.direction == 'down'){
+
+                      if(this.dif_X >= this.dif_divide){
+
+                        this.final_direction = `${this.direction}-${this.direction_X}`;
+
+                      }else{
+
+                        this.final_direction = `${this.direction}`;
+
+                      }
+
+                    }else{
+
+                      if(this.dif_Y >= this.dif_divide){
+
+                        this.final_direction = `${this.direction_Y}-${this.direction}`;
+                      }else{
+
+                        this.final_direction = `${this.direction}`;
+
+                      }
+                    }
+
+                    //this.changePositionArrow(this.final_direction,key);
+                    if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                    }else{
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                    }
+                  }else{
+                    if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+
+                      let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                      //this.changePositionArrow(old_direction[1],key);
+                      if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${old_direction[1]}`;
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                      }else{
+                        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
+                        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                      }
+                    }else{
+
+                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                      //console.log('se borra la flecha', vehicles[index].name);
+                      //console.log(vehicles[index].name);
+
+                    }
+
+                  }
+
+                }else if (this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed == 0 && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
+
+                  if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+                    let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_${old_direction[1]}`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }else{
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_down-left.svg`;
+                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }
+                  
+                }else{
+                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                }
+                this.markerClusterGroup.getLayers()[key].setLatLng(coord);
+                let aux = this.markerClusterGroup.getLayers()[key];
+                // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+                //follow true
+                this.dataFitBounds = [];
+                for (const i in vehicles){
+                  if(vehicles[i].follow){
+                    const aux2: [string, string] = [vehicles[i].latitud!, vehicles[i].longitud!];
+                    this.dataFitBounds.push(aux2);
+                  }
+                }
+                if(this.dataFitBounds.length>0){
+                  map.fitBounds(this.dataFitBounds);
+                }
+              }else{
+                // console.log('TRAMA IGNORADA NO CAMBIA ESTADO VEHICULO ----->');
               }
-              
-              
-              this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
-                '<aside class="">'+
-                  '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
-                  '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                  '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                  '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
-                  '<small>TIEMPO DE PARADA: Calculando ...</small>'+
-                '</aside>';
-              // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
-              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
+            }
+          }
+        }
+      } //end if index vehicle
+    }
+  }
 
-              this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
+  changeStatusEye(id: number): void {
+    this.changeEye.emit(id);
+  }
 
-              // if(vehicles[index].speed != 0){
+  sendDataMap(data: Vehicle[]): void{
+    this.sendData.emit(data);
+  }
+
+  loadMap(map: any): void{
+    // //console.log("loadMap");
+    this.map = map;
+  }
+
+  changePositionArrow(direction: string, key: any){
+    switch(direction){
+      case 'up':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+        break;
+      case 'up-left':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,60];
+        break;
+      case 'up-right':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,60];
+        break;
+      case 'down':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,0];
+        break;
+      case 'down-left':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,30];
+        break;
+      case 'down-right':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,30];
+        break;
+      case 'left':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,30];
+        break;
+      case 'right':
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,30];
+        break;
+    }
+  }
+
+  // deleteMarker(IMEI: string):void{
+  //   this.map.removeLayer(this.marker[IMEI]);
+  // }
+
+  onDrawIcon(map: any): void{
+    this.map = map;
+    let group : any[]= [];
+    const e = this.vehicleService.vehicles;
+    let aux_cont = 0;
+
+    const transmissionStatusColor: any = {
+      10:"green",
+      20:"blue",
+      30:"purple",
+      40:"black",
+      50:"orange",
+      60:"red",
+      100:"transm-color-not-defined"
+    }
+
+    this.markerClusterGroup.clearLayers();
+
+    for (const property in e){
+        //console.log("e----- ", property);
+        //console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
+        //console.log("e[property].eye", e[property].eye);
+        if (e.hasOwnProperty(property)&&e[property].eye == true) {
+          if(this.statusMap==false){
+            const aux2: [string, string] = [e[property].latitud!, e[property].longitud!];
+            this.dataFitBounds.push(aux2);
+          }
+          // this.map.removeLayer(this.demo);
+          // this.drawIcon(e[property], map, Number(e[property].latitud), Number(e[property].longitud));
+          this.drawIcon(e[property], map);
+        }
+    }
+
+
+    if(this.dataFitBounds.length>0){
+      // //console.log("dataFitBounds map",this.dataFitBounds);
+      map.fitBounds(this.dataFitBounds);
+    }
+    this.statusMap=true;
+    this.dataFitBounds = [];
+    //EVENTO cluster lista
+    this.markerClusterGroup.on('clusterclick',function(a : any){
+      //console.log('click cluster...........');
+      var coords = a.layer.getLatLng();
+      //console.log(a.layer.getAllChildMarkers());
+      var lista = '<table class="infovehiculos"><tbody>';
+      var array = a.layer.getAllChildMarkers();
+      //console.log('array'+array);
+      for (const i in array) {
+        var aaa = array[i]['_tooltip']['_content'];
+        //console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+        var vehicleData = e.find((vehicle:UserTracker) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
+        var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color!]: 'transm-color-not-defined'
+        lista = lista + '<tr><td><div class="dot-vehicle ' + transmissionColorClass + '"></div></td><td>' + aaa + '</td></tr>';
+      }
+      // for (var i=0; i<array.length; i++){
+      //     var aaa = array[i].label._content.split(' <');
+      //     // //console.log(aaa[0]);
+      //     var bbb = array[i].label._content.split('color:');
+      //     var ccc = bbb[1].split(';');
+      //     //console.log(aaa[0]+" - color css : "+ccc[0]);
+      //     lista = lista + '<tr style="margin:10px;"><td><div style="border-radius: 50%; width: 10px; height: 10px; background-color:' + ccc[0] + ';"></div></td><td style="font-size: 14px;">' + aaa[0] + '</td></tr>';
+      // }
+      lista = lista + '</tbody></table>';
+      var popupMarker = L.popup({maxHeight: 400, closeButton: false, closeOnClick: true, autoClose: true, className: 'popupList'})
+        .setLatLng([coords.lat, coords.lng])
+        .setContent(lista)
+        .openOn(map);
+    });
+  }
+  // private
+  private groupAllv2(distance : number): any{
+    const e = this.vehicleService.vehicles;
+    let group: any[] = [];
+    let d = distance*(-1);
+
+    let i_group = 0;
+    for (const index in e){
+      let i = parseInt(index);
+      // group[i]={
+      //   name:e[i].name,
+      //   distance:0,
+      //   data:[]
+      // };
+      // get x , y
+      let x = Math.trunc(parseInt(e[i].longitud!)/d) * d + d;
+      // //console.log('longitud vehicle ',e[i].longitud);
+      // //console.log('longitud x', x);
+      let y = Math.trunc(parseInt(e[i].latitud!)/d) * d + d;
+      // //console.log('latitud vehicle ',e[i].latitud);
+      // //console.log('latitud y', y);
+
+      let status = true;
+      for (const index2 in group) {
+        let j = parseInt(index2);
+
+        if(group[j]['long']==x&&group[j]['lat']){
+          group[j]['data'].push(e[i]);
+          status=false;
+        }
+      }
+
+      if(status){
+        //crate new group
+        group[i_group]={
+          name:i_group+1,
+          long : x,
+          lat : y,
+          longitud : x + (d/2*-1),
+          latitud : y + (d/2*-1),
+          data:[]
+        };
+        group[i_group].data.push(e[i]);
+        //console.log('create new group',i_group);
+        i_group++;
+      }
+
+    }
+    return group;
+  }
+ 
+  private mensaje(){
+    //console.log("mensaje");
+  }
+  public timeStopAux(data: any): void{
+
+    // console.log("calculando time stop aux ...");
+
+    let ar_vel = data.speed;
+    if (data.speed > 3) {
+        ar_vel = data.speed;
+        data.paradaDesde = false;
+    } else {
+        if (data.paradaDesde == false) {
+            ar_vel = data.speed;
+        } else {
+            ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
+        }
+    }
+
+        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+    let params = {
+      imei: data.imei,
+      name: data.name,
+      nameconvoy: data.nameconvoy,
+      namegrupo: data.namegrupo,
+      nameoperation: data.nameoperation,
+      namedriver: data.namedriver,
+      longitud: data.longitud,
+      latitud: data.latitud,
+      speed: data.speed,
+      dt_tracker: data.dt_tracker,
+      paradaDesde: data.paradaDesde,
+      fecha_i: f_ini,
+      fecha_f: f_fin,
+      vel: ar_vel
+    };
+
+    this.vehicleService.postTimeStop(params);
+  }
+  public timeStop(this: any): void{
+    //console.log("this",this);
+    // consultar data actual
+    let vehicle = this.vehicleService.getVehicle(this.imei);
+
+    this.speed = vehicle.speed;
+    this.dt_tracker = vehicle.dt_tracker;
+
+    // console.log("calculando time stop ...");
+
+    let ar_vel = this.speed;
+    if (this.speed > 3) {
+        ar_vel = this.speed;
+        this.paradaDesde = false;
+    } else {
+        if (this.paradaDesde == false) {
+            ar_vel = this.speed;
+        } else {
+            ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
+        }
+    }
+
+        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+    let params = {
+      imei: this.imei,
+      name: this.name,
+      nameconvoy: this.nameconvoy,
+      namegrupo: this.namegrupo,
+      nameoperation: this.nameoperation,
+      namedriver: this.namedriver,
+      longitud: this.longitud,
+      latitud: this.latitud,
+      speed: this.speed,
+      dt_tracker: this.dt_tracker,
+      paradaDesde: this.paradaDesde,
+      fecha_i: f_ini,
+      fecha_f: f_fin,
+      vel: ar_vel
+    };
+
+    this.vehicleService.postTimeStop(params);
+  }
+
+
+  private drawIcon(data:any, map: any): void{
+    // assets/images/objects/nuevo/{{ rowData['icon']
+    let iconUrl = './assets/images/objects/nuevo/'+data.icon;
+    
+    const iconMarker = L.icon({
+      iconUrl: iconUrl,
+      iconSize: [45, 45],
+      iconAnchor: [30, 45],
+      popupAnchor:  [-3, -40]
+    });
+    
+    let nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+    if (nameGroup){
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div>'+
+      '<div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      '<aside #popupText class="">'+
+        '<small>'+nameGroup+'</small><br>'+
+        // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small>REFERENCIA: '+'NN'+'</small><br>'+
+        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+        '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
+      '</aside>';
+    }else{
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div>'+
+      '<div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      '<aside #popupText class="">'+
+        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small>REFERENCIA: '+'NN'+'</small><br>'+
+        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+        '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
+      '</aside>';
+    }
+    
+
+    // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
+    const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
+    // tempMarker.imei = data.IMEI;
+    // tempMarker.bindLabel("My Label");
+    
+    tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+      permanent: true,
+      offset: [0, 12],
+      className: 'vehicle-tooltip', });
+    // tempMarker.bindTooltip(`<span>${data.name}</span><br><span>${data.namedriver}</span>`, {
+    //   permanent: true,
+    //   offset: [0, 0],
+    //   className: 'vehicle-tooltip', });
+   
+    let options = {
+      imei: data.IMEI,
+      name: data.name,
+      nameconvoy: data.nameconvoy,
+      namegrupo: data.namegrupo,
+      nameoperation: data.nameoperation,
+      namedriver: data.namedriver,
+      longitud: data.longitud,
+      latitud: data.latitud,
+      speed: data.speed,
+      dt_tracker: data.dt_tracker,
+      paradaDesde: "",
+      vehicleService : this.vehicleService
+    };
+    // //console.log('envia cero data',data.speed);
+    // console.log('envia cero XD',options);
+    tempMarker.on('click',this.timeStop,options);
+    // tempMarker.on('click',this.timeStop,options);
+    // // this
+    this.marker[data.IMEI]=tempMarker;
+
+    this.markerClusterGroup.addLayer(tempMarker);
+    // ////console.log('this.markerClusterGroup',this.markerClusterGroup);
+    let object = this.markerClusterGroup.getLayers();
+    let cont = 0;
+    for (const key in object) {
+      if (object[key]['_tooltip']['_content']==data.name) {
+        //console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+data.name);
+        //console.log('key = ',key);
+        //console.log('content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+        cont++;
+      }
+    }
+    //console.log('registros encontrados ---> '+cont);
+    this.markerClusterGroup.addTo(this.map);
+    //console.log('marker placa '+data.name+' IMEI = ',this.marker[data.IMEI]);
+    // //console.log('length = ',this.markerClusterGroup.getLayers().length-1);
+
+    // //console.log('getlayer '+(this.markerClusterGroup.getLayers().length-1)+' -->',this.markerClusterGroup.getLayers()[this.markerClusterGroup.getLayers().length-1]);//ok
+    // let layer = this.markerClusterGroup.hasLayer(tempMarker);
+    // //console.log('haslayer',layer); true si existe el layer
+    //console.log('this.markerClusterGroup',this.markerClusterGroup);
+    let layers = this.markerClusterGroup.getLayers();
+    //console.log('layers',layers);
+
+
+    // //console.log('maker',this.marker);
+    // var markers = L.markerClusterGroup({
+    // 	iconCreateFunction: function(cluster) {
+    //     return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
+    // 	}
+    // });
+
+    // markers.addLayer(tempMarker);
+    // this.map.addLayer(markers);
+    // this.markerClusterGroup.addLayer(L.marker([lat, lng], {icon: iconMarker}));
+    // map.addLayer(this.markerClusterGroup);
+  }
+
+  public changeClusteringVisibility(visibility: boolean){
+
+    this.clustering = visibility;
+  }
+
+  public get getClustering(): boolean{
+
+    return this.clustering;
+  }
+  public timeChangeIconUrl(imei:string,icon:string,key:any){
+    // this.timeWait = 15000; // 150 segundos en milisegundos
+
+    if (this.timeNow[imei]) {
+      clearTimeout(this.timeNow[imei]); // Limpia el temporizador existente si hay uno para este índice
+      // console.log('SE LIMPIO EL TEMPORIZADOR del -->',imei);
+    }
+    const tiempoUltimaActualizacion = Date.now(); // Actualiza el tiempo de la última actualización para este índice
+    // console.log('CREANDO TEMPORIZADOR NUEVO -->',imei);
+    this.timeNow[imei] = setTimeout(() => {
+      // Verifica si ha pasado el tiempo especificado desde la última actualización
+      const tiempoActual = Date.now();
+      const tiempoTranscurrido = tiempoActual - tiempoUltimaActualizacion;
+      if (tiempoTranscurrido >= this.timeWait) {
+        // Realiza la acción si ha pasado el tiempo especificado sin actualización
+        console.log('*************** PASO 2 Horas Cambiando color a default ---->', imei);
+        const iconUrl = './assets/images/objects/nuevo/' + icon;
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl'] = iconUrl;
+        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+
+      }
+    }, this.timeWait);
+  }
+
+}
+//OLD CONFIGURATION
+ // if(vehicles[index].speed != 0){
 
               //   let prueba = this.coords_vehicle.find(term => term.name == vehicles[index].name);
 
@@ -756,569 +1372,3 @@ export class MapService {
               //   console.log('sin velocidad', vehicles[index].name);
 
               // }
-
-              // if(vehicles[index].speed != 0){
-              if((vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1')) && vehicles[index].speed != 0){ //ESTA EN MOVIMIENTO 
-
-                this.dif_mayor = 0.00;
-                this.dif_divide = 0.00;
-                this.dif_X = 0.00;
-                this.dif_Y = 0.00;
-                this.direction = '';
-                this.final_direction = '';
-                this.direction_X = '';
-                this.direction_Y = '';
-
-                if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
-                {
-                  if(coord.lat! > oldCoords.lat){
-                    //arriba
-                    this.direction_Y = 'up';
-                    this.dif_Y = parseFloat(coord.lat!)-oldCoords.lat;
-                    if(this.dif_Y >= this.dif_mayor){
-                      this.dif_mayor = this.dif_Y;
-                      this.direction = 'up';
-                      this.dif_divide = this.dif_Y/2;
-                    }
-                  }else{
-                    //abajo
-                    this.direction_Y = 'down';
-                    this.dif_Y = oldCoords.lat-parseFloat(coord.lat!);
-                    if(this.dif_Y >= this.dif_mayor){
-                      this.dif_mayor = this.dif_Y;
-                      this.direction = 'down';
-                      this.dif_divide = this.dif_Y/2;
-
-                    }
-                  }
-
-                  if(coord.lng! > oldCoords.lng){
-                    //derecha
-                    this.direction_X = 'right';
-                    this.dif_X = parseFloat(coord.lng!)-oldCoords.lng;
-                    if(this.dif_X >= this.dif_mayor){
-                      this.dif_mayor = this.dif_X;
-                      this.direction = 'right';
-                      this.dif_divide = this.dif_X/2;
-                    }
-                  }else{
-                    //izquierda
-                    this.direction_X = 'left';
-                    this.dif_X = oldCoords.lng-parseFloat(coord.lng!);
-                    if(this.dif_X >= this.dif_mayor){
-                      this.dif_mayor = this.dif_X;
-                      this.direction = 'left';
-                      this.dif_divide = this.dif_X/2;
-                    }
-                  }
-
-                  if(this.direction == 'up' || this.direction == 'down'){
-
-                    if(this.dif_X >= this.dif_divide){
-
-                      this.final_direction = `${this.direction}-${this.direction_X}`;
-
-                    }else{
-
-                      this.final_direction = `${this.direction}`;
-
-                    }
-
-                  }else{
-
-                    if(this.dif_Y >= this.dif_divide){
-
-                      this.final_direction = `${this.direction_Y}-${this.direction}`;
-                    }else{
-
-                      this.final_direction = `${this.direction}`;
-
-                    }
-                  }
-
-                  //this.changePositionArrow(this.final_direction,key);
-                  if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                  }else{
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                  }
-                }else{
-                  if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-
-                    let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-                    //this.changePositionArrow(old_direction[1],key);
-                    if(this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed! > vehicles[index].limit_speed!){
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/excessCursor/arrow_${old_direction[1]}`;
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                    }else{
-                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
-                      this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                    }
-                  }else{
-
-                    this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                    //console.log('se borra la flecha', vehicles[index].name);
-                    //console.log(vehicles[index].name);
-
-                  }
-
-                }
-
-              }else if (this.userDataService.changeItemIcon == 'cursor' && vehicles[index].speed == 0 && (vehicles[index].parametros!.includes('|di4=1|') || vehicles[index].parametros!.includes('Custom_ign=1'))){
-
-                if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-                  let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_${old_direction[1]}`;
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                }else{
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/relentiCursor/arrow_down-left.svg`;
-                  this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                }
-                
-              }else{
-                this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-              }
-
-              this.markerClusterGroup.getLayers()[key].setLatLng(coord);
-              let aux = this.markerClusterGroup.getLayers()[key];
-              // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
-              //follow true
-              this.dataFitBounds = [];
-              for (const i in vehicles){
-
-                if(vehicles[i].follow){
-                  const aux2: [string, string] = [vehicles[i].latitud!, vehicles[i].longitud!];
-                  this.dataFitBounds.push(aux2);
-                }
-              }
-
-              if(this.dataFitBounds.length>0){
-                map.fitBounds(this.dataFitBounds);
-              }
-            }
-          }
-          //console.log('se econtraron '+cont+' resultados');
-          // //console.log('aux = ', aux.getLatLng());
-
-          // iconUrl = './assets/images/accbrusca.png';
-
-          // //console.log('markerClusterGroup',this.markerClusterGroup);
-        }
-
-      } //end if index vehicle
-
-
-    }
-  }
-
-  changeStatusEye(id: number): void {
-    this.changeEye.emit(id);
-  }
-
-  sendDataMap(data: Vehicle[]): void{
-    this.sendData.emit(data);
-  }
-
-  loadMap(map: any): void{
-    // //console.log("loadMap");
-    this.map = map;
-  }
-
-  changePositionArrow(direction: string, key: any){
-    switch(direction){
-      case 'up':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-        break;
-      case 'up-left':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,60];
-        break;
-      case 'up-right':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,60];
-        break;
-      case 'down':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,0];
-        break;
-      case 'down-left':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,30];
-        break;
-      case 'down-right':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[13,30];
-        break;
-      case 'left':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[50,30];
-        break;
-      case 'right':
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[-20,30];
-        break;
-    }
-  }
-
-  // deleteMarker(IMEI: string):void{
-  //   this.map.removeLayer(this.marker[IMEI]);
-  // }
-
-  onDrawIcon(map: any): void{
-    //console.log("onDrawIcon");
-    this.map = map;
-    let group : any[]= [];
-    const e = this.vehicleService.vehicles;
-    let aux_cont = 0;
-
-    const transmissionStatusColor: any = {
-      10:"green",
-      20:"blue",
-      30:"purple",
-      40:"black",
-      50:"orange",
-      60:"red",
-      100:"transm-color-not-defined"
-    }
-
-    this.markerClusterGroup.clearLayers();
-
-    for (const property in e){
-        //console.log("e----- ", property);
-        //console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
-        //console.log("e[property].eye", e[property].eye);
-        if (e.hasOwnProperty(property)&&e[property].eye == true) {
-          if(this.statusMap==false){
-            const aux2: [string, string] = [e[property].latitud!, e[property].longitud!];
-            this.dataFitBounds.push(aux2);
-          }
-          // this.map.removeLayer(this.demo);
-          // this.drawIcon(e[property], map, Number(e[property].latitud), Number(e[property].longitud));
-          this.drawIcon(e[property], map);
-        }
-    }
-
-
-    if(this.dataFitBounds.length>0){
-      // //console.log("dataFitBounds map",this.dataFitBounds);
-      map.fitBounds(this.dataFitBounds);
-    }
-    this.statusMap=true;
-    this.dataFitBounds = [];
-    //EVENTO cluster lista
-    this.markerClusterGroup.on('clusterclick',function(a : any){
-      //console.log('click cluster...........');
-      var coords = a.layer.getLatLng();
-                      //console.log(a.layer.getAllChildMarkers());
-                      var lista = '<table class="infovehiculos"><tbody>';
-                      var array = a.layer.getAllChildMarkers();
-                      //console.log('array'+array);
-                      for (const i in array) {
-                        var aaa = array[i]['_tooltip']['_content'];
-                        //console.log(aaa.replace(/<\/?[^>]+(>|$)/g, ""));
-                        var vehicleData = e.find((vehicle:UserTracker) => vehicle.name == aaa.replace(/<\/?[^>]+(>|$)/g, ""));
-                        var transmissionColorClass = typeof vehicleData != 'undefined'? transmissionStatusColor[vehicleData.point_color!]: 'transm-color-not-defined'
-                        lista = lista + '<tr><td><div class="dot-vehicle ' + transmissionColorClass + '"></div></td><td>' + aaa + '</td></tr>';
-                      }
-                      // for (var i=0; i<array.length; i++){
-                      //     var aaa = array[i].label._content.split(' <');
-                      //     // //console.log(aaa[0]);
-                      //     var bbb = array[i].label._content.split('color:');
-                      //     var ccc = bbb[1].split(';');
-                      //     //console.log(aaa[0]+" - color css : "+ccc[0]);
-                      //     lista = lista + '<tr style="margin:10px;"><td><div style="border-radius: 50%; width: 10px; height: 10px; background-color:' + ccc[0] + ';"></div></td><td style="font-size: 14px;">' + aaa[0] + '</td></tr>';
-                      // }
-
-                      lista = lista + '</tbody></table>';
-
-                      var popupMarker = L.popup({maxHeight: 400, closeButton: false, closeOnClick: true, autoClose: true, className: 'popupList'})
-                          .setLatLng([coords.lat, coords.lng])
-                          .setContent(lista)
-                          .openOn(map);
-    });
-  }
-  // private
-  private groupAllv2(distance : number): any{
-    const e = this.vehicleService.vehicles;
-    let group: any[] = [];
-    let d = distance*(-1);
-
-    let i_group = 0;
-    for (const index in e){
-      let i = parseInt(index);
-      // group[i]={
-      //   name:e[i].name,
-      //   distance:0,
-      //   data:[]
-      // };
-      // get x , y
-      let x = Math.trunc(parseInt(e[i].longitud!)/d) * d + d;
-      // //console.log('longitud vehicle ',e[i].longitud);
-      // //console.log('longitud x', x);
-      let y = Math.trunc(parseInt(e[i].latitud!)/d) * d + d;
-      // //console.log('latitud vehicle ',e[i].latitud);
-      // //console.log('latitud y', y);
-
-      let status = true;
-      for (const index2 in group) {
-        let j = parseInt(index2);
-
-        if(group[j]['long']==x&&group[j]['lat']){
-          group[j]['data'].push(e[i]);
-          status=false;
-        }
-      }
-
-      if(status){
-        //crate new group
-        group[i_group]={
-          name:i_group+1,
-          long : x,
-          lat : y,
-          longitud : x + (d/2*-1),
-          latitud : y + (d/2*-1),
-          data:[]
-        };
-        group[i_group].data.push(e[i]);
-        //console.log('create new group',i_group);
-        i_group++;
-      }
-
-    }
-    return group;
-  }
-
-  // private drawIconUpdate(data : any, map : any){
-  //   let iconUrl = './assets/images/objects/nuevo/'+data.icon;
-  //   // if(data.speed>0){
-  //   //   iconUrl = './assets/images/accbrusca.png';
-  //   // }
-  //   const iconMarker = L.icon({
-  //     iconUrl: iconUrl,
-  //     iconSize: [30, 30],
-  //     iconAnchor: [15, 30],
-  //     popupAnchor:  [-3, -40]
-  //   });
-  //
-  //   const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
-  //     '<aside class="">'+
-  //       '<small>CONVOY: '+data.convoy+'</small><br>'+
-  //       '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-  //       '<small>REFERENCIA: '+'NN'+'</small><br>'+
-  //       '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-  //       '<small>TIEMPO DE PARADA: </small>'+
-  //     '</aside>';
-  //
-  //   // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
-  //   const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
-  //   // tempMarker.bindLabel("My Label");
-  //   // tempMarker.bindTooltip("text here", { permanent: true, offset: [0, 12] });
-  //   // // this
-  //
-  //   this.markerClusterGroup.addLayer(tempMarker);
-  //   // this.markerClusterGroup.addTo(this.map);
-  //   this.marker[data.IMEI]=tempMarker;
-  // }
-  private mensaje(){
-    //console.log("mensaje");
-  }
-  public timeStopAux(data: any): void{
-
-    // console.log("calculando time stop aux ...");
-
-    let ar_vel = data.speed;
-    if (data.speed > 3) {
-        ar_vel = data.speed;
-        data.paradaDesde = false;
-    } else {
-        if (data.paradaDesde == false) {
-            ar_vel = data.speed;
-        } else {
-            ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
-        }
-    }
-
-        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
-        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
-
-    let params = {
-      imei: data.imei,
-      name: data.name,
-      nameconvoy: data.nameconvoy,
-      longitud: data.longitud,
-      latitud: data.latitud,
-      speed: data.speed,
-      dt_tracker: data.dt_tracker,
-      paradaDesde: data.paradaDesde,
-      fecha_i: f_ini,
-      fecha_f: f_fin,
-      vel: ar_vel
-    };
-
-    this.vehicleService.postTimeStop(params);
-  }
-  public timeStop(this: any): void{
-    //console.log("this",this);
-    // consultar data actual
-    let vehicle = this.vehicleService.getVehicle(this.imei);
-
-    this.speed = vehicle.speed;
-    this.dt_tracker = vehicle.dt_tracker;
-
-    // console.log("calculando time stop ...");
-
-    let ar_vel = this.speed;
-    if (this.speed > 3) {
-        ar_vel = this.speed;
-        this.paradaDesde = false;
-    } else {
-        if (this.paradaDesde == false) {
-            ar_vel = this.speed;
-        } else {
-            ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
-        }
-    }
-
-        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
-        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
-
-    let params = {
-      imei: this.imei,
-      name: this.name,
-      nameconvoy: this.nameconvoy,
-      longitud: this.longitud,
-      latitud: this.latitud,
-      speed: this.speed,
-      dt_tracker: this.dt_tracker,
-      paradaDesde: this.paradaDesde,
-      fecha_i: f_ini,
-      fecha_f: f_fin,
-      vel: ar_vel
-    };
-
-    this.vehicleService.postTimeStop(params);
-  }
-
-
-  private drawIcon(data:any, map: any): void{
-    // assets/images/objects/nuevo/{{ rowData['icon']
-    let iconUrl = './assets/images/objects/nuevo/'+data.icon;
-    //ESTO NO SE HACE AL INICIO PORQUE LA DATA ES PASADA...
-    // if(data.parametrosGet['di4']==1 || data.parametrosGet['Custom_ign']==1 ){
-    //   if(data.speed>0){
-    //   iconUrl = './assets/images/objects/nuevo/state_moved/movimiento_'+data.icon;
-    //   // iconUrl = './assets/images/accbrusca.png';
-    //   }else{
-    //   iconUrl = './assets/images/objects/nuevo/state_relenti/relenti_'+data.icon;
-    //   }
-    // }
-    const iconMarker = L.icon({
-      iconUrl: iconUrl,
-      iconSize: [40, 40],
-      iconAnchor: [25, 40],
-      popupAnchor:  [-3, -40]
-    });
-
-    //console.log('data.name',data.name);
-    const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
-      '<aside #popupText class="">'+
-        '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small>REFERENCIA: '+'NN'+'</small><br>'+
-        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-        '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
-      '</aside>';
-
-    // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
-    const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
-    // tempMarker.imei = data.IMEI;
-    // tempMarker.bindLabel("My Label");
-    tempMarker.bindTooltip(`<span>${data.name}</span>`, {
-      permanent: true,
-      offset: [0, 12],
-      className: 'vehicle-tooltip', });
-    let options = {
-      imei: data.IMEI,
-      name: data.name,
-      nameconvoy: data.nameconvoy,
-      longitud: data.longitud,
-      latitud: data.latitud,
-      speed: data.speed,
-      dt_tracker: data.dt_tracker,
-      paradaDesde: "",
-      vehicleService : this.vehicleService
-    };
-    // //console.log('envia cero data',data.speed);
-    // console.log('envia cero XD',options);
-    tempMarker.on('click',this.timeStop,options);
-    // tempMarker.on('click',this.timeStop,options);
-    // // this
-    this.marker[data.IMEI]=tempMarker;
-
-    this.markerClusterGroup.addLayer(tempMarker);
-    // ////console.log('this.markerClusterGroup',this.markerClusterGroup);
-    let object = this.markerClusterGroup.getLayers();
-    let cont = 0;
-    for (const key in object) {
-      if (object[key]['_tooltip']['_content']==data.name) {
-        //console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+data.name);
-        //console.log('key = ',key);
-        //console.log('content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
-        cont++;
-      }
-    }
-    //console.log('registros encontrados ---> '+cont);
-    this.markerClusterGroup.addTo(this.map);
-    //console.log('marker placa '+data.name+' IMEI = ',this.marker[data.IMEI]);
-    // //console.log('length = ',this.markerClusterGroup.getLayers().length-1);
-
-    // //console.log('getlayer '+(this.markerClusterGroup.getLayers().length-1)+' -->',this.markerClusterGroup.getLayers()[this.markerClusterGroup.getLayers().length-1]);//ok
-    // let layer = this.markerClusterGroup.hasLayer(tempMarker);
-    // //console.log('haslayer',layer); true si existe el layer
-    //console.log('this.markerClusterGroup',this.markerClusterGroup);
-    let layers = this.markerClusterGroup.getLayers();
-    //console.log('layers',layers);
-
-
-    // //console.log('maker',this.marker);
-    // var markers = L.markerClusterGroup({
-    // 	iconCreateFunction: function(cluster) {
-    //     return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
-    // 	}
-    // });
-
-    // markers.addLayer(tempMarker);
-    // this.map.addLayer(markers);
-    // this.markerClusterGroup.addLayer(L.marker([lat, lng], {icon: iconMarker}));
-    // map.addLayer(this.markerClusterGroup);
-  }
-
-  public changeClusteringVisibility(visibility: boolean){
-
-    this.clustering = visibility;
-  }
-
-  public get getClustering(): boolean{
-
-    return this.clustering;
-  }
-  public timeChangeIconUrl(imei:string,icon:string,key:any){
-    // this.timeWait = 15000; // 150 segundos en milisegundos
-
-    if (this.timeNow[imei]) {
-      clearTimeout(this.timeNow[imei]); // Limpia el temporizador existente si hay uno para este índice
-      // console.log('SE LIMPIO EL TEMPORIZADOR del -->',imei);
-    }
-    const tiempoUltimaActualizacion = Date.now(); // Actualiza el tiempo de la última actualización para este índice
-    // console.log('CREANDO TEMPORIZADOR NUEVO -->',imei);
-    this.timeNow[imei] = setTimeout(() => {
-      // Verifica si ha pasado el tiempo especificado desde la última actualización
-      const tiempoActual = Date.now();
-      const tiempoTranscurrido = tiempoActual - tiempoUltimaActualizacion;
-      if (tiempoTranscurrido >= this.timeWait) {
-        // Realiza la acción si ha pasado el tiempo especificado sin actualización
-        console.log('*************** PASO 2 Horas Cambiando color a default ---->', imei);
-        const iconUrl = './assets/images/objects/nuevo/' + icon;
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl'] = iconUrl;
-        this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-
-      }
-    }, this.timeWait);
-  }
-
-}

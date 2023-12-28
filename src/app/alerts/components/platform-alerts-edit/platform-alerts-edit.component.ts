@@ -349,6 +349,7 @@ export class PlatformAlertsEditComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           await this.AlertService.edit(this.alertForm.value);
+          this.AlertService.getAll();
           this.clickShowPanel('ALERTS-PLATFORMS');
         },
       }).then((data) => {

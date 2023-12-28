@@ -242,6 +242,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           const res = await this.AlertService.create(this.alertForm.value);
+          this.AlertService.getAll();
           this.clickShowPanel();
         },
       }).then((data) => {

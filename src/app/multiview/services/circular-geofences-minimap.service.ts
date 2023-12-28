@@ -185,13 +185,13 @@ export class CircularGeofencesMinimapService {
     }
     this.initializingUserPrivleges = true;
     this.attemptToHideSpinner();
-    console.log('(Circular Geofences Service) Privilegios obtenidos...');
+    // console.log('(Circular Geofences Service) Privilegios obtenidos...');
   }
 
   attemptToHideSpinner(){
-    console.log('Attempt to hide Geofences Spinner: ', { 
-      isTableReady: this.initializingCircularGeofences, 
-      isUserDataReady: this.initializingUserPrivleges } );
+    // console.log('Attempt to hide Geofences Spinner: ', { 
+    //   isTableReady: this.initializingCircularGeofences, 
+    //   isUserDataReady: this.initializingUserPrivleges } );
     if(this.initializingCircularGeofences && this.initializingUserPrivleges){
       this.spinner.hide('loadingCircularGeofencesSpiner');
     }

@@ -264,6 +264,10 @@ export class PlatformAlertsCreateComponent implements OnInit {
       this.alertForm.value.tiempo_limite_infraccion = 0;
     }
 
+    if(typeof this.alertForm.value.sonido == "undefined"){
+      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
+    }
+
     if (
       typeof this.alertForm.value.velocidad_limite_infraccion == 'undefined'
     ) {
@@ -293,6 +297,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           await this.AlertService.create(this.alertForm.value);
+          this.AlertService.getAll();
           this.clickShowPanel('ALERTS-PLATFORMS');
         },
       }).then((data) => {

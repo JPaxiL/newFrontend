@@ -108,7 +108,7 @@ export class PopupService {
 
     const footerDiv = document.createElement('div');
     footerDiv.classList.add('footer-popup-events');
-    let driver = vehicle.nombre_conductor != null ? vehicle.nombre_conductor : 'Sin conductor';
+    let driver = vehicle.namedriver != null ? vehicle.namedriver : 'Sin conductor';
     footerDiv.innerHTML = `<i class="fa fa-user me-2"></i><span>${driver}</span>`;
 
     // Construir la estructura del bloque de popup

@@ -237,7 +237,7 @@ export class EventPopupComponent implements OnInit, AfterViewInit {
       const componentRef: ComponentRef<any> = this.container.createComponent(factory);
       const params:any = {
         'event': event, 
-        'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'driver': this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.namedriver??'',
         'showMultimediaFirst': true,
         'hasMultimedia':true,
         'showTitle':false

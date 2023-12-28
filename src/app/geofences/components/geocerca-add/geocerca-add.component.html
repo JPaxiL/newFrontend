@@ -1,10 +1,9 @@
 <div class="d-flex flex-column" style="height: 100%;">
-  <div *ngIf="geoOptions=='poligon'|| geoOptions=='line'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca' "></div>
-  <div *ngIf="geoOptions=='circ'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.circularGeofencesService.action == 'edit' ? 'Configurar Geocerca Circular' : 'Nueva Geocerca' "></div>
+  <div *ngIf="geoOptions=='poligon'|| geoOptions=='line'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit pol' ? 'Configurar Geocerca Poligonal' : 'Nueva Geocerca' "></div>
+  <div *ngIf="geoOptions=='circ'" class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda" [innerHTML]="this.geofencesService.action == 'edit cir' ? 'Configurar Geocerca Circular' : 'Nueva Geocerca' "></div>
   <div class="modal-body panel-izq-container p-fluid overflow-auto" style="position: relative;">
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="spinnerLoading" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Guardando cambios... </p></ngx-spinner>
     <div class="panel-izq-form">
-      <div class="gl-row-underline">
         <div class="flex container" >
           <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 1" (click)="selectBtn(1)">
             <button type="button" *ngIf="geofencesService.showBtnAdd" (click)="selectBtn(1)" class="pentagon btn">
@@ -135,7 +134,8 @@
             <label>LÍMITE DE VELOCIDAD:</label>
         </div>
         <div class="col-12 d-flex">
-          <p-inputNumber class="flex-grow-1" [(ngModel)]="form.limite_velocidad" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+          <p-inputNumber *ngIf="geoOptions=='poligon' || geoOptions=='line'" class="flex-grow-1" [(ngModel)]="form.limite_velocidad" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+          <p-inputNumber *ngIf="geoOptions=='circ'" class="flex-grow-1" [(ngModel)]="form.limite_velocidad" suffix=" Km/h" [disabled]="!form.checkVelocidad" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           <span class="flex-none center-icon neutral-icon-color">
             <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="right" title="Establece un límite de velocidad estándar para todas las unidades que transiten dentro de la geocerca."></i>
           </span>
@@ -178,7 +178,17 @@
         <div class="col-12">
           <div class="p-field">
             <label class="" id="operation_label">OPERACIONES:</label>
-            <p-dropdown [options]="operations" [(ngModel)]="selectedOperation" [showClear]="true" optionLabel="nameoperation" optionValue="idoperation" (onChange)="onChangeOperation();"  [placeholder]="placeholderOperation"  [disabled]="disabledOperation" [ngModelOptions]="{standalone: true}"></p-dropdown>
+            <p-dropdown 
+              [options]="operations" 
+              [(ngModel)]="selectedOperation" 
+              [showClear]="true" 
+              optionLabel="nameoperation" 
+              optionValue="idoperation" 
+              (onChange)="onChangeOperation();"  
+              [placeholder]="placeholderOperation" 
+              [disabled]="disabledOperation" 
+              [ngModelOptions]="{standalone: true}">
+            </p-dropdown>
           </div>
         </div>
       </div>
@@ -196,7 +206,7 @@
                 [filterValue]="filterTag"
                 (onFilter)="updateFilter($event)"
                 placeholder="Seleccionar etiquetas" 
-                (onChange)="onSelecTags()"
+                (onChange)="onSelecTags();"
                 [ngModelOptions]="{standalone: true}"
                 optionLabel="var_name"
                 [optionValue]="'id'"
@@ -206,7 +216,7 @@
           </div>
           <div class="col-2">
             <div class="d-flex justify-content-center align-items-center">
-              <button (click)="addNewTag()" type="button" class="btn-gl-blue btn-circle" title="Agregar Etiqueta" data-bs-toggle="tooltip" data-bs-placement="auto" onclick="this.blur();">
+              <button (click)="addNewTag()" type="button" class="flex-none center-icon neutral-icon-color btn-circle" title="Agregar Etiqueta" data-bs-toggle="tooltip" data-bs-placement="auto" onclick="this.blur();">
                 <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
               </button>
             </div>
