@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class UserConfigComponent implements OnInit {
   
   private userDataCompletedSubscription: Subscription | undefined;
-
+  private vehicleCompletedSubscription: Subscription | undefined;
   userForm :any = {};
 
   isUnderConstruction: boolean = true;
@@ -225,25 +225,34 @@ export class UserConfigComponent implements OnInit {
               );
             }else if (response.res){
               // console.log('INICIANDO USER DATA SERVICE PRIMERO');
-              this.userDataService.getUserData();
               // Desuscribe el observador anterior si existe
               if (this.userDataCompletedSubscription) {
+                console.log('DESUSCRIPCION USERDATA ...');
                 this.userDataCompletedSubscription.unsubscribe();
               }
+              // Llamas a getUserData y esperas a que se complete
+              this.userDataService.getUserData();
               // Crea una nueva suscripción y guárdala en la variable para poder desuscribirte luego
               this.userDataCompletedSubscription = this.userDataService.userDataCompleted.subscribe(async (completed: boolean) => {
                 if (completed) {
+                  // Desuscribe el observador anterior si existe
+                  if (this.vehicleCompletedSubscription) {
+                    console.log('DESUSCRIPCION VEHICLE...');
+                    this.vehicleCompletedSubscription.unsubscribe();
+                  }
+                  // Inicializa vehicleService después de que userDataService esté completo
                   this.vehicleService.initialize();
-                  this.vehicleService.vehicleCompleted.subscribe(async (vehicleComplete: boolean)=>{
-                    if (vehicleComplete){
-                      this.loading=false;
+                  // Suscripción a vehicleCompleted para mostrar el mensaje una vez que vehicleService se inicializa
+                  this.vehicleCompletedSubscription = this.vehicleService.vehicleCompleted.subscribe(async (vehicleComplete: boolean) => {
+                    if (vehicleComplete) {
+                      this.loading = false;
                       Swal.fire(
                         '',
                         'Los datos se guardaron y actualizaron correctamente!!',
                         'success'
                       );
                     }
-                  })
+                  });
                 }
               });
               

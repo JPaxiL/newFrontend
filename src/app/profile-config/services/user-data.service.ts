@@ -54,12 +54,12 @@ export class UserDataService {
         this.userEmail = data.data.email;
         this.companyName = data.data.company_name;
         this.userDataInitialized = true;
-        this.userDataCompleted.emit(true);
-        this.geofencesPrivileges.emit(true);
-        this.geopointsPrivileges.emit(true);
         this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
         this.changeItemIcon = this.getChangeItemColor();
         console.log('USER DATA SERVICE LOADED')
+        this.userDataCompleted.emit(true);
+        this.geofencesPrivileges.emit(true);
+        this.geopointsPrivileges.emit(true);
       },
       error: (errorMsg) => {
         console.log('No se pudo obtener datos del usuario', errorMsg);
