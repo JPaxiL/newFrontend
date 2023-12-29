@@ -291,9 +291,9 @@ export class GeofencesService {
   }
 
   attemptToHideSpinner(){
-    console.log('Attempt to hide Geofences Spinner: ', {
-      isTableReady: this.initializingGeofences,
-      isUserDataReady: this.initializingUserPrivleges } );
+    // console.log('Attempt to hide Geofences Spinner: ', {
+    //   isTableReady: this.initializingGeofences,
+    //   isUserDataReady: this.initializingUserPrivleges } );
     if(this.initializingGeofences && this.initializingUserPrivleges){
       this.spinner.hide('loadingGeofencesSpinner');
     }
@@ -310,7 +310,7 @@ export class GeofencesService {
     }
     this.initializingUserPrivleges = true;
     this.attemptToHideSpinner();
-    console.log('(Geofences Service) Privilegios obtenidos...');
+    // console.log('(Geofences Service) Privilegios obtenidos...');
   }
 
   getCoordenadas(data:any){

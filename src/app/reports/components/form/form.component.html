@@ -126,6 +126,17 @@
         </div> -->
       </div>
 
+
+      <div class="row" style="padding: 0px 0.3rem">
+        <div class="col-6">
+          <label>
+            <p-checkbox name="groupname" [binary]="true" [(ngModel)]="chkDateHour" (onChange)="onChkDateHourChange(); validateForm();"></p-checkbox>
+            Fecha/Hora</label>
+        </div>
+      </div>
+  
+
+
       <div class="row" style="padding: 0px 0.3rem">
         <ng-container *ngIf="showOdomOpt">
           <div class="col-6">

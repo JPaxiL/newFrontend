@@ -56,12 +56,12 @@ export class TreeTableComponent implements OnInit {
   };
 
   hint: any = {
-    10: 'En movimiento',
-    20: 'Detenido encendido',
-    30: 'Detenido apagado',
-    40: 'Sin transmisión',
-    50: 'Sin cobertura',
-    60: 'GPS sin señal',
+    10: 'Unidad en Movimiento',
+    20: 'Unidad Detenida con Ignición',
+    30: 'Unidad Detenida sin Ignición',
+    40: 'Unidad sin Transmisión',
+    50: 'Unidad sin Cobertura',
+    60: 'Unidad con Error GPS',
     100: 'No definido',
   };
 
