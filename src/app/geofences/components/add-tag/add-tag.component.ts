@@ -1,8 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import Swal from 'sweetalert2';
 import { GeofencesService } from '../../services/geofences.service';
-import { Geofences } from '../../models/geofences';
-import { IGeofence } from '../../models/interfaces';
 import  { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -37,14 +35,11 @@ export class AddTagComponent implements OnInit {
 
   ngOnInit(): void {
     this.getOperations();
-    console.log("hereee", this.geofencesService.listGeofences);
     this.list1 = [];
     this.list2 = [];
     this.tagsForm = this.initForm();
   }
-  ngOnDestroy(){
-
-  }
+  ngOnDestroy(){ }
   initForm(): FormGroup {
     return this.fb.group({
       id:[''],
@@ -82,7 +77,7 @@ export class AddTagComponent implements OnInit {
       }
     }
     this.operations.sort((a: { idoperation: number; }, b: { idoperation: number; }) => a.idoperation - b.idoperation);
-    console.log('GEt Operations in Tags: ',this.operations);
+    console.log('Get Operations in Tags: ',this.operations);
   }
   onName(data: any){
     this.nameTarget = data.target.value;
@@ -95,12 +90,9 @@ export class AddTagComponent implements OnInit {
       aux.push(this.list2[key]);
     }
     // inserto valores nuevos
-    // //console.log('subir a lista 2');
     for (const key in this.selectedList1) {
       // let index = aux.indexOf(this.selectedList1[key]);
-      // //console.log("index====",index);
       aux.push(this.selectedList1[key]);
-      //console.log(this.selectedList1[key]);
     }
     //inserto valores en list2
     this.list2 = aux;
@@ -129,12 +121,8 @@ export class AddTagComponent implements OnInit {
       aux.push(this.list1[key]);
     }
     // inserto valores nuevos
-    // //console.log('subir a lista 2');
     for (const key in this.selectedList2) {
-      // let index = aux.indexOf(this.selectedList2[key]);
-      // //console.log("index====",index);
       aux.push(this.selectedList2[key]);
-      //console.log(this.selectedList2[key]);
     }
     //inserto valores en list1
     this.list1 = aux;
@@ -158,8 +146,8 @@ export class AddTagComponent implements OnInit {
   validateRepeatName (name: string){
     this.isExistTag = false;
     let aux = this.geofencesService.listTag.some((tg:any)=> tg.var_name == name);
-    console.log("se repite el nombre", aux);
-    return false;
+    console.log("Si se repite el nombre", aux);
+    return true;
   }
   validateFormsInputs(){
     const inputElement = this.name.nativeElement;
@@ -181,7 +169,6 @@ export class AddTagComponent implements OnInit {
       const index = geofences.indexOf(this.list2[key])
     }
     this.geofencesService.geofences = geofences;
-    // //console.log('new vehicles',vehicles);
     //this.geofencesService.geofencesTree = this.Geofences.createTreeNode(geofences);
     this.onHideEvent.emit(false);
     this.list2=[];

@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
-import { ITag } from '../models/interfaces';
+import { IGeofence, ITag } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -19,18 +19,23 @@ export class GeofencesService {
   private api_url = environment.apiUrl;
   public geofences:any = [];
   public nameComponentPol:string = "LISTAR";
+  public compTags: string = 'LISTAR';
   public geofencesTree: TreeNode[]=[];
   public treeTableStatus: boolean = false;
   public idGeocercaEdit:number = 0;
+  public idTagEdit:number = 0;
+  public nameTagEdit:string = '';
   public type: string = 'polig'; //[polig, cir, line]
   public action:string = 'add'; //[add,edit,delete]
+  public actionTags: string = '';
 
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
   @Output() displayOn = new EventEmitter<any>();
   @Output() deleted = new EventEmitter();
-   disableBtn: boolean = true;
+  @Output() reloadTableTree = new EventEmitter<any>();
+  disableBtn: boolean = true;
   modalCloseEvent = new EventEmitter();
 
   tblDataGeo: any = [];
@@ -51,7 +56,7 @@ export class GeofencesService {
   defaultTagNameFontSize = 10;
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
-
+  public demo:boolean = false;
   initializingUserPrivleges: boolean = false;
   showBtnAdd = true;
   showBtnEdit = true;
@@ -83,11 +88,9 @@ export class GeofencesService {
       this.geofences = response.data;
       await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
       .then(response => {
-        console.log("ress", response);
         this.listTag = response.data;
-        console.log("lisstagg", this.listTag);
-
-        console.log("Polygonalessss",response.data);
+        console.log("lisTags", this.listTag);
+        console.log("Polygonales", this.geofences);
         this.initializeTable();
         this.drawGeofencesOnMap();
         this.updateGeoCounters();
@@ -117,6 +120,17 @@ export class GeofencesService {
     return this.http.post<any>(`${this.api_url}/api/storeTagAndAssigGeos`, req);
   } 
  
+  updateTagAndAssingGeo(req: any): Observable<any> {
+    console.log('req',req);
+    return this.http.post<any>(`${this.api_url}/api/updateTagAndAssigGeos`, req);
+
+  }
+
+  deleteTagOfGeo(req: any): Observable<any> {
+    console.log('reqDelete',req);
+    return this.http.post<any>(`${this.api_url}/api/deleteTagOfGeos`, req);
+
+  } 
 
   closeModal() {
     // Envía evento al padre para cerrarse
@@ -387,7 +401,7 @@ export class GeofencesService {
               expanded: true,
               children:[
                 {
-                  data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
+                  data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation']},
                   expanded: true,
                   children: [
                     {
@@ -402,7 +416,7 @@ export class GeofencesService {
           console.log('case defoult:0_1');
           const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.listGeofences[index]['idoperation']);
           const newTag = {
-            data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta' },
+            data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation']},
             expanded: true,
             children: [
               {
@@ -445,7 +459,7 @@ export class GeofencesService {
                 expanded: true,
                 children:[
                   {
-                    data:{id:indexTag, name: tagName, col:3, type:'etiqueta' },
+                    data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'] },
                     expanded: true,
                     children: [
                       {
@@ -460,7 +474,7 @@ export class GeofencesService {
             console.log('case:0_1');
             const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.listGeofences[index]['idoperation']);
             const newTag = {
-              data:{id:indexTag, name: tagName, col:3, type:'etiqueta' },
+              data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation']},
               expanded: true,
               children: [
                 {
@@ -489,5 +503,35 @@ export class GeofencesService {
     console.log('arbol de etiquetas',map);
     return Promise.resolve(map);
   }
+  
+  public async updateListGeofences(geofences: any){
+    console.log('geocercas actualizarLista', geofences);
+    for(const geoKey in geofences){
+      //this.listGeofences.filter((geo: { tags: any| string[] }) => geo.tags == );
+      // const filterItem = this.listGeofences.find((item: { id: any; })=>item.id == geo.id);
+      // if(filterItem){
+      //   filterItem.tags=geo.geo_tags;
+      // }
+
+      console.log('geookay', geofences[geoKey].id);
+      const geosOld = this.listGeofences;
+      const resultado = this.listGeofences.filter( (item: any) => item.id == geofences[geoKey].id);
+      const filterItem = geosOld.find((item: { id: any; })=>item.id == geofences[geoKey].id);
+      console.log('resul', resultado, filterItem);
+      if(resultado){
+        const index = this.listGeofences.indexOf(resultado);
+        console.log('Encontratdo vehicle ....',geosOld[index]);
+
+        geosOld[index].tags  = geofences[geoKey].id;
+        this.listGeofences = geosOld;
+        console.log('actualizando el anterior....',geosOld[index]);
+        //reload talbe
+      }
+    }
+    console.log('retornarList', this.listGeofences);
+    
+  }
+
+
 
 }

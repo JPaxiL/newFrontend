@@ -37,7 +37,6 @@ export class GeocercaMainComponent implements OnInit {
 
   handleDeleteItem(): void {
     this.geofencesService.nameComponentPol =  "LISTAR";
-    console.log('llego al comp padre');
   }
 
 }
