@@ -13,7 +13,6 @@ export class AddTagComponent implements OnInit {
   @Input('display') display: boolean = false;
   @Output() onHideEvent = new EventEmitter<boolean>();
   @ViewChild('name',{ static:true}) name!: ElementRef;
-  @ViewChild('description',{ static:true}) description!: ElementRef;
   tagsForm!: FormGroup;
   selectedOperation: any={};
   operations: any=[];
@@ -39,7 +38,9 @@ export class AddTagComponent implements OnInit {
     this.list2 = [];
     this.tagsForm = this.initForm();
   }
-  ngOnDestroy(){ }
+  ngOnDestroy(){
+    //this.name = null;
+   }
   initForm(): FormGroup {
     return this.fb.group({
       id:[''],
@@ -147,7 +148,7 @@ export class AddTagComponent implements OnInit {
     this.isExistTag = false;
     let aux = this.geofencesService.listTag.some((tg:any)=> tg.var_name == name);
     console.log("Si se repite el nombre", aux);
-    return true;
+    return aux;
   }
   validateFormsInputs(){
     const inputElement = this.name.nativeElement;
@@ -160,39 +161,6 @@ export class AddTagComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  addTag(){
-    //console.log();
-    const geofences = this.geofencesService.geofences;
-    for (const key in this.list2) {
-      const index = geofences.indexOf(this.list2[key])
-    }
-    this.geofencesService.geofences = geofences;
-    //this.geofencesService.geofencesTree = this.Geofences.createTreeNode(geofences);
-    this.onHideEvent.emit(false);
-    this.list2=[];
-    this.name.nativeElement.value = "";
-  }
-  
-  async onSubmit(){
-    let req = {};
-    req = {
-      geofences : this.list2,
-      var_name : this.nameTarget,
-    };
-    console.log('req==>',req);
-    // await this.geofencesService.storeTagAndAssingGeo(req).toPromise()
-    // .then((info) => {
-    //   if(info){
-    //     //this.addTag();  
-    //   }else{
-    //     //mensaje de error
-    //     console.log('EXISTE UN ERROR');
-    //   }
-    // }).catch(errorMsg => {
-    //   console.log(`Falló la asignación de etiqueras (promise): `, errorMsg);
-    // });
   }
 
   onConfirmTag(){
@@ -266,23 +234,28 @@ export class AddTagComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        //await this.onSubmit();
         await this.geofencesService.storeTagAndAssingGeo(req).subscribe(
-          (req) => {
+          async (response) => {
             // Manejar la respuesta del servidor si es necesario
-            console.log('Actualización exitosa:', req);  
-            if (!req.res){
+            console.log('Actualización exitosa:', response);  
+            if (!response.res){
               Swal.fire(
                 'Error',
-                req.message,
+                response.message,
                 'warning'
               );
-            }else if (req.res){
+            }else if (response.res){
+              await this.geofencesService.addTagToList(response.tag);
+              await this.geofencesService.updateListGeofences(response.geos);
+              this.geofencesService.tagAdded.emit();
               Swal.fire(
                 '',
                 'Los datos se guardaron correctamente!!',
                 'success'
               );
+              this.selectedOperation = '';
+              this.list1 = [];
+              this.list2 = [];
               this.onHideEvent.emit(false);
             }
           },
@@ -296,8 +269,6 @@ export class AddTagComponent implements OnInit {
               );
           }
         );
-        // var sub = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeoEdit)[0];
-        // res = await this.geofencesService.edit(this.geoForm.value);
       },
     }).then((data) => {
       // if(data.isConfirmed) {
@@ -311,7 +282,6 @@ export class AddTagComponent implements OnInit {
       //   console.log(`(geo Group) Hubo un error al crear la nueva etiqueta }`);
       // }
       this.loading=false;
-      //REINICIAR ARBOL DE ETIQUETAS
     });
   }
 
