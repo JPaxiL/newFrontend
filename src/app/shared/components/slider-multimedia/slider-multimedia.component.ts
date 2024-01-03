@@ -16,7 +16,7 @@ export class SliderMultimediaComponent implements OnInit {
 
   @Input() event: any;
   @Input() driver: string = '';
-  @Input() showFooter = true;
+  @Input() showFooter = false;
   @Input() showMultimediaFirst = true;
   @Input() showMultimedias = false;
   @Input() hasMultimedia = false;
@@ -68,13 +68,13 @@ export class SliderMultimediaComponent implements OnInit {
   // -------- cipia multimedia
   
   displayMultimedia = false;
-  multimedias: MultimediaItem[] = [];
+  //multimedias: MultimediaItem[] = [];
   get activeIndex(): number {
     return this._activeIndex;
   }
 
   set activeIndex(newValue) {
-      if (this.multimedias && 1 <= newValue && newValue <= (this.multimedias.length)) {
+      if (this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId] && 1 <= newValue && newValue <= (this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId].length)) {
           this._activeIndex = newValue;
       }
   }
@@ -84,9 +84,7 @@ export class SliderMultimediaComponent implements OnInit {
   // -------- end  cipia multimedia
   private destroy$ = new Subject<void>();
 
-  constructor(private multimediaService: MultimediaService,private sanitizer: DomSanitizer) { }
-
-
+  constructor(public multimediaService: MultimediaService,private sanitizer: DomSanitizer) { }
 
   ngOnDestroy() {
     console.log("DESTRUYENDOOO");
@@ -103,31 +101,49 @@ export class SliderMultimediaComponent implements OnInit {
     }
 
     this.checkCipiaMultimedia(this.event.parametros,this.event.imei);
-    console.log("MULTIMEDIAS RENDERED======= ",this.multimedias);
+    console.log("MULTIMEDIAS RENDERED======= ",this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId]);
     if(this.showMultimediaFirst){
       this.loadMedia();
     }
   }
 
   checkCipiaMultimedia(params: any, imei:string){
+    if (!this.multimediaService.multimediaCipiaItems.hasOwnProperty(params["eventId"])) {
+      this.multimediaService.multimediaCipiaItems[params["eventId"]] = [];
+    }else{
+      console.log("params: ",params);
+      console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
+      console.log("event: ",this.event);
+      return;
+    }
     console.log("params: ",params);
+    console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
+    console.log("event: ",this.event);
     
     if(params["gps"] && params["gps"]=="cipia" && (params["has_video"]=="1" || params["has_image"] == "1")){
       this.hasMultimedia = true
       if(params["has_image"]=="1"){
         if(params["cabin_image"] == "1"){
-          this.multimedias.push({type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"CABIN"}, url:""})
+          this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
+            {type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"CABIN"}, description: params["eventDateTime"], url:""}
+          )
         }
         if(params["road_image"] == "1"){
-          this.multimedias.push({type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"ROAD"}, url:""})
+          this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
+            {type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"ROAD"}, description: params["eventDateTime"], url:""}
+          )
         }
       }
       if(params["has_video"]=="1"){
         if(params["cabin_video"] == "1"){
-          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"CABIN"}, url:""})
+          this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
+            {type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"CABIN"}, description: params["eventDateTime"], url:""}
+          )
         }
         if(params["road_video"] == "1"){
-          this.multimedias.push({type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"ROAD"}, url:""})
+          this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
+            {type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"ROAD"}, description: params["eventDateTime"], url:""}
+          )
         }
       }
     }
@@ -153,15 +169,15 @@ export class SliderMultimediaComponent implements OnInit {
   }
 
   async loadMedia(item?:any):Promise<void>{
-    const media = item? item : this.multimedias[this.activeIndex-1];
+    const media = item? item : this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId][this.activeIndex-1];
     this.error = false;
     if(media.url.length == 0){
       //const url = await this.multimediaService.getMediaFromEvent('E321361117',media.params.eventId,media.params.type,media.params.source).toPromise();
       this.loading = true;
-      this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source,undefined,undefined,0).pipe(takeUntil(this.destroy$)).toPromise().then(url => {
+      this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source,undefined,undefined,3,10).pipe(takeUntil(this.destroy$)).toPromise().then(url => {
         if(url){
-          this.multimedias[this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
-          console.log("nueva url: ",this.multimedias[this.activeIndex-1].url);
+          this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId][this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
+          console.log("nueva url: ",this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId][this.activeIndex-1].url);
         }
         this.loading = false;
       }).catch( error => {
@@ -201,9 +217,12 @@ export class SliderMultimediaComponent implements OnInit {
       this.multimediaService.recordVideo(params).subscribe( frame => {
         console.log("frame obtained: ", frame);
         params.eventId = frame.Parametros.eventId;
-        this.multimedias.push({type: type, params: params, url:""});
-        console.log("Multimedia Item added: ",{type: type, params: params, url:""});
+        this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId].push(
+          {type: type, params: params, url:"", description: frame.Parametros.eventDateTime}
+        );
+        console.log("Multimedia Item added: ",{type: type, params: params, url:"", description: frame.Parametros.eventDateTime});
         this.onDemandLoader = false;
+        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
       },
       error =>{
         console.error(error);
@@ -215,9 +234,12 @@ export class SliderMultimediaComponent implements OnInit {
       this.multimediaService.retrieveVideoFrom(params).subscribe( frame => {
         console.log("frame obtained: ", frame);
         params.eventId = frame.Parametros.eventId;
-        this.multimedias.push({type: type, params: params, url:""});
-        console.log("Multimedia Item added: ",{type: type, params: params, url:""});
+        this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId].push(
+          {type: type, params: params, url:"", description: frame.Parametros.eventDateTime}
+        );
+        console.log("Multimedia Item added: ",{type: type, params: params, url:"", description: frame.Parametros.eventDateTime});
         this.onDemandLoader = false;
+        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
       },
       error =>{
         console.error(error);

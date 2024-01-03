@@ -5,14 +5,19 @@ import { from, Observable, Subject, throwError, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { catchError, delay, filter, map, mergeMap, take, timeout } from 'rxjs/operators';
-import { CipiaMultimediaParam } from '../models/interfaces';
+import { CipiaMultimediaParam, MultimediaItem } from '../models/interfaces';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { SocketWebService } from 'src/app/vehicles/services/socket-web.service';
 import Swal from 'sweetalert2';
 
+interface IMultimedias {
+  [key: string]: MultimediaItem[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class MultimediaService {
 
   constructor(private http: HttpClient, private wsService:SocketWebService) { }
@@ -25,14 +30,17 @@ export class MultimediaService {
   private _blob = new Subject<any>();
   private _stateChange = new Subject<any>();
   //@Output() onStop: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public blob: any;
 
+  public blob: any;
   private canvas: HTMLCanvasElement | null = null;
   private canvas2d: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
 
   private captureInterval: any;
   public isRecording = false;
+
+  public multimediaCipiaItems: IMultimedias = {};
+
   getMediaStream(){
     return this._mediaStream.asObservable();
   }

@@ -3233,7 +3233,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         'driver': this.VehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.namedriver??'',
         'showMultimediaFirst': true,
         'hasMultimedia':true,
-        'showTitle':false
+        'showTitle': false,
+        'showFooter': false
       };
       // Asignar datos al componente si existen
       

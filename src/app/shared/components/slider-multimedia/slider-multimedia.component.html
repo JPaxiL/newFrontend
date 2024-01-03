@@ -16,12 +16,12 @@
             </button>
             <p-menu #menu [popup]="true" [model]="menuMultimedia" appendTo="body"></p-menu>
         </div>
-        <div *ngIf="hasMultimedia && showMultimedias && multimedias.length>0" class="multimedia-controls">
-            <button *ngIf="multimedias.length>1" class="control-button pe-auto" (click)="next()">
+        <div *ngIf="hasMultimedia && showMultimedias && multimediaService.multimediaCipiaItems[event.parametros.eventId].length" class="multimedia-controls">
+            <button *ngIf="multimediaService.multimediaCipiaItems[event.parametros.eventId].length>1" class="control-button pe-auto" (click)="next()">
                 <i class="pi pi-chevron-left"></i>
             </button>
-            <span class="slider-text">{{activeIndex}}/{{multimedias.length}}</span>
-            <button *ngIf="multimedias.length>1" class="control-button pe-auto" (click)="prev()">
+            <span class="slider-text">{{activeIndex}}/{{multimediaService.multimediaCipiaItems[event.parametros.eventId].length}}</span>
+            <button *ngIf="multimediaService.multimediaCipiaItems[event.parametros.eventId].length>1" class="control-button pe-auto" (click)="prev()">
                 <i class="pi pi-chevron-right"></i>
             </button>
             <button class="window-button pe-auto" (click)="toggleMaximize()">
@@ -32,7 +32,7 @@
     </div>
     <div *ngIf="showMultimedias" class="multimedia-body">
         <div class="multimedia-wrapper" #multimedia_wrapper>
-            <ng-container *ngFor="let item of multimedias; let i = index" >
+            <ng-container *ngFor="let item of multimediaService.multimediaCipiaItems[event.parametros.eventId]; let i = index" >
                 <div class="multimedia-item" *ngIf="i==activeIndex-1">
                     <img *ngIf="!error && !loading && item.type=='image'" [src]="item.url" style="height: 100%;" alt="cargando..."/>
                     <div *ngIf="error" (click)="loadMedia(item)" class="error-multimedia d-flex flex-column align-items-center justify-content-center">
@@ -50,6 +50,11 @@
         <div class="slider-title">
             <img src="./assets/images/events/conductor.png" class="slider-icon">
             <span class="slider-text">{{driver? driver : 'Conductor no identificado'}}</span>
+        </div>
+    </div>
+    <div *ngIf="!showFooter" class="slider-footer">
+        <div class="slider-title">
+            <span class="slider-text">{{multimediaService.multimediaCipiaItems[event.parametros.eventId][activeIndex-1].description}}</span>
         </div>
     </div>
 </div>

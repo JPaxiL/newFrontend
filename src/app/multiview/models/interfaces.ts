@@ -208,6 +208,8 @@ export interface MultimediaItem {
     type: TypeCipiaMultimedia,
     params?: CipiaMultimediaParam,
     url: SafeUrl,
+    description?: string,
+    title?: string
 }
 
 export interface CipiaMultimediaParam {
