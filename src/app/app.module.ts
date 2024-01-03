@@ -35,6 +35,8 @@ import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
 import { TagModule } from 'primeng-lts/tag';
 import { TooltipModule } from 'primeng-lts/tooltip';
 import {SlideMenuModule} from 'primeng-lts/slidemenu';
+import {ProgressBarModule} from 'primeng-lts/progressbar';
+import {MenuModule} from 'primeng-lts/menu';
 import {SidebarModule} from 'primeng-lts/sidebar';
 import {ScrollPanelModule} from 'primeng-lts/scrollpanel';
 import {GalleriaModule} from 'primeng-lts/galleria';
@@ -293,6 +295,7 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
     PickListModule,
     ListboxModule,
     CardModule,
+    ProgressBarModule,
     BadgeModule,
     CheckboxModule,
     OverlayPanelModule,
@@ -301,6 +304,7 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
     MultiSelectModule,
     CalendarModule,
     SlideMenuModule,
+    MenuModule,
     GalleriaModule,
     LeafletModule,
     LeafletMarkerClusterModule,

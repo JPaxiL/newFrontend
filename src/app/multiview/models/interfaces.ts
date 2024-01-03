@@ -1,3 +1,4 @@
+import { SafeUrl } from "@angular/platform-browser";
 import { Vehicle } from "src/app/vehicles/models/vehicle";
 
 export interface Operation {
@@ -202,3 +203,22 @@ export interface MediaRequest {
     seconds: number, // max = 30
     source: string, //  CABIN | ROAD
 }
+
+export interface MultimediaItem {
+    type: TypeCipiaMultimedia,
+    params?: CipiaMultimediaParam,
+    url: SafeUrl,
+}
+
+export interface CipiaMultimediaParam {
+    imei:string,
+    eventId?:string,
+    type:TypeCipiaMultimedia,
+    from?: string //date in UTC0 "2023-10-09 19:12:00"
+    seconds?: number // max= 30
+    source: SourceCipiaMultimedia
+}
+
+export type VideoOnDemandTime = 'backward' | 'forward' | 'now';
+export type SourceCipiaMultimedia = "CABIN" | "ROAD";
+export type TypeCipiaMultimedia = "video" | "image";

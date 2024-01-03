@@ -47,13 +47,22 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     name : "",
     type : ""
   };
+  displayEditTags: boolean = false;
+  textHeaderEdit: string = "";
+  selectedList1: any = [];
+  selectedList2: any = [];
   geofencesTree: TreeNode[]=[];
-  
+  display: boolean = false;
+  nameEdit: string= '';
+  isFormName: boolean = false; //para validar NameObligatorio en Tag
+  isExistTag: boolean = false; //para validar NameExistente en Tag
+  listTagsEmpty: boolean = false; //para validar si el array de list2 esta vacio en la creacion
+  nameTagInit: string = ''; //en el caso de que no se edite el nombre de tag 
   alreadyLoaded: boolean = false;
-  @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   @ViewChild('tt') tt!:any;
   @Output() eventDisplayTags = new EventEmitter<boolean>();
   @Output() onDeleteItem: EventEmitter<any> = new EventEmitter();
+  @Output() onHideEvent = new EventEmitter<boolean>();
 
   treeGeofences: any;
   public column: number = 6; //posible order
@@ -65,7 +74,11 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     private polylineGeofenceService: PolylineGeogencesService,
     private spinner: NgxSpinnerService,
     private configDropdown: NgbDropdownConfig,
-  ) { }
+  ) {
+    this.geofencesService.tagAdded.subscribe(async () => {
+      this.geofences = await this.geofencesService.createTreeNode();
+    });
+  }
 
   async ngOnInit(): Promise <void> {    
     if(!this.geofencesService.initializingGeofences || !this.circularGeofencesService.initializingCircularGeofences){
@@ -102,7 +115,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     // }
     this.geofencesService.listGeofences = this.objGeofences.geofences;
     this.geofences  = await this.geofencesService.createTreeNode();
-    
+    this.loading = false;
   }
 
   ngOnDestroy() {
@@ -158,11 +171,313 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
   agInit(params: any){
     this.params = params;
   }
-  onClickTags(){
-    // this.geofencesService.compTags = "ADD TAG";
-    // this.geofencesService.actionTag = "addTag"
+  onClickAddTags(){
+    // this.geofencesService.compTags = 'MODAL TAG';
+    // this.geofencesService.actionTags = 'add';
     this.eventDisplayTags.emit(true);
   }
+
+  validateFormsInputs(){
+    const inputElement = this.nameEdit;
+    this.isFormName = inputElement.trim() !== '';
+  }
+
+  validateRepeatName (name: string){
+    this.isExistTag = false;
+    if( this.nameTagInit !== this.nameEdit){
+      let aux = this.geofencesService.listTag.some((tg:any)=> tg.var_name == name);
+      console.log("Si se repite el nombre", aux);
+      return aux;
+    } 
+    return false;
+  }
+  verifyEmptyList(){
+    if (!this.list2 || this.list2.length === 0) {
+      this.listTagsEmpty = true;
+      return true;
+    }
+    return false;
+  }
+
+  onConfirmationEdit(){
+    this.loading=true;
+    let currName = this.nameEdit;
+    //let currName = this.nameEdit.nativeElement.value;
+    // if (!this.isFormName) {
+    //   Swal.fire({
+    //     title: 'Error',
+    //     text: `Al editar la Etiqueta debe tener un nombre.`,
+    //     icon: 'error',
+    //   }).then(() => {
+    //     this.loading = false; // Restablece el estado de carga en caso de error.
+    //   });
+    //   return;
+    // }
+    
+    this.isExistTag = this.validateRepeatName(currName);
+      if (this.isExistTag){
+        Swal.fire({
+            title: 'Error',
+            text: `Ya existe una etiqueta con ese nombre, ingrese otro distinto.`,
+          icon: 'error',
+        }).then(() => {
+          this.loading = false; // Restablece el estado de carga en caso de error.
+        });
+        return;
+      }
+      this.listTagsEmpty = this.verifyEmptyList();
+      if (this.listTagsEmpty){
+        Swal.fire({
+          title: 'Error',
+          text: `La lista debe contener mínimo una geocerca.`,
+          icon: 'error',
+        }).then(() => {
+          this.loading = false; // Restablece el estado de carga en caso de error.
+        });
+        return;
+      }
+    let currType = this.dataEdit.type;
+    const req = {
+      type : this.dataEdit.type,
+      id : this.dataEdit.id,
+      list1 : this.list1.map((item: { id: any; type: any; }) => ({ id: item.id, type: item.type })),
+      list2 : this.list2.map((item: { id: any; type: any; }) => ({ id: item.id, type: item.type })),
+      var_name: this.nameEdit
+    };
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Se aplicarán los cambios',
+      //icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        this.geofencesService.updateTagAndAssingGeo(req).subscribe(
+          async (response) => {
+            // Manejar la respuesta del servidor si es necesario
+            console.log('Actualización exitosa:', response);
+            if (!response.success) {
+              Swal.fire(
+                'Error',
+                response.message,
+                'warning'
+              );
+            } else if (response.success) {
+              await this.geofencesService.updateListTags(response.tag);
+              await this.geofencesService.updateListGeofences(response.geos);
+              this.geofences = await this.geofencesService.createTreeNode();
+              this.loading = false;
+              Swal.fire(
+                '',
+                response.message,
+                'success'
+              );
+              this.displayEditTags = false;
+            }
+          },
+          (error) => {
+            // Manejar errores si la actualización falla
+            console.error('Error al guardar la información:', error);
+            Swal.fire(
+              'Error',
+              'Ocurrió un error...',
+              'warning'
+            );
+          }
+        )
+      },
+    }).then((data) => {
+      console.log(`respuesta`, data);
+      this.loading=false;
+    });
+  }
+
+  showEditTag(data: any){
+    console.log('Data', data);
+    this.dataEdit = data;
+    this.displayEditTags = true;
+    this.textHeaderEdit = data.type+" "+data.name;
+    this.nameEdit = data.name;
+    this.nameTagInit = data.name;
+    console.log('name initial:', this.nameTagInit);
+    let aux1:any=[];
+    let aux2=[];
+    let aux_idgrupo=-1;
+    data.idOpe = 0;
+    //list 1
+    const geofences = this.geofencesService.listGeofences.filter((geofence: any)=>geofence.idoperation == data.idOpe);
+    for (const key in geofences) {
+      const geoExist = geofences[key]['tags'].includes(data.id);
+      if(geoExist){
+        aux2.push(geofences[key]);
+      } else {
+        aux1.push(geofences[key]);
+      }
+      //id 0 significa que no tiene
+    }
+    this.list2 = aux2;
+    this.list1 = aux1;
+    console.log('LISTA --> 1',this.list1);
+    console.log('LISTA --> 2',this.list2);
+  }
+
+  upList1(){
+    let aux: any=[];
+    //recupero valores upList2
+    for (const key in this.list1) {
+      aux.push(this.list1[key]);
+    }
+    // inserto valores nuevos
+    for (const key in this.selectedList2) {
+      aux.push(this.selectedList2[key]);
+    }
+    //inserto valores en list1
+    this.list1 = aux;
+    console.log('list1', this.list1);
+    //vacio valores de list 2
+    let aux2: any = [];
+    let aux_status = false;
+    for (const key in this.list2) {
+      let aux_status=false;
+      for (const key2 in this.selectedList2) {
+        if (this.list2[key]==this.selectedList2[key2]) {
+          aux_status=true;
+        }
+      }
+      if(!aux_status){
+        aux2.push(this.list2[key]);
+      }
+    }
+    this.list2 = aux2;
+    this.selectedList2=[];
+  }
+
+  upList2(){
+    let aux: any=[];
+    //recupero valores upList2
+    for (const key in this.list2) {
+      aux.push(this.list2[key]);
+    }
+    // inserto valores nuevos
+    for (const key in this.selectedList1) {
+      aux.push(this.selectedList1[key]);
+    }
+    //inserto valores en list2
+    this.list2 = aux;
+    console.log('list2', this.list2);
+    //vacio valores de list 1
+    let aux2: any = [];
+    let aux_status = false;
+    for (const key in this.list1) {
+      let aux_status=false;
+      for (const key2 in this.selectedList1) {
+        if (this.list1[key]==this.selectedList1[key2]) {
+          aux_status=true;
+        }
+      }
+      if(!aux_status){
+        aux2.push(this.list1[key]);
+      }
+    }
+    this.list1 = aux2;
+    this.selectedList1=[];
+  }
+
+  showDelete(data: any){
+    var idOpe = data.idOpe;
+    var idTag = data.id;
+    var geosDelets : any []=[];
+    let geosOpe = this.geofencesService.listGeofences.filter((geo: { idoperation: any; }) => geo.idoperation == idOpe);
+    for(const geo of geosOpe){
+      const geoTag = geo.tags;
+      const geoMap = {
+        id: geo.id,
+        type: geo.type
+      };
+      if(geoTag.includes(idTag)){
+        geosDelets.push(geoMap);
+      }
+    }
+    if(data['id']==null){
+      console.log('no hay id');
+      Swal.fire({
+        title: 'Error',
+        text: 'No existe Agrupación, recarge la página ...',
+        icon: 'error',
+      });
+    }
+    const req = {
+      id : data.id,
+      type : data.type,
+      geofences : geosDelets,
+    };
+    console.log('eliminar',req);
+    Swal.fire({
+      title: 'Confirmación',
+      text: `¿Está seguro de eliminar, la Etiqueta: ${data.name}?`,
+      icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        this.geofencesService.deleteTagOfGeo(req).subscribe(
+          async (response) => {
+            // Manejar la respuesta del servidor si es necesario
+            console.log('eliminación exitosa:', response);  
+            if (!response.success){
+              Swal.fire(
+                'Error',
+                response.message,
+                'warning'
+              );
+            }else if (response.success){
+              await this.geofencesService.updateListGeofences(response.geos);
+              this.geofences = await this.geofencesService.createTreeNode();
+              this.loading = false;
+              Swal.fire(
+                '',
+                'Se eliminó la etiqueta correctamente!!',
+                'success'
+              );
+            }
+          },
+          (error) => {
+            // Manejar errores si la actualización falla
+            console.error('Error al guardar la información:', error);
+            Swal.fire(
+              'Error',
+              'Ocurrió un error...',
+              'warning'
+              );
+          }
+        );
+      },
+    }).then((data) => {
+      // if(data.isConfirmed) {
+      //   Swal.fire(
+      //     'Eliminar',
+      //     `Eliminación de ${this.typeDelete} exitosa`,
+      //     'success'
+      //   );
+      // }
+    });
+  }
+
+  //Tableee
 
   headerScrollHandler(){
     setTimeout(()=> {
@@ -206,25 +521,67 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     $('p-treetable.geofence-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
   }
 
-  showGeos(type: string, id: string ){
-    if(type == ''){
-  
-    }else {
+  showGeosByTagOp(type: string, id: string, idOpe?: string){
+    
+    console.log('idOpe: ', idOpe);
+    
+    if(type == 'etiqueta'){
       
+      var idTg = id;
+      console.log('tag valor',idTg);
+
+      if(idTg == '0'){
+        //const tags = this.geofencesService.geofences.map((tag: { tags: []; }) => tag.tags).flat();
+        this.geofencesService.listGeofences.forEach((geo: {id: number; zone_visible: string; tags: string[]; }) => {
+          if(geo.tags.length === 0 && geo.zone_visible === 'true'){
+            this.clickShowGeoPol(geo.id, true);
+          }
+        });
+      
+      } else if(idTg != '0') {
+        const geosByOp = [...new Set(this.geofencesService.listGeofences.map((geo: { idoperation: any; }) => geo.idoperation))];
+        geosByOp.forEach(idOpe => {
+          // Obtener geos de esa operación
+          const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: unknown; }) => geos.idoperation == idOpe);
+          console.log('operationss', filteredGeos);
+          // Aplicar lógica de visibilidad
+          filteredGeos.forEach((geo: {id: number; tags: string | string[]; zone_visible: string; }) => {
+            if (geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true') {
+              this.clickShowGeoPol(geo.id, true); 
+            }
+          });
+        });
+
+        // this.geofencesService.listGeofences.forEach((geo: {id: number; zone_visible: string; tags: string | string[]; }) => {
+        //   if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true'){
+        //     this.clickShowGeoPol(geo.id, true);
+        //   }
+        // });
+      }
+      
+
+    }else if(type == 'operacion') {
+      var idOp = id;
+      //filtro si alguna geocerca tiene el idOp
+      this.geofencesService.listGeofences.forEach((geo: { id: number; idoperation: string; zone_visible: string; }) => {
+        if((geo.idoperation === idOp && geo.zone_visible === 'true') == this.geofencesService.eyeInputSwitch){
+          this.clickShowGeoPol(geo.id, true);
+          geo.zone_visible = 'false'; 
+          //this.clickShowGeoCir(geo.id, true);
+          //geo.zone_visible = geo.zone_visible === "true" ? "false" : "true";
+        }
+      });
+
+      for(let i = 0; i < this.geofencesService.geofences.length; i++){
+        this.geofencesService.clearDrawingsOfGeofence(this.geofencesService.geofences[i]);
+      }
+      for(let i = 0; i < this.geofencesService.geofences.length; i++){
+        this.geofencesService.showDrawingsOfGeofence(this.geofencesService.geofences[i]);
+      }
     }
-  
-    // var geoList = this.geofencesService.geofences.map((geo: { id: number, zone_visible: string, tags: []})=>
-    // {
-    //   return {id: geo.id, visible: geo.zone_visible, tag: geo.tags }
-    // });
-    // geoList.forEach((geo: {id: number, visible: string, tag: []}) => {
-    //   if((geo.visible == 'true') != this.geofencesService.eyeInputSwitch){
-    //     this.clickShowGeoPol(geo.id, true)
-    //   }
-    // });
   }
 
-  onClickEyeAll(){
+  onClickAllEyes(){
       this.onClickEyePol();
       this.onClickEyeCir();
       //this.clickShowGeoLin();
@@ -263,22 +620,22 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  onClickTagNamesEyeAll(){
-    this.onClickTagNamesEyePol();
-    this.onClickTagNamesEyeCir();
-    this.onClickTagNamesEyeLin();
+  onClickShowAllNames(){
+    this.onClickShowNamesPol();
+    this.onClickShowNamesCir();
+    this.onClickShowNamesLin();
   }
-  onClickTagNamesEyePol(){
+  onClickShowNamesPol(){
     this.geofencesService.tagNamesEyeState = !this.geofencesService.tagNamesEyeState;
     var geofencesList = this.geofencesService.geofences.map( (geofence: { id: number, zone_name_visible: string }) =>
       { return { id: geofence.id, tag_visible: geofence.zone_name_visible}; } );
     geofencesList.forEach((geofence: { id: number, tag_visible: string }) => {
       if((geofence.tag_visible == 'true') != this.geofencesService.tagNamesEyeState){
-        this.clickShowNameGeoPol(geofence.id, true);
+        this.clickShowGeoPolName(geofence.id, true);
       }
     });
   }
-  onClickTagNamesEyeCir(){
+  onClickShowNamesCir(){
     this.circularGeofencesService.tagNamesEyeState = !this.tagNamesEyeState;
     let circularGeofencesList = this.circularGeofencesService.circular_geofences.map( (circular_geofence: { id: number, zone_name_visible: string }) => { 
       return { 
@@ -287,11 +644,11 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       });
       circularGeofencesList.forEach((circular_geofence: { id: number, tag_visible: string }) => {
       if((circular_geofence.tag_visible == 'true') != this.tagNamesEyeState){
-        this.clickShowNameGeoCir(circular_geofence.id, true);
+        this.clickShowGeoCirName(circular_geofence.id, true);
       }
     });
   }
-  onClickTagNamesEyeLin(){
+  onClickShowNamesLin(){
     this.polylineGeofenceService.tagNamesEyeState = !this.tagNamesEyeState;
     let polyGeofencesList = this.polylineGeofenceService.polyline_geofences.map( (circular_geofence: { id: number, zone_name_visible: string }) => { 
       return { 
@@ -300,7 +657,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       });
       polyGeofencesList.forEach((circular_geofence: { id: number, tag_visible: string }) => {
       if((circular_geofence.tag_visible == 'true') != this.tagNamesEyeState){
-        this.clickShowNameGeoLin(circular_geofence.id, true);
+        this.clickShowGeoLinName(circular_geofence.id, true);
       }
     });
   }
@@ -324,7 +681,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
       if(geo.zone_name_visible == 'true'){
-        this.clickShowNameGeoPol(id);
+        this.clickShowGeoPolName(id);
       }
     } else {
       geo.zone_visible  = 'true';
@@ -363,7 +720,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
       if(geo.zone_name_visible == 'true'){
-        this.clickShowNameGeoCir(id);
+        this.clickShowGeoCirName(id);
       }
     } else {
       geo.zone_visible  = 'true';
@@ -401,7 +758,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
       if(geo.zone_name_visible == 'true'){
-        this.clickShowNameGeoLin(id);
+        this.clickShowGeoLinName(id);
       }
     } else {
       geo.zone_visible  = 'true';
@@ -431,20 +788,18 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  clickShowNameGeoAll(id: number, type: string){
+  clickShowGeoName(id: number, type: string){
     if(type=='polig'){
-      this.clickShowNameGeoPol(id);
+      this.clickShowGeoPolName(id);
     }else if (type=='circ'){
-      this.clickShowNameGeoCir(id);
+      this.clickShowGeoCirName(id);
     }else if(type == 'line'){
-      this.clickShowNameGeoLin(id);
+      this.clickShowGeoLinName(id);
     }
   }
 
-  clickShowNameGeoPol(id:number, comesFromInputSwitch?: boolean){
-    //console.log("Mostrar/Ocultar nombre");
+  clickShowGeoPolName(id:number, comesFromInputSwitch?: boolean){
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
-    //console.log(geo);
     if (geo.zone_name_visible == "true") {
 
       geo.zone_name_visible  = "false";
@@ -463,7 +818,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  clickShowNameGeoCir(id:number, comesFromInputSwitch?: boolean){
+  clickShowGeoCirName(id:number, comesFromInputSwitch?: boolean){
     var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
 
     if (geo.zone_name_visible == 'true') {
@@ -481,8 +836,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  clickShowNameGeoLin(id:number, comesFromInputSwitch?: boolean){
-    
+  clickShowGeoLinName(id:number, comesFromInputSwitch?: boolean){
     var geo = this.polylineGeofenceService.polyline_geofences.filter((item:any)=> item.id == id)[0];
 
     if (geo.zone_name_visible == 'true') {
@@ -528,7 +882,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  clickAgregarGeocercaPol() {
+  clickAddGeoPol() {
     this.geofencesService.nameComponentPol = "ADD GEO";
     this.geofencesService.action         = 'add';
   }

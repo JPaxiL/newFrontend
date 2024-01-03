@@ -1,7 +1,10 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import moment from 'moment';
+import { MenuItem } from 'primeng-lts/api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CipiaMultimediaParam, MultimediaItem, SourceCipiaMultimedia, TypeCipiaMultimedia, VideoOnDemandTime } from 'src/app/multiview/models/interfaces';
 import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 
 @Component({
@@ -22,6 +25,33 @@ export class SliderMultimediaComponent implements OnInit {
   loading = false;
   error = false;
 
+  menuMultimedia:MenuItem[] = [
+    {
+      label: '30seg antes', 
+      icon: 'pi pi-fw pi-step-backward',
+      command: () => {
+        this.getVideoOnDemand(30,'backward');
+      }
+    },
+    {
+      label: '30seg despues', 
+      icon: 'pi pi-fw pi-step-forward',
+      command: () => {
+        this.getVideoOnDemand(30, 'forward');
+      }
+    },
+    {
+      label: 'grabar 30seg', 
+      icon: 'pi pi-fw pi-video',
+      command: () => {
+        this.getVideoOnDemand(30, 'now');
+      }
+    }
+  ];
+
+  isMaximized = false;
+  onDemandLoader = false;
+
   @ViewChild('multimedia_wrapper') multimediaWrapper!:ElementRef;
 
   icons_available = ["alcoholemia",
@@ -38,7 +68,7 @@ export class SliderMultimediaComponent implements OnInit {
   // -------- cipia multimedia
   
   displayMultimedia = false;
-  multimedias: any[] = [];
+  multimedias: MultimediaItem[] = [];
   get activeIndex(): number {
     return this._activeIndex;
   }
@@ -146,6 +176,71 @@ export class SliderMultimediaComponent implements OnInit {
     this.showMultimedias = !this.showMultimedias;
     if(this.showMultimedias){
       this.loadMedia();
+    }
+  }
+
+  async getVideoOnDemand(seconds:number=30, option: VideoOnDemandTime='now', source: SourceCipiaMultimedia = "CABIN", type: TypeCipiaMultimedia = 'video'){
+    this.onDemandLoader = true;
+    let from = "";
+    if(option == "backward"){
+      from = moment(this.event.fecha_tracker, 'YYYY/MM/DD HH:mm:ss').subtract(seconds, 'seconds').add(5, 'hours').format('YYYY/MM/DD HH:mm:ss')
+    }else if( option == "forward"){
+      from = moment(this.event.fecha_tracker, 'YYYY/MM/DD HH:mm:ss').add(5, 'hours').format('YYYY/MM/DD HH:mm:ss')
+    }
+
+    let params:CipiaMultimediaParam = {
+      imei: this.event.imei,
+      type: type,
+      seconds: seconds,
+      from: from,
+      source: source
+    };
+    if(option == "now"){
+      console.log("record video with params: ", params);
+      
+      this.multimediaService.recordVideo(params).subscribe( frame => {
+        console.log("frame obtained: ", frame);
+        params.eventId = frame.Parametros.eventId;
+        this.multimedias.push({type: type, params: params, url:""});
+        console.log("Multimedia Item added: ",{type: type, params: params, url:""});
+        this.onDemandLoader = false;
+      },
+      error =>{
+        console.error(error);
+        this.onDemandLoader = false;
+      });
+    }else{
+      console.log("retrieving video with params: ", params);
+      
+      this.multimediaService.retrieveVideoFrom(params).subscribe( frame => {
+        console.log("frame obtained: ", frame);
+        params.eventId = frame.Parametros.eventId;
+        this.multimedias.push({type: type, params: params, url:""});
+        console.log("Multimedia Item added: ",{type: type, params: params, url:""});
+        this.onDemandLoader = false;
+      },
+      error =>{
+        console.error(error);
+        this.onDemandLoader = false;
+      });
+    }
+  }
+
+  toggleMaximize() {
+    this.isMaximized = !this.isMaximized;
+    this.updateMaximizeState();
+  }
+
+  updateMaximizeState() {
+    const sliderContent = document.querySelector('.slider-content');
+    if (sliderContent) {
+      if (this.isMaximized) {
+        // Maximizar
+        sliderContent.classList.add('maximized');
+      } else {
+        // Minimizar
+        sliderContent.classList.remove('maximized');
+      }
     }
   }
 
