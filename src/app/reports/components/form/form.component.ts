@@ -247,6 +247,31 @@ export class FormComponent implements OnInit {
       evDeteccionDeManipulacion360:false,
 
     };
+  
+  //Reporte 6 - Reporte de Eventos , Seleccion de Campo
+
+  eC = {
+    Fecha :true,
+    FechaServidor :false,
+    Evento :true,
+    Codigo :true,
+    Placa :true,
+    TipoUnidad :false,
+    IdConductor :false,
+    Conductor :false,
+    VelMobileye :false,
+    VelGPS :true,
+    VelCAN :false,
+    VelECO :false,
+    VelGPSspeed :false,
+
+    Zona :false,
+    PuntoCercano :false,
+    Ubicacion :false,
+    Referencia :false,
+    EnlaceArchivo :false,
+    Parametros : false,
+  }
 
 
 
@@ -489,24 +514,27 @@ export class FormComponent implements OnInit {
     console.log("Es firefox ? " + this.isFirefox);
     console.log("Es safari ? " + this.isSafari);
 
-    	// console.log("fnc_direccion--xDs");
-			var f = new google.maps.Geocoder();
-			// var h = new google.maps.LatLng(trama.lat, trama.lng);
-			var h = new google.maps.LatLng(-16.406578,-71.560808);
 
-			f.geocode({
-					'latLng': h
-			},  (a:any, b:any) => {
-					console.log("*********************1");
-					console.log(a);
-					console.log(b);
-					console.log("*********************2");
-					if (b == "REQUEST_DENIED") {
-						// vm.chkApiGoogle = false;
-					} else {
-            this.reportService.setApiGoogle(true);
-					}
-			});
+      //this.reportService.eC = this.eC;
+
+    	// // console.log("fnc_direccion--xDs");
+			// var f = new google.maps.Geocoder();
+			// // var h = new google.maps.LatLng(trama.lat, trama.lng);
+			// var h = new google.maps.LatLng(-16.406578,-71.560808);
+
+			// f.geocode({
+			// 		'latLng': h
+			// },  (a:any, b:any) => {
+			// 		console.log("*********************1");
+			// 		console.log(a);
+			// 		console.log(b);
+			// 		console.log("*********************2");
+			// 		if (b == "REQUEST_DENIED") {
+			// 			// vm.chkApiGoogle = false;
+			// 		} else {
+      //       this.reportService.setApiGoogle(true);
+			// 		}
+			// });
 
 
   }
@@ -730,9 +758,11 @@ export class FormComponent implements OnInit {
   }
 
   reportar(new_tab?: any){
+
+    this.reportService.eC = JSON.parse(JSON.stringify(this.eC));
+
     console.log(new_tab !== undefined);
     this.reportService.workingOnReport = true;
-
 
     var repSubtitle = '';
     var chkDateHour = this.chkDateHour;
