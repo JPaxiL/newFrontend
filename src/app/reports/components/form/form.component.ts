@@ -11,6 +11,7 @@ import { Title } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserDetectorService } from '../../services/browser-detector.service';
+import { EventService } from 'src/app/events/services/event.service';
 
 import Swal from 'sweetalert2';
 // import { threadId } from 'worker_threads';
@@ -26,6 +27,7 @@ declare var google: any;
 export class FormComponent implements OnInit {
   reports: any=[];
   selectedReport: any={};
+  events: any=[];
   vehicles: any=[];
   selectedVehicles: any=[];
   convoys: any=[];
@@ -195,58 +197,67 @@ export class FormComponent implements OnInit {
     velMobileye_ME460:false,
   };
 
-
+  // PARA CONTROLADR CUALES EVENTOS MOSTRAR
+  eventType: any[] = [
+    { name: 'gps', active: false,label:'GPS' }, 
+    { name: 'platform', active: false,label:'PLATAFORMA' }, 
+    { name: 'security', active: false,label:'SEGURIDAD VEHICULAR' },
+    { name: 'mobile', active: false,label:'SOLUCIONES MÓVILES' },
+    { name: '360', active: false,label:'FATIGA 360' },
+  ];
   //Reporte 6 - Reporte de Eventos
-  eV = {
-      GPSbateriaBaja:false,
-      GPSbateriaDesconectada:false,
-      GPSaceleracionBrusca:false,
-      GPSfrenadaBrusca:false,
-      GPSbloqueoTransmision:false,
-      GPSsos:false,
-      GPSremolque:false,
-      GPSparada: false, // --- NEW
-      GPSmotorEncendido: false, // --- NEW
-      GPSmotorApagado: false, // --- NEW
+  eV: { [key: string]: boolean } = {};
+  //Reporte 6 - Reporte de Eventos
+  // eV = {
+  //     GPSbateriaBaja:false,
+  //     GPSbateriaDesconectada:false,
+  //     GPSaceleracionBrusca:false,
+  //     GPSfrenadaBrusca:false,
+  //     GPSbloqueoTransmision:false,
+  //     GPSsos:false,
+  //     GPSremolque:false,
+  //     GPSparada: false, // --- NEW
+  //     GPSmotorEncendido: false, // --- NEW
+  //     GPSmotorApagado: false, // --- NEW
 
-      evEntrada:false,
-      evSalida:false,
-      evEstadia:false,   // --- NEW
-      evParada:false,
-      evMovSinProgramacion:false,  //  NEW
-      evInfraccion:false,
-      evExcesoDeVelocidad:false,
-      evAnticolisionFrontal:false,
-      evColisionConPeatones:false,
+  //     evEntrada:false,
+  //     evSalida:false,
+  //     evEstadia:false,   // --- NEW
+  //     evParada:false,
+  //     evMovSinProgramacion:false,  //  NEW
+  //     evInfraccion:false,
+  //     evExcesoDeVelocidad:false,
+  //     evAnticolisionFrontal:false,
+  //     evColisionConPeatones:false,
 
-      evNoRostro:false,
-      evFatigaExtrema:false,
-      evDesvioCarrilIzquierda:false,
-      evDesvioCarrilDerecha:false,
-      evBloqueoVisionMobileye:false,
+  //     evNoRostro:false,
+  //     evFatigaExtrema:false,
+  //     evDesvioCarrilIzquierda:false,
+  //     evDesvioCarrilDerecha:false,
+  //     evBloqueoVisionMobileye:false,
 
 
-      AccFatiga:false, // DESACTIVADO
-      AccAlcoholemia:false,
-      AccIButton: false,  // --- DESACTIVADO
-      AccSomnolencia: false,
-      AccDistraccion: false,
+  //     AccFatiga:false, // DESACTIVADO
+  //     AccAlcoholemia:false,
+  //     AccIButton: false,  // --- DESACTIVADO
+  //     AccSomnolencia: false,
+  //     AccDistraccion: false,
 
-      OtroTodos:false,
-      OtroExVelocidad:false,
+  //     OtroTodos:false,
+  //     OtroExVelocidad:false,
 
-      //==========================
+  //     //==========================
 
-      evConductorAdormitado360:false,
-      evConductorSomnoliento360:false,
-      evDistraccionDetectada360:false,
-      evCinturonNoDetectado360:false,
-      evCigarroDetectado:false,
-      evCelularDetectado360:false,
-      evErrorDeCamara:false,
-      evDeteccionDeManipulacion360:false,
+  //     evConductorAdormitado360:false,
+  //     evConductorSomnoliento360:false,
+  //     evDistraccionDetectada360:false,
+  //     evCinturonNoDetectado360:false,
+  //     evCigarroDetectado:false,
+  //     evCelularDetectado360:false,
+  //     evErrorDeCamara:false,
+  //     evDeteccionDeManipulacion360:false,
 
-    };
+  //   };
   
   //Reporte 6 - Reporte de Eventos , Seleccion de Campo
 
@@ -310,6 +321,7 @@ export class FormComponent implements OnInit {
     public reportService: ReportService,
     private vehicleService: VehicleService,
     private confirmationService: ConfirmationService,
+    public eventService:EventService,
     private http: HttpClient,
     private titleService: Title) {
       //INICIAR EL VEHICLE SERVICE PARA REPORTES
@@ -422,7 +434,28 @@ export class FormComponent implements OnInit {
     }
 
   ngOnInit(): void {
-
+    //LISTA DE EVENTOS
+    this.eventService.getEventsForUser().subscribe(
+      async (data) => {
+        // Aquí puedes trabajar con los datos obtenidos
+        console.log('EVENTOS DEL USUARIO OBTENIDOS: 1vez', data);
+        // Realiza cualquier acción con los datos recibidos
+        if (data.success){
+          this.events = data.data;
+          this.events = this.events.map((event: any) => {
+            return { ...event, active: false };
+          });
+          await this.updateShowTypeEvents();
+        }else{
+          this.events = [];
+          console.log('EL USUARIO NO TIENE EVENTOS');
+        }
+      },
+      (error) => {
+        // Maneja los errores si ocurre alguno durante la solicitud
+        console.error('Error al obtener los eventos:', error);
+      }
+    );
     this.strYearRange = '2000:' + new Date().getFullYear();
     console.log(this.selectedReport);
     console.log(JSON.stringify(this.selectedReport) == '{}');
@@ -539,7 +572,15 @@ export class FormComponent implements OnInit {
 
   }
 
-
+  updateShowTypeEvents(){
+    this.events.forEach((event: any) => {
+      const eventTypeToUpdate = this.eventType.find(type => type.name === event.event_category);
+      if (eventTypeToUpdate) {
+        eventTypeToUpdate.active = true;
+      }
+    });
+    console.log('test types -->',this.eventType);
+  }
   endInit(){
     if(this.errorFlag == 1){
       this.spinner.hide("fullScreenSpinner");
@@ -1209,97 +1250,113 @@ export class FormComponent implements OnInit {
   }
 
   onChkAllEvents(){
-    this.eV = {
-      GPSbateriaBaja:this.eV.OtroTodos,
-      GPSbateriaDesconectada:this.eV.OtroTodos,
-      GPSaceleracionBrusca:this.eV.OtroTodos,
-      GPSfrenadaBrusca:this.eV.OtroTodos,
-      GPSbloqueoTransmision:this.eV.OtroTodos,
-      GPSsos:this.eV.OtroTodos,
-      GPSremolque:this.eV.OtroTodos,
-      GPSparada: this.eV.OtroTodos, // --- NEW
-      GPSmotorEncendido: this.eV.OtroTodos, // --- NEW
-      GPSmotorApagado: this.eV.OtroTodos, // --- NEW
+    // this.eV = {
+    //   GPSbateriaBaja:this.eV.OtroTodos,
+    //   GPSbateriaDesconectada:this.eV.OtroTodos,
+    //   GPSaceleracionBrusca:this.eV.OtroTodos,
+    //   GPSfrenadaBrusca:this.eV.OtroTodos,
+    //   GPSbloqueoTransmision:this.eV.OtroTodos,
+    //   GPSsos:this.eV.OtroTodos,
+    //   GPSremolque:this.eV.OtroTodos,
+    //   GPSparada: this.eV.OtroTodos, // --- NEW
+    //   GPSmotorEncendido: this.eV.OtroTodos, // --- NEW
+    //   GPSmotorApagado: this.eV.OtroTodos, // --- NEW
 
-      evEntrada:this.eV.OtroTodos,
-      evSalida:this.eV.OtroTodos,
-      evEstadia:this.eV.OtroTodos,   // --- NEW
-      evParada:this.eV.OtroTodos,
-      evMovSinProgramacion:this.eV.OtroTodos,  //  NEW
-      evInfraccion:this.eV.OtroTodos,
-      evExcesoDeVelocidad:this.eV.OtroTodos,
-      evAnticolisionFrontal:this.eV.OtroTodos,
-      evColisionConPeatones:this.eV.OtroTodos,
+    //   evEntrada:this.eV.OtroTodos,
+    //   evSalida:this.eV.OtroTodos,
+    //   evEstadia:this.eV.OtroTodos,   // --- NEW
+    //   evParada:this.eV.OtroTodos,
+    //   evMovSinProgramacion:this.eV.OtroTodos,  //  NEW
+    //   evInfraccion:this.eV.OtroTodos,
+    //   evExcesoDeVelocidad:this.eV.OtroTodos,
+    //   evAnticolisionFrontal:this.eV.OtroTodos,
+    //   evColisionConPeatones:this.eV.OtroTodos,
 
-      evNoRostro:this.eV.OtroTodos,
-      evFatigaExtrema:this.eV.OtroTodos,
-      evDesvioCarrilIzquierda:this.eV.OtroTodos,
-      evDesvioCarrilDerecha:this.eV.OtroTodos,
-      evBloqueoVisionMobileye:this.eV.OtroTodos,
-
-
-      AccFatiga:this.eV.OtroTodos, // DESACTIVADO
-      AccAlcoholemia:this.eV.OtroTodos,
-      AccIButton: this.eV.OtroTodos,  // --- DESACTIVADO
-      AccSomnolencia: this.eV.OtroTodos,
-      AccDistraccion: this.eV.OtroTodos,
-
-      OtroTodos:this.eV.OtroTodos,
-      OtroExVelocidad:this.eV.OtroTodos,
+    //   evNoRostro:this.eV.OtroTodos,
+    //   evFatigaExtrema:this.eV.OtroTodos,
+    //   evDesvioCarrilIzquierda:this.eV.OtroTodos,
+    //   evDesvioCarrilDerecha:this.eV.OtroTodos,
+    //   evBloqueoVisionMobileye:this.eV.OtroTodos,
 
 
-      //==========================
+    //   AccFatiga:this.eV.OtroTodos, // DESACTIVADO
+    //   AccAlcoholemia:this.eV.OtroTodos,
+    //   AccIButton: this.eV.OtroTodos,  // --- DESACTIVADO
+    //   AccSomnolencia: this.eV.OtroTodos,
+    //   AccDistraccion: this.eV.OtroTodos,
 
-      evConductorAdormitado360: this.eV.OtroTodos,
-      evConductorSomnoliento360: this.eV.OtroTodos,
-      evDistraccionDetectada360: this.eV.OtroTodos,
-      evCinturonNoDetectado360: this.eV.OtroTodos,
-      evCigarroDetectado: this.eV.OtroTodos,
-      evCelularDetectado360: this.eV.OtroTodos,
-      evErrorDeCamara: this.eV.OtroTodos,
-      evDeteccionDeManipulacion360: this.eV.OtroTodos,
+    //   OtroTodos:this.eV.OtroTodos,
+    //   OtroExVelocidad:this.eV.OtroTodos,
 
 
-    };
+    //   //==========================
+
+    //   evConductorAdormitado360: this.eV.OtroTodos,
+    //   evConductorSomnoliento360: this.eV.OtroTodos,
+    //   evDistraccionDetectada360: this.eV.OtroTodos,
+    //   evCinturonNoDetectado360: this.eV.OtroTodos,
+    //   evCigarroDetectado: this.eV.OtroTodos,
+    //   evCelularDetectado360: this.eV.OtroTodos,
+    //   evErrorDeCamara: this.eV.OtroTodos,
+    //   evDeteccionDeManipulacion360: this.eV.OtroTodos,
+
+
+    // };
+    this.events.forEach((event: {name_form: any; active: boolean;}) => {
+      event.active = this.eV.OtroTodos;
+      this.eV[event.name_form] = event.active;
+    });
+    console.log(this.eV);
   }
 
   onChangeChkEvents(){
-    if(!this.eV.GPSbateriaDesconectada) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.GPSaceleracionBrusca) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.GPSfrenadaBrusca) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.GPSsos) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.GPSmotorEncendido) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.GPSmotorApagado) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.GPSbateriaDesconectada) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.GPSaceleracionBrusca) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.GPSfrenadaBrusca) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.GPSsos) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.GPSmotorEncendido) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.GPSmotorApagado) { this.eV.OtroTodos = false; return; }
 
-    if(!this.eV.evEntrada) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evSalida) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evEstadia) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evParada) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evInfraccion) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evExcesoDeVelocidad) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evEntrada) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evSalida) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evEstadia) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evParada) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evInfraccion) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evExcesoDeVelocidad) { this.eV.OtroTodos = false; return; }
 
 
-    if(!this.eV.evNoRostro) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evFatigaExtrema) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.AccFatiga) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.AccDistraccion) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evAnticolisionFrontal) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evColisionConPeatones) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evDesvioCarrilIzquierda) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evDesvioCarrilDerecha) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evBloqueoVisionMobileye) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evNoRostro) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evFatigaExtrema) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.AccFatiga) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.AccDistraccion) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evAnticolisionFrontal) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evColisionConPeatones) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evDesvioCarrilIzquierda) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evDesvioCarrilDerecha) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evBloqueoVisionMobileye) { this.eV.OtroTodos = false; return; }
 
-    //ULTIMOS CHANGES CIPIA
-    if(!this.eV.evConductorAdormitado360) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evConductorSomnoliento360) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evDistraccionDetectada360) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evCinturonNoDetectado360) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evCigarroDetectado) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evCelularDetectado360) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evErrorDeCamara) { this.eV.OtroTodos = false; return; }
-    if(!this.eV.evDeteccionDeManipulacion360) { this.eV.OtroTodos = false; return; }
+    // //ULTIMOS CHANGES CIPIA
+    // if(!this.eV.evConductorAdormitado360) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evConductorSomnoliento360) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evDistraccionDetectada360) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evCinturonNoDetectado360) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evCigarroDetectado) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evCelularDetectado360) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evErrorDeCamara) { this.eV.OtroTodos = false; return; }
+    // if(!this.eV.evDeteccionDeManipulacion360) { this.eV.OtroTodos = false; return; }
 
-    this.eV.OtroTodos = true;
+    // this.eV.OtroTodos = true;
+     // Ahora, para actualizar this.ev con data de this.events:
+    this.events.forEach((event: { name_form: string | number; active: boolean; }) => {
+      this.eV[event.name_form] = event.active;
+    });
+    // Verificar si al menos un event.active es false
+    const alMenosUnFalse = this.events.some((event: { active: boolean; }) => event.active === false);
+    // Actualizar this.ev.OtroTodos
+    this.eV.OtroTodos = !alMenosUnFalse;
+
+    console.log(this.eV); 
+
   }
 
   validateForm(){
@@ -1451,57 +1508,62 @@ export class FormComponent implements OnInit {
       velMobileye_ME460:false,
     };
 
+
+    this.events.forEach((event: {name_form: any; active: boolean;}) => {
+      event.active = false;
+      this.eV[event.name_form] = false;
+    });
     //6. Eventos
-    this.eV = {
-      GPSbateriaBaja:false,
-      GPSbateriaDesconectada:false,
-      GPSaceleracionBrusca:false,
-      GPSfrenadaBrusca:false,
-      GPSbloqueoTransmision:false,
-      GPSsos:false,
-      GPSremolque:false,
-      GPSparada: false, // --- NEW
-      GPSmotorEncendido: false, // --- NEW
-      GPSmotorApagado: false, // --- NEW
+    // this.eV = {
+    //   GPSbateriaBaja:false,
+    //   GPSbateriaDesconectada:false,
+    //   GPSaceleracionBrusca:false,
+    //   GPSfrenadaBrusca:false,
+    //   GPSbloqueoTransmision:false,
+    //   GPSsos:false,
+    //   GPSremolque:false,
+    //   GPSparada: false, // --- NEW
+    //   GPSmotorEncendido: false, // --- NEW
+    //   GPSmotorApagado: false, // --- NEW
 
-      evEntrada:false,
-      evSalida:false,
-      evEstadia:false,   // --- NEW
-      evParada:false,
-      evMovSinProgramacion:false,  //  NEW
-      evInfraccion:false,
-      evExcesoDeVelocidad:false,
-      evAnticolisionFrontal:false,
-      evColisionConPeatones:false,
+    //   evEntrada:false,
+    //   evSalida:false,
+    //   evEstadia:false,   // --- NEW
+    //   evParada:false,
+    //   evMovSinProgramacion:false,  //  NEW
+    //   evInfraccion:false,
+    //   evExcesoDeVelocidad:false,
+    //   evAnticolisionFrontal:false,
+    //   evColisionConPeatones:false,
 
-      evNoRostro:false,
-      evFatigaExtrema:false,
-      evDesvioCarrilIzquierda:false,
-      evDesvioCarrilDerecha:false,
-      evBloqueoVisionMobileye:false,
+    //   evNoRostro:false,
+    //   evFatigaExtrema:false,
+    //   evDesvioCarrilIzquierda:false,
+    //   evDesvioCarrilDerecha:false,
+    //   evBloqueoVisionMobileye:false,
 
 
-      AccFatiga:false, // DESACTIVADO
-      AccAlcoholemia:false,
-      AccIButton: false,  // --- DESACTIVADO
-      AccSomnolencia: false,
-      AccDistraccion: false,
+    //   AccFatiga:false, // DESACTIVADO
+    //   AccAlcoholemia:false,
+    //   AccIButton: false,  // --- DESACTIVADO
+    //   AccSomnolencia: false,
+    //   AccDistraccion: false,
 
-      OtroTodos:false,
-      OtroExVelocidad:false,
+    //   OtroTodos:false,
+    //   OtroExVelocidad:false,
 
-      //==========================
+    //   //==========================
 
-      evConductorAdormitado360:false,
-      evConductorSomnoliento360:false,
-      evDistraccionDetectada360:false,
-      evCinturonNoDetectado360:false,
-      evCigarroDetectado:false,
-      evCelularDetectado360:false,
-      evErrorDeCamara:false,
-      evDeteccionDeManipulacion360:false,
+    //   evConductorAdormitado360:false,
+    //   evConductorSomnoliento360:false,
+    //   evDistraccionDetectada360:false,
+    //   evCinturonNoDetectado360:false,
+    //   evCigarroDetectado:false,
+    //   evCelularDetectado360:false,
+    //   evErrorDeCamara:false,
+    //   evDeteccionDeManipulacion360:false,
       
-    };
+    // };
 
     //Reporte 10
     this.chkFatigaSomnolencia = true;
