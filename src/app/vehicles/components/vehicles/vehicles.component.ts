@@ -66,6 +66,12 @@ export class VehiclesComponent implements OnInit {
     config: false,
     sort: 'asc'
   }
+  selectedNameShowVehicle: string='all';
+  nameShows: any[] = [
+    { label: 'Por nùmero Placa', value: 'num_plate' },
+    { label: 'Por código interno', value: 'cod_interno' },
+    { label: 'Ambos', value: 'all' }
+  ];
 
   rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
   panelPaddingLeft = (Number(getComputedStyle(document.documentElement).getPropertyValue('--gl-panel-padding-left').replace('rem', '')) * this.rem_to_px )*0.25; //NO ESTOY SEGURO
@@ -246,6 +252,29 @@ export class VehiclesComponent implements OnInit {
       ],
     });
     this.api.sizeColumnsToFit();
+  }
+
+  onChangeSelection(show_name:string){
+    console.log('Vehicles List:',this.vehicles);
+    const vehicles = this.vehicleService.vehicles;
+    let tempShowName = '';
+    for (const index of vehicles) {
+      if(show_name=='num_plate'){
+        tempShowName = index.plate_number!;
+      }else if (show_name=='cod_interno'){
+        tempShowName = index.cod_interno!;
+      }else if (show_name =='all'){
+        tempShowName = index.cod_interno+'('+index.plate_number+')';
+      }
+      index.name= tempShowName;
+    }
+    if(this.vehicleService.listTable==0){
+      this.vehicleService.reloadTable.emit();
+    }else{
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+      this.vehicleService.reloadTableTree.emit();
+    }
+    this.vehicleService.onClickSelection(show_name);
   }
 
   // Cambio de vista

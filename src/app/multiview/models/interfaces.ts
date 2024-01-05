@@ -92,6 +92,7 @@ export interface UserTracker {
     nametype_vehicle?: string | null
     tolva?: string,
     tag?: boolean,
+    tag_driver?: boolean,
     cod_interno?: string | null
 }
 
