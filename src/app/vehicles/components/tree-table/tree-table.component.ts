@@ -2,8 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild, OnDestroy, Output, EventEmitt
 import { TreeNode } from 'primeng-lts/api';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
-import {DialogModule} from 'primeng-lts/dialog';
-
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -80,6 +78,13 @@ export class TreeTableComponent implements OnInit {
     config: true,
     sort: 'asc'
   }
+
+  selectedNameShowVehicle: string='all';
+  nameShows: any[] = [
+    { label: 'Por nùmero Placa', value: 'num_plate' },
+    { label: 'Por código interno', value: 'cod_interno' },
+    { label: 'Ambos', value: 'all' }
+  ];
 
 
   @ViewChild('tt') tt!:any;
@@ -580,6 +585,29 @@ export class TreeTableComponent implements OnInit {
     this.display = !this.display;
 
     // //console.log("display-->",this.display);
+  }
+
+  onChangeSelection(show_name:string){
+    console.log('Vehicles de Tree:',this.vehicles);
+    const vehicles = this.vehicleService.vehicles;
+    let tempShowName = '';
+    for (const index of vehicles) {
+      if(show_name=='num_plate'){
+        tempShowName = index.plate_number!;
+      }else if (show_name=='cod_interno'){
+        tempShowName = index.cod_interno!;
+      }else if (show_name =='all'){
+        tempShowName = index.cod_interno+'('+index.plate_number+')';
+      }
+      index.name= tempShowName;
+    }
+    if(this.vehicleService.listTable==0){
+      this.vehicleService.reloadTable.emit();
+    }else{
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+      this.vehicleService.reloadTableTree.emit();
+    }
+    this.vehicleService.onClickSelection(show_name);
   }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;

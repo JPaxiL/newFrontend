@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import 'leaflet.markercluster';
 import 'leaflet.markercluster.freezable';
 
+import { VehicleConfigService } from './vehicle-config.service';
 import { SocketWebService } from './socket-web.service';
 import { VehicleService } from './vehicle.service';
 import { FollowService } from './follow.service';
@@ -30,10 +31,11 @@ export class MapService {
   // public markerClusterGroup!: L.MarkerClusterGroup;
   public markerClusterGroup!: any;
   public markerClusterData!: any;
-
+  public markerClusterGroupOnda!:any;
   public leafletEvent!: L.LeafletEvent;
   private dataFitBounds: [string, string][] = [];
   private marker: any = [];
+  private markerOnda: any = [];
   private statusMap: boolean = false;
   private statusIcon: boolean = false;
   private interval!: any;
@@ -73,6 +75,7 @@ export class MapService {
     private socketWebService: SocketWebService,
     private tabService: TabService,
     private userDataService: UserDataService,
+    private vehicleConfigService: VehicleConfigService,
   ) {
     // this.interval = setInterval(function(this){
     //   // this.localStorage
@@ -83,6 +86,11 @@ export class MapService {
       removeOutsideVisibleBounds: true,
       zoomToBoundsOnClick: false
     });
+    //PARA ONDAS
+    // this.markerClusterGroupOnda = L.markerClusterGroup({
+    //   removeOutsideVisibleBounds: true,
+    //   zoomToBoundsOnClick: false
+    // });
 
     this.vehicleService.drawIconMap.subscribe(e=>{
       this.onDrawIcon(this.map);
@@ -113,6 +121,14 @@ export class MapService {
     });
     this.vehicleService.clickDriver.subscribe(res=>{
       this.tagDriver(res);
+    });
+    //CAMBIO DE NOMBRE/COD/AMBOS
+    this.vehicleService.clickSelection.subscribe(res=>{
+      this.changeNameVehicles(res);
+    });
+    //ACTUALIZAR NOMBRE DEL VEHICLE
+    this.vehicleConfigService.updateName.subscribe(res=>{
+      this.updateNameMarker(res);
     });
     this.vehicleService.calcTimeStop.subscribe(data=>{
       // console.log("event time stop res = ",data);
@@ -299,12 +315,14 @@ export class MapService {
     if(vehicle!.eye==true){
       // this.map.addLayer(this.marker[IMEI]);
       this.markerClusterGroup.addLayer(this.marker[IMEI]);
+      // this.markerClusterGroupOnda.addLayer(this.markerOnda[IMEI]);
       this.tagClick(vehicle!.IMEI!, false);
       this.vehicleService.countOpenEyes++;
     }else{
       //console.log('quitar vehiculo del mapa ...',vehicle);
       // this.map.removeLayer(this.marker[IMEI]);
       this.markerClusterGroup.removeLayer(this.marker[IMEI]);
+      // this.markerClusterGroupOnda.removeLayer(this.markerOnda[IMEI]);
       this.vehicleService.countOpenEyes--;
     }
     this.vehicleService.allEyes.state = this.vehicleService.countOpenEyes > 0;
@@ -318,9 +336,11 @@ export class MapService {
       // }
       if(vehicles[i].eye==true){
         this.markerClusterGroup.addLayer(this.marker[vehicles[i].IMEI!]);
+        // this.markerClusterGroupOnda.addLayer(this.markerOnda[vehicles[i].IMEI!]); //Para Ondas
         this.tagClick(vehicles[i].IMEI!, false);
       }else{
         this.markerClusterGroup.removeLayer(this.marker[vehicles[i].IMEI!]);
+        // this.markerClusterGroupOnda.removeLayer(this.markerOnda[vehicles[i].IMEI!]); //Para Ondas
       }
     }
     this.vehicleService.vehicles = vehicles;
@@ -347,16 +367,46 @@ export class MapService {
     for (const i in this.vehicleService.vehicles){
       if(this.vehicleService.vehicles[i].IMEI==IMEI){
         if(comesFromCheckbox != false){
-          this.vehicleService.vehicles[i].tag=!this.vehicleService.vehicles[i].tag;
+          this.vehicleService.vehicles[i].tag_driver=!this.vehicleService.vehicles[i].tag_driver;
         }
         vehicle = this.vehicleService.vehicles[i];
       }
     }
-    if(vehicle!.tag!){
-      this.marker[IMEI].openTooltip();
+    console.log(vehicle);
+    const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
+    // Actualizar el contenido del tooltip del marcador específico
+    if(vehicle!.tag_driver!){
+      this.marker[IMEI].setTooltipContent(`<span>${vehicle!.name}</span>${tempNameDriver}`);
     } else {
-      this.marker[IMEI].closeTooltip();
+      this.marker[IMEI].setTooltipContent(`<span>${vehicle!.name}</span>`);
     }
+  }
+
+  changeNameVehicles(show_name:string){
+    let vehicle = undefined;
+    let tempShowName = 'all';
+    for (const i in this.vehicleService.vehicles){
+      vehicle = this.vehicleService.vehicles[i];
+      if(show_name=='num_plate'){
+        tempShowName = vehicle!.plate_number!;
+      }else if (show_name=='cod_interno'){
+        tempShowName = vehicle!.cod_interno!;
+      }else if (show_name =='all'){
+        tempShowName = vehicle!.cod_interno+'('+vehicle!.plate_number+')';
+      }
+      const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
+      if(vehicle!.tag_driver == true){
+        this.marker[vehicle!.IMEI!].setTooltipContent(`<span>${tempShowName}</span>${tempNameDriver}`);
+      }else{
+        this.marker[vehicle!.IMEI!].setTooltipContent(`<span>${tempShowName}</span>`);
+      }
+      
+    }
+  }
+
+  updateNameMarker(vehicle:any){
+    // console.log('ESTO LLEGO A UPDATE NAME MARKER',vehicle);
+    this.marker[vehicle.tracker_imei].setTooltipContent(`<span>${vehicle.nombre}</span>`);
   }
 
   followClickIcon(map: any, IMEI: string){
@@ -818,7 +868,7 @@ export class MapService {
     }
 
     this.markerClusterGroup.clearLayers();
-
+    // this.markerClusterGroupOnda.clearLayers();
     for (const property in e){
         //console.log("e----- ", property);
         //console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
@@ -1010,8 +1060,24 @@ export class MapService {
 
 
   private drawIcon(data:any, map: any): void{
+    //SOLO PARA ONDAS CON GIF
+    // if (this.userDataService.changeItemIcon == 'ondas'){
+    //   //CREAR ONDA DEL VEHICLE
+    //   let iconOndaUrl = './assets/images/user_config/test_onda.gif';
+    //   const iconMarkerShadow = L.icon({
+    //     iconUrl: iconOndaUrl,
+    //     iconSize: [60, 65],
+    //     iconAnchor: [40, 55],
+    //     popupAnchor:  [-3, -40]
+    //   });
+    //   const tempMarkerOnda = L.marker([data.latitud, data.longitud], {icon: iconMarkerShadow}); 
+    //   this.markerOnda[data.IMEI]=tempMarkerOnda;
+    //   this.markerClusterGroupOnda.addLayer(tempMarkerOnda);
+    //   this.markerClusterGroupOnda.addTo(this.map);
+    // }
     // assets/images/objects/nuevo/{{ rowData['icon']
     let iconUrl = './assets/images/objects/nuevo/'+data.icon;
+    // let iconOndaUrl = './assets/images/user_config/circulo_movimiento.svg';
     
     const iconMarker = L.icon({
       iconUrl: iconUrl,
@@ -1080,6 +1146,7 @@ export class MapService {
     // tempMarker.on('click',this.timeStop,options);
     // // this
     this.marker[data.IMEI]=tempMarker;
+ 
 
     this.markerClusterGroup.addLayer(tempMarker);
     // ////console.log('this.markerClusterGroup',this.markerClusterGroup);

@@ -57,6 +57,7 @@ export class VehicleService {
   @Output() clickDriver = new EventEmitter<any>();
   @Output() clickListTable = new EventEmitter<any>();
   @Output() calcTimeStop = new EventEmitter<any>();
+  @Output() clickSelection = new EventEmitter<any>();
 
   constructor(
     private http: HttpClient,
@@ -158,6 +159,11 @@ export class VehicleService {
   // }
   public sortLimitVehicle(): void{
     this.sortLimit.emit();
+  }
+
+  public onClickSelection(show_name:string):void{
+    console.log('Llego ShowName al servicio:',show_name);
+    this.clickSelection.emit(show_name);
   }
 
   public getVehicles(): Observable<any>{

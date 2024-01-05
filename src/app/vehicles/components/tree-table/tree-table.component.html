@@ -114,6 +114,10 @@
               Personalizar Panel
             </div>
             <div class="container pt-2 png-checkbox-container">
+              <div class="button-group">
+                <p-selectButton [options]="nameShows" [(ngModel)]="selectedNameShowVehicle" (onChange)="onChangeSelection($event.value)"></p-selectButton>
+              </div>
+              <div class="dropdown-divider"></div>
               <div>
                 <span (click)="onClickSetting('eye')">
                   <p-checkbox [(ngModel)]="setting['eye']" [binary]="true"></p-checkbox>
@@ -186,6 +190,7 @@
                   Transmisión
                 </span>
               </div> -->
+              
               <div>
                 <span (click)="onClickSetting('config')">
                   <p-checkbox [(ngModel)]="setting['config']" [binary]="true"></p-checkbox>
@@ -193,6 +198,7 @@
                 </span>
               </div>
               <div class="dropdown-divider"></div>
+
             </div>
 
             <!-- <div class="dropdown-item active-view" style="padding: 0.125rem 0.75rem;"> -->
@@ -243,14 +249,14 @@
           <col style="width: 40px;" *ngIf="setting['eye']">
           <col style="width: 100%;" *ngIf="setting['vehicle']">
           <col style="width: 50%;" *ngIf="setting['imei']">
-          <col style="width: 40px;" *ngIf="setting['tag_driver']">
-          <col style="width: 45px;" *ngIf="setting['tag']">
-          <col style="width: 45px;" *ngIf="setting['follow']">
-          <col style="width: 45px;" *ngIf="setting['limit']">
-          <col style="width: 45px;" *ngIf="setting['gps']">
-          <col style="width: 45px;" *ngIf="setting['gsm']">
-          <col style="width: 45px;" *ngIf="setting['trans']">
-          <col style="width: 45px;" *ngIf="setting['config']">
+          <col style="width: 30px;" *ngIf="setting['tag_driver']">
+          <col style="width: 35px;" *ngIf="setting['tag']">
+          <col style="width: 35px;" *ngIf="setting['follow']">
+          <col style="width: 35px;" *ngIf="setting['limit']">
+          <col style="width: 35px;" *ngIf="setting['gps']">
+          <col style="width: 35px;" *ngIf="setting['gsm']">
+          <col style="width: 35px;" *ngIf="setting['trans']">
+          <col style="width: 35px;" *ngIf="setting['config']">
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>

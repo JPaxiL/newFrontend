@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 export class VehicleConfigService {
 
   @Output() displayOn = new EventEmitter<any>();
+  @Output() updateName = new EventEmitter<any>();
 
   constructor(private http: HttpClient) { }
 
@@ -22,7 +23,9 @@ export class VehicleConfigService {
     return this.http.get(this.api_url+"/api/test");
 
   }
-
+  public onVehicleUpdate(vehicle:any): void{
+    this.updateName.emit(vehicle);
+  }
   putConfig(vehicle: any): Observable<any>{
     return this.http.put(this.api_url+"/api/tracker/"+vehicle.IMEI,vehicle);
   }
