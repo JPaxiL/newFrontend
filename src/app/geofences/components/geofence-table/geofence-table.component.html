@@ -339,7 +339,7 @@
                         </div>
                         <div (click)="showGeosByTagOp(rowData['type'], rowData['id'], rowData['idOpe'])" ngbDropdownItem>
                           <span class="btn-label">
-                            Ocultar Geocercas
+                            Ocultar/Mostrar Geocercas
                           </span>
                         </div>
                       </div>
@@ -393,7 +393,7 @@
               <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
               <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                 <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                <div ngbDropdownItem (click)="clickEliminarGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
               </div>
             </div>
           </td>
@@ -599,7 +599,7 @@
               <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
               <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                 <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                <div ngbDropdownItem (click)="clickEliminarGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
               </div>
             </div>
           </td>

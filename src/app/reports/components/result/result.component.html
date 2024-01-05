@@ -6271,25 +6271,36 @@
               <thead>
                 <tr>
                     <th>Item</th>
-                    <th>Evento</th>
+                    
 
-                    <th *ngIf="!chkDateHour">Fecha/Hora Evento</th>
-                    <th *ngIf="chkDateHour">Fecha Evento</th>
-                    <th *ngIf="chkDateHour">Hora Evento</th>
-                    <th *ngIf="!chkDateHour">Fecha/Hora Servidor</th>
-                    <th *ngIf="chkDateHour && user_id != 923">Fecha Servidor</th>
-                    <th *ngIf="chkDateHour && user_id != 923">Hora Servidor</th>
-                    <th>Código</th>
-                    <th>Placa</th>
-                    <th>Tipo de Unidad</th>
+                    <th *ngIf="!chkDateHour && reportService.eC.Fecha">Fecha/Hora Evento</th>
+                    <th *ngIf="chkDateHour && reportService.eC.Fecha">Fecha Evento</th>
+                    <th *ngIf="chkDateHour && reportService.eC.Fecha">Hora Evento</th>
+                    <th *ngIf="!chkDateHour && reportService.eC.FechaServidor">Fecha/Hora Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
 
-                    <th>Vel.360</th>
+                    <th *ngIf="reportService.eC.Evento" >Evento</th>
 
-                    <th>Tramo o Geocerca</th>
-                    <!-- <th>Punto Cercano</th> -->
-                    <th>Referencia</th>
-                    <th>Ubicación</th>
-                    <th>Enlace a Archivo</th>
+                    <th *ngIf="reportService.eC.Codigo">Código</th>
+                    <th *ngIf="reportService.eC.Placa">Placa</th>
+                    <th *ngIf="reportService.eC.TipoUnidad">Tipo de Unidad</th>
+
+                    <th *ngIf="reportService.eC.IdConductor">ID Conductor</th>
+                    <th *ngIf="reportService.eC.Conductor">Conductor</th>
+
+                    <th *ngIf="reportService.eC.VelMobileye">Vel.Mobileye</th>
+                    <th *ngIf="reportService.eC.VelGPS">Vel.GPS</th>
+                    <th *ngIf="reportService.eC.VelGPSspeed">Vel.GPS speed</th>
+                    <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
+                    <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
+
+                    <th *ngIf="reportService.eC.Zona">Zona</th>
+                    <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
+                    <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
+                    <th *ngIf="reportService.eC.Referencia">Referencia</th>
+                    <th *ngIf="reportService.eC.EnlaceArchivo">Enlace a Archivo</th>
+                    <th *ngIf="reportService.eC.Parametros">Parámetros</th>
 
                 </tr>
               </thead>
@@ -6298,36 +6309,46 @@
                 <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
 
                     <td>{{i + 1}}</td>
-                    <td>{{row.descripcion_evento}}</td>
+                    
 
-                    <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
+                    <td *ngIf="!chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[1]}}</td>
 
-                    <td *ngIf="!chkDateHour">{{row.fecha_servidor}}</td>
-                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[1]}}</td>
+                    <td *ngIf="!chkDateHour && reportService.eC.FechaServidor">{{row.fecha_servidor}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[1]}}</td>
+
+                    <td *ngIf="reportService.eC.Evento">{{row.descripcion_evento}}</td>
+
+                    <td *ngIf="reportService.eC.Codigo">{{row.codigo}}</td>
+                    <td *ngIf="reportService.eC.Placa">{{row.placa}}</td>
+                    <td *ngIf="reportService.eC.TipoUnidad">{{row.tipo_unidad}}</td>
 
 
-                    <td>{{row.codigo}}</td>
-                    <td>{{row.placa}}</td>
-                    <td>{{row.tipo_unidad}}</td>
+                    <td *ngIf="reportService.eC.IdConductor">{{row.idConductor}}</td>
+                    <td *ngIf="reportService.eC.Conductor">{{row.conductor}}</td>
+ 
 
-                    <td>{{row.vel_gps}} Km/h</td>
-                    <!-- <td>{{row.idConductor}}</td>
-                    <td>{{row.conductor}}</td>
-                    <td>{{row.vel_gps_speed}} Km/h</td>
-                    <td>{{row.vel_can}} Km/h</td> -->
+                    <td *ngIf="reportService.eC.VelMobileye">{{row.vel_mobileye}}</td>
+                    <td *ngIf="reportService.eC.VelGPS">{{row.vel_gps}}</td>
+                    <td *ngIf="reportService.eC.VelGPSspeed">{{row.vel_gps_speed}}</td>
+                    <td *ngIf="reportService.eC.VelCAN">{{row.vel_can}}</td>
+                    <td *ngIf="reportService.eC.VelECO">{{row.vel_eco}}</td>
 
-                    <td>{{row.tramo}}</td>
-                    <td>{{row.referencia}}</td>
-                    <td>
+
+                    <td *ngIf="reportService.eC.Zona">{{row.tramo}}</td>
+                    <td *ngIf="reportService.eC.PuntoCercano">{{row.PC}}</td>
+                    <td *ngIf="reportService.eC.Ubicacion">
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    
-                    <td>
+                    <td *ngIf="reportService.eC.Referencia">{{row.referencia}}</td>
+
+                    <td *ngIf="reportService.eC.EnlaceArchivo">
                       <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
                     </td>
+
+                    <td *ngIf="reportService.eC.Parametros">{{row.parametros}}</td>
 
                 </tr>
               </tbody>
@@ -6360,25 +6381,37 @@
                 <tr>
               
                   <th>Item</th>
-                  <th>Evento</th>
+                    
 
-                  <th *ngIf="!chkDateHour">Fecha/Hora Evento</th>
-                  <th *ngIf="chkDateHour">Fecha Evento</th>
-                  <th *ngIf="chkDateHour">Hora Evento</th>
-                  <th *ngIf="!chkDateHour">Fecha/Hora Servidor</th>
-                  <th *ngIf="chkDateHour && user_id != 923">Fecha Servidor</th>
-                  <th *ngIf="chkDateHour && user_id != 923">Hora Servidor</th>
-                  <th>Código</th>
-                  <th>Placa</th>
-                  <th>Tipo de Unidad</th>
+                  <th *ngIf="!chkDateHour && reportService.eC.Fecha">Fecha/Hora Evento</th>
+                  <th *ngIf="chkDateHour && reportService.eC.Fecha">Fecha Evento</th>
+                  <th *ngIf="chkDateHour && reportService.eC.Fecha">Hora Evento</th>
+                  <th *ngIf="!chkDateHour && reportService.eC.FechaServidor">Fecha/Hora Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
 
-                  <th>Vel.360</th>
+                  <th *ngIf="reportService.eC.Evento" >Evento</th>
 
-                  <th>Tramo o Geocerca</th>
-                  <!-- <th>Punto Cercano</th> -->
-                  <th>Referencia</th>
-                  <th>Ubicación</th>
-                  <th>Enlace a Archivo</th>
+                  <th *ngIf="reportService.eC.Codigo">Código</th>
+                  <th *ngIf="reportService.eC.Placa">Placa</th>
+                  <th *ngIf="reportService.eC.TipoUnidad">Tipo de Unidad</th>
+
+                  <th *ngIf="reportService.eC.IdConductor">ID Conductor</th>
+                  <th *ngIf="reportService.eC.Conductor">Conductor</th>
+
+                  <th *ngIf="reportService.eC.VelMobileye">Vel.Mobileye</th>
+                  <th *ngIf="reportService.eC.VelGPS">Vel.GPS</th>
+                  <th *ngIf="reportService.eC.VelGPSspeed">Vel.GPS speed</th>
+                  <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
+                  <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
+
+                  <th *ngIf="reportService.eC.Zona">Zona</th>
+                  <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
+                  <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
+                  <th *ngIf="reportService.eC.Referencia">Referencia</th>
+
+                  <th *ngIf="reportService.eC.EnlaceArchivo">Enlace a Archivo</th>
+                  <th *ngIf="reportService.eC.Parametros">Parámetros</th>
 
                 </tr>
               </thead>
@@ -6386,38 +6419,64 @@
               <tbody>
                 <tr *ngFor="let row of v_table[1];  let i = index;">
 
-                    <td>{{i + 1}}</td>
+                    <!-- <td>{{i + 1}}</td>
                     <td>{{row.descripcion_evento}}</td>
-
                     <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
                     <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
                     <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
-
                     <td *ngIf="!chkDateHour">{{row.fecha_servidor}}</td>
                     <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[0]}}</td>
                     <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[1]}}</td>
-
-
                     <td>{{row.codigo}}</td>
                     <td>{{row.placa}}</td>
                     <td>{{row.tipo_unidad}}</td>
-
                     <td>{{row.vel_gps}} Km/h</td>
-
-                    <!-- <td>{{row.idConductor}}</td>
-                    <td>{{row.conductor}}</td>
-                    <td>{{row.vel_gps_speed}} Km/h</td>
-                    <td>{{row.vel_can}} Km/h</td> -->
-
                     <td>{{row.tramo}}</td>
                     <td>{{row.referencia}}</td>
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    
                     <td>
                       <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+                    </td> -->
+
+                    <td>{{i + 1}}</td>
+
+                    <td *ngIf="!chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[1]}}</td>
+
+                    <td *ngIf="!chkDateHour && reportService.eC.FechaServidor">{{row.fecha_servidor}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[1]}}</td>
+
+                    <td *ngIf="reportService.eC.Evento">{{row.descripcion_evento}}</td>
+
+                    <td *ngIf="reportService.eC.Codigo">{{row.codigo}}</td>
+                    <td *ngIf="reportService.eC.Placa">{{row.placa}}</td>
+                    <td *ngIf="reportService.eC.TipoUnidad">{{row.tipo_unidad}}</td>
+
+                    <td *ngIf="reportService.eC.IdConductor">{{row.idConductor}}</td>
+                    <td *ngIf="reportService.eC.Conductor">{{row.conductor}}</td>
+
+ 
+                    <td *ngIf="reportService.eC.VelMobileye">{{row.vel_mobileye}}</td>
+                    <td *ngIf="reportService.eC.VelGPS">{{row.vel_gps}}</td>
+                    <td *ngIf="reportService.eC.VelGPSspeed">{{row.vel_gps_speed}}</td>
+                    <td *ngIf="reportService.eC.VelCAN">{{row.vel_can}}</td>
+                    <td *ngIf="reportService.eC.VelECO">{{row.vel_eco}}</td>
+
+                    <td *ngIf="reportService.eC.Zona">{{row.tramo}}</td>
+                    <td *ngIf="reportService.eC.PuntoCercano">{{row.PC}}</td>
+                    <td *ngIf="reportService.eC.Ubicacion">
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
+                    <td *ngIf="reportService.eC.Referencia">{{row.referencia}}</td>
+
+                    <td *ngIf="reportService.eC.EnlaceArchivo">
+                      <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+                    </td>
+                    <td *ngIf="reportService.eC.Parametros">{{row.parametros}}</td>
 
                 </tr>
               </tbody>
@@ -6683,7 +6742,7 @@
         <!-- <md-button ng-if="res.mostrarPdf()" class="md-raised md-primary" ng-click="res.exportPdfPosicion()">EXPORTAR PDF</md-button> -->
 
 
-        <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-success" (click)="exportPdfParadasMovimientos();">EXPORTAR PDF</button> 
+        <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-success" (click)="showSelectPdf('exportPdfParadasMovimientos');">EXPORTAR PDF</button> 
 
         <!--<button *ngIf="report_data.num_rep == 1" class="btn btn-success" (click)="exportPdfExcesosVelocidad();">EXPORTAR PDF</button> -->
         <!-- <button *ngIf="report_data.num_rep == 2" class="btn btn-success" (click)="exportPdfEntradaSalida();">EXPORTAR PDF</button>

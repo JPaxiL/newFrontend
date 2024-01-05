@@ -210,15 +210,15 @@ export class MapService {
 
   }
   setNameGroup(nameOpe:string,nameGru:string,nameCon:string): string{
-    if (nameOpe != 'Unidades Sin Operacion'){
+    if (nameCon != 'Unidades Sin Convoy'){
       if (nameGru != 'Unidades Sin Grupo'){
-        if (nameCon != 'Unidades Sin Convoy'){
+        if (nameOpe != 'Unidades Sin Operacion'){
           return 'OPERACION/GRUPO/CONVOY: '+nameOpe+' / '+nameGru+' / '+nameCon;
         }else{
-          return 'OPERACION/GRUPO:'+nameOpe+' / '+nameGru;
+          return 'CONVOY/GRUPO:'+nameCon+' / '+nameGru;
         }
       }else{
-        return 'OPERACION: '+nameOpe;
+        return 'CONVOY: '+nameCon;
       }
     }else{
       return '';

@@ -12,7 +12,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserDetectorService } from '../../services/browser-detector.service';
 import { EventService } from 'src/app/events/services/event.service';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11fb96d6b9b8fe540cbbb45fd7eb9ba258b8efab
 
 import Swal from 'sweetalert2';
 // import { threadId } from 'worker_threads';
@@ -29,6 +32,7 @@ export class FormComponent implements OnInit {
   reports: any=[];
   events: any=[];
   selectedReport: any={};
+  events: any=[];
   vehicles: any=[];
   selectedVehicles: any=[];
   convoys: any=[];
@@ -253,60 +257,52 @@ export class FormComponent implements OnInit {
       // AccDistraccion: false, //Distracción
       // evVibracionSensorFatiga: false, //Vibración de Fatiga
 
-      // //EVENTOS SOLUCIONES MOVILES
-      // evDvrOperativo: false, //DVR Operativo
-      // evDvrInoperativo: false, //DVR Inoperativo
+  //     AccFatiga:false, // DESACTIVADO
+  //     AccAlcoholemia:false,
+  //     AccIButton: false,  // --- DESACTIVADO
+  //     AccSomnolencia: false,
+  //     AccDistraccion: false,
 
-      // //EVENTOS FATIGA 360
-      // evConductorAdormitado360:false,// Conductor Adormitado 360
-      // evConductorSomnoliento360:false,// Conductor Somnoliento 360
-      // evDistraccionDetectada360:false,// Distracción detectada 360
-      // evCinturonNoDetectado360:false,// Cinturón no detectado 360
-      // evCigarroDetectado:false, // Cigarro detectado 360
-      // evCelularDetectado360:false,// Celular detectado 360
-      // evErrorDeCamara:false,// Error de Cámara 360
-      // evDeteccionDeManipulacion360:false,// Detección de Manipulación 360
+  //     OtroTodos:false,
+  //     OtroExVelocidad:false,
 
-      // evActualizacionEstadoGps360:false,// Actualización de Estado del Gps 360
-      // evActualizacionFwComplete360:false,// Actualizacion FW Completada 360
-      // evActualizacionFwFailed360:false,// Actualizacion FW Fallida 360
-      // evActualizacionFwStart360:false,// Actualizacion FW Iniciada 360
-      // evAdvertenciaCambioCarril360:false,// Advertencia de Cambio de Carril 360
-      // evColisionWithPeaton360:false,// Advertencia de Colisión con Peatones 360
-      // evColisionFrontal360:false,// Advertencia de Colisión Frontal 360
-      // evColisionFrontalUrbana360:false,// Advertencia de Colisión Frontal Urbana 360
-      // evCalibracionComplete360:false,// Calibracion Completada 360
-      // evCalibracionAcelerometro3D360:false,// Calibración del acelerómetro 3D completada 360
-      // evCalibracionFailed360:false,// Calibracion Fallida 360
-      // evChangeDriver360:false,// Cambio de Conductor 360
-      // evDriverIdUpdated360:false,// Conductor ID Actualizado 360
-      // evDriverIdentified360:false,// Conductor Identificado 360
-      // evDriverAusent360:false,// Conductor no detectado 360
-      // evDriverNotIdentified360:false,// Conductor No Identificado 360
-      
-      // evErrorAplication360:false,// Error de aplicación 360
-      // evErrorSystem360:false,// Error del sistema 360
-      // evEventExterno360:false,// Evento Externo Solicitado 360
-      // evExcessVelocity360:false,// Exceso de Velocidad 360
-      // evFailedStartSystem360:false,// Fallo en Inicio del sistema 360
-      // evIgnicionOn360:false,// Ignición Activada 360
-      // evIgnicionOff360:false,// Ignición Desactivada 360
-      // evStartSystem360:false,// Inicio del sistema 360
-      // evMculog360:false,// MCULOG 360
-      // evReposoIn360:false,// Modo de Reposo Ingresado 360
-      // evMonitoreoAvance360:false,// Monitoreo y Advertencia de Avance 360
-      // evMovementStop360:false,// Movimiento Detenido 360
-      // evMovementStart360:false,// Movimiento Iniciado 360
-      // evSkipRedLight360:false,// Saltarse Semáforo en Rojo 360
-      // evSystemOk360:false,// Sistema OK 360
-      // evsystemReset360:false,// Sistema Reiniciado 360
-      // evStopIgnored:false,// Stop Desobedecido 360
+  //     //==========================
 
-      // //==========================
-      // OtroTodos:false,
-      // OtroExVelocidad:false,
+  //     evConductorAdormitado360:false,
+  //     evConductorSomnoliento360:false,
+  //     evDistraccionDetectada360:false,
+  //     evCinturonNoDetectado360:false,
+  //     evCigarroDetectado:false,
+  //     evCelularDetectado360:false,
+  //     evErrorDeCamara:false,
+  //     evDeteccionDeManipulacion360:false,
 
-    // };
+  //   };
+  
+  //Reporte 6 - Reporte de Eventos , Seleccion de Campo
+
+  eC = {
+    Fecha :true,
+    FechaServidor :false,
+    Evento :true,
+    Codigo :true,
+    Placa :true,
+    TipoUnidad :false,
+    IdConductor :false,
+    Conductor :false,
+    VelMobileye :false,
+    VelGPS :true,
+    VelCAN :false,
+    VelECO :false,
+    VelGPSspeed :false,
+
+    Zona :false,
+    PuntoCercano :false,
+    Ubicacion :false,
+    Referencia :false,
+    EnlaceArchivo :false,
+    Parametros : false,
+  }
 
 
 
@@ -344,8 +340,8 @@ export class FormComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public reportService: ReportService,
     private vehicleService: VehicleService,
-    private eventService: EventService,
     private confirmationService: ConfirmationService,
+    public eventService:EventService,
     private http: HttpClient,
     private titleService: Title) {
       //INICIAR EL VEHICLE SERVICE PARA REPORTES
@@ -568,24 +564,27 @@ export class FormComponent implements OnInit {
     console.log("Es firefox ? " + this.isFirefox);
     console.log("Es safari ? " + this.isSafari);
 
-    	// console.log("fnc_direccion--xDs");
-			var f = new google.maps.Geocoder();
-			// var h = new google.maps.LatLng(trama.lat, trama.lng);
-			var h = new google.maps.LatLng(-16.406578,-71.560808);
 
-			f.geocode({
-					'latLng': h
-			},  (a:any, b:any) => {
-					console.log("*********************1");
-					console.log(a);
-					console.log(b);
-					console.log("*********************2");
-					if (b == "REQUEST_DENIED") {
-						// vm.chkApiGoogle = false;
-					} else {
-            this.reportService.setApiGoogle(true);
-					}
-			});
+      //this.reportService.eC = this.eC;
+
+    	// // console.log("fnc_direccion--xDs");
+			// var f = new google.maps.Geocoder();
+			// // var h = new google.maps.LatLng(trama.lat, trama.lng);
+			// var h = new google.maps.LatLng(-16.406578,-71.560808);
+
+			// f.geocode({
+			// 		'latLng': h
+			// },  (a:any, b:any) => {
+			// 		console.log("*********************1");
+			// 		console.log(a);
+			// 		console.log(b);
+			// 		console.log("*********************2");
+			// 		if (b == "REQUEST_DENIED") {
+			// 			// vm.chkApiGoogle = false;
+			// 		} else {
+      //       this.reportService.setApiGoogle(true);
+			// 		}
+			// });
 
 
   }
@@ -818,9 +817,11 @@ export class FormComponent implements OnInit {
   }
 
   reportar(new_tab?: any){
+
+    this.reportService.eC = JSON.parse(JSON.stringify(this.eC));
+
     console.log(new_tab !== undefined);
     this.reportService.workingOnReport = true;
-
 
     var repSubtitle = '';
     var chkDateHour = this.chkDateHour;
