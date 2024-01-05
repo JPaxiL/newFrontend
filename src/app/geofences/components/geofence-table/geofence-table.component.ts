@@ -47,6 +47,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     name : "",
     type : ""
   };
+  visibleRow: any = {};
   displayEditTags: boolean = false;
   textHeaderEdit: string = "";
   selectedList1: any = [];
@@ -522,53 +523,56 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
   }
 
   showGeosByTagOp(type: string, id: string, idOpe?: string){
-    
+    let tempId = idOpe + '_' + id;
+    this.visibleRow.tempId = true;
     console.log('idOpe: ', idOpe);
-    
+    console.log('idTag: ', id);
     if(type == 'etiqueta'){
-      
       var idTg = id;
-      console.log('tag valor',idTg);
-
-      if(idTg == '0'){
-        //const tags = this.geofencesService.geofences.map((tag: { tags: []; }) => tag.tags).flat();
-        this.geofencesService.listGeofences.forEach((geo: {id: number; zone_visible: string; tags: string[]; }) => {
-          if(geo.tags.length === 0 && geo.zone_visible === 'true'){
+      if(idTg == '0' && idOpe == '0'){
+        const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
+        filteredGeos.forEach((geo: {id: number; type: string; zone_visible: string; tags: string[]; }) => {
+          if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'polig'){
             this.clickShowGeoPol(geo.id, true);
+          } else if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'circ'){
+            this.clickShowGeoCir(geo.id, true);
           }
         });
-      
-      } else if(idTg != '0') {
-        const geosByOp = [...new Set(this.geofencesService.listGeofences.map((geo: { idoperation: any; }) => geo.idoperation))];
-        geosByOp.forEach(idOpe => {
-          // Obtener geos de esa operación
-          const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: unknown; }) => geos.idoperation == idOpe);
-          console.log('operationss', filteredGeos);
-          // Aplicar lógica de visibilidad
-          filteredGeos.forEach((geo: {id: number; tags: string | string[]; zone_visible: string; }) => {
-            if (geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true') {
-              this.clickShowGeoPol(geo.id, true); 
-            }
-          });
+      } else if(idTg == '0' && idOpe != '0'){
+        const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
+        filteredGeos.forEach((geo: {id: number; type: string; zone_visible: string; tags: string[]; }) => {
+          if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'polig'){
+            this.clickShowGeoPol(geo.id, true);
+          } else if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'circ'){
+            this.clickShowGeoCir(geo.id, true);
+          }
         });
-
-        // this.geofencesService.listGeofences.forEach((geo: {id: number; zone_visible: string; tags: string | string[]; }) => {
-        //   if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true'){
-        //     this.clickShowGeoPol(geo.id, true);
-        //   }
-        // });
+      }else if(idTg != '0' && idOpe == '0'){
+        const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
+        filteredGeos.forEach((geo: {id: number; type: string; zone_visible: string; tags: string[]; }) => {
+          if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'polig'){
+            this.clickShowGeoPol(geo.id, true);
+          } else if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'circ'){
+            this.clickShowGeoCir(geo.id, true);
+          }
+        });
+      } else if(idTg != '0' && idOpe != '0') {
+        const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
+        filteredGeos.forEach((geo: { type: string;id: number; tags: string | string[]; zone_visible: string; }) => {
+          if (geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'polig') {
+              this.clickShowGeoPol(geo.id, true); 
+          } else if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'circ'){
+            this.clickShowGeoCir(geo.id, true);
+          }
+        });
       }
-      
-
     }else if(type == 'operacion') {
       var idOp = id;
-      //filtro si alguna geocerca tiene el idOp
-      this.geofencesService.listGeofences.forEach((geo: { id: number; idoperation: string; zone_visible: string; }) => {
-        if((geo.idoperation === idOp && geo.zone_visible === 'true') == this.geofencesService.eyeInputSwitch){
+      this.geofencesService.listGeofences.forEach((geo: { id: number; type: string; idoperation: string; zone_visible: string; }) => {
+        if(geo.idoperation === idOp && geo.zone_visible === 'true' && geo.type == 'polig'){
           this.clickShowGeoPol(geo.id, true);
-          geo.zone_visible = 'false'; 
-          //this.clickShowGeoCir(geo.id, true);
-          //geo.zone_visible = geo.zone_visible === "true" ? "false" : "true";
+        } else if(geo.idoperation === idOp && geo.zone_visible === 'true' && geo.type == 'circ'){
+          this.clickShowGeoCir(geo.id, true);
         }
       });
 
