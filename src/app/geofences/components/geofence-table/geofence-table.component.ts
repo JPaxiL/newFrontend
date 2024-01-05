@@ -91,7 +91,6 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     // if(!this.circularGeofencesService.initializingCircularGeofences || !this.circularGeofencesService.initializingUserPrivleges){
     //   // this.geofencesService.spinner.show('loadingGeofencesSpinner');
     // }
-    console.log('objinit:==>', this.objGeofences);
     if(this.geofencesService.initializingGeofences){
       await this.objGeofences.setGeofences(this.geofencesService.geofences as IGeofence[], 'polig');
     }else{
@@ -143,35 +142,6 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  addDataGeofence(geofences: any){
-    const items = geofences;
-    for (const i in items){
-      items[i] = this.formatGeofence(items[i]);
-    }
-    return items;
-  }
-
-  public formatGeofence(geofence: any): any{
-    const today = moment();
-    geofence = this.addSelect(geofence);
-    return geofence;
-  }
-
-  private addSelect(geofence: any){
-    geofence.follow = false;
-    geofence.eye = true;
-    geofence.tag = true;
-    geofence.arrayPrueba = [];
-    geofence.arrayPruebaParada = [];
-    geofence.paradaDesde = false;
-    geofence.eventos = {};
-
-    return geofence;
-  }
-  params: any;
-  agInit(params: any){
-    this.params = params;
-  }
   onClickAddTags(){
     // this.geofencesService.compTags = 'MODAL TAG';
     // this.geofencesService.actionTags = 'add';
@@ -690,6 +660,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     } else {
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
+      this.clickShowGeoPolName(id);
     }
     this.geofencesService.updateGeoCounters();
     this.geofencesService.updateGeoTagCounters();
@@ -729,6 +700,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     } else {
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
+      this.clickShowGeoCirName(id);
     }
 
     this.circularGeofencesService.updateGeoCounters();
@@ -767,6 +739,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     } else {
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
+      this.clickShowGeoLinName(id);
     }
 
     this.polylineGeofenceService.updateGeoCounters();
@@ -914,17 +887,17 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     this.geofencesService.idGeocercaEdit = id;
   }
   
-  clickEliminarGeocerca(id:number , type: string){
+  clickDeleteGeo(id:number , type: string){
     if(type=='polig'){
-      this.clickEliminarGeocercaPol(id);
+      this.clickDeleteGeoPol(id);
     }else if (type=='circ'){
-      this.clickEliminarGeocercaCir(id);
+      this.clickDeleteGeoCir(id);
     }else if(type == 'line'){
-      //this.clickEliminarGeocercaLin(id);
+      //this.clickDeleteGeoLin(id);
     }
   }
 
-  async clickEliminarGeocercaPol(id:number) {
+  async clickDeleteGeoPol(id:number) {
     this.geofencesService.action = 'delete';
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
 
@@ -967,7 +940,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  clickEliminarGeocercaCir(id:number) {
+  clickDeleteGeoCir(id:number) {
     this.circularGeofencesService.action = "delete";
     var geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
 

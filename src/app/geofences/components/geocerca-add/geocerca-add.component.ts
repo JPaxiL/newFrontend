@@ -418,12 +418,12 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
     this.form.categoria = geo.zone_cat;
     let checkVelocidad = false;
     switch (geo.vel_act_zona) {
-      case "0      ":
-      case "false  ":
+      case "0":
+      case "false":
         checkVelocidad = false;
         break;
-      case "1      ":
-      case "true   ":
+      case "1":
+      case "true":
         checkVelocidad = true;
         break;
       default:
@@ -652,8 +652,43 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       return;
     }
+    console.log('checkVelocidad', this.form.checkVelocidad);
+    if(this.form.checkVelocidad == 'true' || this.form.checkVelocidad == true){
+      console.log('ingresa a la validacion');
+      if(this.form.limite_velocidad == null || this.form.limite_velocidad == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+      if(this.form.limite_tolerable == null || this.form.limite_tolerable == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad tolerable no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+      if(this.form.limite_grave == null || this.form.limite_grave == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad grave no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+      if(this.form.limite_muy_grave == null || this.form.limite_muy_grave == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad muy grave no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+    }
     this.spinner.show('spinnerLoading');
-
     if ( this.geofencesService.action == 'edit pol' ) {
       var geo0 = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
       this.form.geo_geometry = this.layerToPoints(geo0.geo_elemento,'POLYGON');
@@ -853,6 +888,44 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       });
       return;
     }
+   
+    console.log('checkVelocidad', this.form.checkVelocidad);
+    if(this.form.checkVelocidad == 'true' || this.form.checkVelocidad == true){
+      console.log('ingresa a la validacion');
+      if(this.form.limite_velocidad == null || this.form.limite_velocidad == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+      if(this.form.limite_tolerable == null || this.form.limite_tolerable == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad tolerable no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+      if(this.form.limite_grave == null || this.form.limite_grave == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad grave no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+      if(this.form.limite_muy_grave == null || this.form.limite_muy_grave == 0){
+        Swal.fire({
+          title: 'Error',
+          text: 'El límite de velocidad muy grave no puede quedar vacío.',
+          icon: 'warning',
+        });
+        return;
+      }
+      
+    }
     this.spinner.show('spinnerLoading');
     this.form.radio = (this.poligonAddCir.getRadius()/1000).toFixed(2);
     console.log('Circ', this.form);
@@ -889,9 +962,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.zone_cat = gEdit.int_categoria;
         geo.vel_act_zona = gEdit.bol_limite_velocidad_activo;
         geo.vel_max = gEdit.int_limite_velocidad_0;
-        geo.int_limite_velocidad_1 = gEdit.int_limite_velocidad_1;
-        geo.int_limite_velocidad_2 = gEdit.int_limite_velocidad_2;
-        geo.int_limite_velocidad_3 = gEdit.int_limite_velocidad_3;
+        geo.vel_zona = gEdit.int_limite_velocidad_1;
+        geo.vel2_zona = gEdit.int_limite_velocidad_2;
+        geo.vel3_zona = gEdit.int_limite_velocidad_3;
         geo.zone_no_int_color = gEdit.bol_sin_relleno;
         geo.idoperation = gEdit.operation_grupo_id ?? 0;
         geo.nameoperation = this.getNameOperation(geo.idoperation);
@@ -966,9 +1039,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
           geo.zone_cat = gNew.int_categoria;
           geo.vel_act_zona = gNew.bol_limite_velocidad_activo;
           geo.vel_max = gNew.int_limite_velocidad_0;
-          geo.int_limite_velocidad_1 = gNew.int_limite_velocidad_1;
-          geo.int_limite_velocidad_2 = gNew.int_limite_velocidad_2;
-          geo.int_limite_velocidad_3 = gNew.int_limite_velocidad_3;
+          geo.vel_zona = gNew.int_limite_velocidad_1;
+          geo.vel2_zona = gNew.int_limite_velocidad_2;
+          geo.vel3_zona = gNew.int_limite_velocidad_3;
           geo.zone_no_int_color = true;
           geo.idoperation = gNew.operation_grupo_id ?? 0;
           geo.nameoperation = this.getNameOperation(geo.idoperation);
