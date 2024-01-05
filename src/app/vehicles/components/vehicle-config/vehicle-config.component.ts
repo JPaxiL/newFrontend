@@ -193,7 +193,8 @@ export class VehicleConfigComponent implements OnInit {
     await this.configService.putConfig(this.vehicle).toPromise()
       .then( newConfig => {
         if(newConfig.res){
-          //console.log(newConfig);
+          // console.log(newConfig);
+          this.configService.onVehicleUpdate(newConfig.data);
           //console.log('(Vehicle Config) Recibido data de guardado de cambios: ');
           this.eventUpdate.emit(this.vehicle);
           this.eventDisplay.emit(false);

@@ -20,6 +20,11 @@
             Personalizar Panel
           </div>
           <div class="container pt-2 png-checkbox-container">
+            <!-- Filtrar Nombre -->
+            <div class="button-group">
+              <p-selectButton [options]="nameShows" [(ngModel)]="selectedNameShowVehicle" (onChange)="onChangeSelection($event.value)"></p-selectButton>
+            </div>
+            <div class="dropdown-divider"></div>
             <div>
               <span (click)="onClickSetting('eye')">
                 <p-checkbox [(ngModel)]="!setting['eye']" [binary]="true"></p-checkbox>
