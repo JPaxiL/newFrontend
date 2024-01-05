@@ -12,10 +12,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserDetectorService } from '../../services/browser-detector.service';
 import { EventService } from 'src/app/events/services/event.service';
-<<<<<<< HEAD
-
-=======
->>>>>>> 11fb96d6b9b8fe540cbbb45fd7eb9ba258b8efab
 
 import Swal from 'sweetalert2';
 // import { threadId } from 'worker_threads';
@@ -32,7 +28,6 @@ export class FormComponent implements OnInit {
   reports: any=[];
   events: any=[];
   selectedReport: any={};
-  events: any=[];
   vehicles: any=[];
   selectedVehicles: any=[];
   convoys: any=[];
