@@ -66,11 +66,11 @@ export class VehiclesComponent implements OnInit {
     config: false,
     sort: 'asc'
   }
-  selectedNameShowVehicle: string='all';
+  selectedNameShowVehicle: string='name';
   nameShows: any[] = [
-    { label: 'Por nùmero Placa', value: 'num_plate' },
-    { label: 'Por código interno', value: 'cod_interno' },
-    { label: 'Ambos', value: 'all' }
+    { label: 'Número placa', value: 'num_plate' },
+    { label: 'Código interno', value: 'cod_interno' },
+    { label: 'Nombre', value: 'name' }
   ];
 
   rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -255,7 +255,7 @@ export class VehiclesComponent implements OnInit {
   }
 
   onChangeSelection(show_name:string){
-    console.log('Vehicles List:',this.vehicles);
+    // console.log('Vehicles List:',this.vehicles);
     const vehicles = this.vehicleService.vehicles;
     let tempShowName = '';
     for (const index of vehicles) {
@@ -263,8 +263,18 @@ export class VehiclesComponent implements OnInit {
         tempShowName = index.plate_number!;
       }else if (show_name=='cod_interno'){
         tempShowName = index.cod_interno!;
-      }else if (show_name =='all'){
-        tempShowName = index.cod_interno+'('+index.plate_number+')';
+      }else if (show_name =='name'){
+        tempShowName = index.name_old!;
+      }
+      if (!tempShowName){
+        // Busca el valor correspondiente en nameShows basado en selectedNameShowVehicle
+        const selectedOption = this.nameShows.find(option => option.value === this.selectedNameShowVehicle);
+        // Verifica si se encontró una opción correspondiente
+        if (selectedOption) {
+          tempShowName = "Unidad Sin " + selectedOption.label;
+        } else {
+          tempShowName = "Unidad Sin Nombre";
+        }
       }
       index.name= tempShowName;
     }

@@ -122,7 +122,7 @@ export class MapService {
     this.vehicleService.clickDriver.subscribe(res=>{
       this.tagDriver(res);
     });
-    //CAMBIO DE NOMBRE/COD/AMBOS
+    //CAMBIO DE NOMBRE/COD/NOMBRE
     this.vehicleService.clickSelection.subscribe(res=>{
       this.changeNameVehicles(res);
     });
@@ -381,21 +381,36 @@ export class MapService {
       this.marker[IMEI].setTooltipContent(`<span>${vehicle!.name}</span>`);
     }
   }
-
+  setDefaultName(show_name:string):string{
+    if(show_name=='num_plate'){
+      return 'Número de placa';
+    }else if (show_name=='cod_interno'){
+      return 'Código interno';
+    }else{
+      return 'Nombre';
+    }
+  }
   changeNameVehicles(show_name:string){
     let vehicle = undefined;
-    let tempShowName = 'all';
+    let tempShowName = '';
+    let defaultName = 'Nombre';
+    defaultName = this.setDefaultName(tempShowName);
     for (const i in this.vehicleService.vehicles){
       vehicle = this.vehicleService.vehicles[i];
       if(show_name=='num_plate'){
         tempShowName = vehicle!.plate_number!;
       }else if (show_name=='cod_interno'){
         tempShowName = vehicle!.cod_interno!;
-      }else if (show_name =='all'){
-        tempShowName = vehicle!.cod_interno+'('+vehicle!.plate_number+')';
+      }else if (show_name =='name'){
+        tempShowName = vehicle!.name_old!;
       }
-      const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
+
+      if(tempShowName == null){
+        tempShowName = 'Unidad Sin '+defaultName;
+      }
+      
       if(vehicle!.tag_driver == true){
+        const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
         this.marker[vehicle!.IMEI!].setTooltipContent(`<span>${tempShowName}</span>${tempNameDriver}`);
       }else{
         this.marker[vehicle!.IMEI!].setTooltipContent(`<span>${tempShowName}</span>`);

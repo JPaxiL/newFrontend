@@ -79,11 +79,11 @@ export class TreeTableComponent implements OnInit {
     sort: 'asc'
   }
 
-  selectedNameShowVehicle: string='all';
+  selectedNameShowVehicle: string='name';
   nameShows: any[] = [
-    { label: 'Por nùmero Placa', value: 'num_plate' },
-    { label: 'Por código interno', value: 'cod_interno' },
-    { label: 'Ambos', value: 'all' }
+    { label: 'Número placa', value: 'num_plate' },
+    { label: 'Código interno', value: 'cod_interno' },
+    { label: 'Nombre', value: 'name' }
   ];
 
 
@@ -588,16 +588,27 @@ export class TreeTableComponent implements OnInit {
   }
 
   onChangeSelection(show_name:string){
-    console.log('Vehicles de Tree:',this.vehicles);
+    // console.log('Vehicles de Tree:',this.vehicles);
     const vehicles = this.vehicleService.vehicles;
     let tempShowName = '';
     for (const index of vehicles) {
+      // console.log('vehicle ->',index);
       if(show_name=='num_plate'){
         tempShowName = index.plate_number!;
       }else if (show_name=='cod_interno'){
         tempShowName = index.cod_interno!;
-      }else if (show_name =='all'){
-        tempShowName = index.cod_interno+'('+index.plate_number+')';
+      }else if (show_name =='name'){
+        tempShowName = index.name_old!;
+      }
+      if (!tempShowName){
+        // Busca el valor correspondiente en nameShows basado en selectedNameShowVehicle
+        const selectedOption = this.nameShows.find(option => option.value === this.selectedNameShowVehicle);
+        // Verifica si se encontró una opción correspondiente
+        if (selectedOption) {
+          tempShowName = "Unidad Sin " + selectedOption.label;
+        } else {
+          tempShowName = "Unidad Sin Nombre";
+        }
       }
       index.name= tempShowName;
     }
