@@ -79,11 +79,11 @@ export class TreeTableComponent implements OnInit {
     sort: 'asc'
   }
 
-  selectedNameShowVehicle: string='all';
+  selectedNameShowVehicle: string='name';
   nameShows: any[] = [
     { label: 'Por nùmero Placa', value: 'num_plate' },
     { label: 'Por código interno', value: 'cod_interno' },
-    { label: 'Ambos', value: 'all' }
+    { label: 'Por nombre', value: 'name' }
   ];
 
 
@@ -592,12 +592,13 @@ export class TreeTableComponent implements OnInit {
     const vehicles = this.vehicleService.vehicles;
     let tempShowName = '';
     for (const index of vehicles) {
+      console.log('vehicle ->',index);
       if(show_name=='num_plate'){
         tempShowName = index.plate_number!;
       }else if (show_name=='cod_interno'){
         tempShowName = index.cod_interno!;
-      }else if (show_name =='all'){
-        tempShowName = index.cod_interno+'('+index.plate_number+')';
+      }else if (show_name =='name'){
+        tempShowName = index.name_old!;
       }
       index.name= tempShowName;
     }

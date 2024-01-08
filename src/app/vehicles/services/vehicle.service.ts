@@ -162,7 +162,7 @@ export class VehicleService {
   }
 
   public onClickSelection(show_name:string):void{
-    console.log('Llego ShowName al servicio:',show_name);
+    // console.log('Llego ShowName al servicio:',show_name);
     this.clickSelection.emit(show_name);
   }
 

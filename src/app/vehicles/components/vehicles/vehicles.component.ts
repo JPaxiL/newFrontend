@@ -66,11 +66,11 @@ export class VehiclesComponent implements OnInit {
     config: false,
     sort: 'asc'
   }
-  selectedNameShowVehicle: string='all';
+  selectedNameShowVehicle: string='name';
   nameShows: any[] = [
     { label: 'Por nùmero Placa', value: 'num_plate' },
     { label: 'Por código interno', value: 'cod_interno' },
-    { label: 'Ambos', value: 'all' }
+    { label: 'Por Nombre', value: 'name' }
   ];
 
   rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -263,8 +263,8 @@ export class VehiclesComponent implements OnInit {
         tempShowName = index.plate_number!;
       }else if (show_name=='cod_interno'){
         tempShowName = index.cod_interno!;
-      }else if (show_name =='all'){
-        tempShowName = index.cod_interno+'('+index.plate_number+')';
+      }else if (show_name =='name'){
+        tempShowName = index.name_old!;
       }
       index.name= tempShowName;
     }
