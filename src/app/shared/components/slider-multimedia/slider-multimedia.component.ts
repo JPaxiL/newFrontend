@@ -1,16 +1,18 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import moment from 'moment';
 import { MenuItem } from 'primeng-lts/api';
+import { Slider } from 'primeng-lts/slider';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CipiaMultimediaParam, MultimediaItem, SourceCipiaMultimedia, TypeCipiaMultimedia, VideoOnDemandTime } from 'src/app/multiview/models/interfaces';
+import { CipiaMultimediaParam, IntervalTime, MultimediaItem, SourceCipiaMultimedia, TypeCipiaMultimedia, VideoOnDemandTime } from 'src/app/multiview/models/interfaces';
 import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 
 @Component({
   selector: 'app-slider-multimedia',
   templateUrl: './slider-multimedia.component.html',
-  styleUrls: ['./slider-multimedia.component.scss']
+  styleUrls: ['./slider-multimedia.component.scss'],
+  providers: [Slider]
 })
 export class SliderMultimediaComponent implements OnInit {
 
@@ -27,32 +29,26 @@ export class SliderMultimediaComponent implements OnInit {
 
   menuMultimedia:MenuItem[] = [
     {
-      label: '30seg antes', 
-      icon: 'pi pi-fw pi-step-backward',
-      command: () => {
-        this.getVideoOnDemand(30,'backward');
+      label: 'Obtener video', 
+      icon: 'pi pi-fw pi-sliders-h',
+      command: async () => {
+        await this.getVideoDialog();
       }
     },
     {
-      label: '30seg despues', 
-      icon: 'pi pi-fw pi-step-forward',
-      command: () => {
-        this.getVideoOnDemand(30, 'forward');
-      }
-    },
-    {
-      label: 'grabar 30seg', 
+      label: 'Grabar video', 
       icon: 'pi pi-fw pi-video',
       command: () => {
-        this.getVideoOnDemand(30, 'now');
+        this.getVideoDialog()
       }
     }
   ];
 
   isMaximized = false;
-  onDemandLoader = false;
+
 
   @ViewChild('multimedia_wrapper') multimediaWrapper!:ElementRef;
+  @ViewChild('_slider') sliderComponent!:Slider;
 
   icons_available = ["alcoholemia",
     "anticolision-frontal",
@@ -84,16 +80,29 @@ export class SliderMultimediaComponent implements OnInit {
   // -------- end  cipia multimedia
   private destroy$ = new Subject<void>();
 
-  constructor(public multimediaService: MultimediaService,private sanitizer: DomSanitizer) { }
+  // ---- getvideo dialog
+  showGetVideoDialog = false;
+  rangeValues: number[] = [20,80];
+  min_range = 0;
+  max_range = 0;
+  gradientColor = "#c2c2c250";
+  gradientMargin = "1rem";
+
+
+  constructor(
+    public multimediaService: MultimediaService,
+    private sanitizer: DomSanitizer,
+    private cdRef: ChangeDetectorRef
+  ) { }
 
   ngOnDestroy() {
-    console.log("DESTRUYENDOOO");
+    //console.log("DESTRUYENDOOO");
     
     this.destroy$.next();
     this.destroy$.complete();
   }
   ngOnInit(): void {
-    console.log("EVENT RENDERED======= ",this.event);
+    //console.log("EVENT RENDERED======= ",this.event);
     if(this.showMultimediaFirst){
       this.showMultimedias = true;
     }else{
@@ -101,61 +110,109 @@ export class SliderMultimediaComponent implements OnInit {
     }
 
     this.checkCipiaMultimedia(this.event.parametros,this.event.imei);
-    console.log("MULTIMEDIAS RENDERED======= ",this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId]);
+    //console.log("MULTIMEDIAS RENDERED======= ",this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId]);
     if(this.showMultimediaFirst){
       this.loadMedia();
     }
+    
+    this.min_range = new Date(this.event.parametros.eventDateTime).getTime()-120000-(5*60*60*1000);
+    this.max_range = new Date(this.event.parametros.eventDateTime).getTime()+120000-(5*60*60*1000);
+    this.rangeValues = [new Date(this.event.parametros.eventDateTime).getTime()-15000-(5*60*60*1000),new Date(this.event.parametros.eventDateTime).getTime()+15000-(5*60*60*1000)]
   }
 
   checkCipiaMultimedia(params: any, imei:string){
     if (!this.multimediaService.multimediaCipiaItems.hasOwnProperty(params["eventId"])) {
       this.multimediaService.multimediaCipiaItems[params["eventId"]] = [];
     }else{
-      console.log("params: ",params);
-      console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
-      console.log("event: ",this.event);
+      //console.log("params: ",params);
+      //console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
+      //console.log("event: ",this.event);
       return;
     }
-    console.log("params: ",params);
-    console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
-    console.log("event: ",this.event);
+    //console.log("params: ",params);
+    //console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
+    //console.log("event: ",this.event);
     
     if(params["gps"] && params["gps"]=="cipia" && (params["has_video"]=="1" || params["has_image"] == "1")){
       this.hasMultimedia = true
       if(params["has_image"]=="1"){
         if(params["cabin_image"] == "1"){
           this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
-            {type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"CABIN"}, description: params["eventDateTime"], url:""}
+            {
+              type:'image',
+              params:{
+                imei:imei,
+                eventId:params["eventId"],
+                type:"image",
+                source:"CABIN"
+              }, 
+              description: 'Hora: '+moment(params["eventDateTime"], 'YYYY/MM/DD HH:mm:ss').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+              url:"",
+              interval: this.multimediaService.getInterval(params["eventDateTime"], 0, 0, 'event')
+            }
           )
         }
         if(params["road_image"] == "1"){
           this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
-            {type:'image',params:{imei:imei,eventId:params["eventId"],type:"image",source:"ROAD"}, description: params["eventDateTime"], url:""}
+            {
+              type:'image',
+              params:{
+                imei:imei,
+                eventId:params["eventId"],
+                type:"image",
+                source:"ROAD"
+              }, 
+              description: 'Hora: '+moment(params["eventDateTime"], 'YYYY/MM/DD HH:mm:ss').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+              url:"",
+              interval: this.multimediaService.getInterval(params["eventDateTime"], -7, 3, 'event')
+            }
           )
         }
       }
       if(params["has_video"]=="1"){
         if(params["cabin_video"] == "1"){
           this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
-            {type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"CABIN"}, description: params["eventDateTime"], url:""}
+            {
+              type:'video',
+              params: {
+                imei:imei,
+                eventId:params["eventId"],
+                type:"video",
+                source:"CABIN"
+              }, 
+              description: 'Desde: '+ moment(params["eventDateTime"], 'YYYY/MM/DD HH:mm:ss').subtract(7, 'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss') 
+                          +'  hasta: '+moment(params["eventDateTime"], 'YYYY/MM/DD HH:mm:ss').add(3,'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+              url:"",
+              interval: this.multimediaService.getInterval(params["eventDateTime"], -7, 3, 'event')
+            }
           )
         }
         if(params["road_video"] == "1"){
           this.multimediaService.multimediaCipiaItems[params["eventId"]].push(
-            {type:'video',params: {imei:imei,eventId:params["eventId"],type:"video",source:"ROAD"}, description: params["eventDateTime"], url:""}
+            {
+              type:'video',
+              params: {
+                imei:imei,
+                eventId:params["eventId"],
+                type:"video",
+                source:"ROAD"
+              }, 
+              description: 'Desde: '+ moment(params["eventDateTime"], 'YYYY/MM/DD HH:mm:ss').subtract(7, 'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss') 
+                          +'  hasta: '+moment(params["eventDateTime"], 'YYYY/MM/DD HH:mm:ss').add(3,'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+              url:"",
+              interval: this.multimediaService.getInterval(params["eventDateTime"], -7, 3, 'event')
+            }
           )
         }
       }
     }
   }
 
-  retryMultimedia(multimedia: any){
-
-  }
+  
   prev(){
     if(!this.loading){
       this.activeIndex++;
-      console.log(this.multimediaWrapper.nativeElement);
+      //console.log(this.multimediaWrapper.nativeElement);
       this.loadMedia();
     }
   }
@@ -163,7 +220,7 @@ export class SliderMultimediaComponent implements OnInit {
   next(){
     if(!this.loading){
       this.activeIndex--;
-      console.log(this.multimediaWrapper.nativeElement);
+      //console.log(this.multimediaWrapper.nativeElement);
       this.loadMedia();
     }
   }
@@ -174,14 +231,14 @@ export class SliderMultimediaComponent implements OnInit {
     if(media.url.length == 0){
       //const url = await this.multimediaService.getMediaFromEvent('E321361117',media.params.eventId,media.params.type,media.params.source).toPromise();
       this.loading = true;
-      this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source,undefined,undefined,3,10).pipe(takeUntil(this.destroy$)).toPromise().then(url => {
+      this.multimediaService.getMediaFromEvent(media.params.imei,media.params.eventId,media.params.type,media.params.source,undefined,undefined,4,5000).pipe(takeUntil(this.destroy$)).toPromise().then(url => {
         if(url){
           this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId][this.activeIndex-1].url = this.sanitizer.bypassSecurityTrustUrl(url) as SafeUrl;
-          console.log("nueva url: ",this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId][this.activeIndex-1].url);
+          //console.log("nueva url: ",this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId][this.activeIndex-1].url);
         }
         this.loading = false;
       }).catch( error => {
-        console.log("eeeerror:",error);
+        //console.log("eeeerror:",error);
         this.loading = false;
         this.error = true;
       });
@@ -192,59 +249,6 @@ export class SliderMultimediaComponent implements OnInit {
     this.showMultimedias = !this.showMultimedias;
     if(this.showMultimedias){
       this.loadMedia();
-    }
-  }
-
-  async getVideoOnDemand(seconds:number=30, option: VideoOnDemandTime='now', source: SourceCipiaMultimedia = "CABIN", type: TypeCipiaMultimedia = 'video'){
-    this.onDemandLoader = true;
-    let from = "";
-    if(option == "backward"){
-      from = moment(this.event.fecha_tracker, 'YYYY/MM/DD HH:mm:ss').subtract(seconds, 'seconds').add(5, 'hours').format('YYYY/MM/DD HH:mm:ss')
-    }else if( option == "forward"){
-      from = moment(this.event.fecha_tracker, 'YYYY/MM/DD HH:mm:ss').add(5, 'hours').format('YYYY/MM/DD HH:mm:ss')
-    }
-
-    let params:CipiaMultimediaParam = {
-      imei: this.event.imei,
-      type: type,
-      seconds: seconds,
-      from: from,
-      source: source
-    };
-    if(option == "now"){
-      console.log("record video with params: ", params);
-      
-      this.multimediaService.recordVideo(params).subscribe( frame => {
-        console.log("frame obtained: ", frame);
-        params.eventId = frame.Parametros.eventId;
-        this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId].push(
-          {type: type, params: params, url:"", description: frame.Parametros.eventDateTime}
-        );
-        console.log("Multimedia Item added: ",{type: type, params: params, url:"", description: frame.Parametros.eventDateTime});
-        this.onDemandLoader = false;
-        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
-      },
-      error =>{
-        console.error(error);
-        this.onDemandLoader = false;
-      });
-    }else{
-      console.log("retrieving video with params: ", params);
-      
-      this.multimediaService.retrieveVideoFrom(params).subscribe( frame => {
-        console.log("frame obtained: ", frame);
-        params.eventId = frame.Parametros.eventId;
-        this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId].push(
-          {type: type, params: params, url:"", description: frame.Parametros.eventDateTime}
-        );
-        console.log("Multimedia Item added: ",{type: type, params: params, url:"", description: frame.Parametros.eventDateTime});
-        this.onDemandLoader = false;
-        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaService.multimediaCipiaItems);
-      },
-      error =>{
-        console.error(error);
-        this.onDemandLoader = false;
-      });
     }
   }
 
@@ -266,4 +270,107 @@ export class SliderMultimediaComponent implements OnInit {
     }
   }
 
+  async getVideoDialog() {
+    this.showGetVideoDialog = !this.showGetVideoDialog;
+    await this.updateSliderBackground();
+    this.cdRef.detectChanges();
+  }
+
+  getMultimediaByRange(rangeValues: number[]){
+    //console.log("rangeValues[0]: ", new Date(rangeValues[0]));
+    //console.log("rangeValues[1]: ", new Date(rangeValues[1]));
+    //console.log("nro seconds: ", (rangeValues[1]-rangeValues[0])/1000);
+    const seconds = (rangeValues[1]-rangeValues[0])/1000;
+    let params:CipiaMultimediaParam = {
+      imei: this.event.imei,
+      type: 'video',
+      seconds: seconds,
+      from: moment(new Date(rangeValues[0]), 'YYYY/MM/DD HH:mm:ss').add(5,'hours').format('YYYY/MM/DD HH:mm:ss'),
+      source: 'CABIN',
+      eventId: this.event.parametros.eventId,
+    };
+    this.multimediaService.getVideoOnDemand('demand', params);
+    this.showGetVideoDialog = false;
+  }
+
+  async updateSliderBackground(): Promise<void>{
+    let auxGradientColor = '';
+    let intervals = [];
+    for (const multimedia of this.multimediaService.multimediaCipiaItems[this.event.parametros.eventId]){
+      if(multimedia.type == "video"){
+        intervals.push(multimedia.interval);
+        //intervals.push(new Date(multimedia.interval!.start).getTime());
+        //intervals.push(new Date(multimedia.interval!.end!).getTime());
+      }
+    }
+    //console.log("this.min_range: ", this.min_range);
+    //console.log("this.max_range: ", this.max_range);
+    //console.log("intervals: ",intervals);
+    const percents = [];
+    for (const interval of intervals){
+      percents.push(
+        {
+          start: ((new Date(interval!.start).getTime() - this.min_range)/(this.max_range - this.min_range)*100).toFixed(1),
+          end: ((new Date(interval!.end!).getTime() - this.min_range)/(this.max_range - this.min_range)*100).toFixed(1),
+          color: interval!.type! == "event" ? 'var(--gl-vivid-red-alpha)': (interval!.type! == "retrieve" ? 'var(--gl-enable-green-alfa)': 'var(--gl-blue-electric-alpha)'),
+          type: interval!.type
+        }
+      )
+    }
+
+    //console.log("percents: ",percents);
+
+    percents.sort((a, b) => {
+          // Primero, ordenar por 'tipo' en el orden deseado
+      const types = ['event', 'recording', 'retrieve'];
+      const indexA = types.indexOf(a.type!);
+      const indexB = types.indexOf(b.type!);
+      
+      if (indexA < indexB) return -1;
+      if (indexA > indexB) return 1;
+
+      if (a.start < b.start) return -1;
+      if (a.start > b.start) return 1;
+
+      return 0; 
+    });
+    for (let i = 0; i < percents.length; i++) {
+      auxGradientColor += `linear-gradient(to right, transparent 0% ${percents[i].start}%, ${percents[i].color +' '+ percents[i].start}% ${percents[i].end}%, transparent ${percents[i].end}% 100% )` + (i+1 < percents.length? ', ':'');
+      // const percent = percents[i];
+      // if(isStartInterval){
+      //   auxGradientColor += 'linear-gradient(to right, #f3f6f4 0%, #f3f6f4 '+ percent.start + '%, transparent 0%)';
+      //   isStartInterval = false;
+      // }
+      // const transparent = (i+1 < percents.length) ? (parseFloat(percents[i+1].start) - parseFloat(percent.end)) : 0;
+      // const isIncluded = (i+1 < percents.length) ? (parseFloat(percents[i+1].end) <= parseFloat(percent.end)) : false;
+      // if(transparent < 0){
+      //   // si el subsiguiente inicio es menor que el final de este intervalo, significa que hay un traslap
+      //   if(isIncluded){
+      //     // Ese traslape podria abarcar todo el intervalo subsiguiente, por tanto se debe tomar precaicion
+      //     auxGradientColor += `,linear-gradient(to right, ${percent.color +' '+ percent.start}%, ${percent.color +' '+ percents[i+1].start}%, transparent 0% )`;
+      //     auxGradientColor += `,linear-gradient(to right, ${percent.color +' '+ percents[i+1].end}%, ${percent.color +' '+ percent.end}%, transparent 0% )`;
+      //   }else{
+      //     auxGradientColor += `,linear-gradient(to right, ${percent.color +' '+ percent.start}%, ${percent.color +' '+ percents[i+1].start}%, transparent ${parseFloat(percents[i+1].start)+ Math.abs(transparent)}% )`;
+      //   }
+      // }else{
+      //   //si no hay traslape, solo pongo el color y añado un gris adicionalmente
+      //   auxGradientColor += `,linear-gradient(to right, ${percent.color +' '+ percent.start}%, ${percent.color +' '+ percent.end}%, transparent 0% )`;
+      //   //añado un gris, si no hay un subiguiente elemento, coloreo hasta el 100% sino solo hasta el inicio del subsiguiente.
+      //   auxGradientColor += `,linear-gradient(to right, #f3f6f4 ${percent.end}%, #f3f6f4 ${i+1 < percents.length? percents[i+1].start : '100'}%, transparent 0%)`;
+      // }
+    }
+    this.gradientColor = auxGradientColor;
+    this.cdRef.detectChanges();
+    Promise.resolve();
+  }
+
+  addMinMaxTime(seconds: number){
+    if(seconds<0){
+      this.min_range += (seconds*1000);
+    }else{
+      this.max_range += (seconds*1000); // ME QUEDE ACA
+    }
+    this.updateSliderBackground();
+    this.sliderComponent.writeValue(this.rangeValues);
+  }
 }

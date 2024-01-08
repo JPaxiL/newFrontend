@@ -5,10 +5,12 @@ import { from, Observable, Subject, throwError, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { catchError, delay, filter, map, mergeMap, take, timeout } from 'rxjs/operators';
-import { CipiaMultimediaParam, MultimediaItem } from '../models/interfaces';
+import { CipiaMultimediaParam, IntervalTime, IntervalType, MultimediaItem, SourceCipiaMultimedia, TypeCipiaMultimedia, VideoOnDemandTime } from '../models/interfaces';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { SocketWebService } from 'src/app/vehicles/services/socket-web.service';
 import Swal from 'sweetalert2';
+import moment from 'moment';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 interface IMultimedias {
   [key: string]: MultimediaItem[];
@@ -20,7 +22,11 @@ interface IMultimedias {
 
 export class MultimediaService {
 
-  constructor(private http: HttpClient, private wsService:SocketWebService) { }
+  constructor(
+    private http: HttpClient, 
+    private wsService:SocketWebService,
+    private toastService: ToastService
+  ) { }
 
   private mediaStream:any;
   private canvasStream:any;
@@ -40,6 +46,7 @@ export class MultimediaService {
   public isRecording = false;
 
   public multimediaCipiaItems: IMultimedias = {};
+  public onDemandLoader = false;
 
   getMediaStream(){
     return this._mediaStream.asObservable();
@@ -304,7 +311,9 @@ export class MultimediaService {
     return new Observable((observer) => {
       if(mediaRequest.seconds!>60 || mediaRequest.seconds!<10){
         Swal.fire('Error', 'La duración del video debe estar entre 10 y 60 segundos.', 'error');
+        observer.error("La duración del video debe estar entre 10 y 60 segundos.");
         observer.complete();
+        return;
       }
       const endpoint = environment.apiUrl + '/api/media/retrieve';
 
@@ -349,15 +358,17 @@ export class MultimediaService {
           console.log("respuesta de retrieve: ", resp);
           if (!resp.success) {
             Swal.fire('Error', resp.message, 'error');
-            frameSubscription.unsubscribe();
+            observer.error(resp)
             observer.complete();
+            frameSubscription.unsubscribe();
           }
         },
         error => {
+          observer.error(error)
+          observer.complete();
           Swal.fire('Error', error.error.messages, 'error');
           console.error('Error al llamar al endpoint /api/media/retrieve:', error);
           frameSubscription.unsubscribe();
-          observer.complete();
         }
       );
     });
@@ -367,6 +378,7 @@ export class MultimediaService {
     return new Observable((observer) => {
       if(mediaRequest.seconds!>60 || mediaRequest.seconds!<10){
         Swal.fire('Error', 'La duración del video debe estar entre 10 y 60 segundos.', 'error');
+        observer.error("La duración del video debe estar entre 10 y 60 segundos.");
         observer.complete();
       }
       // Only for video
@@ -413,6 +425,7 @@ export class MultimediaService {
           if (!resp.success) {
             Swal.fire('Error', resp.message, 'error');
             frameSubscription.unsubscribe();
+            observer.error(resp.message);
             observer.complete();
           }
         },
@@ -420,9 +433,79 @@ export class MultimediaService {
           Swal.fire('Error', error.error.messages, 'error');
           console.error('Error al llamar al endpoint /api/media/retrieve:', error);
           frameSubscription.unsubscribe();
+          observer.error(error);
           observer.complete();
         }
       );
     });
+  }
+
+  async getVideoOnDemand(option: VideoOnDemandTime='now', multimediaParams: CipiaMultimediaParam){
+    this.onDemandLoader = true;
+    
+    if(option == "now"){
+      console.log("record video with params: ", multimediaParams);
+      
+      this.recordVideo(multimediaParams).subscribe( frame => {
+        console.log("frame obtained: ", frame);
+        const auxMultimediaParams = {...multimediaParams};
+        auxMultimediaParams.eventId = frame.Parametros.eventId;
+        this.multimediaCipiaItems[multimediaParams.eventId!].push(
+          {
+            type: multimediaParams.type,
+            params: auxMultimediaParams, 
+            description: 'Desde: '+ moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').subtract(5,'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss') 
+                          +'  hasta: '+moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').add(multimediaParams.seconds,'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+            url:"",
+            interval: this.getInterval(multimediaParams.from!, -5, multimediaParams.seconds!,'recording')
+          }
+        );
+        console.log("Multimedia Item added: ",{type: multimediaParams.type, params: auxMultimediaParams, url:"", description: frame.Parametros.eventDateTime});
+        this.onDemandLoader = false;
+        //this.updateSliderBackground();
+        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaCipiaItems);
+      },
+      error =>{
+        console.error(error);
+        this.onDemandLoader = false;
+      });
+    }else{
+      console.log("retrieving video with params: ", multimediaParams);
+      this.toastService.emitToastMessage({key: 'multimediaOnDemand', severity:'info', summary: 'Obteniendo video 360', detail: 'Se le notificará cuando el video se encuentre disponible.', sticky: true, closable: false});
+      this.retrieveVideoFrom(multimediaParams).subscribe( frame => {
+        console.log("frame obtained: ", frame);
+        const auxMultimediaParams = {...multimediaParams};
+        auxMultimediaParams.eventId = frame.Parametros.eventId;
+        this.multimediaCipiaItems[multimediaParams.eventId!].push(
+          {
+            type: multimediaParams.type,
+            params: auxMultimediaParams, 
+            description: 'Desde: '+ moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss') 
+                          +'  hasta: '+moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').add(multimediaParams.seconds,'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+            url:"",
+            interval: this.getInterval(multimediaParams.from!, 0, multimediaParams.seconds!,'retrieve')
+          }
+        );
+        console.log("Multimedia Item added: ",{type: multimediaParams.type, params: auxMultimediaParams, url:"", description: frame.Parametros.eventDateTime, interval: this.getInterval(frame.Parametros.eventDateTime, 0, multimediaParams.seconds!, 'retrieve')});
+        this.onDemandLoader = false;
+        //this.updateSliderBackground();
+        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaCipiaItems);
+        this.toastService.clearToastMessage('multimediaOnDemand');
+        this.toastService.emitToastMessage({key: 'regular', severity:'success', summary: 'Video obtenido', detail: 'El video ya se encuentra disponible. Vaya al evento correspondiente para verlo.'});
+      },
+      error => {
+        this.onDemandLoader = false;
+        this.toastService.clearToastMessage('multimediaOnDemand');
+        this.toastService.emitToastMessage({key: 'regular', severity:'warn', summary: 'Video no disponible', detail: 'El video no se pudo obtener, refresque la página e inténtelo nuevamente.'});
+      });
+    }
+  }
+
+  getInterval(event_date_time: string, add_start_number:number, add_end_numbrer:number, type?: IntervalType):IntervalTime{
+    return {
+      start: moment(event_date_time, 'YYYY/MM/DD HH:mm:ss').add(add_start_number, 'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'),
+      end: moment(event_date_time, 'YYYY/MM/DD HH:mm:ss').add(add_end_numbrer, 'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'),
+      type: type??'event'
+    }
   }
 }

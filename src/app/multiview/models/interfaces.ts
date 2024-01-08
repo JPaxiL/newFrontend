@@ -209,18 +209,25 @@ export interface MultimediaItem {
     params?: CipiaMultimediaParam,
     url: SafeUrl,
     description?: string,
-    title?: string
+    title?: string,
+    interval?: IntervalTime
 }
 
 export interface CipiaMultimediaParam {
     imei:string,
     eventId?:string,
     type:TypeCipiaMultimedia,
-    from?: string //date in UTC0 "2023-10-09 19:12:00"
-    seconds?: number // max= 30
+    from?: string, //date in UTC0 "2023-10-09 19:12:00"
+    seconds?: number, // max= 30
     source: SourceCipiaMultimedia
 }
 
-export type VideoOnDemandTime = 'backward' | 'forward' | 'now';
+export type IntervalTime = {
+    start: string,
+    end?: string,
+    type?: IntervalType,
+}
+export type VideoOnDemandTime = 'demand' | 'now';
 export type SourceCipiaMultimedia = "CABIN" | "ROAD";
 export type TypeCipiaMultimedia = "video" | "image";
+export type IntervalType = "recording" | "event" | "retrieve";

@@ -2,8 +2,6 @@ import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef } from '
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-
 import { MapService } from '../../../vehicles/services/map.service';
 import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
@@ -11,6 +9,8 @@ import { GeopointsService } from '../../../geopoints/services/geopoints.service'
 import { CircularGeofencesService } from 'src/app/geofences/services/circular-geofences.service';
 import { PolylineGeogencesService } from 'src/app/geofences/services/polyline-geogences.service';
 import { HistorialService } from 'src/app/historial/services/historial.service';
+import { MessageService, Message } from 'primeng-lts/api';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 declare var $: any;
 
@@ -20,6 +20,7 @@ declare var $: any;
   styleUrls: [
     './map-view.component.scss'
   ],
+  providers: [MessageService]
 })
 export class MapViewComponent implements OnInit, AfterViewInit {
   //private map!: L.Map;
@@ -35,8 +36,22 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService,
-    public historialService: HistorialService
-  ) {}
+    public historialService: HistorialService,
+    private messageService: MessageService,
+    private toastService: ToastService
+  ) {
+
+    this.toastService.toastMessageCallback.subscribe( (message: Message) => {
+      this.messageService.add(message);
+    });
+    this.toastService.toastClearCallback.subscribe( (key:string) => {
+      if(key.length > 0){
+        this.messageService.clear(key);
+      }else{
+        this.messageService.clear();
+      }
+    });
+  }
   // constructor() { }
 
   ngOnInit(): void {

@@ -1,5 +1,5 @@
 <div class="slider-content">
-    <p-progressBar *ngIf="onDemandLoader" mode="indeterminate"></p-progressBar>
+    <p-progressBar *ngIf="multimediaService.onDemandLoader" mode="indeterminate"></p-progressBar>
     <div class="slider-header">
         <div class="slider-title">
             <ng-container *ngIf="showTitle">
@@ -11,7 +11,7 @@
             <span *ngIf="showTitle" class="slider-text">
                     {{event.nombre?event.nombre:!event.mensaje_alerta.includes('undefi')?event.mensaje_alerta:event.name | uppercase}}
             </span>
-            <button *ngIf="!showTitle" class="control-button pe-auto" (click)="menu.toggle($event)">
+            <button *ngIf="!showTitle" class="control-button pe-auto" [disabled]="loading" (click)="menu.toggle($event)">
                 <i class="pi pi-ellipsis-v"></i>
             </button>
             <p-menu #menu [popup]="true" [model]="menuMultimedia" appendTo="body"></p-menu>
@@ -58,3 +58,44 @@
         </div>
     </div>
 </div>
+<p-dialog header="Obtener video" [(visible)]="showGetVideoDialog" (onHide)="showGetVideoDialog=false" (onShow)="updateSliderBackground()" [breakpoints]="{'960px': '50vw', '640px': '75vw'}" appendTo="body" id="getVideo">
+    <div class="dialog-body-container">
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="dialog-form-container">
+            <div class="d-flex flex-column mt-2 gap-1 justify-content-center" style="min-width: 25rem;">
+                <div class="d-flex justify-content-between">
+                    <h6 class="my-2">Rango: {{ rangeValues[0]| unixTimeToDate }} - {{ rangeValues[1] | unixTimeToDate }}</h6>
+                    <h6 class="my-2">Duración: {{(rangeValues[1]-rangeValues[0])/1000}}&nbsp;seg.</h6>
+                </div>
+                <div class="d-flex justify-content-between gap-1 align-content-center ">
+                    <button pButton pRipple [pTooltip]="'- 1 minuto'" (click)="addMinMaxTime(-60)" type="button" icon="pi pi-step-backward" class="p-button-rounded p-button-text"></button>
+                    <p-slider *ngIf="showGetVideoDialog"
+                        [(ngModel)]="rangeValues" 
+                        [range]="true" 
+                        [min]="min_range" 
+                        [max]="max_range"
+                        [step]="1000"
+                        class="w-100 m-auto"
+                        [style]="{background:gradientColor, margin: 'auto'}"      
+                        #_slider                  
+                    >
+                    </p-slider>
+                    <button pButton pRipple [pTooltip]="'+ 1 minuto'" (click)="addMinMaxTime(+60)" type="button" icon="pi pi-step-forward" class="p-button-rounded p-button-text"></button>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>{{min_range | unixTimeToDate}}</span>
+                    <span>{{max_range | unixTimeToDate}}</span>
+                </div>
+                <button 
+                    (click)="getMultimediaByRange(rangeValues)" 
+                    type="button"
+                    class="btn-gl-save btn-dark-hover btn-sm w-50 my-4 mx-auto" 
+                    [disabled]="loading"
+                >
+                    Obtener
+                </button>
+            </div>
+          </div>
+        </div>
+      </div>
+</p-dialog>

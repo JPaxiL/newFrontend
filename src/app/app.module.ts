@@ -157,6 +157,8 @@ import { DriversHistoryComponent } from './drivers/components/drivers-history/dr
 import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
 import { ShortenPipe } from './core/pipes/shorten.pipe';
 import { AddTagComponent } from './geofences/components/add-tag/add-tag.component';
+import { UnixTimeToDatePipe } from './core/pipes/unix-time-to-date.pipe';
+import {ToastModule} from 'primeng-lts/toast';
 
 @NgModule({
   declarations: [
@@ -253,7 +255,8 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
     CarouselComponent,
     DriversHistoryComponent,
     SliderMultimediaComponent,
-    AddTagComponent
+    AddTagComponent,
+    UnixTimeToDatePipe
   ],
   imports: [
     ToastrModule.forRoot({
@@ -301,6 +304,7 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
     OverlayPanelModule,
     TagModule,
     TooltipModule,
+    ToastModule,
     MultiSelectModule,
     CalendarModule,
     SlideMenuModule,

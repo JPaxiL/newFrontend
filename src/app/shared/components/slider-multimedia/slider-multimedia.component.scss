@@ -10,6 +10,24 @@
     height: 2px !important;
   }
 
+  ::ng-deep {
+    .p-slider.p-slider-horizontal {
+      height: 0.75rem;
+    }
+    .p-slider .p-slider-range {
+      background-color: #00000030;
+    }
+
+    .p-slider-handle {
+      background-color: #ffffff10 !important;
+      height: 1.5rem !important;
+      width: 1.5rem !important;
+    }
+    .p-slider.p-slider-horizontal .p-slider-handle {
+      margin-top: -0.75rem !important;
+      margin-left: -0.75rem !important;
+  }
+  }
   .slider-content.maximized {
     position: fixed;
     top: 0;
