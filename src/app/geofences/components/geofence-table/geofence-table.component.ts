@@ -141,6 +141,11 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       return cellValue.includes(this.searchValueGeo.toLowerCase());
     });
   }
+  
+  onQuickFilterChanged(data: any){
+    this.tt.filterGlobal(data.target.value, 'contains')
+    this.tt.defaultSortOrder=-1;
+  }
 
   onClickAddTags(){
     // this.geofencesService.compTags = 'MODAL TAG';
@@ -430,6 +435,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
                 'warning'
               );
             }else if (response.success){
+              await this.geofencesService.removeListTag(response.tag);
               await this.geofencesService.updateListGeofences(response.geos);
               this.geofences = await this.geofencesService.createTreeNode();
               this.loading = false;
@@ -664,17 +670,23 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     //console.log("localizar una geocerca");
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
     //console.log(geo);
+    let tempOld: string = '';
 
     if (geo.zone_visible == 'true') {
+      console.log('entró aqui');
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
       if(geo.zone_name_visible == 'true'){
+        tempOld = geo.zone_name_visible_old;
         this.clickShowGeoPolName(id);
       }
     } else {
+      console.log('entró aqui2');
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
-      this.clickShowGeoPolName(id);
+      if(geo.zone_name_visible_old == 'true'){
+        this.clickShowGeoPolName(id);
+      }
     }
     this.geofencesService.updateGeoCounters();
     this.geofencesService.updateGeoTagCounters();
@@ -700,6 +712,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         }
       }
     }
+    geo.zone_name_visible_old = tempOld
   }
 
   clickShowGeoCir(id:number, comesFromInputSwitch?: boolean){
@@ -791,6 +804,8 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
   clickShowGeoPolName(id:number, comesFromInputSwitch?: boolean){
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
+   
+    
     if (geo.zone_name_visible == "true") {
 
       geo.zone_name_visible  = "false";
@@ -800,13 +815,15 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     } else {
       geo.zone_name_visible  = "true";
       geo.zone_name_visible_bol = true;
-
+      
       geo.marker_name.addTo(this.mapService.map);
     }
+    geo.zone_name_visible_old = geo.zone_name_visible;
     this.geofencesService.updateGeoTagCounters();
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
       this.geofencesService.tagNamesEyeState = this.geofencesService.geofenceTagCounters.visible != 0;
     }
+    console.log('geoZone', geo.zone_name_visible,geo.zone_name_visible_old);
   }
 
   clickShowGeoCirName(id:number, comesFromInputSwitch?: boolean){

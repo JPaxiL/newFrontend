@@ -663,30 +663,30 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         });
         return;
       }
-      if(this.form.limite_tolerable == null || this.form.limite_tolerable == 0){
-        Swal.fire({
-          title: 'Error',
-          text: 'El límite de velocidad tolerable no puede quedar vacío.',
-          icon: 'warning',
-        });
-        return;
-      }
-      if(this.form.limite_grave == null || this.form.limite_grave == 0){
-        Swal.fire({
-          title: 'Error',
-          text: 'El límite de velocidad grave no puede quedar vacío.',
-          icon: 'warning',
-        });
-        return;
-      }
-      if(this.form.limite_muy_grave == null || this.form.limite_muy_grave == 0){
-        Swal.fire({
-          title: 'Error',
-          text: 'El límite de velocidad muy grave no puede quedar vacío.',
-          icon: 'warning',
-        });
-        return;
-      }
+      // if(this.form.limite_tolerable == null || this.form.limite_tolerable == 0){
+      //   Swal.fire({
+      //     title: 'Error',
+      //     text: 'El límite de velocidad tolerable no puede quedar vacío.',
+      //     icon: 'warning',
+      //   });
+      //   return;
+      // }
+      // if(this.form.limite_grave == null || this.form.limite_grave == 0){
+      //   Swal.fire({
+      //     title: 'Error',
+      //     text: 'El límite de velocidad grave no puede quedar vacío.',
+      //     icon: 'warning',
+      //   });
+      //   return;
+      // }
+      // if(this.form.limite_muy_grave == null || this.form.limite_muy_grave == 0){
+      //   Swal.fire({
+      //     title: 'Error',
+      //     text: 'El límite de velocidad muy grave no puede quedar vacío.',
+      //     icon: 'warning',
+      //   });
+      //   return;
+      // }
     }
     this.spinner.show('spinnerLoading');
     if ( this.geofencesService.action == 'edit pol' ) {
@@ -900,30 +900,30 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         });
         return;
       }
-      if(this.form.limite_tolerable == null || this.form.limite_tolerable == 0){
-        Swal.fire({
-          title: 'Error',
-          text: 'El límite de velocidad tolerable no puede quedar vacío.',
-          icon: 'warning',
-        });
-        return;
-      }
-      if(this.form.limite_grave == null || this.form.limite_grave == 0){
-        Swal.fire({
-          title: 'Error',
-          text: 'El límite de velocidad grave no puede quedar vacío.',
-          icon: 'warning',
-        });
-        return;
-      }
-      if(this.form.limite_muy_grave == null || this.form.limite_muy_grave == 0){
-        Swal.fire({
-          title: 'Error',
-          text: 'El límite de velocidad muy grave no puede quedar vacío.',
-          icon: 'warning',
-        });
-        return;
-      }
+      // if(this.form.limite_tolerable == null || this.form.limite_tolerable == 0){
+      //   Swal.fire({
+      //     title: 'Error',
+      //     text: 'El límite de velocidad tolerable no puede quedar vacío.',
+      //     icon: 'warning',
+      //   });
+      //   return;
+      // }
+      // if(this.form.limite_grave == null || this.form.limite_grave == 0){
+      //   Swal.fire({
+      //     title: 'Error',
+      //     text: 'El límite de velocidad grave no puede quedar vacío.',
+      //     icon: 'warning',
+      //   });
+      //   return;
+      // }
+      // if(this.form.limite_muy_grave == null || this.form.limite_muy_grave == 0){
+      //   Swal.fire({
+      //     title: 'Error',
+      //     text: 'El límite de velocidad muy grave no puede quedar vacío.',
+      //     icon: 'warning',
+      //   });
+      //   return;
+      // }
       
     }
     this.spinner.show('spinnerLoading');

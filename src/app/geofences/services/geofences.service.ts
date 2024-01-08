@@ -537,6 +537,10 @@ export class GeofencesService {
     //console.log('new listTags:', tagsNew)
   }
 
+  public async removeListTag(tag: any){
+    const tagsNew = this.listTag.push(tag);
+    //console.log('new listTags:', tagsNew)
+  }
 
 
 }

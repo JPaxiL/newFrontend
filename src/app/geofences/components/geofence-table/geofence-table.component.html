@@ -88,7 +88,7 @@
       <div class="d-flex flex-grow-1">
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <input type="text" [(ngModel)]="searchValueGeo"  class="form-control" placeholder="Buscar nombre...">
+          <input type="text" (keyup)="onQuickFilterChanged($event)"  class="form-control" placeholder="Buscar nombre...">
           <!-- <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
         </span>
       </div>
@@ -153,7 +153,7 @@
     </div>
   </div>
   <div class="">
-    <p-treeTable *ngIf="viewOptions=='viewGroup'" [value]="geofences" [loading]="loading"
+    <p-treeTable #tt [value]="geofences" *ngIf="viewOptions=='viewGroup'" [loading]="loading"
       scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name"
       [resizableColumns]="true"
       [reorderableColumns]="true"
@@ -166,7 +166,7 @@
       [globalFilterFields]="['nameoperation','namegrupo','zone_name']">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col style="width: 2.5rem;" />
+          <col style="width: 2.0rem;" />
           <col style="width: 16%;"/>
           <col style="width: 20%;"/>
           <col style="width: 55%;" />
@@ -348,7 +348,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </td>
         </tr>
@@ -404,7 +403,7 @@
       </ng-template>
     </p-treeTable>
     <!-- ViewGeneral -->
-    <p-treeTable *ngIf="viewOptions=='viewGen'" [value]="geofences" [loading]="loading"
+    <p-treeTable #tt *ngIf="viewOptions=='viewGen'" [value]="geofences" [loading]="loading"
       scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name"
       [resizableColumns]="true"
       [reorderableColumns]="true"
