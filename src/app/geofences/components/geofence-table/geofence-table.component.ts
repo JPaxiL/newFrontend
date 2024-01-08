@@ -280,8 +280,6 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     console.log('name initial:', this.nameTagInit);
     let aux1:any=[];
     let aux2=[];
-    let aux_idgrupo=-1;
-    data.idOpe = 0;
     //list 1
     const geofences = this.geofencesService.listGeofences.filter((geofence: any)=>geofence.idoperation == data.idOpe);
     for (const key in geofences) {
@@ -363,9 +361,25 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
   showDelete(data: any){
     var idOpe = data.idOpe;
+    let existOtherOp: boolean = false;
     var idTag = data.id;
     var geosDelets : any []=[];
     let geosOpe = this.geofencesService.listGeofences.filter((geo: { idoperation: any; }) => geo.idoperation == idOpe);
+    let geosDontOpe = this.geofencesService.listGeofences.filter((geo: { idoperation: any;}) => geo.idoperation != idOpe);
+    geosDontOpe.forEach((geo: {id: number; tags: string[]; }) => {
+      if(geo.tags.includes(idTag)){
+        existOtherOp = true;
+      }
+    });
+    if(existOtherOp){
+      console.log('en otra operacion hay tag');
+      Swal.fire({
+        title: 'Error',
+        text: `Etiqueta "${data.name}" exite en otra operación.`,
+        icon: 'error',
+      });
+      return;
+    }
     for(const geo of geosOpe){
       const geoTag = geo.tags;
       const geoMap = {
@@ -392,7 +406,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     console.log('eliminar',req);
     Swal.fire({
       title: 'Confirmación',
-      text: `¿Está seguro de eliminar, la Etiqueta: ${data.name}?`,
+      text: `¿Está seguro de eliminar, Etiqueta: ${data.name}?`,
       icon: 'warning',
       showLoaderOnConfirm: true,
       showCancelButton: true,
