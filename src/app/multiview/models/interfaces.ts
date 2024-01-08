@@ -54,7 +54,6 @@ export interface UserTracker {
     eye?: boolean,
     tanque?: string,
     name?: string,
-    name_old?: string,
     icon_def?: string,
     icon?:  string,
     icon_name?: string,

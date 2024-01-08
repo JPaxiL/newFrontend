@@ -122,7 +122,7 @@ export class MapService {
     this.vehicleService.clickDriver.subscribe(res=>{
       this.tagDriver(res);
     });
-    //CAMBIO DE NOMBRE/COD/NOMBRe
+    //CAMBIO DE NOMBRE/COD/AMBOS
     this.vehicleService.clickSelection.subscribe(res=>{
       this.changeNameVehicles(res);
     });
@@ -384,15 +384,15 @@ export class MapService {
 
   changeNameVehicles(show_name:string){
     let vehicle = undefined;
-    let tempShowName = '';
+    let tempShowName = 'all';
     for (const i in this.vehicleService.vehicles){
       vehicle = this.vehicleService.vehicles[i];
       if(show_name=='num_plate'){
         tempShowName = vehicle!.plate_number!;
       }else if (show_name=='cod_interno'){
         tempShowName = vehicle!.cod_interno!;
-      }else if (show_name =='name'){
-        tempShowName = vehicle!.name_old!;
+      }else if (show_name =='all'){
+        tempShowName = vehicle!.cod_interno+'('+vehicle!.plate_number+')';
       }
       const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
       if(vehicle!.tag_driver == true){
