@@ -53,6 +53,7 @@ export class MinimapService {
     public eventService: EventService,
   ) {
     this.userDataService.getUserData();
+    this.vehicleService.setDefaultStatusDataVehicle();
     this.vehicleService.initialize();
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("user data completadoooo",vehicles);

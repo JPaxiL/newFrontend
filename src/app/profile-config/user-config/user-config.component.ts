@@ -241,6 +241,7 @@ export class UserConfigComponent implements OnInit {
                     this.vehicleCompletedSubscription.unsubscribe();
                   }
                   // Inicializa vehicleService después de que userDataService esté completo
+                  this.vehicleService.setDefaultStatusDataVehicle();
                   this.vehicleService.initialize();
                   // Suscripción a vehicleCompleted para mostrar el mensaje una vez que vehicleService se inicializa
                   this.vehicleCompletedSubscription = this.vehicleService.vehicleCompleted.subscribe(async (vehicleComplete: boolean) => {

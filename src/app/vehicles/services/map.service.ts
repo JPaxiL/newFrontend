@@ -130,6 +130,10 @@ export class MapService {
     this.vehicleConfigService.updateName.subscribe(res=>{
       this.updateNameMarker(res);
     });
+    //ACTUALIZAR TOOLTIP Y POPUP INFO
+    this.vehicleService.reloadNameDriver.subscribe(res=>{
+      this.updateNameDriver(res);
+    });
     this.vehicleService.calcTimeStop.subscribe(data=>{
       // console.log("event time stop res = ",data);
 
@@ -229,12 +233,15 @@ export class MapService {
     if (nameCon != 'Unidades Sin Convoy'){
       if (nameGru != 'Unidades Sin Grupo'){
         if (nameOpe != 'Unidades Sin Operacion'){
-          return 'OPERACION/GRUPO/CONVOY: '+nameOpe+' / '+nameGru+' / '+nameCon;
+          return nameOpe+' / '+nameGru+' / '+nameCon;
+          // return 'OPERACION/GRUPO/CONVOY: '+nameOpe+' / '+nameGru+' / '+nameCon;
         }else{
-          return 'CONVOY/GRUPO:'+nameCon+' / '+nameGru;
+          return nameCon+' / '+nameGru;
+          // return 'CONVOY/GRUPO:'+nameCon+' / '+nameGru;
         }
       }else{
-        return 'CONVOY: '+nameCon;
+        return nameCon;
+        // return 'CONVOY: '+nameCon;
       }
     }else{
       return '';
@@ -375,9 +382,10 @@ export class MapService {
     console.log(vehicle);
     const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
     // Actualizar el contenido del tooltip del marcador específico
-    if(vehicle!.tag_driver!){
+    if(vehicle!.tag_driver! && vehicle!.namedriver != 'No Especificado'){
       this.marker[IMEI].setTooltipContent(`<span>${vehicle!.name}</span>${tempNameDriver}`);
     } else {
+      console.log('No tiene driver',vehicle!.namedriver,vehicle!.tag_driver);
       this.marker[IMEI].setTooltipContent(`<span>${vehicle!.name}</span>`);
     }
   }
@@ -409,7 +417,7 @@ export class MapService {
         tempShowName = 'Unidad Sin '+defaultName;
       }
       
-      if(vehicle!.tag_driver == true){
+      if(vehicle!.tag_driver == true && vehicle!.namedriver != 'No Especificado'){
         const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
         this.marker[vehicle!.IMEI!].setTooltipContent(`<span>${tempShowName}</span>${tempNameDriver}`);
       }else{
@@ -421,7 +429,71 @@ export class MapService {
 
   updateNameMarker(vehicle:any){
     // console.log('ESTO LLEGO A UPDATE NAME MARKER',vehicle);
-    this.marker[vehicle.tracker_imei].setTooltipContent(`<span>${vehicle.nombre}</span>`);
+    // console.log('ESTO TIENE THIS MARKER',this.marker[vehicle.tracker_imei]);
+    let vehicleFound = this.vehicleService.vehicles.find((vh)=>vh.IMEI == vehicle.tracker_imei);
+    // console.log(vehicleFound);
+    if (vehicleFound){
+      if(vehicleFound!.tag_driver == true && vehicleFound!.namedriver != 'No Especificado'){
+        const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicleFound!.namedriver + '</span>';
+        this.marker[vehicleFound!.IMEI!].setTooltipContent(`<span>${vehicle.nombre}</span>${tempNameDriver}`);
+      }else{
+        this.marker[vehicleFound!.IMEI!].setTooltipContent(`<span>${vehicle.nombre}</span>`);
+      }
+    }
+    
+  }
+  generateContentPopUp(vehicle:any):string{
+    const nameGroup = this.setNameGroup(vehicle.nameoperation, vehicle.namegrupo, vehicle.nameconvoy);
+    let popupContent = '<div class="row"><div class="col-6" align="left"><strong>' + vehicle.name + '</strong></div><div class="col-6" align="right"><strong>' + vehicle.speed + ' km/h</strong></div></div>' +
+        '<aside class="">';
+      if (nameGroup) {
+        popupContent += '<small>' + nameGroup + '</small><br>';
+        console.log('EXISTE nameGroup');
+      }
+    popupContent += '<small>CONDUCTOR: ' + vehicle.namedriver + '</small><br>' +
+      '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
+      '<small>REFERENCIA: ' + vehicle.ref + '</small><br>' +
+      '<small>FECHA DE TRANSMISION: ' + vehicle.dt_tracker + '</small><br>' +
+      '<small>TIEMPO DE PARADA: ' + vehicle.tiempoParada + '</small>' +
+      '</aside>';
+    return popupContent;
+  }
+  updateNameDriver(vehicle:any){
+    console.log('Llego vehicle a map service->',vehicle);
+    console.log('this.Marker',this.marker[vehicle.IMEI]);
+    // let auxContentPopUp = this.generateContentPopUp(vehicle);
+    //ACTUALIZAR CONTENIDO DEL POPUP DEL ICONO MARKER y EL CLUSTER
+    // const markerToUpdate = this.markerClusterGroup.getLayers().find((layer: any) => {
+    //   return layer._leaflet_id === this.marker[vehicle.IMEI]._leaflet_id;
+    // });
+    // console.log('Cluster Group Found ->',markerToUpdate);
+    vehicle.dt_tracker = moment(vehicle.dt_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+    let options = {
+      imei: vehicle.IMEI,
+      name: vehicle.name,
+      nameconvoy: vehicle.nameconvoy,
+      namegrupo: vehicle.namegrupo,
+      nameoperation: vehicle.nameoperation,
+      namedriver: vehicle.namedriver,
+      longitud: vehicle.longitud.toString(),
+      latitud: vehicle.latitud.toString(),
+      speed: vehicle.speed,
+      dt_tracker: vehicle.dt_tracker,//luego de pasar por filtro
+      paradaDesde: "",
+      vehicleService : this.vehicleService
+    };
+    this.timeStopAux(options);
+
+    // this.marker[vehicle!.IMEI].setPopupContent(auxContentPopUp);
+    
+    // markerToUpdate.setPopupContent(auxContentPopUp);
+    //ACTUALIZA EL TOOLTIP LOS ACTIVADOS
+    if(vehicle!.tag_driver == true && vehicle!.namedriver != 'No Especificado'){
+      const tempNameDriver = '<br><span style="display: block; text-align: center;">' + vehicle!.namedriver + '</span>';
+      this.marker[vehicle!.IMEI!].setTooltipContent(`<span>${vehicle.name}</span>${tempNameDriver}`);
+    }else{
+      this.marker[vehicle!.IMEI!].setTooltipContent(`<span>${vehicle.name}</span>`);
+    }
   }
 
   followClickIcon(map: any, IMEI: string){
@@ -509,7 +581,6 @@ export class MapService {
         vehicles[index].parametros = data.Parametros;
 
         // const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
-
 
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
 
@@ -1005,9 +1076,8 @@ export class MapService {
             ar_vel = -1; // velocidad mayor a 6 para que no traiga historial
         }
     }
-
-        let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
-        let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+    let f_ini = moment( new Date() ).add(-1, 'days').add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+    let f_fin = moment( new Date() ).add(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
 
     let params = {
       imei: data.imei,
@@ -1028,11 +1098,12 @@ export class MapService {
 
     this.vehicleService.postTimeStop(params);
   }
-  public timeStop(this: any): void{
-    //console.log("this",this);
+  //CUANDO SE HACE CLICK EN UN VEHICLE
+  public timeStop(this: any): void{ 
+    // console.log("this",this);
     // consultar data actual
     let vehicle = this.vehicleService.getVehicle(this.imei);
-
+    // console.log('Click Vehicle ->',vehicle);
     this.speed = vehicle.speed;
     this.dt_tracker = vehicle.dt_tracker;
 
@@ -1059,7 +1130,7 @@ export class MapService {
       nameconvoy: this.nameconvoy,
       namegrupo: this.namegrupo,
       nameoperation: this.nameoperation,
-      namedriver: this.namedriver,
+      namedriver: vehicle.namedriver,
       longitud: this.longitud,
       latitud: this.latitud,
       speed: this.speed,
@@ -1069,7 +1140,6 @@ export class MapService {
       fecha_f: f_fin,
       vel: ar_vel
     };
-
     this.vehicleService.postTimeStop(params);
   }
 
@@ -1131,7 +1201,6 @@ export class MapService {
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
-    
     tempMarker.bindTooltip(`<span>${data.name}</span>`, {
       permanent: true,
       offset: [0, 12],
@@ -1165,16 +1234,18 @@ export class MapService {
 
     this.markerClusterGroup.addLayer(tempMarker);
     // ////console.log('this.markerClusterGroup',this.markerClusterGroup);
-    let object = this.markerClusterGroup.getLayers();
-    let cont = 0;
-    for (const key in object) {
-      if (object[key]['_tooltip']['_content']==data.name) {
-        //console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+data.name);
-        //console.log('key = ',key);
-        //console.log('content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
-        cont++;
-      }
-    }
+    // let object = this.markerClusterGroup.getLayers();
+    // let cont = 0;
+    // for (const key in object) {
+    //   // console.log('Objetct[key] ->',object[key],tempMarker);
+    //   if (object[key]['_tooltip']['_content']==data.name) {
+    //     //NUNCA ENTRA 
+    //     //console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+data.name);
+    //     //console.log('key = ',key);
+    //     //console.log('content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
+    //     cont++;
+    //   }
+    // }
     //console.log('registros encontrados ---> '+cont);
     this.markerClusterGroup.addTo(this.map);
     //console.log('marker placa '+data.name+' IMEI = ',this.marker[data.IMEI]);
