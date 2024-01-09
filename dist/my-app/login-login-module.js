@@ -203,6 +203,7 @@ class LoginComponent {
             });
             this.eventSocketService.user_id = localStorage.getItem('user_id');
             this.eventSocketService.initializeSocket(this.eventSocketService.user_id);
+            this.vehicleService.setDefaultStatusDataVehicle();
             this.vehicleService.initialize();
             this.eventService.getAll();
             this.eventSocketService.listen();
