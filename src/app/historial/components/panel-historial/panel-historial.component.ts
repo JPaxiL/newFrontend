@@ -301,19 +301,24 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           console.log('EVENTOS DEL USUARIO OBTENIDOS:', data);
           // Realiza cualquier acción con los datos recibidos
           if (data.success){
-            await this.createEventList(data.data); 
-            this.spinner.hide('loadingHistorialForm');
-            this.EventService.eventsUserLoaded = true;
+            this.eventList = [];
+            this.eventList = this.EventService.createEventList(data.data);
           }else{
+            this.eventList = [];
             console.log('EL USUARIO NO TIENE EVENTOS');
-            this.spinner.hide('loadingHistorialForm');
           }
+          this.spinner.hide('loadingHistorialForm');
         },
         (error) => {
           // Maneja los errores si ocurre alguno durante la solicitud
           console.error('Error al obtener los eventos:', error);
         }
       );
+    }else{
+      this.spinner.show('loadingHistorialForm');
+      console.log('TEST->',this.EventService.eventsGroupedList,this.eventList);
+      this.eventList = this.EventService.eventsGroupedList;
+      this.spinner.hide('loadingHistorialForm');
     }
     
 
@@ -436,60 +441,6 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     
   }
 
-  createEventList (data:any){
-    let status_event = false;
-    let map: any=[];
-    for (let event of data) {
-      status_event= false;
-      event.event_category = this.changeNameEvent(event.event_category);
-      
-      const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_category);
-
-      if (existingTypeEvent) {
-        // El tipo de evento ya existe en el mapa
-        const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.slug);
-
-        if (!existingEvent) {
-          // El id_event no existe para este tipo de evento, lo agregamos
-          existingTypeEvent.items.push({
-            name: event.name_event,
-            value: event.slug
-          });
-        }
-      } else {
-        // El tipo de evento no existe en el mapa, lo añadimos
-        map.push({
-          label: event.event_category,
-          items: [
-            {
-              name: event.name_event,
-              value: event.slug,
-            }
-          ]
-        });
-      }
-
-    }
-    console.log(map);
-    // LIMPIAMOS EVENTOS LIST
-    this.eventList = [];
-    this.eventList = map;
-  }
-  changeNameEvent (name:string){
-    if (name == 'gps'){
-      return 'EVENTOS GPS TRACKER';
-    }else if(name == 'platform'){
-      return 'EVENTOS PLATAFORMA';
-    }else if (name == 'accessories'){
-      return 'EVENTOS FATIGA 360º'
-    }else if (name == 'security'){
-      return 'EVENTOS SEGURIDAD VEHICULAR'
-    }else if (name == 'mobile'){
-      return 'EVENTOS SOLUCIONES MÓVILES´'
-    }else {
-      return 'EVENTOS '+name.toUpperCase();
-    }
-  }
 
   ngOnDestroy(){
     ////console.log('me destruire gaaa');

@@ -232,7 +232,13 @@
                             <input id="eventos" type="text" [value]="userInfoForm.eventosLenght+' registros'" pInputText class="p-inputtext-sm text-end" placeholder="" disabled>
                           </div>
                           <div *ngIf="showEventos == true" class="col-7 d-flex justify-content-start">
-                            <p-dropdown [options]="events" [appendTo]="'body'" placeholder="Lista de Eventos" emptyMessage="No tiene Eventos" optionLabel="name_event" [style]="{'max-height':'200px','max-width':'200px'}" (onChange)="showEventos = false"></p-dropdown>
+                            <p-dropdown [options]="events" [appendTo]="'body'" [group]="true" placeholder="Lista de Eventos" emptyMessage="No tiene Eventos" optionLabel="name" [style]="{'max-height':'200px','max-width':'200px'}" (onChange)="showEventos = false">
+                              <ng-template let-group pTemplate="group">
+                                <div class="p-d-flex p-ai-center">
+                                    <span>{{group.label}}</span>
+                                </div>
+                              </ng-template>
+                            </p-dropdown>
                           </div>
                         </div>
                         <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">

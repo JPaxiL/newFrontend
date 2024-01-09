@@ -457,7 +457,7 @@ export class FormComponent implements OnInit {
           this.events = this.events.map((event: any) => {
             return { ...event, active: false };
           });
-          await this.updateShowTypeEvents();
+          this.updateShowTypeEvents();
         }else{
           this.events = [];
           console.log('EL USUARIO NO TIENE EVENTOS');
