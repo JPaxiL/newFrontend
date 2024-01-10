@@ -753,6 +753,7 @@ export class VehicleService {
 
   public setDefaultStatusDataVehicle(){
     this.statusDataVehicle=false;
+    console.log('ChangesStatus');
   }
 
 }
