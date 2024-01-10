@@ -4,7 +4,7 @@
   <div class="modal-body panel-izq-container p-fluid overflow-auto" style="position: relative;">
     <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="spinnerLoading" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Guardando cambios... </p></ngx-spinner>
     <div class="panel-izq-form">
-        <div class="flex container" >
+        <div *ngIf="divEnabled" class="flex container" >
           <div class="border btnBorder center-icon btn-gl-save btn-dark-hover w-100" [class.selected]="btnSelected === 1" (click)="selectBtn(1)">
             <button type="button" *ngIf="geofencesService.showBtnAdd" (click)="selectBtn(1)" class="pentagon btn">
             </button>

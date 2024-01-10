@@ -35,7 +35,8 @@ export class GeofencesService {
   @Output() displayOn = new EventEmitter<any>();
   @Output() deleted = new EventEmitter();
   @Output() reloadTableTree = new EventEmitter<any>();
-  disableBtn: boolean = true;
+  private divEnabledSubject = new BehaviorSubject<boolean>(true);
+  divEnabled$ = this.divEnabledSubject.asObservable();
   modalCloseEvent = new EventEmitter();
   tagAdded = new EventEmitter();
 
@@ -136,6 +137,10 @@ export class GeofencesService {
   closeModal() {
     // Envía evento al padre para cerrarse
     this.modalCloseEvent.emit();
+  }
+
+  setDivEnabled(enabled: boolean) {
+    this.divEnabledSubject.next(enabled);
   }
 
   public clearDrawingsOfGeofence(geofence: any){
@@ -538,8 +543,8 @@ export class GeofencesService {
   }
 
   public async removeListTag(tag: any){
-    const tagsNew = this.listTag.push(tag);
-    //console.log('new listTags:', tagsNew)
+    //const tagsNew = this.listTag.splice(tag);
+    console.log('new listTags:', tag);
   }
 
 

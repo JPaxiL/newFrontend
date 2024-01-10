@@ -33,6 +33,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
 	disabledGroup = true;
   geoOptions = 'poligon';
   poligonAdd:any;
+  divEnabled = true;
   placeholderOperation = 'Seleccione una Operación ...';
   booleanOptions = [
     { label: 'Sí', value: true },
@@ -72,7 +73,10 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     if ( this.geofencesService.nameComponentPol = "ADD GEO") {
       if(this.geofencesService.action=='edit pol'){
-        //desabilitar elbotton circular
+        //deshabilitar elbotton circular
+        this.geofencesService.divEnabled$.subscribe((enabled) => {
+          this.divEnabled = enabled;
+        });
         this.llenar_formulario();
       var geo = this.geofencesService.geofences.filter((item:any)=> item.id == this.geofencesService.idGeocercaEdit)[0];
       if (geo.zone_visible == 'true') {
@@ -96,6 +100,9 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
       this.changeGeoColor(this.form.id);
       this.poligonAdd.editing.enable();
       }else if(this.geofencesService.action == 'edit cir'){
+        this.geofencesService.divEnabled$.subscribe((enabled) => {
+          this.divEnabled = enabled;
+        });
         this.btnSelected = 2;
         this.geoOptions = 'circ';
         this.llenar_formularioCir();
