@@ -35,10 +35,11 @@
   <div class="panel-izq-table-container" style="flex-grow: 0;">
     <table id="tbl_geos">
       <colgroup>
-        <col width="10%" />
-        <col width="30%" />
+        <col width="5%" />
+        <col width="25%" />
         <col width="20%" />
-        <col width="30%" />
+        <col width="20%" />
+        <col width="20%" />
         <col width="10%" />
 
       </colgroup>
@@ -47,8 +48,9 @@
               <th>Nº</th>
               <!-- <td></td> -->
               <th class="text-start">Nombre</th>
-              <th class="text-start">DNI</th>
-              <th>N° Llave/Placa</th>
+              <th>N° Placa</th>
+              <th>N° Llave</th>
+              <th>N° Cipia</th>
               <!-- <th><i class="fa fa-id-card fa-lg"></i></th> -->
               <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
               <th><i class="fa fa-pencil fa-lg"></i></th>
@@ -61,10 +63,13 @@
             <td class="text-center">{{indice+1}} </td>
             <!-- <td class="text-center">{{sub.trama.id}} </td> -->
             <td>{{sub.trama.nombre_conductor}} </td>
-            <td>{{sub.trama.dni_conductor}}</td>
-            <td *ngIf="(sub.trama.tipo_identificacion == 'ibutton')">{{sub.trama.nro_llave}}</td>
-            <td *ngIf="(sub.trama.tipo_identificacion == 'imei')">{{sub.trama.tracker_nombre}}</td>
-            <td *ngIf="(sub.trama.tipo_identificacion == '' || sub.trama.tipo_identificacion == null)"></td>
+            <td>{{sub.trama.tracker_nombre}}</td>
+            <td>{{sub.trama.nro_llave}}</td>
+            <td>{{sub.trama.nro_cipia}}</td>
+            <!-- <td>{{sub.trama.dni_conductor}}</td> -->
+            <!-- <td *ngIf="(sub.trama.tipo_identificacion == 'ibutton')">{{sub.trama.nro_llave}}</td> -->
+            <!-- <td *ngIf="(sub.trama.tipo_identificacion == 'imei')">{{sub.trama.tracker_nombre}}</td> -->
+            <!-- <td *ngIf="(sub.trama.tipo_identificacion == '' || sub.trama.tipo_identificacion == null)"></td> -->
 
             <!-- <td class="inline-png-checkbox text-center">
               <p-checkbox [(ngModel)]="sub.trama.activo" [disabled]="true" [binary]="true"></p-checkbox>
