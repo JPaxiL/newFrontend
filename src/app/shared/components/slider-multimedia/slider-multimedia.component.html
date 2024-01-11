@@ -99,3 +99,34 @@
         </div>
       </div>
 </p-dialog>
+<p-dialog header="Grabar video" [(visible)]="showRecordVideoDialog" (onHide)="showRecordVideoDialog=false" [breakpoints]="{'960px': '50vw', '640px': '75vw'}" appendTo="body" id="recordVideo">
+    <div class="dialog-body-container">
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="dialog-form-container">
+            <div class="d-flex flex-column mt-2 gap-1 justify-content-center" style="min-width: 25rem;">
+                <div class="d-flex justify-content-between">
+                    <h6 class="my-2">Duración: {{recordTime}}&nbsp;seg.</h6>
+                </div>
+                <div class="d-flex justify-content-between gap-1 align-content-center ">
+                    <p-slider *ngIf="showRecordVideoDialog"
+                        [(ngModel)]="recordTime" 
+                        [min]="10" 
+                        [max]="60"
+                        [step]="1"
+                        class="w-100 m-auto"
+                    >
+                    </p-slider>
+                </div>
+                <button 
+                    (click)="getMultimediaRecording(recordTime)" 
+                    type="button"
+                    class="btn-gl-save btn-dark-hover btn-sm w-50 my-4 mx-auto" 
+                    [disabled]="loading"
+                >
+                    Grabar
+                </button>
+            </div>
+          </div>
+        </div>
+      </div>
+</p-dialog>

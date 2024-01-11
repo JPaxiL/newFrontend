@@ -208,6 +208,7 @@ export interface MultimediaItem {
     type: TypeCipiaMultimedia,
     params?: CipiaMultimediaParam,
     url: SafeUrl,
+    blobId?: string, //id in indexedDB
     description?: string,
     title?: string,
     interval?: IntervalTime
