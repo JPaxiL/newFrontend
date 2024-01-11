@@ -251,19 +251,20 @@ export class MapService {
   printPopup(data: any): void{
 
 
-
     let object = this.markerClusterGroup.getLayers();
     //   let cont = 0;
       for (const key in object) {
         if(object[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
           const nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+          const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
           if (nameGroup){
             this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
             '<aside class="">'+
             // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
             '<small>'+nameGroup+'</small><br>'+
             '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-            '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+            // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+            '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
             '<small>REFERENCIA: '+data.ref+'</small><br>'+
             '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
             '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
@@ -272,7 +273,8 @@ export class MapService {
             this.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
             '<aside class="">'+
             '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-            '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+            // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+            '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
             '<small>REFERENCIA: '+data.ref+'</small><br>'+
             '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
             '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
@@ -443,6 +445,7 @@ export class MapService {
     
   }
   generateContentPopUp(vehicle:any):string{
+    const googleMapsLink = `https://www.google.com/maps?q=${vehicle.latitud},${vehicle.longitud}`;
     const nameGroup = this.setNameGroup(vehicle.nameoperation, vehicle.namegrupo, vehicle.nameconvoy);
     let popupContent = '<div class="row"><div class="col-6" align="left"><strong>' + vehicle.name + '</strong></div><div class="col-6" align="right"><strong>' + vehicle.speed + ' km/h</strong></div></div>' +
         '<aside class="">';
@@ -451,7 +454,8 @@ export class MapService {
         console.log('EXISTE nameGroup');
       }
     popupContent += '<small>CONDUCTOR: ' + vehicle.namedriver + '</small><br>' +
-      '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
+      '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</a></small><br>' +
+      // '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
       '<small>REFERENCIA: ' + vehicle.ref + '</small><br>' +
       '<small>FECHA DE TRANSMISION: ' + vehicle.dt_tracker + '</small><br>' +
       '<small>TIEMPO DE PARADA: ' + vehicle.tiempoParada + '</small>' +
@@ -717,6 +721,7 @@ export class MapService {
                 }
                 this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
                 // CREA EL MARKERCLUSTER
+                const googleMapsLink = `https://www.google.com/maps?q=${vehicles[index].latitud},${vehicles[index].longitud}`;
                 const nameGroup = this.setNameGroup(vehicles[index].nameoperation!,vehicles[index].namegrupo!,vehicles[index].nameconvoy!);
                 if (nameGroup){
                   this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
@@ -724,7 +729,8 @@ export class MapService {
                     '<small>'+nameGroup+'</small><br>'+
                     // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
                     '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
-                    '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    // '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + vehicles[index].latitud + ', ' + vehicles[index].longitud + '</a></small><br>' +
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
                     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
@@ -734,7 +740,8 @@ export class MapService {
                   this.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+vehicles[index].name+'</strong></div><div class="col-6" align="right"><strong>'+vehicles[index].speed+' km/h</strong></div></div>'+
                   '<aside class="">'+
                     '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
-                    '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    // '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
+                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + vehicles[index].latitud + ', ' + vehicles[index].longitud + '</a></small><br>' +
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
                     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
@@ -1172,6 +1179,7 @@ export class MapService {
     });
     
     let nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+    const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
     if (nameGroup){
       var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div>'+
       '<div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
@@ -1179,7 +1187,8 @@ export class MapService {
         '<small>'+nameGroup+'</small><br>'+
         // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
@@ -1189,7 +1198,8 @@ export class MapService {
       '<div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
