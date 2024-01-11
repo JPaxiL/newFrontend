@@ -74,6 +74,8 @@ export class EventService {
   new_notif_stack: number[] = [];
 
  public eventsUserLoaded: boolean = false;
+ public eventsGroupedList: any = [];
+ public eventsLength: any;
 
   constructor(
     private http: HttpClient,
@@ -710,6 +712,63 @@ export class EventService {
    */
   public getContentPopup(event:any) {
     return getContentPopup(event);
+  }
+
+  public changeNameEvent (name:string){
+    if (name == 'gps'){
+      return 'EVENTOS GPS TRACKER';
+    }else if(name == 'platform'){
+      return 'EVENTOS PLATAFORMA';
+    // }else if (name == 'accessories'){
+    }else if (name == '360'){
+      return 'EVENTOS FATIGA 360º'
+    }else if (name == 'security'){
+      return 'EVENTOS SEGURIDAD VEHICULAR'
+    }else if (name == 'mobile'){
+      return 'EVENTOS SOLUCIONES MÓVILES´'
+    }else {
+      return 'EVENTOS '+name.toUpperCase();
+    }
+  }
+
+  public createEventList (data:any):any[]{
+    // let status_event = false;
+    let map: any=[];
+    for (let event of data) {
+      // status_event= false;
+      event.event_category = this.changeNameEvent(event.event_category);
+      
+      const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_category);
+
+      if (existingTypeEvent) {
+        // El tipo de evento ya existe en el mapa
+        const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.slug);
+
+        if (!existingEvent) {
+          // El id_event no existe para este tipo de evento, lo agregamos
+          existingTypeEvent.items.push({
+            name: event.name_event,
+            value: event.slug
+          });
+        }
+      } else {
+        // El tipo de evento no existe en el mapa, lo añadimos
+        map.push({
+          label: event.event_category,
+          items: [
+            {
+              name: event.name_event,
+              value: event.slug,
+            }
+          ]
+        });
+      }
+
+    }
+    this.eventsGroupedList = map;
+    this.eventsLength = data.length;
+    this.eventsUserLoaded = true;
+    return map;
   }
 
 }

@@ -36,7 +36,7 @@ p {
     &.dropdown-customize-vehicle-panel{
         margin-left: 1.875rem; //Padding de rowBusqueda + ancho de dragbar + espacio adicional 0.375
         margin-right: 0.625rem;
-        background: linear-gradient(0deg, #fff 50%, var(--gl-purple-blue) 50%);
+        background: linear-gradient(0deg, #fff 50%, var(--gl-blue-dark) 50%);
 
         > div:first-child{
             color: #fff;
@@ -296,7 +296,7 @@ p {
         }
     }
     tr.row-header-operacion {
-      background-color: var(--gl-purple-blue) !important;
+      background-color: var(--gl-blue-dark) !important;
         color: #fff;
 
         > td > div.row > div.col-9:first-child > p-treetabletoggler > button.p-treetable-toggler.p-link.p-ripple {
@@ -354,3 +354,24 @@ p {
     fill: #ff0000; /* Cambia el color aquí */
   }
   
+/* Estilos para el componente p-selectButton */
+::ng-deep .button-group .p-selectbutton {
+    font-size: 7px; /* Tamaño de la fuente */
+  }
+  
+/* Estilos para los ítems dentro del p-selectButton */
+::ng-deep .button-group .p-selectbutton .p-button {
+    padding: 5px 10px; /* Espaciado interno del botón */
+    // margin-right: 8px; /* Espaciado entre botones (ajusta según necesites) */
+  }
+
+::ng-deep .button-group .p-selectbutton .p-button:active {
+    background-color: var(--gl-gray-blue) !important; /* Color de fondo cuando está activo */
+    border-color: var(--gl-gray-blue) !important; /* Color de borde cuando está activo */
+
+  }
+
+::ng-deep .button-group .p-selectbutton .p-button.p-highlight {
+    background-color: var(--gl-blue) !important; /* Color de fondo cuando está seleccionado */
+    border-color: var(--gl-blue) !important; /* Color de borde cuando está seleccionado */
+  }

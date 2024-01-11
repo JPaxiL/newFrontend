@@ -98,7 +98,7 @@
 
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Placa/Código" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
+          <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="IMEI/Placa/Código/Nombre" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
         </span>
 
         <button (click)="onClickGroup()" type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2" title="Nuevo Operación/Grupo/Convoy" data-bs-toggle="tooltip" data-bs-placement="auto" container="body" onclick="this.blur();">
@@ -114,6 +114,10 @@
               Personalizar Panel
             </div>
             <div class="container pt-2 png-checkbox-container">
+              <div class="button-group">
+                <p-selectButton [options]="vehicleService.optionsFilterNameVehicle" [(ngModel)]="vehicleService.selectedFilterNameVehicle" (onChange)="onChangeSelection($event.value)"></p-selectButton>
+              </div>
+              <div class="dropdown-divider"></div>
               <div>
                 <span (click)="onClickSetting('eye')">
                   <p-checkbox [(ngModel)]="setting['eye']" [binary]="true"></p-checkbox>
@@ -186,6 +190,7 @@
                   Transmisión
                 </span>
               </div> -->
+              
               <div>
                 <span (click)="onClickSetting('config')">
                   <p-checkbox [(ngModel)]="setting['config']" [binary]="true"></p-checkbox>
@@ -193,6 +198,7 @@
                 </span>
               </div>
               <div class="dropdown-divider"></div>
+
             </div>
 
             <!-- <div class="dropdown-item active-view" style="padding: 0.125rem 0.75rem;"> -->
@@ -243,14 +249,14 @@
           <col style="width: 40px;" *ngIf="setting['eye']">
           <col style="width: 100%;" *ngIf="setting['vehicle']">
           <col style="width: 50%;" *ngIf="setting['imei']">
-          <col style="width: 40px;" *ngIf="setting['tag_driver']">
-          <col style="width: 45px;" *ngIf="setting['tag']">
-          <col style="width: 45px;" *ngIf="setting['follow']">
-          <col style="width: 45px;" *ngIf="setting['limit']">
-          <col style="width: 45px;" *ngIf="setting['gps']">
-          <col style="width: 45px;" *ngIf="setting['gsm']">
-          <col style="width: 45px;" *ngIf="setting['trans']">
-          <col style="width: 45px;" *ngIf="setting['config']">
+          <col style="width: 30px;" *ngIf="setting['tag_driver']">
+          <col style="width: 35px;" *ngIf="setting['tag']">
+          <col style="width: 35px;" *ngIf="setting['follow']">
+          <col style="width: 35px;" *ngIf="setting['limit']">
+          <col style="width: 35px;" *ngIf="setting['gps']">
+          <col style="width: 35px;" *ngIf="setting['gsm']">
+          <col style="width: 35px;" *ngIf="setting['trans']">
+          <col style="width: 35px;" *ngIf="setting['config']">
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>

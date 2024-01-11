@@ -4,7 +4,7 @@
 
       <span class="p-input-icon-right flex-grow-1 me-2">
         <i class="fa fa-search" aria-hidden="true"></i>
-        <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Placa/Código" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
+        <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="IMEI/Placa/Código/Nombre" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
       </span>
 
       <!-- <button type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2">
@@ -20,6 +20,11 @@
             Personalizar Panel
           </div>
           <div class="container pt-2 png-checkbox-container">
+            <!-- Filtrar Nombre -->
+            <div class="button-group">
+              <p-selectButton [options]="vehicleService.optionsFilterNameVehicle" [(ngModel)]="vehicleService.selectedFilterNameVehicle" (onChange)="onChangeSelection($event.value)"></p-selectButton>
+            </div>
+            <div class="dropdown-divider"></div>
             <div>
               <span (click)="onClickSetting('eye')">
                 <p-checkbox [(ngModel)]="!setting['eye']" [binary]="true"></p-checkbox>

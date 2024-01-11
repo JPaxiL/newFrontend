@@ -60,8 +60,10 @@ export class AddTagComponent implements OnInit {
     let aux2:any[] = [];
     this.list1 = [];
     this.list2 = [];
-    aux2 = this.geofencesService.listGeofences.filter((geo: any)=>geo.idoperation == this.selectedOperation);
+    const geos =this.geofencesService.listGeofences.map((geo: { id: any; zone_name: any; type: any; idoperation: any; tags: any[]; zone_color: any}) => ({ id: geo.id, zone_name: geo.zone_name, type: geo.type, idoperation: geo.idoperation, tags: geo.tags, zone_color: geo.zone_color }));
+    aux2 = geos.filter((geofence: any)=>geofence.idoperation == this.selectedOperation);
     this.list1 = aux2;
+    console.log('list1: ', this.list1);
   }
 
   getOperations(){

@@ -5,6 +5,7 @@ import { EventSocketService } from './../../../events/services/event-socket.serv
 import { EventService } from 'src/app/events/services/event.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { TabService } from '../../services/tab.service';
+import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
 
 declare var $: any;
 
@@ -34,6 +35,7 @@ export class NavbarComponent implements OnInit {
     public panelService: PanelService,
     private userDataService: UserDataService,
     private tabService: TabService,
+    private multimediaService: MultimediaService
   ) { 
     this.tabService.setCurrentTab('main-panel');
   }
@@ -104,11 +106,11 @@ export class NavbarComponent implements OnInit {
     this.showMultiviewModal = false;
   }
 
-  logOut(): void {
+  async logOut(): Promise<void> {
     this.panelService.activity_logout({id:'477'}).then(()=>{
       console.log('cerrar sesion');
     });
-
+    await this.multimediaService.clearMultimediaStorage();
     localStorage.clear();
     /* this.router.navigate(['']); */
     window.location.reload();

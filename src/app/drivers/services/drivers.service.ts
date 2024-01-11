@@ -15,6 +15,7 @@ export class DriversService {
 
   public drivers:any = [];
   public ibuttons:any = [];
+  public icipias:any = [];
 
   public nombreComponente:string = "LISTAR";
 
@@ -56,6 +57,7 @@ export class DriversService {
       
       this.drivers  = response.data[0];
       this.ibuttons = response.data[1];
+      this.icipias = response.data[2];
       this.initializeTable();
       // this.getDataIbuttons('1');
       this.initializingDriver = true;
@@ -66,8 +68,12 @@ export class DriversService {
 
   initializeTable() {
     this.tblDataDriver = [];
-    console.log('drivers: ', this.drivers);
+    // console.log('drivers: ', this.drivers);
     for (let i = 0; i < this.drivers.length; i++) {
+      this.drivers[i].tracker_imei = this.drivers[i].tracker_imei ?? '--';
+      this.drivers[i].tracker_nombre = this.drivers[i].tracker_nombre ?? '--';
+      this.drivers[i].nro_llave = this.drivers[i].nro_llave ?? '--';
+      this.drivers[i].nro_cipia = this.drivers[i].nro_cipia ?? '--';
       this.tblDataDriver.push({trama:this.drivers[i]});
     }
     this.isRowDataEmpty = this.tblDataDriver.length == 0;

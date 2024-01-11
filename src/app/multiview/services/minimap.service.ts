@@ -53,6 +53,7 @@ export class MinimapService {
     public eventService: EventService,
   ) {
     this.userDataService.getUserData();
+    this.vehicleService.setDefaultStatusDataVehicle();
     this.vehicleService.initialize();
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("user data completadoooo",vehicles);
@@ -191,15 +192,15 @@ export class MinimapService {
   }
 
   setNameGroup(nameOpe:string,nameGru:string,nameCon:string): string{
-    if (nameOpe != 'Unidades Sin Operacion'){
+    if (nameCon != 'Unidades Sin Convoy'){
       if (nameGru != 'Unidades Sin Grupo'){
-        if (nameCon != 'Unidades Sin Convoy'){
+        if (nameOpe != 'Unidades Sin Operacion'){
           return 'OPERACION/GRUPO/CONVOY: '+nameOpe+' / '+nameGru+' / '+nameCon;
         }else{
-          return 'OPERACION/GRUPO:'+nameOpe+' / '+nameGru;
+          return 'CONVOY/GRUPO:'+nameCon+' / '+nameGru;
         }
       }else{
-        return 'OPERACION: '+nameOpe;
+        return 'CONVOY: '+nameCon;
       }
     }else{
       return '';

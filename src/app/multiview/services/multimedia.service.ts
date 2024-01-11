@@ -1,21 +1,48 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import * as RecordRTC from 'recordrtc';
 import html2canvas from 'html2canvas';
-import { from, Observable, Subject, throwError, timer } from 'rxjs';
+import { from, Observable, of, Subject, throwError, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { catchError, delay, filter, map, mergeMap, take, timeout } from 'rxjs/operators';
-import { CipiaMultimediaParam } from '../models/interfaces';
+import { catchError, delay, filter, map, mergeMap, take, takeUntil, timeout } from 'rxjs/operators';
+import { CipiaMultimediaParam, IntervalTime, IntervalType, MultimediaItem, SourceCipiaMultimedia, TypeCipiaMultimedia, VideoOnDemandTime } from '../models/interfaces';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { SocketWebService } from 'src/app/vehicles/services/socket-web.service';
 import Swal from 'sweetalert2';
+import moment from 'moment';
+import { ToastService } from 'src/app/shared/services/toast.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
+import { IndexedDbService } from 'src/app/shared/services/indexed-db.service';
+
+interface IMultimedias {
+  [key: string]: MultimediaItem[];
+}
+
+const EVENTS_MULTIMEDIA_KEY = "multimedia_items";
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class MultimediaService {
 
-  constructor(private http: HttpClient, private wsService:SocketWebService) { }
+  constructor(
+    private http: HttpClient, 
+    private wsService:SocketWebService,
+    private toastService: ToastService,
+    private localStorageService: LocalStorageService,
+    private indexedDBService: IndexedDbService,
+    private sanitizer: DomSanitizer,
+  ) { 
+    if(indexedDBService.isReady){
+      this.loadMultimediaCipiaItemsFromLocalStorage();
+    }else{
+      this.indexedDBService.completed.subscribe(()=> {
+        this.loadMultimediaCipiaItemsFromLocalStorage();
+      })
+    }
+  }
 
   private mediaStream:any;
   private canvasStream:any;
@@ -25,14 +52,22 @@ export class MultimediaService {
   private _blob = new Subject<any>();
   private _stateChange = new Subject<any>();
   //@Output() onStop: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public blob: any;
 
+  public blob: any;
   private canvas: HTMLCanvasElement | null = null;
   private canvas2d: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
 
   private captureInterval: any;
   public isRecording = false;
+
+  public multimediaCipiaItems: IMultimedias = {};
+  public onDemandLoader = false;
+
+  public isLoadedMultimediaCipia = false;
+  public completedMultimediaCipia:EventEmitter<any> = new EventEmitter<any>();
+  private destroy$ = new Subject<void>();
+
   getMediaStream(){
     return this._mediaStream.asObservable();
   }
@@ -273,7 +308,7 @@ export class MultimediaService {
     const endpoint = environment.apiUrl + '/api/media/' + type + '/' + imei + '/' + eventId + '/' + source + '/' + parseInt(index.toString());
   
     return this.http.get(endpoint, { responseType: 'blob' }).pipe(
-      map(blob => URL.createObjectURL(blob)),
+      map(async(blob) => await this.saveBlobToIndexedDb(blob, blob.type)),
       catchError((e) => {
         if(e.status != 404){
           return throwError(e);
@@ -291,12 +326,41 @@ export class MultimediaService {
     );
   }
 
+  async saveBlobToIndexedDb(blob: Blob, type: string): Promise<any>{
+    console.log("CALL saveBlobToIndexedDb", blob);
+    console.log("CALL TYPE BLOB", type);
+    
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (event:any) => {
+        const arrayBuffer = event.target.result;
+        try {
+          const id = await this.indexedDBService.saveBlob(arrayBuffer,type).toPromise();
+          const blobUrl = URL.createObjectURL(blob);
+          console.log("SAVED IN INDEXEDDB: ",id,blobUrl);
+          
+          resolve({
+            id: id,
+            url: blobUrl
+          });
+        } catch (error) {
+          reject(error);
+        }
+      }
+      reader.onerror = (error) => {
+        reject(error);
+      }
+      reader.readAsArrayBuffer(blob);
+    });
+  }
 
   retrieveVideoFrom(mediaRequest: CipiaMultimediaParam): Observable<any> {
     return new Observable((observer) => {
       if(mediaRequest.seconds!>60 || mediaRequest.seconds!<10){
         Swal.fire('Error', 'La duración del video debe estar entre 10 y 60 segundos.', 'error');
+        observer.error("La duración del video debe estar entre 10 y 60 segundos.");
         observer.complete();
+        return;
       }
       const endpoint = environment.apiUrl + '/api/media/retrieve';
 
@@ -317,7 +381,7 @@ export class MultimediaService {
           //return this.getMediaFromEvent(mediaRequest.imei, frame.Parametros.eventId, "video", mediaRequest.source, 0, mediaRequest.seconds!<31?15:30);
         }),
         take(1), // Solo toma la primera URL válida y completa la suscripción
-        timeout(mediaRequest.seconds! * 1000)
+        timeout(mediaRequest.seconds! * 2000)
       );
       // Aplicar timeout al Observable
       const frameSubscription = frameSubscriptionSocket.subscribe(
@@ -341,15 +405,17 @@ export class MultimediaService {
           console.log("respuesta de retrieve: ", resp);
           if (!resp.success) {
             Swal.fire('Error', resp.message, 'error');
-            frameSubscription.unsubscribe();
+            observer.error(resp)
             observer.complete();
+            frameSubscription.unsubscribe();
           }
         },
         error => {
+          observer.error(error)
+          observer.complete();
           Swal.fire('Error', error.error.messages, 'error');
           console.error('Error al llamar al endpoint /api/media/retrieve:', error);
           frameSubscription.unsubscribe();
-          observer.complete();
         }
       );
     });
@@ -359,6 +425,7 @@ export class MultimediaService {
     return new Observable((observer) => {
       if(mediaRequest.seconds!>60 || mediaRequest.seconds!<10){
         Swal.fire('Error', 'La duración del video debe estar entre 10 y 60 segundos.', 'error');
+        observer.error("La duración del video debe estar entre 10 y 60 segundos.");
         observer.complete();
       }
       // Only for video
@@ -405,6 +472,7 @@ export class MultimediaService {
           if (!resp.success) {
             Swal.fire('Error', resp.message, 'error');
             frameSubscription.unsubscribe();
+            observer.error(resp.message);
             observer.complete();
           }
         },
@@ -412,9 +480,198 @@ export class MultimediaService {
           Swal.fire('Error', error.error.messages, 'error');
           console.error('Error al llamar al endpoint /api/media/retrieve:', error);
           frameSubscription.unsubscribe();
+          observer.error(error);
           observer.complete();
         }
       );
     });
+  }
+
+  async getVideoOnDemand(option: VideoOnDemandTime='now', multimediaParams: CipiaMultimediaParam){
+    this.onDemandLoader = true;
+    
+    if(option == "now"){
+      console.log("record video with params: ", multimediaParams);
+      this.toastService.emitToastMessage({key: 'multimediaOnDemand', severity:'info', summary: 'Grabar video 360', detail: 'Se le notificará cuando el video esté disponible.', sticky: true, closable: false});
+      this.recordVideo(multimediaParams).subscribe( async(frame) => {
+        console.log("frame obtained: ", frame);
+        const auxMultimediaParams = {...multimediaParams};
+        auxMultimediaParams.eventId = frame.Parametros.eventId;
+        await this.addMultimediaCipiaItem(multimediaParams.eventId!,
+          {
+            type: multimediaParams.type,
+            params: auxMultimediaParams, 
+            description: 'Desde: '+ moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss') 
+                          +'  hasta: '+moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').add(multimediaParams.seconds,'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+            url:"",
+            blobId: "",
+            interval: this.getInterval(multimediaParams.from!, 0, multimediaParams.seconds!,'recording')
+          }
+        );
+        console.log("Multimedia Item added: ",{type: multimediaParams.type, params: auxMultimediaParams, url:"", description: frame.Parametros.eventDateTime});
+        this.onDemandLoader = false;
+        //this.updateSliderBackground();
+        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaCipiaItems);
+        this.toastService.clearToastMessage('multimediaOnDemand');
+        this.toastService.emitToastMessage({key: 'regular', severity:'success', summary: 'Grabación exitosa', detail: 'La grabación ha terminado con éxito. Vaya al evento correspondiente para ver el video.'});
+      },
+      error =>{
+        console.error(error);
+        this.onDemandLoader = false;
+        this.toastService.clearToastMessage('multimediaOnDemand');
+        this.toastService.emitToastMessage({key: 'regular', severity:'warn', summary: 'Grabación no disponible', detail: 'La grabación no se pudo obtener. Inténtelo nuevamente.'});
+      });
+    }else{
+      console.log("retrieving video with params: ", multimediaParams);
+      this.toastService.emitToastMessage({key: 'multimediaOnDemand', severity:'info', summary: 'Obteniendo video 360', detail: 'Se le notificará cuando el video se encuentre disponible.', sticky: true, closable: false});
+      this.retrieveVideoFrom(multimediaParams).subscribe( async(frame) => {
+        console.log("frame obtained: ", frame);
+        const auxMultimediaParams = {...multimediaParams};
+        auxMultimediaParams.eventId = frame.Parametros.eventId;
+        await this.addMultimediaCipiaItem(multimediaParams.eventId!,
+          {
+            type: multimediaParams.type,
+            params: auxMultimediaParams, 
+            description: 'Desde: '+ moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss') 
+                          +'  hasta: '+moment(multimediaParams.from, 'YYYY/MM/DD HH:mm:ss').add(multimediaParams.seconds,'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'), 
+            url:"",
+            blobId: "",
+            interval: this.getInterval(multimediaParams.from!, 0, multimediaParams.seconds!,'retrieve')
+          }
+        );
+        console.log("Multimedia Item added: ",{type: multimediaParams.type, params: auxMultimediaParams, url:"", description: frame.Parametros.eventDateTime, interval: this.getInterval(frame.Parametros.eventDateTime, 0, multimediaParams.seconds!, 'retrieve')});
+        this.onDemandLoader = false;
+        //this.updateSliderBackground();
+        console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaCipiaItems);
+        this.toastService.clearToastMessage('multimediaOnDemand');
+        this.toastService.emitToastMessage({key: 'regular', severity:'success', summary: 'Video obtenido', detail: 'El video ya se encuentra disponible. Vaya al evento correspondiente para verlo.'});
+      },
+      error => {
+        this.onDemandLoader = false;
+        this.toastService.clearToastMessage('multimediaOnDemand');
+        this.toastService.emitToastMessage({key: 'regular', severity:'warn', summary: 'Video no disponible', detail: 'El video no se pudo obtener, refresque la página e inténtelo nuevamente.'});
+      });
+    }
+  }
+
+  getInterval(event_date_time: string, add_start_number:number, add_end_numbrer:number, type?: IntervalType):IntervalTime{
+    return {
+      start: moment(event_date_time, 'YYYY/MM/DD HH:mm:ss').add(add_start_number, 'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'),
+      end: moment(event_date_time, 'YYYY/MM/DD HH:mm:ss').add(add_end_numbrer, 'seconds').subtract(5,'hours').format('YYYY/MM/DD HH:mm:ss'),
+      type: type??'event'
+    }
+  }
+
+  loadMediaFromMultimediaItem(activeIndex: number, parentEventId: string, untilDestroy: Subject<void>): Promise<void>{
+    const media = this.multimediaCipiaItems[parentEventId][activeIndex];
+    console.log("parentID: ", parentEventId);
+    console.log("activeIndex: ", activeIndex);
+    console.log("media: ", media);
+    
+    return new Promise<void>( (resolve, reject) => {
+      if(!media.url!){
+        this.getMediaFromEvent(
+          media.params!.imei,
+          media.params!.eventId!,
+          media.params!.type,
+          media.params!.source,
+          undefined,media.params!.seconds??undefined,10,7000
+        ).pipe(takeUntil(untilDestroy)).toPromise().then(blobItem => {
+          if(blobItem){
+            this.updateUrlToMultimediaCipiaItem(
+              parentEventId, 
+              this.sanitizer.bypassSecurityTrustUrl(blobItem.url) as SafeUrl,
+              blobItem.id,
+              activeIndex
+            )
+          }
+          resolve();
+        }).catch( error => {
+          reject();
+        });
+      } else {
+        resolve();
+      }
+    });
+  }
+
+  async loadMultimediaCipiaItemsFromLocalStorage(){
+    let events = this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[];
+    if(events){
+      events.map(async (event) => {
+        console.log("retrieving MultimediaCipiaItems from: ", event);
+        
+        let auxMultimediaCipiaItems:MultimediaItem[] = this.localStorageService.getItem(event) as MultimediaItem[];  
+        console.log("MultimediaCipiaItems data: ", auxMultimediaCipiaItems);
+        if (auxMultimediaCipiaItems) {
+          const promises: Promise<MultimediaItem>[] = auxMultimediaCipiaItems.map(async (item: MultimediaItem) => {
+            const blobItem = await this.indexedDBService.getBlob(item.blobId!).toPromise();
+            console.log("blobItem getBlob", blobItem);
+            item.url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blobItem)) as SafeUrl;
+            return item;
+          });
+  
+          // Esperar a que todas las promesas se resuelvan
+          const resolvedItems = await Promise.all(promises);
+          this.multimediaCipiaItems[event] = resolvedItems;
+        }
+      })
+    }
+    this.isLoadedMultimediaCipia = true;
+    this.completedMultimediaCipia.emit();
+    console.log(" MultimediaCipiaItems loaded: ", this.multimediaCipiaItems);
+  }
+
+  async addMultimediaCipiaItem(eventId:string, item: MultimediaItem){
+    this.multimediaCipiaItems[eventId].push(item);
+    this.localStorageService.updateItem(eventId,this.multimediaCipiaItems[eventId]);
+    console.log("addMultimediaCipiaItem LocalStorage: ", this.localStorageService.getItem(eventId));
+    await this.loadMediaFromMultimediaItem(this.multimediaCipiaItems[eventId].length-1, eventId, this.destroy$);
+  }
+
+  initializeNewMultimediaCipiaItem(eventId:string){
+    this.multimediaCipiaItems[eventId] = [];
+    this.localStorageService.setItem(eventId,[])
+    this.addEventToListInLocalStorage(eventId);
+    console.log("update LocalStorage: ", this.localStorageService.getItem(eventId));
+  }
+
+  updateUrlToMultimediaCipiaItem(eventId:string, url:SafeUrl, blobId:string , index:number){
+    this.multimediaCipiaItems[eventId][index].url = url;
+    this.multimediaCipiaItems[eventId][index].blobId = blobId;
+    this.localStorageService.updateItem(eventId, this.multimediaCipiaItems[eventId]);
+    console.log("update LocalStorage: ", this.localStorageService.getItem(eventId));
+  }
+
+  addEventToListInLocalStorage(eventId:string){
+    let events = this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[];
+    console.log("eventsInLocalStorage: ", events);
+    if (events){
+      events.push(eventId);
+      this.localStorageService.updateItem(EVENTS_MULTIMEDIA_KEY, [...events]);
+      console.log("eventsInLocalStorageAfter: ", this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[]);
+    }else{
+      this.localStorageService.setItem(EVENTS_MULTIMEDIA_KEY,[eventId]);
+      console.log("eventsInLocalStorage append: ", this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[]);
+
+    }
+  }
+
+  async clearMultimediaStorage(){
+    let events = this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[];
+
+    if(events){
+      for (const event of events) {
+        console.log("deleting MultimediaCipiaItems from: ", event);
+        
+        let auxMultimediaCipiaItems:MultimediaItem[] = this.localStorageService.getItem(event) as MultimediaItem[];  
+        if (auxMultimediaCipiaItems) {
+          for (const item of auxMultimediaCipiaItems) {
+            await this.indexedDBService.deleteBlob(item.blobId!).toPromise();
+            console.log("deleted: ", item.blobId!);
+          }
+        }
+      }
+    }
   }
 }

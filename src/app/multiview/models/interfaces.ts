@@ -54,6 +54,7 @@ export interface UserTracker {
     eye?: boolean,
     tanque?: string,
     name?: string,
+    name_old?: string,
     icon_def?: string,
     icon?:  string,
     icon_name?: string,
@@ -92,6 +93,7 @@ export interface UserTracker {
     nametype_vehicle?: string | null
     tolva?: string,
     tag?: boolean,
+    tag_driver?: boolean,
     cod_interno?: string | null
 }
 
@@ -208,17 +210,27 @@ export interface MultimediaItem {
     type: TypeCipiaMultimedia,
     params?: CipiaMultimediaParam,
     url: SafeUrl,
+    blobId?: string, //id in indexedDB
+    description?: string,
+    title?: string,
+    interval?: IntervalTime
 }
 
 export interface CipiaMultimediaParam {
     imei:string,
     eventId?:string,
     type:TypeCipiaMultimedia,
-    from?: string //date in UTC0 "2023-10-09 19:12:00"
-    seconds?: number // max= 30
+    from?: string, //date in UTC0 "2023-10-09 19:12:00"
+    seconds?: number, // max= 30
     source: SourceCipiaMultimedia
 }
 
-export type VideoOnDemandTime = 'backward' | 'forward' | 'now';
+export type IntervalTime = {
+    start: string,
+    end?: string,
+    type?: IntervalType,
+}
+export type VideoOnDemandTime = 'demand' | 'now';
 export type SourceCipiaMultimedia = "CABIN" | "ROAD";
 export type TypeCipiaMultimedia = "video" | "image";
+export type IntervalType = "recording" | "event" | "retrieve";

@@ -158,10 +158,11 @@ export class UserInfoComponent implements OnInit {
           console.log('EVENTOS DEL USUARIO OBTENIDOS: 1vez', data);
           // Realiza cualquier acción con los datos recibidos
           if (data.success){
-            this.userDataService.eventsUser = data.data;
-            this.events = this.userDataService.eventsUser;
-            this.EventService.eventsUserLoaded = true;
-            this.userInfoForm.eventosLenght = this.events.length;
+            this.EventService.createEventList(data.data);
+            // this.userDataService.eventsUser = data.data;
+            // this.events = this.userDataService.eventsUser;
+            this.events = this.EventService.eventsGroupedList;
+            this.userInfoForm.eventosLenght = this.EventService.eventsLength;
           }else{
             this.events = [];
             console.log('EL USUARIO NO TIENE EVENTOS');
@@ -174,9 +175,11 @@ export class UserInfoComponent implements OnInit {
         }
       );
     }else{
+      this.events = this.EventService.eventsGroupedList;
+      this.userInfoForm.eventosLenght = this.EventService.eventsLength;
+      // this.events = this.userDataService.eventsUser;
+      // this.userInfoForm.eventosLenght = this.events.length;
       this.userDataService.spinner.hide('loadingInfoUser');
-      this.events = this.userDataService.eventsUser;
-      this.userInfoForm.eventosLenght = this.events.length;
 
     }
     // this.userDataService.spinner.hide('loadingInfoUser'); // Nombre opcional, puedes usarlo para identificar el spinner
