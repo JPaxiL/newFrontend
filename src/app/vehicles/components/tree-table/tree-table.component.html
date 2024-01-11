@@ -98,7 +98,7 @@
 
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="Placa/Código" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
+          <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="IMEI/Placa/Código/Nombre" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
         </span>
 
         <button (click)="onClickGroup()" type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2" title="Nuevo Operación/Grupo/Convoy" data-bs-toggle="tooltip" data-bs-placement="auto" container="body" onclick="this.blur();">
@@ -115,7 +115,7 @@
             </div>
             <div class="container pt-2 png-checkbox-container">
               <div class="button-group">
-                <p-selectButton [options]="nameShows" [(ngModel)]="selectedNameShowVehicle" (onChange)="onChangeSelection($event.value)"></p-selectButton>
+                <p-selectButton [options]="vehicleService.optionsFilterNameVehicle" [(ngModel)]="vehicleService.selectedFilterNameVehicle" (onChange)="onChangeSelection($event.value)"></p-selectButton>
               </div>
               <div class="dropdown-divider"></div>
               <div>

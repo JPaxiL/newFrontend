@@ -79,19 +79,11 @@ export class TreeTableComponent implements OnInit {
     sort: 'asc'
   }
 
-  selectedNameShowVehicle: string='name';
-  nameShows: any[] = [
-    { label: 'Número placa', value: 'num_plate' },
-    { label: 'Código interno', value: 'cod_interno' },
-    { label: 'Nombre', value: 'name' }
-  ];
-
-
   @ViewChild('tt') tt!:any;
 
 
   constructor(
-    private vehicleService:VehicleService,
+    public vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private spinner: NgxSpinnerService,
@@ -602,7 +594,7 @@ export class TreeTableComponent implements OnInit {
       }
       if (!tempShowName){
         // Busca el valor correspondiente en nameShows basado en selectedNameShowVehicle
-        const selectedOption = this.nameShows.find(option => option.value === this.selectedNameShowVehicle);
+        const selectedOption = this.vehicleService.optionsFilterNameVehicle.find(option => option.value === this.vehicleService.selectedFilterNameVehicle);
         // Verifica si se encontró una opción correspondiente
         if (selectedOption) {
           tempShowName = "Unidad Sin " + selectedOption.label;
@@ -683,8 +675,8 @@ export class TreeTableComponent implements OnInit {
 
   public onQuickFilterChanged(data: any) {
     // //console.log("tt",this.tt);
-    this.tt.filterGlobal(data.target.value, 'contains')
-    this.tt.defaultSortOrder=-1;
+    this.tt.filterGlobal(data.target.value, 'contains');
+    this.tt.defaultSortOrder = -1;
   }
 
   getContrastYIQ(hex: string){
