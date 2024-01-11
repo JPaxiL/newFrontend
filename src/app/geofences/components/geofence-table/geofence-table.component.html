@@ -1,3 +1,86 @@
+<p-dialog header="" icon="pi pi-info-circle" [style]="{width: '50vw'}" [(visible)]="displayEditTags" [modal]="true" [resizable]="false">
+  <ng-template class="p-dialog-title" pTemplate="header">
+    <div>
+      <i class="fa fa-pencil me-2" aria-hidden="true"></i>
+      <strong>Editar {{textHeaderEdit}}</strong>
+    </div>
+  </ng-template>
+  <div class="dialog-body-container">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="dialog-form-container">
+        <div class="row gl-out-middleline">
+          <div class="col p-field p-0">
+            <div class="row gl-row-underline m-0 w-100">
+              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                <label for="float-input">Nombre:</label>
+              </div>
+              <div class="col-7">
+                <input [(ngModel)]="nameEdit" id="float-input" type="text" pInputText class="p-inputtext-sm" placeholder="" [disabled]="loading">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-column mt-3">
+          <div class="row gl-listbox-container">
+            <div class="col">
+              <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar Geocerca" optionLabel="zone_name" [listStyle]="{'height':'200px'}" [disabled]="loading">
+                <ng-template let-geo pTemplate="item">
+                  <div class="car-item">
+                    <div *ngIf="(geo['type'])=='polig'"  width="25" height="25" class="pentagon me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                    <div *ngIf="(geo['type'])=='circ'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                    <div *ngIf="(geo['type'])=='lin'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                  </div>
+                  <div><label>{{geo.zone_name}}</label></div>
+                </ng-template>
+              </p-listbox>
+            </div>
+            <div class="col-1 d-flex flex-column justify-content-center align-items-center">
+              <div style="height: 1.5rem;"></div>
+              <div class="">
+                <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
+                  <span>
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+              <div style="height: 1rem;"></div>
+              <div class="">
+                <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
+                  <span>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div class="col">
+              <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar Geocerca" optionLabel="zone_name" [listStyle]="{'height':'200px'}" [disabled]="loading">
+                <ng-template let-geo pTemplate="item">
+                  <div class="car-item">
+                    <div *ngIf="(geo['type'])=='polig'"  width="25" height="25" class="pentagon me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                    <div *ngIf="(geo['type'])=='circ'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                    <div *ngIf="(geo['type'])=='lin'" class="circle me-2" [ngStyle]="{'background-color': geo.zone_color}"></div>
+                  </div>
+                  <div><label>{{geo.zone_name}}</label></div>
+                </ng-template>
+              </p-listbox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="row d-flex justify-content-center">
+      <div class="col-4">
+        <button (click)="displayEditTags=false" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading"loading>Cancelar</button>
+      </div>
+      <div class="col-4">
+        <button (click)="onConfirmationEdit()" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading"loading>Guardar</button>
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+
 <div class="table-content-component-panel-monitoreo" style="position: relative; height: 100%;">
   <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingGeofencesSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Geocercas... </p></ngx-spinner>
   <div class="card-body p-fluid bg-gl-blue-dark" id="rowBusqueda">
@@ -5,7 +88,7 @@
       <div class="d-flex flex-grow-1">
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <input type="text" [(ngModel)]="searchValueGeo"  class="form-control" placeholder="Buscar nombre...">
+          <input type="text" (keyup)="onQuickFilterChanged($event)"  class="form-control" placeholder="Buscar geocerca...">
           <!-- <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
         </span>
       </div>
@@ -41,11 +124,11 @@
           </div>
           <div class="dropdown-item"  style="padding: 0.125rem 0.75rem;">
             <i *ngIf="geofencesService.showBtnAdd" class="fa fa-plus" style="width: 20px;"></i>
-            <span  (click)="clickAgregarGeocercaPol()" title="Crear geocerca">Crear Geocerca</span>
+            <span  (click)="clickAddGeoPol()" title="Crear geocerca">Crear Geocerca</span>
           </div>
           <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
             <i *ngIf="geofencesService.showBtnTags" class="fa fa-plus" style="width: 20px;" data-bs-placement="auto" container="body" onclick="this.blur();"></i>
-            <span (click)="onClickTags()" aria-hidden="true" type="button">Crear Etiqueta</span>
+            <span (click)="onClickAddTags()" aria-hidden="true" type="button">Crear Etiqueta</span>
           </div>
         </div>
       </div>
@@ -70,7 +153,7 @@
     </div>
   </div>
   <div class="">
-    <p-treeTable *ngIf="viewOptions=='viewGroup'" [value]="geofences" [loading]="loading"
+    <p-treeTable #tt [value]="geofences" *ngIf="viewOptions=='viewGroup'" [loading]="loading"
       scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name"
       [resizableColumns]="true"
       [reorderableColumns]="true"
@@ -83,7 +166,7 @@
       [globalFilterFields]="['nameoperation','namegrupo','zone_name']">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col style="width: 2.5rem;" />
+          <col style="width: 2.0rem;" />
           <col style="width: 16%;"/>
           <col style="width: 20%;"/>
           <col style="width: 55%;" />
@@ -97,12 +180,12 @@
         <tr>
           <th></th>
           <th>
-            <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEyeAll()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
+            <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickAllEyes()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
           </th>
           <th > <i class="fas fa-crosshairs ag-grid-header-icon"></i></th>
           <th style="text-align: center; white-space: nowrap;">Geocerca</th>
           <th>
-            <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEyeAll()">
+            <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickShowAllNames()">
             <div>
               <i *ngIf="geofencesService.tagNamesEyeState " class="fas fa-eye mini-eye"></i>
               <i *ngIf="!geofencesService.tagNamesEyeState " class="far fa-eye-slash mini-eye"></i>
@@ -237,7 +320,7 @@
                 <div class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
                   <div class="d-flex justify-content-end">
                     <div class="d-flex align-items-center">
-                      <!-- <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEyeAll()" class="d-flex justify-content-center align-items-center me-2" ngDefaultControl></p-inputSwitch> -->
+                      <!-- <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickAllEyes()" class="d-flex justify-content-center align-items-center me-2" ngDefaultControl></p-inputSwitch> -->
                     </div>
                     <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
                       <span ngbDropdownToggle class="btn-label burger-options" title="Opciones" data-bs-toggle="tooltip" data-bs-placement="top">
@@ -254,9 +337,9 @@
                             Eliminar {{rowData['type']}}
                           </span>
                         </div>
-                        <div (click)="showGeo(rowData['type'], rowData['id'])" ngbDropdownItem>
+                        <div (click)="showGeosByTagOp(rowData['type'], rowData['id'], rowData['idOpe'])" ngbDropdownItem>
                           <span class="btn-label">
-                            Ocultar Geocercas
+                            Ocultar/Mostrar Geocercas
                           </span>
                         </div>
                       </div>
@@ -265,7 +348,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </td>
         </tr>
@@ -299,7 +381,7 @@
           </td>
           <td class="inline-png-checkbox">
             <span class="btn-label" title="Mostrar nombre">
-              <p-checkbox [ngModel]="rowData['zone_name_visible_bol']" [binary]="true" (onChange)="clickShowNameGeoAll(rowData['id'], rowData['type'])"></p-checkbox>
+              <p-checkbox [ngModel]="rowData['zone_name_visible_bol']" [binary]="true" (onChange)="clickShowGeoName(rowData['id'], rowData['type'])"></p-checkbox>
             </span>
           </td>
           <td style="min-width: 215px;" class="geofence-column">
@@ -310,7 +392,7 @@
               <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
               <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                 <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                <div ngbDropdownItem (click)="clickEliminarGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
               </div>
             </div>
           </td>
@@ -320,8 +402,8 @@
         </tr>
       </ng-template>
     </p-treeTable>
-    <!-- General view -->
-    <p-treeTable *ngIf="viewOptions=='viewGen'" [value]="geofences" [loading]="loading"
+    <!-- ViewGeneral -->
+    <p-treeTable #tt *ngIf="viewOptions=='viewGen'" [value]="geofences" [loading]="loading"
       scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name"
       [resizableColumns]="true"
       [reorderableColumns]="true"
@@ -348,12 +430,12 @@
         <tr>
           <th></th>
           <th>
-            <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickEyeAll()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
+            <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickAllEyes()" class="d-flex justify-content-center align-items-center" ngDefaultControl></p-inputSwitch>
           </th>
           <th > <i class="fas fa-crosshairs ag-grid-header-icon"></i></th>
           <th style="text-align: center; white-space: nowrap;">Geocerca</th>
           <th>
-            <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickTagNamesEyeAll()">
+            <i class="fa fa-id-card fa-lg mini-eye-container" (click)="onClickShowAllNames()">
             <div>
               <i *ngIf="geofencesService.tagNamesEyeState" class="fas fa-eye mini-eye"></i>
               <i *ngIf="!geofencesService.tagNamesEyeState" class="far fa-eye-slash mini-eye"></i>
@@ -505,7 +587,7 @@
           </td>
           <td class="inline-png-checkbox">
             <span class="btn-label" title="Mostrar nombre">
-              <p-checkbox [ngModel]="rowData['zone_name_visible_bol']" [binary]="true" (onChange)="clickShowNameGeoAll(rowData['id'], rowData['type'])"></p-checkbox>
+              <p-checkbox [ngModel]="rowData['zone_name_visible_bol']" [binary]="true" (onChange)="clickShowGeoName(rowData['id'], rowData['type'])"></p-checkbox>
             </span>
           </td>
           <td style="min-width: 215px;" class="geofence-column">
@@ -516,7 +598,7 @@
               <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
               <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                 <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                <div ngbDropdownItem (click)="clickEliminarGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
               </div>
             </div>
           </td>

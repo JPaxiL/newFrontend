@@ -57,7 +57,10 @@ export class VehicleService {
   @Output() clickDriver = new EventEmitter<any>();
   @Output() clickListTable = new EventEmitter<any>();
   @Output() calcTimeStop = new EventEmitter<any>();
+  @Output() clickSelection = new EventEmitter<any>();
+  @Output() reloadNameDriver = new EventEmitter<any>();
 
+  
   constructor(
     private http: HttpClient,
     ) {
@@ -160,6 +163,11 @@ export class VehicleService {
     this.sortLimit.emit();
   }
 
+  public onClickSelection(show_name:string):void{
+    // console.log('Llego ShowName al servicio:',show_name);
+    this.clickSelection.emit(show_name);
+  }
+
   public getVehicles(): Observable<any>{
     return this.http.get(this.URL_LIST);
   }
@@ -227,17 +235,19 @@ export class VehicleService {
     const vehicles = this.vehicles;
     const resultado = this.vehicles.find( (vehi: any) => vehi.IMEI == data.tracker_imei.toString() );
     if(resultado){
-      const index = this.vehicles.indexOf( resultado);
-      console.log('Encontratdo vehicle ....',vehicles[index]);
+      const index = this.vehicles.indexOf(resultado);
+      // console.log('Encontratdo vehicle ....',vehicles[index]);
 
       vehicles[index].id_conductor  = data.id;
-      vehicles[index].namedriver  = data.namedriver;
+      vehicles[index].namedriver  = data.nombre_conductor;
 
       this.vehicles = vehicles;
-      console.log('actualizando el anterior....',vehicles[index]);
+      // console.log('actualizando el anterior....',vehicles[index]);
       //reload talbe
       this.reloadTable.emit(vehicles);
       this.reloadTableTree.emit(vehicles);
+      console.log('VEHICLE UPDATED EMIT',this.vehicles[index],data);
+      this.reloadNameDriver.emit(this.vehicles[index]);
 
     }
   }
@@ -558,18 +568,17 @@ export class VehicleService {
   }
  
   private addSelect(vehicle: any){
+    // console.log('UPDATE in addSelect vehicle->',vehicle);
+    
     if(this.statusDataVehicle==false){
       vehicle.follow = false;
       vehicle.tag = true;
       vehicle.eye = true;
-    }else{ //EN DUDA SI VA SEGUIR ESTA COSA
-      vehicle.eye = true;
-    }
-    if(vehicle.id_conductor){
-      vehicle.tag_driver = true;
-    }else{
       vehicle.tag_driver = false;
     }
+    // else{ //EN DUDA SI VA SEGUIR ESTA COSA
+    //   vehicle.eye = true;
+    // }
     vehicle.arrayPrueba = [];
     vehicle.arrayPruebaParada = [];
     vehicle.paradaDesde = false;
@@ -740,6 +749,11 @@ export class VehicleService {
     // console.log("prueba:",prueba);
 
     return map;
+  }
+
+  public setDefaultStatusDataVehicle(){
+    this.statusDataVehicle=false;
+    console.log('ChangesStatus');
   }
 
 }

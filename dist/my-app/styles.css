@@ -35549,7 +35549,10 @@ textarea.form-control-lg {
   --gl-yellow: #FFCC29;
   --gl-body-background-color: rgb(237, 232, 232);
   --gl-danger-red: #f9524d;
+  --gl-vivid-red-alpha: #ff0004c5;
   --gl-vivid-red: #c13133;
+  --gl-enable-green: #00fa9a;
+  --gl-enable-green-alfa: #1eff00c5;
   --gl-purple-blue: #686c96;
   --gl-purple-blue-dark: #21265c;
   --gl-gray-blue: #8ca2c9;
@@ -35557,6 +35560,7 @@ textarea.form-control-lg {
   --gl-blue-dark-hover: #121928;
   --gl-blue-dark: #33486f;
   --gl-blue-electric: #33486f;
+  --gl-blue-electric-alpha: #0059ffc5;
   --gl-blue-dark-alpha: rgba(51, 72, 111, 0.85);
   --gl-blue: #48659c;
   --gl-light-blue: #30a9d9 ;

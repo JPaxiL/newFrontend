@@ -17,6 +17,10 @@ export class ReportService {
   contReport : any = 0;
   userId : any = 0;
 
+
+  eC:any; //Reporte 6 - Reporte de Eventos , Seleccion de Campo = Eventos Campos
+
+
   data = [];
 
   setParams(values:any) {

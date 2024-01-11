@@ -66,6 +66,12 @@ export class VehiclesComponent implements OnInit {
     config: false,
     sort: 'asc'
   }
+  selectedNameShowVehicle: string='name';
+  nameShows: any[] = [
+    { label: 'Número placa', value: 'num_plate' },
+    { label: 'Código interno', value: 'cod_interno' },
+    { label: 'Nombre', value: 'name' }
+  ];
 
   rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
   panelPaddingLeft = (Number(getComputedStyle(document.documentElement).getPropertyValue('--gl-panel-padding-left').replace('rem', '')) * this.rem_to_px )*0.25; //NO ESTOY SEGURO
@@ -246,6 +252,39 @@ export class VehiclesComponent implements OnInit {
       ],
     });
     this.api.sizeColumnsToFit();
+  }
+
+  onChangeSelection(show_name:string){
+    // console.log('Vehicles List:',this.vehicles);
+    const vehicles = this.vehicleService.vehicles;
+    let tempShowName = '';
+    for (const index of vehicles) {
+      if(show_name=='num_plate'){
+        tempShowName = index.plate_number!;
+      }else if (show_name=='cod_interno'){
+        tempShowName = index.cod_interno!;
+      }else if (show_name =='name'){
+        tempShowName = index.name_old!;
+      }
+      if (!tempShowName){
+        // Busca el valor correspondiente en nameShows basado en selectedNameShowVehicle
+        const selectedOption = this.nameShows.find(option => option.value === this.selectedNameShowVehicle);
+        // Verifica si se encontró una opción correspondiente
+        if (selectedOption) {
+          tempShowName = "Unidad Sin " + selectedOption.label;
+        } else {
+          tempShowName = "Unidad Sin Nombre";
+        }
+      }
+      index.name= tempShowName;
+    }
+    if(this.vehicleService.listTable==0){
+      this.vehicleService.reloadTable.emit();
+    }else{
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+      this.vehicleService.reloadTableTree.emit();
+    }
+    this.vehicleService.onClickSelection(show_name);
   }
 
   // Cambio de vista

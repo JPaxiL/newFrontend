@@ -54,6 +54,7 @@ export interface UserTracker {
     eye?: boolean,
     tanque?: string,
     name?: string,
+    name_old?: string,
     icon_def?: string,
     icon?:  string,
     icon_name?: string,
@@ -92,6 +93,7 @@ export interface UserTracker {
     nametype_vehicle?: string | null
     tolva?: string,
     tag?: boolean,
+    tag_driver?: boolean,
     cod_interno?: string | null
 }
 
