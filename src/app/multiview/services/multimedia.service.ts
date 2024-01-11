@@ -381,7 +381,7 @@ export class MultimediaService {
           //return this.getMediaFromEvent(mediaRequest.imei, frame.Parametros.eventId, "video", mediaRequest.source, 0, mediaRequest.seconds!<31?15:30);
         }),
         take(1), // Solo toma la primera URL válida y completa la suscripción
-        timeout(mediaRequest.seconds! * 1000)
+        timeout(mediaRequest.seconds! * 2000)
       );
       // Aplicar timeout al Observable
       const frameSubscription = frameSubscriptionSocket.subscribe(
@@ -492,7 +492,7 @@ export class MultimediaService {
     
     if(option == "now"){
       console.log("record video with params: ", multimediaParams);
-      this.toastService.emitToastMessage({key: 'multimediaOnDemand', severity:'info', summary: 'Grabar video 360', detail: 'Se le notificará cuando el dispositivo confirme la grabación.', sticky: true, closable: false});
+      this.toastService.emitToastMessage({key: 'multimediaOnDemand', severity:'info', summary: 'Grabar video 360', detail: 'Se le notificará cuando el video esté disponible.', sticky: true, closable: false});
       this.recordVideo(multimediaParams).subscribe( async(frame) => {
         console.log("frame obtained: ", frame);
         const auxMultimediaParams = {...multimediaParams};
@@ -513,7 +513,7 @@ export class MultimediaService {
         //this.updateSliderBackground();
         console.log("this.multimediaService.multimediaCipiaItems: ",this.multimediaCipiaItems);
         this.toastService.clearToastMessage('multimediaOnDemand');
-        this.toastService.emitToastMessage({key: 'regular', severity:'success', summary: 'Grabación confirmada', detail: 'La grabación ha iniciado con éxito. Vaya al evento correspondiente para ver el video.'});
+        this.toastService.emitToastMessage({key: 'regular', severity:'success', summary: 'Grabación exitosa', detail: 'La grabación ha terminado con éxito. Vaya al evento correspondiente para ver el video.'});
       },
       error =>{
         console.error(error);
@@ -575,7 +575,7 @@ export class MultimediaService {
           media.params!.eventId!,
           media.params!.type,
           media.params!.source,
-          undefined,undefined,8,7000
+          undefined,media.params!.seconds??undefined,10,7000
         ).pipe(takeUntil(untilDestroy)).toPromise().then(blobItem => {
           if(blobItem){
             this.updateUrlToMultimediaCipiaItem(
