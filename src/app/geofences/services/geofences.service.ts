@@ -68,6 +68,7 @@ export class GeofencesService {
   listTag: ITag [] = [];
   public operations: any = [];
   public tagGroups: any = [];
+  listRows: any = [];
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -403,11 +404,11 @@ export class GeofencesService {
           //console.log('case defoult:1_1');
           map.push(
             {
-              data:{id:this.listGeofences[index]['idoperation'],name: this.listGeofences[index]['nameoperation'], col:3, type:'operacion' },
+              data:{id:this.listGeofences[index]['idoperation'],name: this.listGeofences[index]['nameoperation'], col:3, type:'operacion', showRow: true },
               expanded: true,
               children:[
                 {
-                  data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation']},
+                  data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'], showRow: true},
                   expanded: true,
                   children: [
                     {
@@ -422,7 +423,7 @@ export class GeofencesService {
           //console.log('case defoult:0_1');
           const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.listGeofences[index]['idoperation']);
           const newTag = {
-            data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation']},
+            data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'], showRow: true},
             expanded: true,
             children: [
               {
@@ -461,11 +462,11 @@ export class GeofencesService {
             //console.log('case:1_1');
             map.push(
               {
-                data:{id:this.listGeofences[index]['idoperation'],name: this.listGeofences[index]['nameoperation'], col:3, type:'operacion' },
+                data:{id:this.listGeofences[index]['idoperation'],name: this.listGeofences[index]['nameoperation'], col:3, type:'operacion', showRow: true },
                 expanded: true,
                 children:[
                   {
-                    data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'] },
+                    data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'],showRow: true },
                     expanded: true,
                     children: [
                       {
@@ -480,7 +481,7 @@ export class GeofencesService {
             //console.log('case:0_1');
             const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.listGeofences[index]['idoperation']);
             const newTag = {
-              data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation']},
+              data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'], showRow: true},
               expanded: true,
               children: [
                 {
@@ -489,7 +490,6 @@ export class GeofencesService {
               ],
             };
             existingOperation.children.push(newTag);
-            
           }else if(status_operation&&!status_tags){
             //console.log('case:1_0');
           }else if(!status_operation&&!status_tags){
@@ -519,10 +519,8 @@ export class GeofencesService {
         const index = this.listGeofences.indexOf(filterItem);
         geosOld[index].tags  = geofences[geoKey][0].geo_tags;
         this.listGeofences = geosOld;
-        //reload talbe
       }
     }
-    //console.log('retornarList', this.listGeofences);  
   }
 
   public async updateListTags(tag: any){
@@ -532,20 +530,16 @@ export class GeofencesService {
         const index = this.listTag.indexOf(filterItem);
         tagsOld[index].var_name = tag.var_name;
         this.listTag = tagsOld;
-        //reload talbe
       }
-      //console.log('new list', this.listTag);
   }
 
   public async addTagToList(tag: any){
     const tagsNew = this.listTag.push(tag);
-    //console.log('new listTags:', tagsNew)
   }
 
   public async removeListTag(tag: any){
-    //const tagsNew = this.listTag.splice(tag);
-    console.log('new listTags:', tag);
+    const tagsNew = this.listTag.filter((tg: {id: any;})=>tg.id !== tag.id);
+    this.listTag = tagsNew;
   }
-
 
 }

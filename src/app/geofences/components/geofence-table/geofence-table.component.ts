@@ -105,7 +105,6 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         await this.objGeofences.setGeofences(data, 'circ');
       })
     }
-    console.log('objinit:==>', this.objGeofences);
     // if(this.polylineGeofenceService.initializingPolylineGeofences){
     //   this.objGeofences.setGeofences(this.polylineGeofenceService.polyline_geofences as IGeofence[], 'lin');
     // }else{
@@ -513,56 +512,58 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     $('p-treetable.geofence-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
   }
 
-  showGeosByTagOp(type: string, id: string, idOpe?: string){
-    let tempId = idOpe + '_' + id;
+  showGeosByTagOp(rowData: any){
+    console.log('rowData',rowData);
+    //let displayGeos = this.geofencesService.listRows.find((item: { id: any; type: any; })=>item.id == rowData.id && item.type == rowData.type);
+    let idOpe = rowData.idOpe;
     this.visibleRow.tempId = true;
-    console.log('idOpe: ', idOpe);
-    console.log('idTag: ', id);
-    if(type == 'etiqueta'){
-      var idTg = id;
+    console.log('idOpe: ', rowData.idOpe);
+    console.log('idTag: ', rowData.id);
+    if(rowData.type == 'etiqueta'){
+      var idTg = rowData.id;
       if(idTg == '0' && idOpe == '0'){
         const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
         filteredGeos.forEach((geo: {id: number; type: string; zone_visible: string; tags: string[]; }) => {
-          if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'polig'){
+          if(geo.tags.length === 0 && geo.type == 'polig'){
             this.clickShowGeoPol(geo.id, true);
-          } else if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'circ'){
+          } else if(geo.tags.length === 0 && geo.type == 'circ'){
             this.clickShowGeoCir(geo.id, true);
           }
         });
       } else if(idTg == '0' && idOpe != '0'){
         const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
         filteredGeos.forEach((geo: {id: number; type: string; zone_visible: string; tags: string[]; }) => {
-          if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'polig'){
+          if(geo.tags.length === 0 && geo.type == 'polig'){
             this.clickShowGeoPol(geo.id, true);
-          } else if(geo.tags.length === 0 && geo.zone_visible === 'true' && geo.type == 'circ'){
+          } else if(geo.tags.length === 0 && geo.type == 'circ'){
             this.clickShowGeoCir(geo.id, true);
           }
         });
       }else if(idTg != '0' && idOpe == '0'){
         const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
         filteredGeos.forEach((geo: {id: number; type: string; zone_visible: string; tags: string[]; }) => {
-          if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'polig'){
+          if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.type == 'polig'){
             this.clickShowGeoPol(geo.id, true);
-          } else if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'circ'){
+          } else if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.type == 'circ'){
             this.clickShowGeoCir(geo.id, true);
           }
         });
       } else if(idTg != '0' && idOpe != '0') {
         const filteredGeos = this.geofencesService.listGeofences.filter((geos: { idoperation: any; }) => geos.idoperation == idOpe);
         filteredGeos.forEach((geo: { type: string;id: number; tags: string | string[]; zone_visible: string; }) => {
-          if (geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'polig') {
+          if (geo.tags.includes(idTg) && geo.tags.length == 1 && geo.type == 'polig') {
               this.clickShowGeoPol(geo.id, true); 
-          } else if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.zone_visible === 'true' && geo.type == 'circ'){
+          } else if(geo.tags.includes(idTg) && geo.tags.length == 1 && geo.type == 'circ'){
             this.clickShowGeoCir(geo.id, true);
           }
         });
       }
-    }else if(type == 'operacion') {
-      var idOp = id;
+    }else if(rowData.type == 'operacion') {
+      var idOp = rowData.id;
       this.geofencesService.listGeofences.forEach((geo: { id: number; type: string; idoperation: string; zone_visible: string; }) => {
-        if(geo.idoperation === idOp && geo.zone_visible === 'true' && geo.type == 'polig'){
+        if(geo.idoperation === idOp && geo.type == 'polig'){
           this.clickShowGeoPol(geo.id, true);
-        } else if(geo.idoperation === idOp && geo.zone_visible === 'true' && geo.type == 'circ'){
+        } else if(geo.idoperation === idOp && geo.type == 'circ'){
           this.clickShowGeoCir(geo.id, true);
         }
       });
@@ -668,26 +669,22 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
   }
 
   clickShowGeoPol(id:number, comesFromInputSwitch?: boolean){
-    //console.log("localizar una geocerca");
     var geo = this.geofencesService.geofences.filter((item:any)=> item.id == id)[0];
-    //console.log(geo);
-    //let tempOld: string = '';
-
+    let tempOld: string = '';
     if (geo.zone_visible == 'true') {
-      console.log('entró aqui');
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
+      tempOld = geo.zone_name_visible_old;
+      geo.zone_name_visible_old = geo.zone_name_visible;
       if(geo.zone_name_visible == 'true'){
-        //tempOld = geo.zone_name_visible_old;
         this.clickShowGeoPolName(id);
       }
     } else {
-      console.log('entró aqui2');
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
-      this.clickShowGeoPolName(id);
-      // if(geo.zone_name_visible_old == 'true'){
-      // }
+      if(geo.zone_name_visible_old == 'true'){
+        this.clickShowGeoPolName(id);
+      }
     }
     this.geofencesService.updateGeoCounters();
     this.geofencesService.updateGeoTagCounters();
@@ -713,22 +710,25 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         }
       }
     }
-    //geo.zone_name_visible_old = tempOld
   }
 
   clickShowGeoCir(id:number, comesFromInputSwitch?: boolean){
     let geo = this.circularGeofencesService.circular_geofences.filter((item:any)=> item.id == id)[0];
-
+    let tempOld: string = '';
     if (geo.zone_visible == 'true') {
       geo.zone_visible  = 'false';
       this.mapService.map.removeLayer(geo.geo_elemento);
+      tempOld = geo.zone_name_visible_old;
+      geo.zone_name_visible_old = geo.zone_name_visible;
       if(geo.zone_name_visible == 'true'){
         this.clickShowGeoCirName(id);
       }
     } else {
       geo.zone_visible  = 'true';
       geo.geo_elemento.addTo(this.mapService.map);
-      this.clickShowGeoCirName(id);
+      if(geo.zone_name_visible_old == 'true'){
+        this.clickShowGeoCirName(id);
+      }
     }
 
     this.circularGeofencesService.updateGeoCounters();

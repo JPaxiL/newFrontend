@@ -153,11 +153,12 @@ export class PopupService {
       iconAnchor: [25, 40],
       popupAnchor: [-3, -40]
     });
-
+    const googleMapsLink = `https://www.google.com/maps?q=${vehicle.latitud},${vehicle.longitud}`;
     const popupText = '<div class="row"><div class="col-6" align="left"><strong>' + vehicle.name + '</strong></div><div class="col-6" align="right"><strong>' + vehicle.speed + ' km/h</strong></div></div>' +
       '<aside #popupText class="">' +
       '<small>CONVOY: ' + vehicle.nameconvoy + '</small><br>' +
-      '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
+      // '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
+      '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</a></small><br>' +
       '<small>REFERENCIA: ' + 'NN' + '</small><br>' +
       '<small>FECHA DE TRANSMISION: ' + vehicle.dt_tracker + '</small><br>' +
       '<small>TIEMPO DE PARADA: Calculando ...</small>' +
