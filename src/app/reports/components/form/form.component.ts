@@ -94,6 +94,7 @@ export class FormComponent implements OnInit {
 	showEvents = false;
   showEventsCipia = false;
   showAtencionEventsCipia = false;
+
 	showSubLimitTime = false;
 	showTrans1min = false;
 	showFatigaOp = false;
@@ -275,7 +276,6 @@ export class FormComponent implements OnInit {
   //   };
   
   //Reporte 6 - Reporte de Eventos , Seleccion de Campo
-
   eC = {
     Fecha :true,
     FechaServidor :false,
@@ -306,7 +306,6 @@ export class FormComponent implements OnInit {
 
     OperadorMonitoreo : false,  // R. Atención de Eventos
   }
-
 
 
   //Reporte 10 - Distraccion y Posible Fatiga
@@ -1080,7 +1079,6 @@ export class FormComponent implements OnInit {
 		this.showLimitTime = false; //Configuracion de rango de tiempo -- true la mayoria
 		this.showEvents = false; //Configuracion
     this.showEventsCipia = false; //Configuracion
-    this.showAtencionEventsCipia = false;
 		this.showTrans1min = false; //Configuracion de duracion de parada >1min
 		this.showFatigaOp = false; //Configuracion de opcion de fatiga 2
 		this.showBrakeAccel = false; //Configuración Aceleracion y frenada
@@ -1210,7 +1208,6 @@ export class FormComponent implements OnInit {
             OperadorMonitoreo : false,  // R. Atención de Eventos
           }
 
-
       break;
       case 'R038':  //   - R038	REPORTE DE ATENCION DE EVENTOS CIPIA
           this.showLimitTime = true;
@@ -1247,6 +1244,7 @@ export class FormComponent implements OnInit {
         
             OperadorMonitoreo : true,  // R. Atención de Eventos
           }
+
       break;
 
       default: break;
