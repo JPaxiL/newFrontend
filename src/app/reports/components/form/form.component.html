@@ -1201,44 +1201,6 @@
             </div>
           </div>
 
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eC.FechaEvaluacion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Fecha de Evaluación</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eC.CriterioEvaluacion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Criterio de Evaluación</label>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eC.Observacion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Observación</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eC.Validacion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Validación</label>
-              </div>
-            </div>
-          </div>
-
-
-
           <div class="row">
             <div class="col-6">
               <div class="p-field">
@@ -1295,7 +1257,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.Zona" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Zona</label>
+                  Geocerca</label>
               </div>
             </div>
             <div class="col-6">
@@ -1334,30 +1296,15 @@
             </div>
             <div class="col-6">
               <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eC.Parametros" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Parámetros</label>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="eC.OperadorMonitoreo" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Operador de Monitoreo</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
                 <!-- <label>
-                  <p-checkbox [(ngModel)]="eC.VelGPSspeed" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Vel. GPS speed</label> -->
+                  <p-checkbox [(ngModel)]="eC.Parametros" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Parámetros</label> -->
               </div>
             </div>
           </div>
+
+
+
 
 
         </div>
@@ -1519,7 +1466,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.Zona" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Zona</label>
+                  Geocerca</label>
               </div>
             </div>
             <div class="col-6">
@@ -1558,6 +1505,9 @@
             </div>
             <div class="col-6">
               <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.EnlaceArchivo" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Enlace a Archivo</label>
                 <!-- <label>
                   <p-checkbox [(ngModel)]="eC.VelGPSspeed" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Vel. GPS speed</label> -->
@@ -1569,6 +1519,8 @@
         </div>
       </div>
       
+
+
 
       <div class="row" *ngIf="showChkSimultaneousTables">
         <div class="p-field col-12 d-flex" style="padding: 0rem 1.25rem;">

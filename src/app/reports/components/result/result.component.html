@@ -1,3 +1,4 @@
+
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reportSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Generando Reporte... </p></ngx-spinner>
 <p-confirmDialog #cdExport [style]="{width: '30rem'}" [closeOnEscape]="true" [breakpoints]="{'960px': '50vw', '640px': '75vw'}" class="gl-confirm-dialog " key="showSelectExcelConfirmation">
   <ng-template pTemplate="header">
@@ -6730,7 +6731,7 @@
               </div>
               <div>
                 <div style="padding: 20px;">
-                  <button class="btn btn-gl btn-gl-light-blue btn-dark-hover" >GUARDAR</button>
+                  <button class="btn btn-gl btn-gl-light-blue btn-dark-hover" (click)="guardarEvaluacionEventos();" >GUARDAR</button>
                 </div>
               </div>
             </div>
@@ -6777,7 +6778,7 @@
                   <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
                   <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
 
-                  <th *ngIf="reportService.eC.Zona">Zona</th>
+                  <th *ngIf="reportService.eC.Zona">Geocerca</th>
                   <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
                   <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
                   <th *ngIf="reportService.eC.Referencia">Referencia</th>
@@ -6882,25 +6883,26 @@
 											</span>
 
                       <br *ngIf="row.senales_posible_fatiga" >
-											<input *ngIf="row.senales_posible_fatiga" style="font-size:12px; width:180px; margin-top: 8px;" type="text" [(ngModel)]="row.identificacion_video" placeholder="Identificar video ">
+											<input *ngIf="row.senales_posible_fatiga" style="font-size:12px; width:180px; margin-top: 8px;" type="text" [(ngModel)]="row.identificacion_video" (change)="onChangeObservacion(row)" placeholder="Identificar video">
 											<br *ngIf="row.senales_posible_fatiga" >
 
 
                         <!-- <div ng-if="row.senales_posible_fatiga" id="form_stars"> -->
                       <div *ngIf="row.senales_posible_fatiga" class="form_stars">
                         <p class="clasificacion">
-                            <input id="radio1_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" value="5"><!--
+                            <input id="radio1_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="5"><!--
                           --><label for="radio1_{{i}}">★</label><!--
-                          --><input id="radio2_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" value="4"><!--
+                          --><input id="radio2_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="4"><!--
                           --><label for="radio2_{{i}}">★</label><!--
-                          --><input id="radio3_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" value="3"><!--
+                          --><input id="radio3_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="3"><!--
                           --><label for="radio3_{{i}}">★</label><!--
-                          --><input id="radio4_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" value="2"><!--
+                          --><input id="radio4_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="2"><!--
                           --><label for="radio4_{{i}}">★</label><!--
-                          --><input id="radio5_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" value="1"><!--
+                          --><input id="radio5_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="1"><!--
                           --><label for="radio5_{{i}}">★</label>
                         </p>
                       </div>
+                    
                       
 
                   </td>
@@ -6909,7 +6911,7 @@
                   <!-- <td *ngIf="reportService.eC.Validacion"><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.valoracion_evento"></td> -->
 
 
-                  <td *ngIf="reportService.eC.VelMobileye">{{row.vel_mobileye}} - {{i}} - {{row.valoracion_evento}} - radio1_{{i}}</td>
+                  <td *ngIf="reportService.eC.VelMobileye">{{row.vel_mobileye}}</td>
                   <td *ngIf="reportService.eC.VelGPS">{{row.vel_gps}}</td>
                   <td *ngIf="reportService.eC.VelGPSspeed">{{row.vel_gps_speed}}</td>
                   <td *ngIf="reportService.eC.VelCAN">{{row.vel_can}}</td>
@@ -6945,7 +6947,7 @@
                       </select>
                       
                       <span *ngIf="row.operador_monitoreo == 'OTRO'">
-												<input style="font-size: 12px;" size="28" type="text" ng-model="row.otro_operador_monitoreo">
+												<input style="font-size: 12px;" size="28" type="text" [(ngModel)]="row.otro_operador_monitoreo" (change)="onChangeOperadorMonitoreo(row)">
 											</span>
 
 											<span *ngIf="row.es_antiguo_operador">
@@ -7045,3 +7047,4 @@
 
   </ng-container>
 </div>
+

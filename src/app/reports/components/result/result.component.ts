@@ -12855,18 +12855,25 @@ export class ResultComponent implements OnDestroy, OnInit {
     var id_conductor_cell_ch_width = "Id Conductor".length;
     var conductor_cell_ch_width = "Conductor".length;
 
-    var vel_mobileye_cell_ch_width = "vel.Mobileye".length;
+    // var fecha_evaluacion_cell_ch_width = "Fecha de Evaluación".length;
+    var criterio_evaluacion_cell_ch_width = "Criterio de Evaluación".length;
+
+    var observacion_cell_ch_width = "Observación".length;
+    // var validacion_cell_ch_width = "Validación".length;
+
+    var vel_can_cell_ch_width = "vel.CAN".length;
     var vel_gps_cell_ch_width = "vel.GPS".length;
     var vel_gps_speed_cell_ch_width = "vel.GPS speed".length;
-    var vel_can_cell_ch_width = "vel.CAN".length;
+    var vel_mobileye_cell_ch_width = "vel.Mobileye".length;
     var vel_eco_cell_ch_width = "vel.ECO".length;
 
-    var zona_cell_ch_width = "Zona".length;
+    var zona_cell_ch_width = "Geocerca".length;
     var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
     var referencia_cell_ch_width = "Referencia".length;
     var enlace_cell_ch_width = "Archivo".length; //Enlace a Archivo
-    var parametros_cell_ch_width = "Parametros".length; //Enlace a Archivo
+    // var parametros_cell_ch_width = "Parámetros".length; //Enlace a Archivo
+    var operador_monitoreo_cell_ch_width = "Operador de Monitoreo".length; //Enlace a Archivo
 
 
     // var allRows = [
@@ -12932,10 +12939,13 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (rs.IdConductor) { array_campos_cabecera.push({ value: "ID Conductor", ...this.colHeaderConfig }); };
           if (rs.Conductor) { array_campos_cabecera.push({ value: "Conductor", ...this.colHeaderConfig }); };
 
-          if (rs.FechaEvaluacion) { array_campos_cabecera.push({ value: "Fecha de Evaluación", ...this.colHeaderConfig }); };
+          if (!this.chkDateHour && rs.FechaEvaluacion) { array_campos_cabecera.push({ value: "Fecha/Hora Evento", ...this.colHeaderConfig }); }
+          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Fecha Evento", ...this.colHeaderConfig }); };
+          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Hora Evento", ...this.colHeaderConfig }); };
+
           if (rs.CriterioEvaluacion) { array_campos_cabecera.push({ value: "Criterio de Evaluación", ...this.colHeaderConfig }); };
           if (rs.Observacion) { array_campos_cabecera.push({ value: "Observación", ...this.colHeaderConfig }); };
-          if (rs.Validacion) { array_campos_cabecera.push({ value: "Validación", ...this.colHeaderConfig }); };
+          // if (rs.Validacion) { array_campos_cabecera.push({ value: "Validación", ...this.colHeaderConfig }); };
 
           if (rs.VelMobileye) { array_campos_cabecera.push({ value: "Vel.Mobileye", ...this.colHeaderConfig }); };
           if (rs.VelGPS) { array_campos_cabecera.push({ value: "Vel.GPS", ...this.colHeaderConfig }); };
@@ -12943,20 +12953,22 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (rs.VelCAN) { array_campos_cabecera.push({ value: "Vel.CAN", ...this.colHeaderConfig }); };
           if (rs.VelECO) { array_campos_cabecera.push({ value: "Vel.ECO", ...this.colHeaderConfig }); };
 
-          if (rs.Zona) { array_campos_cabecera.push({ value: "Zona", ...this.colHeaderConfig }); };
+          if (rs.Zona) { array_campos_cabecera.push({ value: "Geocerca", ...this.colHeaderConfig }); };
           if (rs.PuntoCercano) { array_campos_cabecera.push({ value: "Punto Cercano", ...this.colHeaderConfig }); };
           if (rs.Ubicacion) { array_campos_cabecera.push({ value: "Ubicación", ...this.colHeaderConfig }); };
           if (rs.Referencia) { array_campos_cabecera.push({ value: "Referencia", ...this.colHeaderConfig }); };
           if (rs.EnlaceArchivo) { array_campos_cabecera.push({ value: "Enlace a Archivo", colSpan: 2, ...this.colHeaderConfig }); };
-          if (rs.Parametros) { array_campos_cabecera.push({ value: "Parámetros", ...this.colHeaderConfig }); };
+          // if (rs.Parametros) { array_campos_cabecera.push({ value: "Parámetros", ...this.colHeaderConfig }); };
           if (rs.OperadorMonitoreo) { array_campos_cabecera.push({ value: "Operador de Monitoreo", ...this.colHeaderConfig }); };
+
+
 
           rows.push({
             cells: array_campos_cabecera ,height: this.colsHeaderHeight
           });
 
 
-          data[1].forEach((item: { parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+          data[1].forEach((item: {fecha_evaluacion:any, operador_monitoreo:any, observacion_evaluacion:any, criterio_evaluacion:any, parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
               //var fh = item.fecha.split(" ");
               var ubicacion = item.latitud + "," + item.longitud;
@@ -12982,7 +12994,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
               referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
               enlace_cell_ch_width = Math.max(enlace_cell_ch_width, (ubicacion??'').toString().length);
-              parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
+              // parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
 
 
 
@@ -13008,22 +13020,35 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.Conductor) { array_campos_cuerpo.push({ value: item.conductor, ...this.bodyRowsConfig }); };
               
 
-              if (rs.VelMobileye) { array_campos_cuerpo.push({ value: item.vel_mobileye +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelGPS) { array_campos_cuerpo.push({ value: item.vel_gps +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelGPSspeed) { array_campos_cuerpo.push({ value: item.vel_gps_speed +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelCAN) { array_campos_cuerpo.push({ value: item.vel_can +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelECO) { array_campos_cuerpo.push({ value: item.vel_eco +" Km/h", ...this.bodyRowsConfig }); };
-    
+              if (!this.chkDateHour && rs.FechaEvaluacion) { array_campos_cuerpo.push({ value: this.isChe(item.fecha_evaluacion), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig }); };
+              if (this.chkDateHour && rs.FechaEvaluacion) { array_campos_cuerpo.push({ value: this.isChe(item.fecha_evaluacion), format: "yyyy/mm/dd", ...this.bodyRowsConfig }); }
+              if (this.chkDateHour && rs.FechaEvaluacion) { array_campos_cuerpo.push({ value: this.isChs(item.fecha_evaluacion), format: "hh:mm:ss", ...this.bodyRowsConfig }); };
 
+
+              if (rs.CriterioEvaluacion) { array_campos_cuerpo.push({ value: item.criterio_evaluacion, ...this.bodyRowsConfig }); };
+              if (rs.Observacion) { array_campos_cuerpo.push({ value: item.observacion_evaluacion, ...this.bodyRowsConfig }); };
+
+              if (rs.VelMobileye) { array_campos_cuerpo.push({ value: item.vel_mobileye +"", ...this.bodyRowsConfig }); };
+              if (rs.VelGPS) { array_campos_cuerpo.push({ value: item.vel_gps +"", ...this.bodyRowsConfig }); };
+              if (rs.VelGPSspeed) { array_campos_cuerpo.push({ value: item.vel_gps_speed +"", ...this.bodyRowsConfig }); };
+              if (rs.VelCAN) { array_campos_cuerpo.push({ value: item.vel_can +"", ...this.bodyRowsConfig }); };
+              if (rs.VelECO) { array_campos_cuerpo.push({ value: item.vel_eco +"", ...this.bodyRowsConfig }); };
+    
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
-              if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
+              //if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
+              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig, fontSize: this.c1_2 }); };
+
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
               if (rs.EnlaceArchivo) { 
                   array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
                   array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });   };
 
-              if (rs.Parametros) { array_campos_cuerpo.push({ value: item.parametros, ...this.bodyRowsConfig }); };
+              // if (rs.Parametros) { array_campos_cuerpo.push({ value: item.parametros, ...this.bodyRowsConfig }); };
+              if (rs.OperadorMonitoreo) { array_campos_cuerpo.push({ value: item.operador_monitoreo, ...this.bodyRowsConfig }); };
+
+
+
 
               rows.push({
                 cells: array_campos_cuerpo, height: this.bodyRowsHeight
@@ -13046,14 +13071,25 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_date } );  }
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  }
 
+
       if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
       if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
       if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
 
+      
       if (rs.IdConductor) { column_config.push( { width: this.calculateColWidth(id_conductor_cell_ch_width) }  ); };
       if (rs.Conductor) {   column_config.push( { width: this.calculateColWidth(conductor_cell_ch_width) }  ); };
 
+      if (!this.chkDateHour && rs.FechaEvaluacion) {  column_config.push( { width: this.w_date_and_hour } );  };
+      if (this.chkDateHour && rs.FechaEvaluacion)  { column_config.push( { width: this.w_date } );  };
+      if (this.chkDateHour && rs.FechaEvaluacion) { column_config.push( { width: this.w_hour } );  };
+
+      if (rs.CriterioEvaluacion) { column_config.push( { width: this.calculateColWidth(criterio_evaluacion_cell_ch_width) }  ); };
+      if (rs.Observacion) { column_config.push( { width: this.calculateColWidth(observacion_cell_ch_width) }  ); };
+
+
+      
       if (rs.VelMobileye) { column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) }  ); };
       if (rs.VelGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) }  ); };
       if (rs.VelGPSspeed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) }  ); };
@@ -13067,7 +13103,8 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (rs.EnlaceArchivo) { column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.EnlaceArchivo) { column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
 
-      if (rs.Parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) }  );  };
+      // if (rs.Parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) }  );  };
+      if (rs.OperadorMonitoreo) { column_config.push( { width: this.calculateColWidth(operador_monitoreo_cell_ch_width) }  );  };
 
 
       exportFileEx.push({
@@ -13088,6 +13125,12 @@ export class ResultComponent implements OnDestroy, OnInit {
       id_conductor_cell_ch_width = "Id Conductor".length;
       conductor_cell_ch_width = "Conductor".length;
   
+      // fecha_evaluacion_cell_ch_width = "Fecha de Evaluación".length;
+      criterio_evaluacion_cell_ch_width = "Criterio de Evaluación".length;
+  
+      observacion_cell_ch_width = "Observación".length;
+      // validacion_cell_ch_width = "Validación".length;
+
       vel_mobileye_cell_ch_width = "vel.Mobileye".length;
       vel_gps_cell_ch_width = "vel.GPS".length;
       vel_gps_speed_cell_ch_width = "vel.GPS speed".length;
@@ -13099,7 +13142,8 @@ export class ResultComponent implements OnDestroy, OnInit {
       ubicacion_cell_ch_width = "Ubicacion".length;
       referencia_cell_ch_width = "Referencia".length;
       enlace_cell_ch_width = "Enlace a Archivo".length; //Enlace a Archivo
-      parametros_cell_ch_width = "Parametros".length; //Enlace a Archivo
+      // parametros_cell_ch_width = "Parametros".length; //Enlace a Archivo
+      operador_monitoreo_cell_ch_width = "Operador de Monitoreo".length; //Enlace a Archivo
 
 
     }
@@ -13129,9 +13173,10 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (this.chkDateHour && rs.Fecha) { column_config.push( { width: this.w_hour } );  }
   
         if (!this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  column_config.push( { width: this.w_date_and_hour } );  };
-        if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_date } );  }
-        if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  }
-  
+        if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_date } );  };
+        if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  };
+
+
         if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(evento_cell_ch_width) }  );  };
         if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
         if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
@@ -13140,6 +13185,17 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (rs.IdConductor) { column_config.push( { width: this.calculateColWidth(id_conductor_cell_ch_width) }  ); };
         if (rs.Conductor) {   column_config.push( { width: this.calculateColWidth(conductor_cell_ch_width) }  ); };
   
+
+
+        if (!this.chkDateHour && rs.FechaEvaluacion) {  column_config.push( { width: this.w_date_and_hour } );  };
+        if (this.chkDateHour && rs.FechaEvaluacion)  { column_config.push( { width: this.w_date } );  };
+        if (this.chkDateHour && rs.FechaEvaluacion) { column_config.push( { width: this.w_hour } );  };
+  
+        if (rs.CriterioEvaluacion) { column_config.push( { width: this.calculateColWidth(criterio_evaluacion_cell_ch_width) }  ); };
+        if (rs.Observacion) { column_config.push( { width: this.calculateColWidth(observacion_cell_ch_width) }  ); };
+  
+
+        
         if (rs.VelMobileye) { column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) }  ); };
         if (rs.VelGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) }  ); };
         if (rs.VelGPSspeed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) }  ); };
@@ -13153,7 +13209,8 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (rs.EnlaceArchivo) { column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
         if (rs.EnlaceArchivo) { column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
 
-        if (rs.Parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) }  );  };
+        // if (rs.Parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) }  );  };
+        if (rs.OperadorMonitoreo) { column_config.push( { width: this.calculateColWidth(operador_monitoreo_cell_ch_width) }  );  };
 
         
 
@@ -13192,6 +13249,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // if (row.FechaEvaluacion == "" || row.FechaEvaluacion == null) {
     //   row.FechaEvaluacion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss"); //actualizar = true;
     // }
+    console.log(row);
     row.editado = 'si';
   }
 
@@ -13230,14 +13288,15 @@ export class ResultComponent implements OnDestroy, OnInit {
   }
 
 
-  actualizarEvaluacionEventos() {
-      console.log("------actualizarEvaluacionEventos");
+  guardarEvaluacionEventos() {
+      console.log("------guardarEvaluacionEventos");
+      this.spinner.show("reportSpinner");
       var arr_params = [];
       console.log(this.sortedData[0][1]);
       console.log(this.data);
 
       for (let index = 0; index < this.data[0][1].length; index++) {
-          console.log(this.data[0][1][index].fecha +"  -   "+ this.data[0][1][index].criterio_evaluacion +"  -  " + this.data[0][1][index].editado);
+          // console.log(this.data[0][1][index].fecha +"  -   "+ this.data[0][1][index].criterio_evaluacion +"  -  " + this.data[0][1][index].editado);
 
           if (this.data[0][1][index].editado) {
               this.data[0][1][index].imei = this.data[0][1][index].tracker_imei;
@@ -13286,6 +13345,152 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
   }
+
+
+  actualizarEvaluacionEventos() {
+
+    console.log("===================================actualizarEvaluacionEventos");
+    // console.log(vm.datos);
+    // console.log(contador);
+
+    // console.log("===== this.data =====");
+    // console.log(this.data);
+    // console.log(this.arr_evaluacion2);
+
+    
+    // var tipoR = vm.optionR();
+    // var rutaUrl = "X";
+    // if (tipoR == 101) {
+    // 	rutaUrl = "informes/informes_fatigas_SF";
+    // } else if (tipoR == 102) {
+    // 	rutaUrl = "informes/informes_fatiga_extrema";
+    // }
+
+    var dataParams:any =  this.reportService.getParams();
+
+    
+
+    dataParams['fecha_hasta2'] = dataParams['fecha_hasta'];
+    dataParams['fecha_hasta'] = moment(new Date()).format("YYYY-MM-DD") + 'T' + moment(new Date()).format("HH:mm:ss") + '-05:00';
+
+    console.log(dataParams);
+
+    this.spinner.show("reportSpinner");
+    this.http.post(environment.apiUrl + dataParams.url, dataParams).subscribe({
+      next: datos => {
+        // console.log("========== values");
+        // console.log(typeof datos);
+        // console.log(datos);
+        var values:any = datos;
+        // console.log(values[0]);
+
+        // console.log("===== this.data");
+        // console.log(this.data);
+
+
+        for (let i = 0; i < this.data.length; i++) {
+
+          // console.log("-------------- nuevas tramas "+i);
+          // console.log(this.data);
+          
+          console.log(values[i][1]);
+          this.data[i][0] = values[i][0];
+          this.data[i][1] = values[i][1];
+
+
+          // for (let j = 0; j < this.data[i][1].length; j++) {
+          //     var row = this.data[i][1][j];
+
+          //     for (let i2 = 0; i2 < this.arr_evaluacion2.length; i2++) {
+          //         const element = this.arr_evaluacion2[i2];
+          //         if (row.fecha == this.arr_evaluacion2[i2][4] && row.nombre == this.arr_evaluacion2[i2][5]) {
+          //             // row.criterio_evaluacion		  = this.arr_evaluacion2[i2][0];
+          //             // row.observacion_evaluacion  = this.arr_evaluacion2[i2][1];
+          //             // row.fecha_evaluacion		    = this.arr_evaluacion2[i2][2];
+          //             // row.operador_monitoreo		  = this.arr_evaluacion2[i2][3];
+          //         }
+
+          //     }
+
+          // }
+
+        }
+
+        // console.log("==========  this.data :");
+        // console.log(this.data);
+        // console.log("==========  this.arr_evaluacion 2 :");
+        // console.log(vm.arr_evaluacion);
+        // console.log(this.arr_evaluacion2);
+        // this.arr_evaluacion = undefined;
+        // this.arr_evaluacion2 = undefined;
+        // console.log(vm.arr_evaluacion);
+        // console.log(this.arr_evaluacion2);
+        this.spinner.hide("reportSpinner");
+
+
+        // this.fatigaExtremaNewFormato();
+
+        // this.reportService.modalActive = true;
+        // this.reportService.objGeneral.data = data;
+        // this.reportService.objGeneral.periodo = periodo;//this.period;
+        // this.reportService.objGeneral.vehiculo = vehiculo;//this.period;
+        // this.reportService.objGeneral.dateHour = dateHour;//this.period;
+        // console.log(this.reportService.objGeneral);
+        // this.spinner.hide("reportSpinner");
+        // console.log("MODAL ACTIVATE");
+      }
+    });
+
+
+
+    // reportServices.setSpinnerValue(true);
+    // $q.all([
+    //   	api.post(rutaUrl, dataParams),
+    //   ]).then(values => {
+    // 	console.log("========== values");
+    // 	console.log(values);
+    // 	console.log(values[0]);
+    // 	// vm.datos = values[0];
+      
+    // 	for (let i = 0; i < vm.datos.length; i++) {
+    // 		//const lista_eventos = vm.datos[i][1];
+    // 		console.log("-------------- nuevas tramas");
+    // 		console.log(values[0][i][1]);
+    // 		vm.datos[i][0] = values[0][i][0];
+    // 		vm.datos[i][1] = values[0][i][1];
+    
+    // 		for (let j = 0; j < vm.datos[i][1].length; j++) {
+    // 			var row = vm.datos[i][1][j];
+    // 			for (let i2 = 0; i2 < vm.arr_evaluacion2.length; i2++) {
+    // 				const element = vm.arr_evaluacion2[i2];
+    // 				if (row.fecha == vm.arr_evaluacion2[i2][4] && row.nombre == vm.arr_evaluacion2[i2][5]) {
+    // 					row.criterio_evaluacion		= vm.arr_evaluacion2[i2][0];
+    // 					row.observacion_evaluacion  = vm.arr_evaluacion2[i2][1];
+    // 					row.fecha_evaluacion		= vm.arr_evaluacion2[i2][2];
+    // 					row.operador_monitoreo		= vm.arr_evaluacion2[i2][3];
+    // 				}
+    // 			}
+    // 		}
+    // 	}
+    // 	console.log("==========  vm.datos :");
+    // 	console.log(vm.datos);
+    // 	console.log("==========  vm.arr_evaluacion 2 :");
+      
+    // 	// console.log(vm.arr_evaluacion);
+    // 	console.log(vm.arr_evaluacion2);
+    // 	vm.arr_evaluacion = undefined;
+    // 	vm.arr_evaluacion2 = undefined;
+    // 	// console.log(vm.arr_evaluacion);
+    // 	console.log(vm.arr_evaluacion2);
+    // 	reportServices.setSpinnerValue(false);
+
+    // });
+
+    // console.log("============= 2 ============");
+    // console.log(vm.datos);
+
+  
+}
 
   exportExcelCoordenadasGeocercas(vrs: number) {
     // dateHour();
@@ -18550,3 +18755,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 }
+
+
+
+
+

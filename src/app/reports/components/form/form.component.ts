@@ -910,6 +910,7 @@ export class FormComponent implements OnInit {
         chkOdomV: chkOdomV,
 				og: JSON.stringify([this.oG]),
 				ev: JSON.stringify([this.eV]),
+        ec: JSON.stringify([this.eC]),
 				chkStops: this.chkStops,
 				chkMovements: this.chkMovements,
 				chkTrans1min: this.chkTrans1min,
@@ -935,6 +936,7 @@ export class FormComponent implements OnInit {
         chkOdomV: chkOdomV,
         og: JSON.stringify([this.oG]),
         ev: JSON.stringify([this.eV]),
+        ec: JSON.stringify([this.eC]),
         chkStops: this.chkStops,
         chkMovements: this.chkMovements,
         chkTrans1min: this.chkTrans1min,
@@ -1079,6 +1081,7 @@ export class FormComponent implements OnInit {
 		this.showLimitTime = false; //Configuracion de rango de tiempo -- true la mayoria
 		this.showEvents = false; //Configuracion
     this.showEventsCipia = false; //Configuracion
+    this.showAtencionEventsCipia = false;
 		this.showTrans1min = false; //Configuracion de duracion de parada >1min
 		this.showFatigaOp = false; //Configuracion de opcion de fatiga 2
 		this.showBrakeAccel = false; //Configuración Aceleracion y frenada
@@ -1763,3 +1766,4 @@ export class FormComponent implements OnInit {
   }
 
 }
+
