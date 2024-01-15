@@ -93,6 +93,7 @@ export class FormComponent implements OnInit {
 	showDivHorizontal = false;
 	showEvents = false;
   showEventsCipia = false;
+  showAtencionEventsCipia = false;
 
 	showSubLimitTime = false;
 	showTrans1min = false;
@@ -275,7 +276,6 @@ export class FormComponent implements OnInit {
   //   };
   
   //Reporte 6 - Reporte de Eventos , Seleccion de Campo
-
   eC = {
     Fecha :true,
     FechaServidor :false,
@@ -285,6 +285,12 @@ export class FormComponent implements OnInit {
     TipoUnidad :false,
     IdConductor :false,
     Conductor :false,
+
+    FechaEvaluacion : false,
+    CriterioEvaluacion : false,
+    Observacion : false,
+    Validacion: false,
+
     VelMobileye :false,
     VelGPS :true,
     VelCAN :false,
@@ -297,8 +303,9 @@ export class FormComponent implements OnInit {
     Referencia :false,
     EnlaceArchivo :false,
     Parametros : false,
-  }
 
+    OperadorMonitoreo : false,  // R. Atención de Eventos
+  }
 
 
   //Reporte 10 - Distraccion y Posible Fatiga
@@ -1169,11 +1176,75 @@ export class FormComponent implements OnInit {
           this.showLimitTime = true;
           this.showEventsCipia = true;
           // this.showEvents = true;
+
+          this.eC = {
+            Fecha :true,
+            FechaServidor :false,
+            Evento :true,
+            Codigo :true,
+            Placa :true,
+            TipoUnidad :false,
+            IdConductor :false,
+            Conductor :false,
+        
+            FechaEvaluacion : false,
+            CriterioEvaluacion : false,
+            Observacion : false,
+            Validacion: false,
+        
+            VelMobileye :false,
+            VelGPS :true,
+            VelCAN :false,
+            VelECO :false,
+            VelGPSspeed :false,
+        
+            Zona :false,
+            PuntoCercano :false,
+            Ubicacion :false,
+            Referencia :false,
+            EnlaceArchivo :false,
+            Parametros : false,
+        
+            OperadorMonitoreo : false,  // R. Atención de Eventos
+          }
+
       break;
       case 'R038':  //   - R038	REPORTE DE ATENCION DE EVENTOS CIPIA
           this.showLimitTime = true;
-          this.showEventsCipia = true;
+          this.showAtencionEventsCipia = true;
           // this.showEvents = true;
+
+          this.eC = {
+            Fecha :true,
+            FechaServidor :true,
+            Evento :true,
+            Codigo :true,
+            Placa :true,
+            TipoUnidad :true,
+            IdConductor :false,
+            Conductor :false,
+        
+            FechaEvaluacion : true,
+            CriterioEvaluacion : true,
+            Observacion : true,
+            Validacion: true,
+        
+            VelMobileye :false,
+            VelGPS :true,
+            VelCAN :true,
+            VelECO :false,
+            VelGPSspeed :false,
+        
+            Zona :false,
+            PuntoCercano :false,
+            Ubicacion :true,
+            Referencia :true,
+            EnlaceArchivo :false,
+            Parametros : false,
+        
+            OperadorMonitoreo : true,  // R. Atención de Eventos
+          }
+
       break;
 
       default: break;

@@ -961,7 +961,7 @@ export class GeocercaAddComponent implements OnInit, OnDestroy  {
         geo.tag_name_color = gEdit.tag_name_color;
         geo.tag_name_font_size = gEdit.tag_name_font_size;
         geo.zone_name_visible = gEdit.bol_mostrar_nombre;
-        geo.zone_name_visible_bol = (gEdit.zone_name_visible == 'true');
+        geo.zone_name_visible_bol = (geo.zone_name_visible == 'true');
         geo.zone_visible = gEdit.bol_mostrar;
         geo.geo_coordenadas = gEdit2.geo_coordenadas;
         geo.zone_color = gEdit.var_color;

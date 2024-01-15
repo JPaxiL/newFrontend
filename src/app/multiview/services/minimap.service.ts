@@ -195,12 +195,12 @@ export class MinimapService {
     if (nameCon != 'Unidades Sin Convoy'){
       if (nameGru != 'Unidades Sin Grupo'){
         if (nameOpe != 'Unidades Sin Operacion'){
-          return 'OPERACION/GRUPO/CONVOY: '+nameOpe+' / '+nameGru+' / '+nameCon;
+          return nameOpe+' / '+nameGru+' / '+nameCon;
         }else{
-          return 'CONVOY/GRUPO:'+nameCon+' / '+nameGru;
+          return nameCon+' / '+nameGru;
         }
       }else{
-        return 'CONVOY: '+nameCon;
+        return nameCon;
       }
     }else{
       return '';
@@ -284,13 +284,15 @@ export class MinimapService {
     });
     //console.log('data.name',data.name);
     let nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+    const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
     if (nameGroup){
       var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
         '<small>'+nameGroup+'</small><br>'+
         // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+mapItem.time_stop+'</small>'+
@@ -299,7 +301,8 @@ export class MinimapService {
       var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+mapItem.time_stop+'</small>'+
@@ -406,13 +409,15 @@ export class MinimapService {
       if(layers[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
         // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
         const nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+        const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
           if (nameGroup){
             mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
           '<aside class="">'+
           // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
           '<small>'+nameGroup+'</small><br>'+
           '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-          '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
           '<small>REFERENCIA: '+data.ref+'</small><br>'+
           '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
           '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
@@ -422,7 +427,8 @@ export class MinimapService {
           '<aside class="">'+
           // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
           '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-          '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
           '<small>REFERENCIA: '+data.ref+'</small><br>'+
           '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
           '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
@@ -539,6 +545,7 @@ export class MinimapService {
 
                 }
                 this.timeChangeIconUrl(item.minimapConf!.vehicles![index].IMEI!,item.minimapConf!.vehicles![index].icon!,item.markerClusterGroup.getLayers()[key]);
+                const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
                 const nameGroup = this.setNameGroup(item.minimapConf!.vehicles![index].nameoperation!,item.minimapConf!.vehicles![index].namegrupo!,item.minimapConf!.vehicles![index].nameconvoy!);
                 if (nameGroup){
                   item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
@@ -546,7 +553,8 @@ export class MinimapService {
                     // '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
                     '<small>'+nameGroup+'</small><br>'+
                     '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
-                    '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
+                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
                     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
@@ -555,20 +563,23 @@ export class MinimapService {
                   item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
                   '<aside class="">'+
                     '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
-                    '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
+                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
                     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
                   '</aside>';
                 }
-                item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
-                  '<aside class="">'+
-                    '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
-                    '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
-                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                    '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
-                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
-                  '</aside>';
+                // EN DUDA SI COMENTARLO
+                // item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
+                //   '<aside class="">'+
+                //     '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
+                //     '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                //     // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
+                //     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                //     '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
+                //     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                //   '</aside>';
                 // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
                 item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
                 item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];

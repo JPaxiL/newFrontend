@@ -41,6 +41,13 @@ export class VehicleService {
   public listTable = -1; // 0 general, 1 = group
 
   public vehicleLoadingError: boolean = false;
+  public selectedFilterNameVehicle: string='name';
+  public optionsFilterNameVehicle: any[] = [
+    { label: 'Número placa', value: 'num_plate' },
+    { label: 'Código interno', value: 'cod_interno' },
+    { label: 'Nombre', value: 'name' }
+  ];
+
 
   @Output() vehicleCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();

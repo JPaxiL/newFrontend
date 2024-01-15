@@ -89,7 +89,6 @@
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
           <input type="text" (keyup)="onQuickFilterChanged($event)"  class="form-control" placeholder="Buscar geocerca...">
-          <!-- <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/> -->
         </span>
       </div>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none ">
@@ -169,7 +168,7 @@
           <col style="width: 2.0rem;" />
           <col style="width: 16%;"/>
           <col style="width: 20%;"/>
-          <col style="width: 55%;" />
+          <col style="width: 60%;" />
           <col style="width: 16%;"/>
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
@@ -315,12 +314,10 @@
                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                 {{rowData['type'] === 'operacion' && rowData['name']!='Geocercas Sin Operacion'? 'Operación: ': rowData['type'] === 'etiqueta' && rowData['name']!='Geocercas Sin Etiquetas'? 'Etiqueta: ' : ''}}{{rowData['name']}}
               </div>
-
               <div class="d-flex justify-content-end pe-3 flex-none">
                 <div class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
                   <div class="d-flex justify-content-end">
                     <div class="d-flex align-items-center">
-                      <!-- <p-inputSwitch [(ngModel)]="geofencesService.eyeInputSwitch" (click)="onClickAllEyes()" class="d-flex justify-content-center align-items-center me-2" ngDefaultControl></p-inputSwitch> -->
                     </div>
                     <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
                       <span ngbDropdownToggle class="btn-label burger-options" title="Opciones" data-bs-toggle="tooltip" data-bs-placement="top">
@@ -337,7 +334,7 @@
                             Eliminar {{rowData['type']}}
                           </span>
                         </div>
-                        <div (click)="showGeosByTagOp(rowData['type'], rowData['id'], rowData['idOpe'])" ngbDropdownItem>
+                        <div (click)="showGeosByTagOp(rowData)" ngbDropdownItem>
                           <span class="btn-label">
                             Ocultar/Mostrar Geocercas
                           </span>
@@ -351,7 +348,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="rowData['col']!=3 && matchesSearch(rowData)">
+        <tr *ngIf="rowData['col']!=3">
           <td></td>
           <td class="eye-column">
             <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShowGeo(rowData['id'], rowData['type'])">
@@ -397,12 +394,9 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="noResults">
-          <td colspan="6" class="text-center">Sin coinicidencias</td>
-        </tr>
       </ng-template>
     </p-treeTable>
-    <!-- ViewGeneral -->
+    <!-- viewGeneral -->
     <p-treeTable #tt *ngIf="viewOptions=='viewGen'" [value]="geofences" [loading]="loading"
       scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" styleClass="p-treetable-sm" sortField="name"
       [resizableColumns]="true"
@@ -557,7 +551,7 @@
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-        <tr *ngIf="rowData['col']!=3 && matchesSearch(rowData)">
+        <tr *ngIf="rowData['col']!=3">
           <td></td>
           <td class="eye-column">
             <button class="btn btn-xs btn-link p-n eye-column" (click)="clickShowGeo(rowData['id'], rowData['type'])">
@@ -602,9 +596,6 @@
               </div>
             </div>
           </td>
-        </tr>
-        <tr *ngIf="noResults">
-          <td colspan="6" class="text-center">Sin coinicidencias</td>
         </tr>
       </ng-template>     
     </p-treeTable>

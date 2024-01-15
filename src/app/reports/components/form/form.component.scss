@@ -151,3 +151,41 @@
     left: 50px;
 }
 
+/***** estilo de estrellas *****/
+#form_stars {
+    width: 100%;
+    margin: 0 auto;
+    height: 30px;
+  }
+  
+  #form_stars p {
+    text-align: center;
+    margin-top: 5px;
+  }
+  
+  #form_stars label {
+    font-size: 20px;
+  }
+  
+  #form_stars input[type="radio"] {
+    display: none;
+  }
+  
+  #form_stars label {
+    color: grey;
+  }
+  
+  #form_stars .clasificacion {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+  
+  #form_stars label:hover,
+  label:hover ~ label {
+    color: orange;
+  }
+  
+  #form_stars input[type="radio"]:checked ~ label {
+    color: orange;
+  }
+/***** estilo de estrellas *****/

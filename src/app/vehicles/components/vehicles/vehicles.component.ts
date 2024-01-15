@@ -66,12 +66,6 @@ export class VehiclesComponent implements OnInit {
     config: false,
     sort: 'asc'
   }
-  selectedNameShowVehicle: string='name';
-  nameShows: any[] = [
-    { label: 'Número placa', value: 'num_plate' },
-    { label: 'Código interno', value: 'cod_interno' },
-    { label: 'Nombre', value: 'name' }
-  ];
 
   rem_to_px = parseFloat(getComputedStyle(document.documentElement).fontSize);
   panelPaddingLeft = (Number(getComputedStyle(document.documentElement).getPropertyValue('--gl-panel-padding-left').replace('rem', '')) * this.rem_to_px )*0.25; //NO ESTOY SEGURO
@@ -97,7 +91,7 @@ export class VehiclesComponent implements OnInit {
    public rowData: any;
 
   constructor(
-    private vehicleService: VehicleService,
+    public vehicleService: VehicleService,
     private vehicleConfigService: VehicleConfigService,
     private mapService: MapService,
     private configDropdown: NgbDropdownConfig
@@ -268,7 +262,7 @@ export class VehiclesComponent implements OnInit {
       }
       if (!tempShowName){
         // Busca el valor correspondiente en nameShows basado en selectedNameShowVehicle
-        const selectedOption = this.nameShows.find(option => option.value === this.selectedNameShowVehicle);
+        const selectedOption = this.vehicleService.optionsFilterNameVehicle.find(option => option.value === this.vehicleService.selectedFilterNameVehicle);
         // Verifica si se encontró una opción correspondiente
         if (selectedOption) {
           tempShowName = "Unidad Sin " + selectedOption.label;
