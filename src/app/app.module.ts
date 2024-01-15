@@ -153,7 +153,6 @@ import { CipiaComponent } from './cipia/cipia.component';
 import { FootbarComponent } from './panel/components/footbar/footbar.component';
 import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
-import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
 import { ShortenPipe } from './core/pipes/shorten.pipe';
 import { AddTagComponent } from './geofences/components/add-tag/add-tag.component';
@@ -253,7 +252,6 @@ import {ToastModule} from 'primeng-lts/toast';
     FootbarComponent,
     EventPopupComponent,
     CarouselComponent,
-    DriversHistoryComponent,
     SliderMultimediaComponent,
     AddTagComponent,
     UnixTimeToDatePipe

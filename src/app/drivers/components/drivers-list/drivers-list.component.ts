@@ -32,18 +32,7 @@ export class DriversListComponent implements OnInit {
     console.log(this.panelService.userData);
 
     if(!this.driversService.initializingDriver){
-      this.driversService.spinner.show('loadingDrivers');
-    }
-
-
-    // this.userData = this.panelService.userData;
-
-    if (this.driversService.drivers.length > 0) {
-      this.driversService.getAll();
-
-    } else {
-      this.driversService.initialize();
-
+      this.driversService.initialize();//AHORA ES UN SERVICIO QUE SIEMPRE SE INICIA
     }
   }
 
@@ -123,8 +112,8 @@ export class DriversListComponent implements OnInit {
     console.log(this.driversService.drivers.length);
     this.driversService.modalActive=true;
     this.driversService.action='add';
-  
   }
+
   onSearchDriver(){
     console.log('searching ...',this.searchValueDriver);
     this.driversService.spinner.show('loadingDrivers');
@@ -148,16 +137,16 @@ export class DriversListComponent implements OnInit {
     }
   }
 
-  showHistoryDriver(){
-    console.log('showHistoryDriver ...');
-    this.driversService.historyDriverActive=true;
-    this.driversService.historyType='driver';
-  }
+  // showHistoryDriver(){
+  //   console.log('showHistoryDriver ...');
+  //   this.driversService.historyDriverActive=true;
+  //   this.driversService.historyType='driver';
+  // }
 
-  showHistoryDriverForPlate(){
-    console.log('showHistoryDriverVehicle ...');
-    this.driversService.historyDriverActive=true;
-    this.driversService.historyType='vehicle';
-  }
+  // showHistoryDriverForPlate(){
+  //   console.log('showHistoryDriverVehicle ...');
+  //   this.driversService.historyDriverActive=true;
+  //   this.driversService.historyType='vehicle';
+  // }
 
 }

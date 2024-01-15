@@ -10,6 +10,7 @@ import { FollowService } from 'src/app/vehicles/services/follow.service';
 import { IMapMinimap, UserTracker } from '../models/interfaces';
 import { EventService } from 'src/app/events/services/event.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { DriversService } from 'src/app/drivers/services/drivers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,9 @@ export class MinimapService {
     private socketWebService: SocketWebService,
     private userDataService: UserDataService,
     public eventService: EventService,
+    public driversService: DriversService,
   ) {
+    this.driversService.initialize();
     this.userDataService.getUserData();
     this.vehicleService.setDefaultStatusDataVehicle();
     this.vehicleService.initialize();
@@ -292,7 +295,7 @@ export class MinimapService {
         // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+mapItem.time_stop+'</small>'+
@@ -301,7 +304,7 @@ export class MinimapService {
       var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
@@ -356,7 +359,6 @@ export class MinimapService {
     //let layers = mapItem.markerClusterGroup.getLayers();
   }
   public timeStop(this: any): void{
-    console.log("this",this);
     // consultar data actual
     let vehicle = this.vehicleService.getVehicle(this.imei);
 
@@ -416,7 +418,7 @@ export class MinimapService {
           // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
           '<small>'+nameGroup+'</small><br>'+
           '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-          '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
           // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
           '<small>REFERENCIA: '+data.ref+'</small><br>'+
           '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
@@ -427,7 +429,7 @@ export class MinimapService {
           '<aside class="">'+
           // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
           '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-          '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
           // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
           '<small>REFERENCIA: '+data.ref+'</small><br>'+
           '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
@@ -457,7 +459,7 @@ export class MinimapService {
 
   private async monitor(data: any): Promise<void>{
     
-    
+    // console.log('DATA INGRESADA ->',data);
     this.maps.forEach(async (item) => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
       const resultado = item.minimapConf?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
@@ -476,9 +478,15 @@ export class MinimapService {
         item.minimapConf!.vehicles![index].altitud = data.Altitud;
         item.minimapConf!.vehicles![index].señal_gps = data.señal_gps;
         item.minimapConf!.vehicles![index].señal_gsm = data.señal_gsm;
+        item.minimapConf!.vehicles![index].driver_id = data.driver_id;
         item.minimapConf!.vehicles![index].parametros = data.Parametros;
         item.minimapConf!.vehicles![index] = this.vehicleService.formatVehicle(item.minimapConf!.vehicles![index]);
 
+        // driversService
+        let tempInfoDriver = this.driversService.getNameDriver(data.IMEI,data.driver_id,item.minimapConf!.vehicles![index].dt_tracker);
+        item.minimapConf!.vehicles![index].id_conductor = tempInfoDriver.id_driver;
+        item.minimapConf!.vehicles![index].namedriver = tempInfoDriver.name_driver;
+        // console.log('Info Driver',tempInfoDriver);
         console.log("["+resultado.numero_placa+"] item.imeiPopup==data.IMEI.toString()", item.imeiPopup==data.IMEI.toString());
         if(item.imeiPopup==data.IMEI.toString()){
           
@@ -553,7 +561,7 @@ export class MinimapService {
                     // '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
                     '<small>'+nameGroup+'</small><br>'+
                     '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
-                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
                     // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
@@ -563,7 +571,7 @@ export class MinimapService {
                   item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
                   '<aside class="">'+
                     '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
-                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
                     // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
@@ -574,7 +582,7 @@ export class MinimapService {
                 // item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
                 //   '<aside class="">'+
                 //     '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
-                //     '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                //     '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
                 //     // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
                 //     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                 //     '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+

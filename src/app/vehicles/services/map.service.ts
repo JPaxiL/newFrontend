@@ -15,6 +15,8 @@ import { FollowService } from './follow.service';
 import { TabService } from 'src/app/panel/services/tab.service';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { DriversService } from 'src/app/drivers/services/drivers.service';
+
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/takeWhile';
@@ -76,6 +78,7 @@ export class MapService {
     private tabService: TabService,
     private userDataService: UserDataService,
     private vehicleConfigService: VehicleConfigService,
+    private driversService: DriversService,
   ) {
     // this.interval = setInterval(function(this){
     //   // this.localStorage
@@ -265,7 +268,7 @@ export class MapService {
             '<small>'+nameGroup+'</small><br>'+
             '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
             // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-            '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+            '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
             '<small>REFERENCIA: '+data.ref+'</small><br>'+
             '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
             '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
@@ -275,7 +278,7 @@ export class MapService {
             '<aside class="">'+
             '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
             // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-            '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+            '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
             '<small>REFERENCIA: '+data.ref+'</small><br>'+
             '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
             '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
@@ -455,7 +458,7 @@ export class MapService {
         console.log('EXISTE nameGroup');
       }
     popupContent += '<small>CONDUCTOR: ' + vehicle.namedriver + '</small><br>' +
-      '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</a></small><br>' +
+      '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + vehicle.latitud + ', ' + vehicle.longitud + '</a></small><br>' +
       // '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
       '<small>REFERENCIA: ' + vehicle.ref + '</small><br>' +
       '<small>FECHA DE TRANSMISION: ' + vehicle.dt_tracker + '</small><br>' +
@@ -562,12 +565,10 @@ export class MapService {
     if(this.vehicleService.statusDataVehicle){
       const vehicles = this.vehicleService.vehicles;
       const vehiclestree = this.vehicleService.vehiclesTree;
-      // //console.log("vehicles socket",vehicles);
+      // console.log("TRAMA ENTRANTE",data);
 
       const resultado = vehicles.find( (vehi: any) => vehi.IMEI == data.IMEI.toString() );
       if(resultado){
-
-
 
         // update dataCompleted
         // //console.log("update data");
@@ -584,12 +585,16 @@ export class MapService {
         vehicles[index].señal_gps = data.señal_gps;
         vehicles[index].señal_gsm = data.señal_gsm;
         vehicles[index].parametros = data.Parametros;
-
+        vehicles[index].driver_id = data.driver_id;
         // const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
 
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
+        // driversService
+        let tempInfoDriver = this.driversService.getNameDriver(data.IMEI,data.driver_id,vehicles[index].dt_tracker);
+        vehicles[index].id_conductor = tempInfoDriver.id_driver;
+        vehicles[index].namedriver = tempInfoDriver.name_driver;
 
-
+        // console.log('VEHICLE FORMAT->',vehicles[index]);
         if(this.imeiPopup==data.IMEI.toString()){
           let options = {
             imei: data.IMEI,
@@ -731,7 +736,7 @@ export class MapService {
                     // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
                     '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
                     // '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + vehicles[index].latitud + ', ' + vehicles[index].longitud + '</a></small><br>' +
+                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + vehicles[index].latitud + ', ' + vehicles[index].longitud + '</a></small><br>' +
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
                     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
@@ -742,7 +747,7 @@ export class MapService {
                   '<aside class="">'+
                     '<small>CONDUCTOR: '+vehicles[index].namedriver+'</small><br>'+
                     // '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                    '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + vehicles[index].latitud + ', ' + vehicles[index].longitud + '</a></small><br>' +
+                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + vehicles[index].latitud + ', ' + vehicles[index].longitud + '</a></small><br>' +
                     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
                     '<small>FECHA DE TRANSMISION: '+vehicles[index].dt_tracker+'</small><br>'+
                     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
@@ -1189,7 +1194,7 @@ export class MapService {
         // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+
@@ -1200,7 +1205,7 @@ export class MapService {
       '<aside #popupText class="">'+
         '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small><a href="' + googleMapsLink + '" target="_blank">UBICACION: ' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+this.time_stop+'</small>'+

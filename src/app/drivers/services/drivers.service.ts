@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +31,12 @@ export class DriversService {
   modalActive:boolean = false;
   isRowDataEmpty: boolean = false;
 
-  private URL_HISTORY = environment.apiUrl;
-  //HISOTIRAL
+  //HISTORIAL
   historyDriverActive:boolean =false;
-
   historyType: string = 'driver';
 
+  //RECONOCIMIENTO DE DRIVER
+  historyDrivers:any = [];
 
   constructor(
     private http: HttpClient,
@@ -45,6 +47,7 @@ export class DriversService {
   public async initialize() {
     this.spinner.show('loadingDrivers');
     await this.getAll();
+    await this.getHistoryAll();
   }
   
 
@@ -61,7 +64,6 @@ export class DriversService {
       this.initializeTable();
       // this.getDataIbuttons('1');
       this.initializingDriver = true;
-
     });
 
   }
@@ -91,10 +93,104 @@ export class DriversService {
     return this.tblDataDriverSearch;
   }
 
-  getHistoryAll(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/historyAll`);
+  public async getHistoryAll() {
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/historyAll`).toPromise()
+    .then(response => {
+      console.log("------------HISTORIAL CONDUCTORES");
+      console.log(response.data);
+      this.historyDrivers = response.data;
+    });
   }
 
+  public getNameDriver(var_imei:string,key_id?:string,date?:string){
+    if (key_id && date){
+      console.log('10');
+      return this.getNameDriverByDate(var_imei,key_id,date);
+    }else if(key_id && !date){
+      console.log('11');
+      return this.getNameDriverByKey(var_imei,key_id);
+    }else if(!key_id && date){
+      console.log('12');
+      return this.getNameDriverByDate(var_imei,key_id,date);
+    }else{
+      console.log('13');
+      return this.getNameDriverByImei(var_imei);
+    }
+  }
+  public getNameDriverByKey(var_imei:string,key_id?:string):any{
+    const driver = this.historyDrivers.find((driver: { nro_key: string;}) =>
+    (driver.nro_key === key_id || driver.nro_key === key_id)|| driver.nro_key === var_imei
+    );
+    if (driver) {
+      return {
+        id_driver: driver.id_driver.toString(),
+        name_driver: driver.name_driver,
+        typeKey: driver.type_key
+      };
+    } else {
+      return {
+        id_driver: null,
+        name_driver: 'No especificado',
+        typeKey: 'No tiene'
+      }
+    }
+  }
+
+  public getNameDriverByImei(var_imei:string):any{
+    const driver = this.historyDrivers.find((driver: { nro_key: string; }) =>
+      driver.nro_key === var_imei
+    );
+    if (driver) {
+      return {
+        id_driver: driver.id_driver.toString(),
+        name_driver: driver.name_driver,
+        typeKey: driver.type_key
+      };
+    } else {
+      return {
+        id_driver: null,
+        name_driver: 'No especificado',
+        typeKey: 'No tiene'
+      }
+    }
+  }
+
+  public getNameDriverByDate(var_imei:string,key_id?:string,date?:any):any{
+    //OBTENER NOMBRE POR FECHA
+    // console.log(var_imei,key_id,date);
+    // console.log(this.historyDrivers);
+    // console.log(parsedDate,moment(this.historyDrivers[3].fecha_ini),moment(this.historyDrivers[3].fecha_fin));
+    const parsedDate = date ? moment(date) : null;
+    const driver = this.historyDrivers.find((driver: { 
+      nro_key: string;
+      fecha_ini: any;
+      fecha_fin: any;
+      type_key: string;
+    }) => {
+      return (
+        (driver.nro_key === key_id || driver.nro_key === key_id) || driver.nro_key === var_imei) && (parsedDate &&
+        (moment(driver.fecha_ini).isBefore(parsedDate) &&
+         (!driver.fecha_fin || moment(driver.fecha_fin).isAfter(parsedDate)))
+      );
+    });
+    if (driver) {
+      return {
+        id_driver: driver.id_driver.toString(),
+        name_driver: driver.name_driver,
+        type_key: driver.type_key,
+        fecha: date || null
+      };
+    } else {
+      return {
+        id_driver: null,
+        name_driver: 'No especificado',
+        typeKey: 'No tiene',
+        fecha: date || null
+      };
+    }
+  }
+
+  
   // getDataIbuttons(id: string) {
   //   let url = `${environment.apiUrl}/api/getIbutton/${id}`;
   //   this.ibuttons = this.http.get(url);

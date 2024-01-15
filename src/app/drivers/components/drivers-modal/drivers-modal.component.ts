@@ -231,8 +231,12 @@ export class DriversModalComponent implements OnInit {
                   console.log('IMEI IGUALES SOLO ACTUALIZAR UNO');
                   this.VehicleService.updateDriverAndId(res.driver);
                 }else{
-                  this.VehicleService.updateDriverAndId(res.driverOld);
-                  this.VehicleService.updateDriverAndId(res.driver);
+                  if (res.driverOld.tracker_imei == true){
+                    this.VehicleService.updateDriverAndId(res.driverOld);
+                  }
+                  if(res.driver.tracker_imei == true){
+                    this.VehicleService.updateDriverAndId(res.driver);
+                  }
                 }
               }
           }
