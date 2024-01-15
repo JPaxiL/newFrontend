@@ -70,7 +70,7 @@ export class IndexedDbService {
         const blobData = event.target.result;
         if (blobData) {
           const blob = new Blob([blobData.data], { type: blobData.type });
-          console.log("BLOB RETRIVED: ", blob);
+          //console.log("BLOB RETRIVED: ", blob);
           
           observer.next(blob);
           observer.complete();

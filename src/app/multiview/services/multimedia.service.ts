@@ -599,14 +599,14 @@ export class MultimediaService {
     let events = this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[];
     if(events){
       events.map(async (event) => {
-        console.log("retrieving MultimediaCipiaItems from: ", event);
+        //console.log("retrieving MultimediaCipiaItems from: ", event);
         
         let auxMultimediaCipiaItems:MultimediaItem[] = this.localStorageService.getItem(event) as MultimediaItem[];  
         console.log("MultimediaCipiaItems data: ", auxMultimediaCipiaItems);
         if (auxMultimediaCipiaItems) {
           const promises: Promise<MultimediaItem>[] = auxMultimediaCipiaItems.map(async (item: MultimediaItem) => {
             const blobItem = await this.indexedDBService.getBlob(item.blobId!).toPromise();
-            console.log("blobItem getBlob", blobItem);
+            //console.log("blobItem getBlob", blobItem);
             item.url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blobItem)) as SafeUrl;
             return item;
           });

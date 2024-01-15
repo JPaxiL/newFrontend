@@ -1369,7 +1369,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     }
 
     if ( this.opcionGraficoConsola == '4') {
-        $("#placeholder").css('height', '100%').css('height', '-=123px'); //-=150px
+        $("#placeholder").css('height', '200px'); //-=150px
     } else {
       //console.log("gaaaaaaaa");
 
