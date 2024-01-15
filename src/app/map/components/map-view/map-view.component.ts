@@ -11,6 +11,7 @@ import { PolylineGeogencesService } from 'src/app/geofences/services/polyline-ge
 import { HistorialService } from 'src/app/historial/services/historial.service';
 import { MessageService, Message } from 'primeng-lts/api';
 import { ToastService } from 'src/app/shared/services/toast.service';
+import { Dropdown } from 'primeng-lts/dropdown';
 
 declare var $: any;
 
@@ -26,7 +27,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   //private map!: L.Map;
   @Input() container = "map";
   vehiclesIsLoaded = false;
-  
+  @ViewChild('_searchDropdown') searchDropdown!: Dropdown;
   
 
   constructor(
@@ -289,6 +290,14 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
   searchItem(event:any){
     console.log(event.value);
-    this.mapServicesService.map.fitBounds([[parseFloat(event.value.latitud),parseFloat(event.value.longitud)]],{}).setZoom(16)
+    if(event.value){
+      this.mapServicesService.map.fitBounds([[parseFloat(event.value.latitud),parseFloat(event.value.longitud)]],{}).setZoom(16)
+    }
+  }
+
+  showSearchDropdown(){
+    console.log("searchDropdown");
+    this.searchDropdown.show();
+    this.searchDropdown.applyFocus();
   }
 }

@@ -192,13 +192,6 @@ export interface TableRowSelectEvent {
     index?: number;
 }
 
-export interface TableRowSelectEvent {
-    originalEvent?: Event;
-    data?: any;
-    type?: string;
-    index?: number;
-}
-
 export interface MediaRequest {
     device_id: string,
     from?: string, //date in UTC0 "2023-10-09 19:12:00"

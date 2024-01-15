@@ -98,7 +98,8 @@ export class EventSocketService extends Socket {
           // console.log("name ====",data.name);
           console.log(even.nombre_objeto+" ========================================== "+data.name);
           even.nombre_objeto = data.name;
-
+          //even.namedriver = this.driverService.getNameDriver(event); <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+          even.namedriver = "NO IDENTIFICADO";
           // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
           //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
           //Si el evento no existe previamente

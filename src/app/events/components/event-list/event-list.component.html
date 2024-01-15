@@ -42,7 +42,34 @@
           class="form-control"
           placeholder="Tipo de Evento"
         /> -->
-        <p-dropdown [options]="eventService.classFilterArray" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="true" [filter]="true" filterBy="option" placeholder="Todos los Eventos" (ngModelChange)="changeTypeEvent()"></p-dropdown>
+        <!--p-dropdown 
+          [options]="eventService.eventsGroupedList" 
+          [(ngModel)]="selectedEvent" 
+          optionLabel="option" 
+          optionValue="tipo" 
+          [appendTo]="'body'" 
+          [showClear]="true" 
+          [filter]="true" 
+          filterBy="option" 
+          placeholder="Todos los Eventos" 
+          (ngModelChange)="changeTypeEvent()"></p-dropdown-->
+        <p-multiSelect
+          [options]="eventService.eventsGroupedList"
+          [group]="true"
+          [(ngModel)]="selectedEvent"
+          optionLabel="name"
+          defaultLabel="Sin eventos seleccionados"
+          [selectedItemsLabel]="'{0} eventos seleccionados'"
+          [showToggleAll]="true"
+          scrollHeight="250px"
+          (onChange)="changeTypeEvent()"
+          [appendTo]="'body'">
+          <ng-template let-group pTemplate="group">
+              <div class="p-d-flex p-ai-center">
+                  <span>{{group.label}}</span>
+              </div>
+          </ng-template>
+        </p-multiSelect>
       </div>
     </div>
   </div>

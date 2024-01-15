@@ -33,26 +33,33 @@
   [(visible)]="mapServicesService.showSearch" 
   id="searchItems"
   [showHeader]="false"
-  [closable]="false"
+  [closable]="true"
   [position]="'top-right'"
   [contentStyle]="{padding:'0', background:'transparent'}"
   [style]="{'margin-right':'45px', 'margin-top':'calc(var(--navbar-height) + 270px)'}"
+  [closeOnEscape]="true"
   [dismissableMask]="true"
+  [modal]="true"
+  (onShow)="showSearchDropdown();"
 >
   <ng-template let-vehicle pTemplate="content">
-    <p-dropdown 
+    <p-dropdown #_searchDropdown
       [options]="mapService.vehicleService.vehicles" 
-      (onChange)="searchItem($event)" 
+      (onChange)="searchItem($event);mapServicesService.showSearch = false;" 
       optionLabel="plate_number" 
       [filter]="true" 
-      filterBy="plate_number,name,empresa,IMEI" 
+      filterBy="plate_number,cod_interno,name,empresa,IMEI" 
       [showClear]="true" 
       placeholder="Búsqueda" 
+      [autofocus]="true"
+      [autofocusFilter]="true"
       appendTo="body"
       [style]="{width:'14rem'}"
+
     >
       <ng-template let-vehicle pTemplate="item">
-        <div>{{vehicle.name.toLowerCase() == vehicle.plate_number.toLowerCase() ? vehicle.name : vehicle.name + ' - ' +vehicle.plate_number}}</div>
+        <!--div>{{vehicle.name.toLowerCase() == vehicle.plate_number.toLowerCase() ? vehicle.name : vehicle.name + ' - ' +vehicle.plate_number}}</div-->
+        <div>{{vehicle.name}}</div>
       </ng-template>
     </p-dropdown>
   </ng-template>

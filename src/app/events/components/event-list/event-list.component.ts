@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
-import { AlertService } from 'src/app/alerts/service/alert.service';
 import { Alert, Evaluation } from 'src/app/alerts/models/alert.interface';
 import Swal from 'sweetalert2';
 
@@ -21,7 +20,7 @@ import Swal from 'sweetalert2';
 export class EventListComponent implements OnInit {
 
   tipoEvento: any = [];
-  selectedEvent: any = {};
+  selectedEvent: any[] = [];
   activeEvent: any = false;
 
   noResults: boolean = false;
@@ -127,7 +126,7 @@ export class EventListComponent implements OnInit {
   async ngOnInit(){
     
   //console.log("event list on init ========================================================================");
-    this.selectedEvent = null;
+    this.selectedEvent = [];
     if(!this.eventService.eventsLoaded || !this.eventService.filterLoaded){
       this.spinner.show('loadingEventList');
     }
@@ -143,6 +142,50 @@ export class EventListComponent implements OnInit {
       this.changeTypeEvent();
     });
 
+    if (this.eventService.eventsUserLoaded == false){
+      this.spinner.show('loadingEventsPanel');
+      this.eventService.getEventsForUser().subscribe(
+        async (data) => {
+          // Aquí puedes trabajar con los datos obtenidos
+          console.log('EVENTOS DEL USUARIO OBTENIDOS:', data);
+          // Realiza cualquier acción con los datos recibidos
+          if (data.success){
+            this.eventService.createEventList(data.data);
+          }else{
+            console.log('EL USUARIO NO TIENE EVENTOS');
+          }
+          this.spinner.hide('loadingEventsPanel');
+        },
+        (error) => {
+          // Maneja los errores si ocurre alguno durante la solicitud
+          console.error('Error al obtener los eventos:', error);
+        }
+      );
+    }else{
+      this.spinner.show('loadingHistorialForm');
+      console.log('TEST IN EVENTS PANEL->',this.eventService.eventsGroupedList);
+      this.spinner.hide('loadingHistorialForm');
+    }
+
+  }
+
+  public changeTypeEvent(){
+    console.log("----> selectedEvent",this.selectedEvent);
+    /* if(this.selectedEvent == ''){ */
+    if(this.selectedEvent.length==0 && this.placa == ''){
+      this.eventService.eventsFiltered = this.eventService.getData();
+    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
+      
+      this.noResults = false;
+    }else{
+      // console.log("this.selectedEvent ??????",this.selectedEvent);
+      this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
+        return this.eventFilter(event);
+      });
+    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
+      // console.log("get data",this.eventService.eventsFiltered);
+      this.noResults = this.eventService.eventsFiltered.length == 0;
+    }
   }
 
   ngOnDestroy(){
@@ -306,24 +349,7 @@ export class EventListComponent implements OnInit {
     return document.querySelectorAll('.leaflet-popup').length > 0;
   }
 
-  public changeTypeEvent(){
-    // console.log("eventService.classFilterArray",this.eventService.classFilterArray);
-    /* if(this.selectedEvent == ''){ */
-    if(this.selectedEvent === null && this.placa == ''){
-      this.eventService.eventsFiltered = this.eventService.getData();
-    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
-      
-      this.noResults = false;
-    }else{
-      // console.log("this.selectedEvent ??????",this.selectedEvent);
-      this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
-        return this.eventFilter(event);
-      });
-    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
-      // console.log("get data",this.eventService.eventsFiltered);
-      this.noResults = this.eventService.eventsFiltered.length == 0;
-    }
-  }
+ 
 
   public searchByPlate(){
     if(this.selectedEvent === null && this.placa == ''){
@@ -342,10 +368,13 @@ export class EventListComponent implements OnInit {
   private eventFilter(event: any){
     // console.log("filter ===> ");
     // console.log("event",event);
-    // console.log("this.selectedEvent",this.selectedEvent);
     // console.log("tipo select",event.tipo +"=="+ this.selectedEvent);
-    return (event.nombre_objeto.toLowerCase().match(this.placa.toLowerCase()) || this.placa == '')
-          && (event.tipo == this.selectedEvent || this.selectedEvent === null);
+    const eventsTypesSelected: string[] = this.selectedEvent.map((event:any) => {
+      return event.value;
+    });
+    const vehicle = this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei);
+    return ((event.nombre_objeto + vehicle?.IMEI+ vehicle?.cod_interno).trim().toLowerCase().match(this.placa.trim().toLowerCase()) || this.placa == '')
+          && (eventsTypesSelected.includes(event.tipo) || this.selectedEvent === null);
   }
 
   rowExpandend(event:any){

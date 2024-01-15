@@ -207,6 +207,8 @@ export class EventService {
           });
           event.layer._myType = 'evento';
           event.layer._myId = event.id;
+          //even.namedriver = this.driverService.getNameDriver(event); <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+          event.namedriver = "NO IDENTIFICADO";
           // event.layer.addTo(this.eventsLayers);
 
           // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
@@ -276,7 +278,6 @@ export class EventService {
   }
 
   public getData() {
-    console.log("get data desde eventService",this.events);
     if(!this.statusLoadPlate){
       this.getVehiclesPlate();
       this.statusLoadPlate = true;

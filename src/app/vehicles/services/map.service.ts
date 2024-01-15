@@ -101,6 +101,7 @@ export class MapService {
       }
     });
     this.socketWebService.callback.subscribe(res =>{
+
       this.monitor(res, this.map);
     });
     this.followService.callback.subscribe(res =>{
