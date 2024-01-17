@@ -207,7 +207,7 @@ class LoginComponent {
             // this.vehicleService.initialize();
             this.eventService.getAll();
             this.eventSocketService.listen();
-            this.userDataService.getUserData();
+            // this.userDataService.getUserData();
         });
     }
 }
