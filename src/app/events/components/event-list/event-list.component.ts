@@ -352,7 +352,8 @@ export class EventListComponent implements OnInit {
  
 
   public searchByPlate(){
-    if(this.selectedEvent === null && this.placa == ''){
+    //if(this.selectedEvent === null && this.placa == ''){
+    if(this.selectedEvent.length==0 && this.placa == ''){
       this.eventService.eventsFiltered = this.eventService.getData();
       this.noResults = false;
     }else {
@@ -374,7 +375,7 @@ export class EventListComponent implements OnInit {
     });
     const vehicle = this.vehicleService.vehicles.find(vh => vh.IMEI == event.imei);
     return ((event.nombre_objeto + vehicle?.IMEI+ vehicle?.cod_interno).trim().toLowerCase().match(this.placa.trim().toLowerCase()) || this.placa == '')
-          && (eventsTypesSelected.includes(event.tipo) || this.selectedEvent === null);
+          && (eventsTypesSelected.includes(event.tipo) || this.selectedEvent.length==0);
   }
 
   rowExpandend(event:any){
