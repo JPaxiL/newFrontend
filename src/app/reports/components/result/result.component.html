@@ -1765,6 +1765,7 @@
             <th>Velocidad CAN</th>
             <th>Odómetro</th>
             <th>Ubicación</th>
+            <th>Geocerca</th>
             <th>Referencia</th>
           </tr>
         </thead>
@@ -1784,6 +1785,7 @@
             <td>
               <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}}, {{row.longitud.toFixed(6)}}</a>
             </td>
+            <td>{{row.tramo}}</td>
             <td>{{row.referencia}}</td>
           </tr>
         </tbody>
@@ -6494,224 +6496,9 @@
     <!-- R038. REPORTE DE ATENCION DE EVENTOS CIPIA -->
     <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R038'">
 
-      <ng-container *ngIf="chkTableDropdown">
-
-        <div class="p-card" style="padding: 1rem;">
-
-          <div class="subtable-title mb-3">
-            <!-- <div>
-              <div>VEHÍCULO</div>
-              <div>
-                <div class="gl-row-underline vehicle-dropdown border-0">
-                  <p-dropdown
-                        [filter]="true"
-                        [options]="reportTableVehicleDropdownOptions"
-                        optionLabel="name"
-                        [(ngModel)]="reportTableVehicleSelected"
-                        [appendTo]="'body'"
-                        (onChange)="renderDataTable()">
-                        <ng-template let-vehicle pTemplate="item">
-                            <div class="country-item">
-                                <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
-                            </div>
-                        </ng-template>
-                  </p-dropdown>
-                </div>
-              </div>
-            </div> -->
-            <div>
-              <div>PERIODO</div>
-              <div>{{period}}</div>
-            </div>
-            <div>
-              <div><button class="btn btn-sm btn-success btn-dark-hover"  (click)="actualizarEvaluacionEventos();"  >ACTUALIZAR</button></div>
-              <div><button class="btn btn-sm btn-success btn-dark-hover" >GUARDAR</button></div>
-            </div>
-
-
-
-
-          </div>
-
-          <ng-container *ngIf="dtRendered">
-            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
-              <thead>
-                <tr>
-                    <th>Item</th>
-                     
-
-                    <th *ngIf="!chkDateHour && reportService.eC.Fecha">Fecha/Hora Evento</th>
-                    <th *ngIf="chkDateHour && reportService.eC.Fecha">Fecha Evento</th>
-                    <th *ngIf="chkDateHour && reportService.eC.Fecha">Hora Evento</th>
-                    <th *ngIf="!chkDateHour && reportService.eC.FechaServidor">Fecha/Hora Servidor</th>
-                    <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
-                    <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
-
-                    <th *ngIf="reportService.eC.Evento" >Evento</th>
-
-                    <th *ngIf="reportService.eC.Codigo">Código</th>
-                    <th *ngIf="reportService.eC.Placa">Placa</th>
-                    <th *ngIf="reportService.eC.TipoUnidad">Tipo de Unidad</th>
-
-                    <th *ngIf="reportService.eC.IdConductor">ID Conductor</th>
-                    <th *ngIf="reportService.eC.Conductor">Conductor</th>
-
-
-                    <th *ngIf="reportService.eC.FechaEvaluacion">Fecha de Evaluación</th>
-                    <th *ngIf="reportService.eC.CriterioEvaluacion">Criterio de Evaluación</th>
-                    <th *ngIf="reportService.eC.Observacion">Observación</th>
-                    <th *ngIf="reportService.eC.Validacion">Validación</th>
-
- 
-                    <th *ngIf="reportService.eC.VelMobileye">Vel.Mobileye</th>
-                    <th *ngIf="reportService.eC.VelGPS">Vel.GPS</th>
-                    <th *ngIf="reportService.eC.VelGPSspeed">Vel.GPS speed</th>
-                    <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
-                    <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
-
-                    <th *ngIf="reportService.eC.Zona">Zona</th>
-                    <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
-                    <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
-                    <th *ngIf="reportService.eC.Referencia">Referencia</th>
-                    <th *ngIf="reportService.eC.EnlaceArchivo">Enlace a Archivo</th>
-                    <th *ngIf="reportService.eC.Parametros">Parámetros</th>
-
-                    <th *ngIf="reportService.eC.OperadorMonitoreo">Operador de Monitoreo</th>
-
-
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
-
-                    <td>{{i + 1}}-</td>
-                    
-
-                    <td *ngIf="!chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker}}</td>
-                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[1]}}</td>
-
-                    <td *ngIf="!chkDateHour && reportService.eC.FechaServidor">{{row.fecha_servidor}}</td>
-                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[0]}}</td>
-                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[1]}}</td>
-
-                    <td *ngIf="reportService.eC.Evento">{{row.descripcion_evento}}</td>
-
-                    <td *ngIf="reportService.eC.Codigo">{{row.codigo}}</td>
-                    <td *ngIf="reportService.eC.Placa">{{row.placa}}</td>
-                    <td *ngIf="reportService.eC.TipoUnidad">{{row.tipo_unidad}}</td>
-
-
-                    <td *ngIf="reportService.eC.IdConductor">{{row.idConductor}}</td>
-                    <td *ngIf="reportService.eC.Conductor">{{row.conductor}}</td>
- 
-                    <td *ngIf="reportService.eC.FechaEvaluacion">{{row.FechaEvaluacion}}</td>
-
-                    <td *ngIf="reportService.eC.CriterioEvaluacion">
-                      <!-- <input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.CriterioEvaluacion"> -->
-                      <select ng-model="row.CriterioEvaluacion" style="width:180px;" >
-												<option value="">OPCIONES</option> 
-												<optgroup label="SEÑALES DE POSIBLE FATIGA">
-
-													<!-- <option value="Inclinación de la cabeza hacia adelante y/o hacia atrás" >Inclinación de la cabeza hacia adelante y/o hacia atrás</option>
-													<option value="Parpadeo involuntario" >Parpadeo involuntario</option>
-													<option value="Gestos o movimientos a manera de autogestión" >Gestos o movimientos a manera de autogestión</option>
-													<option value="Bostezo continuo (>=3 en 30 seg.)" >Bostezo continuo (>=3 en 30 seg.)</option>
-													<option value="Mano con acción de frotación en los ojos" >Mano con acción de frotación en los ojos</option> -->
-
-													<option value="INCLINACIÓN DE LA CABEZA HACIA ADELANTE Y/O HACIA ATRÁS" >INCLINACIÓN DE LA CABEZA HACIA ADELANTE Y/O HACIA ATRÁS</option>
-													<option value="PARPADEO INVOLUNTARIO" >PARPADEO INVOLUNTARIO</option>
-													<option value="GESTOS O MOVIMIENTOS A MANERA DE AUTOGESTIÓN" >GESTOS O MOVIMIENTOS A MANERA DE AUTOGESTIÓN</option>
-													<option value="BOSTEZO CONTINUO (>=3 EN 30 SEG.)" >BOSTEZO CONTINUO (>=3 EN 30 SEG.)</option>
-													<option value="MANO CON ACCIÓN DE FROTACIÓN EN LOS OJOS" >MANO CON ACCIÓN DE FROTACIÓN EN LOS OJOS</option>
-
-
-												</optgroup>
-												<optgroup label="SIN SEÑAL DE POSIBLE FATIGA">
-
-													<!-- <option value="Características de ojos de facciones asiáticas" >Características de ojos de facciones asiáticas</option>
-													<option value="Cobertura de rostro con bufanda y/o chalina" >Cobertura de rostro con bufanda y/o chalina</option>
-													<option value="Existe mirada del conductor al tablero" >Existe mirada del conductor al tablero</option>
-													<option value="Lentes correctores mal puestos" >Lentes correctores mal puestos</option>
-													<option value="Lentes correctores con marco reducido" >Lentes correctores con marco reducido</option>
-													<option value="Lentes de seguridad mal colocados o marco reducido" >Lentes de seguridad mal colocados o marco reducido</option>
-													<option value="Otro tipo de lentes" >Otro tipo de lentes</option>
-													<option value="Presencia de deslumbramientos" >Presencia de deslumbramientos</option>
-													<option value="Uso de chullo, gorra con vísera o casco" >Uso de chullo, gorra con vísera o casco</option>
-													<option value="Uso de sobrelentes" >Uso de sobrelentes</option>
-													<option value="Uso de maquillaje en el rostro" >Uso de maquillaje en el rostro</option> -->
-
-													<option value="CARACTERÍSTICAS DE OJOS DE FACCIONES ASIÁTICAS" >CARACTERÍSTICAS DE OJOS DE FACCIONES ASIÁTICAS</option>
-													<option value="COBERTURA DE ROSTRO CON BUFANDA Y/O CHALINA" >COBERTURA DE ROSTRO CON BUFANDA Y/O CHALINA</option>
-													<option value="EXISTE MIRADA DEL CONDUCTOR AL TABLERO" >EXISTE MIRADA DEL CONDUCTOR AL TABLERO</option>
-													<option value="LENTES CORRECTORES MAL PUESTOS" >LENTES CORRECTORES MAL PUESTOS</option>
-													<option value="LENTES CORRECTORES CON MARCO REDUCIDO" >LENTES CORRECTORES CON MARCO REDUCIDO</option>
-													<!-- <option value="LENTES DE SEGURIDAD MAL COLOCADOS O MARCO REDUCIDO" >LENTES DE SEGURIDAD MAL COLOCADOS O MARCO REDUCIDO</option> -->
-													<option value="LENTES DE SEGURIDAD MAL PUESTOS" >LENTES DE SEGURIDAD MAL PUESTOS</option>
-													<option value="OTRO TIPO DE LENTES" >OTRO TIPO DE LENTES</option>
-													<option value="PRESENCIA DE DESLUMBRAMIENTOS" >PRESENCIA DE DESLUMBRAMIENTOS</option>
-													<option value="USO DE CHULLO, GORRA CON VÍSERA O CASCO" >USO DE CHULLO, GORRA CON VÍSERA O CASCO</option>
-													<option value="USO DE SOBRELENTES" >USO DE SOBRELENTES</option>
-													<option value="USO DE MAQUILLAJE EN EL ROSTRO" >USO DE MAQUILLAJE EN EL ROSTRO</option>
-
-												</optgroup>
-											</select>
-                    
-                    </td>
-
-
-
-                    <td *ngIf="reportService.eC.Observacion"><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.Observacion"></td>
-                    <td *ngIf="reportService.eC.Validacion"><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.Validacion"></td>
-
-
-                    <td *ngIf="reportService.eC.VelMobileye">{{row.vel_mobileye}}</td>
-                    <td *ngIf="reportService.eC.VelGPS">{{row.vel_gps}}</td>
-                    <td *ngIf="reportService.eC.VelGPSspeed">{{row.vel_gps_speed}}</td>
-                    <td *ngIf="reportService.eC.VelCAN">{{row.vel_can}}</td>
-                    <td *ngIf="reportService.eC.VelECO">{{row.vel_eco}}</td>
-
-                    <td *ngIf="reportService.eC.Zona">{{row.tramo}}</td>
-                    <td *ngIf="reportService.eC.PuntoCercano">{{row.PC}}</td>
-                    <td *ngIf="reportService.eC.Ubicacion">
-                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
-                    </td>
-                    <td *ngIf="reportService.eC.Referencia">{{row.referencia}}</td>
-
-                    <td *ngIf="reportService.eC.EnlaceArchivo">
-                      <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
-                    </td>
-
-                    <td *ngIf="reportService.eC.Parametros">{{row.parametros}}</td>
-
-                    <td *ngIf="reportService.eC.OperadorMonitoreo" >
-                      <!-- <input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.OperadorMonitoreo"> -->
-                      <select ng-model="row.OperadorMonitoreo" style="width:180px;"> 
-        
-                        <option value="">OPCIONES</option> 
-                        <option value="HANCCO DIAZ, Gary Maurizio">HANCCO DIAZ, Gary Maurizio</option>
-                        <option value="HUACHO OCHOA, Gonzalo Joe">HUACHO OCHOA, Gonzalo Joe</option>
-                        <option value="MAMANI SIERRA, Raquel">MAMANI SIERRA, Raquel</option>
-                        <option value="ROJAS RONDON, Carla Alejandra">ROJAS RONDON, Carla Alejandra</option>
-                        <option value="OTRO">OTRO</option>
-    
-                      </select>
-                    </td>
-
-
-                </tr>
-              </tbody>
-
-            </table>
-          </ng-container>
-
-        </div>
-
-      </ng-container>
-
-      <ng-container *ngIf="!chkTableDropdown">
-
+      
+      <!-- <ng-container *ngIf="!chkTableDropdown"> -->
+      <ng-container >
         <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
           

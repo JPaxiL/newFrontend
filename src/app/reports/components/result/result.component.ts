@@ -4731,7 +4731,9 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
           cellsCuerpo.push({ value: item.duracion, ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.nombre_zona, ...this.bodyRowsConfig });
-          cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+          //cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig });
+          
           cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
 
           rows.push({
@@ -5001,7 +5003,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCuerpo.push({ value: item.combusrestante, ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.di4 == 0? 'Cerrado': (item.di4 == 1? 'Abierto': '-'), ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: this.isNumber(item.can_dist)? item.can_dist.toFixed(2): item.can_dist, ...this.bodyRowsConfig });
-          cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+          // cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
+          cellsCuerpo.push({ formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.alerta, ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.combustiblealerta, ...this.bodyRowsConfig });
           cellsCuerpo.push({ value: item.can_rpm, ...this.bodyRowsConfig });
@@ -5706,7 +5709,8 @@ export class ResultComponent implements OnDestroy, OnInit {
         }, index: number) => {
 
 
-            var ubicacion = item.lat + "," + item.lng + "";
+            var ubicacion = item.lat.toFixed(6) + "," + item.lng.toFixed(6) + "";
+
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
             var parametros = this.breakParameterColValue(item.parametros??'');
@@ -5764,7 +5768,9 @@ export class ResultComponent implements OnDestroy, OnInit {
               }
             };
 
-            if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
+            //if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
+            if (data[2].ubicacion) { cellsCuerpo.push({ formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig }); };
+
             if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, ...this.bodyRowsConfig }); };
             if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, ...this.bodyRowsConfig }); };
             if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, ...this.bodyRowsConfig }); };
@@ -6442,7 +6448,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bol_datos_ex = false;
     var column_config:Columns[] = [];
 
-    var table_width = this.chkDateHour? 12:11;
+    var table_width = this.chkDateHour? 13:12;
 
     var nom_inf = "REPORTE DE POSICIÓN";
     /* if (vm.optionUser() == 445 ) {
@@ -6467,6 +6473,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var vel_gps_cell_ch_width = "Velocidad GPS".length;
     var vel_can_cell_ch_width = "Velocidad CAN".length;
     var odometro_cell_ch_width = "Odometro".length;
+    var geocerca_cell_ch_width = "Geocerca".length;
     var referencia_cell_ch_width = "Referencia".length;
 
     if(this.sortedData.length > 0) {
@@ -6509,6 +6516,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Velocidad CAN", ...this.colHeaderConfig },
               { value: "Odómetro", ...this.colHeaderConfig },
               { value: "Ubicación", ...this.colHeaderConfig },
+              { value: "Geocerca", ...this.colHeaderConfig },
               { value: "Referencia", ...this.colHeaderConfig },
               /* { value: "Zona Cercana", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 },
               { value: "Latitud/Longitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 } */
@@ -6516,7 +6524,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             ],
             height: this.colsHeaderHeight,
           });
-          this.sortedData.forEach((item: { latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
+          this.sortedData.forEach((item: { tramo:any, latitud: number; longitud: number; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; referencia: any; }, index: number) => {
             //var fh = item.fecha_final.split(" ");
             var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
@@ -6527,6 +6535,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
+            geocerca_cell_ch_width = Math.max(geocerca_cell_ch_width, (item.tramo??'').toString().length);
             referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
 
             rows.push({
@@ -6547,8 +6556,10 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.velocidad+" km/h", ...this.bodyRowsConfig },
                 { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
                 { value: item.odometro, ...this.bodyRowsConfig },
-                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', ...this.bodyRowsConfig, fontSize: this.c1_2 },
-                { value: item.referencia, ...this.bodyRowsConfig },
+                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig },
+
+                { value: item.tramo, ...this.bodyRowsConfig },
+                { value: item.referencia, ...this.bodyRowsConfig }, 
               ],
               height: this.bodyRowsHeight,
             });
@@ -6575,12 +6586,13 @@ export class ResultComponent implements OnDestroy, OnInit {
               { value: "Velocidad CAN", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
               { value: "Odómetro", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
               { value: "Ubicación", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
+              { value: "Geocerca", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
               { value: "Referencia", bold:  this.colsHeaderBold, color: this.colsHeaderTextColor, background: this.colsHeaderBackground, vAlign: "center", hAlign: "center", fontSize: this.t3, borderRight: { color: this.headersBorderColor, size: this.headersBorderSize }, borderLeft: { color: this.headersBorderColor, size: this.headersBorderSize } },
             ],
             height: this.colsHeaderHeight,
           });
 
-          this.sortedData.forEach((item: { latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
+          this.sortedData.forEach((item: { tramo:any, latitud: number; longitud: number; referencia: string; codigo: any; placa: any; convoy: any; origen: any; destino: any; fecha: any; estado: any; conductor: any; velocidad: string; velocidad_can: any; odometro:any; zonaCercana: any; }, index: number) => {
             var ubicacion = item.latitud + "," + item.longitud;
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
 
@@ -6591,6 +6603,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
+            geocerca_cell_ch_width = Math.max(geocerca_cell_ch_width, (item.tramo??'').toString().length);
             referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
 
             rows.push({
@@ -6610,7 +6623,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.velocidad+" km/h", ...this.bodyRowsConfig },
                 { value: item.velocidad_can+" km/h", ...this.bodyRowsConfig },
                 { value: item.odometro, ...this.bodyRowsConfig },
-                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', ...this.bodyRowsConfig, fontSize: this.c1_2 },
+                { formula:  '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', ...this.bodyRowsConfig },
+                { value: item.tramo, ...this.bodyRowsConfig },
                 { value: item.referencia, ...this.bodyRowsConfig },
 
               ],
@@ -6643,6 +6657,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         column_config.push({ width: this.calculateColWidth(vel_can_cell_ch_width)});
         column_config.push({ width: this.calculateColWidth(odometro_cell_ch_width)});
         column_config.push({ width: this.w_lat_long});
+        column_config.push({ width: this.calculateColWidth(geocerca_cell_ch_width)});
         column_config.push({ width: this.calculateColWidth(referencia_cell_ch_width)});
 
         // //********************************************* excel version 1 *********************************
@@ -12576,8 +12591,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           data[1].forEach((item: { parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
               //var fh = item.fecha.split(" ");
-              var ubicacion = item.latitud + "," + item.longitud;
-
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
               evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
               codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
@@ -12625,17 +12639,20 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.Conductor) { array_campos_cuerpo.push({ value: item.conductor, ...this.bodyRowsConfig }); };
               
 
-              if (rs.VelMobileye) { array_campos_cuerpo.push({ value: item.vel_mobileye +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelGPS) { array_campos_cuerpo.push({ value: item.vel_gps +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelGPSspeed) { array_campos_cuerpo.push({ value: item.vel_gps_speed +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelCAN) { array_campos_cuerpo.push({ value: item.vel_can +" Km/h", ...this.bodyRowsConfig }); };
-              if (rs.VelECO) { array_campos_cuerpo.push({ value: item.vel_eco +" Km/h", ...this.bodyRowsConfig }); };
+              if (rs.VelMobileye) { array_campos_cuerpo.push({ value: item.vel_mobileye, ...this.bodyRowsConfig }); };
+              if (rs.VelGPS) { array_campos_cuerpo.push({ value: item.vel_gps, ...this.bodyRowsConfig }); };
+              if (rs.VelGPSspeed) { array_campos_cuerpo.push({ value: item.vel_gps_speed, ...this.bodyRowsConfig }); };
+              if (rs.VelCAN) { array_campos_cuerpo.push({ value: item.vel_can, ...this.bodyRowsConfig }); };
+              if (rs.VelECO) { array_campos_cuerpo.push({ value: item.vel_eco, ...this.bodyRowsConfig }); };
     
 
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
-              if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
+              // if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
+              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula: '=HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig}); };
+
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
+              
               if (rs.EnlaceArchivo) { 
                   array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
                   array_campos_cuerpo.push({ formula: '=HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });   };
@@ -12887,7 +12904,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
     ];
 
-    this.sortedData.forEach((data: any,idx:any) => {
+    this.data.forEach((data: any,idx:any) => {
 
       if(data[1].length > 0){
         bol_datos_ex = true;
@@ -12982,6 +12999,11 @@ export class ResultComponent implements OnDestroy, OnInit {
 
               id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
               conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+
+               
+              criterio_evaluacion_cell_ch_width = Math.max(criterio_evaluacion_cell_ch_width, (item.criterio_evaluacion??'').toString().length);
+
+              observacion_cell_ch_width = Math.max(observacion_cell_ch_width, (item.observacion_evaluacion??'').toString().length);
 
               vel_mobileye_cell_ch_width = Math.max(vel_mobileye_cell_ch_width, (item.vel_mobileye??'').toString().length);
               vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.vel_gps??'').toString().length);
