@@ -123,6 +123,7 @@ export class LoginComponent implements OnInit {
     // this.vehicleService.initialize();
     this.eventService.getAll();
     this.eventSocketService.listen();
-    this.userDataService.getUserData();
+    // this.userDataService.getUserData();
+    
   }
 }

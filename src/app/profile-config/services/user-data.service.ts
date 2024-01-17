@@ -51,8 +51,8 @@ export class UserDataService {
         this.typeVehiclesUserData = await data.data3;
         this.userData = await data.data;
         this.userName = data.data.nombre_usuario.normalize('NFKD').replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '').replace(/  +/g, ' ').trim();
-        this.userEmail = data.data.email;
-        this.companyName = data.data.company_name;
+        this.userEmail = data.data.var_email;
+        this.companyName = data.data.var_nombre_comercial; //Otro var_razon_social 
         this.userDataInitialized = true;
         this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
         this.changeItemIcon = this.getChangeItemColor();

@@ -265,7 +265,20 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.UserDataService.getUserData();
+    // this.UserDataService.getUserData();
+    if(!this.UserDataService.userDataInitialized){
+      console.log('(Navbar) User Data no está listo. Subscribiendo para obtener data...');
+      this.UserDataService.userDataCompleted.subscribe({
+        next: (result: boolean) => {
+          if(result){
+            this.UserDataService.getUserData();
+          }
+        },
+        error: (errMsg: any) => {
+          console.log('(Navbar) Error al obtener userData: ', errMsg);
+        }
+      });
+    } 
     console.log("=================================");
     console.log(this.UserDataService);
     console.log(this.UserDataService.typeVehicles);

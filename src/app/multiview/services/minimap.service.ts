@@ -56,6 +56,7 @@ export class MinimapService {
   ) {
     this.driversService.initialize();
     this.userDataService.getUserData();
+    
     this.vehicleService.setDefaultStatusDataVehicle();
     this.vehicleService.initialize();
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
