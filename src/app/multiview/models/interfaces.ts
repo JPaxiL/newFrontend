@@ -61,6 +61,7 @@ export interface UserTracker {
     icon_name?: string,
     icon_color?: string,
     limit_speed?: number,
+    cant_gallons?: number
     // nameconvoy?: string,
     operation?: string,
     follow?: boolean,

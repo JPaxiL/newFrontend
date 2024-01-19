@@ -104,16 +104,16 @@ export class DriversService {
 
   public getNameDriver(var_imei:string,key_id?:string,date?:string){
     if (key_id && date){
-      console.log('10');
+      // console.log('10');
       return this.getNameDriverByDate(var_imei,key_id,date);
     }else if(key_id && !date){
-      console.log('11');
+      // console.log('11');
       return this.getNameDriverByKey(var_imei,key_id);
     }else if(!key_id && date){
-      console.log('12');
+      // console.log('12');
       return this.getNameDriverByDate(var_imei,key_id,date);
     }else{
-      console.log('13');
+      // console.log('13');
       return this.getNameDriverByImei(var_imei);
     }
   }

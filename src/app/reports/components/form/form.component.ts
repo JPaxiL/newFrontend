@@ -12,6 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserDetectorService } from '../../services/browser-detector.service';
 import { EventService } from 'src/app/events/services/event.service';
+import { DriversService } from 'src/app/drivers/services/drivers.service';
 
 import Swal from 'sweetalert2';
 // import { threadId } from 'worker_threads';
@@ -345,9 +346,11 @@ export class FormComponent implements OnInit {
     private confirmationService: ConfirmationService,
     public eventService:EventService,
     private http: HttpClient,
+    private driversService: DriversService,
     private titleService: Title) {
       //INICIAR EL VEHICLE SERVICE PARA REPORTES
       vehicleService.initialize();
+      driversService.getHistoryAll();
       //this.fullScreenSpinnerMsg = 'Iniciando Módulo de Reportes';
       spinner.show("fullScreenSpinner");
       this.titleService.setTitle('Reportes');
@@ -590,6 +593,10 @@ export class FormComponent implements OnInit {
 
 
   }
+  //FUNCION PARA IDENTIFICAR Y OBTENER NAME DRIVER
+  // let tempInfoDriver = this.driversService.getNameDriver(data.IMEI,data.driver_id,vehicles[index].dt_tracker);
+  //       vehicles[index].id_conductor = tempInfoDriver.id_driver;
+  //       vehicles[index].namedriver = tempInfoDriver.name_driver;
 
   // Supongamos que this.events contiene tus datos
   updateShowTypeEvents() {
