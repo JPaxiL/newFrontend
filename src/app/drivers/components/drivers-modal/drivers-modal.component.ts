@@ -154,14 +154,14 @@ export class DriversModalComponent implements OnInit {
       return ;
     }
 
-    if (this.driversForm.value.dni == '') {
-      Swal.fire({
-        title: 'Error',
-        text: 'Ingrese el DNI del conductor',
-        icon: 'error',
-      });
-      return ;
-    }
+    // if (this.driversForm.value.dni == '') {
+    //   Swal.fire({
+    //     title: 'Error',
+    //     text: 'Ingrese el DNI del conductor',
+    //     icon: 'error',
+    //   });
+    //   return ;
+    // }
     // console.log(this.driversForm.value.tracker_imei);
     if (this.driversForm.value.tracker_imei == null || this.driversForm.value.tracker_imei == "" || this.driversForm.value.tracker_imei == "--") {
       this.driversForm.value.tracker_imei = null;
