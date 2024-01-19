@@ -1249,10 +1249,13 @@ export class FormComponent implements OnInit {
           }
 
       break;
+      case 'R039': //  - R039	REPORTE DE EXCESOS DE VELOCIDAD (NUEVO FORMATO)
+        this.showLimitTime = true;
+      break;
 
       default: break;
     }
-/*     console.log(Object.keys(this.reports[this.selectedReport]).length === 0);
+    /*  console.log(Object.keys(this.reports[this.selectedReport]).length === 0);
     console.log(_.isEmpty(this.reports[this.selectedReport])); */
     console.log(_.isEmpty(this.selectedReport));
     console.log(this.selectedReport);
@@ -1576,6 +1579,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R037' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R038' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R039' && is_vehicle_selected)
       );
   }
 
