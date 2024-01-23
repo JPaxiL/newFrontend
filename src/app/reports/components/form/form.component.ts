@@ -26,6 +26,7 @@ declare var google: any;
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
+  displayModal: boolean = false;//PARA MODAL
   reports: any=[];
   events: any=[];
   selectedReport: any={};
@@ -343,7 +344,7 @@ export class FormComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public reportService: ReportService,
     private vehicleService: VehicleService,
-    private confirmationService: ConfirmationService,
+    public confirmationService: ConfirmationService,
     public eventService:EventService,
     private http: HttpClient,
     private driversService: DriversService,
@@ -351,6 +352,7 @@ export class FormComponent implements OnInit {
       //INICIAR EL VEHICLE SERVICE PARA REPORTES
       vehicleService.initialize();
       driversService.getHistoryAll();
+      driversService.getIbuttonAll();
       //this.fullScreenSpinnerMsg = 'Iniciando Módulo de Reportes';
       spinner.show("fullScreenSpinner");
       this.titleService.setTitle('Reportes');
@@ -801,6 +803,41 @@ export class FormComponent implements OnInit {
     this.selectedZones = this.chkAllZones? this.zones.map((zone: { id: any; }) => { return zone.id}): [];
   }
 
+  
+
+  getConfirm() {
+    this.isFormFilled = false;
+    Swal.fire({
+      // title: 'Título de la Alerta',
+      text: '¿Desea generar el reporte en una nueva ventana?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      confirmButtonColor: '#30a9d9',
+      cancelButtonText: 'No',
+      cancelButtonColor: '#e3e3e3',
+      showCloseButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // console.log('Sí');
+        this.fullScreenSpinnerMsg = 'Generando Reporte...';
+        this.spinner.show("fullScreenSpinner");
+        console.log("Se acepta una nueva hoja");
+        console.log('Cargando...');
+        this.reportar(false);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // console.log('No');
+        this.spinner.show("reportSpinner");
+        console.log("Reporte en la misma hoja");
+        this.reportar();
+      } else {
+        //CUANDO ES ESC O X
+        console.log('Cancel');
+        this.isFormFilled = true;
+      }
+    });
+  }
+
   confirm() {
     this.isFormFilled = false;
     this.confirmationService.confirm({
@@ -995,7 +1032,7 @@ export class FormComponent implements OnInit {
       repTitle = reportSelect.value;
     }
 
-
+    console.log('API: ',environment.apiUrl + param.url, param);
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
         //console.log(this.selectedConvoy.length);
@@ -1007,6 +1044,7 @@ export class FormComponent implements OnInit {
         this.reportService.setParams(param);
         // console.log("MODAL ACTIVATE");
         // this.reportService.modalActive = true;
+        this.setNameDriver(data);
         var report_data = {
           data: data,
           numRep: param.numRep, // codigo
@@ -1070,6 +1108,29 @@ export class FormComponent implements OnInit {
     });
   }
 
+  setNameDriver(data:any){
+    // console.log('data SetNameDriver-->',data);
+    for(let index of data){
+      for (let subindex of index[1]) {
+        console.log(subindex);
+        if(subindex.idConductor != '-' && subindex.idConductor){
+          let fecha_moment = moment(subindex.fecha_tracker,'YYYY/MM/DD HH:mm:ss');
+          // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
+          let auxName = this.driversService.getNameDriver(subindex.tracker_imei,subindex.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
+          subindex.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
+          console.log('SUBINDEX BEFORE ->',subindex.conductor,subindex.idConductor);
+          console.log('Name Finds->',auxName);
+          if (auxName.nro_key == null){
+            subindex.idConductor = this.driversService.getIbutton(subindex.idConductor);
+            subindex.conductor = 'No especificado';
+          }else{
+            subindex.idConductor = auxName.nro_key;
+          }
+          console.log('SUBINDEX AFTER ->',subindex.conductor,subindex.idConductor);
+        }
+      }
+    }
+  }
   changedReport(){
     console.log(this.selectedReport);
     console.log(typeof this.selectedReport);

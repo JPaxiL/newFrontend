@@ -1536,7 +1536,9 @@
     </div>
 
   <ng-template pTemplate="footer">
-    <button [disabled]="!isFormFilled || reportService.workingOnReport" (click)="confirm()" class="btn-gl-save btn-dark-hover" style="width: 10rem; border: none;">Generar Reporte</button>
+    <button [disabled]="!isFormFilled || reportService.workingOnReport" (click)="getConfirm()" class="btn-gl-save btn-dark-hover" style="width: 10rem; border: none;">Generar Reporte</button>
+    
+    <!-- <button [disabled]="!isFormFilled || reportService.workingOnReport" (click)="confirm()" class="btn-gl-save btn-dark-hover" style="width: 10rem; border: none;">Generar Reporte</button> -->
     <!-- <label>
       <p-checkbox [(ngModel)]="!chkTableDropdown" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport" (onChange)="logDropState()"></p-checkbox>
       Mostrar tablas en simultáneo</label> -->
