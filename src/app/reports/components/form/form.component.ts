@@ -1113,6 +1113,23 @@ export class FormComponent implements OnInit {
     //PARA REPORTES R008 - POSICION
     if (this.selectedReport == 'R008'){
       console.log('Logica para reporte de posicion...');
+      for(let index of data){
+        console.log(index);
+        if(index.idConductor != '-' && index.idConductor){
+          let fecha_moment = moment(index.fecha_tracker,'YYYY/MM/DD HH:mm:ss');
+          // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
+          let auxName = this.driversService.getNameDriver(index.tracker_imei,index.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
+          index.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
+          console.log('SUBINDEX BEFORE ->',index.conductor,index.idConductor);
+          console.log('Name Finds->',auxName);
+          if (auxName.nro_key == null){
+            index.idConductor = this.driversService.getIbutton(index.idConductor);
+            index.conductor = 'No especificado';
+          }else{
+            index.idConductor = auxName.nro_key;
+          }
+        }
+      }
     }else if(this.selectedReport == 'R037' || this.selectedReport == 'R038'){
       //PARA REPORTES EVENTOS R037 Y ATENCION EVENTOS R038
       for(let index of data){
