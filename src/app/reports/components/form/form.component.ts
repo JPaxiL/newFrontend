@@ -1031,7 +1031,6 @@ export class FormComponent implements OnInit {
     } else {
       repTitle = reportSelect.value;
     }
-
     console.log('API: ',environment.apiUrl + param.url, param);
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
@@ -1044,7 +1043,7 @@ export class FormComponent implements OnInit {
         this.reportService.setParams(param);
         // console.log("MODAL ACTIVATE");
         // this.reportService.modalActive = true;
-        this.setNameDriver(data);
+        this.setNameDriver(data,this.selectedReport);
         var report_data = {
           data: data,
           numRep: param.numRep, // codigo
@@ -1108,27 +1107,36 @@ export class FormComponent implements OnInit {
     });
   }
 
-  setNameDriver(data:any){
-    // console.log('data SetNameDriver-->',data);
-    for(let index of data){
-      for (let subindex of index[1]) {
-        console.log(subindex);
-        if(subindex.idConductor != '-' && subindex.idConductor){
-          let fecha_moment = moment(subindex.fecha_tracker,'YYYY/MM/DD HH:mm:ss');
-          // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
-          let auxName = this.driversService.getNameDriver(subindex.tracker_imei,subindex.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
-          subindex.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
-          console.log('SUBINDEX BEFORE ->',subindex.conductor,subindex.idConductor);
-          console.log('Name Finds->',auxName);
-          if (auxName.nro_key == null){
-            subindex.idConductor = this.driversService.getIbutton(subindex.idConductor);
-            subindex.conductor = 'No especificado';
-          }else{
-            subindex.idConductor = auxName.nro_key;
+  setNameDriver(data:any,codeReport:string){
+    console.log('data SetNameDriver-->',data);
+
+    //PARA REPORTES R008 - POSICION
+    if (this.selectedReport == 'R008'){
+      console.log('Logica para reporte de posicion...');
+    }else if(this.selectedReport == 'R037' || this.selectedReport == 'R038'){
+      //PARA REPORTES EVENTOS R037 Y ATENCION EVENTOS R038
+      for(let index of data){
+        for (let subindex of index[1]) {
+          console.log(subindex);
+          if(subindex.idConductor != '-' && subindex.idConductor){
+            let fecha_moment = moment(subindex.fecha_tracker,'YYYY/MM/DD HH:mm:ss');
+            // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
+            let auxName = this.driversService.getNameDriver(subindex.tracker_imei,subindex.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
+            subindex.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
+            console.log('SUBINDEX BEFORE ->',subindex.conductor,subindex.idConductor);
+            console.log('Name Finds->',auxName);
+            if (auxName.nro_key == null){
+              subindex.idConductor = this.driversService.getIbutton(subindex.idConductor);
+              subindex.conductor = 'No especificado';
+            }else{
+              subindex.idConductor = auxName.nro_key;
+            }
+            console.log('SUBINDEX AFTER ->',subindex.conductor,subindex.idConductor);
           }
-          console.log('SUBINDEX AFTER ->',subindex.conductor,subindex.idConductor);
         }
       }
+    }else{
+      //NO MUESTRA CONDUCTOR...
     }
   }
   changedReport(){
