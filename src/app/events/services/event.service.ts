@@ -84,7 +84,7 @@ export class EventService {
     public vehicleService: VehicleService,
     ) {
       this.vehicleService.dataCompleted.subscribe(vehicles=>{
-        console.log("evento cargo antes que vehicles ...");
+        //console.log("evento cargo antes que vehicles ...");
         this.getVehiclesPlate();
       });
       // if(false){
@@ -127,7 +127,7 @@ export class EventService {
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }
-    
+
   }
 
   public getEventName(): Observable<any>{
@@ -135,11 +135,11 @@ export class EventService {
   }
 
   // EVENTS for History
-  
+
   public getEventsForUser(): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/api/getPermissEvents`);
   }
-  
+
   public loadNameEvent(event: any){
     // console.log("buscando evento "+event.tipo,this.eventsCommon.indexOf(event.tipo));
     if(this.eventsCommon.indexOf(event.tipo)<0){
@@ -184,16 +184,16 @@ export class EventService {
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
       .then((response) => {
-        // console.log("eventos cargados === -------------->",response.data);
-        this.getEventName().subscribe(name=>{
-          // console.log("consiguiendo los nombres de los eventos",name.data);
-          this.events_names = name.data;
-          // for (const index in this.events) {
-          //   this.events[index].nombre=this.loadNameEvent(this.events[index]);
-          // }
-          console.log("vehicles cargo antes que eventos ...");
-          this.getVehiclesPlate();
-        });
+         console.log("######################### ####### eventos cargados === -------------->",response.data);
+        // this.getEventName().subscribe(name=>{
+        //    console.log("consiguiendo los nombres de los eventos",name.data);
+        //   this.events_names = name.data;
+        //   // for (const index in this.events) {
+        //   //   this.events[index].nombre=this.loadNameEvent(this.events[index]);
+        //   // }
+        //   console.log("vehicles cargo antes que eventos ...");
+        //   this.getVehiclesPlate();
+        // });
         this.events = response.data.map((event: any) => {
 
           //event.nombre=this.loadNameEvent(event); //conseguir el nombre que el usuario le puso
@@ -445,7 +445,9 @@ export class EventService {
       { tipo: 'conductor-identificado-360', clase: 'no-rostro' },
       { tipo: 'conductor-ausente-360', clase: 'no-rostro' },
       { tipo: 'ignicion-activada-360', clase: 'no-rostro' },
-      { tipo: 'actualizacion-estado-gps-360', clase: 'no-rostro' }
+      { tipo: 'actualizacion-estado-gps-360', clase: 'no-rostro' },
+      { tipo: 'conductor-no-identificado', clase: 'no-rostro' },
+      { tipo: 'conductor-identificado', clase: 'no-rostro' }
     ];
 
 
@@ -517,7 +519,7 @@ export class EventService {
                 this.pinPopupStream.emit(event);
               });
             }
-            
+
             console.log(this.eventsHistorial);
 
           });
@@ -528,14 +530,14 @@ export class EventService {
       for (const index in data) {
         // console.log("IMEI",data[index].IMEI);
         if (String(data[index].IMEI) == String(imei)) {
-  
+
           console.log("return true");
           return data[index];
         }
       }
       console.log("return false");
       return undefined;
-  
+
     }
 
     public attachClassesToEvents(single_event?: any){
@@ -630,7 +632,7 @@ export class EventService {
       if(this.filterLoaded && this.eventsLoaded){
         this.attachClassesToEvents();
         this.eventsFiltered = this.getData();
-        
+
         this.sortEventsTableData(); //Initial table sort
         this.spinner.hide('loadingEventList');
         console.log('Ocultar Spinner');
@@ -704,7 +706,7 @@ export class EventService {
 
       // console.log("===============================");
       // console.log(response);
-      
+
       return response.data;
   }
 
@@ -733,24 +735,29 @@ export class EventService {
   }
 
   public createEventList (data:any):any[]{
+    console.log("[event.service] createEventList",data);
     // let status_event = false;
     let map: any=[];
     for (let event of data) {
+      console.log("event: ",event);
       // status_event= false;
       event.event_category = this.changeNameEvent(event.event_category);
-      
-      const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_category);
 
+      const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_category);
+      console.log("existingTypeEvent",existingTypeEvent);
       if (existingTypeEvent) {
         // El tipo de evento ya existe en el mapa
+        console.log("el tipo de evento existe en el mapa.....");
         const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.slug);
 
         if (!existingEvent) {
-          // El id_event no existe para este tipo de evento, lo agregamos
+           console.log("El id_event no existe para este tipo de evento, lo agregamos");
           existingTypeEvent.items.push({
             name: event.name_event,
             value: event.slug
           });
+        }else{
+          console.log("no existe el evento ",existingEvent);
         }
       } else {
         // El tipo de evento no existe en el mapa, lo añadimos

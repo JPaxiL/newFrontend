@@ -124,7 +124,7 @@ export class EventListComponent implements OnInit {
     }
 
   async ngOnInit(){
-    
+
   //console.log("event list on init ========================================================================");
     this.selectedEvent = [];
     if(!this.eventService.eventsLoaded || !this.eventService.filterLoaded){
@@ -143,7 +143,7 @@ export class EventListComponent implements OnInit {
     });
 
     if (this.eventService.eventsUserLoaded == false){
-      this.spinner.show('loadingEventsPanel');
+      //this.spinner.show('loadingEventsPanel');
       this.eventService.getEventsForUser().subscribe(
         async (data) => {
           // Aquí puedes trabajar con los datos obtenidos
@@ -170,20 +170,13 @@ export class EventListComponent implements OnInit {
   }
 
   public changeTypeEvent(){
-    console.log("----> selectedEvent",this.selectedEvent);
-    /* if(this.selectedEvent == ''){ */
     if(this.selectedEvent.length==0 && this.placa == ''){
       this.eventService.eventsFiltered = this.eventService.getData();
-    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
-      
       this.noResults = false;
     }else{
-      // console.log("this.selectedEvent ??????",this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService.getData().filter( (event:any)  => {
         return this.eventFilter(event);
       });
-    //console.log("eventsFiltered:::", this.eventService.eventsFiltered);
-      // console.log("get data",this.eventService.eventsFiltered);
       this.noResults = this.eventService.eventsFiltered.length == 0;
     }
   }
@@ -202,10 +195,8 @@ export class EventListComponent implements OnInit {
     this.data_debug = ['-','-','-','-'];
   }
   clickEventPanel(): void {
-  //console.log(this.eventService.eventDeveloperStatus);
     if(this.eventService.eventDeveloperCount > 5){
       this.eventService.eventDeveloperStatus = true;
-    //console.log("eres desarrollador ...",this.eventService.eventDeveloperStatus);
     }else{
       this.eventService.eventDeveloperCount++;
     }
@@ -214,11 +205,8 @@ export class EventListComponent implements OnInit {
   async loadFilterData(){
     if(!this.eventService.hasEventPanelBeenOpened){
       this.eventService.hasEventPanelBeenOpened = true;
-    //console.log('Cargando Filtros...');
-      //this.tipoEvento = await this.eventService.getAllEventsForTheFilter();
       await this.eventService.getAllEventsForTheFilter();
       this.eventService.filterLoaded = true;
-    //console.log('Filtros cargados');
     }
     this.tipoEvento = this.eventService.getFilters();
     this.eventService.showEventPanel();
@@ -232,7 +220,6 @@ export class EventListComponent implements OnInit {
     antes de procesar parametros  string
     event-list.component.ts:130 despues de procesar parametros  object
     */
-    // console.log("antes de procesar parametros ",typeof(event.parametros));
     if(event.parametros&&typeof(event.parametros)=='string'){
       event.parametros.split('|').forEach((item:any) => {
         const [key, value] = item.split('=');
@@ -242,11 +229,8 @@ export class EventListComponent implements OnInit {
       event.parametros = objParams;
     }
 
-  //console.log("desde show events - componente event list ...",event);
-  //console.log("has popup opened", event.layer.isPopupOpen());
     if (this.eventService.activeEvent) {
       if(this.eventService.activeEvent.id == event.id && event.layer.isPopupOpen()){
-      //console.log("no hacer nada");
         return;
       }
       this.eventService.activeEvent.layer.closePopup();
@@ -263,8 +247,6 @@ export class EventListComponent implements OnInit {
 
     var eventClass:any = this.eventService.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
     eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
-    // convierto el atributo params en un objeto
-
 
     this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
 
@@ -331,7 +313,6 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement){
-  console.log("click event....",event);
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if(false){
@@ -349,7 +330,7 @@ export class EventListComponent implements OnInit {
     return document.querySelectorAll('.leaflet-popup').length > 0;
   }
 
- 
+
 
   public searchByPlate(){
     //if(this.selectedEvent === null && this.placa == ''){
@@ -384,7 +365,7 @@ export class EventListComponent implements OnInit {
     }
     this.loading_evaluation = true;
   //console.log("event.data", event.data);
-    
+
     if(event.data.id){
       this.eventService.getEvaluations(event.data.id).then( evaluations => {
         if(evaluations.length > 0){
@@ -393,7 +374,7 @@ export class EventListComponent implements OnInit {
           auxEvent.evaluations = evaluations as Evaluation[];
         //console.log("EVENTS EVALUATIONS GETS ", auxEvent);
         }
-        
+
       }).finally( () => {
         this.loading_evaluation = false;
       });
@@ -439,7 +420,7 @@ export class EventListComponent implements OnInit {
 
   clearEvaluation(evaluation : Evaluation){
   //console.log("evaluation to clean", evaluation);
-    
+
     if(!evaluation.id){
       evaluation.criterio_evaluacion = '';
       evaluation.identificacion_video = '';
@@ -458,7 +439,7 @@ export class EventListComponent implements OnInit {
       }
     });
   }
-  
+
   closeEvaluationExpanded(evaluation: Evaluation){
     this.clearEvaluation(evaluation);
     this.expandedRows = {};

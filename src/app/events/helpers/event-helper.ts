@@ -356,6 +356,22 @@ export const getContentPopup = (event: any, d: any = '...') => {
       'assets/images/events-icons/fatiga.svg',
     );
 
+  } else if (event.tipo == 'fatiga-extrema') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre??event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/fatiga.svg',
+    );
+
   } else if (event.tipo == 'distraccion') {
     return render_leaflet_tootlip(
       {
@@ -501,6 +517,36 @@ export const getContentPopup = (event: any, d: any = '...') => {
       'assets/images/events-icons/fatiga.svg',
     );
   } else if (event.tipo == 'no-rostro') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre??event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'conductor-no-identificado') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre??event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'conductor-identificado') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre??event.name,
