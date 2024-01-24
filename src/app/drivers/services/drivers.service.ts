@@ -31,12 +31,14 @@ export class DriversService {
   modalActive:boolean = false;
   isRowDataEmpty: boolean = false;
 
-  //HISTORIAL
+  //HISTORIAL DEPRECATE
   historyDriverActive:boolean =false;
   historyType: string = 'driver';
 
   //RECONOCIMIENTO DE DRIVER
   historyDrivers:any = [];
+  //LISTA COMPLETA DE IBUTTONS NO ASIGNADAS
+  availableIbuttons: any = [];
 
   constructor(
     private http: HttpClient,
@@ -102,6 +104,28 @@ export class DriversService {
     });
   }
 
+  public async getIbuttonAll(){
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/ibuttonsAll`).toPromise()
+    .then(response => {
+      console.log("------------LISTA DE IBUTTONS");
+      console.log(response.data);
+      this.availableIbuttons = response.data;
+    });
+  }
+
+  public getIbutton(ibutton_id:any):any{
+    console.log(ibutton_id);
+    const ibutton = this.availableIbuttons.find((ibutton: { var_llave: any;}) =>
+    ibutton.var_llave.includes(ibutton_id!)
+    );
+    console.log('Find->',ibutton);
+    if(ibutton){
+      return ibutton.var_llave;
+    }else{
+      return '-';
+    }
+  }
+
   public getNameDriver(var_imei:string,key_id?:string,date?:string){
     if (key_id && date){
       // console.log('10');
@@ -119,19 +143,21 @@ export class DriversService {
   }
   public getNameDriverByKey(var_imei:string,key_id?:string):any{
     const driver = this.historyDrivers.find((driver: { nro_key: string;}) =>
-    (driver.nro_key === key_id || driver.nro_key === key_id)|| driver.nro_key === var_imei
+    (driver.nro_key.includes(key_id!) )|| driver.nro_key === var_imei
     );
     if (driver) {
       return {
         id_driver: driver.id_driver.toString(),
+        nro_key: driver.nro_key,
         name_driver: driver.name_driver,
-        typeKey: driver.type_key
+        type_key: driver.type_key
       };
     } else {
       return {
+        nro_key: null,
         id_driver: null,
         name_driver: 'No especificado',
-        typeKey: 'No tiene'
+        type_key: 'No tiene'
       }
     }
   }
@@ -143,14 +169,16 @@ export class DriversService {
     if (driver) {
       return {
         id_driver: driver.id_driver.toString(),
+        nro_key: driver.nro_key,
         name_driver: driver.name_driver,
-        typeKey: driver.type_key
+        type_key: driver.type_key
       };
     } else {
       return {
         id_driver: null,
         name_driver: 'No especificado',
-        typeKey: 'No tiene'
+        nro_key: null,
+        type_key: 'No tiene'
       }
     }
   }
@@ -168,7 +196,7 @@ export class DriversService {
       type_key: string;
     }) => {
       return (
-        (driver.nro_key === key_id || driver.nro_key === key_id) || driver.nro_key === var_imei) && (parsedDate &&
+        (driver.nro_key.includes(key_id!)) || driver.nro_key === var_imei) && (parsedDate &&
         (moment(driver.fecha_ini).isBefore(parsedDate) &&
          (!driver.fecha_fin || moment(driver.fecha_fin).isAfter(parsedDate)))
       );
@@ -178,13 +206,15 @@ export class DriversService {
         id_driver: driver.id_driver.toString(),
         name_driver: driver.name_driver,
         type_key: driver.type_key,
+        nro_key: driver.nro_key,
         fecha: date || null
       };
     } else {
       return {
+        nro_key: null,
         id_driver: null,
         name_driver: 'No especificado',
-        typeKey: 'No tiene',
+        type_key: 'No tiene',
         fecha: date || null
       };
     }
