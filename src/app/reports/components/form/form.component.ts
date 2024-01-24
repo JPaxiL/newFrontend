@@ -198,6 +198,12 @@ export class FormComponent implements OnInit {
     velGPS:false,
     velGPS_speed:false,
     velMobileye_ME460:false,
+    //NEW 24-01
+    alimentGps:false,
+    nivelBateria:false,
+    nivelCobertura:false,
+    temperaturaGps:false,
+    satelite:false,
   };
 
   // PARA CONTROLADR CUALES EVENTOS MOSTRAR
@@ -1108,47 +1114,96 @@ export class FormComponent implements OnInit {
   }
 
   setNameDriver(data:any,codeReport:string){
-    console.log('data SetNameDriver-->',data);
-
+    // console.log('data SetNameDriver-->',data);
     //PARA REPORTES R008 - POSICION
     if (this.selectedReport == 'R008'){
-      console.log('Logica para reporte de posicion...');
+      // console.log('Logica para reporte de posicion...');
       for(let index of data){
-        console.log(index);
+        // console.log(index);
         if(index.idConductor != '-' && index.idConductor){
-          let fecha_moment = moment(index.fecha_tracker,'YYYY/MM/DD HH:mm:ss');
+          let fecha_moment = moment(index.fecha,'YYYY/MM/DD HH:mm:ss');
+          index.tracker_imei = '-';//PORQUE NO VIENE TRACKER IMEI
           // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
           let auxName = this.driversService.getNameDriver(index.tracker_imei,index.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
           index.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
-          console.log('SUBINDEX BEFORE ->',index.conductor,index.idConductor);
-          console.log('Name Finds->',auxName);
+          // console.log('INDEX BEFORE ->',index.conductor,index.idConductor);
+          // console.log('Name Finds->',auxName);
           if (auxName.nro_key == null){
             index.idConductor = this.driversService.getIbutton(index.idConductor);
             index.conductor = 'No especificado';
           }else{
             index.idConductor = auxName.nro_key;
           }
+          // console.log('INDEX AFTER ->',index.conductor,index.idConductor);
         }
       }
-    }else if(this.selectedReport == 'R037' || this.selectedReport == 'R038'){
-      //PARA REPORTES EVENTOS R037 Y ATENCION EVENTOS R038
+    }else if(this.selectedReport == 'R037' || this.selectedReport == 'R038' || this.selectedReport=='R040'){
+      //PARA REPORTES EVENTOS R037 Y ATENCION EVENTOS R038 / y R040
       for(let index of data){
         for (let subindex of index[1]) {
-          console.log(subindex);
+          // console.log(subindex);
           if(subindex.idConductor != '-' && subindex.idConductor){
             let fecha_moment = moment(subindex.fecha_tracker,'YYYY/MM/DD HH:mm:ss');
             // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
             let auxName = this.driversService.getNameDriver(subindex.tracker_imei,subindex.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
             subindex.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
-            console.log('SUBINDEX BEFORE ->',subindex.conductor,subindex.idConductor);
-            console.log('Name Finds->',auxName);
+            // console.log('SUBINDEX BEFORE ->',subindex.conductor,subindex.idConductor);
+            // console.log('Name Finds->',auxName);
             if (auxName.nro_key == null){
               subindex.idConductor = this.driversService.getIbutton(subindex.idConductor);
               subindex.conductor = 'No especificado';
             }else{
               subindex.idConductor = auxName.nro_key;
             }
-            console.log('SUBINDEX AFTER ->',subindex.conductor,subindex.idConductor);
+            // console.log('SUBINDEX AFTER ->',subindex.conductor,subindex.idConductor);
+          }
+        }
+      }
+    }else if(this.selectedReport == 'R039'){
+      //PARA REPORTES EXCESO VELOCIDAD R039
+      for(let index of data){
+        for (let subindex of index[1]) {
+          // console.log(subindex);
+          // subindex.idConductor = '01235564';
+          if(subindex.idConductor != '-' && subindex.idConductor){
+            subindex.tracker_imei = '-';//PORQUE NO VIENE TRACKER IMEI
+            let fecha_moment = moment(subindex.fecha_inicio,'YYYY/MM/DD HH:mm:ss');
+            // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
+            let auxName = this.driversService.getNameDriver(subindex.tracker_imei,subindex.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
+            subindex.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
+            // console.log('SUBINDEX BEFORE ->',subindex.conductor,subindex.idConductor);
+            // console.log('Name Finds->',auxName);
+            if (auxName.nro_key == null){
+              subindex.idConductor = this.driversService.getIbutton(subindex.idConductor);
+              subindex.conductor = 'No especificado';
+            }else{
+              subindex.idConductor = auxName.nro_key;
+            }
+            // console.log('SUBINDEX AFTER ->',subindex.conductor,subindex.idConductor);
+          }
+        }
+      }
+    }else if(this.selectedReport == 'R020'){
+      // console.log('ENTRO AL REPORTE 20 DRIVER');
+      for(let index of data){
+        for (let subindex of index[1]) {
+          // console.log(subindex);
+          // subindex.idConductor = '01235564';
+          if(subindex.idConductor != '-' && subindex.idConductor){
+            subindex.tracker_imei = '-';//PORQUE NO VIENE TRACKER IMEI
+            let fecha_moment = moment(subindex.fecha,'YYYY/MM/DD HH:mm:ss');
+            // let fecha_parsed = fecha_moment.format('YYYY-MM-DD HH:mm:ss');
+            let auxName = this.driversService.getNameDriver(subindex.tracker_imei,subindex.idConductor,fecha_moment.format('YYYY-MM-DD HH:mm:ss'));
+            subindex.conductor = (auxName.name_driver!='No especificado') ? auxName.name_driver : '-'; 
+            // console.log('SUBINDEX BEFORE ->',subindex.conductor,subindex.idConductor);
+            // console.log('Name Finds->',auxName);
+            if (auxName.nro_key == null){
+              subindex.idConductor = this.driversService.getIbutton(subindex.idConductor);
+              subindex.conductor = 'No especificado';
+            }else{
+              subindex.idConductor = auxName.nro_key;
+            }
+            // console.log('SUBINDEX AFTER ->',subindex.conductor,subindex.idConductor);
           }
         }
       }
@@ -1344,6 +1399,43 @@ export class FormComponent implements OnInit {
       break;
       case 'R039': //  - R039	REPORTE DE EXCESOS DE VELOCIDAD (NUEVO FORMATO)
         this.showLimitTime = true;
+      break;
+      case 'R040':  //   - R040	REPORTE DE EVENTOS CIPIA
+          this.showLimitTime = true;
+          this.showEventsCipia = true;
+          // this.showEvents = true;
+
+          this.eC = {
+            Fecha :true,
+            FechaServidor :false,
+            Evento :true,
+            Codigo :true,
+            Placa :true,
+            TipoUnidad :false,
+            IdConductor :false,
+            Conductor :false,
+        
+            FechaEvaluacion : false,
+            CriterioEvaluacion : false,
+            Observacion : false,
+            Validacion: false,
+        
+            VelMobileye :false,
+            VelGPS :true,
+            VelCAN :false,
+            VelECO :false,
+            VelGPSspeed :false,
+        
+            Zona :false,
+            PuntoCercano :false,
+            Ubicacion :false,
+            Referencia :false,
+            EnlaceArchivo :false,
+            Parametros : false,
+        
+            OperadorMonitoreo : false,  // R. Atención de Eventos
+          }
+
       break;
 
       default: break;
@@ -1674,6 +1766,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R038' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R039' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R040' && is_vehicle_selected)
       );
   }
 
@@ -1741,6 +1835,12 @@ export class FormComponent implements OnInit {
       velGPS:false,
       velGPS_speed:false,
       velMobileye_ME460:false,
+      //NEW 24-01
+      alimentGps:false,
+      nivelBateria:false,
+      nivelCobertura:false,
+      temperaturaGps:false,
+      satelite:false,
     };
 
     this.events.forEach((event: {name_form: any; active: boolean;}) => {

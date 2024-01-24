@@ -363,134 +363,203 @@
         <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
 
           <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.fServidor" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                 Fecha Servidor</label>
               </div>
             </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.alcoholemia" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                Alcoholemia</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.ubicacion" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Ubicación</label>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.parametros" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                Parámetros</label>
+                  <p-checkbox [(ngModel)]="oG.pCercano" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Punto Cercano</label>
               </div>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.velGPS" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Velocidad GPS</label>
               </div>
             </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.cNivel" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Nivel de Combustible</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.velECO" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Velocidad ECO</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.cRestante" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  C.Restante</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.velGPS_speed" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Velocidad GPS_speed</label>
               </div>
             </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.cMotor" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Consumo de Motor</label>
-              </div>
-            </div>
-          </div>
-          
-          
-          <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.velMobileye_ME460" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Velocidad Mobileye</label>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Velocidad CAN</label>
               </div>
             </div>
-          </div>
-
-
-          <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.altitud" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Altitud</label>
+                  <p-checkbox [(ngModel)]="oG.velECO" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Velocidad ECO</label>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.RxM" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  RPM</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.RPMAlta" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  RPM Alta</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.cNivel" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Nivel de Combustible</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.cRestante" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Combustible Restante</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.cMotor" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Consumo de Motor</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.odometro" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Odómetro</label>
               </div>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.altitud" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Altitud</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.angulo" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Angulo</label>
               </div>
             </div>
+            <!-- ALIMENTACION GPS -->
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.alimentGps" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Alimentación GPS (F)</label>
+              </div>
+            </div>
+            <!-- NIVEL DE BATERIA -->
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.nivelBateria" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Nivel de batería (F)</label>
+              </div>
+            </div>
+            <!-- NIVEL DE COBERTURA -->
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.nivelCobertura" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Nivel de cobertura (F)</label>
+              </div>
+            </div>
+            <!-- NIVEL DE TEMPERATURA GPS -->
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.temperaturaGps" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Temperatura GPS (F)</label>
+              </div>
+            </div>
+            <!-- SATELITE -->
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.sat" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Satélite</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.recFacial" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Reconocimiento Facial</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.onOff" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                Ignición</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.alcoholemia" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                Alcoholemia</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.DUOT2state" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                DUOT2 state</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.parametros" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                Parámetros</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                Referencia</label>
+              </div>
+            </div>
+          </div>
+          <!-- ON / OFF AHORA ES IGNICION?? -->
+          <!-- <div class="row">
             <div class="col-6">
               <div class="p-field">
                 <label>
@@ -498,78 +567,7 @@
                   On / Off</label>
               </div>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.RPMAlta" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  RPM Alta</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.RxM" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Rev. X Min.</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Referencia</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.recFacial" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Reconocimiento Facial</label>
-              </div>
-            </div>
-          </div>
-
-
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <!-- <label>
-                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
-                  Referencia</label>-->
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.pCercano" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Punto Cercano</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              <div class="p-field">
-                <!-- <label>
-                  <p-checkbox [(ngModel)]="oG.referencia" [binary]="true" inputId="binary"></p-checkbox>
-                  Referencia</label>-->
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="p-field">
-                <label>
-                  <p-checkbox [(ngModel)]="oG.DUOT2state" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  DUOT2 state</label>
-              </div>
-            </div>
-          </div>
-
+          </div> -->
         </div>
 
       </div>
@@ -1132,24 +1130,143 @@
 
    
           <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.Fecha" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Fecha</label>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.FechaServidor" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Fecha Servidor</label>
               </div>
             </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Evento" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Evento</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Codigo" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Código</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Placa" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Placa</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.TipoUnidad" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Tipo de Unidad</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.IdConductor" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  ID Conductor</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Conductor" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Conductor</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.VelMobileye" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Vel. Mobileye</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.VelGPS" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Vel. GPS</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.VelGPSspeed" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Vel. GPS speed</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.VelCAN" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Vel. CAN</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.VelECO" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Vel. ECO</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Zona" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Geocerca</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.PuntoCercano" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Punto Cercano</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Ubicacion" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Ubicación</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Referencia" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Referencia</label>
+              </div>
+            </div>
+            <div class="col-6" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.EnlaceArchivo" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Enlace a Archivo</label>
+              </div>
+            </div>
+            <div class="col-6" *ngIf="selectedReport == 'R040'" style="margin-top: 5px">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="eC.Parametros" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Parámetros</label>
+              </div>
+            </div>
           </div>
 
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-6">
               <div class="p-field">
                 <label>
@@ -1219,14 +1336,14 @@
           </div>
 
           <div class="row">
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
-                <!-- <label>
+                 <label>
                   <p-checkbox [(ngModel)]="eC.VelMobileye" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Vel. Mobileye</label> -->
+                  Vel. Mobileye</label> 
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.VelGPSspeed" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
@@ -1294,18 +1411,14 @@
                   Enlace a Archivo</label>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6" *ngIf="selectedReport == 'R040'">
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.Parametros" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Parámetros</label>
               </div>
             </div>
-          </div>
-
-
-
-
+          </div> -->
 
         </div>
       </div>

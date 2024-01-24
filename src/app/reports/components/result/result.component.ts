@@ -735,6 +735,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         className: 'btn btn-success'
       }],
       initComplete: ( oSettings: any ) => {
+        console.log('Osetting->',oSettings);
         if(this.chkTableDropdown){
           console.log('InitComplete, with order: ', this.dtOptions.order);
         } else {
