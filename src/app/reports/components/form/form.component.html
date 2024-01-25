@@ -3,6 +3,7 @@
   <p *ngIf="!areVehiclesLoaded && areZonesLoaded" style="color: #ffffff" > Cargando vehículos... </p>
   <p *ngIf="areVehiclesLoaded && !areZonesLoaded" style="color: #ffffff" > Cargando zonas... </p>
   <p *ngIf="areVehiclesLoaded && areZonesLoaded" style="color: #ffffff" > {{ fullScreenSpinnerMsg }} </p>
+  <!-- AGREGAR CARGADO DE DRIVERS Y IBUTTONS -->
 </ngx-spinner>
 
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reloadSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "true"><p style="color: white" > Recargando página... </p></ngx-spinner>

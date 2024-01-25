@@ -26,7 +26,6 @@ declare var google: any;
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
-  displayModal: boolean = false;//PARA MODAL
   reports: any=[];
   events: any=[];
   selectedReport: any={};
@@ -357,6 +356,7 @@ export class FormComponent implements OnInit {
     private titleService: Title) {
       //INICIAR EL VEHICLE SERVICE PARA REPORTES
       vehicleService.initialize();
+      // driversService.initialize();
       driversService.getHistoryAll();
       driversService.getIbuttonAll();
       //this.fullScreenSpinnerMsg = 'Iniciando Módulo de Reportes';
@@ -601,10 +601,6 @@ export class FormComponent implements OnInit {
 
 
   }
-  //FUNCION PARA IDENTIFICAR Y OBTENER NAME DRIVER
-  // let tempInfoDriver = this.driversService.getNameDriver(data.IMEI,data.driver_id,vehicles[index].dt_tracker);
-  //       vehicles[index].id_conductor = tempInfoDriver.id_driver;
-  //       vehicles[index].namedriver = tempInfoDriver.name_driver;
 
   // Supongamos que this.events contiene tus datos
   updateShowTypeEvents() {

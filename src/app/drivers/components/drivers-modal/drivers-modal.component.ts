@@ -9,6 +9,7 @@ import { DriversService } from '../../services/drivers.service';
 import Swal from 'sweetalert2';
 
 import {Md5} from 'ts-md5';
+import { Driver } from '../../models/interfaces';
 
 
 @Component({
@@ -85,7 +86,7 @@ export class DriversModalComponent implements OnInit {
 
     if ( this.driversService.action == "edit" ) {
       //solo para el caso de EDIT su ibutton debe mostrarse
-      var sub = this.driversService.drivers.filter((item:any)=> item.id == this.driversService.idDriverEdit);
+      var sub = this.driversService.drivers.filter((item:Driver)=> item.id == this.driversService.idDriverEdit);
       console.log('PRUEBA EDIT ->',sub);
       this.driversForm = this.fb.group({
               id:         [sub[0].id],
@@ -195,7 +196,7 @@ export class DriversModalComponent implements OnInit {
         } else {
           res = await this.driversService.create(this.driversForm.value);
         }
-        // console.log('response->',res);
+        console.log('response->',res);
 
         if (res.success == false) {
             Swal.fire(
@@ -214,7 +215,7 @@ export class DriversModalComponent implements OnInit {
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
             if(res.dataInsert.tipo_identificacion.vehicle == true){
-              this.VehicleService.updateDriverAndId(res.dataInsert);
+              this.VehicleService.updateDriverAndId(res.dataInsert,true);
             }
           } else if(res.text == 'Update') {
               Swal.fire(
@@ -228,14 +229,17 @@ export class DriversModalComponent implements OnInit {
               if(res.driver.tipo_identificacion.vehicle == true || res.driverOld.tipo_identificacion.vehicle == true){
                 //VERIFICAR IMEI IGUALEs
                 if(res.driverOld.tracker_imei == res.driver.tracker_imei){
-                  console.log('IMEI IGUALES SOLO ACTUALIZAR UNO');
-                  this.VehicleService.updateDriverAndId(res.driver);
-                }else{
-                  if (res.driverOld.tracker_imei == true){
-                    this.VehicleService.updateDriverAndId(res.driverOld);
+                  // console.log('IMEI IGUALES SOLO ACTUALIZAR UNO');
+                  this.VehicleService.updateDriverAndId(res.driver,true);
+                }else {
+                  // console.log('IMEI NO IGUALES SOLO ACTUALIZAR UNO');
+                  if (res.driverOld.tipo_identificacion.vehicle == true){
+                    // console.log('UPDATE OLD',res.driverOld);
+                    this.VehicleService.updateDriverAndId(res.driverOld,false); // SI ES FALSE ELIMINA
                   }
-                  if(res.driver.tracker_imei == true){
-                    this.VehicleService.updateDriverAndId(res.driver);
+                  if(res.driver.tipo_identificacion.vehicle == true){
+                    // console.log('UPDATE NEW',res.driver);
+                    this.VehicleService.updateDriverAndId(res.driver,true);
                   }
                 }
               }

@@ -238,7 +238,11 @@ export class VehicleService {
   public getIndexToIMEI(IMEI: string):any{
     ///implements
   }
-  public updateDriverAndId(data : any){
+  public updateDriverAndId(data : any,add:boolean){
+    if(!add){
+      data.id = null;
+      data.nombre_conductor = 'No Especificado';
+    }
     const vehicles = this.vehicles;
     const resultado = this.vehicles.find( (vehi: any) => vehi.IMEI == data.tracker_imei.toString() );
     if(resultado){

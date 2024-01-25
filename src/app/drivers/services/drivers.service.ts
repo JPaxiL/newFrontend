@@ -9,23 +9,25 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Timestamp } from 'rxjs/internal/operators/timestamp';
 import * as moment from 'moment';
+import { Driver,Ibutton,Icipia,HistoryDriver } from '../models/interfaces';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DriversService {
 
-  public drivers:any = [];
-  public ibuttons:any = [];
-  public icipias:any = [];
+  public drivers:Driver[] = [];
+  public ibuttons:Ibutton[] = [];
+  public icipias:Icipia[] = [];
 
   public nombreComponente:string = "LISTAR";
 
   public idDriverEdit:number = 0;
   public action:string = "add"; //[add,edit,delete]
 
-  tblDataDriver: any = [];
-  tblDataDriverSearch: any = [];
+  tblDataDriver: Driver[] = [];
+  tblDataDriverSearch: Driver[] = [];
   initializingDriver: boolean = false;
 
   modalActive:boolean = false;
@@ -36,9 +38,9 @@ export class DriversService {
   historyType: string = 'driver';
 
   //RECONOCIMIENTO DE DRIVER
-  historyDrivers:any = [];
+  historyDrivers:HistoryDriver[] = [];
   //LISTA COMPLETA DE IBUTTONS NO ASIGNADAS
-  availableIbuttons: any = [];
+  availableIbuttons: Ibutton[] = [];
 
   constructor(
     private http: HttpClient,
@@ -78,7 +80,7 @@ export class DriversService {
       this.drivers[i].tracker_nombre = this.drivers[i].tracker_nombre ?? '--';
       this.drivers[i].nro_llave = this.drivers[i].nro_llave ?? '--';
       this.drivers[i].nro_cipia = this.drivers[i].nro_cipia ?? '--';
-      this.tblDataDriver.push({trama:this.drivers[i]});
+      this.tblDataDriver.push(this.drivers[i]);
     }
     this.isRowDataEmpty = this.tblDataDriver.length == 0;
     this.spinner.hide('loadingDrivers');
@@ -107,25 +109,33 @@ export class DriversService {
   public async getIbuttonAll(){
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/ibuttonsAll`).toPromise()
     .then(response => {
-      console.log("------------LISTA DE IBUTTONS");
+      console.log("------------LISTA DE IBUTTONS COMPLETA");
       console.log(response.data);
       this.availableIbuttons = response.data;
     });
   }
 
-  public getIbutton(ibutton_id:any):any{
+  public getIbutton(ibutton_id:string):string{
     console.log(ibutton_id);
-    const ibutton = this.availableIbuttons.find((ibutton: { var_llave: any;}) =>
-    ibutton.var_llave.includes(ibutton_id!)
+    const ibutton = this.availableIbuttons.find((ibutton:Ibutton) =>
+    ibutton.var_llave!.includes(ibutton_id!)
     );
     // console.log('Find->',ibutton);
     if(ibutton){
-      return ibutton.var_llave;
+      return ibutton.var_llave!;
     }else{
       return '-';
     }
   }
-
+  
+  public getDriverById(id:number):string{
+    const driver = this.drivers.find(driver => driver.id === id);
+    if (driver){
+      return driver.nombre_conductor;
+    }else{
+      return 'No Especificado';
+    }
+  }
   public getNameDriver(var_imei:string,key_id?:string,date?:string){
     if (key_id && date){
       // console.log('10');
@@ -142,8 +152,8 @@ export class DriversService {
     }
   }
   public getNameDriverByKey(var_imei:string,key_id?:string):any{
-    const driver = this.historyDrivers.find((driver: { nro_key: string;}) =>
-    (driver.nro_key.includes(key_id!) )|| driver.nro_key === var_imei
+    const driver = this.historyDrivers.find((history_driver:HistoryDriver) =>
+    (history_driver.nro_key.includes(key_id!)&& (key_id != '0') )|| history_driver.nro_key === var_imei
     );
     if (driver) {
       return {
@@ -163,12 +173,12 @@ export class DriversService {
   }
 
   public getNameDriverByImei(var_imei:string):any{
-    const driver = this.historyDrivers.find((driver: { nro_key: string; }) =>
-      driver.nro_key === var_imei
+    const driver = this.historyDrivers.find((history_driver:HistoryDriver) =>
+    history_driver.nro_key === var_imei
     );
     if (driver) {
       return {
-        id_driver: driver.id_driver.toString(),
+        id_driver: driver.id_driver,
         nro_key: driver.nro_key,
         name_driver: driver.name_driver,
         type_key: driver.type_key
@@ -189,21 +199,17 @@ export class DriversService {
     // console.log(this.historyDrivers);
     // console.log(parsedDate,moment(this.historyDrivers[3].fecha_ini),moment(this.historyDrivers[3].fecha_fin));
     const parsedDate = date ? moment(date) : null;
-    const driver = this.historyDrivers.find((driver: { 
-      nro_key: string;
-      fecha_ini: any;
-      fecha_fin: any;
-      type_key: string;
-    }) => {
+    const driver = this.historyDrivers.find((history_driver:HistoryDriver) => {
       return (
-        (driver.nro_key.includes(key_id!)) || driver.nro_key === var_imei) && (parsedDate &&
-        (moment(driver.fecha_ini).isBefore(parsedDate) &&
-         (!driver.fecha_fin || moment(driver.fecha_fin).isAfter(parsedDate)))
+        (history_driver.nro_key.includes(key_id!) && (key_id != '0')) || history_driver.nro_key === var_imei) && (parsedDate &&
+        (moment(history_driver.fecha_ini).isBefore(parsedDate) &&
+         (!history_driver.fecha_fin || moment(history_driver.fecha_fin).isAfter(parsedDate)))
       );
     });
     if (driver) {
+      // console.log('DRIVER FIND->',driver);
       return {
-        id_driver: driver.id_driver.toString(),
+        id_driver: driver.id_driver,
         name_driver: driver.name_driver,
         type_key: driver.type_key,
         nro_key: driver.nro_key,
@@ -248,6 +254,13 @@ export class DriversService {
     console.log(response);
     return response;//[1,0]
   }
+
+  // public async updateViewDriverHistory() {
+  //   const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/driver/updateView`,'').toPromise();
+  //   console.log(response);
+  //   return response;//[success=true,message]
+  // }
+ 
 
   
 
