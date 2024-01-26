@@ -14,6 +14,7 @@ import { VehicleService } from '../../vehicles/services/vehicle.service';
 import { MultimediaService } from '../../multiview/services/multimedia.service';
 import { AlertService } from 'src/app/alerts/service/alert.service';
 import { Evaluation } from 'src/app/alerts/models/alert.interface';
+import { DriversService } from 'src/app/drivers/services/drivers.service';
 
 @Injectable({
   providedIn: 'root',
@@ -82,6 +83,7 @@ export class EventService {
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
     public vehicleService: VehicleService,
+    public driverService: DriversService,
     ) {
       this.vehicleService.dataCompleted.subscribe(vehicles=>{
         //console.log("evento cargo antes que vehicles ...");
@@ -116,14 +118,16 @@ export class EventService {
   public getVehiclesPlate(data_events?:any): void {
     if(data_events){
       for (const index in data_events) {
-        // console.log(this.events[index].imei);
         data_events[index].nombre_objeto = this.vehicleService.getVehicle(data_events[index].imei).name;
+        data_events[index].namedriver = this.driverService.getDriverById(data_events[index].driver_id);
+
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }else{
       for (const index in this.events) {
-        // console.log(this.events[index].imei);
+        console.log('Else ->',this.events[index]);
         this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+        this.events[index].namedriver = this.driverService.getDriverById(this.events[index].driver_id);
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }
@@ -207,8 +211,9 @@ export class EventService {
           });
           event.layer._myType = 'evento';
           event.layer._myId = event.id;
-          //even.namedriver = this.driverService.getNameDriver(event); <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
-          event.namedriver = "NO IDENTIFICADO";
+          // console.log('EVENTO ->',event);
+          event.namedriver = this.driverService.getDriverById(event.driver_id);// <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+          // event.namedriver = "NO IDENTIFICADO";
           // event.layer.addTo(this.eventsLayers);
 
           // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.

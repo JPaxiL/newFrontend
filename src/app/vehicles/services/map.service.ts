@@ -561,15 +561,17 @@ export class MapService {
   //     object[key]['_popup']['_content'] = content;
   //   }
   // }
-  setFormatIbuttonId(codigo: string): string {
-    // Convertir el código a un valor hexadecimal y darle formato específico
-    const valor1: string = (parseInt(codigo)).toString(16).toUpperCase();
-    const cadena: string =
-      valor1.slice(7,9) + valor1.slice(5,7) + valor1.slice(3,5) + valor1.slice(1,3);
-    console.log('LLAVE IDENTIFIED->',cadena);
-    // Devolver la cadena formateada
-    return cadena;
-  }
+
+
+  // setFormatIbuttonId(codigo: string): string {
+  //   // Convertir el código a un valor hexadecimal y darle formato específico
+  //   const valor1: string = (parseInt(codigo)).toString(16).toUpperCase();
+  //   const cadena: string =
+  //     valor1.slice(7,9) + valor1.slice(5,7) + valor1.slice(3,5) + valor1.slice(1,3);
+  //   console.log('LLAVE IDENTIFIED->',cadena);
+  //   // Devolver la cadena formateada
+  //   return cadena;
+  // }
   
   monitor(data: any, map: any): void{
     if(this.vehicleService.statusDataVehicle){
@@ -578,9 +580,11 @@ export class MapService {
 
       const resultado = vehicles.find( (vehi: any) => vehi.IMEI == data.IMEI.toString() );
       if(resultado){
-        if(data.driver_id != '0'){
-          data.driver_id = this.setFormatIbuttonId(data.driver_id)
-        }
+        //YA NO ES NECESARIO EL PARSEO
+        // if(data.driver_id != '0'){
+        //   data.driver_id = this.setFormatIbuttonId(data.driver_id)
+        // }
+
         // update dataCompleted
         // //console.log("update data");
         const index = vehicles.indexOf( resultado);
@@ -600,10 +604,9 @@ export class MapService {
         // const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
 
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
-        // driversService
-        let tempInfoDriver = this.driversService.getNameDriver(data.IMEI,data.driver_id,vehicles[index].dt_tracker);
-        vehicles[index].id_conductor = tempInfoDriver.id_driver;
-        vehicles[index].namedriver = tempInfoDriver.name_driver;
+        // OBTENER EL NOMBRE EN BASE AL ID DRIVER
+        vehicles[index].namedriver = this.driversService.getDriverById(data.driver_id);
+        vehicles[index].id_conductor = data.driver_id;
 
         // console.log('VEHICLE FORMAT->',vehicles[index]);
         if(this.imeiPopup==data.IMEI.toString()){

@@ -35,8 +35,8 @@ export class DriversListComponent implements OnInit {
     if(!this.driversService.initializingDriver){
       this.driversService.initialize();//AHORA ES UN SERVICIO QUE SIEMPRE SE INICIA
     }
-    console.log(this.driversService.drivers);
-    console.log('DRIVER ID 300->',this.driversService.getDriverById(300));
+    // console.log(this.driversService.drivers);
+    // console.log('DRIVER ID 300->',this.driversService.getDriverById(300));
   }
 
   clickConfigurarDriver(id:any) {

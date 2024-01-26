@@ -12,6 +12,7 @@ export interface Driver {
     tipo_identificacion:string[];
     id_keyIbutton?:number;
     id_keyIcipia?:number;
+    id_usuario?:number;
     // Otras propiedades del objeto driver, si las hay
   }
 
@@ -21,10 +22,12 @@ export interface Driver {
     var_llave?: string;
     company_id?: number;
     usuario_id?: number;
+    bol_estado?: boolean;
   }
   export interface Icipia {
     id: number;
     value: string;
+    bol_estado?: boolean;
   }
 
   export type HistoryDriver = {

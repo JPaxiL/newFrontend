@@ -10,7 +10,7 @@ import { catchError } from 'rxjs/operators';
 import { Timestamp } from 'rxjs/internal/operators/timestamp';
 import * as moment from 'moment';
 import { Driver,Ibutton,Icipia,HistoryDriver } from '../models/interfaces';
-
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +45,7 @@ export class DriversService {
   constructor(
     private http: HttpClient,
     public spinner: NgxSpinnerService,
+    public userDataService:UserDataService
   ) { }
 
 
@@ -74,13 +75,16 @@ export class DriversService {
 
   initializeTable() {
     this.tblDataDriver = [];
+    //FILTRAR SOLO DEL USER
+    const filteredDrivers = this.drivers.filter((driver) => driver.id_usuario == this.userDataService.userData.id);
+    // console.log('DRIVERS FILTRADO->',filteredDrivers); //PARA LA TABLA
     // console.log('drivers: ', this.drivers);
-    for (let i = 0; i < this.drivers.length; i++) {
-      this.drivers[i].tracker_imei = this.drivers[i].tracker_imei ?? '--';
-      this.drivers[i].tracker_nombre = this.drivers[i].tracker_nombre ?? '--';
-      this.drivers[i].nro_llave = this.drivers[i].nro_llave ?? '--';
-      this.drivers[i].nro_cipia = this.drivers[i].nro_cipia ?? '--';
-      this.tblDataDriver.push(this.drivers[i]);
+    for (let i = 0; i < filteredDrivers.length; i++) {
+      filteredDrivers[i].tracker_imei = filteredDrivers[i].tracker_imei ?? '--';
+      filteredDrivers[i].tracker_nombre = filteredDrivers[i].tracker_nombre ?? '--';
+      filteredDrivers[i].nro_llave = filteredDrivers[i].nro_llave ?? '--';
+      filteredDrivers[i].nro_cipia = filteredDrivers[i].nro_cipia ?? '--';
+      this.tblDataDriver.push(filteredDrivers[i]);
     }
     this.isRowDataEmpty = this.tblDataDriver.length == 0;
     this.spinner.hide('loadingDrivers');

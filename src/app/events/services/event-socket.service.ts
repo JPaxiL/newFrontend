@@ -9,6 +9,7 @@ import { VehicleService } from '../../vehicles/services/vehicle.service';
 import { UsersService } from 'src/app/dashboard/service/users.service';
 import { AlertService } from 'src/app/alerts/service/alert.service';
 import { PopupService } from './popup.service';
+import { DriversService } from 'src/app/drivers/services/drivers.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,7 @@ export class EventSocketService extends Socket {
   constructor(
     public eventService: EventService,
     public vehicleService: VehicleService,
+    public driverService: DriversService,
     private AlertService: AlertService) {
     super({
       url: environment.socketEvent,
@@ -98,8 +100,13 @@ export class EventSocketService extends Socket {
           // console.log("name ====",data.name);
           console.log(even.nombre_objeto+" ========================================== "+data.name);
           even.nombre_objeto = data.name;
-          //even.namedriver = this.driverService.getNameDriver(event); <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
-          even.namedriver = "NO IDENTIFICADO";
+
+          //<------- BUSCAR EL NOMBRE
+          // console.log('EVENT LLEGO->',even);
+          // console.log('DRIVER INIT->',this.driverService.drivers);
+          even.namedriver = this.driverService.getDriverById(even.driver_id);// <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+          // even.namedriver = "NO IDENTIFICADO";
+          
           // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
           //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
           //Si el evento no existe previamente

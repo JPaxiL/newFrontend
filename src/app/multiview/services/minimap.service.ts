@@ -54,9 +54,11 @@ export class MinimapService {
     public eventService: EventService,
     public driversService: DriversService,
   ) {
-    this.driversService.initialize();
+    // this.driversService.initialize();
     this.userDataService.getUserData();
-    
+    this.userDataService.userDataCompleted.subscribe(res=>{
+      this.driversService.initialize(); //NECESITA INFO DE USER DATA
+    })
     this.vehicleService.setDefaultStatusDataVehicle();
     this.vehicleService.initialize();
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
@@ -484,9 +486,8 @@ export class MinimapService {
         item.minimapConf!.vehicles![index] = this.vehicleService.formatVehicle(item.minimapConf!.vehicles![index]);
 
         // driversService
-        let tempInfoDriver = this.driversService.getNameDriver(data.IMEI,data.driver_id,item.minimapConf!.vehicles![index].dt_tracker);
-        item.minimapConf!.vehicles![index].id_conductor = tempInfoDriver.id_driver;
-        item.minimapConf!.vehicles![index].namedriver = tempInfoDriver.name_driver;
+        item.minimapConf!.vehicles![index].id_conductor = data.driver_id
+        item.minimapConf!.vehicles![index].namedriver = this.driversService.getDriverById(data.driver_id);
         // console.log('Info Driver',tempInfoDriver);
         console.log("["+resultado.numero_placa+"] item.imeiPopup==data.IMEI.toString()", item.imeiPopup==data.IMEI.toString());
         if(item.imeiPopup==data.IMEI.toString()){
