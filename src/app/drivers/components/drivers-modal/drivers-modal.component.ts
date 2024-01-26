@@ -100,7 +100,7 @@ export class DriversModalComponent implements OnInit {
               tracker_nombre: [sub[0].tracker_nombre],
               tipo_identificacion: [sub[0].tipo_identificacion],
             });
-        console.log(this.driversForm);
+        console.log(this.driversForm.value);
 
     } else {
         this.driversForm = this.initForm();
