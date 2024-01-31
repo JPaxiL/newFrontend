@@ -29,6 +29,7 @@ export interface UnitItem {
 }
 
 export interface UserTracker {
+    // timeLast?: boolean;
     driver_id?: string; //PARA LLAVE IBUTTON O ICIPIA
     nameconvoy?: string;
     namegrupo?: string;

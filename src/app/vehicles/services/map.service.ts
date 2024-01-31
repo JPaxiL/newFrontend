@@ -561,18 +561,18 @@ export class MapService {
   //     object[key]['_popup']['_content'] = content;
   //   }
   // }
-
-
-  // setFormatIbuttonId(codigo: string): string {
-  //   // Convertir el código a un valor hexadecimal y darle formato específico
-  //   const valor1: string = (parseInt(codigo)).toString(16).toUpperCase();
-  //   const cadena: string =
-  //     valor1.slice(7,9) + valor1.slice(5,7) + valor1.slice(3,5) + valor1.slice(1,3);
-  //   console.log('LLAVE IDENTIFIED->',cadena);
-  //   // Devolver la cadena formateada
-  //   return cadena;
-  // }
-  
+  diffSecondsNow(fecha:string):boolean {
+    // Obtener la fecha y hora actual
+    const fechaActual = moment();
+    // Parsear la fecha proporcionada
+    const fechaComparar = moment(fecha);
+    // Calcular la diferencia en segundos
+    const diferenciaEnSegundos = fechaActual.diff(fechaComparar, 'seconds');
+    // Comprobar si la diferencia es mayor a 15 segundos
+    console.log('Diff ',diferenciaEnSegundos);
+    console.log('Resulta ',diferenciaEnSegundos>15);
+    return diferenciaEnSegundos > 15;
+}
   monitor(data: any, map: any): void{
     if(this.vehicleService.statusDataVehicle){
       const vehicles = this.vehicleService.vehicles;
@@ -580,14 +580,28 @@ export class MapService {
 
       const resultado = vehicles.find( (vehi: any) => vehi.IMEI == data.IMEI.toString() );
       if(resultado){
-        //YA NO ES NECESARIO EL PARSEO
         // if(data.driver_id != '0'){
-        //   data.driver_id = this.setFormatIbuttonId(data.driver_id)
+        //   console.log('DATA DRIVER_ID ',data.driver_id);
         // }
-
         // update dataCompleted
         // //console.log("update data");
         const index = vehicles.indexOf( resultado);
+        const fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // if(this.diffSecondsNow(fecha_tracker) && vehicles[index].timeLast == false){
+        //   vehicles[index].timeLast = true;
+        //   console.log('DATA NO ENTRA POR SER DE VOLCADO');
+        //   return;
+        // }
+       
+        if(vehicles[index].dt_tracker != fecha_tracker && vehicles[index].driver_id != data.driver_id && !this.diffSecondsNow(fecha_tracker)){
+          data.fecha_tracker = fecha_tracker;
+          console.log('Fecha Diferente',vehicles[index].dt_tracker,fecha_tracker); 
+          console.log('TRAMA',data);
+          vehicles[index].driver_id = data.driver_id;
+          // OBTENER EL NOMBRE EN BASE AL ID DRIVER
+          vehicles[index].namedriver = this.driversService.getDriverById(data.driver_id);
+          vehicles[index].id_conductor = data.driver_id;
+        }
 
         vehicles[index].latitud = data.Latitud.toString();
         vehicles[index].longitud = data.Longitud.toString();
@@ -595,20 +609,14 @@ export class MapService {
 
         vehicles[index].dt_server = data.fecha_server;
         // vehicles[index].dt_tracker = data.fecha_tracker;
-        vehicles[index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        vehicles[index].dt_tracker = fecha_tracker;
         vehicles[index].altitud = data.Altitud;
         vehicles[index].señal_gps = data.señal_gps;
         vehicles[index].señal_gsm = data.señal_gsm;
         vehicles[index].parametros = data.Parametros;
-        vehicles[index].driver_id = data.driver_id;
         // const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
 
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
-        // OBTENER EL NOMBRE EN BASE AL ID DRIVER
-        vehicles[index].namedriver = this.driversService.getDriverById(data.driver_id);
-        vehicles[index].id_conductor = data.driver_id;
-
-        // console.log('VEHICLE FORMAT->',vehicles[index]);
         if(this.imeiPopup==data.IMEI.toString()){
           let options = {
             imei: data.IMEI,

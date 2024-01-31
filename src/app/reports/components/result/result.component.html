@@ -1264,24 +1264,23 @@
                       <th *ngIf="reportTableDropdownData[2].fServidor && chkDateHour">Fecha Servidor</th>
                       <th *ngIf="reportTableDropdownData[2].fServidor && chkDateHour">Hora Servidor</th>
 
-                      <th *ngIf="reportTableDropdownData[2].ubicacion" >Ubicación</th>
                       <th *ngIf="reportTableDropdownData[2].pCercano" >Punto Cercano</th>
 
+                      <th *ngIf="reportTableDropdownData[2].velCAN" >Velocidad CAN</th>
                       <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep != 'R036'" >Velocidad GPS</th>
                       <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep == 'R036'" >Velocidad 360</th>
-
                       <th *ngIf="reportTableDropdownData[2].velGPS_speed" >Velocidad GPS speed</th>
                       <th *ngIf="reportTableDropdownData[2].velMobileye_ME460" >Velocidad Mobileye</th>
-                      <th *ngIf="reportTableDropdownData[2].velCAN" >Velocidad CAN</th>
                       <th *ngIf="reportTableDropdownData[2].velECO" >Velocidad ECO</th>
 
+                      <th *ngIf="reportTableDropdownData[2].DUOT2state" >DUOT2 state</th>
                       <th *ngIf="reportTableDropdownData[2].RxM" >RPM</th>
                       <th *ngIf="reportTableDropdownData[2].RPMAlta" >RPM Alta</th>
 
                       <th *ngIf="reportTableDropdownData[2].cNivel" >Nivel de Combustible</th>
-                      <th *ngIf="reportTableDropdownData[2].cRestante" >C. Restante</th>
+                      <th *ngIf="reportTableDropdownData[2].cRestante" >Combustible Restante</th>
 
-                      <th *ngIf="reportTableDropdownData[2].cMotor" >C. Motor</th>
+                      <th *ngIf="reportTableDropdownData[2].cMotor" >Consumo Motor</th>
                       <th *ngIf="reportTableDropdownData[2].odometro" >Odómetro</th>
 
                       <th *ngIf="reportTableDropdownData[2].altitud" >Altitud</th>
@@ -1299,10 +1298,10 @@
                       <th *ngIf="reportTableDropdownData[2].onOff" >Ignición</th>
                       <th *ngIf="reportTableDropdownData[2].alcoholemia" >Alcoholemia</th>
 
-                      <th *ngIf="reportTableDropdownData[2].DUOT2state" >DUOT2 state</th>
                       <th *ngIf="reportTableDropdownData[2].parametros" >Parámetros</th>
-
+                      <th *ngIf="reportTableDropdownData[2].ubicacion" >Ubicación</th>
                       <th *ngIf="reportTableDropdownData[2].referencia" >Referencia</th>
+
 
                       <!-- NO SE USAN -->
                       <th *ngIf="reportTableDropdownData[2].fatiga" >Fatiga</th>
@@ -1328,19 +1327,14 @@
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td> -->
 
-
-                      <td *ngIf="reportTableDropdownData[2].ubicacion">
-                      <!-- <td *ngIf="v_table[2].ubicacion"> -->
-                        <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
-                      </td>
-
                       <td *ngIf="reportTableDropdownData[2].pCercano" >{{row.pCercano}}</td>
+                      <td *ngIf="reportTableDropdownData[2].velCAN" [ngStyle]="{'background-color': row.velCAN > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="reportTableDropdownData[2].velGPS" [ngStyle]="{'background-color': row.velGPS > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
                       <td *ngIf="reportTableDropdownData[2].velGPS_speed" >{{row.velGPS_speed}}</td>
                       <td *ngIf="reportTableDropdownData[2].velMobileye_ME460" >{{row.velMobileye_ME460}}</td>
-                      <td *ngIf="reportTableDropdownData[2].velCAN" [ngStyle]="{'background-color': row.velCAN > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="reportTableDropdownData[2].velECO" [ngStyle]="{'background-color': row.velECO > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
                       
+                      <td *ngIf="reportTableDropdownData[2].DUOT2state" >{{row.DUOT2state}}</td>
                       <td *ngIf="reportTableDropdownData[2].RxM" >{{row.RxM}}</td>
                       <td *ngIf="reportTableDropdownData[2].RPMAlta" >{{row.RPMAlta}}</td>
 
@@ -1368,8 +1362,11 @@
                       <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state == 5" [ngStyle]="{'background-color': 'rgb(255,  0, 0)'}">{{row.alcohol_nombre}}</td>
                       <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state != 4 && row.alcohol_state != 5" >{{row.alcohol_nombre}}</td>
 
-                      <td *ngIf="reportTableDropdownData[2].DUOT2state" >{{row.DUOT2state}}</td>
                       <td *ngIf="reportTableDropdownData[2].parametros" >{{row.parametros}}</td>
+                      <td *ngIf="reportTableDropdownData[2].ubicacion">
+                        <!-- <td *ngIf="v_table[2].ubicacion"> -->
+                          <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
+                        </td>
                       <td *ngIf="reportTableDropdownData[2].referencia" >
                         <!-- {{row.referencia}} -->
                         <span *ngIf="row.referencia != 'desconocido ...'" [innerHTML]="row.referencia">
@@ -1474,15 +1471,15 @@
                       <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
                       <th *ngIf="v_table[2].fServidor && chkDateHour">Hora Servidor</th>
 
-                      <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
                       <th *ngIf="v_table[2].pCercano" >Punto Cercano</th>
+
+                      <th *ngIf="v_table[2].velCAN" >Velocidad CAN</th>
                       <th *ngIf="v_table[2].velGPS && report_data.num_rep != 'R036'" >Velocidad GPS</th>
                       <th *ngIf="v_table[2].velGPS && report_data.num_rep == 'R036'" >Velocidad 360</th>
-
                       <th *ngIf="v_table[2].velGPS_speed" >Velocidad GPS speed</th>
                       <th *ngIf="v_table[2].velMobileye_ME460" >Velocidad Mobileye</th>
-                      <th *ngIf="v_table[2].velCAN" >Velocidad CAN</th>
                       <th *ngIf="v_table[2].velECO" >Velocidad ECO</th>
+                      <th *ngIf="v_table[2].DUOT2state" >DUOT2 state</th>
 
                       <th *ngIf="v_table[2].RxM" >RPM</th>
                       <th *ngIf="v_table[2].RPMAlta" >RPM Alta</th>
@@ -1508,8 +1505,8 @@
                       <th *ngIf="v_table[2].onOff" >Ignición</th>
                       <th *ngIf="v_table[2].alcoholemia" >Alcoholemia</th>
 
-                      <th *ngIf="v_table[2].DUOT2state" >DUOT2 state</th>
                       <th *ngIf="v_table[2].parametros" >Parámetros</th>
+                      <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
 
                       <th *ngIf="v_table[2].referencia" >Referencia</th>
 
@@ -1533,17 +1530,15 @@
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[1]}}</td>
 
-                      <td *ngIf="v_table[2].ubicacion">
-                        <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
-                      </td>
                       <td *ngIf="v_table[2].pCercano" >{{row.pCercano}}</td>
 
+                      <td *ngIf="v_table[2].velCAN" [ngStyle]="{'background-color': row.velCAN > v_table[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="v_table[2].velGPS" [ngStyle]="{'background-color': row.velGPS > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
                       <td *ngIf="v_table[2].velGPS_speed" >{{row.velGPS_speed}}</td>
                       <td *ngIf="v_table[2].velMobileye_ME460" >{{row.velMobileye_ME460}}</td>
-                      <td *ngIf="v_table[2].velCAN" [ngStyle]="{'background-color': row.velCAN > v_table[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="v_table[2].velECO" [ngStyle]="{'background-color': row.velECO > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
 
+                      <td *ngIf="v_table[2].DUOT2state" >{{row.DUOT2state}}</td>
                       <td *ngIf="v_table[2].RxM" >{{row.RxM}}</td>
                       <td *ngIf="v_table[2].RPMAlta" >{{row.RPMAlta}}</td>
 
@@ -1571,9 +1566,10 @@
                       <td *ngIf="v_table[2].alcoholemia && row.alcohol_state == 5" [ngStyle]="{'background-color': 'rgb(255,  0, 0)'}">{{row.alcohol_nombre}}</td>
                       <td *ngIf="v_table[2].alcoholemia && row.alcohol_state != 4 && row.alcohol_state != 5" >{{row.alcohol_nombre}}</td>
 
-                      <td *ngIf="v_table[2].DUOT2state" >{{row.DUOT2state}}</td>
                       <td *ngIf="v_table[2].parametros" >{{row.parametros}}</td>
-
+                      <td *ngIf="v_table[2].ubicacion">
+                        <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
+                      </td>
                       <td *ngIf="v_table[2].referencia" >
                         <!-- {{row.referencia}} -->
                         <span *ngIf="row.referencia != 'desconocido ...'" [innerHTML]="row.referencia"></span>
@@ -6354,7 +6350,7 @@
                     <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
                     <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
 
-                    <th *ngIf="reportService.eC.Zona">Zona</th>
+                    <th *ngIf="reportService.eC.Zona">Geocerca</th>
                     <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
                     <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
                     <th *ngIf="reportService.eC.Referencia">Referencia</th>
@@ -6847,7 +6843,11 @@
                   <th>Id Conductor</th>
                   <th>Conductor</th>
 
-                  <th>Tramo</th>
+                  <th>Geocerca</th>
+                  <!-- new 29-01 -->
+                  <th>Vel. Can</th>
+                  <th>Satélite</th>
+
                   <th>Límite de Velocidad</th>
                   <th>Exceso de Velocidad</th>
                   <th>Ubicación</th>
@@ -6870,8 +6870,12 @@
                   <td>{{row.conductor}}</td>
 
                   <td>{{row.nombre_zona}}</td>
-                  <td>{{row.v0}} Km/h</td>
-                  <td>{{row.velocidad}} Km/h</td>
+                  <!-- new 29-01 -->
+                  <td>{{row.can_speed}}</td>
+                  <td>{{row.satelite}}</td>
+
+                  <td>{{row.v0}}</td>
+                  <td>{{row.velocidad}}</td>
                   <td>
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>

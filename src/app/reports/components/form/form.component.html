@@ -374,15 +374,15 @@
             <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.ubicacion" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Ubicación</label>
+                  <p-checkbox [(ngModel)]="oG.pCercano" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Punto Cercano</label>
               </div>
             </div>
             <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.pCercano" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Punto Cercano</label>
+                  <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Velocidad CAN</label>
               </div>
             </div>
             <div class="col-6" style="margin-top: 5px">
@@ -409,15 +409,15 @@
             <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.velCAN" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Velocidad CAN</label>
+                  <p-checkbox [(ngModel)]="oG.velECO" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Velocidad ECO</label>
               </div>
             </div>
             <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.velECO" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Velocidad ECO</label>
+                  <p-checkbox [(ngModel)]="oG.DUOT2state" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                DUOT2 state</label>
               </div>
             </div>
             <div class="col-6" style="margin-top: 5px">
@@ -481,7 +481,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.alimentGps" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Alimentación GPS (F)</label>
+                  Alimentación GPS</label>
               </div>
             </div>
             <!-- NIVEL DE BATERIA -->
@@ -489,7 +489,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.nivelBateria" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Nivel de batería (F)</label>
+                  Nivel de batería</label>
               </div>
             </div>
             <!-- NIVEL DE COBERTURA -->
@@ -497,7 +497,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.nivelCobertura" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Nivel de cobertura (F)</label>
+                  Nivel de cobertura</label>
               </div>
             </div>
             <!-- NIVEL DE TEMPERATURA GPS -->
@@ -505,7 +505,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="oG.temperaturaGps" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Temperatura GPS (F)</label>
+                  Temperatura GPS</label>
               </div>
             </div>
             <!-- SATELITE -->
@@ -540,15 +540,15 @@
             <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.DUOT2state" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                DUOT2 state</label>
+                  <p-checkbox [(ngModel)]="oG.parametros" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                Parámetros</label>
               </div>
             </div>
             <div class="col-6" style="margin-top: 5px">
               <div class="p-field">
                 <label>
-                  <p-checkbox [(ngModel)]="oG.parametros" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
-                Parámetros</label>
+                  <p-checkbox [(ngModel)]="oG.ubicacion" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Ubicación</label>
               </div>
             </div>
             <div class="col-6" style="margin-top: 5px">
@@ -630,11 +630,13 @@
 
         <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
 
-        <ng-container *ngFor="let type of eventType">
+        <ng-container *ngFor="let type of eventsTypes">
           <ng-container *ngIf="type.active">
             <div class="row">
               <div class="col-12">
-                <label class="bg-subtitle bg-subtitle-light">Eventos {{type.label}}</label>
+                <label class="bg-subtitle bg-subtitle-light">Eventos {{type.label}}
+                  <p-checkbox [(ngModel)]="type.selectAll" [binary]="true" inputId="binary" (onChange)="onSelectAllChange(type)" [disabled]="reportService.workingOnReport"></p-checkbox>
+                </label>
               </div>
             </div>
             <div class="row">
@@ -1107,7 +1109,7 @@
                   Todos</label> -->
                 <label>
                   <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary" (onChange)="onChkAllEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Todos</label>
+                  Todos los Eventos</label>
               </div>
             </div>
             <div class="col-6">

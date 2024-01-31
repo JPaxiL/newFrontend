@@ -52,7 +52,7 @@ export class DriversService {
   public async initialize() {
     this.spinner.show('loadingDrivers');
     await this.getAll();
-    await this.getHistoryAll();
+    // await this.getHistoryAll();
   }
   
 
@@ -120,12 +120,12 @@ export class DriversService {
   }
 
   public getIbutton(ibutton_id:string):string{
-    console.log(ibutton_id);
+    // console.log('IBUTTON ID',ibutton_id);
     const ibutton = this.availableIbuttons.find((ibutton:Ibutton) =>
     ibutton.var_llave!.includes(ibutton_id!)
     );
-    // console.log('Find->',ibutton);
     if(ibutton){
+      // console.log('LLAVE->',ibutton);
       return ibutton.var_llave!;
     }else{
       return '-';
@@ -133,8 +133,10 @@ export class DriversService {
   }
   
   public getDriverById(id:number):string{
-    const driver = this.drivers.find(driver => driver.id === id);
+    // console.log('ID->',id);
+    const driver = this.drivers.find(driver => driver.id == id);
     if (driver){
+      console.log('DRIVER FIND->',driver);
       return driver.nombre_conductor;
     }else{
       return 'No Especificado';

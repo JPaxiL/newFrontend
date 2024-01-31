@@ -459,7 +459,18 @@ export class MinimapService {
     }
     return g
   }
-
+  diffSecondsNow(fecha:string):boolean {
+    // Obtener la fecha y hora actual
+    const fechaActual = moment();
+    // Parsear la fecha proporcionada
+    const fechaComparar = moment(fecha);
+    // Calcular la diferencia en segundos
+    const diferenciaEnSegundos = fechaActual.diff(fechaComparar, 'seconds');
+    // Comprobar si la diferencia es mayor a 15 segundos
+    // console.log('Diff ',diferenciaEnSegundos);
+    // console.log('Resulta ',diferenciaEnSegundos>15);
+    return diferenciaEnSegundos > 15;
+  }
   private async monitor(data: any): Promise<void>{
     
     // console.log('DATA INGRESADA ->',data);
@@ -472,7 +483,18 @@ export class MinimapService {
       if(resultado){
         const index = item.minimapConf!.vehicles!.indexOf(resultado);
         console.log("resultado e indice: ", resultado, index);
-
+        
+        const fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // if(this.diffSecondsNow(fecha_tracker)){
+        //   console.log('DATA NO ENTRA POR SER DE VOLCADO');
+        //   return;
+        // }
+        if(item.minimapConf!.vehicles![index].dt_tracker != fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(fecha_tracker)){
+          item.minimapConf!.vehicles![index].driver_id = data.driver_id;
+          // OBTENER EL NOMBRE EN BASE AL ID DRIVER
+          item.minimapConf!.vehicles![index].namedriver = this.driversService.getDriverById(data.driver_id);
+          item.minimapConf!.vehicles![index].id_conductor = data.driver_id;
+        }
         item.minimapConf!.vehicles![index].latitud = data.Latitud.toString();
         item.minimapConf!.vehicles![index].longitud = data.Longitud.toString();
         item.minimapConf!.vehicles![index].speed = data.Velocidad;
@@ -481,13 +503,9 @@ export class MinimapService {
         item.minimapConf!.vehicles![index].altitud = data.Altitud;
         item.minimapConf!.vehicles![index].señal_gps = data.señal_gps;
         item.minimapConf!.vehicles![index].señal_gsm = data.señal_gsm;
-        item.minimapConf!.vehicles![index].driver_id = data.driver_id;
         item.minimapConf!.vehicles![index].parametros = data.Parametros;
         item.minimapConf!.vehicles![index] = this.vehicleService.formatVehicle(item.minimapConf!.vehicles![index]);
 
-        // driversService
-        item.minimapConf!.vehicles![index].id_conductor = data.driver_id
-        item.minimapConf!.vehicles![index].namedriver = this.driversService.getDriverById(data.driver_id);
         // console.log('Info Driver',tempInfoDriver);
         console.log("["+resultado.numero_placa+"] item.imeiPopup==data.IMEI.toString()", item.imeiPopup==data.IMEI.toString());
         if(item.imeiPopup==data.IMEI.toString()){

@@ -125,7 +125,6 @@ export class EventService {
       }
     }else{
       for (const index in this.events) {
-        console.log('Else ->',this.events[index]);
         this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
         this.events[index].namedriver = this.driverService.getDriverById(this.events[index].driver_id);
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
