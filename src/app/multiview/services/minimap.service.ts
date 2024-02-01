@@ -484,22 +484,39 @@ export class MinimapService {
         const index = item.minimapConf!.vehicles!.indexOf(resultado);
         console.log("resultado e indice: ", resultado, index);
         
-        const fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // const fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
         // if(this.diffSecondsNow(fecha_tracker)){
         //   console.log('DATA NO ENTRA POR SER DE VOLCADO');
         //   return;
         // }
-        if(item.minimapConf!.vehicles![index].dt_tracker != fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(fecha_tracker)){
+        data.fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // if(data.IMEI =='860640057372346'){
+        //   data.driver_id=489;
+        //   console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker,data.fecha_tracker); 
+        //   console.log('TRAMA',data);
+        //   console.log('VEHICLE OLD',item.minimapConf!.vehicles![index]);
+        //   console.log(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker));
+        //   console.log(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker);
+        //   console.log(item.minimapConf!.vehicles![index].driver_id != data.driver_id);
+        //   console.log(!this.diffSecondsNow(data.fecha_tracker));
+        // }
+        if(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker)){
           item.minimapConf!.vehicles![index].driver_id = data.driver_id;
+          // console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker); 
+          // data.fecha_tracker = fecha_tracker;
+          // console.log('TRAMA',data);
           // OBTENER EL NOMBRE EN BASE AL ID DRIVER
           item.minimapConf!.vehicles![index].namedriver = this.driversService.getDriverById(data.driver_id);
           item.minimapConf!.vehicles![index].id_conductor = data.driver_id;
+          console.log('DRIVER MINIMAP->',data.IMEI,' - ',data.driver_id,':',item.minimapConf!.vehicles![index].namedriver);
+
         }
         item.minimapConf!.vehicles![index].latitud = data.Latitud.toString();
         item.minimapConf!.vehicles![index].longitud = data.Longitud.toString();
         item.minimapConf!.vehicles![index].speed = data.Velocidad;
         item.minimapConf!.vehicles![index].dt_server = data.fecha_server;
-        item.minimapConf!.vehicles![index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // item.minimapConf!.vehicles![index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        item.minimapConf!.vehicles![index].dt_tracker = data.fecha_tracker;
         item.minimapConf!.vehicles![index].altitud = data.Altitud;
         item.minimapConf!.vehicles![index].señal_gps = data.señal_gps;
         item.minimapConf!.vehicles![index].señal_gsm = data.señal_gsm;

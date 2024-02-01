@@ -569,8 +569,8 @@ export class MapService {
     // Calcular la diferencia en segundos
     const diferenciaEnSegundos = fechaActual.diff(fechaComparar, 'seconds');
     // Comprobar si la diferencia es mayor a 15 segundos
-    console.log('Diff ',diferenciaEnSegundos);
-    console.log('Resulta ',diferenciaEnSegundos>15);
+    // console.log('Diff ',diferenciaEnSegundos);
+    // console.log('Resulta ',diferenciaEnSegundos>15);
     return diferenciaEnSegundos > 15;
 }
   monitor(data: any, map: any): void{
@@ -595,12 +595,13 @@ export class MapService {
        
         if(vehicles[index].dt_tracker != fecha_tracker && vehicles[index].driver_id != data.driver_id && !this.diffSecondsNow(fecha_tracker)){
           data.fecha_tracker = fecha_tracker;
-          console.log('Fecha Diferente',vehicles[index].dt_tracker,fecha_tracker); 
-          console.log('TRAMA',data);
+          // console.log('Fecha Diferente',vehicles[index].dt_tracker,fecha_tracker); 
+          // console.log('TRAMA',data);
           vehicles[index].driver_id = data.driver_id;
           // OBTENER EL NOMBRE EN BASE AL ID DRIVER
           vehicles[index].namedriver = this.driversService.getDriverById(data.driver_id);
           vehicles[index].id_conductor = data.driver_id;
+          console.log('DRIVER->',data.IMEI,' - ',data.driver_id,':',vehicles[index].namedriver);
         }
 
         vehicles[index].latitud = data.Latitud.toString();
