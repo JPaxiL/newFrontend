@@ -120,13 +120,14 @@ export class EventService {
       for (const index in data_events) {
         data_events[index].nombre_objeto = this.vehicleService.getVehicle(data_events[index].imei).name;
         data_events[index].namedriver = this.driverService.getDriverById(data_events[index].driver_id);
-
+        console.log('DRIVER:',data_events[index].namedriver,' - Unidad:',data_events[index].nombre_objeto);
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }else{
       for (const index in this.events) {
         this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
         this.events[index].namedriver = this.driverService.getDriverById(this.events[index].driver_id);
+        console.log('DRIVER:',this.events[index].namedriver,' - Unidad:',this.events[index].nombre_objeto);
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }
