@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../models/vehicle';
 import {TreeNode} from 'primeng-lts/api';
+import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 
 import { environment } from 'src/environments/environment';
 // import { SocketWebService } from '../services/socket-web.service';
@@ -47,6 +48,11 @@ export class VehicleService {
     { label: 'Código interno', value: 'cod_interno' },
     { label: 'Nombre', value: 'name' }
   ];
+  public vehiclesFixes: any=[];
+  public initializingVehiclesFixes:boolean = false;
+  public unitsFixesStatus: boolean = false;
+  public fixes: any = [];
+
 
 
   @Output() vehicleCompleted = new EventEmitter<any>();
@@ -101,9 +107,10 @@ export class VehicleService {
         // this.dataCompleted.emit(this.vehicles);
       },this.timeDemo);
     }else{
-      this.getVehicles().subscribe(vehicles=>{
+      this.getVehicles().subscribe(async vehicles=>{
         // console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
+        await this.getVehiclesFixes();
         this.vehiclesTree = this.createNode(this.vehicles);
         this.statusDataVehicle = true;
         this.statusDataVehicleTree = true;
@@ -177,6 +184,19 @@ export class VehicleService {
 
   public getVehicles(): Observable<any>{
     return this.http.get(this.URL_LIST);
+  }
+  public async getVehiclesFixes() {
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/getVehiclesFixes`).toPromise()
+    .then(response => {
+      console.log("------------Vehicles Fijados");
+      console.log(response);
+      this.vehiclesFixes = response.data;
+      this.initializingVehiclesFixes = true;
+
+    });
+  }
+  public async updateUnitFixes(vehicles:UserTracker){
+    this.vehiclesFixes = vehicles;
   }
   public queryTimeStop(params: any): Observable<any>{
     return this.http.get(this.URL_TIME_STOP+'?fecha_i='+params.fecha_i+'&vel='+params.speed+'&fecha_f='+params.fecha_f+'&imei='+params.imei+'&lat='+params.latitud+'&lng='+params.longitud);
@@ -745,9 +765,8 @@ export class VehicleService {
     status_group=false;
     status_convoy=false;
     status_operation=false;
-  }
-    // ORDENACION DEL MAPEO POR ID (ID = 0 singifica que no tiene Operacion/Grupo/Convoy)
-
+    }
+    // ORDENACION DEL MAPEO POR ID 
     // console.log("operations",this.operations);
     // console.log("groups",this.groups);
     // console.log("convoys",this.convoys);
@@ -756,9 +775,66 @@ export class VehicleService {
     // map.forEach((node: { data: { id: any; }; }) => {
     //   console.log(node.data.id);
     // });
-    // console.log("mapa:",map);
+    console.log("mapa:",map);
     // console.log("prueba:",prueba);
+    if (this.unitsFixesStatus){
+      map = this.addVehiclesFixes(map);
+    }
+    return map;
+  }
 
+  addVehiclesFixes(map:any):any{
+    // PRIMERO SE BUSCA y SE AGREGAR A VEHICLES TREE
+    this.fixes = [];
+    console.log('AGREGANDO VEHICLES FIXES:',this.vehiclesFixes);
+    this.fixes.push(0);
+      map.push(
+        {
+          data:{id:0,name:'Unidades Fijadas', col:3, type:'pinUp' },
+          expanded: true,
+          children:[]
+        }
+      );
+    for (let index of this.vehiclesFixes) {
+      // console.log(index);
+      const aux_vehicle = this.vehicles.find((vehicle: any) => vehicle.id == index);
+      // console.log(aux_vehicle);
+      if(aux_vehicle){
+        if(this.fixes.includes(0)){
+          const existingPinUp = map.find((item: { data: { id: any; type:string}; }) => item.data.id == 0 && item.data.type == 'pinUp');
+          existingPinUp.children.push({
+            data: aux_vehicle
+          });
+        }else{
+          this.fixes.push(0);
+          console.log('ERROR NO DEBERIA INGRESAR AQUI...');
+          map.push(
+            {
+              data:{id:0,name:'Unidades Fijadas', col:3, type:'pinUp' },
+              expanded: true,
+              children:[
+                {
+                  data:aux_vehicle
+                }
+              ]
+            }
+          );
+        }
+      }
+    }
+    map.sort((a: { data: { type: string; }; }, b: { data: { type: string; }; }) => {
+      // Si a es de tipo 'pinUp' y b no lo es, a debería ir antes en la lista
+      if (a.data.type === 'pinUp' && b.data.type !== 'pinUp') {
+          return -1;
+      }
+      // Si b es de tipo 'pinUp' y a no lo es, b debería ir antes en la lista
+      if (b.data.type === 'pinUp' && a.data.type !== 'pinUp') {
+          return 1;
+      }
+      // Si ninguno de los elementos es de tipo 'pinUp' o ambos lo son, no se cambia el orden
+      return 0;
+    });
+    console.log("mapa con Fixes:",map);
     return map;
   }
 

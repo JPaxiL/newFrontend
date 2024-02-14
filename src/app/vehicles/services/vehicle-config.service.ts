@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
+import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,25 @@ export class VehicleConfigService {
   }
   putGroupUpdate(req: any): Observable<any>{
     return this.http.put(this.api_url+"/api/group_update",req);
+  }
+
+  // updateUnitFixes(req: any): Observable<any>{
+  //   return this.http.post(this.api_url+"/api/updateVehiclesFixes",req);
+  // }
+  // cleanUnitFixes(req: any): Observable<any>{
+  //   return this.http.post(this.api_url+"/api/cleanVehiclesFixes",req);
+  // }
+
+  public async updateUnitFixes(subuser: any) {
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/updateVehiclesFixes`,subuser).toPromise();
+    // console.log(response);
+    return response;
+  }
+
+  public async cleanUnitFixes(subuser: any) {
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/cleanVehiclesFixes`,subuser).toPromise();
+    // console.log(response);
+    return response;
   }
 
 }

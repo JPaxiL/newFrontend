@@ -383,7 +383,6 @@ export class FormComponent implements OnInit {
           // this.convoys = this.convoys.filter((convoy: any) => convoy != "Unidades Sin Convoy");
           // this.groups = this.groups.map((grupo: { grupo: any; }) => { return grupo.grupo});
           
-          // this.operations = this.vehicles.listOperations;
           //lista de Operaciones Grupos Convoys existentes con vehiculos
           
           this.areVehiclesLoaded = true;

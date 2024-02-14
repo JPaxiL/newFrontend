@@ -44,7 +44,7 @@ export class UserConfigComponent implements OnInit {
     { name: 'Amarillo', code: 'ffff00',color: '#FFFF00' }, // Amarillo
   ];
   constructor(       
-    private userDataService: UserDataService,
+    public userDataService: UserDataService,
     private panelService: PanelService,
     private vehicleService: VehicleService) {
   }

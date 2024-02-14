@@ -7,6 +7,7 @@ import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FollowService } from '../../services/follow.service';
 import Swal from 'sweetalert2';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 @Component({
   selector: 'app-tree-table',
@@ -17,6 +18,7 @@ export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
+  showVehiclesFixes: boolean = true;
   vehicleIconState: boolean = true;
   vehicleTransmissionStatus: boolean = true;
   sortOrder: number=1;
@@ -35,12 +37,14 @@ export class TreeTableComponent implements OnInit {
   list2: any = [];
   selectedList1: any = [];
   selectedList2: any = [];
+
   private dataEdit : any = {
     id : -1,
     name : "",
     type : ""
   };
   alreadyLoaded: boolean = false;
+  readonlyNameGroup: boolean = false;
 
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   color: any = {
@@ -126,6 +130,8 @@ export class TreeTableComponent implements OnInit {
       this.loading=false;
       this.alreadyLoaded = true;
       this.headerScrollHandler();
+      console.log(this.vehicleService.vehiclesFixes);
+      this.showVehiclesFixes= this.vehicleService.unitsFixesStatus;
     }
     this.cols = [
           { field: 'eye', header: 'eye' },
@@ -206,18 +212,35 @@ export class TreeTableComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        await this.onSubmitEdit();
+        if (currType== 'pinUp'){
+          await this.onSubmitEditFixes();
+        }else{
+          await this.onSubmitEdit();
+        }
       },
     }).then((data) => {
-      if(data.isConfirmed) {
-        Swal.fire(
-          'Éxito',
-          `El ${currType} se editó exitosamente`,
-          'success'
-        );
-      } else {
-        console.log(`(Vehicle Group) Hubo un error al editar el ${currType}`);
+      if (currType== 'pinUp'){
+        if(data.isConfirmed) {
+          Swal.fire(
+            'Éxito',
+            `Las unidades Fijadas se editaron exitosamente`,
+            'success'
+          );
+        } else {
+          console.log(`(Vehicle Group) Hubo un error al editar las unidades Fijadas`);
+        }
+      }else{
+        if(data.isConfirmed) {
+          Swal.fire(
+            'Éxito',
+            `El ${currType} se editó exitosamente`,
+            'success'
+          );
+        } else {
+          console.log(`(Vehicle Group) Hubo un error al editar el ${currType}`);
+        }
       }
+      
       this.loading=false;
     });
   }
@@ -247,6 +270,26 @@ export class TreeTableComponent implements OnInit {
         }).catch(errorMsg => {
           console.log(errorMsg);
         });
+    }
+  }
+  async onSubmitEditFixes(){
+    const req = {
+      vehicles: this.list2.map((item: { id: any; }) => item.id)
+    };
+    console.log('Enviando...',req);
+    let response = await this.vehicleConfigService.updateUnitFixes(req);
+    // console.log(response);
+    if(response.success){
+      await this.vehicleService.updateUnitFixes(req['vehicles']);
+      this.updateGroup();
+      this.vehicleService.reloadTableTree.emit();
+      this.displayEditGroup = false;
+    }else{
+      Swal.fire(
+        'Ups',
+        `Ocurrió un problema al actualizar Las unidades Fijadas`,
+        'error'
+      );
     }
   }
   updateGroup(){
@@ -302,6 +345,8 @@ export class TreeTableComponent implements OnInit {
           vehicles[key].nameconvoy=this.nameEdit.nativeElement.value;
         }
       }
+    }else{
+      console.log('Update Units Fixes...');
     }
 
 
@@ -314,6 +359,7 @@ export class TreeTableComponent implements OnInit {
     this.displayEditGroup = true;
     this.textHeaderEdit = data.type+" "+data.name;
     this.nameEdit.nativeElement.value = data.name;
+    this.readonlyNameGroup = false;
 
     //list 1
     const vehicles = this.vehicleService.vehicles;
@@ -353,6 +399,80 @@ export class TreeTableComponent implements OnInit {
 
   }
   
+  showEditFixes(data: any){
+    this.readonlyNameGroup = true;
+    this.dataEdit = data;
+    // console.log('show edit data',data);
+    this.displayEditGroup = true;
+    this.textHeaderEdit = " "+data.name;
+    this.nameEdit.nativeElement.value = data.name;
+
+    const vehicles = this.vehicleService.vehicles;
+    const vehiclesFixes = this.vehicleService.vehiclesFixes;
+    let aux1:any=[];
+    let aux2=[];
+    aux1 = vehicles;
+    for (const key in vehiclesFixes) {
+      aux1 = aux1.filter((vehicle: any)=>vehicle.id!=vehiclesFixes[key]);
+      const foundVehicle:any = this.vehicleService.vehicles.find((vehicle: any)=>vehicle.id==vehiclesFixes[key]);
+      if (foundVehicle){
+        aux2.push(foundVehicle);
+      }
+    }
+    this.list2 = aux2;
+    this.list1 = aux1;
+    // console.log('LISTA --> 1',this.list1);
+    // console.log('LISTA --> 2',this.list2);
+  }
+  cleanFixes(data:any){
+    Swal.fire({
+      title: 'Confirmación',
+      text: `¿Está seguro de Limpiar la lista de Unidades Fijadas?`,
+      icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Limpiar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        await this.onDeleteFixes(data);
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Limpiar',
+          `Limpieza de Unidades Fijadas exitosa`,
+          'success'
+        );
+      }
+    });
+    
+  }
+  async onDeleteFixes(data:any){
+    const req = {
+      type: data.name,
+    };
+    let array:any =[]
+    console.log('Enviando a Limpiar...',req);
+    let response = await this.vehicleConfigService.cleanUnitFixes(req);
+    if(response.success){
+      await this.vehicleService.updateUnitFixes(array);
+      this.updateGroup();
+      this.vehicleService.reloadTableTree.emit();
+      this.displayEditGroup = false;
+    }else{
+      Swal.fire(
+        'Ups',
+        `Ocurrió un problema al limpiar Las unidades Fijadas`,
+        'error'
+      );
+    }
+  }
   showDelete(data: any){
     this.textDelete = data['type'];
     if(data['id']==null){
@@ -685,6 +805,12 @@ export class TreeTableComponent implements OnInit {
     var b = parseInt(hex.slice(5,7),16);
     var yiq = ((r*299)+(g*587)+(b*114))/1000;
     return (yiq >= 128) ? '#000' : '#fff';
+  }
+
+  public onChangeUnitsFixes(){
+    this.vehicleService.unitsFixesStatus = this.showVehiclesFixes;
+    this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
+    this.vehicleService.reloadTableTree.emit();
   }
 
 }

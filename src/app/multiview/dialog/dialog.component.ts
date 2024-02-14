@@ -53,7 +53,6 @@ export class DialogComponent implements OnInit {
               this.operations = resp.data as Operation[];
               this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
             });
-            console.log('OPERATIONS MULTIVIEW NEW ----->',this.vehicleService.listOperations);
             this.resetCurrentMultiview();
           }
         },
@@ -67,7 +66,6 @@ export class DialogComponent implements OnInit {
         this.operations = resp.data as Operation[];
         this.operations.push({id:0,descripcion:"Sin Operación", nombre:"Sin Operación",usuario_id:0});
       });
-      console.log('OPERATIONS MULTIVIEW NEW ----->',this.vehicleService.listOperations);
       this.resetCurrentMultiview();
     }
   }
