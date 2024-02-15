@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Alert } from '../../models/alert.interface';
 import { AlertService } from '../../../alerts/service/alert.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
-import { Select2Data } from 'ng-select2-component';
+import { Select2Data, Select2Option } from 'ng-select2-component';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { PanelService } from 'src/app/panel/services/panel.service';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { GeofencesService } from 'src/app/geofences/services/geofences.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -28,21 +26,30 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   public vehicles: Select2Data = [];
   public geocercas: Select2Data = [];
+  public geocercasFiltradas: Select2Data = [];
   public geocircles: Select2Data = [];
 
   public disabledEventSoundActive = false;
-  public disabledEmail = false;
+  public disabledEmail = true;
   public expirationDate = true;
   public showInfraccion = false;
+  public showInfraccionGeocerca = false;
   public showTiempoLimite = false;
   public showFechaCaducidad = true;
   public showGeocercas = true;
   public disabledTimeLimit = true;
   loadingEventSelectInput: boolean = true;
+  alertSelected: any;
+  public disabledWhatsapp = true;
 
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
+  ];
+
+  booleanOptionsVentanaEmergente = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
   ];
 
   listaSonidos:any = [];
@@ -63,6 +70,11 @@ export class PlatformAlertsCreateComponent implements OnInit {
     { label: '30 Seg.', value: 30 },
     { label: '1 Min.', value: 60 },
     { label: '2 Min.', value: 120 },
+  ];
+
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
   ];
 
   constructor(
@@ -91,7 +103,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       tipoAlerta: ['', [Validators.required]],
       chkEventoActivado: [true],
       chkSonido: [true],
-      chkCorreo: [true],
+      chkCorreo: [false],
       sonido: [
         {
           value: 'sonidos/alarm8.mp3',
@@ -100,8 +112,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
       ],
       nombre: [''],
       lista_emails: [[]],
-      fecha_desde: [dateCurrent],
-      fecha_hasta: [dateCurrent],
+      //fecha_desde: [dateCurrent],
+      //fecha_hasta: [dateCurrent],
       email: [
         { value: '', disabled: this.disabledEmail },
         [Validators.required, Validators.email],
@@ -117,13 +129,23 @@ export class PlatformAlertsCreateComponent implements OnInit {
       ],
       chkFijarLimiteVelocidad: [false],
       velocidad_limite_infraccion: [{ value: '', disabled: true }],
+      chkwhatsapp: [false],
+      lista_whatsapp: [[]],
+      whatsapp: [
+        { value: '', disabled: this.disabledWhatsapp },
+        [Validators.required],
+      ],
+      chkVentanaEmergente:[false],
+      chkEvaluation:[false]
     });
     this.loading = false;
     this.loadData();
   }
 
   public async loadData() {
-    this.events = await this.AlertService.getEventsByType('Plataforma');
+    this.events = await this.AlertService.getEventsByType('platform');
+    console.log("EVENTSSS:::::",this.events);
+    
     this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();
@@ -132,6 +154,19 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.hideLoadingSpinner();
   }
 
+  changeVehicles(event:any){
+    console.log("event::::",event);
+    const operations = new Set();
+    this.alertForm.value.vehicles.forEach((objeto:any) => {
+      const vh = this.vehicles.find((vh:any) => vh.value == objeto);
+      console.log("vh:",vh);
+      operations.add(vh?.templateId);
+    });
+    console.log("OPERATIONS::::",operations);
+    this.geocercasFiltradas = this.geocercas.filter(geofence => operations.has(geofence.templateId));
+    console.log("geocercasFiltradas::::",this.geocercasFiltradas.length);
+
+  }
   setDataVehicles() {
     let vehicles = this.VehicleService.getVehiclesData();
 
@@ -139,6 +174,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       return {
         value:vehicle.IMEI,
         label: vehicle.name,
+        templateId: vehicle.idoperation
       };
     });
 
@@ -152,9 +188,10 @@ export class PlatformAlertsCreateComponent implements OnInit {
       return {
         value: geocerca.id,
         label: geocerca.zone_name,
+        templateId: geocerca.idoperation,
       };
     });
-
+    this.geocercasFiltradas = this.geocercas;
     this.loadingGeofencesMultiselectReady = true;
     this.hideLoadingSpinner();
   }
@@ -212,19 +249,23 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.alertForm.value.geocercascirculares = JSON.stringify(
       this.alertForm.value.geocercascirculares
     );
-    this.alertForm.value.fecha_desde = this.setDate(
+    /*this.alertForm.value.fecha_desde = this.setDate(
       this.alertForm.value.fecha_desde
     );
     this.alertForm.value.fecha_hasta = this.setDate(
       this.alertForm.value.fecha_hasta
-    );
+    );*/
 
     if (this.alertForm.value.duracion_formato_parada == '') {
       this.alertForm.value.duracion_formato_parada = 'S';
     }
 
     if (typeof this.alertForm.value.tiempo_limite_infraccion == 'undefined') {
-      this.alertForm.value.tiempo_limite_infraccion = 10;
+      this.alertForm.value.tiempo_limite_infraccion = 0;
+    }
+
+    if(typeof this.alertForm.value.sonido == "undefined"){
+      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
     }
 
     if (
@@ -238,8 +279,13 @@ export class PlatformAlertsCreateComponent implements OnInit {
       return
     }
 
-    if (this.alertForm.value.vehiculos.length != 0) {
+    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+      Swal.fire('Error', 'Debe ingresar un número', 'warning');
+      return
+    }
 
+    if (this.alertForm.value.vehiculos.length != 0) {
+      console.log("ANTES DE GUARDAR: ",this.alertForm.value);
       Swal.fire({
         title: '¿Desea guardar los cambios?',
         //text: 'Espere un momento...',
@@ -251,6 +297,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           await this.AlertService.create(this.alertForm.value);
+          this.AlertService.getAll();
           this.clickShowPanel('ALERTS-PLATFORMS');
         },
       }).then((data) => {
@@ -331,35 +378,64 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   changeAlertType() {
     console.log(this.alertForm.value.tipoAlerta);
-    switch (this.alertForm.value.tipoAlerta) {
-      case 'Zona de entrada':
-      case 'Zona de salida':
+    const alert = this.events.find((event:any) => event.id.toString() == this.alertForm.value.tipoAlerta.toString());
+    this.alertSelected = alert;
+    console.log("alerttt",alert);
+    this.alertForm.value.velocidad_limite_infraccion = 0;
+    if(this.alertSelected.slug == 'infraccion'){
+      this.alertForm.controls['velocidad_limite_infraccion'].enable();
+      this.alertForm.value.chkFijarLimiteVelocidad = [true];
+    }else{
+      this.alertForm.controls['velocidad_limite_infraccion'].disable();
+    }
+    switch (alert.slug) {
+      case 'zona-de-entrada':
+      case 'zona-de-salida':
         this.showTiempoLimite = false;
-        this.showFechaCaducidad = true;
+        this.showFechaCaducidad = false;
         this.showGeocercas = true;
         this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
         break;
 
-      case 'Tiempo de estadia en zona':
-      case 'Parada en zona no autorizada':
+      case 'tiempo-estadio-zona':
+      case 'parada-en-zona-no-autorizada':
         this.showTiempoLimite = true;
-        this.showFechaCaducidad = true;
+        this.showFechaCaducidad = false;
         this.showGeocercas = true;
         this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
         break;
-      case 'Infracción':
-      case 'Infraccion':
+      case 'infraccion':
         this.showTiempoLimite = false;
         this.showFechaCaducidad = false;
         this.showGeocercas = false;
         this.showInfraccion = true;
+        this.showInfraccionGeocerca = false;
         break;
 
+      case 'infraccion-geocerca':
+        this.showTiempoLimite = false;
+        this.showFechaCaducidad = false;
+        this.showGeocercas = true;
+        this.showInfraccion = false;
+        this.showInfraccionGeocerca = true;
+        break;
+      case 'exceso-velocidad':
+        this.showTiempoLimite = false;
+        this.showFechaCaducidad = false;
+        this.showGeocercas = true;
+        this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
+        break;
       default:
         break;
     }
   }
 
+  resetForm(){
+    this.alertForm.reset();
+  }
   changechkFijarTiempo() {
     if (this.alertForm.value.chkFijarTiempo) {
       this.alertForm.controls['tiempo_limite_infraccion'].enable();
@@ -383,6 +459,48 @@ export class PlatformAlertsCreateComponent implements OnInit {
   hideLoadingSpinner(){
     if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){
       this.spinner.hide('loadingAlertData');
+    }
+  }
+
+  addWhatsapp() {
+    if (this.alertForm.value.chkwhatsapp) {
+      if (this.alertForm.value.whatsapp) {
+        if (
+          !this.isInArray(
+            this.alertForm.value.whatsapp,
+            this.alertForm.value.lista_whatsapp
+          )
+        ) {
+          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.controls.whatsapp.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El número ingresado ya existe.',
+            icon: 'warning',
+          });
+        }
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un número.',
+          icon: 'warning',
+        });
+      }
+
+    }
+  }
+
+  restWhatsapp(index: number) {
+    this.alertForm.value.lista_whatsapp.splice(index, 1);
+  }
+
+  chkWhatsappHandler() {
+
+    if (this.alertForm.value.chkwhatsapp) {
+      this.alertForm.controls['whatsapp'].enable();
+    } else {
+      this.alertForm.controls['whatsapp'].disable();
     }
   }
 }

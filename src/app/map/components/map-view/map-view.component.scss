@@ -41,6 +41,15 @@
         }
       }
     }
+  
+
+    .view-container {
+      height: 100%;
+      width: 100%;
+    }
+    .grid-section {
+        height: 100%;
+    }
 
     /* PROPUESTAS de COLOR*/
     .fatiga{
@@ -115,6 +124,39 @@
     }
 
 
+    .conductor-adormitado, .conductor-adormitado{
+      --event-main-color: #287b72;
+    }
+
+    .conductor-somnoliento, .conductor-somnoliento{
+      --event-main-color: #2589e6;
+    }
+
+    .distraccion-detectada, .distraccion-detectada{
+      --event-main-color: #1f3fbe;
+    }
+
+    .conductor-somnoliento, .conductor-somnoliento{
+      --event-main-color: #22915b;
+    }
+
+    .cinturon-NoDetectado, .cinturon-NoDetectado{
+      --event-main-color: #8237d8;
+    }
+
+    .celular-detectado, .celular-detectado{
+      --event-main-color: #d1623a;
+    }
+
+    .cigarro-detectado, .cigarro-detectado{
+      --event-main-color: #9e2b95;
+    }
+    .deteccion-manipulacion, .deteccion-manipulacion{
+      --event-main-color: #cf5739;
+    }
+    .error-camara, .error-camara{
+      --event-main-color: #1d7c28;
+    }
     /* COLORES DEFINIDOS */
     .zona-entrada, .zona-de-entrada{
       --event-main-color: #F58634;
@@ -197,6 +239,15 @@
     .distraccion,
     .no-rostro,
 
+    .conductor-adormitado, .conductor-adormitado,
+    .conductor-somnoliento, .conductor-somnoliento,
+    .distraccion-detectada, .distraccion-detectada,
+    .cinturon-NoDetectado, .cinturon-NoDetectado,
+    .celular-detectado, .celular-detectado,
+    .cigarro-detectado, .cigarro-detectado,
+    .deteccion-manipulacion, .deteccion-manipulacion,
+    .error-camara, .error-camara,
+    
     /* DEFINIDOS */
     .zona-entrada, .zona-de-entrada,
     .zona-salida, .zona-de-salida,
@@ -235,12 +286,15 @@
     /* Nombres de vehículos */
     .leaflet-tooltip.vehicle-tooltip{
       border: none;
-      color: #fff;
-      border-radius: 0.5rem;
-      background-color: var(--gl-blue-dark);
+      color: var(--gl-blue-dark);
+      text-shadow: 0 0 3px white;
+      //border-radius: 0.5rem;
+      background-color: transparent !important;
       font-weight: bold;
       line-height: 1rem;
+      box-shadow: none !important;
       //-webkit-text-stroke: 0.75px black;
+      // text-align: center; /* Centrar el texto */
       &::before{
         display: none;
       }

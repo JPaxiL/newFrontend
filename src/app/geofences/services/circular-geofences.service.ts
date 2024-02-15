@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
@@ -15,7 +15,7 @@ import { switchMap } from 'rxjs/operators';
 export class CircularGeofencesService {
 
   circular_geofences: any[] = []
-  nombreComponente:string = "LISTAR";
+  nameComponentCir:string = "LISTAR";
   action:string = "add";
   idGeocercaEdit:number = 0;
 
@@ -32,6 +32,7 @@ export class CircularGeofencesService {
   defaultTagNameFontSize = 10;
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
+  @Output() dataCompleted = new EventEmitter<any>();
 
   circularGeofenceCounters: any = {
     visible: 0,
@@ -59,6 +60,7 @@ export class CircularGeofencesService {
     this.http.get<ResponseInterface>(`${environment.apiUrl}/api/circular-zone`).subscribe(resp => {
 
       this.circular_geofences = resp.data;
+      console.log("Circularessss",resp.data);
       this.initializeTable();
       this.drawGeofencesOnMap();
       this.updateGeoCounters();
@@ -68,6 +70,7 @@ export class CircularGeofencesService {
       this.initializingCircularGeofences = true;
       this.attemptToHideSpinner();
       console.log(this.circular_geofences);
+      this.dataCompleted.emit(this.circular_geofences);
     });
   }
 
@@ -75,7 +78,7 @@ export class CircularGeofencesService {
     this.tblDataGeo = [];
     for(let i = 0; i < this.circular_geofences.length; i++){
       if(this.circular_geofences[i].id != newCircularGeofenceId){
-        this.circular_geofences[i].zone_name_visible_bol = (this.circular_geofences[i].zone_name_visible === true);
+        this.circular_geofences[i].zone_name_visible_bol = (this.circular_geofences[i].zone_name_visible == 'true');
       } else {
         this.circular_geofences[i].zone_name_visible_bol = true;
       }
@@ -83,18 +86,18 @@ export class CircularGeofencesService {
     }
     this.tblDataGeoFiltered = this.getTableData();
 
-    console.log(this.tblDataGeoFiltered);
+    // console.log(this.tblDataGeoFiltered);
     
   }
 
   bindMouseEvents(geofence: any){
     geofence.geo_elemento.on('mouseover', () => {
-      if(geofence.zone_name_visible != true){
+      if(geofence.zone_name_visible != 'true'){
         geofence.marker_name.addTo(this.mapService.map);
       }
     });
     geofence.geo_elemento.on('mouseout', () => {
-      if(geofence.zone_name_visible != true){
+      if(geofence.zone_name_visible != 'true'){
         this.mapService.map.removeLayer(geofence.marker_name);
       }
     });
@@ -114,11 +117,11 @@ export class CircularGeofencesService {
   }
 
   showDrawingsOfGeofence(geofence: any){
-    if (geofence.zone_visible == true) {
+    if (geofence.zone_visible == 'true') {
       geofence.geo_elemento.addTo(this.mapService.map);
     }
 
-    if (geofence.zone_name_visible == true) {
+    if (geofence.zone_name_visible == 'true') {
       geofence.marker_name.addTo(this.mapService.map);
     }
     
@@ -194,7 +197,7 @@ export class CircularGeofencesService {
   }
 
   getUserPrivileges(){
-    console.log('(Circular Geofences Service) Esperando privliegios...');
+    // console.log('(Circular Geofences Service) Esperando privliegios...');
     if(!this.userDataService.userDataInitialized){
       console.log('(Circular Geofences Service) User Data no está listo. Subscribiendo para obtener privilegios...');
       this.userDataService.geofencesPrivileges.subscribe({
@@ -235,7 +238,7 @@ export class CircularGeofencesService {
   }
 
   updateGeoCounters(){
-    this.circularGeofenceCounters.visible = this.circular_geofences.filter( (circular_geofences: { zone_visible: boolean; }) => circular_geofences.zone_visible == true).length;
+    this.circularGeofenceCounters.visible = this.circular_geofences.filter( (circular_geofences: { zone_visible: string; }) => circular_geofences.zone_visible == 'true').length;
     this.circularGeofenceCounters.hidden = this.circular_geofences.length - this.circularGeofenceCounters.visible;
     
   }
@@ -247,12 +250,12 @@ export class CircularGeofencesService {
 
   clearDrawingsOfGeofence(geofence: any){
     if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
-      && geofence.zone_visible == true ){
+      && geofence.zone_visible == 'true' ){
 
       this.mapService.map.removeLayer(geofence.geo_elemento);
     }
     if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
-      && geofence.zone_name_visible == true ){
+      && geofence.zone_name_visible == 'true' ){
 
       this.mapService.map.removeLayer(geofence.marker_name);
     }

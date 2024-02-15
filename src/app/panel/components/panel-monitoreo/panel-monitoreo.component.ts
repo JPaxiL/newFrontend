@@ -10,7 +10,6 @@ declare var $: any;
 })
 export class PanelMonitoreoComponent implements OnInit {
 
-
   constructor( public panelService: PanelService ) { }
 
   ngOnInit(): void {
@@ -77,6 +76,9 @@ export class PanelMonitoreoComponent implements OnInit {
       case "ALERTS-GPS":
       case "ALERTS-PLATFORMS":
       case "ALERTS-ACCESSORIES":
+      case "ALERTS-SECURITY":
+      case "ALERTS-MOBILE":
+      case "ALERTS-360":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-alertas-header-height').replace('rem', '')) != 0;
       case "GEOFENCES":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-geocercas-header-height').replace('rem', '')) != 0;
@@ -90,6 +92,8 @@ export class PanelMonitoreoComponent implements OnInit {
         // return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-historial-header-height').replace('rem', '')) != 0;
       case "EVENT-USER":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-notificaciones-header-height').replace('rem', '')) != 0;
+      case "USER-INFO":
+          return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-configuracion-header-height').replace('rem', '')) != 0;
       case "USER-CONFIG":
         return Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-configuracion-header-height').replace('rem', '')) != 0;
       case "DASHBOARD":

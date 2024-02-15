@@ -13,23 +13,17 @@
       <div class="dialog-body-container">
   
         <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
-          <!-- <div class="" *ngIf="true">
-            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-          </div> -->
-  
-
   
           <div class="dialog-form-container d-flex" >
-
 
             <div class="row">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                    <label for="nameCreate">Nombre</label>
+                    <label for="name_driver">Nombre</label>
                   </div>
                   <div class="col-7">
-                    <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="nombre" autocomplete="no">
+                    <input id="name_driver" type="text" pInputText class="p-inputtext-sm" formControlName="nombre" autocomplete="no">
                   </div>
                 </label>
               </div>
@@ -39,10 +33,10 @@
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                    <label for="nameCreate">DNI</label>
+                    <label for="dni_driver">DNI</label>
                   </div>
                   <div class="col-7">
-                    <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="dni" autocomplete="no">
+                    <input id="dni_driver" type="text" pInputText class="p-inputtext-sm" formControlName="dni" autocomplete="no">
                   </div>
                 </label>
               </div>
@@ -62,7 +56,7 @@
               </div>
             </div> -->
 
-            <div class="row">
+            <!-- <div class="row">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
@@ -84,39 +78,37 @@
                   </div>
                 </label>
               </div>
-            </div>
-
-
-            <div *ngIf="driversForm.value.tipo_identificacion == 'ibutton'" class="row">
+            </div> -->
+            <div class="row">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                    <label for="tipo-unidad">Nro Llave :</label>
+                    <label for="licencia_driver">Nro Licencia</label>
                   </div>
                   <div class="col-7">
-                    <div class="p-field">
-                      <p-dropdown
-                      [filter]="true"
-                      [options]="ibuttons"
-                      optionLabel="value"
-                      optionValue="id"
-                      formControlName="nro_llave"
-                      [showClear]="true"
-                      [appendTo]="'body'"
-                      placeholder="Seleccione llave I-button..."></p-dropdown>
-                    </div>
+                    <input id="licencia_driver" type="text" pInputText class="p-inputtext-sm" formControlName="nro_licencia" autocomplete="no">
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="licencia_driver">Nro Celular</label>
+                  </div>
+                  <div class="col-7">
+                    <input id="licencia_driver" type="text" pInputText class="p-inputtext-sm" formControlName="nro_cellphone" autocomplete="no">
                   </div>
                 </label>
               </div>
             </div>
 
-
-
-            <div *ngIf="driversForm.value.tipo_identificacion == 'imei'" class="row">
+            <div class="row">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                    <label for="tipo-unidad">Vehículo :</label>
+                    <label for="tipo-unidad-imei">Vehículo :</label>
                   </div>
                   <div class="col-7">
                     <div class="p-field">
@@ -134,38 +126,51 @@
                 </label>
               </div>
             </div>
-
-            <!-- [(ngModel)]="form.selectedCar" -->
-
-            <!-- <p-multiSelect
-            [options]="geocercas"
-            optionLabel="label"
-            optionValue="value"
-            formControlName="nro_llave"
-            defaultLabel="0 geocercas seleccionados"
-            [appendTo]="'body'"
-            [maxSelectedLabels]="1"
-            [selectedItemsLabel]="'{0} geocercas seleccionados'"
-            ></p-multiSelect> -->
-
-    
-
-
-
             <div class="row">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
-                    <label for="nameCreate">Nro Licencia</label>
+                    <label for="tipo-unidad-imei">Código Cipia:</label>
                   </div>
                   <div class="col-7">
-                    <input id="nameCreate" type="text" pInputText class="p-inputtext-sm" formControlName="nro_licencia" autocomplete="no">
+                    <div class="p-field">
+                      <p-dropdown
+                      [filter]="true"
+                      [options]="icipias"
+                      optionLabel="value"
+                      optionValue="id"
+                      formControlName="nro_cipia"
+                      [showClear]="true"
+                      [appendTo]="'body'"
+                      placeholder="Seleccione el Código Cipia..."></p-dropdown>
+                    </div>
                   </div>
                 </label>
               </div>
             </div>
 
-
+            <div class="row">
+              <div class="col p-field">
+                <label class="row gl-row-underline">
+                  <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                    <label for="tipo-unidad-llave">Nro Llave :</label>
+                  </div>
+                  <div class="col-7">
+                    <div class="p-field">
+                      <p-dropdown
+                      [filter]="true"
+                      [options]="ibuttons"
+                      optionLabel="value"
+                      optionValue="id"
+                      formControlName="nro_llave"
+                      [showClear]="true"
+                      [appendTo]="'body'"
+                      placeholder="Seleccione llave I-button..."></p-dropdown>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>

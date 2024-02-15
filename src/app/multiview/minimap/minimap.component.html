@@ -1,0 +1,52 @@
+<div class="w-100 h-100 d-flex flex-column">
+     <div class="minimap-header d-flex justify-content-between align-items-center px-3">
+          <div class="d-flex align-items-center justify-content-start gap-4 ">
+               <span class="minimap-title">
+                    <!--{{configuration.numero_placa}}{{configuration.nombre_grupo? ' - ('+configuration.nombre_grupo+')' : ''}}-->
+                    {{title}}
+               </span>
+               <!--*ngIf="miniMap.events! > 0" -->
+               <div *ngIf="miniMap.nEvents! > 0" (click)="openOverlay($event,'op-' + idContainer.toString())">
+                    <i
+                         [value]="miniMap.nEvents!<100?miniMap.nEvents!.toString():'+99'" 
+                         class="pi pi-bell text-xl mr-4" 
+                         pBadge 
+                         style="font-size: 1.5rem" 
+                         severity="danger">
+                    </i>
+               </div>
+               <p-overlayPanel appendTo="body" [attr.id]="'op-' + idContainer.toString()" [style]="{'max-width': '600px'}" [showCloseIcon]="true">
+                    <ng-template pTemplate="content">
+                         <!--p-table [value]="events" selectionMode="single" [(selection)]="eventSelected" (onRowSelect)="onEventSelect($event, 'op-' + idContainer.toString())" [paginator]="true" [rows]="5" responsiveLayout="scroll"-->
+                         <p-table [value]="miniMap.events" selectionMode="single" [(selection)]="eventSelected" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                              <ng-template pTemplate="header">
+                                   <tr>
+                                        <th pSortableColumn="evento">Evento<p-sortIcon field="evento"></p-sortIcon></th>
+                                        <th pSortableColumn="nombre_objeto">Placa<p-sortIcon field="nombre_objeto"></p-sortIcon></th>
+                                        <th pSortableColumn="fecha_tracker">Fecha<p-sortIcon field="fecha_tracker"></p-sortIcon></th>
+                                   </tr>
+                              </ng-template>
+                              <ng-template pTemplate="body" let-rowData let-event>
+                                   <!--tr [pSelectableRow]="rowData"-->
+                                   <tr #currRow (click)="switchEventOnMap(event, currRow, 'op-' + idContainer.toString())" [ngClass]="{ 'unread-event': !event.viewed }" [class]="event.clase">
+                                        <td>
+                                             <div class="d-flex justify-content-between ">
+                                                  <span>{{ event.name }}</span>
+                                                  <p-tag *ngIf="!event.viewed" severity="success" value="Nuevo"></p-tag>
+                                             </div>
+                                        </td>
+                                        <td>{{event.nombre_objeto}}</td>
+                                        <td>{{event.fecha_tracker}}</td>
+                                   </tr>
+                              </ng-template>
+                         </p-table>
+                    </ng-template>
+               </p-overlayPanel>
+          </div>
+          <button class="close-button" (click)="deleteMap()">
+               <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 8L8 16M8 8L16 16" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path> </g></svg>
+          </button>
+     </div>
+     <div [id]="'map-container-'+idContainer.toString()" class="w-100 h-100">
+     </div>
+</div>

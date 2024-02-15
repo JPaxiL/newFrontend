@@ -1,3 +1,4 @@
+
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="reportSpinner" size = "medium" color = "#fff" type = "ball-rotate" [fullScreen] = "false"><p style="color: white" > Generando Reporte... </p></ngx-spinner>
 <p-confirmDialog #cdExport [style]="{width: '30rem'}" [closeOnEscape]="true" [breakpoints]="{'960px': '50vw', '640px': '75vw'}" class="gl-confirm-dialog " key="showSelectExcelConfirmation">
   <ng-template pTemplate="header">
@@ -170,7 +171,7 @@
             </div>
 
             <ng-container *ngIf="dtRendered">
-              <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -867,8 +868,8 @@
                     <th *ngIf="!chkOdomV">Odómetro</th>
                     <th *ngIf="chkOdomV">Odómetro Virtual</th>
                     <th>Ubicación</th>
-                    <th>Mensaje de Alerta</th>
-                    <th>Combustible Alerta (galones)</th>
+                    <!-- <th>Mensaje de Alerta</th>
+                    <th>Combustible Alerta (galones)</th> -->
                     <th>can_rpm</th>
                     <th>Altitud</th>
                   </tr>
@@ -895,8 +896,8 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.alerta}}</td>
-                    <td>{{row.combustiblealerta}}</td>
+                    <!-- <td>{{row.alerta}}</td>
+                    <td>{{row.combustiblealerta}}</td> -->
                     <td>{{row.can_rpm}}</td>
                     <td>{{row.altitude}}</td>
                   </tr>
@@ -958,8 +959,8 @@
                     <th *ngIf="!chkOdomV">Odómetro</th>
                     <th *ngIf="chkOdomV">Odómetro Virtual</th>
                     <th>Ubicación</th>
-                    <th>Mensaje de Alerta</th>
-                    <th>Combustible Alerta (galones)</th>
+                    <!-- <th>Mensaje de Alerta</th>
+                    <th>Combustible Alerta (galones)</th> -->
                     <th>can_rpm</th>
                     <th>Altitud</th>
                   </tr>
@@ -985,8 +986,8 @@
                     <td>
                       <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                     </td>
-                    <td>{{row.alerta}}</td>
-                    <td>{{row.combustiblealerta}}</td>
+                    <!-- <td>{{row.alerta}}</td>
+                    <td>{{row.combustiblealerta}}</td> -->
                     <td>{{row.can_rpm}}</td>
                     <td>{{row.altitude}}</td>
                   </tr>
@@ -1049,7 +1050,7 @@
                 </div>
               </div>
               <div>
-                <div>PERIODO</div>
+                <div>PERIODO -1-</div>
                 <div>{{period}}</div>
               </div>
             </div>
@@ -1129,11 +1130,11 @@
 
             <div class="subtable-title mb-3">
               <div>
-                <div>VEHÍCULO</div>
+                <div>VEHÍCULO -2-</div>
                 <div>{{v_table[0][1]}}</div>
               </div>
               <div>
-                <div>PERIODO</div>
+                <div>PERIODO--</div>
                 <div>{{period}}</div>
               </div>
             </div>
@@ -1210,7 +1211,7 @@
 
 
     <!-- 5. REPORTE GENERAL-->
-    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R006'">
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R006' || report_data.num_rep == 'R036'">
 
       <ng-container *ngIf="chkTableDropdown">
 
@@ -1263,35 +1264,50 @@
                       <th *ngIf="reportTableDropdownData[2].fServidor && chkDateHour">Fecha Servidor</th>
                       <th *ngIf="reportTableDropdownData[2].fServidor && chkDateHour">Hora Servidor</th>
 
-                      <th *ngIf="reportTableDropdownData[2].ubicacion" >Ubicación</th>
-                      <th *ngIf="reportTableDropdownData[2].velGPS" >Velocidad GPS</th>
-                      <th *ngIf="reportTableDropdownData[2].velECO" >Velocidad ECO</th>
+                      <th *ngIf="reportTableDropdownData[2].pCercano" >Punto Cercano</th>
+
+                      <th *ngIf="reportTableDropdownData[2].velCAN" >Velocidad CAN</th>
+                      <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep != 'R036'" >Velocidad GPS</th>
+                      <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep == 'R036'" >Velocidad 360</th>
                       <th *ngIf="reportTableDropdownData[2].velGPS_speed" >Velocidad GPS speed</th>
                       <th *ngIf="reportTableDropdownData[2].velMobileye_ME460" >Velocidad Mobileye</th>
+                      <th *ngIf="reportTableDropdownData[2].velECO" >Velocidad ECO</th>
+
+                      <th *ngIf="reportTableDropdownData[2].DUOT2state" >DUOT2 state</th>
+                      <th *ngIf="reportTableDropdownData[2].RxM" >RPM</th>
+                      <th *ngIf="reportTableDropdownData[2].RPMAlta" >RPM Alta</th>
+
+                      <th *ngIf="reportTableDropdownData[2].cNivel" >Nivel de Combustible</th>
+                      <th *ngIf="reportTableDropdownData[2].cRestante" >Combustible Restante</th>
+
+                      <th *ngIf="reportTableDropdownData[2].cMotor" >Consumo Motor</th>
+                      <th *ngIf="reportTableDropdownData[2].odometro" >Odómetro</th>
 
                       <th *ngIf="reportTableDropdownData[2].altitud" >Altitud</th>
                       <th *ngIf="reportTableDropdownData[2].angulo" >Angulo</th>
+
+                      <th *ngIf="reportTableDropdownData[2].alimentGps" >Alimentación GPS</th>
+                      <th *ngIf="reportTableDropdownData[2].nivelBateria" >Nivel de Batería</th>
+
+                      <th *ngIf="reportTableDropdownData[2].nivelCobertura" >Nivel de Cobertura</th>
+                      <th *ngIf="reportTableDropdownData[2].temperaturaGps" >Temperatura GPS</th>
+
+                      <th *ngIf="reportTableDropdownData[2].satelite" >Satélite</th>
+                      <th *ngIf="reportTableDropdownData[2].recFacial" >Reconocimiento Facial</th>
+
+                      <th *ngIf="reportTableDropdownData[2].onOff" >Ignición</th>
+                      <th *ngIf="reportTableDropdownData[2].alcoholemia" >Alcoholemia</th>
+
+                      <th *ngIf="reportTableDropdownData[2].parametros" >Parámetros</th>
+                      <th *ngIf="reportTableDropdownData[2].ubicacion" >Ubicación</th>
+                      <th *ngIf="reportTableDropdownData[2].referencia" >Referencia</th>
+
+
+                      <!-- NO SE USAN -->
                       <th *ngIf="reportTableDropdownData[2].fatiga" >Fatiga</th>
                       <!-- <th *ngIf="v_table[2].fExBrusca" >Frenada Extrema Brusca</th> -->
                       <th *ngIf="reportTableDropdownData[2].fBrusca" >Frenada Brusca</th>
                       <th *ngIf="reportTableDropdownData[2].aBrusca" >Aceleración Brusca</th>
-                      <th *ngIf="reportTableDropdownData[2].RPMAlta" >RPM Alta</th>
-
-                      <th *ngIf="reportTableDropdownData[2].alcoholemia" >Alcoholemia</th>
-                      <th *ngIf="reportTableDropdownData[2].parametros" >Parámetros</th>
-                      <th *ngIf="reportTableDropdownData[2].cNivel" >Nivel de Combustible</th>
-                      <th *ngIf="reportTableDropdownData[2].cRestante" >C.Restante</th>
-                      <th *ngIf="reportTableDropdownData[2].cMotor" >C.Motor</th>
-                      <th *ngIf="reportTableDropdownData[2].odometro" >Odómetro</th>
-                      <th *ngIf="reportTableDropdownData[2].onOff" >On/Off</th>
-                      <th *ngIf="reportTableDropdownData[2].RxM" >Rev.X Min.</th>
-                      <th *ngIf="reportTableDropdownData[2].recFacial" >Reconocimiento Facial</th>
-                      <th *ngIf="reportTableDropdownData[2].velCAN" >Velocidad CAN</th>
-                      <th *ngIf="reportTableDropdownData[2].pCercano" >Punto Cercano</th>
-                      <th *ngIf="reportTableDropdownData[2].referencia" >Referencia</th>
-
-                      <th *ngIf="reportTableDropdownData[2].DUOT2state" >DUOT2 state</th>
-
                   </tr>
                 </thead>
 
@@ -1311,38 +1327,46 @@
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td> -->
 
-
-                      <td *ngIf="reportTableDropdownData[2].ubicacion">
-                      <!-- <td *ngIf="v_table[2].ubicacion"> -->
-                        <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
-                      </td>
+                      <td *ngIf="reportTableDropdownData[2].pCercano" >{{row.pCercano}}</td>
+                      <td *ngIf="reportTableDropdownData[2].velCAN" [ngStyle]="{'background-color': row.velCAN > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="reportTableDropdownData[2].velGPS" [ngStyle]="{'background-color': row.velGPS > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
-                      <td *ngIf="reportTableDropdownData[2].velECO" [ngStyle]="{'background-color': row.velECO > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
                       <td *ngIf="reportTableDropdownData[2].velGPS_speed" >{{row.velGPS_speed}}</td>
                       <td *ngIf="reportTableDropdownData[2].velMobileye_ME460" >{{row.velMobileye_ME460}}</td>
+                      <td *ngIf="reportTableDropdownData[2].velECO" [ngStyle]="{'background-color': row.velECO > reportTableDropdownData[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
                       
+                      <td *ngIf="reportTableDropdownData[2].DUOT2state" >{{row.DUOT2state}}</td>
+                      <td *ngIf="reportTableDropdownData[2].RxM" >{{row.RxM}}</td>
+                      <td *ngIf="reportTableDropdownData[2].RPMAlta" >{{row.RPMAlta}}</td>
+
+                      <td *ngIf="reportTableDropdownData[2].cNivel" >{{row.cNivel}}</td>
+                      <td *ngIf="reportTableDropdownData[2].cRestante" >{{row.cRestante}}</td>
+
+                      <td *ngIf="reportTableDropdownData[2].cMotor" >{{row.cMotor}}</td>
+                      <td *ngIf="reportTableDropdownData[2].odometro" >{{row.odometro}}</td>
 
                       <td *ngIf="reportTableDropdownData[2].altitud" >{{row.altitud}}</td>
                       <td *ngIf="reportTableDropdownData[2].angulo" >{{row.angulo}}</td>
-                      <td *ngIf="reportTableDropdownData[2].fatiga" [ngStyle]="{'background-color': row.fatiga == 'si' ? 'rgb(28, 243, 9)' : {} }">{{row.fatiga}}</td>
-                      <td *ngIf="reportTableDropdownData[2].fBrusca" >{{row.fBrusca}}</td>
-                      <td *ngIf="reportTableDropdownData[2].aBrusca" >{{row.aBrusca}}</td>
-                      <td *ngIf="reportTableDropdownData[2].RPMAlta" >{{row.RPMAlta}}</td>
+
+                      <!-- NEW -->
+                      <td *ngIf="reportTableDropdownData[2].alimentGps" >{{row.alimentGps}}</td>
+                      <td *ngIf="reportTableDropdownData[2].nivelBateria" >{{row.nivelBateria}}</td>
+
+                      <td *ngIf="reportTableDropdownData[2].nivelCobertura" >{{row.nivelCobertura}}</td>
+                      <td *ngIf="reportTableDropdownData[2].temperaturaGps" >{{row.temperaturaGps}}</td>
+
+                      <td *ngIf="reportTableDropdownData[2].satelite" >{{row.satelite}}</td>
+                      <td *ngIf="reportTableDropdownData[2].recFacial" >{{row.recFacial}}</td>
+                      <td *ngIf="reportTableDropdownData[2].onOff" >{{row.onOff}}</td>
 
                       <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state == 4" [ngStyle]="{'background-color': 'rgb(28, 243, 9)'}">{{row.alcohol_nombre}}</td>
                       <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state == 5" [ngStyle]="{'background-color': 'rgb(255,  0, 0)'}">{{row.alcohol_nombre}}</td>
                       <td *ngIf="reportTableDropdownData[2].alcoholemia && row.alcohol_state != 4 && row.alcohol_state != 5" >{{row.alcohol_nombre}}</td>
 
                       <td *ngIf="reportTableDropdownData[2].parametros" >{{row.parametros}}</td>
-                      <td *ngIf="reportTableDropdownData[2].cNivel" >{{row.cNivel}}</td>
-                      <td *ngIf="reportTableDropdownData[2].cRestante" >{{row.cRestante}}</td>
-                      <td *ngIf="reportTableDropdownData[2].cMotor" >{{row.cMotor}}</td>
-                      <td *ngIf="reportTableDropdownData[2].odometro" >{{row.odometro}}</td>
-                      <td *ngIf="reportTableDropdownData[2].onOff" >{{row.onOff}}</td>
-                      <td *ngIf="reportTableDropdownData[2].RxM" >{{row.RxM}}</td>
-                      <td *ngIf="reportTableDropdownData[2].recFacial" >{{row.recFacial}}</td>
-                      <td *ngIf="reportTableDropdownData[2].velCAN" [ngStyle]="{'background-color': row.velCAN > reportTableDropdownData[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
-                      <td *ngIf="reportTableDropdownData[2].pCercano" >{{row.pCercano}}</td>
+                      <td *ngIf="reportTableDropdownData[2].ubicacion">
+                        <!-- <td *ngIf="v_table[2].ubicacion"> -->
+                          <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
+                        </td>
                       <td *ngIf="reportTableDropdownData[2].referencia" >
                         <!-- {{row.referencia}} -->
                         <span *ngIf="row.referencia != 'desconocido ...'" [innerHTML]="row.referencia">
@@ -1350,6 +1374,12 @@
                         <button *ngIf="row.referencia == 'desconocido ...'" class="btn btn-success" (click)="showGeneralDireccion(row, reportTableDropdownData[1]);">Ver</button>
                       </td>
 
+                      <td *ngIf="reportTableDropdownData[2].fatiga" [ngStyle]="{'background-color': row.fatiga == 'si' ? 'rgb(28, 243, 9)' : {} }">{{row.fatiga}}</td>
+                      <td *ngIf="reportTableDropdownData[2].fBrusca" >{{row.fBrusca}}</td>
+                      <td *ngIf="reportTableDropdownData[2].aBrusca" >{{row.aBrusca}}</td>
+
+                      
+                     
 
 
 											<!-- <td ng-if="dato[2].referencia" >
@@ -1362,7 +1392,6 @@
 
 
 
-                      <td *ngIf="reportTableDropdownData[2].DUOT2state" >{{row.DUOT2state}}</td>
 
                   </tr>
                 </tbody>
@@ -1442,35 +1471,50 @@
                       <th *ngIf="v_table[2].fServidor && chkDateHour">Fecha Servidor</th>
                       <th *ngIf="v_table[2].fServidor && chkDateHour">Hora Servidor</th>
 
-                      <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
-                      <th *ngIf="v_table[2].velGPS" >Velocidad GPS</th>
-                      <th *ngIf="v_table[2].velECO" >Velocidad ECO</th>
+                      <th *ngIf="v_table[2].pCercano" >Punto Cercano</th>
+
+                      <th *ngIf="v_table[2].velCAN" >Velocidad CAN</th>
+                      <th *ngIf="v_table[2].velGPS && report_data.num_rep != 'R036'" >Velocidad GPS</th>
+                      <th *ngIf="v_table[2].velGPS && report_data.num_rep == 'R036'" >Velocidad 360</th>
                       <th *ngIf="v_table[2].velGPS_speed" >Velocidad GPS speed</th>
                       <th *ngIf="v_table[2].velMobileye_ME460" >Velocidad Mobileye</th>
+                      <th *ngIf="v_table[2].velECO" >Velocidad ECO</th>
+                      <th *ngIf="v_table[2].DUOT2state" >DUOT2 state</th>
+
+                      <th *ngIf="v_table[2].RxM" >RPM</th>
+                      <th *ngIf="v_table[2].RPMAlta" >RPM Alta</th>
+
+                      <th *ngIf="v_table[2].cNivel" >Nivel de Combustible</th>
+                      <th *ngIf="v_table[2].cRestante" >C.Restante</th>
+
+                      <th *ngIf="v_table[2].cMotor" >C.Motor</th>
+                      <th *ngIf="v_table[2].odometro" >Odómetro</th>
 
                       <th *ngIf="v_table[2].altitud" >Altitud</th>
                       <th *ngIf="v_table[2].angulo" >Angulo</th>
+
+                      <th *ngIf="v_table[2].alimentGps" >Alimentación GPS</th>
+                      <th *ngIf="v_table[2].nivelBateria" >Nivel de Batería</th>
+
+                      <th *ngIf="v_table[2].nivelCobertura" >Nivel de Cobertura</th>
+                      <th *ngIf="v_table[2].temperaturaGps" >Temperatura GPS</th>
+
+                      <th *ngIf="v_table[2].satelite" >Satélite</th>
+                      <th *ngIf="v_table[2].recFacial" >Reconocimiento Facial</th>
+
+                      <th *ngIf="v_table[2].onOff" >Ignición</th>
+                      <th *ngIf="v_table[2].alcoholemia" >Alcoholemia</th>
+
+                      <th *ngIf="v_table[2].parametros" >Parámetros</th>
+                      <th *ngIf="v_table[2].ubicacion" >Ubicación</th>
+
+                      <th *ngIf="v_table[2].referencia" >Referencia</th>
+
+                      <!-- YA NO SE USAN -->
                       <th *ngIf="v_table[2].fatiga" >Fatiga</th>
                       <!-- <th *ngIf="v_table[2].fExBrusca" >Frenada Extrema Brusca</th> -->
                       <th *ngIf="v_table[2].fBrusca" >Frenada Brusca</th>
                       <th *ngIf="v_table[2].aBrusca" >Aceleración Brusca</th>
-                      <th *ngIf="v_table[2].RPMAlta" >RPM Alta</th>
-
-                      <th *ngIf="v_table[2].alcoholemia" >Alcoholemia</th>
-                      <th *ngIf="v_table[2].parametros" >Parámetros</th>
-                      <th *ngIf="v_table[2].cNivel" >Nivel de Combustible</th>
-                      <th *ngIf="v_table[2].cRestante" >C.Restante</th>
-                      <th *ngIf="v_table[2].cMotor" >C.Motor</th>
-                      <th *ngIf="v_table[2].odometro" >Odómetro</th>
-                      <th *ngIf="v_table[2].onOff" >On/Off</th>
-                      <th *ngIf="v_table[2].RxM" >Rev.X Min.</th>
-                      <th *ngIf="v_table[2].recFacial" >Reconocimiento Facial</th>
-                      <th *ngIf="v_table[2].velCAN" >Velocidad CAN</th>
-                      <th *ngIf="v_table[2].pCercano" >Punto Cercano</th>
-                      <th *ngIf="v_table[2].referencia" >Referencia</th>
-
-                      <th *ngIf="v_table[2].DUOT2state" >DUOT2 state</th>
-
                   </tr>
                 </thead>
 
@@ -1486,47 +1530,64 @@
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[0]}}</td>
                       <td *ngIf="v_table[2].fServidor && chkDateHour" >{{row.fServidor.split(' ')[1]}}</td>
 
-                      <td *ngIf="v_table[2].ubicacion">
-                        <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
-                      </td>
+                      <td *ngIf="v_table[2].pCercano" >{{row.pCercano}}</td>
+
+                      <td *ngIf="v_table[2].velCAN" [ngStyle]="{'background-color': row.velCAN > v_table[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
                       <td *ngIf="v_table[2].velGPS" [ngStyle]="{'background-color': row.velGPS > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velGPS}}</td>
-                      <td *ngIf="v_table[2].velECO" [ngStyle]="{'background-color': row.velECO > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
                       <td *ngIf="v_table[2].velGPS_speed" >{{row.velGPS_speed}}</td>
                       <td *ngIf="v_table[2].velMobileye_ME460" >{{row.velMobileye_ME460}}</td>
+                      <td *ngIf="v_table[2].velECO" [ngStyle]="{'background-color': row.velECO > v_table[2][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velECO}}</td>
+
+                      <td *ngIf="v_table[2].DUOT2state" >{{row.DUOT2state}}</td>
+                      <td *ngIf="v_table[2].RxM" >{{row.RxM}}</td>
+                      <td *ngIf="v_table[2].RPMAlta" >{{row.RPMAlta}}</td>
+
+                      <td *ngIf="v_table[2].cNivel" >{{row.cNivel}}</td>
+                      <td *ngIf="v_table[2].cRestante" >{{row.cRestante}}</td>
+
+                      <td *ngIf="v_table[2].cMotor" >{{row.cMotor}}</td>
+                      <td *ngIf="v_table[2].odometro" >{{row.odometro}}</td>
 
                       <td *ngIf="v_table[2].altitud" >{{row.altitud}}</td>
                       <td *ngIf="v_table[2].angulo" >{{row.angulo}}</td>
-                      <td *ngIf="v_table[2].fatiga" [ngStyle]="{'background-color': row.fatiga == 'si' ? 'rgb(28, 243, 9)' : {} }">{{row.fatiga}}</td>
-                      <td *ngIf="v_table[2].fBrusca" >{{row.fBrusca}}</td>
-                      <td *ngIf="v_table[2].aBrusca" >{{row.aBrusca}}</td>
-                      <td *ngIf="v_table[2].RPMAlta" >{{row.RPMAlta}}</td>
 
+                      <!-- NEW -->
+                      <td *ngIf="v_table[2].alimentGps" >{{row.alimentGps}}</td>
+                      <td *ngIf="v_table[2].nivelBateria" >{{row.nivelBateria}}</td>
+ 
+                      <td *ngIf="v_table[2].nivelCobertura" >{{row.nivelCobertura}}</td>
+                      <td *ngIf="v_table[2].temperaturaGps" >{{row.temperaturaGps}}</td>
+ 
+                      <td *ngIf="v_table[2].satelite" >{{row.satelite}}</td>
+                      <td *ngIf="v_table[2].recFacial" >{{row.recFacial}}</td>
+                       
+                      <td *ngIf="v_table[2].onOff" >{{row.onOff}}</td>
                       <td *ngIf="v_table[2].alcoholemia && row.alcohol_state == 4" [ngStyle]="{'background-color': 'rgb(28, 243, 9)'}">{{row.alcohol_nombre}}</td>
                       <td *ngIf="v_table[2].alcoholemia && row.alcohol_state == 5" [ngStyle]="{'background-color': 'rgb(255,  0, 0)'}">{{row.alcohol_nombre}}</td>
                       <td *ngIf="v_table[2].alcoholemia && row.alcohol_state != 4 && row.alcohol_state != 5" >{{row.alcohol_nombre}}</td>
 
                       <td *ngIf="v_table[2].parametros" >{{row.parametros}}</td>
-                      <td *ngIf="v_table[2].cNivel" >{{row.cNivel}}</td>
-                      <td *ngIf="v_table[2].cRestante" >{{row.cRestante}}</td>
-                      <td *ngIf="v_table[2].cMotor" >{{row.cMotor}}</td>
-                      <td *ngIf="v_table[2].odometro" >{{row.odometro}}</td>
-                      <td *ngIf="v_table[2].onOff" >{{row.onOff}}</td>
-                      <td *ngIf="v_table[2].RxM" >{{row.RxM}}</td>
-                      <td *ngIf="v_table[2].recFacial" >{{row.recFacial}}</td>
-                      <td *ngIf="v_table[2].velCAN" [ngStyle]="{'background-color': row.velCAN > v_table[3][8] ? 'rgb(28, 243, 9)' : {} }">{{row.velCAN}}</td>
-                      <td *ngIf="v_table[2].pCercano" >{{row.pCercano}}</td>
-                      <!-- <td *ngIf="v_table[2].referencia" >{{row.referencia}}</td> -->
-
+                      <td *ngIf="v_table[2].ubicacion">
+                        <a href="http://maps.google.com/maps?q={{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}&amp;t=m" target="_blank">{{row.lat.toFixed(6)}},{{row.lng.toFixed(6)}}</a>
+                      </td>
                       <td *ngIf="v_table[2].referencia" >
                         <!-- {{row.referencia}} -->
                         <span *ngIf="row.referencia != 'desconocido ...'" [innerHTML]="row.referencia"></span>
                         <button *ngIf="row.referencia == 'desconocido ...'" class="btn btn-success" (click)="showGeneralDireccion(row, v_table[1]);">Ver</button>
-
-
                       </td>
 
+                      <td *ngIf="v_table[2].fatiga" [ngStyle]="{'background-color': row.fatiga == 'si' ? 'rgb(28, 243, 9)' : {} }">{{row.fatiga}}</td>
+                      <td *ngIf="v_table[2].fBrusca" >{{row.fBrusca}}</td>
+                      <td *ngIf="v_table[2].aBrusca" >{{row.aBrusca}}</td>
 
-                      <td *ngIf="v_table[2].DUOT2state" >{{row.DUOT2state}}</td>
+                      
+                      
+                     
+                      <!-- <td *ngIf="v_table[2].referencia" >{{row.referencia}}</td> -->
+
+                      
+                     
+
 
                   </tr>
                 </tbody>
@@ -1756,6 +1817,7 @@
             <th>Velocidad CAN</th>
             <th>Odómetro</th>
             <th>Ubicación</th>
+            <th>Geocerca</th>
             <th>Referencia</th>
           </tr>
         </thead>
@@ -1775,6 +1837,7 @@
             <td>
               <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}}, {{row.longitud.toFixed(6)}}</a>
             </td>
+            <td>{{row.tramo}}</td>
             <td>{{row.referencia}}</td>
           </tr>
         </tbody>
@@ -5459,7 +5522,7 @@
         <div class="p-card" style="padding: 1rem;">
 
           <div class="subtable-title mb-3">
-            <div>
+            <!-- <div>
               <div>VEHÍCULO</div>
               <div>
                 <div class="gl-row-underline vehicle-dropdown border-0">
@@ -5478,6 +5541,10 @@
                   </p-dropdown>
                 </div>
               </div>
+            </div> -->
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
             </div>
             <div>
               <div>PERIODO</div>
@@ -5543,9 +5610,13 @@
         <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
 
           <div class="subtable-title mb-3">
-            <div>
+            <!-- <div>
               <div>VEHÍCULO</div>
               <div>{{v_table[0][1]}}</div>
+            </div> -->
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
             </div>
             <div>
               <div>PERIODO</div>
@@ -5610,20 +5681,1200 @@
     </div>
 
 
+    <!-- R032 REPORTE DE EVENTO SOS -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R032'">
 
-    <!-- -R031  -->
-    <!-- <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R031'">
+      <ng-container *ngIf="chkTableDropdown">
 
-      <app-xreports-alcotester></app-xreports-alcotester>
+        <div class="p-card" style="padding: 1rem;">
 
-    </div> -->
+          <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>
+                <div class="gl-row-underline vehicle-dropdown border-0">
+                  <p-dropdown
+                        [filter]="true"
+                        [options]="reportTableVehicleDropdownOptions"
+                        optionLabel="name"
+                        [(ngModel)]="reportTableVehicleSelected"
+                        [appendTo]="'body'"
+                        (onChange)="renderDataTable()">
+                        <ng-template let-vehicle pTemplate="item">
+                            <div class="country-item">
+                                <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                            </div>
+                        </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <th>Item</th>
+                    <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                    <th *ngIf="chkDateHour">Fecha</th>
+                    <th *ngIf="chkDateHour">Hora</th>
+                    <th>Código</th>
+                    <th>Placa</th>
+                    <th>Tipo de Unidad</th>
+
+                    <th>Id Conductor</th>
+                    <th>Conductor</th>
+                    <th>Vel.GPS</th>
+                    <th>Vel.CAN</th>
+
+                    <th>Tramo</th>
+                    <th>Punto Cercano</th>
+                    <th>Ubicación</th>
+                    <!-- <th>Sonido en Cabina</th> -->
+
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+
+                    <td>{{i + 1}}</td>
+                    <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+                    <td>{{row.codigo}}</td>
+                    <td>{{row.placa}}</td>
+                    <td>{{row.tipo_unidad}}</td>
+
+                    <td>{{row.idConductor}}</td>
+                    <td>{{row.conductor}}</td>
+                    <td>{{row.vel_gps_speed}} Km/h</td>
+                    <td>{{row.vel_can}} Km/h</td>
+
+                    <td>{{row.tramo}}</td>
+                    <td>{{row.PC}}</td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="!chkTableDropdown">
+
+        <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+
+          <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>{{v_table[0][1]}}</div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <th>Item</th>
+                    <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                    <th *ngIf="chkDateHour">Fecha</th>
+                    <th *ngIf="chkDateHour">Hora</th>
+                    <th>Código</th>
+                    <th>Placa</th>
+                    <th>Tipo de Unidad</th>
+
+                    <th>Id Conductor</th>
+                    <th>Conductor</th>
+                    <th>Vel.GPS</th>
+                    <th>Vel.CAN</th>
+
+                    <th>Tramo</th>
+                    <th>Punto Cercano</th>
+                    <th>Ubicación</th>
+                    <!-- <th>Sonido en Cabina</th> -->
+
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                    <td>{{i + 1}}</td>
+                    <td *ngIf="!chkDateHour">{{row.fecha}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha.split(' ')[1]}}</td>
+                    <td>{{row.codigo}}</td>
+                    <td>{{row.placa}}</td>
+                    <td>{{row.tipo_unidad}}</td>
+
+                    <td>{{row.idConductor}}</td>
+                    <td>{{row.conductor}}</td>
+                    <td>{{row.vel_gps_speed}} Km/h</td>
+                    <td>{{row.vel_can}} Km/h</td>
+
+                    <td>{{row.tramo}}</td>
+                    <td>{{row.PC}}</td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+                    <!-- <td>{{row.sonidoEnCabina}}</td> -->
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+
+    <!-- R033 REPORTE COORDENADAS GEOCERCAS -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R033'">
+
+      <ng-container *ngIf="chkTableDropdown">
+
+        <div class="p-card" style="padding: 1rem;">
+
+          <!-- <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>
+                <div class="gl-row-underline vehicle-dropdown border-0">
+                  <p-dropdown
+                        [filter]="true"
+                        [options]="reportTableVehicleDropdownOptions"
+                        optionLabel="name"
+                        [(ngModel)]="reportTableVehicleSelected"
+                        [appendTo]="'body'"
+                        (onChange)="renderDataTable()">
+                        <ng-template let-vehicle pTemplate="item">
+                            <div class="country-item">
+                                <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                            </div>
+                        </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div> -->
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Nº Geo</th>
+                    <th>Nombre Geocerca</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+
+                    <th>Velocidad</th>
+                    <th>Vel.Muy Grave</th>
+                    <th>Vel.Grave</th>
+                    <th>Vel.Tolerable</th>
+                    <th>Zona Color</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+
+                    <td>{{i + 1}}</td>
+                    <td>{{row.nro}}</td>
+                    <td>{{row.zone_name}}</td>
+                    <td>{{row.lat}}</td>
+                    <td>{{row.lng}}</td>
+
+                    <td>{{row.vel_max}}</td>
+                    <td>{{row.vel3_zona}}</td>
+                    <td>{{row.vel2_zona}}</td>
+                    <td>{{row.vel_zona}}</td>
+                    <td>{{row.zone_color}}</td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="!chkTableDropdown">
+
+        <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+
+          <!-- <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>{{v_table[0][1]}}</div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div> -->
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Nº Geo</th>
+                  <th>Nombre Geocerca</th>
+                  <th>Latitud</th>
+                  <th>Longitud</th>
+
+                  <th>Velocidad</th>
+                  <th>Vel.Muy Grave</th>
+                  <th>Vel.Grave</th>
+                  <th>Vel.Tolerable</th>
+                  <th>Zona Color</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td>{{row.nro}}</td>
+                  <td>{{row.zone_name}}</td>
+                  <td>{{row.lat}}</td>
+                  <td>{{row.lng}}</td>
+
+                  <td>{{row.vel_max}}</td>
+                  <td>{{row.vel3_zona}}</td>
+                  <td>{{row.vel2_zona}}</td>
+                  <td>{{row.vel_zona}}</td>
+                  <td>{{row.zone_color}}</td>
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+    <!-- R034 REPORTE COORDENADAS GEOPUNTOS -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R034'">
+
+      <ng-container *ngIf="chkTableDropdown">
+
+        <div class="p-card" style="padding: 1rem;">
+
+          <!-- <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>
+                <div class="gl-row-underline vehicle-dropdown border-0">
+                  <p-dropdown
+                        [filter]="true"
+                        [options]="reportTableVehicleDropdownOptions"
+                        optionLabel="name"
+                        [(ngModel)]="reportTableVehicleSelected"
+                        [appendTo]="'body'"
+                        (onChange)="renderDataTable()">
+                        <ng-template let-vehicle pTemplate="item">
+                            <div class="country-item">
+                                <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                            </div>
+                        </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div> -->
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Nº Punto</th>
+                    <th>Nombre Punto</th>
+
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Color</th>
+
+                    <th>Visibilidad Punto</th>
+                    <th>Visibilidad Nombre</th>
+
+                    <th>Latitud 2</th>
+                    <th>Longitud 2</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+
+                    <td>{{i + 1}}</td>
+                    <td>{{row.nro}}</td>
+                    <td>{{row.geopunto_name}}</td>
+                    <td>{{row.lat}}</td>
+                    <td>{{row.lng}}</td>
+                    <td>{{row.geopunto_color}}</td>
+
+                    <td>{{row.geopunto_visible}}</td>
+                    <td>{{row.geopunto_nombre_visible}}</td>
+                    <td>{{row.lat_1}}</td>
+                    <td>{{row.lng_1}}</td>
+                    
+                </tr>
+
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="!chkTableDropdown">
+
+        <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+
+          <!-- <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>{{v_table[0][1]}}</div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div> -->
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Nº Punto</th>
+                  <th>Nombre Punto</th>
+
+                  <th>Latitud</th>
+                  <th>Longitud</th>
+                  <th>Color</th>
+
+                  <th>Visibilidad Punto</th>
+                  <th>Visibilidad Nombre</th>
+
+                  <th>Latitud 2</th>
+                  <th>Longitud 2</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td>{{row.nro}}</td>
+                  <td>{{row.geopunto_name}}</td>
+                  <td>{{row.lat}}</td>
+                  <td>{{row.lng}}</td>
+                  <td>{{row.geopunto_color}}</td>
+
+                  <td>{{row.geopunto_visible}}</td>
+                  <td>{{row.geopunto_nombre_visible}}</td>
+                  <td>{{row.lat_1}}</td>
+                  <td>{{row.lng_1}}</td>
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+    <!-- R035 REPORTE COORDENADAS GEOCERCAS CIRCULARES -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R035'">
+
+      <ng-container *ngIf="chkTableDropdown">
+
+        <div class="p-card" style="padding: 1rem;">
+
+          <!-- <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>
+                <div class="gl-row-underline vehicle-dropdown border-0">
+                  <p-dropdown
+                        [filter]="true"
+                        [options]="reportTableVehicleDropdownOptions"
+                        optionLabel="name"
+                        [(ngModel)]="reportTableVehicleSelected"
+                        [appendTo]="'body'"
+                        (onChange)="renderDataTable()">
+                        <ng-template let-vehicle pTemplate="item">
+                            <div class="country-item">
+                                <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                            </div>
+                        </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div> -->
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Nº Geo</th>
+                    <th>Nombre Geocerca</th>
+
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>radio</th>
+                    <th>diametro</th>
+
+                    <th>Velocidad</th>
+                    <th>Vel.Muy Grave</th>
+                    <th>Vel.Grave</th>
+                    <th>Vel.Tolerable</th>
+                    <th>Zona Color</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+
+                    <td>{{i + 1}}</td>
+                    <td>{{row.nro}}</td>
+                    <td>{{row.geocerca_name}}</td>
+
+                    <td>{{row.lat}}</td>
+                    <td>{{row.lng}}</td>
+                    <td>{{row.radio}}</td>
+                    <td>{{row.diametro}}</td>
+
+                    <td>{{row.v0}}</td>
+                    <td>{{row.v3}}</td>
+                    <td>{{row.v2}}</td>
+                    <td>{{row.v1}}</td>
+                    <td>{{row.geocerca_color}}</td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="!chkTableDropdown">
+
+        <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+
+          <!-- <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>{{v_table[0][1]}}</div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div> -->
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Nº Geo</th>
+                  <th>Nombre Geocerca</th>
+
+                  <th>Latitud</th>
+                  <th>Longitud</th>
+                  <th>radio</th>
+                  <th>diametro</th>
+
+                  <th>Velocidad</th>
+                  <th>Vel.Muy Grave</th>
+                  <th>Vel.Grave</th>
+                  <th>Vel.Tolerable</th>
+                  <th>Zona Color</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td>{{row.nro}}</td>
+                  <td>{{row.geocerca_name}}</td>
+
+                  <td>{{row.lat}}</td>
+                  <td>{{row.lng}}</td>
+                  <td>{{row.radio}}</td>
+                  <td>{{row.diametro}}</td>
+
+                  <td>{{row.v0}}</td>
+                  <td>{{row.v3}}</td>
+                  <td>{{row.v2}}</td>
+                  <td>{{row.v1}}</td>
+                  <td>{{row.geocerca_color}}</td>
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+
+    <!-- R037. REPORTE DE EVENTOS CIPIA -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R037' || report_data.num_rep == 'R040'">
+
+      <ng-container *ngIf="chkTableDropdown">
+
+        <div class="p-card" style="padding: 1rem;">
+
+          <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>
+                <div class="gl-row-underline vehicle-dropdown border-0">
+                  <p-dropdown
+                        [filter]="true"
+                        [options]="reportTableVehicleDropdownOptions"
+                        optionLabel="name"
+                        [(ngModel)]="reportTableVehicleSelected"
+                        [appendTo]="'body'"
+                        (onChange)="renderDataTable()">
+                        <ng-template let-vehicle pTemplate="item">
+                            <div class="country-item">
+                                <span>{{vehicle.name}} {{vehicle.dataSize}}</span>
+                            </div>
+                        </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+                    <th>Item</th>
+                    
+
+                    <th *ngIf="!chkDateHour && reportService.eC.Fecha">Fecha/Hora Evento</th>
+                    <th *ngIf="chkDateHour && reportService.eC.Fecha">Fecha Evento</th>
+                    <th *ngIf="chkDateHour && reportService.eC.Fecha">Hora Evento</th>
+                    <th *ngIf="!chkDateHour && reportService.eC.FechaServidor">Fecha/Hora Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
+                    <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
+
+                    <th *ngIf="reportService.eC.Evento" >Evento</th>
+
+                    <th *ngIf="reportService.eC.Codigo">Código</th>
+                    <th *ngIf="reportService.eC.Placa">Placa</th>
+                    <th *ngIf="reportService.eC.TipoUnidad">Tipo de Unidad</th>
+
+                    <th *ngIf="reportService.eC.IdConductor">ID Conductor</th>
+                    <th *ngIf="reportService.eC.Conductor">Conductor</th>
+
+                    <th *ngIf="reportService.eC.VelMobileye">Vel.Mobileye</th>
+                    <th *ngIf="reportService.eC.VelGPS">Vel.GPS</th>
+                    <th *ngIf="reportService.eC.VelGPSspeed">Vel.GPS speed</th>
+                    <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
+                    <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
+
+                    <th *ngIf="reportService.eC.Zona">Geocerca</th>
+                    <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
+                    <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
+                    <th *ngIf="reportService.eC.Referencia">Referencia</th>
+                    <th *ngIf="reportService.eC.EnlaceArchivo">Enlace a Archivo</th>
+                    <th *ngIf="reportService.eC.Parametros">Parámetros</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of reportTableDropdownData[1];  let i = index;">
+
+                    <td>{{i + 1}}</td>
+                    
+
+                    <td *ngIf="!chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[1]}}</td>
+
+                    <td *ngIf="!chkDateHour && reportService.eC.FechaServidor">{{row.fecha_servidor}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[1]}}</td>
+
+                    <td *ngIf="reportService.eC.Evento">{{row.descripcion_evento}}</td>
+
+                    <td *ngIf="reportService.eC.Codigo">{{row.codigo}}</td>
+                    <td *ngIf="reportService.eC.Placa">{{row.placa}}</td>
+                    <td *ngIf="reportService.eC.TipoUnidad">{{row.tipo_unidad}}</td>
+
+
+                    <td *ngIf="reportService.eC.IdConductor">{{row.idConductor}}</td>
+                    <td *ngIf="reportService.eC.VelGPSspeed">{{row.vel_gps_speed}}</td>
+                    <td *ngIf="reportService.eC.VelCAN">{{row.vel_can}}</td>
+                    <td *ngIf="reportService.eC.VelECO">{{row.vel_eco}}</td>
+
+
+                    <td *ngIf="reportService.eC.Zona">{{row.tramo}}</td>
+                    <td *ngIf="reportService.eC.PuntoCercano">{{row.PC}}</td>
+                    <td *ngIf="reportService.eC.Ubicacion">
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+                    <td *ngIf="reportService.eC.Referencia">{{row.referencia}}</td>
+
+                    <td *ngIf="reportService.eC.EnlaceArchivo">
+                    </td>
+
+                    <td *ngIf="reportService.eC.Parametros">{{row.parametros}}</td>
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="!chkTableDropdown">
+
+        <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+
+          <div class="subtable-title mb-3">
+            <div>
+              <div>VEHÍCULO</div>
+              <div>{{v_table[0][1]}}</div>
+            </div>
+            <div>
+              <div>PERIODO</div>
+              <div>{{period}}</div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+              
+                  <th>Item</th>
+                    
+
+                  <th *ngIf="!chkDateHour && reportService.eC.Fecha">Fecha/Hora Evento</th>
+                  <th *ngIf="chkDateHour && reportService.eC.Fecha">Fecha Evento</th>
+                  <th *ngIf="chkDateHour && reportService.eC.Fecha">Hora Evento</th>
+                  <th *ngIf="!chkDateHour && reportService.eC.FechaServidor">Fecha/Hora Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
+
+                  <th *ngIf="reportService.eC.Evento" >Evento</th>
+
+                  <th *ngIf="reportService.eC.Codigo">Código</th>
+                  <th *ngIf="reportService.eC.Placa">Placa</th>
+                  <th *ngIf="reportService.eC.TipoUnidad">Tipo de Unidad</th>
+
+                  <th *ngIf="reportService.eC.IdConductor">ID Conductor</th>
+                  <th *ngIf="reportService.eC.Conductor">Conductor</th>
+
+                  <th *ngIf="reportService.eC.VelMobileye">Vel.Mobileye</th>
+                  <th *ngIf="reportService.eC.VelGPS">Vel.GPS</th>
+                  <th *ngIf="reportService.eC.VelGPSspeed">Vel.GPS speed</th>
+                  <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
+                  <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
+
+                  <th *ngIf="reportService.eC.Zona">Zona</th>
+                  <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
+                  <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
+                  <th *ngIf="reportService.eC.Referencia">Referencia</th>
+
+                  <th *ngIf="reportService.eC.EnlaceArchivo">Enlace a Archivo</th>
+                  <th *ngIf="reportService.eC.Parametros">Parámetros</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                    <!-- <td>{{i + 1}}</td>
+                    <td>{{row.descripcion_evento}}</td>
+                    <td *ngIf="!chkDateHour">{{row.fecha_tracker}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour">{{row.fecha_tracker.split(' ')[1]}}</td>
+                    <td *ngIf="!chkDateHour">{{row.fecha_servidor}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923">{{row.fecha_servidor.split(' ')[1]}}</td>
+                    <td>{{row.codigo}}</td>
+                    <td>{{row.placa}}</td>
+                    <td>{{row.tipo_unidad}}</td>
+                    <td>{{row.vel_gps}} Km/h</td>
+                    <td>{{row.tramo}}</td>
+                    <td>{{row.referencia}}</td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+                    <td>
+                      <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+                    </td> -->
+
+                    <td>{{i + 1}}</td>
+
+                    <td *ngIf="!chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[1]}}</td>
+
+                    <td *ngIf="!chkDateHour && reportService.eC.FechaServidor">{{row.fecha_servidor}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[0]}}</td>
+                    <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[1]}}</td>
+
+                    <td *ngIf="reportService.eC.Evento">{{row.descripcion_evento}}</td>
+
+                    <td *ngIf="reportService.eC.Codigo">{{row.codigo}}</td>
+                    <td *ngIf="reportService.eC.Placa">{{row.placa}}</td>
+                    <td *ngIf="reportService.eC.TipoUnidad">{{row.tipo_unidad}}</td>
+
+                    <td *ngIf="reportService.eC.IdConductor">{{row.idConductor}}</td>
+                    <td *ngIf="reportService.eC.Conductor">{{row.conductor}}</td>
+
+ 
+                    <td *ngIf="reportService.eC.VelMobileye">{{row.vel_mobileye}}</td>
+                    <td *ngIf="reportService.eC.VelGPS">{{row.vel_gps}}</td>
+                    <td *ngIf="reportService.eC.VelGPSspeed">{{row.vel_gps_speed}}</td>
+                    <td *ngIf="reportService.eC.VelCAN">{{row.vel_can}}</td>
+                    <td *ngIf="reportService.eC.VelECO">{{row.vel_eco}}</td>
+
+                    <td *ngIf="reportService.eC.Zona">{{row.tramo}}</td>
+                    <td *ngIf="reportService.eC.PuntoCercano">{{row.PC}}</td>
+                    <td *ngIf="reportService.eC.Ubicacion">
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+                    <td *ngIf="reportService.eC.Referencia">{{row.referencia}}</td>
+
+                    <td *ngIf="reportService.eC.EnlaceArchivo">
+                      <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+                    </td>
+                    <td *ngIf="reportService.eC.Parametros">{{row.parametros}}</td>
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+    <!-- R038. REPORTE DE ATENCION DE EVENTOS CIPIA -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R038'">
+
+
+      <!-- <ng-container *ngIf="!chkTableDropdown"> -->
+      <ng-container >
+        <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 0.8rem;">
+
+          
+          <div class="p-card">
+
+            <div class="subtable-title mb-2">
+              <div style="width: 50%; min-width: 50%;">
+                <div style="padding: 20px;">
+                  {{period}}
+                </div>
+              </div>
+              <div >
+                <div style="padding: 20px;">
+                  <button class="btn btn-gl btn-gl-light-blue btn-dark-hover" (click)="actualizarEvaluacionEventos();" >ACTUALIZAR</button>
+
+                </div>
+              </div>
+              <div>
+                <div style="padding: 20px;">
+                  <button class="btn btn-gl btn-gl-light-blue btn-dark-hover" (click)="guardarEvaluacionEventos();" >GUARDAR</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
 
 
 
 
+          <ng-container *ngIf="dtRendered">
+            <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+              <thead>
+                <tr>
+              
+                  <th>Item</th>
+                     
+
+                  <th *ngIf="!chkDateHour && reportService.eC.Fecha">Fecha/Hora Evento</th>
+                  <th *ngIf="chkDateHour && reportService.eC.Fecha">Fecha Evento</th>
+                  <th *ngIf="chkDateHour && reportService.eC.Fecha">Hora Evento</th>
+                  <th *ngIf="!chkDateHour && reportService.eC.FechaServidor">Fecha/Hora Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
+                  <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
+
+                  <th *ngIf="reportService.eC.Evento" >Evento</th>
+
+                  <th *ngIf="reportService.eC.Codigo">Código</th>
+                  <th *ngIf="reportService.eC.Placa">Placa</th>
+                  <th *ngIf="reportService.eC.TipoUnidad">Tipo de Unidad</th>
+
+                  <th *ngIf="reportService.eC.IdConductor">ID Conductor</th>
+                  <th *ngIf="reportService.eC.Conductor">Conductor</th>
 
 
+                  <th *ngIf="reportService.eC.FechaEvaluacion">Fecha de Evaluación</th>
+                  <th *ngIf="reportService.eC.CriterioEvaluacion">Criterio de Evaluación</th>
+                  <th *ngIf="reportService.eC.Observacion">Observación</th>
+                  <!-- <th *ngIf="reportService.eC.Validacion">Validación</th> -->
+
+
+                  <th *ngIf="reportService.eC.VelMobileye">Vel.Mobileye</th>
+                  <th *ngIf="reportService.eC.VelGPS">Vel.GPS</th>
+                  <th *ngIf="reportService.eC.VelGPSspeed">Vel.GPS speed</th>
+                  <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
+                  <th *ngIf="reportService.eC.VelECO">Vel.ECO</th>
+
+                  <th *ngIf="reportService.eC.Zona">Geocerca</th>
+                  <th *ngIf="reportService.eC.PuntoCercano">Punto Cercano</th>
+                  <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
+                  <th *ngIf="reportService.eC.Referencia">Referencia</th>
+                  <th *ngIf="reportService.eC.EnlaceArchivo">Enlace a Archivo</th>
+                  <th *ngIf="reportService.eC.Parametros">Parámetros</th>
+
+                  <th *ngIf="reportService.eC.OperadorMonitoreo">Operador de Monitoreo</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                    
+
+                  <td *ngIf="!chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker}}</td>
+                  <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour && reportService.eC.Fecha">{{row.fecha_tracker.split(' ')[1]}}</td>
+
+                  <td *ngIf="!chkDateHour && reportService.eC.FechaServidor">{{row.fecha_servidor}}</td>
+                  <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">{{row.fecha_servidor.split(' ')[1]}}</td>
+
+                  <td *ngIf="reportService.eC.Evento">{{row.descripcion_evento}}</td>
+
+                  <td *ngIf="reportService.eC.Codigo">{{row.codigo}}</td>
+                  <td *ngIf="reportService.eC.Placa">{{row.placa}}</td>
+                  <td *ngIf="reportService.eC.TipoUnidad">{{row.tipo_unidad}}</td>
+
+                    <td>{{row.tramo}}</td>
+                    <td>{{row.referencia}}</td>
+                    <td>
+                      <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                    </td>
+
+                  <!-- 
+                  $result[$i][1][$j]->fecha_evaluacion = "";
+                  $result[$i][1][$j]->criterio_evaluacion = "";
+                  $result[$i][1][$j]->observacion_evaluacion = "";
+                  $result[$i][1][$j]->operador_monitoreo = "";
+
+                  $result[$i][1][$j]->senales_posible_fatiga = false;
+                  $result[$i][1][$j]->identificacion_video = "";
+                  $result[$i][1][$j]->valoracion_evento = "1"; -->
+
+
+                  <td *ngIf="reportService.eC.CriterioEvaluacion">
+                      <!-- <input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.CriterioEvaluacion"> -->
+                      <select [(ngModel)]="row.criterio_evaluacion" style="width:180px;" (change)="onChangeCriterioEvaluacion(row)" >
+                        <option value="">OPCIONES</option> 
+                        <optgroup label="SEÑALES DE POSIBLE FATIGA">
+
+                          <!-- <option value="Inclinación de la cabeza hacia adelante y/o hacia atrás" >Inclinación de la cabeza hacia adelante y/o hacia atrás</option>
+                          <option value="Parpadeo involuntario" >Parpadeo involuntario</option>
+                          <option value="Gestos o movimientos a manera de autogestión" >Gestos o movimientos a manera de autogestión</option>
+                          <option value="Bostezo continuo (>=3 en 30 seg.)" >Bostezo continuo (>=3 en 30 seg.)</option>
+                          <option value="Mano con acción de frotación en los ojos" >Mano con acción de frotación en los ojos</option> -->
+
+                          <option value="INCLINACIÓN DE LA CABEZA HACIA ADELANTE Y/O HACIA ATRÁS" >INCLINACIÓN DE LA CABEZA HACIA ADELANTE Y/O HACIA ATRÁS</option>
+                          <option value="PARPADEO INVOLUNTARIO" >PARPADEO INVOLUNTARIO</option>
+                          <option value="GESTOS O MOVIMIENTOS A MANERA DE AUTOGESTIÓN" >GESTOS O MOVIMIENTOS A MANERA DE AUTOGESTIÓN</option>
+                          <option value="BOSTEZO CONTINUO (>=3 EN 30 SEG.)" >BOSTEZO CONTINUO (>=3 EN 30 SEG.)</option>
+                          <option value="MANO CON ACCIÓN DE FROTACIÓN EN LOS OJOS" >MANO CON ACCIÓN DE FROTACIÓN EN LOS OJOS</option>
+
+
+                        </optgroup>
+                        <optgroup label="SIN SEÑAL DE POSIBLE FATIGA">
+
+                          <!-- <option value="Características de ojos de facciones asiáticas" >Características de ojos de facciones asiáticas</option>
+                          <option value="Cobertura de rostro con bufanda y/o chalina" >Cobertura de rostro con bufanda y/o chalina</option>
+                          <option value="Existe mirada del conductor al tablero" >Existe mirada del conductor al tablero</option>
+                          <option value="Lentes correctores mal puestos" >Lentes correctores mal puestos</option>
+                          <option value="Lentes correctores con marco reducido" >Lentes correctores con marco reducido</option>
+                          <option value="Lentes de seguridad mal colocados o marco reducido" >Lentes de seguridad mal colocados o marco reducido</option>
+                          <option value="Otro tipo de lentes" >Otro tipo de lentes</option>
+                          <option value="Presencia de deslumbramientos" >Presencia de deslumbramientos</option>
+                          <option value="Uso de chullo, gorra con vísera o casco" >Uso de chullo, gorra con vísera o casco</option>
+                          <option value="Uso de sobrelentes" >Uso de sobrelentes</option>
+                          <option value="Uso de maquillaje en el rostro" >Uso de maquillaje en el rostro</option> -->
+
+                          <option value="CARACTERÍSTICAS DE OJOS DE FACCIONES ASIÁTICAS" >CARACTERÍSTICAS DE OJOS DE FACCIONES ASIÁTICAS</option>
+                          <option value="COBERTURA DE ROSTRO CON BUFANDA Y/O CHALINA" >COBERTURA DE ROSTRO CON BUFANDA Y/O CHALINA</option>
+                          <option value="EXISTE MIRADA DEL CONDUCTOR AL TABLERO" >EXISTE MIRADA DEL CONDUCTOR AL TABLERO</option>
+                          <option value="LENTES CORRECTORES MAL PUESTOS" >LENTES CORRECTORES MAL PUESTOS</option>
+                          <option value="LENTES CORRECTORES CON MARCO REDUCIDO" >LENTES CORRECTORES CON MARCO REDUCIDO</option>
+                          <!-- <option value="LENTES DE SEGURIDAD MAL COLOCADOS O MARCO REDUCIDO" >LENTES DE SEGURIDAD MAL COLOCADOS O MARCO REDUCIDO</option> -->
+                          <option value="LENTES DE SEGURIDAD MAL PUESTOS" >LENTES DE SEGURIDAD MAL PUESTOS</option>
+                          <option value="OTRO TIPO DE LENTES" >OTRO TIPO DE LENTES</option>
+                          <option value="PRESENCIA DE DESLUMBRAMIENTOS" >PRESENCIA DE DESLUMBRAMIENTOS</option>
+                          <option value="USO DE CHULLO, GORRA CON VÍSERA O CASCO" >USO DE CHULLO, GORRA CON VÍSERA O CASCO</option>
+                          <option value="USO DE SOBRELENTES" >USO DE SOBRELENTES</option>
+                          <option value="USO DE MAQUILLAJE EN EL ROSTRO" >USO DE MAQUILLAJE EN EL ROSTRO</option>
+
+                        </optgroup>
+                      </select>
+                    
+                      <span *ngIf="row.es_antiguo_criterio">
+												{{row.criterio_evaluacion}}
+											</span>
+
+                      <br *ngIf="row.senales_posible_fatiga" >
+											<input *ngIf="row.senales_posible_fatiga" style="font-size:12px; width:180px; margin-top: 8px;" type="text" [(ngModel)]="row.identificacion_video" (change)="onChangeObservacion(row)" placeholder="Identificar video">
+											<br *ngIf="row.senales_posible_fatiga" >
+
+
+                        <!-- <div ng-if="row.senales_posible_fatiga" id="form_stars"> -->
+                      <div *ngIf="row.senales_posible_fatiga" class="form_stars">
+                        <p class="clasificacion">
+                            <input id="radio1_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="5"><!--
+                          --><label for="radio1_{{i}}">★</label><!--
+                          --><input id="radio2_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="4"><!--
+                          --><label for="radio2_{{i}}">★</label><!--
+                          --><input id="radio3_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="3"><!--
+                          --><label for="radio3_{{i}}">★</label><!--
+                          --><input id="radio4_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="2"><!--
+                          --><label for="radio4_{{i}}">★</label><!--
+                          --><input id="radio5_{{i}}" name="grupo_{{i}}" type="radio" [(ngModel)]="row.valoracion_evento" (change)="onChangeObservacion(row)" value="1"><!--
+                          --><label for="radio5_{{i}}">★</label>
+                        </p>
+                      </div>
+                    
+                      
+
+                  </td>
+
+                  <td *ngIf="reportService.eC.Observacion"><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.observacion_evaluacion" (change)="onChangeObservacion(row)" ></td>
+                  <!-- <td *ngIf="reportService.eC.Validacion"><input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.valoracion_evento"></td> -->
+
+
+                  <td *ngIf="reportService.eC.VelMobileye">{{row.vel_mobileye}}</td>
+                  <td *ngIf="reportService.eC.VelGPS">{{row.vel_gps}}</td>
+                  <td *ngIf="reportService.eC.VelGPSspeed">{{row.vel_gps_speed}}</td>
+                  <td *ngIf="reportService.eC.VelCAN">{{row.vel_can}}</td>
+                  <td *ngIf="reportService.eC.VelECO">{{row.vel_eco}}</td>
+
+
+                  <td *ngIf="reportService.eC.Zona">{{row.tramo}}</td>
+                  <td *ngIf="reportService.eC.PuntoCercano">{{row.PC}}</td>
+                  <td *ngIf="reportService.eC.Ubicacion">
+                    <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                  </td>
+
+                  <td *ngIf="reportService.eC.OperadorMonitoreo" >
+                    
+                      <!-- <input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.OperadorMonitoreo"> -->
+                      
+                      <select [(ngModel)]="row.operador_monitoreo" style="width:180px;" (change)="onChangeOperadorMonitoreo(row)"> 
+        
+                        <option value="">OPCIONES</option> 
+                        <option value="HANCCO DIAZ, Gary Maurizio">HANCCO DIAZ, Gary Maurizio</option>
+                        <option value="HUACHO OCHOA, Gonzalo Joe">HUACHO OCHOA, Gonzalo Joe</option>
+                        <option value="MAMANI SIERRA, Raquel">MAMANI SIERRA, Raquel</option>
+                        <option value="ROJAS RONDON, Carla Alejandra">ROJAS RONDON, Carla Alejandra</option>
+                        <option value="OTRO">OTRO</option>
     
+                      </select>
+                      
+                      <span *ngIf="row.operador_monitoreo == 'OTRO'">
+												<input style="font-size: 12px;" size="28" type="text" [(ngModel)]="row.otro_operador_monitoreo" (change)="onChangeOperadorMonitoreo(row)">
+											</span>
+
+											<span *ngIf="row.es_antiguo_operador">
+												{{row.operador_monitoreo}}
+											</span>
+
+
+                  </td>
+
+
+
+
+
+                </tr>
+              </tbody>
+
+            </table>
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+
+    <!-- R039. REPORTE DE EXCESOS DE VELOCIDAD (NUEVO FORMATO) -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R039'">
+      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+
+        <div class="subtable-title mb-3">
+          <!-- <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div> -->
+          <div style="width: 100%; min-width: 100%;">
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="dtRendered">
+          <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-border row-border hover">
+            <thead>
+              <tr>
+                  <th>Item</th>
+                  <th *ngIf="!chkDateHour">Fecha/Hora</th>
+                  <th *ngIf="chkDateHour">Fecha</th>
+                  <th *ngIf="chkDateHour">Hora</th>
+                  <th>Código</th>
+                  <th>Placa</th>
+                  <th>Tipo de Unidad</th>
+
+                  <th>Id Conductor</th>
+                  <th>Conductor</th>
+
+                  <th>Geocerca</th>
+                  <!-- new 29-01 -->
+                  <th>Vel. Can</th>
+                  <th>Satélite</th>
+
+                  <th>Límite de Velocidad</th>
+                  <th>Exceso de Velocidad</th>
+                  <th>Ubicación</th>
+
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let row of v_table[1];  let i = index;">
+
+                  <td>{{i + 1}}</td>
+                  <td *ngIf="!chkDateHour">{{row.fecha_inicio}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_inicio.split(' ')[0]}}</td>
+                  <td *ngIf="chkDateHour">{{row.fecha_inicio.split(' ')[1]}}</td>
+                  <td>{{row.codigo}}</td>
+                  <td>{{row.placa}}</td>
+                  <td>{{row.tipo_unidad}}</td>
+
+                  <td>{{row.idConductor}}</td>
+                  <td>{{row.conductor}}</td>
+
+                  <td>{{row.nombre_zona}}</td>
+                  <!-- new 29-01 -->
+                  <td>{{row.can_speed}}</td>
+                  <td>{{row.satelite}}</td>
+
+                  <td>{{row.v0}}</td>
+                  <td>{{row.velocidad}}</td>
+                  <td>
+                    <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                  </td>
+
+              </tr>
+            </tbody>
+
+          </table>
+        </ng-container>
+
+      </div>
+    </div>
+
 
     <div *ngIf="dtRendered" class="export-container">
       <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
@@ -5653,6 +6904,14 @@
       <button *ngIf="report_data.num_rep == 'R030'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFatigaExtremaFormatoBetsy_1');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R031'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelAlcotester');">EXPORTAR EXCEL</button>
 
+      <button *ngIf="report_data.num_rep == 'R033'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCoordenadasGeocercas');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R034'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCoordenadasGeopuntos');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R035'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCoordenadasGeocercasCirculares');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R036'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R037'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R038'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosEvaluacionCIPIA');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R039'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadNuevoFormato');">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R040'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>
 
 
       <!-- <button *ngIf="report_data.num_rep == 'R028'" class="btn btn-gl btn-success btn-dark-hover" (click)="">EXPORTAR EXCEL</button> -->
@@ -5667,9 +6926,9 @@
         <!-- <md-button ng-if="res.mostrarPdf()" class="md-raised md-primary" ng-click="res.exportPdfPosicion()">EXPORTAR PDF</md-button> -->
 
 
-        <!-- <button *ngIf="report_data.num_rep == 0" class="btn btn-success" (click)="exportPdfParadasMovimientos();">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-success" (click)="showSelectPdf('exportPdfParadasMovimientos');">EXPORTAR PDF</button> 
 
-        <button *ngIf="report_data.num_rep == 1" class="btn btn-success" (click)="exportPdfExcesosVelocidad();">EXPORTAR PDF</button> -->
+        <!--<button *ngIf="report_data.num_rep == 1" class="btn btn-success" (click)="exportPdfExcesosVelocidad();">EXPORTAR PDF</button> -->
         <!-- <button *ngIf="report_data.num_rep == 2" class="btn btn-success" (click)="exportPdfEntradaSalida();">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 3" class="btn btn-success" (click)="showSelectExcel('exportPdfCombustible');">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 4" class="btn btn-success" (click)="showSelectExcel('exportPdfExcesosEnZona');">EXPORTAR PDF</button>
@@ -5692,3 +6951,4 @@
 
   </ng-container>
 </div>
+

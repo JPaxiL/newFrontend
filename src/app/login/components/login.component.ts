@@ -65,6 +65,8 @@ export class LoginComponent implements OnInit {
   }
 
   save(): void{
+    console.log("LOGIN ISVALID: ",this.loginForm.valid);
+    
     if (this.loginForm.valid) {
       const params = this.loginForm.value;
       // params['registrador_id'] = params['registrador']['id'];
@@ -73,7 +75,7 @@ export class LoginComponent implements OnInit {
       this.store.dispatch(new SignIn( params.name, params.password)).subscribe( (data) => {
         // Animación de carga de Iniciando sesión...
         this.validCredentials = 1;
-        //console.log('Inicio de sesión exitoso');
+        console.log('Inicio de sesión exitoso');
         //console.log(data);
         this.startSession();
         /* this.userService.setUserInLocalStorage();
@@ -106,6 +108,8 @@ export class LoginComponent implements OnInit {
   }
 
   async startSession(){
+    console.log("starting SESION");
+    
     await this.userService.setUserInLocalStorage();
     this.router.navigate(['/panel'], {
       state: {
@@ -114,9 +118,12 @@ export class LoginComponent implements OnInit {
       }
     });
     this.eventSocketService.user_id = localStorage.getItem('user_id');
-    this.vehicleService.initialize();
+    this.eventSocketService.initializeSocket(this.eventSocketService.user_id);
+    // this.vehicleService.setDefaultStatusDataVehicle();
+    // this.vehicleService.initialize();
     this.eventService.getAll();
     this.eventSocketService.listen();
-    this.userDataService.getUserData();
+    // this.userDataService.getUserData();
+    
   }
 }

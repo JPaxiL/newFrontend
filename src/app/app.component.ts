@@ -24,14 +24,14 @@ export class AppComponent {
         next: (response: boolean) => {
           if(response){
             if(this.tabService.requiresVehicleServices()){
-              this.vehicleService.initialize();
+              // this.vehicleService.initialize();
             }
             if(this.tabService.requiresEventServices()){
               this.eventService.getAll();
               this.eventSocketService.listen();
             } 
             if(this.tabService.requiresUserDataServices()){
-              this.userDataService.getUserData();
+              // this.userDataService.getUserData();
             }
             
           }

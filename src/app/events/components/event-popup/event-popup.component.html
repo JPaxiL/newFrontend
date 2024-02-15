@@ -1,0 +1,29 @@
+<div class="w-100 h-100 d-flex flex-column shadow-lg">
+     <div class="popup-header d-flex justify-content-between align-items-center px-1">
+          <span class="popup-title ms-2">
+               {{((configuration.vehicles![0].name ? configuration.vehicles![0].name : configuration.vehicles![0].plate_number)+' '+ (configuration.vehicles![0].operation? ' - ('+configuration.vehicles![0].operation+')' : '')) | shorten:20}}
+          </span>
+          <div class="d-flex gap-1 align-items-center">
+               <img *ngIf="has_multimedia" pTooltip="Ver Multimedia" alt="logo" src="assets/images/ver_cipia.svg" class="popup-icon pe-auto" (click)="showMultimedia()"/>
+               <img pTooltip="Abrir StreetView" alt="logo" src="assets/images/ver_street_view.png" class="popup-icon pe-auto" (click)="eventOnStreetView()"/>
+               <img pTooltip="Mapa Principal" alt="logo" src="assets/images/ubicar_en_mapa.png" class="popup-icon pe-auto" (click)="eventOnMainMap()"/>
+               <button class="close-button pe-auto" (click)="deletePopup()">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 8L8 16M8 8L16 16" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path> </g></svg>
+               </button>
+          </div>
+     </div>
+     
+     <div class="popup-body">
+          <app-slider-multimedia 
+               [event]="configuration.event"
+               [driver]="configuration.vehicles![0].namedriver!"
+               [showMultimediaFirst]="false"
+               [showFooter]="true"
+               [hasMultimedia]="has_multimedia"
+               #appSlider
+          >
+               <div [id]="configuration.mapConf?.containerId.toString()" class="w-100 h-100 popup-content">
+               </div>
+          </app-slider-multimedia>
+     </div>
+</div>

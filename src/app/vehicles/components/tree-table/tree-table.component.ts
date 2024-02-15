@@ -2,13 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild, OnDestroy, Output, EventEmitt
 import { TreeNode } from 'primeng-lts/api';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
-import {DialogModule} from 'primeng-lts/dialog';
-
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FollowService } from '../../services/follow.service';
 import Swal from 'sweetalert2';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 @Component({
   selector: 'app-tree-table',
@@ -19,8 +18,9 @@ export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
-  vehicleIconState: boolean = false;
-
+  showVehiclesFixes: boolean = true;
+  vehicleIconState: boolean = true;
+  vehicleTransmissionStatus: boolean = true;
   sortOrder: number=1;
   display: boolean = false;
   displayDelete: boolean = false;
@@ -37,12 +37,14 @@ export class TreeTableComponent implements OnInit {
   list2: any = [];
   selectedList1: any = [];
   selectedList2: any = [];
+
   private dataEdit : any = {
     id : -1,
     name : "",
     type : ""
   };
   alreadyLoaded: boolean = false;
+  readonlyNameGroup: boolean = false;
 
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   color: any = {
@@ -56,12 +58,12 @@ export class TreeTableComponent implements OnInit {
   };
 
   hint: any = {
-    10: 'En movimiento',
-    20: 'Detenido encendido',
-    30: 'Detenido apagado',
-    40: 'Sin transmisión',
-    50: 'Sin cobertura',
-    60: 'GPS sin señal',
+    10: 'Unidad en Movimiento',
+    20: 'Unidad Detenida con Ignición',
+    30: 'Unidad Detenida sin Ignición',
+    40: 'Unidad sin Transmisión',
+    50: 'Unidad sin Cobertura',
+    60: 'Unidad con Error GPS',
     100: 'No definido',
   };
 
@@ -70,6 +72,7 @@ export class TreeTableComponent implements OnInit {
     eye: true,
     imei: false,
     vehicle: true,
+    tag_driver: false,//HASTA QUE SE IMPLEMENTE DRIVERS
     tag: true,
     follow: true,
     limit: true,
@@ -82,8 +85,9 @@ export class TreeTableComponent implements OnInit {
 
   @ViewChild('tt') tt!:any;
 
+
   constructor(
-    private vehicleService:VehicleService,
+    public vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private spinner: NgxSpinnerService,
@@ -116,7 +120,6 @@ export class TreeTableComponent implements OnInit {
 
     });
 
-
   }
 
   ngOnInit(): void {
@@ -127,6 +130,8 @@ export class TreeTableComponent implements OnInit {
       this.loading=false;
       this.alreadyLoaded = true;
       this.headerScrollHandler();
+      console.log(this.vehicleService.vehiclesFixes);
+      this.showVehiclesFixes= this.vehicleService.unitsFixesStatus;
     }
     this.cols = [
           { field: 'eye', header: 'eye' },
@@ -141,8 +146,13 @@ export class TreeTableComponent implements OnInit {
     this.treeTableResizing(true);
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
-    console.log(this.vehicleService.vehicles);
+    // console.log(this.vehicleService.vehicles);
+    
+
+    // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
+
   }
+
 
   headerScrollHandler(){
     setTimeout(()=> {
@@ -162,6 +172,7 @@ export class TreeTableComponent implements OnInit {
     /* console.log('--navbar-height: ', Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''))); */
 
     const navbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height').replace('rem', ''));
+    const footbarHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--footbar-height').replace('rem', ''));
     const rowBusquedaHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--row-busqueda-height').replace('rem', ''));
     const panelMonitoreoVehiclesHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--pm-vehiculos-header-height').replace('rem', ''));
     const treetableHeaderHeight = Number(getComputedStyle(document.documentElement).getPropertyValue('--treetable-header-height').replace('rem', ''));
@@ -173,7 +184,7 @@ export class TreeTableComponent implements OnInit {
     //0.125rem es tolerancia para evitar overflow
     //Le quité la tolerancia porque el cálculo ahora es exacto.
     //12.125 era 9.375 + 2.75 (previa altura del navbar)
-    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (rowBusquedaHeight + panelMonitoreoVehiclesHeaderHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
+    var treeTable_height_in_px = $('.map-area-app').height()! - rem_to_px * (rowBusquedaHeight + panelMonitoreoVehiclesHeaderHeight + footbarHeight + treetableHeaderHeight + ($('.map-area-app').width()! > 740? 0: navbarHeight)) ;
     //$('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr("style", '');
     $('p-treetable.vehicle-treetable .cdk-virtual-scroll-viewport').attr('style', 'height: ' + treeTable_height_in_px + 'px !important');
     //console.log('treeTable altura en px:' + treeTable_height_in_px);
@@ -201,18 +212,35 @@ export class TreeTableComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        await this.onSubmitEdit();
+        if (currType== 'pinUp'){
+          await this.onSubmitEditFixes();
+        }else{
+          await this.onSubmitEdit();
+        }
       },
     }).then((data) => {
-      if(data.isConfirmed) {
-        Swal.fire(
-          'Éxito',
-          `El ${currType} se editó exitosamente`,
-          'success'
-        );
-      } else {
-        console.log(`(Vehicle Group) Hubo un error al editar el ${currType}`);
+      if (currType== 'pinUp'){
+        if(data.isConfirmed) {
+          Swal.fire(
+            'Éxito',
+            `Las unidades Fijadas se editaron exitosamente`,
+            'success'
+          );
+        } else {
+          console.log(`(Vehicle Group) Hubo un error al editar las unidades Fijadas`);
+        }
+      }else{
+        if(data.isConfirmed) {
+          Swal.fire(
+            'Éxito',
+            `El ${currType} se editó exitosamente`,
+            'success'
+          );
+        } else {
+          console.log(`(Vehicle Group) Hubo un error al editar el ${currType}`);
+        }
       }
+      
       this.loading=false;
     });
   }
@@ -244,105 +272,254 @@ export class TreeTableComponent implements OnInit {
         });
     }
   }
+  async onSubmitEditFixes(){
+    const req = {
+      vehicles: this.list2.map((item: { id: any; }) => item.id)
+    };
+    console.log('Enviando...',req);
+    let response = await this.vehicleConfigService.updateUnitFixes(req);
+    // console.log(response);
+    if(response.success){
+      await this.vehicleService.updateUnitFixes(req['vehicles']);
+      this.updateGroup();
+      this.vehicleService.reloadTableTree.emit();
+      this.displayEditGroup = false;
+    }else{
+      Swal.fire(
+        'Ups',
+        `Ocurrió un problema al actualizar Las unidades Fijadas`,
+        'error'
+      );
+    }
+  }
   updateGroup(){
     const vehicles = this.vehicleService.vehicles;
-    if(this.dataEdit.type=='grupo'){
+    if(this.dataEdit.type=='operacion'){
       for (const key in this.list1) {
         let index = vehicles.indexOf(this.list1[key]);
-        vehicles[index].idgrupo = null;
-        vehicles[index].grupo = "Unidades Sin Grupo";
+        vehicles[index].idoperation = 0;
+        vehicles[index].nameoperation = "Unidades Sin Operacion";
+      }
 
+      for (const key in this.list2){
+        let index = vehicles.indexOf(this.list2[key]);
+        vehicles[index].idoperation = this.dataEdit.id;
+        vehicles[index].nameoperation = this.nameEdit.nativeElement.value;
+      }
+      for(const key in vehicles){
+        if(vehicles[key].idoperation==this.dataEdit.id){
+          vehicles[key].nameoperation=this.nameEdit.nativeElement.value
+        }
+      }
+    }else if(this.dataEdit.type=='grupo'){
+      for (const key in this.list1) {
+        let index = vehicles.indexOf(this.list1[key]);
+        vehicles[index].idgrupo = 0;
+        vehicles[index].namegrupo = "Unidades Sin Grupo";
       }
 
       for (const key in this.list2){
         let index = vehicles.indexOf(this.list2[key]);
         vehicles[index].idgrupo = this.dataEdit.id;
-        vehicles[index].grupo = this.nameEdit.nativeElement.value;
+        vehicles[index].namegrupo = this.nameEdit.nativeElement.value;
       }
       for(const key in vehicles){
         if(vehicles[key].idgrupo==this.dataEdit.id){
-          vehicles[key].grupo=this.nameEdit.nativeElement.value
+          vehicles[key].namegrupo=this.nameEdit.nativeElement.value
         }
       }
-    }else{
+    }else if(this.dataEdit.type=='convoy'){
       for (const key in this.list1) {
         let index = vehicles.indexOf(this.list1[key]);
-        vehicles[index].idconvoy = null;
-        vehicles[index].convoy = "Unidades Sin Convoy";
-
+        vehicles[index].idconvoy = 0;
+        vehicles[index].nameconvoy = "Unidades Sin Convoy";
       }
 
       for (const key in this.list2){
         let index = vehicles.indexOf(this.list2[key]);
         vehicles[index].idconvoy = this.dataEdit.id;
-        vehicles[index].convoy = this.nameEdit.nativeElement.value;
+        vehicles[index].nameconvoy = this.nameEdit.nativeElement.value;
       }
       for(const key in vehicles){
         if(vehicles[key].idconvoy==this.dataEdit.id){
-          vehicles[key].convoy=this.nameEdit.nativeElement.value;
+          vehicles[key].nameconvoy=this.nameEdit.nativeElement.value;
         }
       }
+    }else{
+      console.log('Update Units Fixes...');
     }
+
+
     this.vehicleService.vehicles = vehicles;
     this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
   }
   showEditGroup(data: any){
     this.dataEdit = data;
-    // //console.log('show edit data',data);
+    // console.log('show edit data',data);
     this.displayEditGroup = true;
     this.textHeaderEdit = data.type+" "+data.name;
     this.nameEdit.nativeElement.value = data.name;
+    this.readonlyNameGroup = false;
 
     //list 1
     const vehicles = this.vehicleService.vehicles;
-    let aux1=[];
+    let aux1:any=[];
     let aux2=[];
     let aux_idgrupo=-1;
     for (const key in vehicles) {
       // //console.log('id==idconvoy------->'+data.id+'=='+vehicles[key]['idconvoy'])
-      if (data.type=='grupo') {
-        if(data.id==vehicles[key]['idgrupo']&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
+      if (data.type=='operacion') {
+        // if(data.id==vehicles[key]['idoperation']&&data.name==vehicles[key]['operation']){
+        if(data.id==vehicles[key]['idoperation']&&vehicles[key]['idgrupo']==0&&vehicles[key]['idconvoy']==0){
           aux2.push(vehicles[key]);
         }
-        aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.grupo=="Unidades Sin Grupo");
+        //id 0 significa que no tiene
+        aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation==0&&vehicle.idgrupo==0&&vehicle.idconvoy==0);
+      }
+      if (data.type=='grupo') {
+        if(data.id==vehicles[key]['idgrupo']&&vehicles[key]['idconvoy']==0){
+          aux2.push(vehicles[key]);
+          //filtrar por idoperacion del grupo
+          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation==vehicles[key]['idoperation']&&vehicle.idgrupo==0&&vehicle.idconvoy==0);
+        }
       }
       if (data.type=='convoy') {
         if(data.id==vehicles[key]['idconvoy']){
           aux2.push(vehicles[key]);
-          aux_idgrupo = vehicles[key]['idgrupo'];
+          //filtrar por idoperacion del grupo
+          aux1 = this.vehicleService.vehicles.filter((vehicle: any)=>vehicle.idoperation==vehicles[key]['idoperation']&&vehicle.idgrupo==vehicles[key]['idgrupo']&&vehicle.idconvoy==0);
         }
-      }
-    }
-    if(data.type=='convoy'){
-      for (const key in vehicles){
-        if(vehicles[key]['idgrupo']==aux_idgrupo&&vehicles[key]['convoy']=='Unidades Sin Convoy'){
-          // //console.log('unidades sin convoy??',vehicles[key]);
-          aux1.push(vehicles[key]);
-        }
-
       }
     }
 
     this.list2 = aux2;
     this.list1 = aux1;
-
+    console.log('LISTA --> 1',this.list1);
+    console.log('LISTA --> 2',this.list2);
 
   }
   
+  showEditFixes(data: any){
+    this.readonlyNameGroup = true;
+    this.dataEdit = data;
+    // console.log('show edit data',data);
+    this.displayEditGroup = true;
+    this.textHeaderEdit = " "+data.name;
+    this.nameEdit.nativeElement.value = data.name;
+
+    const vehicles = this.vehicleService.vehicles;
+    const vehiclesFixes = this.vehicleService.vehiclesFixes;
+    let aux1:any=[];
+    let aux2=[];
+    aux1 = vehicles;
+    for (const key in vehiclesFixes) {
+      aux1 = aux1.filter((vehicle: any)=>vehicle.id!=vehiclesFixes[key]);
+      const foundVehicle:any = this.vehicleService.vehicles.find((vehicle: any)=>vehicle.id==vehiclesFixes[key]);
+      if (foundVehicle){
+        aux2.push(foundVehicle);
+      }
+    }
+    this.list2 = aux2;
+    this.list1 = aux1;
+    // console.log('LISTA --> 1',this.list1);
+    // console.log('LISTA --> 2',this.list2);
+  }
+  cleanFixes(data:any){
+    Swal.fire({
+      title: 'Confirmación',
+      text: `¿Está seguro de Limpiar la lista de Unidades Fijadas?`,
+      icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Limpiar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        await this.onDeleteFixes(data);
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Limpiar',
+          `Limpieza de Unidades Fijadas exitosa`,
+          'success'
+        );
+      }
+    });
+    
+  }
+  async onDeleteFixes(data:any){
+    const req = {
+      type: data.name,
+    };
+    let array:any =[]
+    console.log('Enviando a Limpiar...',req);
+    let response = await this.vehicleConfigService.cleanUnitFixes(req);
+    if(response.success){
+      await this.vehicleService.updateUnitFixes(array);
+      this.updateGroup();
+      this.vehicleService.reloadTableTree.emit();
+      this.displayEditGroup = false;
+    }else{
+      Swal.fire(
+        'Ups',
+        `Ocurrió un problema al limpiar Las unidades Fijadas`,
+        'error'
+      );
+    }
+  }
   showDelete(data: any){
     this.textDelete = data['type'];
     if(data['id']==null){
-      //console.log('no hay id');
+      console.log('no hay id');
+      Swal.fire({
+        title: 'Error',
+        text: 'No existe Agrupación, recarge la página ...',
+        icon: 'error',
+      });
     }else{
-      // //console.log('en proceso de borrado');
       this.idDelete = data['id'];
       this.typeDelete = data['type'];
+      console.log('en proceso de borrado',this.idDelete,this.typeDelete);
     }
 
+    // SI EXISTE UN CONVOY DEBE ENVIAR UN MENSAJE DE ANTES DESCOMPONER EL GRUPO 
+    if(this.textDelete=='grupo'){
+      const existsElement = this.vehicleService.vehicles.some((vehicle: any) => {
+        return vehicle.idgrupo === data['id'] && vehicle.idconvoy !== 0;
+      }); 
+      if(existsElement){
+        Swal.fire({
+          title: 'Error',
+          text: 'Primero Debe Eliminar los convoy que tiene el grupo ...',
+          icon: 'error',
+        });
+        return;
+
+      }
+    // SI EXISTE UN CONVOY/GRUPO DEBE ENVIAR UN MENSAJE DE ANTES DESCOMPONER LA OPERACION
+    }else if(this.textDelete == 'operacion'){
+      const existsElement = this.vehicleService.vehicles.some((vehicle: any) => {
+        return vehicle.idoperation == data['id'] && (vehicle.idgrupo != 0 || vehicle.idconvoy != 0);
+      }); 
+      if(existsElement){
+        Swal.fire({
+          title: 'Error',
+          text: 'Primero Debe Eliminar los grupos y/o convoys que tiene la operación ...',
+          icon: 'error',
+        });
+        return;
+      }
+    }
 
     Swal.fire({
       title: 'Confirmación',
-      text: `¿Está seguro de descomponer el ${data.type} ${data.name}?`,
+      text: `¿Está seguro de descomponer, ${data.type}: ${data.name}?`,
       icon: 'warning',
       showLoaderOnConfirm: true,
       showCancelButton: true,
@@ -361,7 +538,7 @@ export class TreeTableComponent implements OnInit {
       if(data.isConfirmed) {
         Swal.fire(
           'Descomponer',
-          'Descomposición del grupo exitosa',
+          `Descomposición de ${this.typeDelete} exitosa`,
           'success'
         );
       }
@@ -443,6 +620,7 @@ export class TreeTableComponent implements OnInit {
   async onDelete(){
     const req = {
       id : this.idDelete,
+      type : this.typeDelete,
       vehicles : null
     };
     // //console.log('borrando ...');
@@ -456,11 +634,14 @@ export class TreeTableComponent implements OnInit {
             for (const j in aux_vehicles_tree) {
               if (aux_vehicles[key]['id']==aux_vehicles_tree[j]['id']) {
                 if(this.typeDelete=='grupo'){
-                  aux_vehicles_tree[j]['idgrupo']=null;
-                  aux_vehicles_tree[j]['grupo']='Unidades Sin Grupo';
-                }else{
-                  aux_vehicles_tree[j]['idconvoy']=null;
-                  aux_vehicles_tree[j]['convoy']='Unidades Sin Convoy';
+                  aux_vehicles_tree[j]['idgrupo']=0;
+                  aux_vehicles_tree[j]['namegrupo']='Unidades Sin Grupo';
+                }else if(this.typeDelete =='operacion'){
+                  aux_vehicles_tree[j]['idoperation']=0;
+                  aux_vehicles_tree[j]['nameoperation']='Unidades Sin Operacion';
+                }else if(this.typeDelete =='convoy'){
+                  aux_vehicles_tree[j]['idconvoy']=0;
+                  aux_vehicles_tree[j]['nameconvoy']='Unidades Sin Convoy';
                 }
     
               }
@@ -488,16 +669,16 @@ export class TreeTableComponent implements OnInit {
     if(resultado){
       const index = vehicles.indexOf( resultado);
 
-      vehicles[index].id_conductor = res.id_conductor;
-      vehicles[index].idgrupo = res.idgrupo;
       vehicles[index].name  = res.name;
-      vehicles[index].model = res.model;
-      vehicles[index].sim_number  = res.sim_number;
-      vehicles[index].plate_number  = res.plate_number;
-      vehicles[index].tolva  = res.tolva;
-      vehicles[index].empresa  = res.empresa;
-      vehicles[index].tipo  = res.tipo;
-      vehicles[index].icon  = res.icon;
+      // vehicles[index].id_conductor = res.id_conductor;
+      // vehicles[index].idgrupo = res.idgrupo;
+      // vehicles[index].model = res.model;
+      // vehicles[index].sim_number  = res.sim_number;
+      // vehicles[index].plate_number  = res.plate_number;
+      // vehicles[index].tolva  = res.tolva;
+      // vehicles[index].empresa  = res.empresa;
+      // vehicles[index].tipo  = res.tipo;
+      // vehicles[index].icon  = res.icon;
 
       this.vehicleService.vehicles = vehicles;
 
@@ -516,6 +697,40 @@ export class TreeTableComponent implements OnInit {
     this.display = !this.display;
 
     // //console.log("display-->",this.display);
+  }
+
+  onChangeSelection(show_name:string){
+    // console.log('Vehicles de Tree:',this.vehicles);
+    const vehicles = this.vehicleService.vehicles;
+    let tempShowName = '';
+    for (const index of vehicles) {
+      // console.log('vehicle ->',index);
+      if(show_name=='num_plate'){
+        tempShowName = index.plate_number!;
+      }else if (show_name=='cod_interno'){
+        tempShowName = index.cod_interno!;
+      }else if (show_name =='name'){
+        tempShowName = index.name_old!;
+      }
+      if (!tempShowName){
+        // Busca el valor correspondiente en nameShows basado en selectedNameShowVehicle
+        const selectedOption = this.vehicleService.optionsFilterNameVehicle.find(option => option.value === this.vehicleService.selectedFilterNameVehicle);
+        // Verifica si se encontró una opción correspondiente
+        if (selectedOption) {
+          tempShowName = "Unidad Sin " + selectedOption.label;
+        } else {
+          tempShowName = "Unidad Sin Nombre";
+        }
+      }
+      index.name= tempShowName;
+    }
+    if(this.vehicleService.listTable==0){
+      this.vehicleService.reloadTable.emit();
+    }else{
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+      this.vehicleService.reloadTableTree.emit();
+    }
+    this.vehicleService.onClickSelection(show_name);
   }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;
@@ -538,6 +753,9 @@ export class TreeTableComponent implements OnInit {
     }
     // //console.log("colmun = ",this.column);
   }
+
+  
+  
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
   }
@@ -545,8 +763,11 @@ export class TreeTableComponent implements OnInit {
     this.vehicleService.onClickIcon(IMEI);
   }
   onSort(data: any){
-    // //console.log("sort desde tree", data);
+    console.log("sort desde tree", data);
     this.sortOrder=data;
+  }
+  onClickDriver(IMEI: string){
+    this.vehicleService.onClickDriver(IMEI);
   }
   onClickTag(IMEI: string){
     this.vehicleService.onClickTag(IMEI);
@@ -569,12 +790,13 @@ export class TreeTableComponent implements OnInit {
   onClickFollow(rowData: any){
     rowData.follow = !rowData.follow;
     this.followService.add(rowData);
+    console.log('SEGUIR VEHICULO -->',rowData);
   }
 
   public onQuickFilterChanged(data: any) {
     // //console.log("tt",this.tt);
-    this.tt.filterGlobal(data.target.value, 'contains')
-    this.tt.defaultSortOrder=-1;
+    this.tt.filterGlobal(data.target.value, 'contains');
+    this.tt.defaultSortOrder = -1;
   }
 
   getContrastYIQ(hex: string){
@@ -583,6 +805,12 @@ export class TreeTableComponent implements OnInit {
     var b = parseInt(hex.slice(5,7),16);
     var yiq = ((r*299)+(g*587)+(b*114))/1000;
     return (yiq >= 128) ? '#000' : '#fff';
+  }
+
+  public onChangeUnitsFixes(){
+    this.vehicleService.unitsFixesStatus = this.showVehiclesFixes;
+    this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
+    this.vehicleService.reloadTableTree.emit();
   }
 
 }

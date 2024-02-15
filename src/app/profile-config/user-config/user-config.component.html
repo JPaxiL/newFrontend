@@ -1,294 +1,168 @@
 <div class="d-flex" style="height: 100%; overflow:auto;">
-    <!--     <div class="card-body p-fluid" id="rowBusqueda" style="font-size: 1rem;">Configuración</div>
-    
-        <div style="background-color: var(--gl-gray); height: 0.125rem; width: 96%; margin-left: 2%; padding: 0;"></div> -->
-        
-        <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
-            <div 
-                class="d-flex flex-column justify-content-center align-items-center"
-                style="position: absolute;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.8);
-                z-index: 999999;"
-                *ngIf="isUnderConstruction">
-                <img 
-                    src="./assets/images/en_construccion.png" 
-                    alt="under_construction"
-                    style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
-                <span style="color: #fff;">Panel en construcción</span>
-            </div>
-
-            <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
-
-            <div class="panel-izq-container h-100" *ngIf="!isUnderConstruction">
+    <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
+        <form (submit)="confirm()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
+            <div class="panel-izq-container h-100" >
                 <div class="panel-izq-form">
-
                     <div class="row my-3">
                         <div class="col-12 d-flex justify-content-center">
                             <div class="profile-picture-container">
-                                <span class="one-character-circled profile-picture">{{ 'U' }}</span>
+                                <span class="one-character-circled profile-picture">{{ userDataService.firstLetter }}</span>
                                 <!-- <img src="assets/images/login/iso.png" class="profile-picture" alt="profile-pic"> -->
-                                <button class="picture-update btn-dark-hover">
-                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                                        viewBox="0 0 13.9 13.9" style="enable-background:new 0 0 13.9 13.9;" xml:space="preserve">
-                                        <path d="M5.6,3.6c0.1,0.4,0.4,0.3,0.7,0.3c0.3,0,0.7,0,1,0C8,3.9,8.2,4,8.2,3.3c0-0.1,0-0.4,0-0.5
-                                            C8.2,2.4,7.8,2.5,7.5,2.5c-0.3,0-0.7,0-1,0c-0.3,0-0.7-0.1-0.8,0.2C5.6,2.8,5.6,2.9,5.6,3.1C5.6,3.2,5.6,3.5,5.6,3.6 M2.9,9.5
-                                            c0.1,0.6,0.2,1,0.5,1.5c0.3,0.5,0.6,0.8,0.9,1.1c0.8,0.7,1.9,1.1,3,1c1.1-0.1,2.1-0.7,2.7-1.4c0.3-0.3,0.2-0.3,0.4-0.6
-                                            c0.1-0.2,0.2-0.4,0.3-0.7c0.1-0.3,0.2-0.5,0.2-0.8c0.1-0.7,0-1.5-0.3-2.2C10.5,7.1,10,6.3,9.6,6C9.5,6,9.4,5.9,9.3,5.8
-                                            c-0.5-0.4-1-0.6-1.6-0.7C6.9,4.9,5.8,5.1,5,5.5C4.6,5.7,4.1,6.1,3.9,6.4C3.8,6.5,3.8,6.5,3.8,6.6L3.5,7C3.4,7.2,3.2,7.5,3.1,7.7
-                                            c0,0.1-0.1,0.2-0.1,0.4C2.9,8.4,2.9,9.1,2.9,9.5z M6.8,12.4c-0.2,0-0.5-0.1-0.7-0.1c-0.6-0.1-1.1-0.5-1.5-0.9
-                                            C3.7,10.5,3.4,9,3.9,7.8C4,7.5,4.3,7,4.5,6.8c0.1-0.1,0.2-0.2,0.2-0.2C4.8,6.6,4.9,6.5,5,6.4c0.4-0.3,0.9-0.5,1.4-0.6
-                                            C7,5.7,7.5,5.8,8.1,6c0.1,0,0.2,0.1,0.3,0.1c0.3,0.1,0.5,0.3,0.7,0.5c0.2,0.1,0.4,0.5,0.6,0.7c0.2,0.4,0.4,0.7,0.5,1.1
-                                            c0.3,1.2-0.2,2.3-0.9,3c-0.3,0.3-0.5,0.5-0.9,0.7c-0.2,0.1-0.4,0.2-0.6,0.2C7.3,12.4,7.2,12.4,6.8,12.4z M4.4,9.2
-                                            c0,0.1,0.1,0.4,0.1,0.5c0.2,0.9,0.9,1.6,1.8,1.8c0.1,0,0.2,0,0.3,0.1c0,0,0.1,0,0.1,0c0.3,0,0.6,0,0.9-0.1c0.9-0.2,1.6-1,1.8-1.8
-                                            c0.1-0.3,0.1-0.6,0.1-0.9c0-0.1,0-0.1,0-0.1C9.4,8.3,9.3,7.9,9,7.6C9,7.5,9,7.5,8.9,7.4C8.8,7.4,8.8,7.3,8.7,7.3
-                                            C8.1,6.6,7.2,6.4,6.3,6.6C6.2,6.6,6,6.7,5.9,6.8c-0.7,0.3-1.2,1-1.4,1.7c-0.1,0.3,0,0.2-0.1,0.4C4.4,9,4.4,9,4.4,9.2z M5.5,9
-                                            C5.4,9,5.3,8.9,5.2,8.7c-0.1-0.3,0.3-0.8,0.5-1c0.2-0.2,0.8-0.5,1.1-0.4C7,7.4,7,7.6,7,7.7C7,8.1,6.6,8,6.2,8.3C5.8,8.6,6,9,5.5,9z
-                                            M0.8,3.6c0-0.1,0.1-0.2,0.1-0.3C1,3.2,1.1,3.2,1.3,3.2c0.3,0,0.6,0,0.9,0c0.5,0,1.2,0,1.7-0.1c0.9-0.3,1-1,1.2-1.2
-                                            c0,0,0.1-0.1,0.1-0.1c0.1-0.1,0.4-0.3,0.6-0.3h2.4c0.1,0,0.4,0.1,0.5,0.2l0.1,0.1C8.8,1.8,8.9,1.9,8.9,2C9,2.1,9,2.2,9.1,2.3
-                                            c0.2,0.4,0.6,0.7,1,0.8c0.5,0.2,1.1,0.1,1.7,0.1c0.3,0,0.6,0,0.9,0c0.3,0,0.5,0.2,0.5,0.4v6.6c0,0.2-0.1,0.3-0.2,0.4
-                                            c-0.1,0.1-0.3,0.1-0.5,0.1c-0.2,0-1,0-1,0c0,0,0,0-0.1,0.1c0,0,0,0.1,0,0.1c0,0.1,0,0.1-0.1,0.2l-0.2,0.4c0.3,0,1.3,0,1.7,0
-                                            c0.1,0,0.3-0.1,0.4-0.1c0.4-0.2,0.6-0.6,0.6-0.9V3.5c0-0.1-0.1-0.4-0.1-0.5c-0.1-0.2-0.2-0.2-0.3-0.3c-0.3-0.3-0.6-0.2-1-0.2
-                                            c-0.1-0.1,0-0.3,0-0.4c0-0.1-0.1-0.2-0.3-0.2h-0.9C11.1,1.9,11,2,11,2.1c0,0.1,0,0.3,0,0.4c-0.2,0-0.4,0-0.6,0
-                                            C9.9,2.3,9.7,1.9,9.5,1.5C9.3,1.3,9.2,1.1,8.9,0.9C8.8,0.9,8.6,0.8,8.5,0.8c-0.3-0.1-2.1,0-2.5,0c-0.4,0-0.5,0-0.9,0.2
-                                            C4.8,1,4.6,1.2,4.5,1.4c-0.3,0.4-0.3,0.9-1.2,1c-0.2,0-1.8,0-2.2,0c-0.2,0-0.3,0-0.5,0.1C0.3,2.7,0,3.2,0,3.5v6.8
-                                            c0,0.1,0.1,0.3,0.1,0.4c0.1,0.1,0.1,0.2,0.2,0.3c0.1,0.2,0.3,0.3,0.6,0.4c0.3,0.1,1.5,0,1.9,0c0-0.1,0-0.1-0.1-0.2l-0.2-0.4
-                                            c0,0,0-0.2-0.1-0.2c-0.1,0-0.9,0-1,0c-0.2,0-0.3,0-0.5-0.1c-0.1-0.1-0.2-0.2-0.2-0.4L0.8,3.6L0.8,3.6z"/>
-                                    </svg>
-                                </button>
+                                <!-- <button class="picture-update btn-dark-hover" type="button" pTooltip="Cambiar Imagen de Perfil" tooltipPosition="right">
+                                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                      viewBox="0 0 13.9 13.9" style="enable-background:new 0 0 13.9 13.9;" xml:space="preserve">
+                                      <path d="M5.6,3.6c0.1,0.4,0.4,0.3,0.7,0.3c0.3,0,0.7,0,1,0C8,3.9,8.2,4,8.2,3.3c0-0.1,0-0.4,0-0.5
+                                          C8.2,2.4,7.8,2.5,7.5,2.5c-0.3,0-0.7,0-1,0c-0.3,0-0.7-0.1-0.8,0.2C5.6,2.8,5.6,2.9,5.6,3.1C5.6,3.2,5.6,3.5,5.6,3.6 M2.9,9.5
+                                          c0.1,0.6,0.2,1,0.5,1.5c0.3,0.5,0.6,0.8,0.9,1.1c0.8,0.7,1.9,1.1,3,1c1.1-0.1,2.1-0.7,2.7-1.4c0.3-0.3,0.2-0.3,0.4-0.6
+                                          c0.1-0.2,0.2-0.4,0.3-0.7c0.1-0.3,0.2-0.5,0.2-0.8c0.1-0.7,0-1.5-0.3-2.2C10.5,7.1,10,6.3,9.6,6C9.5,6,9.4,5.9,9.3,5.8
+                                          c-0.5-0.4-1-0.6-1.6-0.7C6.9,4.9,5.8,5.1,5,5.5C4.6,5.7,4.1,6.1,3.9,6.4C3.8,6.5,3.8,6.5,3.8,6.6L3.5,7C3.4,7.2,3.2,7.5,3.1,7.7
+                                          c0,0.1-0.1,0.2-0.1,0.4C2.9,8.4,2.9,9.1,2.9,9.5z M6.8,12.4c-0.2,0-0.5-0.1-0.7-0.1c-0.6-0.1-1.1-0.5-1.5-0.9
+                                          C3.7,10.5,3.4,9,3.9,7.8C4,7.5,4.3,7,4.5,6.8c0.1-0.1,0.2-0.2,0.2-0.2C4.8,6.6,4.9,6.5,5,6.4c0.4-0.3,0.9-0.5,1.4-0.6
+                                          C7,5.7,7.5,5.8,8.1,6c0.1,0,0.2,0.1,0.3,0.1c0.3,0.1,0.5,0.3,0.7,0.5c0.2,0.1,0.4,0.5,0.6,0.7c0.2,0.4,0.4,0.7,0.5,1.1
+                                          c0.3,1.2-0.2,2.3-0.9,3c-0.3,0.3-0.5,0.5-0.9,0.7c-0.2,0.1-0.4,0.2-0.6,0.2C7.3,12.4,7.2,12.4,6.8,12.4z M4.4,9.2
+                                          c0,0.1,0.1,0.4,0.1,0.5c0.2,0.9,0.9,1.6,1.8,1.8c0.1,0,0.2,0,0.3,0.1c0,0,0.1,0,0.1,0c0.3,0,0.6,0,0.9-0.1c0.9-0.2,1.6-1,1.8-1.8
+                                          c0.1-0.3,0.1-0.6,0.1-0.9c0-0.1,0-0.1,0-0.1C9.4,8.3,9.3,7.9,9,7.6C9,7.5,9,7.5,8.9,7.4C8.8,7.4,8.8,7.3,8.7,7.3
+                                          C8.1,6.6,7.2,6.4,6.3,6.6C6.2,6.6,6,6.7,5.9,6.8c-0.7,0.3-1.2,1-1.4,1.7c-0.1,0.3,0,0.2-0.1,0.4C4.4,9,4.4,9,4.4,9.2z M5.5,9
+                                          C5.4,9,5.3,8.9,5.2,8.7c-0.1-0.3,0.3-0.8,0.5-1c0.2-0.2,0.8-0.5,1.1-0.4C7,7.4,7,7.6,7,7.7C7,8.1,6.6,8,6.2,8.3C5.8,8.6,6,9,5.5,9z
+                                          M0.8,3.6c0-0.1,0.1-0.2,0.1-0.3C1,3.2,1.1,3.2,1.3,3.2c0.3,0,0.6,0,0.9,0c0.5,0,1.2,0,1.7-0.1c0.9-0.3,1-1,1.2-1.2
+                                          c0,0,0.1-0.1,0.1-0.1c0.1-0.1,0.4-0.3,0.6-0.3h2.4c0.1,0,0.4,0.1,0.5,0.2l0.1,0.1C8.8,1.8,8.9,1.9,8.9,2C9,2.1,9,2.2,9.1,2.3
+                                          c0.2,0.4,0.6,0.7,1,0.8c0.5,0.2,1.1,0.1,1.7,0.1c0.3,0,0.6,0,0.9,0c0.3,0,0.5,0.2,0.5,0.4v6.6c0,0.2-0.1,0.3-0.2,0.4
+                                          c-0.1,0.1-0.3,0.1-0.5,0.1c-0.2,0-1,0-1,0c0,0,0,0-0.1,0.1c0,0,0,0.1,0,0.1c0,0.1,0,0.1-0.1,0.2l-0.2,0.4c0.3,0,1.3,0,1.7,0
+                                          c0.1,0,0.3-0.1,0.4-0.1c0.4-0.2,0.6-0.6,0.6-0.9V3.5c0-0.1-0.1-0.4-0.1-0.5c-0.1-0.2-0.2-0.2-0.3-0.3c-0.3-0.3-0.6-0.2-1-0.2
+                                          c-0.1-0.1,0-0.3,0-0.4c0-0.1-0.1-0.2-0.3-0.2h-0.9C11.1,1.9,11,2,11,2.1c0,0.1,0,0.3,0,0.4c-0.2,0-0.4,0-0.6,0
+                                          C9.9,2.3,9.7,1.9,9.5,1.5C9.3,1.3,9.2,1.1,8.9,0.9C8.8,0.9,8.6,0.8,8.5,0.8c-0.3-0.1-2.1,0-2.5,0c-0.4,0-0.5,0-0.9,0.2
+                                          C4.8,1,4.6,1.2,4.5,1.4c-0.3,0.4-0.3,0.9-1.2,1c-0.2,0-1.8,0-2.2,0c-0.2,0-0.3,0-0.5,0.1C0.3,2.7,0,3.2,0,3.5v6.8
+                                          c0,0.1,0.1,0.3,0.1,0.4c0.1,0.1,0.1,0.2,0.2,0.3c0.1,0.2,0.3,0.3,0.6,0.4c0.3,0.1,1.5,0,1.9,0c0-0.1,0-0.1-0.1-0.2l-0.2-0.4
+                                          c0,0,0-0.2-0.1-0.2c-0.1,0-0.9,0-1,0c-0.2,0-0.3,0-0.5-0.1c-0.1-0.1-0.2-0.2-0.2-0.4L0.8,3.6L0.8,3.6z"/>
+                                  </svg>
+                                </button> -->
                             </div>
                         </div>
                         <span class="col-12 text-center w-100 mt-2">
-                            abcdefghijklmn@gmail.com
+                            {{userDataService.userEmail}}
                         </span>
                     </div>
+                    
+                    <div class="panel-izq-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Tipo de vehiculo</th>
+                                    <th style="width: 25%;">Color de Icono</th>
+                                    <th style="width: 40%;">Consumo Combustible (Gal)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of typeVehiclesList; let i = index">
+                                    <tr>
+                                        <td style="width: 30%;">
+                                            <span>{{item.var_nombre}}</span>
+                                            <!-- <input type="hidden" value="{{item.id}}"> -->
+                                            <input type="hidden" [(ngModel)]="item.id" name="id_{{i}}" />
 
-                    <div class="gl-row-underline">
-                        <div class="col-12">
-                            <label>NUEVA CONTRASEÑA:</label>
+                                        </td>
+                                        <td style="width: 40%;">
+                                            <div class="row">
+                                                <div class="col-12 d-flex">
+                                                    <div class="col-12">
+                                                        <p-dropdown
+                                                          [options]="filteredColorsVehicles"
+                                                          optionLabel="name"
+                                                          optionValue="code"
+                                                          name="var_color_{{i}}"
+                                                          [(ngModel)]="item.var_color"
+                                                          [showClear]="false"
+                                                          [appendTo]="'body'"
+                                                          [style]="{ 'display': 'flex', 'align-items': 'center' }"
+                                                        >
+                                                        <ng-template let-color pTemplate="selectedItem">
+                                                            <div class="color-option">
+                                                              <div class="color-box" [style.background-color]="color.color"></div>
+                                                              <span>{{ color.name }}</span>
+                                                            </div>
+                                                        </ng-template>
+                                                        <ng-template let-color pTemplate="item">
+                                                            <div class="color-option">
+                                                              <div class="color-box" [style.background-color]="color.color"></div>
+                                                              <span>{{ color.name }}</span>
+                                                            </div>
+                                                          </ng-template>
+                                                        </p-dropdown>
+                                                      </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="var_galon_{{i}}" [(ngModel)]="item.var_galon" pInputText placeholder="Galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right" />
+                                            <!-- <input type="text" value="{{item.var_galon}}" pInputText placeholder="galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right"/> -->
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
+                        <div class="col-12 d-flex">
+                            <label>
+                                <p-checkbox [(ngModel)]="showChangeItem" (onChange)="changeItemCheckbox();" name="checkbox_changeItem" [binary]="true" inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<span>{{ showChangeItem ? 'Desactivar' : 'Activar' }}</span> Cambio de Color según Estado
+                                (En movimiento: VERDE, Exceso de Límite de velocidad: ROJO, Relenti: AZUL)
+                            </label>
                         </div>
-                        <div class="col-12">
-                            <input type="text" pInputText [(ngModel)]="pngNewPass"/>
+                        
+                        <ng-container *ngIf="showChangeItem == true">
+                            <div class="flex align-items h-5 column" >
+                                <div class="">
+                                    <object data="assets/images/user_config/circulo_movimiento.svg"></object>
+                                </div>
+                                <div>
+                                    <label class="switch" >
+                                        <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox"  (change)="switchActive(1);" >
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex align-items h-5 column">
+                                <div class="">
+                                    <object data="assets/images/user_config/flecha_movimiento.png"></object>
+                                </div>
+                                <div>
+                                    <label class="switch" >
+                                        <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2);">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex align-items h-5 column">
+                                <div class="">
+                                    <object data="assets/images/objects/nuevo/auto.svg "></object>
+                                </div>
+                                <div>
+                                    <label class="switch" >
+                                        <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox"  (change)="switchActive(3);">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </ng-container>
+                        
+                        
+                    </div> 
+                    <p-footer>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-6">
+                                <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
+                            </div>
+                            <div class="col-6">
+                                <button _ngcontent-cic-c118="" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading" type="submit" >Guardar</button>
+                            </div>
+                            </div>
+                            <div class="" *ngIf="loading">
                         </div>
-                    </div>
-
-                    <div class="gl-row-underline">
-                        <div class="col-12">
-                            <label>REPITE LA NUEVA CONTRASEÑA:</label>
-                        </div>
-                        <div class="col-12">
-                            <input type="text" pInputText [(ngModel)]="pngNewPassR"/>
-                        </div>
-                    </div>
-
-                    <div class="gl-row-underline">
-                        <div class="col-12">
-                            <label>MOSTRAR DIRECCIÓN DE VEHÍCULO:</label>
-                        </div>
-                        <div class="col-12">
-                            <p-dropdown 
-                            [options]="showVehicleDirOptions" 
-                            optionLabel="name" 
-                            optionValue="id"
-                            [(ngModel)]="mostrarDirVehicle"
-                            [showClear]="false" 
-                            [appendTo]="'body'" 
-                            (onChange)="consoleMostrar()"
-                            placeholder="Seleccione una opción..."></p-dropdown>
-                        </div>
-                    </div>
-
-                    <div class="gl-row-underline">
-                        <div class="col-12">
-                            <label>MOSTRAR ÍCONO DE VEHÍCULO:</label>
-                        </div>
-                        <div class="col-12">
-                            <p-dropdown 
-                            [options]="configIconOptions" 
-                            optionLabel="name" 
-                            optionValue="id"
-                            [(ngModel)]="mostrarIcono"
-                            [showClear]="false" 
-                            [appendTo]="'body'" 
-                            (onChange)="consoleMostrar()"
-                            placeholder="Seleccione una opción..."></p-dropdown>
-                        </div>
-                    </div>
-
-                    <div class="gl-row-underline">
-                        <div class="col-12">
-                            <label>TAMAÑO DE ÍCONO DE VEHÍCULO:</label>
-                        </div>
-                        <div class="col-12">
-                            <p-dropdown 
-                            [options]="sizeIconOptions" 
-                            optionLabel="name" 
-                            optionValue="id"
-                            [(ngModel)]="sizeIcono"
-                            [showClear]="false" 
-                            [appendTo]="'body'" 
-                            (onChange)="consoleMostrar()"
-                            placeholder="Seleccione una opción..."></p-dropdown>
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-center mt-4 panel-izq-container-footer">
-                        <div class="col-6">
-                            <button class="btn-gl-cancel btn-dark-hover w-100" (click)="panelService.clickShowPanel('USER-CONFIG')">Cancelar</button>
-                        </div>
-                        <div class="col-6">
-                            <button class="btn-gl-save btn-dark-hover w-100">Guardar</button>
-                        </div>
-                    </div>
-
+                    </p-footer>
                 </div>
             </div>
-
-        </div>            
-    
-        <!-- <div class="modal-body panel-izq-container p-fluid">
-            <form [formGroup]="profileConfigForm">
-                <div class="row">
-                    <legend class="col-12">Contraseña</legend>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Contraseña actual:</span>
-                            <div class="col-8">
-                                <input 
-                                id="actual_pass"
-                                [class.is-invalid]="profileConfigForm.get('actual_pass')?.touched && profileConfigForm.get('actual_pass')?.invalid"
-                                type="password" 
-                                class="form-control" 
-                                formControlName="actual_pass"
-                                maxlength="25">
-                                <div class="invalid-feedback">
-                                    Este campo no puede quedar vacío
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Nueva contraseña:</span>
-                            <div class="col-8">
-                                <input 
-                                    id="new_pass_1"
-                                    [class.is-invalid]="profileConfigForm.get('new_pass_1')?.touched && profileConfigForm.get('new_pass_1')?.invalid"
-                                    type="password" 
-                                    class="form-control" 
-                                    formControlName="new_pass_1"
-                                    maxlength="25">
-                                <div class="invalid-feedback">
-                                    Este campo no puede quedar vacío
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Repetir nueva contraseña:</span>
-                            <div class="col-8">
-                                <input 
-                                    id="new_pass_2"
-                                    [class.is-invalid]="profileConfigForm.get('new_pass_2')?.touched && (profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value)"
-                                    type="password" 
-                                    class="form-control" 
-                                    formControlName="new_pass_2"
-                                    maxlength="25">
-                                <div 
-                                    *ngIf="!(profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value) &&profileConfigForm.get('new_pass_2')?.touched && profileConfigForm.get('new_pass_2')?.invalid"            
-                                    class="invalid-feedback">
-                                    Este campo no puede quedar vacío
-                                </div>
-                                <div 
-                                    *ngIf="profileConfigForm.get('new_pass_2')?.dirty && profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value" 
-                                    class="invalid-feedback">
-                                    La nueva contraseña debe coincidir
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-    
-                <div class="row"></div>
-    
-                <div class="modal-footer">
-                    <div class="row w-100 justify-content-around">
-                        <div class="col-5">
-                          <button type="button" class="btn btn-success w-100 not-cancel" [disabled]="profileConfigForm.get('actual_pass')?.invalid || profileConfigForm.get('new_pass_1')?.invalid || profileConfigForm.get('new_pass_2')?.invalid || profileConfigForm.get('new_pass_1')?.value != profileConfigForm.get('new_pass_2')?.value">Actualizar Contraseña</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <div class="panel-izq-form">
-
-                <div class="row">
-                    <legend class="col-12">Mapa</legend>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Mostrar dirección de vehículo</span>
-                            <div class="col-8">
-                                <p-dropdown 
-                                    [options]="showVehicleDirOptions" 
-                                    optionLabel="name" 
-                                    optionValue="id"
-                                    [(ngModel)]="mostrarDirVehicle"
-                                    [showClear]="false" 
-                                    [appendTo]="'body'" 
-                                    (onChange)="consoleMostrar()"
-                                    placeholder="Seleccione una opción..."></p-dropdown>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Mostrar ícono de vehículo</span>
-                            <div class="col-8">
-                                <p-dropdown 
-                                    [options]="configIconOptions" 
-                                    optionLabel="name" 
-                                    optionValue="id"
-                                    [(ngModel)]="mostrarIcono"
-                                    [showClear]="false" 
-                                    [appendTo]="'body'" 
-                                    (onChange)="consoleMostrar()"
-                                    placeholder="Seleccione una opción..."></p-dropdown>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label class="row">
-                            <span class="col-4">Tamaño de ícono de vehículo</span>
-                            <div class="col-8">
-                                <p-dropdown 
-                                    [options]="sizeIconOptions" 
-                                    optionLabel="name" 
-                                    optionValue="id"
-                                    [(ngModel)]="sizeIcono"
-                                    [showClear]="false" 
-                                    [appendTo]="'body'" 
-                                    (onChange)="consoleMostrar()"
-                                    placeholder="Seleccione una opción..."></p-dropdown>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-    
-            </div>
-
-            <div class="modal-footer">
-                <div class="row w-100 justify-content-around">
-                  <div class="col-5 d-flex justify-content-center flex-column">
-                    <button type="button" class="btn btn-success w-100">Cancelar</button>
-                  </div>
-                  <div class="col-5">
-                    <button type="button" class="btn btn-success w-100">Guardar Cambios</button>
-                  </div>
-                </div>
-              </div>
-    
-        </div> -->
-    
-    </div>
+        </form>
+    </div> 
+</div>

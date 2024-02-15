@@ -1,0 +1,185 @@
+.slider-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  ::ng-deep .p-progressbar {
+    background-color: rgb(0 0 0 / 0%);
+    z-index: 1000;
+    height: 2px !important;
+  }
+
+  ::ng-deep {
+    .p-slider.p-slider-horizontal {
+      height: 0.75rem;
+    }
+    .p-slider .p-slider-range {
+      background-color: #00000030;
+    }
+
+    .p-slider-handle {
+      background-color: #ffffff10 !important;
+      height: 1.5rem !important;
+      width: 1.5rem !important;
+    }
+    .p-slider.p-slider-horizontal .p-slider-handle {
+      margin-top: -0.75rem !important;
+      margin-left: -0.75rem !important;
+  }
+  }
+  .slider-content.maximized {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+    background-color: white;
+    overflow: auto;
+  }
+
+  .slider-header,
+  .slider-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #0000003c;
+    color: white; /* Puedes ajustar el color del texto según tus preferencias */
+    padding: 0.2rem 0.5rem 0.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1010;
+  }
+
+  .slider-header {
+    top: 0;
+  }
+  
+  .slider-footer {
+    bottom: 0;
+  }
+
+  .slider-title {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5rem;
+  }
+
+  .slider-icon {
+    height: 1.3rem;
+    width: 1.3rem;
+}
+
+.slider-text {
+    color: whitesmoke;
+    font-weight:500;
+    text-transform: uppercase;
+    font-size:x-small;
+    text-shadow: 0 0 5px black;
+}
+
+.multimedia-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: #000000;
+  }
+
+.multimedia-controls {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    justify-content: end;
+}
+
+.multimedia-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.multimedia-item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-button {
+    width: 14px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    background: rgba(212, 212, 212, 0.63);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.window-button {
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: rgba(212, 212, 212, 0.63);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+:host ::ng-deep .custom-spinner .p-progress-spinner-circle {
+    animation: custom-progress-spinner-dash 1.5s ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite;
+}
+
+@keyframes custom-progress-spinner-color {
+    100%,
+    0% {
+        stroke: #16697A;
+    }
+    40% {
+        stroke: #489FB5;
+    }
+    66% {
+        stroke: #82C0CC;
+    }
+    80%,
+    90% {
+        stroke: #FFA62B;
+    }
+}
+
+@keyframes custom-progress-spinner-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}

@@ -55,10 +55,12 @@ export class AlertListComponent implements OnInit {
 
   ngOnDestroy(){
     this.panelAlertKey = 0;
-    this.AlertService.clearDataAll();
+    //this.AlertService.clearDataAll();
   }
 
   public async loadData(){
+    console.log("Loading alerts in Alert-list");
+    
     this.alerts = await this.AlertService.getAll();
     this.isRowDataEmpty = this.alerts.length == 0; 
     if(this.AlertService.panelAlertKey == this.panelAlertKey){

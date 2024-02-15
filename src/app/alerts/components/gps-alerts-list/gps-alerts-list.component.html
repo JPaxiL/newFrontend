@@ -23,14 +23,20 @@
             <span>Todas las Alertas</span>
           </div>
           <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-GPS')">
-            <span>Alertas GPS</span>
+            <span>Alertas GPS Tracker</span>
           </div>
           <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-PLATFORMS')">
             <span>Alertas Plataforma</span>
           </div>
-          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-ACCESSORIES')">
-            <span>Alertas Seg. Vehicular</span>
-          </div> 
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-SECURITY')">
+            <span>Alertas Seguridad Vehicular</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-MOBILE')">
+            <span>Alertas Soluciones Móviles</span>
+          </div>
+          <div ngbDropdownItem (click)="panelService.clickHeaderToggle('ALERTS-360')">
+            <span>Alertas Fatiga 360</span>
+          </div>
         </div>
       </div>
     </div>

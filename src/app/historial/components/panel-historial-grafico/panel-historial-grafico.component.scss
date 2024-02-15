@@ -1,21 +1,41 @@
-
-
 #graficohistorial{
-  height:200px;
-
-  width: calc(100% - 465px);
-
+  height:240px;
+  //height:calc(100% - 50px);
+  // width: calc(100% - 465px);
+  width: 100%;
   background: #fff; background-color:#FFF;
-  display: none;
-  position:absolute;
+  // display: none;
+  // position:absolute;
   right:0px;
   bottom:0px;
   overflow-y: auto;
-  overflow-x: hidden;
+  // overflow-x: hidden;
   padding: 5px;
-  z-index: 20000;
+  // z-index: 20000;
 }
 
+
+#placeholder{
+  height:160px;
+  width: 100%;
+}
+
+
+
+.p-dialog.p-component .p-dialog-content {
+  padding: 1.5rem 1.5rem 0.0rem 1.5rem;
+
+}
+
+.p-dialog-content {
+  flex-grow: 1;
+  /* overflow-y: auto; */
+}
+
+
+.p-dialog .p-dialog-footer {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
 
 #datoslegend {
   font-size: 11px;
@@ -88,4 +108,31 @@ background-color: #ffffff !important;
 p.rredd {
   color: red;
   font-size: 20px;
+}
+
+
+
+:host ::ng-deep .p-slider { 
+  // width: 300px; 
+  height: 9px; 
+} 
+
+:host ::ng-deep .p-slider .p-slider-range{ 
+  background: #00CCFF; 
+}
+
+
+:host ::ng-deep .p-slider-handle { 
+  border-color: grey; 
+} 
+
+:host ::ng-deep .p-slider .p-slider-handle:hover { 
+  border-color: grey; 
+  background: grey; 
+} 
+
+:host ::ng-deep .p-slider .p-slider-handle:focus { 
+  border-color: grey; 
+  box-shadow: grey; 
+  background: grey; 
 }

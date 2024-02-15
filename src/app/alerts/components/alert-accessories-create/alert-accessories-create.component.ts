@@ -17,21 +17,32 @@ declare var $: any;
   styleUrls: ['./alert-accessories-create.component.scss'],
 })
 export class AlertAccessoriesCreateComponent implements OnInit {
-  options = new Array({ id: 'ALERTS-ACCESSORIES', name: 'Alertas Seguridad Vehicular' });
-
+  options = new Array({ id: 'ALERTS-ACCESSORIES', name: 'Alertas 360' });
+  type = "";
   public alertForm!: FormGroup;
   public events: any = [];
   public loading: boolean = true;
   public vehicles: Select2Data = [];
   public disabledEventSoundActive = true;
   public disabledEmail = true;
+  public disabledWhatsapp = true;
   loadingEventSelectInput: boolean = true;
-  
+
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
   ];
-  
+
+  booleanOptionsVentanaEmergente = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
+
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
+
   listaSonidos: any = [];
   audio = new Audio();
 
@@ -51,7 +62,9 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show('loadingAlertData');
-
+    this.type = this.panelService.nombreComponente == "ALERTS-SECURITY-CREATE"? "security" : (this.panelService.nombreComponente == "ALERTS-MOBILE-CREATE"? "mobile":"360");
+    console.log("TYPE:   ",this.type);
+    
     this.alertForm = this.formBuilder.group({
       vehicles: ['', [Validators.required]],
       // geocercas: [[]],
@@ -60,6 +73,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
       chkEventoActivado: [true],
       chkSonido: [false],
       chkCorreo: [false],
+      chkwhatsapp: [false],
       sonido: [
         {
           value: 'sonidos/alarm8.mp3',
@@ -74,7 +88,15 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         { value: '', disabled: this.disabledEmail },
         [Validators.required, Validators.email],
       ],
-      eventType: ['accessories'],
+      eventType: [this.type],
+
+      lista_whatsapp: [[]],
+      whatsapp: [
+        { value: '', disabled: this.disabledWhatsapp },
+        [Validators.required],
+      ],
+      chkVentanaEmergente:[false],
+      chkEvaluation:[false]
     });
 
     this.loading = false;
@@ -83,7 +105,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
-    this.events = await this.AlertService.getEventsByType('Accesorios');
+    this.events = await this.AlertService.getEventsByType(this.type);
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;
@@ -105,8 +127,8 @@ export class AlertAccessoriesCreateComponent implements OnInit {
   }
 
   playAudio(path: string) {
-    if(typeof path != 'undefined' && path != ''){
-      if(this.audio.currentSrc != '' && !this.audio.ended){
+    if (typeof path != 'undefined' && path != '') {
+      if (this.audio.currentSrc != '' && !this.audio.ended) {
         this.audio.pause();
       }
       this.audio = new Audio('assets/' + path);
@@ -116,10 +138,10 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         audioPromise.then(() => {
           //console.log('Playing notification sound')
         })
-        .catch((error: any) => {
-          //console.log(error);
-          // Auto-play was prevented
-        });
+          .catch((error: any) => {
+            //console.log(error);
+            // Auto-play was prevented
+          });
       }
     }
   }
@@ -178,11 +200,25 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     }
   }
 
+  chkWhatsappHandler() {
+
+    if (this.alertForm.value.chkwhatsapp) {
+      this.alertForm.controls['whatsapp'].enable();
+    } else {
+      this.alertForm.controls['whatsapp'].disable();
+    }
+  }
+
   onSubmit(event: any) {
     event.preventDefault();
 
-    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+    if (this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0) {
       Swal.fire('Error', 'Debe ingresar un correo', 'warning');
+      return
+    }
+
+    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+      Swal.fire('Error', 'Debe ingresar un número', 'warning');
       return
     }
 
@@ -206,7 +242,8 @@ export class AlertAccessoriesCreateComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           const res = await this.AlertService.create(this.alertForm.value);
-          this.clickShowPanel('ALERTS-ACCESSORIES');
+          this.AlertService.getAll();
+          this.clickShowPanel();
         },
       }).then((data) => {
         if (data.isConfirmed) {
@@ -222,17 +259,56 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     }
   }
 
-  clickShowPanel(nomComponent: string): void {
+  clickShowPanel(): void {
     $('#panelMonitoreo').show('slow');
-    this.panelService.nombreComponente = nomComponent;
-
-    const item = this.options.filter((item) => item.id == nomComponent);
-    this.panelService.nombreCabecera = item[0].name;
+    if(this.type == "security"){;
+      this.panelService.nombreComponente = "ALERTS-SECURITY";
+      this.panelService.nombreCabecera =   "Alertas Seguridad Vehicular";
+    }else if(this.type == "mobile"){
+      this.panelService.nombreComponente = "ALERTS-MOBILE";
+      this.panelService.nombreCabecera =   "Alertas Solución Móvil";
+    }else{
+      this.panelService.nombreComponente = "ALERTS-360";
+      this.panelService.nombreCabecera =   "Alertas Fatiga 360";
+    }
   }
 
-  hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){
+  hideLoadingSpinner() {
+    if (this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady) {
       this.spinner.hide('loadingAlertData');
     }
+  }
+
+  addWhatsapp() {
+    if (this.alertForm.value.chkwhatsapp) {
+      if (this.alertForm.value.whatsapp) {
+        if (
+          !this.isInArray(
+            this.alertForm.value.whatsapp,
+            this.alertForm.value.lista_whatsapp
+          )
+        ) {
+          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.controls.whatsapp.reset();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'El número ingresado ya existe.',
+            icon: 'warning',
+          });
+        }
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe ingresar un número.',
+          icon: 'warning',
+        });
+      }
+
+    }
+  }
+
+  restWhatsapp(index: number) {
+    this.alertForm.value.lista_whatsapp.splice(index, 1);
   }
 }

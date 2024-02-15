@@ -7,10 +7,12 @@
       <div class="d-flex flex-grow-1">
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <input type="text" (keyup)="onBusqueda($event)" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/>
+          <input type="text" (keyup)="onBusqueda($event)" type="text" [(ngModel)]="NomBusqueda"  class="form-control" placeholder="Buscar por nombre"/>
         </span>
       </div>
-
+      <button type="button" *ngIf="geofencesService.showBtnImportExport" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickImportGeocerca()" title="Importar o exportar">
+        <i class="fa fa-book" aria-hidden="true"></i>
+      </button>
       <button type="button" *ngIf="geofencesService.showBtnAdd" class="btn-gl-blue btn-dark-hover btn-circle flex-none" (click)="clickAgregarGeocerca()" title="Crear geocerca">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
@@ -30,8 +32,6 @@
         <col *ngIf="geofencesService.showBtnEdit" width="13%" />
         <col *ngIf="geofencesService.showBtnEdit" width="13%" />
         <col *ngIf="!geofencesService.showBtnEdit" width="26%" />
-
-
 
       </colgroup>
       <thead class="visible-on-scroll">
@@ -167,7 +167,6 @@
           </tr>
       </thead>
       <tbody style="border-top: inherit;">
-
           <tr *ngFor="let geo of geofencesService.tblDataGeoFiltered ;let indice=index" class="">
 
               <!-- <td>{{geo.trama.zone_visible}}</td> -->
@@ -180,7 +179,7 @@
               <!-- <td>{{geo.trama.zone_color}}</td> -->
               <td class="text-center">
                 <button class="btn btn-xs btn-link p-n" (click)="clickLocate(geo.trama.id)" >
-                  <div [ngStyle]="{'background-color': geo.trama.zone_color}" class="geofence-color" ></div>
+                  <div [ngStyle]="{'background-color': geo.trama.zone_color}" class="pentagon" ></div>
                 </button>
               </td>
 
@@ -209,8 +208,6 @@
                   </div>
                 </div>
               </td>
-
-
           </tr>
           <tr *ngIf="noResults">
             <td colspan="6" class="text-center">Sin coinicidencias</td>

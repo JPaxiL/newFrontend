@@ -17,6 +17,8 @@ export class AlertService {
   public alertsByType: any = [];
   public panelAlertKey: Number = 0;
 
+  dataCompleted = false;
+
   public alertsForEventSocket: any[] = [];
 
   public listaSonidos = [
@@ -28,11 +30,13 @@ export class AlertService {
     { id: 6, ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
     { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
     { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
-    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
-    { id: 10, ruta: '', label: 'Sin Sonido' },
+    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' }
   ];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    console.log("INICIANDO-----ALERTSERVICE");
+    
+  }
 
   public async get(id:string):Promise <Alert[]> {
     const response: ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts/${id}`).toPromise();
@@ -40,7 +44,7 @@ export class AlertService {
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1): Promise<Alert[]>{
-    console.log('Obteniendo Alertas...');
+    // console.log('Obteniendo Alertas...');
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alerts`).toPromise();
     let i = 1;
     let alerts_for_events_socket: any[] = [];
@@ -51,7 +55,7 @@ export class AlertService {
       data.notificacion_email_bol = (data.notificacion_email == 'true');
 
       alerts_for_events_socket.push(
-        { evento_id: data.id, 
+        { evento_id: data.id,
           sonido_sistema_bol: data.sonido_sistema_bol,
           ruta_sonido: sistema_notificacion[3]});
 
@@ -62,8 +66,9 @@ export class AlertService {
 
     });
     this.alertsForEventSocket = alerts_for_events_socket;
-    console.log('Alertas obtenidas');
+    // console.log('Alertas obtenidas');
     //console.log(this.alertsForEventSocket);
+    this.dataCompleted = true;
     return this.alerts;
   }
 
@@ -85,9 +90,9 @@ export class AlertService {
     const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events/${type}`).toPromise();
     let event = response.data;
 
-    event = event.filter(function( obj:any ) {
-      return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
-    });
+    // event = event.filter(function( obj:any ) {
+    //   return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
+    // });
 
     event = event.map( (ev:any) => {
       ev.name = this.toCamelCase(ev.name);
@@ -100,11 +105,11 @@ export class AlertService {
   toCamelCase(str:any){
     const palabras = str.split(" ");
 
-    var palabraM = palabras.map((palabra:any) => { 
+    var palabraM = palabras.map((palabra:any) => {
       if (palabra=='de' || palabra=='en' || palabra=='con' || palabra=='de' || palabra=='la' ) {
         return palabra;
       } else {
-        return palabra[0].toUpperCase() + palabra.substring(1); 
+        return palabra[0].toUpperCase() + palabra.substring(1);
       }
     }).join(" ");
     return palabraM;
@@ -139,7 +144,9 @@ export class AlertService {
   }
 
   public async create(alert: any) {
+    console.log("data enviada",alert);
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/alerts`,alert).toPromise();
+    console.log("response",response);
     return response.data;
   }
 
@@ -159,5 +166,11 @@ export class AlertService {
 
   public getAlertEditData(){
     return this.alertEdit;
+  }
+
+  public getAlertById(id:string){
+    console.log("id----", id);
+    console.log("Alerts----", this.alerts);
+    return this.alerts.find(alert => alert.id == id.toString());
   }
 }

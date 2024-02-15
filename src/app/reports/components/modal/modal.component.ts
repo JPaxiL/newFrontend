@@ -63,6 +63,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   periodo :any = "";
   vehiculo :any = "";
   chkDateHour :any = "";
+  numRep :any;
 
   dtOptions = {
       pagingType: 'full_numbers',
@@ -130,6 +131,12 @@ export class ModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log("====MODAAAAAAALL ABIERTOOOO=====");
     console.log(this.reportService.objGeneral);
+
+
+    // <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep != 'R036'" >Velocidad GPS</th>
+    // <th *ngIf="reportTableDropdownData[2].velGPS && report_data.num_rep == 'R036'" >Velocidad 360</th>
+
+
     
     this.display = true;
 
@@ -137,6 +144,9 @@ export class ModalComponent implements OnInit, OnDestroy {
     this.periodo = this.reportService.objGeneral.periodo;
     this.vehiculo = this.reportService.objGeneral.vehiculo;
     this.chkDateHour = this.reportService.objGeneral.dateHour;
+    this.numRep = this.reportService.objGeneral.numRep;
+
+    
 
     if (this.isIOSChrome) {
       // is Google Chrome on IOS

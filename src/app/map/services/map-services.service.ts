@@ -10,8 +10,8 @@ export class MapServicesService {
   map!: L.Map; //guardara el mapa
   nombreMap: string = '001';
   display: boolean = false;
+  showSearch: boolean = false;
   constructor(
-    private vehicleService: VehicleService,
     public toolbarMapService: ToolbarMapService
     ) {}
 
@@ -94,6 +94,9 @@ export class MapServicesService {
 
     this.toolbarMapService.change.subscribe(display => {
       this.display = display;
+    });
+    this.toolbarMapService.searchClick.subscribe(() => {
+      this.showSearch = !this.showSearch;
     });
   }
 

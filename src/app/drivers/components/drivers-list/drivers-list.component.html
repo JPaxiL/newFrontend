@@ -1,100 +1,117 @@
+
 <div class="table-content-component-panel-monitoreo" style="position: relative;">
 
-        <div
-            class="d-flex flex-column justify-content-center align-items-center"
-            style="position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 999999;"
-            *ngIf="isUnderConstruction">
-            <img
-                src="./assets/images/en_construccion.png"
-                alt="under_construction"
-                style="display: flex; max-width: 50%; max-height: 20rem; margin-bottom: 1rem;">
-            <span style="color: #fff;">Panel en construcción</span>
-        </div>
-  
-        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingDrivers" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
-  
-        <div class="panel-izq-table-container" style="flex-grow: 0;">
-          <table id="tbl_geos">
-            <colgroup>
-              <col width="15%" />
-              <col width="25%" />
-              <col width="30%" />
-              <col width="15%" />
-              <col width="15%" />
-  
-            </colgroup>
-            <thead class="visible-on-scroll">
-                <tr>
-                    <th>Nº</th>
-                    <!-- <td></td> -->
-                    <th class="text-start">Nombre</th>
-                    <th class="text-start">DNI</th>
-                    <th>N° Llave/Placa</th>
-                    <!-- <th><i class="fa fa-id-card fa-lg"></i></th> -->
-                    <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
-                    <th><i class="fa fa-pencil fa-lg"></i></th>
-  
-                </tr>
-            </thead>
-            <tbody style="border-top: inherit;">
-  
-                <tr *ngFor="let sub of driversService.tblDataDriver;let indice=index">
-                  <td class="text-center">{{indice+1}} </td>
-                  <td>{{sub.trama.nombre_conductor}} </td>
-                  <td>{{sub.trama.dni_conductor}}</td>
-                  <td *ngIf="(sub.trama.tipo_identificacion == 'ibutton')">{{sub.trama.nro_llave}}</td>
-                  <td *ngIf="(sub.trama.tipo_identificacion == 'imei')">{{sub.trama.tracker_nombre}}</td>
-                  <td *ngIf="(sub.trama.tipo_identificacion == '' || sub.trama.tipo_identificacion == null)"></td>
+  <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingPlatformAlertsSpinner" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Alertas Plataforma... </p></ngx-spinner>
 
-                  <!-- <td class="inline-png-checkbox text-center">
-                    <p-checkbox [(ngModel)]="sub.trama.activo" [disabled]="true" [binary]="true"></p-checkbox>
-                  </td> -->
-  
-  
-                  <td>
-                    <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
-  
-                      <i class="fa fa-pencil" ngbDropdownToggle></i>
-                      <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
-                        <!-- <div ngbDropdownItem (click)="clickActivarSubusuario(sub.trama.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Activar/Desactivar</div> -->
-                        <div ngbDropdownItem (click)="clickConfigurarDriver(sub.trama.id_conductor)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                        <div ngbDropdownItem (click)="clickEliminarDriver($event, sub.trama.id_conductor)" ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr *ngIf="driversService.isRowDataEmpty">
-                  <td colspan="6" class="text-center">No hay conductores asignados</td>
-                </tr>
-  
-          
-            </tbody>
-          </table>
-        </div>
-  
-  
-  
-        <!-- {{userData.nombre_usuario}} -->
-  
-  
-        <div class="d-flex justify-content-center my-4 panel-izq-container-footer">
-          <div class="col-6">
-              <button type="button" (click)="clickAgregarDriver()" class="btn-gl-save btn-dark-hover w-100" >Agregar Conductor</button>
+  <div class="card-body p-fluid" id="rowBusqueda">
+    <div class="d-flex">
+      <div class="d-flex flex-grow-1">
+        <span class="p-input-icon-right flex-grow-1 me-2">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input (keyup)="onSearchDriver()" [(ngModel)]="searchValueDriver" type="text" id="searchKey" class="form-control"  class="form-control ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false" placeholder="Buscar por Nombre / Placa / Ibutton..." />
+        </span>
+      </div>
+
+      <button (click)="clickAgregarDriver()" type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2" title="Agregar Conductor" data-bs-toggle="tooltip" data-bs-placement="auto" container="body" onclick="this.blur();">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+
+      <!-- <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
+        <button class="btn-gl-blue btn-dark-hover btn-circle" ngbDropdownToggle>
+          <i class="fas fa-address-book fa-lg" aria-hidden="true"></i>
+        </button>
+        <div ngbDropdownMenu class="gl-custom-dropdown dropdown-alert-panel">
+          <div ngbDropdownItem (click)="showHistoryDriver()">
+            <span>Historial de Conductores</span>
+          </div>
+          <div ngbDropdownItem (click)="showHistoryDriverForPlate()">
+            <span>Historial de Vehículos</span>
           </div>
         </div>
-  
-
-  
-        <div *ngIf="(driversService.modalActive)">
-          <app-drivers-modal></app-drivers-modal>
-        </div>
-  
-  
-  
-  
+      </div> -->
+    </div>
   </div>
+  
+  <div class="panel-izq-table-container" style="flex-grow: 0;">
+    <table id="tbl_geos">
+      <colgroup>
+        <col width="5%" />
+        <col width="25%" />
+        <col width="20%" />
+        <col width="20%" />
+        <col width="20%" />
+        <col width="10%" />
+
+      </colgroup>
+      <thead class="visible-on-scroll">
+          <tr>
+              <th>Nº</th>
+              <!-- <td></td> -->
+              <th class="text-start">NOMBRE</th>
+              <th>DNI</th>
+              <th>TELÉFONO</th>
+              <th>N° Licencia</th>
+              <!-- <th><i class="fa fa-id-card fa-lg"></i></th> -->
+              <!-- <td><span class="fa fa-car fa-lg"></span></td> -->
+              <th><i class="fa fa-pencil fa-lg"></i></th>
+
+          </tr>
+      </thead>
+      <tbody style="border-top: inherit;">
+
+          <tr *ngFor="let driver of driversService.tblDataDriver;let indice=index">
+            <td class="text-center">{{indice+1}} </td>
+            <!-- <td class="text-center">{{driver.id}} </td> -->
+            <td>{{driver.nombre_conductor}} </td>
+            <td>{{driver.dni_conductor}}</td>
+            <td>{{driver.telefono_conductor}}</td>
+            <td>{{driver.nro_licencia}}</td>
+            <!-- <td>{{driver.tracker_nombre}}</td>
+            <td>{{driver.nro_llave}}</td>
+            <td>{{driver.nro_cipia}}</td> -->
+            <!-- <td>{{driver.dni_conductor}}</td> -->
+            <!-- <td *ngIf="(driver.tipo_identificacion == 'ibutton')">{{driver.nro_llave}}</td> -->
+            <!-- <td *ngIf="(driver.tipo_identificacion == 'imei')">{{driver.tracker_nombre}}</td> -->
+            <!-- <td *ngIf="(driver.tipo_identificacion == '' || driver.tipo_identificacion == null)"></td> -->
+
+            <!-- <td class="inline-png-checkbox text-center">
+              <p-checkbox [(ngModel)]="driver.activo" [disabled]="true" [binary]="true"></p-checkbox>
+            </td> -->
+
+
+            <td>
+              <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+
+                <i class="fa fa-pencil" ngbDropdownToggle></i>
+                <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                  <div ngbDropdownItem (click)="clickConfigurarDriver(driver.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                  <div ngbDropdownItem (click)="clickEliminarDriver(driver.id)" ><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="driversService.isRowDataEmpty">
+            <td colspan="6" class="text-center">No hay conductores asignados</td>
+          </tr>
+
+    
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-center my-4 panel-izq-container-footer">
+    <div class="col-6">
+        <button type="button" (click)="clickAgregarDriver()" class="btn-gl-save btn-dark-hover w-100" >Agregar Conductor</button>
+    </div>
+  </div>
+  <div *ngIf="(driversService.modalActive)">
+    <app-drivers-modal></app-drivers-modal>
+  </div>
+  <div *ngIf="(driversService.historyDriverActive)">
+   <app-drivers-history></app-drivers-history> 
+  </div>
+
+
+</div>
+
   

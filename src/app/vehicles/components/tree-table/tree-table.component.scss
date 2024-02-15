@@ -32,11 +32,11 @@ p {
     }
 }
 
-.gl-custom-dropdown { 
+.gl-custom-dropdown {
     &.dropdown-customize-vehicle-panel{
         margin-left: 1.875rem; //Padding de rowBusqueda + ancho de dragbar + espacio adicional 0.375
-        margin-right: 0.625rem; 
-        background: linear-gradient(0deg, #fff 50%, var(--gl-purple-blue) 50%);
+        margin-right: 0.625rem;
+        background: linear-gradient(0deg, #fff 50%, var(--gl-blue-dark) 50%);
 
         > div:first-child{
             color: #fff;
@@ -45,7 +45,7 @@ p {
         }
 
         > .container {
-            background-color: #fff; 
+            background-color: #fff;
          }
 
         &::after{
@@ -57,7 +57,7 @@ p {
             left: 0.75rem;
             border-right: 0.625rem solid var(--gl-purple-blue);
         }
-    
+
         &[x-placement="left-top"]::after{
             right: -0.5rem;
             border-left: 0.625rem solid var(--gl-purple-blue);
@@ -74,7 +74,7 @@ p {
         background-color: var(--gl-purple-blue);
         font-size: 0.75rem;
         padding: 0 0;
-        
+
         > div {
             color: #fff;
             padding: 0.25rem 0.75rem;
@@ -96,7 +96,7 @@ p {
                 top: -0.25rem;
                 border-right: 0.625rem solid var(--gl-purple-blue);
             }
-            
+
             & > .dropdown-item:first-child:hover{
                 position: relative;
                 &::after{
@@ -110,14 +110,14 @@ p {
                 }
             }
         }
-    
+
         &[x-placement="left-top"]{
             &::after{
                 right: -0.375rem;
                 top: -0.25rem;
                 border-left: 0.625rem solid var(--gl-purple-blue);
             }
-            
+
             & > .dropdown-item:first-child:hover{
                 position: relative;
                 &::after{
@@ -131,14 +131,14 @@ p {
                 }
             }
         }
-        
+
         &[x-placement="right-bottom"]{
             &::after{
                 left: 1.875rem;
                 bottom: 0;
                 border-right: 0.625rem solid var(--gl-purple-blue);
             }
-            
+
             & > .dropdown-item:last-child:hover{
                 position: relative;
                 &::after{
@@ -152,7 +152,7 @@ p {
                 }
             }
         }
-    
+
         &[x-placement="left-bottom"]{
             &::after{
                 right: -0.375rem;
@@ -203,7 +203,7 @@ p {
 
     .p-treetable-thead {
         border-bottom: solid 1.1px var(--gl-light-gray);
-        
+
         tr > th {
             text-align: center;
             background-color: var(--gl-light-gray);
@@ -223,7 +223,7 @@ p {
         }
     }
 
-    .p-treetable-scrollable-body { 
+    .p-treetable-scrollable-body {
         overflow: auto !important;
     }
 
@@ -247,7 +247,7 @@ p {
             &.edit-column{
                 i{
                     cursor: pointer;
-                } 
+                }
             }
 
             &.vehicle-column{
@@ -270,10 +270,10 @@ p {
             }
         }
 
-        tr.row-header-convoy, 
+        tr.row-header-pinup,tr.row-header-operacion,tr.row-header-convoy,
         tr.row-header-grupo{
             button.p-treetable-toggler.p-link.p-ripple[style*="visibility: visible; margin-left:"]  {
-                margin-left: 0.375rem !important; 
+                margin-left: 0.375rem !important;
             }
             button.p-treetable-toggler.p-link.p-ripple:enabled:hover{
                 border-color: inherit;
@@ -291,7 +291,39 @@ p {
         tr.row-header-grupo button.p-treetable-toggler.p-link.p-ripple{
             color: #fff;
         }
+        tr.row-header-operacion button.p-treetable-toggler.p-link.p-ripple{
+          color: #fff;
+        }
+        tr.row-header-pinup button.p-treetable-toggler.p-link.p-ripple{
+            color: #fff;
+          }
     }
+    tr.row-header-operacion {
+      background-color: var(--gl-blue-dark) !important;
+        color: #fff;
+
+        > td > div.row > div.col-9:first-child > p-treetabletoggler > button.p-treetable-toggler.p-link.p-ripple {
+            color: #fff;
+        }
+
+        .burger-options > svg {
+            fill: #fff;
+            stroke: #fff;
+        }
+    }
+    tr.row-header-pinup {
+        background-color: var(--gl-blue-electric-alpha) !important;
+          color: #fff;
+  
+          > td > div.row > div.col-9:first-child > p-treetabletoggler > button.p-treetable-toggler.p-link.p-ripple {
+              color: #fff;
+          }
+  
+          .burger-options > svg {
+              fill: #fff;
+              stroke: #fff;
+          }
+      }
 
     tr.row-header-grupo {
         background-color: var(--gl-light-blue) !important;
@@ -328,7 +360,34 @@ p {
         color: #fff;
     } */
 
-    .p-treetable-loading > .p-treetable-loading-overlay { 
+    .p-treetable-loading > .p-treetable-loading-overlay {
         display: none;
     }
 }
+
+
+.change-color .body {
+    fill: #ff0000; /* Cambia el color aquí */
+  }
+  
+/* Estilos para el componente p-selectButton */
+::ng-deep .button-group .p-selectbutton {
+    font-size: 7px; /* Tamaño de la fuente */
+  }
+  
+/* Estilos para los ítems dentro del p-selectButton */
+::ng-deep .button-group .p-selectbutton .p-button {
+    padding: 5px 10px; /* Espaciado interno del botón */
+    // margin-right: 8px; /* Espaciado entre botones (ajusta según necesites) */
+  }
+
+::ng-deep .button-group .p-selectbutton .p-button:active {
+    background-color: var(--gl-gray-blue) !important; /* Color de fondo cuando está activo */
+    border-color: var(--gl-gray-blue) !important; /* Color de borde cuando está activo */
+
+  }
+
+::ng-deep .button-group .p-selectbutton .p-button.p-highlight {
+    background-color: var(--gl-blue) !important; /* Color de fondo cuando está seleccionado */
+    border-color: var(--gl-blue) !important; /* Color de borde cuando está seleccionado */
+  }

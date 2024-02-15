@@ -18,6 +18,19 @@ declare var $j: any;
 export class PanelHistorialGraficoComponent implements OnInit {
 
 
+    sliderValue:any=0;
+    sliderValueMax:any=100; //1000
+    sliderValueReferencia:any="Referencia de Direccion";
+
+    sliderValueFecha:any="000-00-00 00:00:00";
+    sliderValueVelocidad:any=0;
+
+    HM:any;  // historial que aparecera en el modal
+    urlGS = "https://www.google.com/";
+
+    width_modal = 500;
+    height_modal = 400;
+
   options_grafico = {
     xaxis: {
         mode: "time",
@@ -178,9 +191,83 @@ export class PanelHistorialGraficoComponent implements OnInit {
     // this.plot_historial = $.plot("#placeholder", [ [[0, 0], [1, 1]] ], this.options_grafico);
 
 
+    this.historialService.icoGplay = this.icoGplay;
+    this.historialService.icoGclick = this.icoGclick;
+
+    console.log("======= ngOnInit ========");
+    console.log(this.historialService.arrayRecorridos);
+    console.log(this.historialService);
+    console.log(this.historialService.keyGrafico);
+    var encontrado = false;
+
+    // $("#placeholder").width(790).height(160);
+    // $("#placeholder").css("width", "790px");
+    // $("#placeholder").css("height", "160px");
+
+
+    for (let i = 0; i < this.historialService.arrayRecorridos.length; i++) {
+
+        if (this.historialService.arrayRecorridos[i].key == this.historialService.keyGrafico) {
+            console.log("indice == ====" + i);
+            console.log(i);
+            this.HM = this.historialService.arrayRecorridos[i];
+            console.log(this.HM);
+            
+            this.sliderValueMax = this.HM.recorrido.length - 1; 
+            encontrado = true;
+        }
+      
+    }
+
+    if (encontrado) {
+        var item = this.HM.recorrido[0];
+        console.log("================ SIIIII");
+        console.log(item);
+    
+        this.sliderValueFecha = item.dt_tracker;
+        this.sliderValueVelocidad = item.speed;
+        this.getReference(item);
+        // this.getStreetViewImg(item);
+    
+        this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
+
+        setTimeout(() => {
+            this.cargarGrafico();
+          }, 500);
+
+        
+    }
+
+
+
+
+
   }
 
 
+  onChangeSlider() {
+    // console.log(this.sliderValueMax);
+    // console.log(this.sliderValue);
+    // console.log(this.HM.recorrido[this.sliderValue]);
+    this.sliderValueFecha = this.HM.recorrido[this.sliderValue].dt_tracker;
+    this.sliderValueVelocidad = this.HM.recorrido[this.sliderValue].speed;
+  }
+
+    //click en alguna parte de la linea
+    onSlideEndSlider() {
+        console.log("========================= onSlideEndSlider");
+        // console.log(this.sliderValue);
+        //-------------this.ogChangeReferences();
+        // var dH =  this.HM.recorrido; //this.historialService.tramasHistorial; // Data Historial
+        // var ppos = this.sliderValue;
+        var item = this.HM.recorrido[ this.sliderValue ];
+        this.cl.position = this.sliderValue
+
+
+        //this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+dH[ppos].lat+","+dH[ppos].lng;
+        this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
+        console.log(this.urlGS  );
+      }
 
   newMessage() {
     this.historialService.changeMessage("Hello from Second Component")
@@ -190,13 +277,106 @@ export class PanelHistorialGraficoComponent implements OnInit {
     //console.log(" com 2 newMessage1");
   }
 
+  clickbtnIzqConsola(): void {
+    console.log(" click a btnIzqConsola ");
+    this.plot_historial.pan({  left: -100  });
+  }
+
+  clickbtnDerConsola(): void {
+    this.plot_historial.pan({  left: +100  });
+  }
+
+  clickbtnZoomInConsola(): void {
+    this.plot_historial.zoom();
+  }
+
+  clickbtnZoomOutConsola(): void {
+    this.plot_historial.zoomOut();
+  }
+
+  clickbtnPlayConsola(): void {
+    console.log(" click a clickbtnPlayConsola ");
+    this.consolahistorialPlay();
+    $('#btnPlayConsola').css({"color":"#00f034"});
+    $('#btnPauseConsola').css({"color":"#495057"});
+    $('#btnStopConsola').css({"color":"#495057"});
+
+  }
+
+  clickbtnPauseConsola(): void {
+    clearTimeout(this.cl.temporizadorConsola);
+    $('#btnPlayConsola').css({"color":"#495057"});
+    $('#btnPauseConsola').css({"color":"#00f034"});
+    $('#btnStopConsola').css({"color":"#495057"});
+  }
+
+  clickbtnStopConsola(): void {
+    clearTimeout(this.cl.temporizadorConsola);
+    this.cl.position = 0;
+    this.mapService.map.removeLayer(this.icoGplay);
+    //this.mapService.map.removeLayer(this.icoGplay_popup);
+    $('#btnPlayConsola').css({"color":"#495057"});
+    $('#btnPauseConsola').css({"color":"#495057"});
+    $('#btnStopConsola').css({"color":"#00f034"});
+  }
+
+    // $("#btnIzqConsola").click(() => {
+    //     console.log(" click a btnIzqConsola ");
+    //     this.plot_historial.pan({  left: -100  });
+    // });
+    // $("#btnDerConsola").click(() => {
+    //     this.plot_historial.pan({  left: +100  });
+    // });
+
+    // $("#btnZoomInConsola").click(() => {
+    //     this.plot_historial.zoom();
+    // });
+
+    // $("#btnZoomOutConsola").click(() => {
+    //     this.plot_historial.zoomOut()
+    // });
+
+    // $("#btnPlayConsola").click(() => {
+    //     this.consolahistorialPlay();
+    // });
+
+    // $("#btnPauseConsola").click(() => {
+    //     clearTimeout(this.cl.temporizadorConsola);
+    // });
+
+    // $("#btnStopConsola").click(() => {
+    //     clearTimeout(this.cl.temporizadorConsola);
+    //     this.cl.position = 0;
+    //     this.mapService.map.removeLayer(this.icoGplay);
+    //     //this.mapService.map.removeLayer(this.icoGplay_popup);
+    // });
 
 
-  cargarGrafico(): void {
+
+
+
+   cargarGrafico() {
 
     console.log("GRAFICOOOOOOOO");
 
     console.log( this.historialService.keyGrafico);
+    console.log( this.historialService.icono);
+    console.log( this.historialService.nombreUnidad);
+    console.log( this.historialService.nameoperation);
+
+
+
+    var nuevo_icono = L.icon({
+            iconUrl: 'assets/images/objects/nuevo/'+this.historialService.icono,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
+        });
+
+    
+    this.icoGplay.setIcon(nuevo_icono);
+
+    console.log("============================");
+    console.log(this.historialService.icono);
     
 
     // jQuery.fn.jquery
@@ -259,8 +439,6 @@ export class PanelHistorialGraficoComponent implements OnInit {
         dH[i].params2 = dH[i].params2 +'</br><strong><small><i>Repeticiones:'+ dH[i].repeticiones+'</i></small></strong></br>';
       }
 
-
-
       // //========= 1Fusionar parametros ====================
       // if(fUnico == dH[i].dt_js.getTime()){
       //   if (i != 0) {
@@ -306,43 +484,92 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
 
 
-    this.plot_historial = $j.plot($("#placeholder"), [{
-        data: this.cl.sin
-    }], this.options_grafico);
 
 
-    $("#btnIzqConsola").click(() => {
-      this.plot_historial.pan({  left: -100  });
+    // $("#placeholder").width(790).height(160);
+    // $("#placeholder").css("width", "790px");
+    // $("#placeholder").css("height", "160px");
+
+
+
+    // $("#btnIzqConsola").click(() => {
+    //     console.log(" click a btnIzqConsola ");
+    //     this.plot_historial.pan({  left: -100  });
+    // });
+    // $("#btnDerConsola").click(() => {
+    //   this.plot_historial.pan({  left: +100  });
+    // });
+
+    // $("#btnZoomInConsola").click(() => {
+    //   this.plot_historial.zoom();
+    // });
+
+    // $("#btnZoomOutConsola").click(() => {
+    //   this.plot_historial.zoomOut()
+    // });
+
+    // $("#btnPlayConsola").click(() => {
+    //   this.consolahistorialPlay();
+    // });
+
+    // $("#btnPauseConsola").click(() => {
+    //   clearTimeout(this.cl.temporizadorConsola);
+    // });
+
+    // $("#btnStopConsola").click(() => {
+    //   clearTimeout(this.cl.temporizadorConsola);
+    //   this.cl.position = 0;
+    //   this.mapService.map.removeLayer(this.icoGplay);
+    //   //this.mapService.map.removeLayer(this.icoGplay_popup);
+    // });
+
+  
+    // await new Promise(f => setTimeout(f, 500));
+
+    
+
+    this.icoGclick.on('popupclose', (e) => {
+        setTimeout(() => {
+                this.mapService.map.removeLayer(this.icoGclick);
+        },300);
     });
-    $("#btnDerConsola").click(() => {
-      this.plot_historial.pan({  left: +100  });
+
+    this.icoGplay.on('popupclose', () => {
+      setTimeout(() => {
+        this.mapService.map.removeLayer(this.icoGplay);
+      },300);
     });
 
-    $("#btnZoomInConsola").click(() => {
-      this.plot_historial.zoom();
-    });
 
-    $("#btnZoomOutConsola").click(() => {
-      this.plot_historial.zoomOut()
-    });
 
-    $("#btnPlayConsola").click(() => {
-      this.consolahistorialPlay();
-    });
+    // if (this.verTabla) {
 
-    $("#btnPauseConsola").click(() => {
-      clearTimeout(this.cl.temporizadorConsola);
-    });
+    //     this.plot_historial = $j.plot($("#placeholder"), [{
+    //         data: this.cl.sin
+    //     }], this.options_grafico);
 
-    $("#btnStopConsola").click(() => {
-      clearTimeout(this.cl.temporizadorConsola);
-      this.cl.position = 0;
-      this.mapService.map.removeLayer(this.icoGplay);
-      //this.mapService.map.removeLayer(this.icoGplay_popup);
-    });
+    //     this.functionMapa();
+        
+    // }
 
+
+  }
+
+  //
+  functionMapa() {
+
+    var rdH = this.historialService.arrayRecorridos;
+    for (let i = 0; i < rdH.length; i++) {
+        console.log(rdH[i].key+"  -  -  "+this.historialService.keyGrafico);
+        if ( rdH[i].key == this.historialService.keyGrafico ) {
+          var dH = rdH[i].recorrido;
+        }
+    }
+    console.log("================== HISTORIAL ENCONTRADO");
+    console.log(dH);
+    
     //==================  MUESTRA INF EN LA LEGENDA DE LA CONSOLA PASANDO EL CURSOR POR ENCIMA DEL GRAFICO ==================
-
+    var dH = dH;
     $j("#placeholder").unbind("plothover");
 
     $j("#placeholder").bind("plothover", (o:any, p:any, n:any) => {
@@ -444,22 +671,17 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
       }
     });
-
     //==================  FIN MUESTRA INF EN LA LEGENDA DE LA CONSOLA PASANDO EL CURSOR POR ENCIMA DEL GRAFICO ==================
 
-
     //==================  UBICAR PUNTO EN EL HISTORIAL ==================
-
     $j("#placeholder").unbind("plotclick");
 
     $j("#placeholder").bind("plotclick",  (o:any, p:any, n:any ) => {
+        
         console.log("===========");
-
         console.log(n);
         console.log(p);
         console.log(o);
-        
-        
         
         if (n) {
             var m = n.dataIndex;
@@ -471,7 +693,31 @@ export class PanelHistorialGraficoComponent implements OnInit {
               break;
             }
             this.moveIconG(dH[m]);
+
+            console.log("=========== PRESIONASTE UN PUNTO EN LA IMAGEN DEL RECORRIDO");
+            
+            console.log(dH[m]);
+            console.log(m);
+            console.log(this.sliderValueMax);
+            console.log(dH.length - 1);
+
+            this.sliderValue = m;
+
+
+            var item = dH[m];        
+            this.sliderValueFecha = item.dt_tracker;
+            this.sliderValueVelocidad = item.speed;
+            this.getReference(item);
+            this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
+
+            
+
+
+            //var item = this.HM.recorrido[ this.sliderValue ];
         }
+
+
+        
     });
     //================== FIN UBICAR PUNTO EN EL HISTORIAL ==================
 
@@ -573,23 +819,60 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
         }
     });
-
-
     //================== FIN ZOOM A LA PARTE DELECCIONADA ==================
 
-    this.icoGclick.on('popupclose', (e) => {
-        setTimeout(() => {
-                this.mapService.map.removeLayer(this.icoGclick);
-        },300);
-    });
 
-    this.icoGplay.on('popupclose', () => {
-      setTimeout(() => {
-        this.mapService.map.removeLayer(this.icoGplay);
-      },300);
-    });
+
+    
+  }
+
+    modalhistorialBtnLento() {
+        console.log("=============================modalhistorialBtnLento");
+        console.log(this.opcionVelocidadGraficoConsola);
+        
+        var vG = parseInt(this.opcionVelocidadGraficoConsola);
+        if (vG > 1 && vG <= 6) {
+        vG = vG - 1;
+        this.opcionVelocidadGraficoConsola = vG.toString();
+        }
+        console.log(this.opcionVelocidadGraficoConsola);
+
+    }
+
+    modalhistorialBtnRapido() {
+        console.log("=============================modalhistorialBtnRapido");
+        console.log(this.opcionVelocidadGraficoConsola);
+
+        var vG = parseInt(this.opcionVelocidadGraficoConsola);
+        if (vG >= 1 && vG < 6) {
+        vG = vG + 1;
+        this.opcionVelocidadGraficoConsola = vG.toString();
+        }
+        console.log(this.opcionVelocidadGraficoConsola);
+
+    }
+
+
+  async getReference(trama:any) {
+    let reference = await this.historialService.getReference(trama.lat, trama.lng);
+    var referencia = reference.referencia;
+    //console.log(referencia);
+    this.sliderValueReferencia = referencia;
+    //return referencia;
+    
+  }
+
+  modalUbicar() {
+    var item = this.HM.recorrido[this.sliderValue];
+    this.icoGclick.setLatLng([item.lat, item.lng]).addTo(this.mapService.map);
+    this.icoGclick.setPopupContent( this.getContentHis(item, this.HM.nombre ) );
+    this.icoGclick.openPopup();
+
+    this.mapService.map.setView([item.lat, item.lng]);
+    this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
 
   }
+
 
   moveIconG(item:any) {
       //console.log("=======Move beybey");
@@ -880,6 +1163,8 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
           break;
     }
+    
+    this.functionMapa();
     this.changeOpcionTamanoConsola();
   }
 
@@ -1084,7 +1369,7 @@ export class PanelHistorialGraficoComponent implements OnInit {
     }
 
     if ( this.opcionGraficoConsola == '4') {
-        $("#placeholder").css('height', '100%').css('height', '-=123px'); //-=150px
+        $("#placeholder").css('height', '200px'); //-=150px
     } else {
       //console.log("gaaaaaaaa");
 
@@ -1093,9 +1378,6 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
 
   }
-
-
-
 
   consolahistorialPlay() {
       // temporizadorConsola
@@ -1111,11 +1393,28 @@ export class PanelHistorialGraficoComponent implements OnInit {
 
       if ((dH.length > 0) && (this.cl.position < dH.length)) {
 
+
+        this.sliderValue = this.cl.position;
+        var item = dH[this.cl.position];   
+
+        this.sliderValueFecha = item.dt_tracker;
+        this.sliderValueVelocidad = item.speed;
+        this.getReference(item);
+        this.urlGS = "http://maps.google.com/maps?q=&layer=c&cbll="+item.lat+","+item.lng+"&cbp=0,"+item.angle+",0,0,0";
+
+        
+
+
+
         var d = dH[this.cl.position].dt_tracker.replace(/\//g, "-");
         var c = dH[this.cl.position].dt_js.getTime();
         var pos = this.cl.position;
 
-        this.consolaSetCrosshair(c);
+        // Existe la tabla
+        if (this.verTabla) {
+            this.consolaSetCrosshair(c);
+        }
+        
         //console.log("position : "+this.cl.position);
         ////console.log("--1");
 
@@ -1312,14 +1611,31 @@ getContentHis(item:any, nombre:any) {
 // }
 
 clickVerTablaRecorrido() {
-  this.verTabla = true;
+    this.verTabla = true;
 
-  this.tConsola =  this.historialService.tramasHistorial; // Data Historial
+    this.tConsola =  this.historialService.tramasHistorial; // Data Historial
 
-  $("#botonverconsola").css( "display", "none" );
-  $("#botonocultarconsola").css( "display", "block" );
+    $("#botonverconsola").css( "display", "none" );
+    $("#botonocultarconsola").css( "display", "block" );
 
-  // tConsola = new Array();
+    setTimeout(() => {
+        if (this.verTabla) {
+            this.plot_historial = $j.plot($("#placeholder"), [{
+                data: this.cl.sin
+            }], this.options_grafico);
+            this.functionMapa();
+        }
+    }, 500);
+
+    
+    // $("#modal-grafico").css('height', '700px');
+
+    // this.width_modal = 600;
+    this.height_modal = 700;
+
+    
+
+    
 }
 
 clickOcultarTablaRecorrido() {
@@ -1327,6 +1643,11 @@ clickOcultarTablaRecorrido() {
 
   $("#botonverconsola").css( "display", "block" );
   $("#botonocultarconsola").css( "display", "none" );
+
+  //$("#modal-grafico").css('height', '500px');
+  this.width_modal = 500;
+  this.height_modal = 500;
+
 
 }
 
@@ -1479,7 +1800,11 @@ clickOcultarTablaRecorrido() {
   //                 show: true,
   //                 steps: true
   //             }
-  //         }));
+  //         }
+  
+  
+  
+  //));
   //         break;
 
 

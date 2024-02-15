@@ -14,6 +14,7 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AuditComponent } from './auditoria/components/audit/audit.component';
 import { AuditresultComponent } from './auditoria/components/auditresult/auditresult.component';
 import { NotFoundComponent } from './panel/not-found/not-found.component';
+import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 
 // import { AuthGuard } from './vehicles/services/auth.guard';
 
@@ -57,6 +58,10 @@ const routes: Routes = [
   {
     path: 'session',
     component: SessionComponent
+  },
+  { path: 'multiview/:name', 
+    component: ScreenViewComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

@@ -9,6 +9,7 @@ import { DriversService } from '../../services/drivers.service';
 import Swal from 'sweetalert2';
 
 import {Md5} from 'ts-md5';
+import { Driver } from '../../models/interfaces';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class DriversModalComponent implements OnInit {
 
   driversForm!: FormGroup;
   ibuttons :any = [];
+  icipias :any = [];
   cars : any = [];
   tipo_identificacion = '';
 
@@ -58,11 +60,18 @@ export class DriversModalComponent implements OnInit {
         { id: '',value:'N/A' },
     ];
 
+  // icipias =  [
+  //   { name: 'C00003',id:'1' },
+  //   { name: 'C00002',id:'2' },
+  //   { name: 'C00001',id:'3' },
+  // ];
+
   ngOnInit(): void {
     console.log("=========ngOnInit ");
     console.log(this.driversService.action);
 
     this.ibuttons = this.driversService.ibuttons;
+    this.icipias = this.driversService.icipias;
 
     let vehicles = this.VehicleService.getVehiclesData();
     // console.log("======================== vehiculos en conductores");
@@ -76,49 +85,46 @@ export class DriversModalComponent implements OnInit {
     // });
 
     if ( this.driversService.action == "edit" ) {
-      var sub = this.driversService.drivers.filter((item:any)=> item.id_conductor == this.driversService.idDriverEdit)[0];
-      // console.log(sub);
+      //solo para el caso de EDIT su ibutton debe mostrarse
+      var sub = this.driversService.drivers.filter((item:Driver)=> item.id == this.driversService.idDriverEdit);
+      console.log('PRUEBA EDIT ->',sub);
       this.driversForm = this.fb.group({
-              id:         [sub.id_conductor],
-              nombre:     [sub.nombre_conductor],
-              dni:        [sub.dni_conductor],
-              nro_llave:      [sub.nro_llave],
-              nro_licencia:   [sub.nro_licencia],
-              tracker_imei:   [sub.tracker_imei],
-              tracker_nombre: [sub.tracker_nombre],
-              tipo_identificacion: [sub.tipo_identificacion],
+              id:         [sub[0].id],
+              nombre:     [sub[0].nombre_conductor],
+              dni:        [sub[0].dni_conductor],
+              nro_llave:      [sub[0].id_keyIbutton],
+              nro_licencia:   [sub[0].nro_licencia],
+              nro_cipia:    [sub[0].id_keyIcipia],
+              nro_cellphone: [sub[0].telefono_conductor],
+              tracker_imei:   [sub[0].tracker_imei],
+              tracker_nombre: [sub[0].tracker_nombre],
+              tipo_identificacion: [sub[0].tipo_identificacion],
             });
-      
+        console.log(this.driversForm.value);
 
     } else {
-        //this.nuevo_formulario();
         this.driversForm = this.initForm();
 
     }
-
-
-    
   }
 
 
   getCars(vehicles: any){
     for (let i = 0; i < vehicles.length; i++) {
+      // let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
       let gaa = { nombre: vehicles[i].name ,imei:vehicles[i].IMEI };
       this.cars.push(gaa);
     }
   }
 
-  onChangeIdentificacion(ev: any) {
-    console.log('----onChangeIdentificacion');
-    console.log(ev);
-    console.log(this.driversForm.value.tipo_identificacion);
+  // onChangeIdentificacion(ev: any) {
+  //   console.log('----onChangeIdentificacion');
+  //   console.log(ev);
+  //   console.log(this.driversForm.value.tipo_identificacion);
 
-    this.tipo_identificacion = this.driversForm.value.tipo_identificacion;
+  //   this.tipo_identificacion = this.driversForm.value.tipo_identificacion;
 
-    
-    
-    
-  }
+  // }
 
   initForm(): FormGroup {
     return this.fb.group({
@@ -126,6 +132,8 @@ export class DriversModalComponent implements OnInit {
       nombre: [''],
       dni:        [''],
       nro_llave:  [''],
+      nro_cellphone:  [''],
+      nro_cipia:  [''],
       nro_licencia: [''],
       tracker_imei:   [''],
       tracker_nombre: [''],
@@ -134,30 +142,9 @@ export class DriversModalComponent implements OnInit {
     })
   }
 
-  showSelectExcel()
-  {
-    console.log("modal");
-    // console.log(this.subcuentasService.modalActive);
-
-
-  }
-
-  public async loadData() {
-    // this.events = await this.AlertService.getEventsByType('platform');
-    // this.loadingEventSelectInput = false;
-    // this.setDataVehiences();
-    // this.setDataGeopcles();
-    // this.setDataGeofoints();
-    // this.setDataReportes();
-    // this.loadingAlertDropdownReady = true;
-    // this.hideLoadingSpinner();
-  }
-
   onSubmit(): void {
     console.log("============ onSubmit ");
-    console.log(this.driversForm);
-    console.log(this.driversForm.value.tipo_identificacion);
-    
+    // console.log(this.driversForm);
 
     if (this.driversForm.value.nombre == '') {
       Swal.fire({
@@ -168,50 +155,30 @@ export class DriversModalComponent implements OnInit {
       return ;
     }
 
-    if (this.driversForm.value.dni == '') {
-      Swal.fire({
-        title: 'Error',
-        text: 'Ingrese el DNI del conductor',
-        icon: 'error',
-      });
-      return ;
+    // if (this.driversForm.value.dni == '') {
+    //   Swal.fire({
+    //     title: 'Error',
+    //     text: 'Ingrese el DNI del conductor',
+    //     icon: 'error',
+    //   });
+    //   return ;
+    // }
+    // console.log(this.driversForm.value.tracker_imei);
+    if (this.driversForm.value.tracker_imei == null || this.driversForm.value.tracker_imei == "" || this.driversForm.value.tracker_imei == "--") {
+      this.driversForm.value.tracker_imei = null;
+      this.driversForm.value.tracker_nombre = null;
+    }else{
+      this.driversForm.value.tracker_nombre = (this.cars.filter((item:any)=> item.imei == this.driversForm.value.tracker_imei))[0].nombre;
+      // console.log(this.driversForm.value.tracker_nombre);
     }
 
-    if (this.driversForm.value.tipo_identificacion == "ibutton") {
-
-        console.log(this.driversForm.value.nro_llave);
-
-        if (this.driversForm.value.nro_llave == null) {
-          Swal.fire({
-            title: 'Error',
-            text: 'Seleccione una llave I-button',
-            icon: 'error',
-          });
-          return ;
-        }
-
-
-      
-    } else if (this.driversForm.value.tipo_identificacion == "imei") {
-
-        console.log(this.driversForm.value.tracker_imei);
-        
-        if (this.driversForm.value.tracker_imei == null || this.driversForm.value.tracker_imei == "") {
-          Swal.fire({
-            title: 'Error',
-            text: 'Seleccione un Vehículo',
-            icon: 'error',
-          });
-          return ;
-        }
-        
-        this.driversForm.value.tracker_nombre = (this.cars.filter((item:any)=> item.imei == this.driversForm.value.tracker_imei))[0].nombre;
-        console.log(this.driversForm.value.tracker_nombre);
-    } else {
-      
+    if (this.driversForm.value.nro_cipia == '--'){
+      this.driversForm.value.nro_cipia = null;
     }
-
-
+    if (this.driversForm.value.nro_llave == '--'){
+      this.driversForm.value.nro_llave = null;
+    }
+    
     Swal.fire({
       //title: '¿Desea guardar los cambios?',
       text: '¿Desea guardar los cambios?',//'Espere un momento...',
@@ -222,23 +189,23 @@ export class DriversModalComponent implements OnInit {
       confirmButtonText: 'Guardar',
       cancelButtonText: 'Cancelar',
       preConfirm: async () => {
-
+        console.log(this.driversForm.value);
         var res:any;
         if ( this.driversService.action == "edit" ) {
-          var sub = this.driversService.drivers.filter((item:any)=> item.id_conductor == this.driversService.idDriverEdit)[0];
-          console.log(sub);
           res = await this.driversService.edit(this.driversForm.value);
         } else {
           res = await this.driversService.create(this.driversForm.value);
         }
+        console.log('response->',res);
 
-        if (res.text == 'repetido') {
+        if (res.success == false) {
             Swal.fire(
               '',
-              'No se pudo agregar.',
+              res.msn,
               'warning'
             );
-        } else if(res.text == 'Insert') {
+        }else if(res.success == true){
+          if(res.text == 'Insert') {
             Swal.fire(
               '',
               'Conductor se registro correctamente.',
@@ -247,80 +214,45 @@ export class DriversModalComponent implements OnInit {
             this.driversService.modalActive = false;
             this.driversService.spinner.show('loadingSubcuentas');
             this.driversService.initialize();
-
-        } else if(res.text == 'editado') {
-            Swal.fire(
-              '',
-              'Conductor se edito correctamente.',
-              'success'
-            );
-            this.driversService.modalActive = false;
-            this.driversService.spinner.show('loadingSubcuentas');
-            this.driversService.initialize();
-
-        } else if(res.text == 'llave_existe') {
-          Swal.fire(
-            '',
-            'Llave ya se encuentra registrada.',
-            'warning'
-          );
-          // this.driversService.modalActive = false;
-          // this.driversService.spinner.show('loadingSubcuentas');
-          // this.driversService.initialize();
-
-        } else if(res.text == 'placa_ocupada') {
-          Swal.fire(
-            '',
-            'Placa ya se encuentra registrada.',
-            'warning'
-          );
-          // this.driversService.modalActive = false;
-          // this.driversService.spinner.show('loadingSubcuentas');
-          // this.driversService.initialize();
-
-        }  else if(true){
-            console.log('------------');
+            if(res.dataInsert.tipo_identificacion.vehicle == true){
+              this.VehicleService.updateDriverAndId(res.dataInsert,true);
+            }
+          } else if(res.text == 'Update') {
+              Swal.fire(
+                '',
+                res.msn,
+                'success'
+              );
+              this.driversService.modalActive = false;
+              this.driversService.spinner.show('loadingSubcuentas');
+              this.driversService.initialize();
+              if(res.driver.tipo_identificacion.vehicle == true || res.driverOld.tipo_identificacion.vehicle == true){
+                //VERIFICAR IMEI IGUALEs
+                if(res.driverOld.tracker_imei == res.driver.tracker_imei){
+                  // console.log('IMEI IGUALES SOLO ACTUALIZAR UNO');
+                  this.VehicleService.updateDriverAndId(res.driver,true);
+                }else {
+                  // console.log('IMEI NO IGUALES SOLO ACTUALIZAR UNO');
+                  if (res.driverOld.tipo_identificacion.vehicle == true){
+                    // console.log('UPDATE OLD',res.driverOld);
+                    this.VehicleService.updateDriverAndId(res.driverOld,false); // SI ES FALSE ELIMINA
+                  }
+                  if(res.driver.tipo_identificacion.vehicle == true){
+                    // console.log('UPDATE NEW',res.driver);
+                    this.VehicleService.updateDriverAndId(res.driver,true);
+                  }
+                }
+              }
+          }
+        }else{
+            console.log('------------ CASO NO DETECTED');
         }
-
-        //'success' , 'warning' , 'error'
-
-        // if (data.isConfirmed) {
-        //   Swal.fire(
-        //     '',//'Datos guardados',
-        //     'Los datos se guardaron correctamente!!',
-        //     'success'
-        //   );
-        // }
-
-
       },
     }).then((data) => {
-      console.log(data);
+      // console.log(data);
     });
 
 
   }
-
-  clickCancelar(id:number) {
-    console.log('clickcancelas');
-
-  }
-
-  clickGuardar(id:number) {
-    console.log('clickguardas');
-
-  }
-
-  getControlLabel(type: string){
-    return this.driversForm.controls[type].value;
-  }
-
-  togglePassEye(){
-    document.querySelector('#passCreate')?.setAttribute('type', this.eyeStateCreate? 'password': 'text');
-    document.querySelector('#passEditBefore')?.setAttribute('type', this.eyeStateEditBefore? 'password': 'text');
-    document.querySelector('#passEditAfter')?.setAttribute('type', this.eyeStateEditAfter? 'password': 'text');
-    document.querySelector('#passEditAfter2')?.setAttribute('type', this.eyeStateEditAfter2? 'password': 'text');
-  }
-
 
 }

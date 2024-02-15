@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { VehicleService } from '../../services/vehicle.service';
 
 @Component({
@@ -13,7 +12,8 @@ export class VehicleComponent implements OnInit {
   public nameColor: string="red";
   public tooltipText: string="Sin señal";
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService) {
+   }
 
   ngOnInit(): void {
   }

@@ -1,0 +1,208 @@
+.profile-picture-container{
+    display: flex;
+    justify-content: center;
+    position: relative;
+  
+    .profile-picture{
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+    }
+  
+    button.picture-update{
+        position: absolute;
+        border: none;
+        bottom: 0.5rem;
+        left: -0.5rem;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        background-color: var(--gl-blue);
+  
+        &.btn-dark-hover::after{
+            border-radius: 50%;
+        }
+  
+        svg{
+            fill: #fff;
+        }
+    }
+  
+    span{
+        user-select: none;
+        font-size: 6rem;
+        line-height: 7.75rem;
+    }
+  
+    img{
+        height: 100%;
+        width: 100%;
+    }
+  }
+  
+  .one-character-circled {
+    text-align: center;
+    background-color: var(--gl-danger-red);
+    color: #fff;
+    border-radius: 50%;
+  }
+  
+  .column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  }
+  
+  //Here is the switch
+  
+  .switch.switch-blue{
+  --gl-light-blue: var(--gl-light-blue);
+  }
+  
+  .switch {
+  font-size: 0.75rem;
+  position: relative;
+  display: inline-block;
+  width: 3.75em;
+  height: 2.125em;
+  }
+  
+  .switch.switch-sm{
+  font-size: 0.625rem;
+  }
+  
+  .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  }
+  
+  .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 2.125em;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  }
+  
+  .slider:before {
+  position: absolute;
+  content: "";
+  height: 1.625em;
+  width: 1.625em;
+  left: 0.25em;
+  bottom: 0.25em;
+  background-color: white;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: 0.4s;
+  }
+  
+  input:checked + .slider {
+  background-color: var(--gl-light-blue);
+  }
+  input:focus + .slider {
+  box-shadow: 0 0 1px var(--gl-light-blue);
+  }
+  input:checked + .slider:before {
+  -webkit-transform: translateX(1.625em);
+  -ms-transform: translateX(1.625em);
+  transform: translateX(1.625em);
+  }
+  
+  //The box align
+  
+  .icon-box{
+  display: flex;
+  justify-content: space-between;
+  width: 25rem;
+  margin: 0 auto;
+  i{
+    font-size: 24rem;
+  }
+  }
+  
+  //other
+  
+  // .switch-list {
+  //   display: flex;
+  //   list-style: none;
+  //   text-align: center;
+  // }
+  
+  // .switchOK {
+  //   display: none;
+  //   + .switch {
+  //     outline: none;
+  //     display: block;
+  //     width: 4em;
+  //     height: 2em;
+  //     position: relative;
+  //     cursor: pointer;
+  //     user-select: none;
+  //     &::after, &::before {
+  //       position: relative;
+  //       display: block;
+  //       content: "";
+  //       width: 50%;
+  //       height: 100%;
+  //     }
+  
+  //     &::after {
+  //       left: 0;
+  //     }
+  
+  //     &::before {
+  //       display: none;
+  //     }
+  //   }
+  
+  //   &:checked + .switch::after {
+  //     left: 50%;
+  
+  //   }
+  // }
+  
+  // .switch-blue {
+  //   + .switch {
+  //     background: white;
+  //     padding: 2px;
+  //     border-radius: 2em;
+  //     transition: all .4s ease;
+  //     border: 1px solid #e8e8e8;
+  
+  //     &::after {
+  //       border-radius: 2em;
+  //       background: #fbfbfb;
+  //       transition: left .3s cubic-bezier(0.0175, 0.885, 0.320, 1.275),
+  //       padding .3s ease, margin .3s ease;
+  //     }
+  //     &:hover::after {
+  //       will-change: padding;
+  //     }
+  //     &:active {
+  //       box-shadow: inset 0 0 0 2px #ccc;
+  //       &::after {
+  //         padding-right: .8em;
+  //       }
+  //     }
+  
+  //   }
+  //   &:checked + .switch {
+  //     background: lightblue;
+  //     &:active {
+  //       box-shadow: none;
+  //       &::after {
+  //         margin-left: -.8em;
+  //       }
+  //     }
+  //   }
+  
+  // }
+  
+  
