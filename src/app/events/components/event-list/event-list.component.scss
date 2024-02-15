@@ -6,6 +6,8 @@
     height: 2.5rem;
     display: flex;
     align-items: center;
+    text-align: center;
+    width: 9rem;
 }    
 
 .unread-event:not(.watched-event){
@@ -15,6 +17,10 @@
         font-weight: bold;
         padding: 0.125rem 0.625rem;
     }
+}
+
+.evaluated-event {
+    background-color: var(--gl-light-green-alpha) !important;
 }
 
 th{
@@ -31,5 +37,8 @@ th{
                 padding: 0.37rem 0.75rem;
             }
         }
+    }
+    .p-datatable .p-datatable-tbody > tr > td{
+        padding: 0.5rem 0.5rem !important; 
     }
 }

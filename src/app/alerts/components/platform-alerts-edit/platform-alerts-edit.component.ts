@@ -32,6 +32,7 @@ export class PlatformAlertsEditComponent implements OnInit {
   public disabledEmail = false;
   public expirationDate = true;
   public showInfraccion = false;
+  public showInfraccionGeocerca = false;
   public showTiempoLimite = false;
   public showFechaCaducidad = true;
   public showGeocercas = true;
@@ -44,6 +45,7 @@ export class PlatformAlertsEditComponent implements OnInit {
   overlayGeo = false;
   loadingEventSelectInput: boolean = true;
   public disabledWhatsapp = true;
+  alertSelected: any;
 
 
   booleanOptions = [
@@ -76,6 +78,10 @@ export class PlatformAlertsEditComponent implements OnInit {
     { label: '2 Min.', value: 120 },
   ];
 
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
 
   constructor(
     private AlertService: AlertService,
@@ -86,31 +92,30 @@ export class PlatformAlertsEditComponent implements OnInit {
     private spinner: NgxSpinnerService,
   ) {
     this.listaSonidos = this.AlertService.listaSonidos;
-    this.loadData();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.spinner.show('loadingAlertData');
-
+    
     let alert = this.AlertService.getAlertEditData();
-
+    console.log("ALERT::::::", alert);
+    
     //this.vehiclesSelected = alert.imei.split(',');
     //this.geoSelected = alert.valor_verificado.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
-    let notificacion_system =
-      arrayNotificationSystem[2].toLowerCase() === 'true';
+    let notificacion_system = arrayNotificationSystem[2].toLowerCase() === 'true';
     let emails = alert.notificacion_direcion_email == ''? []: alert.notificacion_direcion_email.split(',');
     let notificacion_email = alert.notificacion_email.toLowerCase() === 'true';
     this.disabledEventSoundActive = !notificacion_system;
     this.disabledEmail = !notificacion_email;
     this.expirationDate = !alert.bol_fecha_caducidad;
-    let fecha_desde = alert.fecha_desde.split('-').map(Number);
-    let fecha_hasta = alert.fecha_hasta.split('-').map(Number);
+    //let fecha_desde = alert.fecha_desde.split('-').map(Number);
+    //let fecha_hasta = alert.fecha_hasta.split('-').map(Number);
     let activo = alert.activo === 'true' ? true : false;
 
     this.disabledTimeLimit = !alert.bol_fijar_tiempo;
     this.disabledSpeed = !alert.bol_fijar_velocidad;
-
+    /*
     let date_from = {
       year: fecha_desde[0],
       month: fecha_desde[1],
@@ -122,7 +127,7 @@ export class PlatformAlertsEditComponent implements OnInit {
       month: fecha_hasta[1],
       day: fecha_hasta[2],
     };
-
+*/
     this.vehiclesSelected = alert.imei ==''? []: alert.imei.split(',');
     this.geoSelected = alert.valor_verificado == ''? []: alert.valor_verificado.split(',');
 
@@ -143,7 +148,7 @@ export class PlatformAlertsEditComponent implements OnInit {
       vehicles: [this.vehiclesSelected, [Validators.required]],
       geocercas: [this.geoSelected],
       geocircles: [[]],
-      tipoAlerta: [alert.tipo, [Validators.required]],
+      tipoAlerta: [alert.event_id, [Validators.required]],
       chkEventoActivado: [activo],
       chkSonido: [notificacion_system],
       chkCorreo: [notificacion_email],
@@ -155,8 +160,8 @@ export class PlatformAlertsEditComponent implements OnInit {
       ],
       nombre: [alert.nombre],
       lista_emails: [emails],
-      fecha_desde: [date_from],
-      fecha_hasta: [date_to],
+      //fecha_desde: [date_from],
+      //fecha_hasta: [date_to],
       email: [
         { value: '', disabled: this.disabledEmail },
         [Validators.required, Validators.email],
@@ -190,21 +195,31 @@ export class PlatformAlertsEditComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[ventana_emergente]
+      chkVentanaEmergente:[ventana_emergente],
+      chkEvaluation:[alert.bol_evaluation]
     });
-
-
-    this.loading = false;
+    console.log("ALERTFORM:::", this.alertForm);
+    this.events = await this.AlertService.getEventsByType('platform');
+    console.log("Events after Load: ", this.events);
+    this.loadData();
+    console.log("After load Data:");
+    
     this.chageAlertType();
+    console.log("After chageAlertType");
+    
+    this.loading = false;
   }
 
-  public async loadData() {
+  public loadData() {
+    console.log("Call LoadData;;;");
+    
     this.setDataGeofences();
     this.setDataVehicles();
-
-    this.events = await this.AlertService.getEventsByType('platform');
+    console.log("after setDataVehicles");
+    
     this.alertForm.patchValue({
-      tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+      //tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+      tipoAlerta: this.alertForm.value.tipoAlerta,
     });
     this.loadingEventSelectInput = false;
 
@@ -212,10 +227,10 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.hideLoadingSpinner();
   }
 
-  async setDataVehicles() {
+  setDataVehicles() {
     let vehicles = this.VehicleService.getVehiclesData();
 
-    this.vehicles = vehicles.map((vehicle: any) => {
+    this.vehicles = vehicles.map((vehicle: any) => {  
       return {
         value: vehicle.IMEI,
         label: vehicle.name
@@ -226,7 +241,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.hideLoadingSpinner();
   }
 
-  async setDataGeofences() {
+  setDataGeofences() {
     let geocercas = this.geofencesService.getData();
     this.geocercas = geocercas.map((geocerca: any) => {
       return {
@@ -290,13 +305,13 @@ export class PlatformAlertsEditComponent implements OnInit {
       this.alertForm.value.geocercas
     );
     // this.alertForm.value.geocercascirculares = JSON.stringify(this.alertForm.value.geocercascirculares);
-    this.alertForm.value.vehicles = null;
+    /*this.alertForm.value.vehicles = null;
     this.alertForm.value.fecha_desde = this.setDate(
       this.alertForm.value.fecha_desde
     );
     this.alertForm.value.fecha_hasta = this.setDate(
       this.alertForm.value.fecha_hasta
-    );
+    );*/
 
     if (this.alertForm.value.duracion_formato_parada == '') {
       this.alertForm.value.duracion_formato_parada = 'S';
@@ -334,6 +349,7 @@ export class PlatformAlertsEditComponent implements OnInit {
         cancelButtonText: 'Cancelar',
         preConfirm: async () => {
           await this.AlertService.edit(this.alertForm.value);
+          this.AlertService.getAll();
           this.clickShowPanel('ALERTS-PLATFORMS');
         },
       }).then((data) => {
@@ -413,32 +429,57 @@ export class PlatformAlertsEditComponent implements OnInit {
   }
 
   chageAlertType() {
-    //console.log(this.alertForm.value.tipoAlerta);
-    //switch (this.alertForm.value.tipoAlerta) {
-    switch (this.alertForm.value.tipoAlerta) {
-      case 'Zona de entrada':
-      case 'Zona de salida':
+    console.log("tipoAlerta",this.alertForm.value.tipoAlerta);
+    console.log("events",this.events);
+    const alert = this.events.find((event:any) => event.id.toString() == this.alertForm.value.tipoAlerta.toString());
+    this.alertSelected = alert;
+    console.log("alerttt",alert);
+    if(this.alertSelected.slug == 'infraccion'){
+      this.alertForm.controls['velocidad_limite_infraccion'].enable();
+    }else{
+      this.alertForm.controls['velocidad_limite_infraccion'].disable();
+    }
+    console.log("selectedAlert: ::: ", this.alertSelected);
+    switch (this.alertSelected.slug) {
+      case 'zona-de-entrada':
+      case 'zona-de-salida':
         this.showTiempoLimite = false;
-        this.showFechaCaducidad = true;
+        this.showFechaCaducidad = false;
         this.showGeocercas = true;
         this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
         break;
 
-      case 'Tiempo de estadia en zona':
-      case 'Parada en zona no autorizada':
+      case 'tiempo-estadio-zona':
+      case 'parada-en-zona-no-autorizada':
         this.showTiempoLimite = true;
-        this.showFechaCaducidad = true;
+        this.showFechaCaducidad = false;
         this.showGeocercas = true;
         this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
         break;
-      case 'Infracción':
-      case 'Infraccion':
+      case 'infraccion':
         this.showTiempoLimite = false;
         this.showFechaCaducidad = false;
         this.showGeocercas = false;
         this.showInfraccion = true;
+        this.showInfraccionGeocerca = false;
         break;
 
+      case 'infraccion-geocerca':
+        this.showTiempoLimite = false;
+        this.showFechaCaducidad = false;
+        this.showGeocercas = true;
+        this.showInfraccion = false;
+        this.showInfraccionGeocerca = true;
+        break;
+      case 'exceso-velocidad':
+        this.showTiempoLimite = false;
+        this.showFechaCaducidad = false;
+        this.showGeocercas = true;
+        this.showInfraccion = false;
+        this.showInfraccionGeocerca = false;
+        break;
       default:
         break;
     }
@@ -475,7 +516,7 @@ export class PlatformAlertsEditComponent implements OnInit {
   }
 
   obtenerTipoAlerta( strAlerta: string){
-    //console.log(this.events);
+    console.log("strAlerta",strAlerta);
     for(let i = 0; i < this.events.length; i++){
       if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
         return this.events[i].name;

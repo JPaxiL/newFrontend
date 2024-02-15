@@ -6,6 +6,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       {
         tipo: event.nombre??event.name,
         nombre_objeto: event.nombre_objeto,
+        name_driver: event.namedriver,
         latitud: event.latitud,
         longitud: event.longitud,
         velocidad: event.velocidad,
@@ -25,6 +26,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
         velocidad: event.velocidad,
         referencia: event.referencia,
         videoUrl: event.videoUrl??'',
@@ -42,6 +44,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         tiempo_estadia: event.tiempo_limite,
         referencia: event.referencia,
@@ -60,6 +64,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         tiempo_tolerancia: event.tiempo_limite,
         referencia: event.referencia,
         videoUrl: event.videoUrl??'',
@@ -82,6 +88,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         int_mant_ultimo_mantenimiento: event.int_mant_ultimo_mantenimiento,
         int_mant_horas_transcurridas: event.int_mant_horas_transcurridas,
         int_mant_horas_restantes: event.int_mant_horas_restantes,
@@ -103,6 +111,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         int_mant_ultimo_mantenimiento: event.int_mant_ultimo_mantenimiento,
         int_mant_horas_transcurridas: event.int_mant_horas_transcurridas,
         int_mant_horas_restantes: event.int_mant_horas_restantes,
@@ -123,6 +133,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         int_mant_ultimo_mantenimiento: event.int_mant_odometro,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -137,6 +149,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         luminaria: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         ultimo_mantenimiento: event.int_mant_odometro,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -151,6 +165,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
@@ -164,6 +180,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         velocidad_limite: event.velocidad_limite,
         referencia: event.referencia,
@@ -181,6 +199,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
           nombre_objeto: event.nombre_objeto,
           latitud: event.latitud,
           longitud: event.longitud,
+          name_driver: event.namedriver,
           velocidad: event.velocidad,
           velocidad_limite: event.velocidad_limite,
           referencia: event.referencia,
@@ -196,6 +215,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
           nombre_objeto: event.nombre_objeto,
           latitud: event.latitud,
           longitud: event.longitud,
+          name_driver: event.namedriver,
           velocidad_unidad: event.velocidad,
           velocidad_limite: event.velocidad_limite,
           tiempo_limite_infraccion: event.tiempo_limite_infraccion,
@@ -214,6 +234,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         geocerca: event.nombre_zona,
@@ -229,6 +251,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -243,6 +267,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -257,6 +283,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -271,6 +299,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         voltaje: event.voltaje,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -285,6 +315,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -299,6 +331,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -313,6 +347,24 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/fatiga.svg',
+    );
+
+  } else if (event.tipo == 'fatiga-extrema') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre??event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -327,6 +379,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -341,6 +395,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -355,6 +411,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -369,6 +427,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -383,6 +443,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -397,6 +459,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -412,6 +476,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -426,6 +492,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -440,6 +508,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -453,6 +523,38 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'conductor-no-identificado') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre??event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+      },
+      'assets/images/events-icons/no-rostro.svg',
+    );
+  }else if (event.tipo == 'conductor-identificado') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre??event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -466,6 +568,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -482,6 +586,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -498,6 +604,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -514,6 +622,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -531,6 +641,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -547,6 +659,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -563,6 +677,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -579,6 +695,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -595,6 +713,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -611,6 +731,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -627,6 +749,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -643,6 +767,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -659,6 +785,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -676,6 +804,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -692,6 +822,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -708,6 +840,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -725,6 +859,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -742,6 +878,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -759,6 +897,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -776,6 +916,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -793,6 +935,8 @@ export const getContentPopup = (event: any, d: any = '...') => {
         nombre_objeto: event.nombre_objeto,
         latitud: event.latitud,
         longitud: event.longitud,
+        name_driver: event.namedriver,
+
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -847,6 +991,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         </colgroup>
         <tbody style="font-size: 0.7rem;">
           ${(typeof event_content.nombre_objeto !== 'undefined') ? `<tr><td>UNIDAD:</td><td>${event_content.nombre_objeto}</td></tr>` : ''}
+          ${(typeof event_content.name_driver !== 'undefined') ? `<tr><td>CONDUCTOR:</td><td>${event_content.name_driver}</td></tr>` : ''}
           ${(typeof event_content.luminaria !== 'undefined') ? `<tr><td>LUMINARIA:</td><td>${event_content.luminaria}</td></tr>` : ''}
           ${(typeof event_content.latitud !== 'undefined' && typeof event_content.latitud !== 'undefined') ? `<tr><td>UBICACIÓN:</td><td><a href="http://maps.google.com/maps?q=${event_content.latitud},${event_content.longitud}&amp;t=m" target="_blank">${event_content.latitud} °,  ${event_content.longitud} °</a></td></tr>` : ''}
           ${(typeof event_content.int_mant_ultimo_mantenimiento !== 'undefined') ? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.int_mant_ultimo_mantenimiento} h</td></tr>` : ''}

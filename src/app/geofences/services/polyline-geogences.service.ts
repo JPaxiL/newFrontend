@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { switchMap } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 export class PolylineGeogencesService {
 
   polyline_geofences: any[] = []
-  nombreComponente:string = "LISTAR";
+  nameComponentLin:string = "LISTAR";
   action:string = "add";
   idGeocercaEdit:number = 0;
 
@@ -31,6 +31,7 @@ export class PolylineGeogencesService {
   defaultTagNameFontSize = 10;
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
+  @Output() dataCompleted = new EventEmitter<any>();
 
   paintpolygonControl: any;
 
@@ -68,6 +69,7 @@ export class PolylineGeogencesService {
       this.tagNamesEyeState = this.polylineGeofenceCounters.visible != 0;
       this.initializingPolylineGeofences = true;
       this.attemptToHideSpinner();
+      this.dataCompleted.emit(this.polyline_geofences);
     });
   }
 
@@ -75,7 +77,7 @@ export class PolylineGeogencesService {
     this.tblDataGeo = [];
     for(let i = 0; i < this.polyline_geofences.length; i++){
       if(this.polyline_geofences[i].id != newCircularGeofenceId){
-        this.polyline_geofences[i].zone_name_visible_bol = (this.polyline_geofences[i].zone_name_visible == true);
+        this.polyline_geofences[i].zone_name_visible_bol = (this.polyline_geofences[i].zone_name_visible == 'true');
       } else {
         this.polyline_geofences[i].zone_name_visible_bol = true;
       }
@@ -87,12 +89,12 @@ export class PolylineGeogencesService {
 
   bindMouseEvents(geofence: any){
     geofence.geo_elemento.on('mouseover', () => {
-      if(geofence.zone_name_visible != true){
+      if(geofence.zone_name_visible != 'true'){
         geofence.marker_name.addTo(this.mapService.map);
       }
     });
     geofence.geo_elemento.on('mouseout', () => {
-      if(geofence.zone_name_visible != true){
+      if(geofence.zone_name_visible != 'true'){
         this.mapService.map.removeLayer(geofence.marker_name);
       }
     });
@@ -112,11 +114,11 @@ export class PolylineGeogencesService {
   }
 
   showDrawingsOfGeofence(geofence: any){
-    if (geofence.zone_visible == true) {
+    if (geofence.zone_visible == 'true') {
       geofence.geo_elemento.addTo(this.mapService.map);
     }
 
-    if (geofence.zone_name_visible == true) {
+    if (geofence.zone_name_visible == 'true') {
       geofence.marker_name.addTo(this.mapService.map);
     }
     
@@ -226,7 +228,7 @@ export class PolylineGeogencesService {
   }
 
   updateGeoCounters(){
-    this.polylineGeofenceCounters.visible = this.polyline_geofences.filter( (polyline_geofences: { zone_visible: boolean; }) => polyline_geofences.zone_visible == true).length;
+    this.polylineGeofenceCounters.visible = this.polyline_geofences.filter( (polyline_geofences: { zone_visible: string; }) => polyline_geofences.zone_visible == 'true').length;
     this.polylineGeofenceCounters.hidden = this.polyline_geofences.length - this.polylineGeofenceCounters.visible;
     
   }
@@ -238,12 +240,12 @@ export class PolylineGeogencesService {
 
   clearDrawingsOfGeofence(geofence: any){
     if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
-      && geofence.zone_visible == true ){
+      && geofence.zone_visible == 'true' ){
 
       this.mapService.map.removeLayer(geofence.geo_elemento);
     }
     if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
-      && geofence.zone_name_visible == true ){
+      && geofence.zone_name_visible == 'true' ){
 
       this.mapService.map.removeLayer(geofence.marker_name);
     }

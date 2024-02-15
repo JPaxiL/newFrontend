@@ -30,7 +30,7 @@
 
           [(ngModel)]="placa"
           class="form-control"
-          placeholder="Buscar por placa"
+          placeholder="Buscar placa|imei|código"
           (keyup)="searchByPlate();"
         />
       </div>
@@ -42,13 +42,182 @@
           class="form-control"
           placeholder="Tipo de Evento"
         /> -->
-        <p-dropdown [options]="eventService.classFilterArray" [(ngModel)]="selectedEvent" optionLabel="option" optionValue="tipo" [appendTo]="'body'" [showClear]="true" [filter]="true" filterBy="option" placeholder="Todos los Eventos" (ngModelChange)="changeTypeEvent()"></p-dropdown>
+        <!--p-dropdown 
+          [options]="eventService.eventsGroupedList" 
+          [(ngModel)]="selectedEvent" 
+          optionLabel="option" 
+          optionValue="tipo" 
+          [appendTo]="'body'" 
+          [showClear]="true" 
+          [filter]="true" 
+          filterBy="option" 
+          placeholder="Todos los Eventos" 
+          (ngModelChange)="changeTypeEvent()"></p-dropdown-->
+        <p-multiSelect
+          [options]="eventService.eventsGroupedList"
+          [group]="true"
+          [(ngModel)]="selectedEvent"
+          optionLabel="name"
+          defaultLabel="Sin eventos seleccionados"
+          [selectedItemsLabel]="'{0} eventos seleccionados'"
+          [showToggleAll]="true"
+          scrollHeight="250px"
+          (onChange)="changeTypeEvent()"
+          [appendTo]="'body'">
+          <ng-template let-group pTemplate="group">
+              <div class="p-d-flex p-ai-center">
+                  <span>{{group.label}}</span>
+              </div>
+          </ng-template>
+        </p-multiSelect>
       </div>
     </div>
   </div>
 
   <div class="panel-izq-table-container">
-    <table id="tbl_events">
+    <p-table [value]="eventService.eventsFiltered" selectionMode="single" (onRowExpand)="rowExpandend($event)" dataKey="uuid_event" [responsive]="true" [autoLayout]="true" [rowExpandMode]="'single'" [expandedRowKeys]="expandedRows">
+      <ng-template pTemplate="header" class="visible-on-scroll">
+          <tr>
+              <th style="width: 1.5rem"></th>
+              <th pSortableColumn="name" (click)="clickEventPanel()" >Evento</th>
+              <th pSortableColumn="nombre">Nombre</th>
+              <th pSortableColumn="nombre_objeto">Placa</th>
+              <th pSortableColumn="fecha_tracker">Fecha</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-event let-expanded="expanded">
+          <tr #currRow (click)="switchEventOnMap(event, currRow)" [style]="{'font-size':'0.75rem'}" [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.uuid_event == eventService.activeEvent.uuid_event , 'evaluated-event': event.evaluated>0}" [class]="event.clase" [pRowToggler]="event.bol_evaluation?event:''">
+              <td>
+                  <button *ngIf="event.bol_evaluation" type="button" pButton pRipple 
+                    class="p-button-rounded p-button-plain p-button-text"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" #rowToggle></button>
+              </td>
+              <td>
+                <div class="event-column">
+                  <span>{{ event.name }}</span>
+                </div>
+              </td>
+              <td>{{event.nombre}}</td>
+              <td>{{event.nombre_objeto}}</td>
+              <td>{{event.fecha_tracker}}</td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-event>
+          <tr *ngIf="loading_evaluation">
+            <td colspan="5">
+              <div class="d-flex justify-content-center ">
+                <p-progressSpinner></p-progressSpinner>
+              </div>
+            </td>
+          </tr>
+          <ng-container  *ngIf="!loading_evaluation">
+            <tr *ngFor="let evaluation of event.evaluations">
+                <td colspan="5">
+                  <div style="font-size: smaller;">
+                    <div class="ps-4 pe-2 py-2 d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="col-5" for="firstname4">Fecha</label>
+                            <div class="col-7">
+                                <span>{{event.fecha_tracker}}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="col-5" for="lastname4" class="">Nombre</label>
+                            <div class="col-7">
+                              <span>{{event.nombre_objeto}}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="col-5" for="firstname4" class="">Tipo de Evento</label>
+                            <div class="col-7">
+                              <span>{{event.name}}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="col-5" for="lastname4" class="">Criterio de Evaluación</label>
+                            <div class="col-7">
+                              <p-dropdown 
+                                [appendTo]="'body'" 
+                                [disabled]="evaluation.id" 
+                                [options]="evaluation_criteria" 
+                                [(ngModel)]="evaluation.criterio_evaluacion" 
+                                placeholder="Selecciona un criterio" 
+                                [group]="true" 
+                                (onChange)="criteriaSelected($event, evaluation)" 
+                                [style]="{'max-width':'15rem'}"
+                              >
+                                <ng-template let-group pTemplate="group">
+                                    <div class="p-d-flex p-ai-center d-flex justify-content-center ">
+                                        <span>{{group.label}}</span>
+                                    </div>
+                                </ng-template>
+                              </p-dropdown>
+                            </div>
+                        </div>
+                        <div *ngIf="evaluation.senales_posible_fatiga" class="d-flex justify-content-between align-items-center">
+                          <label class="col-5" for="firstname4" class="">Identificar video</label>
+                          <div class="col-7">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-link"></i>
+                                <input 
+                                  [disabled]="evaluation.id" 
+                                  type="text" 
+                                  pInputText 
+                                  placeholder="url" 
+                                  [(ngModel)]="evaluation.identificacion_video"
+                                />
+                            </span>
+                          </div>
+                        </div>
+                        <div *ngIf="evaluation.senales_posible_fatiga" class="d-flex justify-content-between align-items-center">
+                            <label class="col-5" for="firstname4" class="">Valoración</label>
+                            <div class="col-7">
+                              <p-rating [disabled]="evaluation.id" [(ngModel)]="evaluation.valoracion_evento" [cancel]="false"></p-rating>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="col-5" for="lastname4" class="">Observación</label>
+                            <div class="col-7">
+                              <input [disabled]="evaluation.id" type="text" pInputText [(ngModel)]="evaluation.observacion_evaluacion">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <label class="col-5" for="lastname4" class="">Operador de Monitoreo</label>
+                          <div class="col-7">
+                            <p-dropdown 
+                              [appendTo]="'body'" 
+                              [disabled]="evaluation.id" 
+                              [options]="operators" 
+                              [(ngModel)]="evaluation.operador_monitoreo" 
+                              placeholder="Selecciona un operador" 
+                              editable="true" 
+                              [group]="true"
+                              [style]="{'max-width':'15rem'}"
+                            >
+                            </p-dropdown>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-4 pt-2">
+                          <button type="button" [loading]="submitting" class="btn-gl-cancel btn-dark-hover w-25 " (click)="closeEvaluationExpanded(evaluation)" >Cancelar</button>
+                          <!--button type="button" pButton class="btn-gl-save btn-dark-hover w-25" (click)="submitEvaluation(evaluation,event)" [disabled]="evaluation.id || submitting">Guardar</button-->
+                          <button pButton pRipple class="btn-gl-save btn-dark-hover w-25" icon="pi pi-save ms-1" [loading]="submitting" (click)="submitEvaluation(evaluation,event)" [disabled]="evaluation.id || submitting">
+                            {{'Guardar '}}
+                          </button>
+                        </div>
+                    </div>
+                  </div>
+                </td>
+            </tr>
+          </ng-container>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="5">Sin coinicidencias</td>
+        </tr>
+    </ng-template>
+    </p-table>
+    <!--table id="tbl_events">
       <thead class="visible-on-scroll">
         <tr>
           <th (click)="clickEventPanel()" >Evento</th>
@@ -75,6 +244,6 @@
         </tr>
 
       </tbody>
-    </table>
+    </table-->
   </div>
 </div>

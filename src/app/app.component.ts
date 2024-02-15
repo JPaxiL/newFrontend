@@ -31,7 +31,7 @@ export class AppComponent {
               this.eventSocketService.listen();
             } 
             if(this.tabService.requiresUserDataServices()){
-              this.userDataService.getUserData();
+              // this.userDataService.getUserData();
             }
             
           }

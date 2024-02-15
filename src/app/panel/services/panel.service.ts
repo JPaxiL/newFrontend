@@ -14,16 +14,26 @@ export class PanelService {
     { id:'HISTORIAL' , name:"Historial"},
     { id:'VEHICLES' , name:"Vehículos"},
     { id:'ALERTS', name:"Todas las Alertas"},
-    { id:'ALERTS-GPS', name:"Alertas GPS"},
-    { id:'ALERTS-GPS-CREATE', name:"Alertas GPS"},
+    { id:'ALERTS-GPS', name:"Alertas GPS Tracker"},
+    { id:'ALERTS-GPS-CREATE', name:"Alertas GPS Tracker"},
     { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
     { id:'ALERTS-PLATFORM-CREATE', name:"Alertas Plataforma"},
     { id:'ALERTS-ACCESSORIES', name:"Alertas 360"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Alertas 360"},
+    { id:'ALERTS-SECURITY', name:"Alertas Seguridad Vehicular"},
+    { id:'ALERTS-SECURITY-CREATE', name:"Alertas Seguridad Vehicular"},
+    { id:'ALERTS-SECURITY-EDIT', name:"Alertas Seguridad Vehicular"},
+    { id:'ALERTS-MOBILE', name:"Alertas Soluciones Móviles"},
+    { id:'ALERTS-MOBILE-CREATE', name:"Alertas Soluciones Móviles"},
+    { id:'ALERTS-MOBILE-EDIT', name:"Alertas Soluciones Móviles"},
+    { id:'ALERTS-360', name:"Alertas Fatiga 360"},
+    { id:'ALERTS-360-CREATE', name:"Alertas Fatiga 360"},
+    { id:'ALERTS-360-EDIT', name:"Alertas Fatiga 360"},
     { id:'GEOFENCES', name:"Geocercas"},
     { id:'CIRCULAR-GEOFENCE', name:"Circular Geofences"},
     { id:'POLYLINE-GEOFENCE', name:"Polyline Geofences"},
     { id:'EVENT-USER', name:'Eventos'},
+    { id:'USER-INFO', name:'Información del Usuario'},
     { id:'USER-CONFIG', name:'Configuración del Usuario'},
     { id:'DASHBOARD', name: 'Dashboard'},
     { id:'AUDITORIA', name: 'Auditoría'},
@@ -77,6 +87,9 @@ export class PanelService {
       case "ALERTS-GPS":
       case "ALERTS-PLATFORMS":
       case "ALERTS-ACCESSORIES":
+      case "ALERTS-SECURITY":
+      case "ALERTS-MOBILE":
+      case "ALERTS-360":
         return 'alertas';
       case "GEOFENCES":
         return 'geocercas';
@@ -90,6 +103,8 @@ export class PanelService {
         return 'historial';
       case "EVENT-USER":
         return 'notificaciones';
+      case "USER-INFO":
+        return 'informacion';
       case "USER-CONFIG":
         return 'configuracion';
       case "DASHBOARD":
@@ -125,6 +140,8 @@ export class PanelService {
         return 'HISTORIAL';
       case "notificaciones":
         return 'EVENT-USER';
+      case "informacion":
+        return 'USER-INFO';
       case "configuracion":
         return 'USER-CONFIG';
       case "dashboard":

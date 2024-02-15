@@ -17,6 +17,7 @@ import { InputNumberModule } from 'primeng-lts/inputnumber';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {ConfirmationService} from 'primeng-lts/api';
 import {SelectButtonModule} from 'primeng-lts/selectbutton';
+import {RatingModule} from 'primeng-lts/rating';
 import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {PickListModule} from 'primeng-lts/picklist';
 import {ListboxModule} from 'primeng-lts/listbox';
@@ -34,6 +35,8 @@ import { OverlayPanelModule } from 'primeng-lts/overlaypanel';
 import { TagModule } from 'primeng-lts/tag';
 import { TooltipModule } from 'primeng-lts/tooltip';
 import {SlideMenuModule} from 'primeng-lts/slidemenu';
+import {ProgressBarModule} from 'primeng-lts/progressbar';
+import {MenuModule} from 'primeng-lts/menu';
 import {SidebarModule} from 'primeng-lts/sidebar';
 import {ScrollPanelModule} from 'primeng-lts/scrollpanel';
 import {GalleriaModule} from 'primeng-lts/galleria';
@@ -71,6 +74,8 @@ import { LimitHeaderComponent } from './vehicles/components/limit-header/limit-h
 import { FollowHeaderComponent } from './vehicles/components/follow-header/follow-header.component';
 import { TransmissionHeaderComponent } from './vehicles/components/transmission-header/transmission-header.component';
 import { TagHeaderComponent } from './vehicles/components/tag-header/tag-header.component';
+import { TagDriverComponent } from './vehicles/components/tag-driver/tag-driver.component';
+import { TagDriverHeaderComponent } from './vehicles/components/tag-driver-header/tag-driver-header.component';
 import { SettingHeaderComponent } from './vehicles/components/setting-header/setting-header.component';
 import { EyeComponent } from './vehicles/components/eye/eye.component';
 import { GpsHeaderComponent } from './vehicles/components/gps-header/gps-header.component';
@@ -108,6 +113,7 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { AreagraphsComponent } from './dashboard2/areagraphs/areagraphs.component';
 import { ModalComponent } from './reports/components/modal/modal.component';
 import { UserConfigComponent } from './profile-config/user-config/user-config.component';
+import { UserInfoComponent } from './profile-config/user-info/user-info.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PanalDashboardComponent } from './dashboard2/components/panal-dashboard/panal-dashboard.component';
@@ -140,14 +146,18 @@ import { PreviewComponent } from './multiview/preview/preview.component';
 import { ScreenViewComponent } from './multiview/screen-view/screen-view.component';
 import { MinimapComponent } from './multiview/minimap/minimap.component';
 import { PanelHistorialRecorridoModalComponent } from './historial/components/panel-historial-recorrido-modal/panel-historial-recorrido-modal.component';
+import { GeofenceTableComponent } from './geofences/components/geofence-table/geofence-table.component';
 import { AlphaNumericDashDirective } from './directives/alpha-numeric-dash.directive';
 import { ScreenRecorderComponent } from './multiview/screen-recorder/screen-recorder.component';
 import { CipiaComponent } from './cipia/cipia.component';
 import { FootbarComponent } from './panel/components/footbar/footbar.component';
 import { EventPopupComponent } from './events/components/event-popup/event-popup.component';
 import { CarouselComponent } from './shared/components/carousel/carousel.component';
-import { DriversHistoryComponent } from './drivers/components/drivers-history/drivers-history.component';
 import { SliderMultimediaComponent } from './shared/components/slider-multimedia/slider-multimedia.component';
+import { ShortenPipe } from './core/pipes/shorten.pipe';
+import { AddTagComponent } from './geofences/components/add-tag/add-tag.component';
+import { UnixTimeToDatePipe } from './core/pipes/unix-time-to-date.pipe';
+import {ToastModule} from 'primeng-lts/toast';
 
 @NgModule({
   declarations: [
@@ -169,6 +179,8 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     FollowHeaderComponent,
     TransmissionHeaderComponent,
     TagHeaderComponent,
+    TagDriverComponent,
+    TagDriverHeaderComponent,
     SettingHeaderComponent,
     EyeComponent,
     GpsHeaderComponent,
@@ -178,6 +190,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     GpsComponent,
     GsmComponent,
     SettingComponent,
+    ShortenPipe,
     TagComponent,
     FollowComponent,
     VehicleHeaderComponent,
@@ -200,6 +213,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     ListGeopointsComponent,
     ModalComponent,
     UserConfigComponent,
+    UserInfoComponent,
     Dashboard2Component,
     AreagraphsComponent,
     PanalDashboardComponent,
@@ -231,14 +245,16 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     ScreenViewComponent,
     MinimapComponent,
     PanelHistorialRecorridoModalComponent,
+    GeofenceTableComponent,
     AlphaNumericDashDirective,
     ScreenRecorderComponent,
     CipiaComponent,
     FootbarComponent,
     EventPopupComponent,
     CarouselComponent,
-    DriversHistoryComponent,
-    SliderMultimediaComponent
+    SliderMultimediaComponent,
+    AddTagComponent,
+    UnixTimeToDatePipe
   ],
   imports: [
     ToastrModule.forRoot({
@@ -265,6 +281,7 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     TreeTableModule,
     DropdownModule,
     DialogModule,
+    RatingModule,
     ScrollPanelModule,
     InputTextModule,
     InputSwitchModule,
@@ -279,14 +296,17 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     PickListModule,
     ListboxModule,
     CardModule,
+    ProgressBarModule,
     BadgeModule,
     CheckboxModule,
     OverlayPanelModule,
     TagModule,
     TooltipModule,
+    ToastModule,
     MultiSelectModule,
     CalendarModule,
     SlideMenuModule,
+    MenuModule,
     GalleriaModule,
     LeafletModule,
     LeafletMarkerClusterModule,
@@ -300,6 +320,8 @@ import { SliderMultimediaComponent } from './shared/components/slider-multimedia
     AgGridModule.withComponents([
       EyeComponent,
       TagHeaderComponent,
+      TagDriverComponent,
+      TagDriverHeaderComponent,
       FollowHeaderComponent,
       EyeHeaderComponent,
       LimitHeaderComponent,

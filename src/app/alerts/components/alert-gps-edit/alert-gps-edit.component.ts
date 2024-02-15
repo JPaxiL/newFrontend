@@ -15,7 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class AlertGpsEditComponent implements OnInit {
 
   options = new Array(
-    { id:'ALERTS-GPS', name:"Alertas GPS"},
+    { id:'ALERTS-GPS', name:"Alertas GPS Tracker"},
   );
 
   public alertForm!: FormGroup;
@@ -57,6 +57,11 @@ export class AlertGpsEditComponent implements OnInit {
     { label: '1 Min.', value: 60 },
     { label: '2 Min.', value: 120 },
   ];
+  booleanOptionsAtencionEventos = [
+    { label: 'Activado', value: true },
+    { label: 'Desactivado', value: false },
+  ];
+
 
   constructor(
     private alertService: AlertService,
@@ -100,7 +105,7 @@ export class AlertGpsEditComponent implements OnInit {
       vehicles: [this.vehiclesSelected,[Validators.required]],
       // geocercas: [[]],
       // geocircles: [[]],
-      tipoAlerta: [alert.tipo,[Validators.required]],
+      tipoAlerta: [alert.event_id,[Validators.required]],
       chkEventoActivado: [activo],
       chkSonido: [notificacion_system],
       chkCorreo: [notificacion_email],
@@ -118,7 +123,9 @@ export class AlertGpsEditComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[ventana_emergente]
+      chkVentanaEmergente:[ventana_emergente],
+      chkEvaluation:[alert.bol_evaluation]
+
     });
 
 
@@ -129,7 +136,8 @@ export class AlertGpsEditComponent implements OnInit {
     this.setDataVehicles();
     this.events = await this.alertService.getEventsByType('gps');
     this.alertForm.patchValue({
-      tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+      //tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+      tipoAlerta: this.alertForm.value.tipoAlerta,
     });
     this.loadingEventSelectInput = false;
 
@@ -256,6 +264,7 @@ export class AlertGpsEditComponent implements OnInit {
             cancelButtonText: 'Cancelar',
             preConfirm:async () => {
               const res = await this.alertService.edit(this.alertForm.value);
+              this.alertService.getAll();
               this.clickShowPanel('ALERTS-GPS');
             }
         }).then(data => {

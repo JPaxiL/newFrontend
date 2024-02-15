@@ -17,6 +17,8 @@ export class AlertService {
   public alertsByType: any = [];
   public panelAlertKey: Number = 0;
 
+  dataCompleted = false;
+
   public alertsForEventSocket: any[] = [];
 
   public listaSonidos = [
@@ -28,8 +30,7 @@ export class AlertService {
     { id: 6, ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
     { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
     { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
-    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
-    { id: 10, ruta: '', label: 'Sin Sonido' },
+    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' }
   ];
 
   constructor(private http: HttpClient) { 
@@ -67,6 +68,7 @@ export class AlertService {
     this.alertsForEventSocket = alerts_for_events_socket;
     // console.log('Alertas obtenidas');
     //console.log(this.alertsForEventSocket);
+    this.dataCompleted = true;
     return this.alerts;
   }
 
@@ -142,7 +144,9 @@ export class AlertService {
   }
 
   public async create(alert: any) {
+    console.log("data enviada",alert);
     const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/alerts`,alert).toPromise();
+    console.log("response",response);
     return response.data;
   }
 

@@ -18,10 +18,12 @@ export class ActionsAlertComponent implements OnInit {
   params: any;
 
   options = new Array(
-    { id:'ALERTS-ACCESSORIES', name:"Alertas 360"},
-    { id:'ALERTS-GPS', name:"Alertas GPS"},
-    { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"},
-
+    { id:'ALERTS', name:"Alertas"},
+    { id:'ALERTS-SECURITY', name:"Crear Alerta Seguridad Vehicular"},
+    { id:'ALERTS-MOBILE', name:"Crear Alerta Solución Móvil"},
+    { id:'ALERTS-360', name:"Crear Alerta 360"},
+    { id:'ALERTS-GPS', name: 'Alertas GPS' },
+    { id:'ALERTS-PLATFORMS', name:"Alertas Plataforma"}
   );
 
 

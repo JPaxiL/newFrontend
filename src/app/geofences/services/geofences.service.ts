@@ -1,24 +1,44 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
-
+import {TreeNode} from 'primeng-lts/api';
 import { MapServicesService } from '../../map/services/map-services.service';
-
+import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { IGeofence, ITag } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeofencesService {
 
+  private api_url = environment.apiUrl;
   public geofences:any = [];
-  public nombreComponente:string = "LISTAR";
-
+  public nameComponentPol:string = "LISTAR";
+  public compTags: string = 'LISTAR';
+  public geofencesTree: TreeNode[]=[];
+  public treeTableStatus: boolean = false;
   public idGeocercaEdit:number = 0;
-  public action:string = "add"; //[add,edit,delete]
+  public idTagEdit:number = 0;
+  public nameTagEdit:string = '';
+  public type: string = 'polig'; //[polig, cir, line]
+  public action:string = 'add'; //[add,edit,delete]
+  public actionTags: string = '';
+
+  @Output() dataTreeCompleted = new EventEmitter<any>();
+  @Output() dataCompleted = new EventEmitter<any>();
+  @Output() clickEye = new EventEmitter<any>();
+  @Output() displayOn = new EventEmitter<any>();
+  @Output() deleted = new EventEmitter();
+  @Output() reloadTableTree = new EventEmitter<any>();
+  private divEnabledSubject = new BehaviorSubject<boolean>(true);
+  divEnabled$ = this.divEnabledSubject.asObservable();
+  modalCloseEvent = new EventEmitter();
+  tagAdded = new EventEmitter();
 
   tblDataGeo: any = [];
   tblDataGeoFiltered: any = [];
@@ -38,11 +58,17 @@ export class GeofencesService {
   defaultTagNameFontSize = 10;
   defaultTagNameColor = '#000000';
   defaultTagNameBackground = 'inherit'
-
+  public demo:boolean = false;
   initializingUserPrivleges: boolean = false;
   showBtnAdd = true;
   showBtnEdit = true;
-
+  showBtnImportExport = true;
+  showBtnTags = true;
+  listGeofences: any = [];
+  listTag: ITag [] = [];
+  public operations: any = [];
+  public tagGroups: any = [];
+  listRows: any = [];
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -56,35 +82,78 @@ export class GeofencesService {
   public async initialize() {
     this.getUserPrivileges();
     await this.getAll();
+    
   }
 
   public async getAll(key: string = '', show_in_page: number = 15, page: number = 1){
     await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/zone`).toPromise()
-    .then(response => {
+    .then(async (response) => {
       this.geofences = response.data;
-      this.initializeTable();
-      this.drawGeofencesOnMap();
-      this.updateGeoCounters();
-      this.updateGeoTagCounters();
-      this.eyeInputSwitch = this.geofenceCounters.visible != 0;
-      this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
-      console.log('Geocercas Cargadas');
-      this.initializingGeofences = true;
-      this.attemptToHideSpinner();
-      console.log(this.geofences);
+      await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/listTags`).toPromise()
+      .then(response => {
+        this.listTag = response.data;
+        console.log("lisTags", this.listTag);
+        console.log("Polygonales", this.geofences);
+        this.initializeTable();
+        this.drawGeofencesOnMap();
+        this.updateGeoCounters();
+        this.updateGeoTagCounters();
+        this.eyeInputSwitch = this.geofenceCounters.visible != 0;
+        this.tagNamesEyeState = this.geofenceTagCounters.visible != 0;
+        this.initializingGeofences = true;
+        this.attemptToHideSpinner();
+        this.dataCompleted.emit(this.geofences);
+      });;
     });
+  }
+ 
+  public getTagss(){
+    return this.listTag.filter(item=>item.var_name != "deafault");
+  }
+  public async storeTag(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/storeTag`,zone).toPromise();
+    return response;
+  }
+  public async deleteTag(zone: any){
+    const response:ResponseInterface = await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/deleteTag`,zone).toPromise();
+    return response;
+  }
+  
+  storeTagAndAssingGeo(req: any): Observable<any> {
+    return this.http.post<any>(`${this.api_url}/api/storeTagAndAssigGeos`, req);
+  } 
+ 
+  updateTagAndAssingGeo(req: any): Observable<any> {
+    console.log('req',req);
+    return this.http.post<any>(`${this.api_url}/api/updateTagAndAssigGeos`, req);
+
+  }
+
+  deleteTagOfGeo(req: any): Observable<any> {
+    console.log('reqDelete',req);
+    return this.http.post<any>(`${this.api_url}/api/deleteTagOfGeos`, req);
+
+  } 
+
+  closeModal() {
+    // Envía evento al padre para cerrarse
+    this.modalCloseEvent.emit();
+  }
+
+  setDivEnabled(enabled: boolean) {
+    this.divEnabledSubject.next(enabled);
   }
 
   public clearDrawingsOfGeofence(geofence: any){
     if(geofence.geo_elemento != null && typeof geofence.geo_elemento != 'undefined'
-      && geofence.zone_visible == "true" ){
+      && geofence.zone_visible == 'true' ){
 
       //Si la geocerca ya existe y es visible, entonces remover la capa
       //console.log('Geocerca visible, eliminar', geofence);
       this.mapService.map.removeLayer(geofence.geo_elemento);
     }
     if(geofence.marker_name != null && typeof geofence.marker_name != 'undefined'
-      && geofence.zone_name_visible == "true" ){
+      && geofence.zone_name_visible == 'true' ){
 
       //Si el nombre de la geocerca ya existe y es visible, entonces removerla
       //console.log('Nombre de geocerca visible, eliminar', geofence);
@@ -93,14 +162,14 @@ export class GeofencesService {
   }
 
   public showDrawingsOfGeofence(geofence: any){
-    if (geofence.zone_visible == "true") {
+    if (geofence.zone_visible == 'true') {
       geofence.geo_elemento.addTo(this.mapService.map);
     }
 
-    if (geofence.zone_name_visible == "true") {
+    if (geofence.zone_name_visible == 'true') {
       geofence.marker_name.addTo(this.mapService.map);
     }
-    
+
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // // tempMarker.bindLabel("My Label");
     // tempMarker.bindTooltip(data.name, { permanent: true, offset: [0, 12] });
@@ -201,6 +270,10 @@ export class GeofencesService {
     return this.tblDataGeo;
   }
 
+  public onClickEye(geofence: string):void{
+    this.clickEye.emit(geofence);
+  }
+
   initializeTable(newGeofenceId?: number) {
     this.tblDataGeo = [];
     for(let i = 0; i < this.geofences.length; i++){
@@ -212,15 +285,15 @@ export class GeofencesService {
       this.tblDataGeo.push({trama:this.geofences[i]});
     }
     this.tblDataGeoFiltered = this.getTableData();
-    
+
     //this.spinner.hide('loadingGeofencesSpinner');
     // this.tblDataGeo.push({icono:"assets/images/end.png", trama:dH[dH.length-1],icono_width:"13px",icono_height:"13px"});
   }
 
   getUserPrivileges(){
-    console.log('(Geofences Service) Esperando privliegios...');
+    //console.log('(Geofences Service) Esperando privliegios...');
     if(!this.userDataService.userDataInitialized){
-      console.log('(Geofences Service) User Data no está listo. Subscribiendo para obtener privilegios...');
+      //console.log('(Geofences Service) User Data no está listo. Subscribiendo para obtener privilegios...');
       this.userDataService.geofencesPrivileges.subscribe({
         next: (result: boolean) => {
           if(result){
@@ -232,16 +305,16 @@ export class GeofencesService {
         }
       });
     } else {
-      console.log('(Geofences Service) User Data está listo. Obteniendo privilegios...');
+      //console.log('(Geofences Service) User Data está listo. Obteniendo privilegios...');
       this.verifyPrivileges();
     }
-    
+
   }
 
   attemptToHideSpinner(){
-    console.log('Attempt to hide Geofences Spinner: ', { 
-      isTableReady: this.initializingGeofences, 
-      isUserDataReady: this.initializingUserPrivleges } );
+    // console.log('Attempt to hide Geofences Spinner: ', {
+    //   isTableReady: this.initializingGeofences,
+    //   isUserDataReady: this.initializingUserPrivleges } );
     if(this.initializingGeofences && this.initializingUserPrivleges){
       this.spinner.hide('loadingGeofencesSpinner');
     }
@@ -258,7 +331,7 @@ export class GeofencesService {
     }
     this.initializingUserPrivleges = true;
     this.attemptToHideSpinner();
-    console.log('(Geofences Service) Privilegios obtenidos...');
+    // console.log('(Geofences Service) Privilegios obtenidos...');
   }
 
   getCoordenadas(data:any){
@@ -283,6 +356,7 @@ export class GeofencesService {
 
   public async delete(id: any){
     const response:ResponseInterface = await this.http.delete<ResponseInterface>(`${environment.apiUrl}/api/zone/${id}`).toPromise();
+    this.deleted.emit(id);
     return response.data;
   }
 
@@ -296,6 +370,176 @@ export class GeofencesService {
   public updateGeoTagCounters(){
     this.geofenceTagCounters.visible = this.geofences.filter( (geofence: { zone_name_visible_bol: boolean; }) => geofence.zone_name_visible_bol == true).length;
     this.geofenceTagCounters.hidden = this.geofences.length - this.geofenceTagCounters.visible;
+  }
+
+  getNameTag(id: any){
+    //console.log('find tagsss',this.tags);
+    return this.listTag.find(tag=>tag.id == id.toString())?.var_name;
+  }
+
+  public async createTreeNode():Promise <TreeNode[]>{
+    let map: any=[];
+    this.operations = [];
+    this.tagGroups = [];
+    let status_operation = false;
+    let status_tags = false;
+    console.log("Geofences Unidos", this.listGeofences)
+
+    for(const index in this.listGeofences){
+      status_operation = false;
+      status_tags= false;
+      //console.log('id GEO TAGS->', this.listGeofences[index].tags);
+      if(this.listGeofences[index].tags?.length == 0 || this.listGeofences[index].tags == null || !this.listGeofences[index].tags){
+        if(this.operations.includes(this.listGeofences[index]['idoperation'])){
+        }else{
+          this.operations.push(this.listGeofences[index]['idoperation']);
+          status_operation= true;
+        }
+        if(this.tagGroups.includes(this.listGeofences[index]['idoperation']+'_0')){
+        }else{
+          this.tagGroups.push(this.listGeofences[index]['idoperation']+'_0');
+          status_tags= true;
+        } //lógica para agregar a map
+        if(status_operation&&status_tags){
+          //console.log('case defoult:1_1');
+          map.push(
+            {
+              data:{id:this.listGeofences[index]['idoperation'],name: this.listGeofences[index]['nameoperation'], col:3, type:'operacion', showRow: true },
+              expanded: true,
+              children:[
+                {
+                  data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'], showRow: true},
+                  expanded: true,
+                  children: [
+                    {
+                      data:this.listGeofences[index],
+                    }
+                  ]
+                }
+              ]
+            }
+          );
+        }else if(!status_operation&&status_tags){
+          //console.log('case defoult:0_1');
+          const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.listGeofences[index]['idoperation']);
+          const newTag = {
+            data:{id:0, name: 'Geocercas Sin Etiquetas', col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'], showRow: true},
+            expanded: true,
+            children: [
+              {
+                data:this.listGeofences[index],
+              }
+            ],
+          };
+          existingOperation.children.push(newTag);
+          
+        }else if(status_operation&&!status_tags){
+          //console.log('case defoult:1_0');
+        }else if(!status_operation&&!status_tags){
+          //console.log('case defoult:0_0');
+          const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.listGeofences[index]['idoperation']);
+          const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id == 0);
+          existingTag.children.push({
+            data: this.listGeofences[index]
+          });
+        }
+      }else{
+        //console.log('ERROR', this.listGeofences[index]);
+        for(const indexTag of this.listGeofences[index].tags!){
+          const tagName = this.getNameTag(indexTag);
+          if(this.operations.includes(this.listGeofences[index]['idoperation'])){
+          }else{
+            this.operations.push(this.listGeofences[index]['idoperation']);
+            status_operation= true;
+          }
+          if(this.tagGroups.includes(this.listGeofences[index]['idoperation']+'_'+indexTag)){
+          }else{
+            this.tagGroups.push(this.listGeofences[index]['idoperation']+'_'+indexTag);
+            status_tags= true;
+          }
+          //
+          if(status_operation&&status_tags){
+            //console.log('case:1_1');
+            map.push(
+              {
+                data:{id:this.listGeofences[index]['idoperation'],name: this.listGeofences[index]['nameoperation'], col:3, type:'operacion', showRow: true },
+                expanded: true,
+                children:[
+                  {
+                    data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'],showRow: true },
+                    expanded: true,
+                    children: [
+                      {
+                        data:this.listGeofences[index],
+                      }
+                    ]
+                  }
+                ]
+              }
+            );
+          }else if(!status_operation&&status_tags){
+            //console.log('case:0_1');
+            const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id === this.listGeofences[index]['idoperation']);
+            const newTag = {
+              data:{id:indexTag, name: tagName, col:3, type:'etiqueta', idOpe: this.listGeofences[index]['idoperation'], showRow: true},
+              expanded: true,
+              children: [
+                {
+                  data:this.listGeofences[index],
+                }
+              ],
+            };
+            existingOperation.children.push(newTag);
+          }else if(status_operation&&!status_tags){
+            //console.log('case:1_0');
+          }else if(!status_operation&&!status_tags){
+            //console.log('case:0_0');
+            const existingOperation = map.find((item: { data: { id: any; }; }) => item.data.id == this.listGeofences[index]['idoperation']);
+            const existingTag = existingOperation.children.find((item: { data: { id: any; }; }) => item.data.id == indexTag);
+            existingTag.children.push({
+              data: this.listGeofences[index]
+            });
+          }
+          status_tags= false;
+          status_operation = false;
+        }
+      }
+    }
+    //console.log("tagss", this.listTag);
+    console.log('arbol de etiquetas',map);
+    return Promise.resolve(map);
+  }
+  
+  public async updateListGeofences(geofences: any){
+    for(const geoKey in geofences){
+      //console.log('geookay', geofences[geoKey][0].id);
+      const geosOld = this.listGeofences;
+      const filterItem = geosOld.find((item: { id: any; })=>item.id == geofences[geoKey][0].id);
+      if(filterItem ){
+        const index = this.listGeofences.indexOf(filterItem);
+        geosOld[index].tags  = geofences[geoKey][0].geo_tags;
+        this.listGeofences = geosOld;
+      }
+    }
+  }
+
+  public async updateListTags(tag: any){
+    const tagsOld = this.listTag;
+    const filterItem = tagsOld.find((item: { id: any; })=>item.id == tag.id);
+      if(filterItem ){
+        const index = this.listTag.indexOf(filterItem);
+        tagsOld[index].var_name = tag.var_name;
+        this.listTag = tagsOld;
+      }
+  }
+
+  public async addTagToList(tag: any){
+    const tagsNew = this.listTag.push(tag);
+  }
+
+  public async removeListTag(tag: any){
+    const tagsNew = this.listTag.filter((tg: {id: any;})=>tg.id !== tag.id);
+    this.listTag = tagsNew;
   }
 
 }

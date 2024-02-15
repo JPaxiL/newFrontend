@@ -11,6 +11,7 @@ import { VehicleService } from '../../../vehicles/services/vehicle.service';
 
 import { MapServicesService } from '../../../map/services/map-services.service';
 import { EventService } from 'src/app/events/services/event.service';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 
 
 import { HistorialService } from '../../services/historial.service';
@@ -62,6 +63,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   conHistorial = false;
   showEventos = false;
   nombreUnidad = '';
+  imei = '';
 
   form : any = {};
 
@@ -221,11 +223,14 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   pngVelFecha: boolean = true;
   pngGrafico: boolean = false;
 
+  soloParaMi: boolean= false;
+
   isHistorialTableLoaded: boolean = false;
 
   constructor(
     public mapService: MapServicesService,
     public historialService: HistorialService,
+    private UserDataService: UserDataService,
     private VehicleService : VehicleService,
     private spinner: NgxSpinnerService,
     private EventService: EventService,
@@ -259,6 +264,33 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
+
+    // this.UserDataService.getUserData();
+    if(!this.UserDataService.userDataInitialized){
+      console.log('(Navbar) User Data no está listo. Subscribiendo para obtener data...');
+      this.UserDataService.userDataCompleted.subscribe({
+        next: (result: boolean) => {
+          if(result){
+            this.UserDataService.getUserData();
+          }
+        },
+        error: (errMsg: any) => {
+          console.log('(Navbar) Error al obtener userData: ', errMsg);
+        }
+      });
+    } 
+    console.log("=================================");
+    console.log(this.UserDataService);
+    console.log(this.UserDataService.typeVehicles);
+    console.log(this.UserDataService.typeVehiclesUserData);
+    console.log(this.UserDataService.userName);
+
+    if (this.UserDataService.userName == 'percy') {
+      this.soloParaMi = true;
+    }
+    
+
+
     if(!this.VehicleService.statusDataVehicle){
       this.spinner.show('loadingHistorialForm');
       this.VehicleService.dataCompleted.subscribe( vehicles => {
@@ -282,19 +314,24 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           console.log('EVENTOS DEL USUARIO OBTENIDOS:', data);
           // Realiza cualquier acción con los datos recibidos
           if (data.success){
-            await this.createEventList(data.data); 
-            this.spinner.hide('loadingHistorialForm');
-            this.EventService.eventsUserLoaded = true;
+            this.eventList = [];
+            this.eventList = this.EventService.createEventList(data.data);
           }else{
+            this.eventList = [];
             console.log('EL USUARIO NO TIENE EVENTOS');
-            this.spinner.hide('loadingHistorialForm');
           }
+          this.spinner.hide('loadingHistorialForm');
         },
         (error) => {
           // Maneja los errores si ocurre alguno durante la solicitud
           console.error('Error al obtener los eventos:', error);
         }
       );
+    }else{
+      this.spinner.show('loadingHistorialForm');
+      console.log('TEST->',this.EventService.eventsGroupedList,this.eventList);
+      this.eventList = this.EventService.eventsGroupedList;
+      this.spinner.hide('loadingHistorialForm');
     }
     
 
@@ -385,6 +422,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     if (!(this.form.selectedCarC == null)) {
       this.nombreUnidad = (this.cars.filter((item:any)=> item.imei == this.form.selectedCar))[0].nombre;
+      this.imei = this.form.selectedCar;
       //console.log("unidad diferente de null");
     } else {
       //console.log("unidad es igual a null");
@@ -413,58 +451,9 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       this.clearMultimedia(event);
       this.addMultimediaComponent(event);
     })
+    
   }
 
-  createEventList (data:any){
-    let status_event = false;
-    let map: any=[];
-    for (let event of data) {
-      status_event= false;
-      event.event_category = this.changeNameEvent(event.event_category);
-      
-      const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_category);
-
-      if (existingTypeEvent) {
-        // El tipo de evento ya existe en el mapa
-        const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.slug);
-
-        if (!existingEvent) {
-          // El id_event no existe para este tipo de evento, lo agregamos
-          existingTypeEvent.items.push({
-            name: event.name_event,
-            value: event.slug
-          });
-        }
-      } else {
-        // El tipo de evento no existe en el mapa, lo añadimos
-        map.push({
-          label: event.event_category,
-          items: [
-            {
-              name: event.name_event,
-              value: event.slug,
-            }
-          ]
-        });
-      }
-
-    }
-    console.log(map);
-    // LIMPIAMOS EVENTOS LIST
-    this.eventList = [];
-    this.eventList = map;
-  }
-  changeNameEvent (name:string){
-    if (name == 'gps'){
-      return 'EVENTOS GPS';
-    }else if(name == 'platform'){
-      return 'EVENTOS PLATAFORMA';
-    }else if (name == 'accessories'){
-      return 'EVENTOS FATIGA 360º'
-    }else {
-      return 'EVENTOS '+name.toUpperCase();
-    }
-  }
 
   ngOnDestroy(){
     ////console.log('me destruire gaaa');
@@ -939,6 +928,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     // var dH =  this.historialService.tramasHistorial; // Data Historial
 
 
+    console.log("=================================");
+    console.log(this.UserDataService.typeVehicles);
+    console.log(this.UserDataService.typeVehiclesUserData);
+
+    
     /* let MDstr = "" + this.form.fecha_desde.month;
     let DDstr = "" + this.form.fecha_desde.day;
     console.log('Form', MDstr);
@@ -1100,6 +1094,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
             dH[0].primero = h; // guardar el numero de elementos en la primera trama.
             dH[0].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
+            dH[0].imei  = this.imei = this.form.selectedCar,
+
 
             dH[h].ultimo  = h; // guardar el numero de elementos en la ultima trama.
             dH[h].nombre = this.nombreUnidad;//"Nombre Unidad";//param.nombreUnidad;
@@ -1664,9 +1660,37 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
   }
 
 
+  clickEnviarCorreoExcel() {
+      console.log(' =========== clickEnviarCorreoExcel 1 =============== ');
+      // var fecha_hoy  = moment( Date.now() ).format('YYYY-MM-DD HH:mm:ss');
+      // var fecha_fin = moment( Date.now() ).format('YYYY-MM-DD 00:00:00');
+      // var fecha_ini = moment( Date.now() ).add(-1, 'days').format('YYYY-MM-DD 00:00:00');
+      // var params = { 
+      //   fecha_hoy : fecha_hoy,
+      //   fecha_fin : fecha_fin,
+      //   fecha_ini : fecha_ini
+      // };
+      // console.log(params);
+      this.historialService.enviarCorreoExcel({});
+      console.log(' =========== clickEnviarCorreoExcel 2 =============== ');
+
+  }
 
   get_combustible_movimiento(dH:any, a1:any, a2:any) {
 
+      console.log("==get_combustible_movimiento");
+      console.log(dH);
+      console.log(a1);
+      console.log(a2);
+
+      if (dH.length > 0) {
+        console.log("== el imei");
+        console.log(dH[0].imei);
+      }
+
+
+
+      
       if (a2 == 'FIN') {
             
           var h = dH.length - 1; //Ultimo indice del array
@@ -1679,6 +1703,47 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           // console.log(x2-x1);
           if (x1 == '-' || x2 == '-') {
               kilometrajeTotal = '-';
+
+              // console.log("========= localStorage ========");
+              // console.log(this.UserDataService.typeVehicles);
+              // console.log(this.UserDataService.typeVehiclesUserData);
+              // console.log(this.UserDataService.typeVehicles[0].var_galon);
+              // console.log("=========");
+              // console.log( this.cars );
+              // console.log( this.VehicleService.getVehiclesData() );
+              //let vehicles = this.VehicleService.getVehiclesData();
+
+              var tipoUnidad = (this.VehicleService.getVehiclesData().filter((item:any)=> item.IMEI == dH[0].imei))[0].tipo;
+              // console.log(tipoUnidad);
+              // console.log(parseInt(tipoUnidad));
+              var tipoU = (this.UserDataService.typeVehiclesUserData.filter((item:any)=> item.type_vehicle_id == parseInt(tipoUnidad)))[0];
+              // console.log(tipoU);
+              // console.log(tipoU.var_galon);
+              // console.log(parseInt(tipoU.var_galon));
+
+              if (tipoU.var_galon == null) {
+                  kilometrajeTotal = '-.';
+              } else {
+
+                  // galones x kilometros
+                  var distancia = this.get_distancia_movimiento(dH, a1, a2); // en km
+                  if (distancia == '-') {
+                      var distancia_nueva = 0;
+                      for (let i = 1; i < dH.length; i++) {
+                          if (dH[i].speed > 1) {
+                              distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                          }
+                      }
+                      kilometrajeTotal = ( distancia_nueva * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  } else {
+                      kilometrajeTotal = ( parseFloat(distancia) * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  }
+
+              }
+              
+              // this.historialService.icono = (this.cars.filter((item:any)=> item.imei == dH[0].imei))[0].icon;
+
+              
           } else {
               kilometrajeTotal = ((x2-x1)*0.2641).toFixed(2) + 'gal. (' + (x2-x1).toFixed(2) + 'l.)';
           }
@@ -1691,6 +1756,42 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           var kilometrajeTotal = '-';
           if (x1 == '-' || x2 == '-') {
               kilometrajeTotal = '';
+
+              console.log("================= XXX =================");
+              
+              console.log(this.UserDataService.typeVehiclesUserData);
+              var tipoUnidad = (this.VehicleService.getVehiclesData().filter((item:any)=> item.IMEI == dH[0].imei))[0].tipo;
+              var tipoU = (this.UserDataService.typeVehiclesUserData.filter((item:any)=> item.type_vehicle_id == parseInt(tipoUnidad)))[0];
+
+              console.log(tipoUnidad+ " ================ " +tipoU);
+
+              if (tipoU.var_galon == null) {
+                  kilometrajeTotal = '-.';
+              } else {
+
+                console.log(" ================ 111");
+
+                  var distancia = this.get_distancia_movimiento(dH, a1, a2); // en km
+                  console.log(" ================ 222");
+
+                  if (distancia == '-') {
+                      var distancia_nueva = 0;
+                      for (let i = a1 +1; i <= a2; i++) {
+                          if (dH[i].speed > 1) {
+                              distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                              console.log(" ================ " +distancia_nueva);
+
+                          }
+                      }
+                      kilometrajeTotal = ( distancia_nueva * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  } else {
+                      kilometrajeTotal = ( parseFloat(distancia) * parseInt(tipoU.var_galon) ).toFixed(2) + 'gal.';
+                  }
+
+              }
+
+
+
           } else {
               kilometrajeTotal = ((x2-x1)*0.2641).toFixed(2) + 'gal. (' + (x2-x1).toFixed(2) + 'l.)';
           }
@@ -1700,9 +1801,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
   }
   
+  
   get_distancia_movimiento(dH:any, a1:any, a2:any) {
-
+    // console.log("------- 11");
     if (a2 == 'FIN') {
+      // console.log("------- 12 fin");
         var h = dH.length - 1; //Ultimo indice del array
         var x1 = (dH[0].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[0].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
         var x2 = (dH[h].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[h].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
@@ -1712,23 +1815,52 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         // console.log(x1+' - '+x2);
         // console.log(x2-x1);
         if (x1 == '-' || x2 == '-') {
+
             kilometrajeTotal = '-';
+
+            var distancia_nueva = 0;
+            for (let i = 1; i < dH.length; i++) {
+                if (dH[i].speed > 1) {
+                    console.log(dH[i-1]);
+
+
+                    distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                }
+            }
+            kilometrajeTotal = (distancia_nueva).toFixed(2) + ' km';
         } else {
+
             kilometrajeTotal = (x2-x1).toFixed(2) + ' km';
         }
         return kilometrajeTotal;
     } else {
+      // console.log("------- 22 fin");
 
         var x1 = (dH[a1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[a1].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
         var x2 = (dH[a2].paramsGet.filter((item:any)=> item.id == "can_dist"))[0] === undefined ? "-" :(dH[a2].paramsGet.filter((item:any)=> item.id == "can_dist"))[0].value ;
         var kilometrajeTotal = '-';
         if (x1 == '-' || x2 == '-') {
-            kilometrajeTotal = '';
+            kilometrajeTotal = '-';
+
+            var distancia_nueva = 0;
+        
+            for (let i = a1 +1 ; i <= a2; i++) {
+                if (dH[i].speed > 1) {
+                  // console.log(a1);
+                  // console.log(a2);
+                  // console.log(dH);
+
+                    distancia_nueva = distancia_nueva + (this.calcularDistanciaEntreDosCoordenadas(dH[i-1].lat, dH[i-1].lng, dH[i].lat, dH[i].lng));
+                }
+            }
+            kilometrajeTotal = (distancia_nueva).toFixed(2) + ' km';
+
         } else {
             kilometrajeTotal = (x2-x1).toFixed(2) + 'km';
         }
         return kilometrajeTotal;
     }
+
   }
 
 
@@ -3062,10 +3194,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       const componentRef: ComponentRef<any> = this.container.createComponent(factory);
       const params:any = {
         'event': event, 
-        'driver': this.VehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.nombre_conductor??'',
+        'driver': this.VehicleService.vehicles.find(vh => vh.IMEI == event.imei)?.namedriver??'',
         'showMultimediaFirst': true,
         'hasMultimedia':true,
-        'showTitle':false
+        'showTitle': false,
+        'showFooter': false
       };
       // Asignar datos al componente si existen
       

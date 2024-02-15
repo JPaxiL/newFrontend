@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import { EventService } from './event.service';
 import { VehicleService } from '../../vehicles/services/vehicle.service';
 import { AlertService } from 'src/app/alerts/service/alert.service';
+import { PopupService } from './popup.service';
+import { DriversService } from 'src/app/drivers/services/drivers.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,17 +27,18 @@ export class EventSocketService extends Socket {
   constructor(
     public eventService: EventService,
     public vehicleService: VehicleService,
+    public driverService: DriversService,
     private AlertService: AlertService) {
-      super({
-        url: environment.socketEvent,
-        //url: 'http://23.29.124.173',
-        options: {
-          query: {
-            userId: localStorage.getItem('user_id'),
-            secret: environment.secretClient,
-          },
+    super({
+      url: environment.socketEvent,
+      //url: 'http://23.29.124.173',
+      options: {
+        query: {
+          userId: localStorage.getItem('user_id'),
+          secret: environment.secretClient,
         },
-      });
+      },
+    });
 
     // this.ioSocket.on('res', (info: any) => {
     //   console.log("info XD");
@@ -92,10 +95,17 @@ export class EventSocketService extends Socket {
         let data = this.filterImei(this.vehicleService.vehicles, even.tracker_imei);
         // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
         // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
-        console.log("----data",data);
         if (data != undefined) {
           // console.log("name ====",data.name);
+          console.log(even.nombre_objeto+" ========================================== "+data.name);
           even.nombre_objeto = data.name;
+
+          //<------- BUSCAR EL NOMBRE
+          // console.log('EVENT LLEGO->',even);
+          // console.log('DRIVER INIT->',this.driverService.drivers);
+          even.namedriver = this.driverService.getDriverById(even.driver_id);// <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+          // even.namedriver = "NO IDENTIFICADO";
+          
           // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
           //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
           //Si el evento no existe previamente
@@ -108,13 +118,12 @@ export class EventSocketService extends Socket {
           }
 
           even.imei = even.tracker_imei;
-          console.log("----even",even);
-          console.log("----this.AlertService.alertsForEventSocket.length",this.AlertService.alertsForEventSocket.length);
-
           //Si las alertas ya cargaron
           if (this.AlertService.alertsForEventSocket.length > 0) {
             //console.log(this.AlertService.alertsForEventSocket);
             let alert_data = this.AlertService.alertsForEventSocket.find(alert => alert.evento_id == even.evento_id);
+            console.log("ALERTA CORRESPONDIENTE::::", alert_data);
+            
             if (typeof alert_data != 'undefined') {
               even['sonido_sistema_bol'] = alert_data.sonido_sistema_bol;
               even['ruta_sonido'] = alert_data.ruta_sonido;
@@ -124,9 +133,8 @@ export class EventSocketService extends Socket {
               even['ruta_sonido'] = 'WhatsappSound9.mp3';
             }
           }
-          
+
           let newEvent = this.setLayer(even);
-          console.log("----newEvent",newEvent);
           this.eventService.addNewEvent(newEvent);
 
           this.eventService.new_notif_stack.push(even.evento_id);
@@ -136,14 +144,13 @@ export class EventSocketService extends Socket {
           console.log("----alert",alert);
 
           if (alert) {
-            console.log("----alert.ventana_emergente",alert.ventana_emergente);
-            if (alert.ventana_emergente) {
+            if (alert.ventana_emergente?.toLowerCase() == 'true') {
               this.eventPopup.emit({event: {...newEvent}, tracker: {...this.vehicleService.getVehicle(even.tracker_imei)}})
               //this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
             }
           }
         } else {
-          //console.log('Evento duplicado ' + new Date() + ': ', even);
+          // console
         }
 
         // this.eventService.checkDuplicates(); // deprecado se controla desde el server

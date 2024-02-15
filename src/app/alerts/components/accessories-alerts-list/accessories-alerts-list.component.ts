@@ -28,8 +28,11 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
     { id:'ALERTS', name:"Alertas"},
     { id:'ALERTS-ACCESSORIES', name:"Alertas 360"},
     { id:'ALERTS-ACCESSORIE-CREATE', name:"Crear Alertas 360"},
+    { id:'ALERTS-SECURITY-CREATE', name:"Crear Alerta Seguridad Vehicular"},
+    { id:'ALERTS-MOBILE-CREATE', name:"Crear Alerta Solución Móvil"},
+    { id:'ALERTS-360-CREATE', name:"Crear Alerta 360"},
   );
-
+  type = ""; //security | mobile | 360
   constructor(
     private AlertService: AlertService,
     public panelService: PanelService,
@@ -44,12 +47,16 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
       "searching": false,
       "info": false
     };
+    this.type = this.panelService.nombreComponente == "ALERTS-SECURITY"? "security" : (this.panelService.nombreComponente == "ALERTS-MOBILE"? "mobile":"360");
+    console.log("TYPE:::: ",this.type);
+    
     this.loadData();
   }
 
   public async loadData(){
     this.spinner.show('loadingAccesoriesAlertsSpinner');
-    this.alerts = await this.AlertService.getAlertsByType('accessories');
+    console.log("TYPE222:::",this.type);
+    this.alerts = await this.AlertService.getAlertsByType(this.type);
     this.isRowDataEmpty = this.alerts.length == 0;
     this.spinner.hide('loadingAccesoriesAlertsSpinner');
     // this.dtTrigger.next();
@@ -78,18 +85,31 @@ export class AccessoriesAlertsListComponent implements OnInit, OnDestroy {
     this.AlertService.alertEdit = alert;
 
     $("#panelMonitoreo").show( "slow" );
-    this.panelService.nombreComponente = "ALERTS-ACCESSORIE-EDIT";
-    this.panelService.nombreCabecera =   "Alerta 360";
+    if(this.type == "security"){
+      this.panelService.nombreComponente = "ALERTS-SECURITY-EDIT";
+      this.panelService.nombreCabecera =   "Alerta Seguridad Vehicular";
+    }else if(this.type == "mobile"){
+      this.panelService.nombreComponente = "ALERTS-MOBILE-EDIT";
+      this.panelService.nombreCabecera =   "Alerta Solución Móvil";
+    }else{
+      this.panelService.nombreComponente = "ALERTS-360-EDIT";
+      this.panelService.nombreCabecera =   "Alerta Fatiga 360";
+    }
   }
 
-  clickShowPanel( nomComponent:string ): void {
-
+  clickShowPanel(): void {
+    console.log("TYPE2:::: ",this.type);
     $("#panelMonitoreo").show( "slow" );
-    this.panelService.nombreComponente = nomComponent;
-
-    const item = this.options.filter((item)=> item.id == nomComponent);
-    this.panelService.nombreCabecera =   item[0].name;
-
+    if(this.type == "security"){;
+      this.panelService.nombreComponente = "ALERTS-SECURITY-CREATE";
+      this.panelService.nombreCabecera =   "Crear Alerta Seguridad Vehicular";
+    }else if(this.type == "mobile"){
+      this.panelService.nombreComponente = "ALERTS-MOBILE-CREATE";
+      this.panelService.nombreCabecera =   "Crear Alerta Solución Móvil";
+    }else{
+      this.panelService.nombreComponente = "ALERTS-360-CREATE";
+      this.panelService.nombreCabecera =   "Crear Alerta Fatiga 360";
+    }
   }
 
   public onSearch(){

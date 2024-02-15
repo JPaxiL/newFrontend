@@ -9,6 +9,8 @@ import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { FollowService } from 'src/app/vehicles/services/follow.service';
 import { IMapMinimap, UserTracker } from '../models/interfaces';
 import { EventService } from 'src/app/events/services/event.service';
+import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { DriversService } from 'src/app/drivers/services/drivers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +39,10 @@ export class MinimapService {
   direction_X = '';
   direction_Y = '';
   vehicleServiceIsReady = false;
+
+  timeNow:any = []; // Array para almacenar los tiempos
+  timeWait:number = 7200000; // 7200 segundos en milisegundos
+
   @Output() sendData = new EventEmitter<any>();
   @Output() vehicleServiceReady = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
@@ -44,8 +50,16 @@ export class MinimapService {
   constructor(
     private vehicleService:VehicleService,
     private socketWebService: SocketWebService,
+    private userDataService: UserDataService,
     public eventService: EventService,
+    public driversService: DriversService,
   ) {
+    // this.driversService.initialize();
+    this.userDataService.getUserData();
+    this.userDataService.userDataCompleted.subscribe(res=>{
+      this.driversService.initialize(); //NECESITA INFO DE USER DATA
+    })
+    this.vehicleService.setDefaultStatusDataVehicle();
     this.vehicleService.initialize();
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("user data completadoooo",vehicles);
@@ -129,13 +143,16 @@ export class MinimapService {
             name: data.name,
             dt_tracker: data.dt_tracker,
             nameconvoy: data.nameconvoy,
+            namegrupo: data.namegrupo,
+            nameoperation: data.nameoperation,
+            namedriver: data.namedriver,
             longitud: data.longitud,
             latitud: data.latitud,
             speed:data.speed,
             ref:data.direction,
             tiempoParada: tiempoParada,
           };
-          console.log("auxxxx",aux);
+          // console.log("auxxxx",aux);
           
           //Una vez llegado el evento con la data de tiempo de parada de un vehiculo,
           //Buscamos a que mapas pertenece el vehiculo y actualizamos el valor de imeiPopu y time_stop
@@ -178,6 +195,23 @@ export class MinimapService {
   }
   getVehicles(){
     return this.vehicleService.vehicles;
+  }
+
+  setNameGroup(nameOpe:string,nameGru:string,nameCon:string): string{
+    if (nameCon != 'Unidades Sin Convoy'){
+      if (nameGru != 'Unidades Sin Grupo'){
+        if (nameOpe != 'Unidades Sin Operacion'){
+          return nameOpe+' / '+nameGru+' / '+nameCon;
+        }else{
+          return nameCon+' / '+nameGru;
+        }
+      }else{
+        return nameCon;
+      }
+    }else{
+      return '';
+      // return 'Vehículo Sin Agrupación';
+    }
   }
   onDrawIcon(mapItem: IMapMinimap): void{
     console.log("onDrawIcon");
@@ -241,7 +275,7 @@ export class MinimapService {
       });
   }
   private async drawIcon(data:any, mapItem: IMapMinimap): Promise<void>{
-    console.log("dataaaaa---",data);
+    // console.log("dataaaaa---",data);
     
     //let iconUrl = './assets/images/objects/nuevo/'+data.icon;
     let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+data.icon);
@@ -255,14 +289,32 @@ export class MinimapService {
       popupAnchor:  [-3, -40],
     });
     //console.log('data.name',data.name);
-    const popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+    let nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+    const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
+    if (nameGroup){
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
-        '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-        '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small>'+nameGroup+'</small><br>'+
+        // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+        // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         '<small>REFERENCIA: '+'NN'+'</small><br>'+
         '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
         '<small>TIEMPO DE PARADA: '+mapItem.time_stop+'</small>'+
       '</aside>';
+    }else{
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      '<aside #popupText class="">'+
+        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+        '<small>REFERENCIA: '+'NN'+'</small><br>'+
+        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+        '<small>TIEMPO DE PARADA: '+mapItem.time_stop+'</small>'+
+      '</aside>';
+    }
+    
 
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
@@ -276,6 +328,9 @@ export class MinimapService {
       imei: data.IMEI,
       name: data.name,
       nameconvoy: data.nameconvoy,
+      namegrupo: data.namegrupo,
+      nameoperation: data.nameoperation,
+      namedriver: data.namedriver,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,
@@ -284,7 +339,7 @@ export class MinimapService {
       vehicleService : this.vehicleService
     };
     // console.log('envia cero data',data.speed);
-    console.log('envia cero XD',options);
+    // console.log('envia cero XD',options);
     tempMarker.on('click',this.timeStop,options);
     // tempMarker.on('click',this.timeStop,options);
     // // this
@@ -307,7 +362,6 @@ export class MinimapService {
     //let layers = mapItem.markerClusterGroup.getLayers();
   }
   public timeStop(this: any): void{
-    console.log("this",this);
     // consultar data actual
     let vehicle = this.vehicleService.getVehicle(this.imei);
 
@@ -335,6 +389,9 @@ export class MinimapService {
       imei: this.imei,
       name: this.name,
       nameconvoy: this.nameconvoy,
+      namegrupo: this.namegrupo,
+      nameoperation: this.nameoperation,
+      namedriver: this.namedriver,
       longitud: this.longitud,
       latitud: this.latitud,
       speed: this.speed,
@@ -356,15 +413,32 @@ export class MinimapService {
 
       if(layers[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
         // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
-
-        mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+        const nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
+        const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
+          if (nameGroup){
+            mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
           '<aside class="">'+
-          '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-          '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+          '<small>'+nameGroup+'</small><br>'+
+          '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+          '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
           '<small>REFERENCIA: '+data.ref+'</small><br>'+
           '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
           '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
           '</aside>');
+          }else{
+            mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+          '<aside class="">'+
+          // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+          '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+          '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small>REFERENCIA: '+data.ref+'</small><br>'+
+          '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
+          '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
+          '</aside>');
+          }
       }
     }
   }
@@ -385,10 +459,21 @@ export class MinimapService {
     }
     return g
   }
-
+  diffSecondsNow(fecha:string):boolean {
+    // Obtener la fecha y hora actual
+    const fechaActual = moment();
+    // Parsear la fecha proporcionada
+    const fechaComparar = moment(fecha);
+    // Calcular la diferencia en segundos
+    const diferenciaEnSegundos = fechaActual.diff(fechaComparar, 'seconds');
+    // Comprobar si la diferencia es mayor a 15 segundos
+    // console.log('Diff ',diferenciaEnSegundos);
+    // console.log('Resulta ',diferenciaEnSegundos>15);
+    return diferenciaEnSegundos > 15;
+  }
   private async monitor(data: any): Promise<void>{
     
-    
+    // console.log('DATA INGRESADA ->',data);
     this.maps.forEach(async (item) => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
       const resultado = item.minimapConf?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
@@ -398,18 +483,47 @@ export class MinimapService {
       if(resultado){
         const index = item.minimapConf!.vehicles!.indexOf(resultado);
         console.log("resultado e indice: ", resultado, index);
+        
+        // const fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // if(this.diffSecondsNow(fecha_tracker)){
+        //   console.log('DATA NO ENTRA POR SER DE VOLCADO');
+        //   return;
+        // }
+        data.fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // if(data.IMEI =='860640057372346'){
+        //   data.driver_id=489;
+        //   console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker,data.fecha_tracker); 
+        //   console.log('TRAMA',data);
+        //   console.log('VEHICLE OLD',item.minimapConf!.vehicles![index]);
+        //   console.log(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker));
+        //   console.log(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker);
+        //   console.log(item.minimapConf!.vehicles![index].driver_id != data.driver_id);
+        //   console.log(!this.diffSecondsNow(data.fecha_tracker));
+        // }
+        if(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker)){
+          item.minimapConf!.vehicles![index].driver_id = data.driver_id;
+          // console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker); 
+          // data.fecha_tracker = fecha_tracker;
+          // console.log('TRAMA',data);
+          // OBTENER EL NOMBRE EN BASE AL ID DRIVER
+          item.minimapConf!.vehicles![index].namedriver = this.driversService.getDriverById(data.driver_id);
+          item.minimapConf!.vehicles![index].id_conductor = data.driver_id;
+          console.log('DRIVER MINIMAP->',data.IMEI,' - ',data.driver_id,':',item.minimapConf!.vehicles![index].namedriver);
 
+        }
         item.minimapConf!.vehicles![index].latitud = data.Latitud.toString();
         item.minimapConf!.vehicles![index].longitud = data.Longitud.toString();
         item.minimapConf!.vehicles![index].speed = data.Velocidad;
         item.minimapConf!.vehicles![index].dt_server = data.fecha_server;
-        item.minimapConf!.vehicles![index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        // item.minimapConf!.vehicles![index].dt_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
+        item.minimapConf!.vehicles![index].dt_tracker = data.fecha_tracker;
         item.minimapConf!.vehicles![index].altitud = data.Altitud;
         item.minimapConf!.vehicles![index].señal_gps = data.señal_gps;
         item.minimapConf!.vehicles![index].señal_gsm = data.señal_gsm;
         item.minimapConf!.vehicles![index].parametros = data.Parametros;
         item.minimapConf!.vehicles![index] = this.vehicleService.formatVehicle(item.minimapConf!.vehicles![index]);
 
+        // console.log('Info Driver',tempInfoDriver);
         console.log("["+resultado.numero_placa+"] item.imeiPopup==data.IMEI.toString()", item.imeiPopup==data.IMEI.toString());
         if(item.imeiPopup==data.IMEI.toString()){
           
@@ -417,6 +531,9 @@ export class MinimapService {
             imei: data.IMEI,
             name: item.minimapConf!.vehicles![index].name,
             nameconvoy: item.minimapConf!.vehicles![index].nameconvoy,
+            namegrupo: item.minimapConf!.vehicles![index].namegrupo,
+            nameoperation: item.minimapConf!.vehicles![index].nameoperation,
+            namedriver: item.minimapConf!.vehicles![index].namedriver,
             longitud: data.Longitud,
             latitud: data.Latitud,
             speed: data.Velocidad,
@@ -444,132 +561,211 @@ export class MinimapService {
                 lng : parseFloat(item.minimapConf!.vehicles![index].longitud!)
               };
 
-              let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.minimapConf!.vehicles![index].icon);
-              item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
-                '<aside class="">'+
-                  '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
-                  '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
-                  '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                  '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
-                  '<small>TIEMPO DE PARADA: Calculando ...</small>'+
-                '</aside>';
-              // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
-              item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
-              
-              item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
-              
-              
-
-              if(item.minimapConf!.vehicles![index].speed != 0){
-
-                this.dif_mayor = 0.00;
-                this.dif_divide = 0.00;
-                this.dif_X = 0.00;
-                this.dif_Y = 0.00;
-                this.direction = '';
-                this.final_direction = '';
-                this.direction_X = '';
-                this.direction_Y = '';
-
-                if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
-                {
-                  if(coord.lat > oldCoords.lat){
-                    //arriba
-                    this.direction_Y = 'up';
-                    this.dif_Y = coord.lat-oldCoords.lat;  
-                    if(this.dif_Y >= this.dif_mayor){
-                      this.dif_mayor = this.dif_Y; 
-                      this.direction = 'up';
-                      this.dif_divide = this.dif_Y/2; 
-                    }
+              // console.log('INFO DEL VEHICLE--->',item.minimapConf!.vehicles![index]);
+              if (item.minimapConf!.vehicles![index].parametros!.includes('di4=') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=')){
+                let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.minimapConf!.vehicles![index].icon);
+                if (this.userDataService.changeItemIcon == 'vehicles' && (item.minimapConf!.vehicles![index].parametros!.includes('|di4=1|') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=1'))){
+                  //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  // console.log('ENTRO A MODIFICAR COLOR VEHICLE...');
+                  if(item.minimapConf!.vehicles![index].speed != 0 && item.minimapConf!.vehicles![index].speed! < item.minimapConf!.vehicles![index].limit_speed! ){
+                    iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/state_moved/'+item.minimapConf!.vehicles![index].icon_def);
+                  }else if(item.minimapConf!.vehicles![index].speed != 0 && item.minimapConf!.vehicles![index].speed! > item.minimapConf!.vehicles![index].limit_speed!){
+                    iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/state_excess/'+item.minimapConf!.vehicles![index].icon_def);
                   }else{
-                    //abajo
-                    this.direction_Y = 'down';
-                    this.dif_Y = oldCoords.lat-coord.lat;
-                    if(this.dif_Y >= this.dif_mayor){
-                      this.dif_mayor = this.dif_Y;
-                      this.direction = 'down';
-                      this.dif_divide = this.dif_Y/2;
-                      
-                    }
+                    iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/state_relenti/'+item.minimapConf!.vehicles![index].icon_def);
                   }
-  
-                  if(coord.lng > oldCoords.lng){
-                    //derecha
-                    this.direction_X = 'right';
-                    this.dif_X = coord.lng-oldCoords.lng; 
-                    if(this.dif_X >= this.dif_mayor){
-                      this.dif_mayor = this.dif_X;
-                      this.direction = 'right';
-                      this.dif_divide = this.dif_X/2;
-                    }
+                  //FALTA AGREGAR LAS DIRECCIONES AQUI UNA FUNCION
+                }else if (this.userDataService.changeItemIcon == 'ondas' && (item.minimapConf!.vehicles![index].parametros!.includes('|di4=1|') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=1'))){
+                  //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
+                  // Si la cadena contiene |di4=1| o custom_ign=1
+                  //ONDAS
+                  if(item.minimapConf!.vehicles![index].speed != 0 && item.minimapConf!.vehicles![index].speed! < item.minimapConf!.vehicles![index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_moved/'+item.minimapConf!.vehicles![index].icon_color+'/'+item.minimapConf!.vehicles![index].icon_name+'.webp';
+                  }else if(item.minimapConf!.vehicles![index].speed != 0 && item.minimapConf!.vehicles![index].speed! > item.minimapConf!.vehicles![index].limit_speed! ){
+                    iconUrl = './assets/images/objects/nuevo/state_excess/'+item.minimapConf!.vehicles![index].icon_color+'/'+item.minimapConf!.vehicles![index].icon_name+'.webp';
                   }else{
-                    //izquierda
-                    this.direction_X = 'left';
-                    this.dif_X = oldCoords.lng-coord.lng;
-                    if(this.dif_X >= this.dif_mayor){
-                      this.dif_mayor = this.dif_X;
-                      this.direction = 'left';
-                      this.dif_divide = this.dif_X/2;
-                    }
-                  }
-                  
-                  if(this.direction == 'up' || this.direction == 'down'){
-  
-                    if(this.dif_X >= this.dif_divide){ 
-  
-                      this.final_direction = `${this.direction}-${this.direction_X}`;
-  
-                    }else{
-  
-                      this.final_direction = `${this.direction}`;
-                      
-                    }
-  
-                  }else{
-  
-                    if(this.dif_Y >= this.dif_divide){
-  
-                      this.final_direction = `${this.direction_Y}-${this.direction}`;
-                    }else{
-  
-                      this.final_direction = `${this.direction}`;
-                      
-                    }
+                    iconUrl = './assets/images/objects/nuevo/state_relenti/'+item.minimapConf!.vehicles![index].icon_color+'/'+item.minimapConf!.vehicles![index].icon_name+'.webp';
                   }
 
-                  //this.changePositionArrow(this.final_direction,key);
-
-                  item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
-                  item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
                 }
-                else{
-                  if(item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
+                this.timeChangeIconUrl(item.minimapConf!.vehicles![index].IMEI!,item.minimapConf!.vehicles![index].icon!,item.markerClusterGroup.getLayers()[key]);
+                const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
+                const nameGroup = this.setNameGroup(item.minimapConf!.vehicles![index].nameoperation!,item.minimapConf!.vehicles![index].namegrupo!,item.minimapConf!.vehicles![index].nameconvoy!);
+                if (nameGroup){
+                  item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
+                  '<aside class="">'+
+                    // '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
+                    '<small>'+nameGroup+'</small><br>'+
+                    '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
+                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
+                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                    '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
+                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                  '</aside>';
+                }else{
+                  item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
+                  '<aside class="">'+
+                    '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
+                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
+                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                    '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
+                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                  '</aside>';
+                }
+                // EN DUDA SI COMENTARLO
+                // item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
+                //   '<aside class="">'+
+                //     '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
+                //     '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                //     // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
+                //     '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
+                //     '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
+                //     '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                //   '</aside>';
+                // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
+                item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
+                item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowSize']=[30,30];
+                if((item.minimapConf!.vehicles![index].parametros!.includes('|di4=1|') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=1')) && item.minimapConf!.vehicles![index].speed != 0){
 
-                    let old_direction = item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-                    //this.changePositionArrow(old_direction[1],key);
+                  this.dif_mayor = 0.00;
+                  this.dif_divide = 0.00;
+                  this.dif_X = 0.00;
+                  this.dif_Y = 0.00;
+                  this.direction = '';
+                  this.final_direction = '';
+                  this.direction_X = '';
+                  this.direction_Y = '';
 
-                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
-                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+                  if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
+                  {
+                    if(coord.lat > oldCoords.lat){
+                      //arriba
+                      this.direction_Y = 'up';
+                      this.dif_Y = coord.lat-oldCoords.lat;  
+                      if(this.dif_Y >= this.dif_mayor){
+                        this.dif_mayor = this.dif_Y; 
+                        this.direction = 'up';
+                        this.dif_divide = this.dif_Y/2; 
+                      }
+                    }else{
+                      //abajo
+                      this.direction_Y = 'down';
+                      this.dif_Y = oldCoords.lat-coord.lat;
+                      if(this.dif_Y >= this.dif_mayor){
+                        this.dif_mayor = this.dif_Y;
+                        this.direction = 'down';
+                        this.dif_divide = this.dif_Y/2;
+                        
+                      }
+                    }
+    
+                    if(coord.lng > oldCoords.lng){
+                      //derecha
+                      this.direction_X = 'right';
+                      this.dif_X = coord.lng-oldCoords.lng; 
+                      if(this.dif_X >= this.dif_mayor){
+                        this.dif_mayor = this.dif_X;
+                        this.direction = 'right';
+                        this.dif_divide = this.dif_X/2;
+                      }
+                    }else{
+                      //izquierda
+                      this.direction_X = 'left';
+                      this.dif_X = oldCoords.lng-coord.lng;
+                      if(this.dif_X >= this.dif_mayor){
+                        this.dif_mayor = this.dif_X;
+                        this.direction = 'left';
+                        this.dif_divide = this.dif_X/2;
+                      }
+                    }
+                    
+                    if(this.direction == 'up' || this.direction == 'down'){
+    
+                      if(this.dif_X >= this.dif_divide){ 
+    
+                        this.final_direction = `${this.direction}-${this.direction_X}`;
+    
+                      }else{
+    
+                        this.final_direction = `${this.direction}`;
+                        
+                      }
+    
+                    }else{
+    
+                      if(this.dif_Y >= this.dif_divide){
+    
+                        this.final_direction = `${this.direction_Y}-${this.direction}`;
+                      }else{
+    
+                        this.final_direction = `${this.direction}`;
+                        
+                      }
+                    }
+
+                    //this.changePositionArrow(this.final_direction,key);
+
+                    // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
+                    // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+                    if(this.userDataService.changeItemIcon == 'cursor' && item.minimapConf!.vehicles![index].speed! > item.minimapConf!.vehicles![index].limit_speed!){
+                      item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
+                      item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/excessCursor/arrow_${this.final_direction}.svg`);
+                      item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                    }else{
+                      item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/arrow_${this.final_direction}.svg`;
+                      item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
+                      item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                    }
                   }
                   else{
+                    if(item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']){
 
-                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                    console.log('se borra la flecha', item.minimapConf!.vehicles![index].name);
+                      let old_direction = item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection'].split('_');
+                      //this.changePositionArrow(old_direction[1],key);
+                      // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
+                      // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                      if(this.userDataService.changeItemIcon == 'cursor' && item.minimapConf!.vehicles![index].speed! > item.minimapConf!.vehicles![index].limit_speed!){
+                        item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/excessCursor/arrow_${old_direction[1]}.svg`;
+                        item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/excessCursor/arrow_${old_direction[1]}`);
+                        item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                        
+                      }else{
+                        item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/arrow_${old_direction[1]}.svg`;
+                        item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
+                        item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                      } 
+                    }
+                    else{
+                      item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                      console.log('se borra la flecha', item.minimapConf!.vehicles![index].name);
+                    }
                   }
+                }else if (this.userDataService.changeItemIcon == 'cursor' && item.minimapConf!.vehicles![index].speed == 0 && (item.minimapConf!.vehicles![index].parametros!.includes('|di4=1|') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=1'))){
+                  if(item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']){
+                    let old_direction = item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection'].split('_');
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/relentiCursor/arrow_${old_direction[1]}.svg`;
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/relentiCursor/arrow_${old_direction[1]}`);
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                    
+                  }else{
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/relentiCursor/arrow_down-left.svg`;
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/relentiCursor/arrow_down-left.svg`);
+                    item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
+                  }
+                }else{
+                  item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
+                  
                 }
-              }else{
-                item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                
-              }
-              
-              item.markerClusterGroup.getLayers()[key].setLatLng(coord);
-              let aux = item.markerClusterGroup.getLayers()[key];
-
-              const auxdataFitBounds = item.getDataFitBounds(item.minimapConf.vehicles!);
-              item.setViewMap(auxdataFitBounds);
-              if(auxdataFitBounds.length>0){
-                item.setFitBounds(auxdataFitBounds);
+                item.markerClusterGroup.getLayers()[key].setLatLng(coord);
+                let aux = item.markerClusterGroup.getLayers()[key];
+                const auxdataFitBounds = item.getDataFitBounds(item.minimapConf.vehicles!);
+                item.setViewMap(auxdataFitBounds);
+                if(auxdataFitBounds.length>0){
+                  item.setFitBounds(auxdataFitBounds);
+                }
               }
             }
           }
@@ -607,6 +803,9 @@ export class MinimapService {
       imei: data.imei,
       name: data.name,
       nameconvoy: data.nameconvoy,
+      namegrupo: data.namegrupo,
+      nameoperation: data.nameoperation,
+      namedriver: data.namedriver,
       longitud: data.longitud,
       latitud: data.latitud,
       speed: data.speed,
@@ -661,5 +860,27 @@ export class MinimapService {
     
       img.src = svgURL;
     });
+  }
+  public timeChangeIconUrl(imei:string,icon:string,MarkerClusterGroup:any){
+    // this.timeWait = 5000; // 150 segundos en milisegundos
+
+    if (this.timeNow[imei]) {
+      clearTimeout(this.timeNow[imei]); // Limpia el temporizador existente si hay uno para este índice
+      // console.log('SE LIMPIO EL TEMPORIZADOR del -->',imei);
+    }
+    const tiempoUltimaActualizacion = Date.now(); // Actualiza el tiempo de la última actualización para este índice
+    // console.log('CREANDO TEMPORIZADOR NUEVO -->',imei);
+    this.timeNow[imei] = setTimeout(async () => {
+      // Verifica si ha pasado el tiempo especificado desde la última actualización
+      const tiempoActual = Date.now();
+      const tiempoTranscurrido = tiempoActual - tiempoUltimaActualizacion;
+      if (tiempoTranscurrido >= this.timeWait) {
+        // Realiza la acción si ha pasado el tiempo especificado sin actualización
+        const iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/state_moved/'+icon);
+        console.log('*************** PASO 2 Horas Cambiando color a default ---->', imei);
+        // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']=iconUrl;
+        MarkerClusterGroup['options']['icon']['options']['iconUrl']=iconUrl;
+      }
+    }, this.timeWait);
   }
 }

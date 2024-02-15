@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../models/vehicle';
 import {TreeNode} from 'primeng-lts/api';
+import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 
 import { environment } from 'src/environments/environment';
 // import { SocketWebService } from '../services/socket-web.service';
@@ -41,7 +42,20 @@ export class VehicleService {
   public listTable = -1; // 0 general, 1 = group
 
   public vehicleLoadingError: boolean = false;
+  public selectedFilterNameVehicle: string='name';
+  public optionsFilterNameVehicle: any[] = [
+    { label: 'Número placa', value: 'num_plate' },
+    { label: 'Código interno', value: 'cod_interno' },
+    { label: 'Nombre', value: 'name' }
+  ];
+  public vehiclesFixes: any=[];
+  public initializingVehiclesFixes:boolean = false;
+  public unitsFixesStatus: boolean = false;
+  public fixes: any = [];
 
+
+
+  @Output() vehicleCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() dataTreeCompleted = new EventEmitter<any>();
 
@@ -53,9 +67,13 @@ export class VehicleService {
   @Output() clickEye = new EventEmitter<any>();
   @Output() clickEyeAll = new EventEmitter<any>();
   @Output() clickTag = new EventEmitter<any>();
+  @Output() clickDriver = new EventEmitter<any>();
   @Output() clickListTable = new EventEmitter<any>();
   @Output() calcTimeStop = new EventEmitter<any>();
+  @Output() clickSelection = new EventEmitter<any>();
+  @Output() reloadNameDriver = new EventEmitter<any>();
 
+  
   constructor(
     private http: HttpClient,
     ) {
@@ -67,7 +85,7 @@ export class VehicleService {
         cargar data,
         emitir evento de carga a demas componentes
     */
-   console.log('Iniciando vehicleService');
+   console.log('VEHICLE SERVICE LOADING');
     if(this.demo){
       setTimeout(()=>{
         // //console.log("carga de data");
@@ -89,16 +107,17 @@ export class VehicleService {
         // this.dataCompleted.emit(this.vehicles);
       },this.timeDemo);
     }else{
-      this.getVehicles().subscribe(vehicles=>{
+      this.getVehicles().subscribe(async vehicles=>{
         // console.log("get vehicles",vehicles);
         this.vehicles = this.dataFormatVehicle(vehicles);
+        await this.getVehiclesFixes();
         this.vehiclesTree = this.createNode(this.vehicles);
         this.statusDataVehicle = true;
         this.statusDataVehicleTree = true;
         this.listOperations = this.generatedListOperations();
         this.dataCompleted.emit(this.vehicles);
         this.dataTreeCompleted.emit(this.vehiclesTree);
-
+        this.vehicleCompleted.emit(true);
         //InputSwitch EyeHeader behavior
         for(let i = 0; i < this.vehicles.length; i++){
           if(this.vehicles[i].eye){
@@ -106,6 +125,7 @@ export class VehicleService {
           }
         }
         this.allEyes.state = this.countOpenEyes > 0;
+        console.log('VEHICLE SERVICE LOADED');
       },
       () => {
         console.log('Error al obtener los vehículos')
@@ -144,6 +164,9 @@ export class VehicleService {
   public onClickIcon(IMEI: string):void{
     this.clickIcon.emit(IMEI);
   }
+  public onClickDriver(IMEI: string): void{
+    this.clickDriver.emit(IMEI);
+  }
   public onClickTag(IMEI: string): void{
     this.clickTag.emit(IMEI);
   }
@@ -154,8 +177,26 @@ export class VehicleService {
     this.sortLimit.emit();
   }
 
+  public onClickSelection(show_name:string):void{
+    // console.log('Llego ShowName al servicio:',show_name);
+    this.clickSelection.emit(show_name);
+  }
+
   public getVehicles(): Observable<any>{
     return this.http.get(this.URL_LIST);
+  }
+  public async getVehiclesFixes() {
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/getVehiclesFixes`).toPromise()
+    .then(response => {
+      console.log("------------Vehicles Fijados");
+      console.log(response);
+      this.vehiclesFixes = response.data;
+      this.initializingVehiclesFixes = true;
+
+    });
+  }
+  public async updateUnitFixes(vehicles:UserTracker){
+    this.vehiclesFixes = vehicles;
   }
   public queryTimeStop(params: any): Observable<any>{
     return this.http.get(this.URL_TIME_STOP+'?fecha_i='+params.fecha_i+'&vel='+params.speed+'&fecha_f='+params.fecha_f+'&imei='+params.imei+'&lat='+params.latitud+'&lng='+params.longitud);
@@ -169,6 +210,9 @@ export class VehicleService {
           imei: data.imei,
           name: data.name,
           nameconvoy: data.nameconvoy,
+          namegrupo: data.namegrupo,
+          nameoperation: data.nameoperation,
+          namedriver: data.namedriver,
           longitud: data.longitud,
           latitud: data.latitud,
           speed: data.speed,
@@ -214,21 +258,27 @@ export class VehicleService {
   public getIndexToIMEI(IMEI: string):any{
     ///implements
   }
-  public updateDriverAndId(data : any){
+  public updateDriverAndId(data : any,add:boolean){
+    if(!add){
+      data.id = null;
+      data.nombre_conductor = 'No Especificado';
+    }
     const vehicles = this.vehicles;
     const resultado = this.vehicles.find( (vehi: any) => vehi.IMEI == data.tracker_imei.toString() );
     if(resultado){
-      const index = this.vehicles.indexOf( resultado);
-      console.log('Encontratdo vehicle ....',vehicles[index]);
+      const index = this.vehicles.indexOf(resultado);
+      // console.log('Encontratdo vehicle ....',vehicles[index]);
 
       vehicles[index].id_conductor  = data.id;
-      vehicles[index].nombre_conductor  = data.nombre_conductor;
+      vehicles[index].namedriver  = data.nombre_conductor;
 
       this.vehicles = vehicles;
-      console.log('actualizando el anterior....',vehicles[index]);
+      // console.log('actualizando el anterior....',vehicles[index]);
       //reload talbe
       this.reloadTable.emit(vehicles);
       this.reloadTableTree.emit(vehicles);
+      console.log('VEHICLE UPDATED EMIT',this.vehicles[index],data);
+      this.reloadNameDriver.emit(this.vehicles[index]);
 
     }
   }
@@ -282,20 +332,14 @@ export class VehicleService {
 
   private addPointColor(vehicle : any){
     // console.log(vehicle.IMEI+" vehicle.point_color antes = ",vehicle.point_color);
-    if(vehicle.point_color==undefined)
-    {
-    vehicle.point_color = 100; //grey
-
+    if(vehicle.point_color==undefined){
+      vehicle.point_color = 100; //grey
     }
-
     if (vehicle.user_id != 445) {
       vehicle = this.addPointColorUser(vehicle);
     }else{
       vehicle = this.addPointColorUser445(vehicle);
     }
-
-
-
     // console.log("vehicle.point_color des = ",vehicle.point_color);
     return vehicle;
   }
@@ -314,29 +358,28 @@ export class VehicleService {
             // img_url = "/images/objects/arrow-1-green.svg"; //==>1 Movimiento
             vehicle.point_color = 10; //grey
         }
-
         if (vehicle.m2h > 0) {
             clearTimeout(vehicle.m2h);
             vehicle.m2h = 0;
         }
         vehicle.m2h = setTimeout(() => {
-            // //console.log("MAS DE 2 HORAS SIN TRANSMISION : " + vehicle.name);
-            vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
-            if( vehicle.c_02 >= 7200 ) {
-                // if (userConfig.icono == "arrow2") {
-                //     var img_url_02 = "/images/objects/arrow-4-black.svg"; //==>4 Sin transmisión
-                //     var icon = new L.Icon({
-                //                 iconUrl: img_url_02,
-                //                 iconSize: [20, 32],
-                //                 iconAnchor: [7, 13]
-                //     });
-                //     vehicle.layer.setIcon(icon);
-                //     vehicle.layer.options.rotationAngle = vehicle.angulo;
-                // }
-                vehicle.point_color = 40; //grey
-                // vehicle.layer.label.setContent(vehiclesHelper.getContentLabel(vehicle));
-            }
-            vehicle.m2h = 0;
+          // //console.log("MAS DE 2 HORAS SIN TRANSMISION : " + vehicle.name);
+          vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
+          if( vehicle.c_02 >= 7200 ) {
+              // if (userConfig.icono == "arrow2") {
+              //     var img_url_02 = "/images/objects/arrow-4-black.svg"; //==>4 Sin transmisión
+              //     var icon = new L.Icon({
+              //                 iconUrl: img_url_02,
+              //                 iconSize: [20, 32],
+              //                 iconAnchor: [7, 13]
+              //     });
+              //     vehicle.layer.setIcon(icon);
+              //     vehicle.layer.options.rotationAngle = vehicle.angulo;
+              // }
+              vehicle.point_color = 40; //grey
+              // vehicle.layer.label.setContent(vehiclesHelper.getContentLabel(vehicle));
+          }
+          vehicle.m2h = 0;
         }, (7200 - vehicle.c_01)*1000 );
 
     }
@@ -353,91 +396,56 @@ export class VehicleService {
     //   console.log('vehicle color init = ',vehicle);
     //   console.log("point_color ",vehicle.point_color);
     // }
-
-    if ( vehicle.parametrosGet["sat"] == 0 || ( vehicle.v_vel > 3 && (vehicle.v_on == 0 || vehicle.v_ac < 5) ) )
-    {
-        vehicle.point_color = 60; //grey GPS sin señal
-    }
-    else if ( vehicle.v_on == 0 )
-    {
-        if( vehicle.c_01 >= 7200 ) {
-            //mayor a 2 horas //==>4
-            // img_url = "/images/objects/arrow-4-black.svg"; //==>4 Sin transmisión
-            vehicle.point_color = 40; //grey Sin transmisión
-        } else if (vehicle.v_vel <= 3) {
-            //menor a 2 horas //==>3
-            // img_url = "/images/objects/arrow-3-purple.svg"; //==>3 Parada (Apagado)
-            vehicle.point_color = 30; //grey Detenido apagado
-
-        }
-    }
-    else {
-      //console.log("cipia entró else") ;
+    // console.log('INFO VEHICLE->',vehicle);
+    if(vehicle.parametrosGet["sat"] == 0 || ( vehicle.v_vel > 3 && vehicle.v_on == 0 ) || (vehicle.v_ac < 5)){
+      vehicle.point_color = 60; //ROJO - UNaIDAD CON ERROR DE GPS
+    }else if ( vehicle.v_on == 0 ){// DI4 o CUSTOM IGN = 0
+      if( vehicle.c_01 >= 7200 ) {
+        //mayor a 2 horas //==>4
+        vehicle.point_color = 40; //NEGRO - UNIDAD SIN TRANSMISION
+      } else if (vehicle.v_vel <= 3) {
+        //menor a 2 horas //==>3
+        vehicle.point_color = 30; //MORADO - UNIDAD DETENIDA SIN IGNICION
+      }
+    }else {
       if ((vehicle.v_vel > 3) && (vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1))) {
-                if( vehicle.c_01 > 300 ) {
-                    //mayor a 5 minutos //==>5
-                    // img_url = "/images/objects/arrow-5-orange.svg"; //==>5 Zona de no cobertura
-                    vehicle.point_color = 50; //grey
-                } else {
-                    //menor a 5 minutos //==>1
-                    // img_url = "/images/objects/arrow-1-green.svg"; //==>1 Movimiento
-                    vehicle.point_color = 10; //grey
-                    if (vehicle.m5 > 0) {
-                        clearTimeout(vehicle.m5);
-                        vehicle.m5 = 0;
-                    }
-                    vehicle.m5 = setTimeout(() => {
-                        // //console.log("MAS DE 5 MINUTOS SIN TRANSMISION, EN MOVIMIENTO , ZONA DE NO COBERTURA: " + item.name);
-                        vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
-                        if ((vehicle.v_vel > 3) && (vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1)) && (vehicle.c_02 >= 300) ) {
-                                //mayor a 5 minutos //==>5
-                                // if (userConfig.icono == "arrow2") {
-                                //     var img_url_02 = "/images/objects/arrow-5-orange.svg"; //==>5 Zona de no cobertura
-                                //     var icon = new L.Icon({
-                                //                 iconUrl: img_url_02,
-                                //                 iconSize: [20, 32],
-                                //                 iconAnchor: [7, 13]
-                                //     });
-                                //     item.layer.setIcon(icon);
-                                // }
-                                vehicle.point_color = 50; //grey
-                                // item.layer.label.setContent(vehiclesHelper.getContentLabel(item));
-                        }
-
-                        vehicle.m5 = 0;
-                    }, (300 - vehicle.c_01)*1000 );
-                }
-        } else if ( (vehicle.v_vel <= 3) && ( vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1) ) ) {
-                // img_url = "/images/objects/arrow-2-blue.svg"; //==>2 Parada (Prendida)
-                vehicle.point_color = 20; //grey
+        if( vehicle.c_01 > 300 ) {
+          //mayor a 5 minutos //==>5
+          vehicle.point_color = 50; //NARANJA - UNIDAD SIN COBERTURA
+        } else {
+          //menor a 5 minutos //==>1
+          vehicle.point_color = 10; //VERDE - UNIDAD EN MOVIMIENTO
+          if (vehicle.m5 > 0) {
+            clearTimeout(vehicle.m5);
+            vehicle.m5 = 0;
+          }
+          vehicle.m5 = setTimeout(() => {
+          // //console.log("MAS DE 5 MINUTOS SIN TRANSMISION, EN MOVIMIENTO , ZONA DE NO COBERTURA: " + item.name);
+          vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
+          if ((vehicle.v_vel > 3) && (vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1)) && (vehicle.c_02 >= 300) ) {
+            //mayor a 5 minutos //==>5
+            vehicle.point_color = 50; //NARANJA - UNIDAD SIN COBERTURA
+            vehicle.m5 = 0;
+          }
+          }, (300 - vehicle.c_01)*1000 );
         }
-
-        if (vehicle.m2h > 0) {
-            clearTimeout(vehicle.m2h);
-            vehicle.m2h = 0;
+      } else if ( (vehicle.v_vel <= 3) && ( vehicle.v_on == 1 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1) ) ) {
+        // img_url = "/images/objects/arrow-2-blue.svg"; //==>2 Parada (Prendida)
+        vehicle.point_color = 20; //AZUL - UNIDAD DETENIDA CON IGNICION
+      }
+      if (vehicle.m2h > 0) {
+        clearTimeout(vehicle.m2h);
+        vehicle.m2h = 0;
+      }
+      vehicle.m2h = setTimeout(() => {
+        // //console.log("MAS DE 2 HORAS SIN TRANSMISION : " + item.name);
+        vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
+        if( vehicle.c_02 >= 7200 && (vehicle.v_on == 0 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1)) ) {
+          vehicle.point_color = 40; //NEGRO - UNIDAD SIN TRANSMISION
         }
-        vehicle.m2h = setTimeout(() => {
-            // //console.log("MAS DE 2 HORAS SIN TRANSMISION : " + item.name);
-            vehicle.c_02 = moment(new Date()).diff( moment(new Date( vehicle.dt_tracker.replace(/-/g, "/") )) , 'seconds');
-            if( vehicle.c_02 >= 7200 && (vehicle.v_on == 0 || (vehicle.parametrosGet['gps']=='cipia' && vehicle.parametrosGet['di4']== 1)) ) {
-                // if (userConfig.icono == "arrow2") {
-                //     var img_url_02 = "/images/objects/arrow-4-black.svg"; //==>4 Sin transmisión
-                //     var icon = new L.Icon({
-                //                 iconUrl: img_url_02,
-                //                 iconSize: [20, 32],
-                //                 iconAnchor: [7, 13]
-                //     });
-                //     item.layer.setIcon(icon);
-                //     item.layer.options.rotationAngle = item.angulo;
-                // }
-                vehicle.point_color = 40; //grey
-                // vehicle.layer.label.setContent(vehiclesHelper.getContentLabel(vehicle));
-            }
-            vehicle.m2h = 0;
-        }, (7200 - vehicle.c_01)*1000 );
-
+        vehicle.m2h = 0;
+      }, (7200 - vehicle.c_01)*1000 );
     }
-
     // if(vehicle.IMEI=='860640057372346'){
     //   // console.log('vehicle color = ',vehicle);
     //   // console.log('vehicle color = ',vehicle);
@@ -589,13 +597,19 @@ export class VehicleService {
 
           return paramsObj;
   }
-
+ 
   private addSelect(vehicle: any){
+    // console.log('UPDATE in addSelect vehicle->',vehicle);
+    
     if(this.statusDataVehicle==false){
       vehicle.follow = false;
       vehicle.tag = true;
       vehicle.eye = true;
+      vehicle.tag_driver = false;
     }
+    // else{ //EN DUDA SI VA SEGUIR ESTA COSA
+    //   vehicle.eye = true;
+    // }
     vehicle.arrayPrueba = [];
     vehicle.arrayPruebaParada = [];
     vehicle.paradaDesde = false;
@@ -751,9 +765,8 @@ export class VehicleService {
     status_group=false;
     status_convoy=false;
     status_operation=false;
-  }
-    // ORDENACION DEL MAPEO POR ID (ID = 0 singifica que no tiene Operacion/Grupo/Convoy)
-
+    }
+    // ORDENACION DEL MAPEO POR ID 
     // console.log("operations",this.operations);
     // console.log("groups",this.groups);
     // console.log("convoys",this.convoys);
@@ -764,8 +777,70 @@ export class VehicleService {
     // });
     console.log("mapa:",map);
     // console.log("prueba:",prueba);
-
+    if (this.unitsFixesStatus){
+      map = this.addVehiclesFixes(map);
+    }
     return map;
+  }
+
+  addVehiclesFixes(map:any):any{
+    // PRIMERO SE BUSCA y SE AGREGAR A VEHICLES TREE
+    this.fixes = [];
+    console.log('AGREGANDO VEHICLES FIXES:',this.vehiclesFixes);
+    this.fixes.push(0);
+      map.push(
+        {
+          data:{id:0,name:'Unidades Fijadas', col:3, type:'pinUp' },
+          expanded: true,
+          children:[]
+        }
+      );
+    for (let index of this.vehiclesFixes) {
+      // console.log(index);
+      const aux_vehicle = this.vehicles.find((vehicle: any) => vehicle.id == index);
+      // console.log(aux_vehicle);
+      if(aux_vehicle){
+        if(this.fixes.includes(0)){
+          const existingPinUp = map.find((item: { data: { id: any; type:string}; }) => item.data.id == 0 && item.data.type == 'pinUp');
+          existingPinUp.children.push({
+            data: aux_vehicle
+          });
+        }else{
+          this.fixes.push(0);
+          console.log('ERROR NO DEBERIA INGRESAR AQUI...');
+          map.push(
+            {
+              data:{id:0,name:'Unidades Fijadas', col:3, type:'pinUp' },
+              expanded: true,
+              children:[
+                {
+                  data:aux_vehicle
+                }
+              ]
+            }
+          );
+        }
+      }
+    }
+    map.sort((a: { data: { type: string; }; }, b: { data: { type: string; }; }) => {
+      // Si a es de tipo 'pinUp' y b no lo es, a debería ir antes en la lista
+      if (a.data.type === 'pinUp' && b.data.type !== 'pinUp') {
+          return -1;
+      }
+      // Si b es de tipo 'pinUp' y a no lo es, b debería ir antes en la lista
+      if (b.data.type === 'pinUp' && a.data.type !== 'pinUp') {
+          return 1;
+      }
+      // Si ninguno de los elementos es de tipo 'pinUp' o ambos lo son, no se cambia el orden
+      return 0;
+    });
+    console.log("mapa con Fixes:",map);
+    return map;
+  }
+
+  public setDefaultStatusDataVehicle(){
+    this.statusDataVehicle=false;
+    console.log('ChangesStatus');
   }
 
 }

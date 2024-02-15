@@ -16,11 +16,11 @@ export class GeocercaPolylineMainComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.polylineGeofenceService.nombreComponente =  "LISTAR";
+    this.polylineGeofenceService.nameComponentLin =  "LISTAR";
   }
 
-  get nombreComponente(){
-    return this.polylineGeofenceService.nombreComponente;
+  get nameComponentLin(){
+    return this.polylineGeofenceService.nameComponentLin;
   }
 
 

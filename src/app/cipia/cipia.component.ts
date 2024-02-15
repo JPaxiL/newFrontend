@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { MediaRequest } from '../multiview/models/interfaces';
+import { CipiaMultimediaParam } from '../multiview/models/interfaces';
 import { MultimediaService } from '../multiview/services/multimedia.service';
 
 
@@ -13,14 +13,16 @@ export class CipiaComponent implements OnInit {
 
     //-------- test retrieveVideo------------
   loading = false;
-  mediaRequestRetrieve: MediaRequest = {
-    device_id: "E321361152",
+  mediaRequestRetrieve: CipiaMultimediaParam = {
+    imei: "E321361152",
+    type: "video",
     from: "2023-10-30 18:45:00",
     seconds: 60,
     source: "CABIN"
   };
-  mediaRequestRecord: MediaRequest = {
-    device_id: "E321361152",
+  mediaRequestRecord: CipiaMultimediaParam = {
+    imei: "E321361152",
+    type: "video",
     seconds: 60,
     source: "CABIN"
   };

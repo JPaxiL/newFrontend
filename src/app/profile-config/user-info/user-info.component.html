@@ -1,0 +1,292 @@
+<div class="d-flex" style="height: 100%; overflow:auto;">
+  <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
+      <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingInfoUser" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
+      <form (submit)="confirm()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
+          <div class="panel-izq-container h-100" >
+              <div class="panel-izq-form">
+                  <div class="row my-3">
+                      <div class="col-12 d-flex justify-content-center">
+                          <div class="profile-picture-container">
+                              <span class="one-character-circled profile-picture">{{ userDataService.firstLetter }}</span>
+                              <!-- <img src="assets/images/login/iso.png" class="profile-picture" alt="profile-pic"> -->
+                              <!-- <button class="picture-update btn-dark-hover" type="button" pTooltip="Cambiar Imagen de Perfil" tooltipPosition="right">
+                                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                      viewBox="0 0 13.9 13.9" style="enable-background:new 0 0 13.9 13.9;" xml:space="preserve">
+                                      <path d="M5.6,3.6c0.1,0.4,0.4,0.3,0.7,0.3c0.3,0,0.7,0,1,0C8,3.9,8.2,4,8.2,3.3c0-0.1,0-0.4,0-0.5
+                                          C8.2,2.4,7.8,2.5,7.5,2.5c-0.3,0-0.7,0-1,0c-0.3,0-0.7-0.1-0.8,0.2C5.6,2.8,5.6,2.9,5.6,3.1C5.6,3.2,5.6,3.5,5.6,3.6 M2.9,9.5
+                                          c0.1,0.6,0.2,1,0.5,1.5c0.3,0.5,0.6,0.8,0.9,1.1c0.8,0.7,1.9,1.1,3,1c1.1-0.1,2.1-0.7,2.7-1.4c0.3-0.3,0.2-0.3,0.4-0.6
+                                          c0.1-0.2,0.2-0.4,0.3-0.7c0.1-0.3,0.2-0.5,0.2-0.8c0.1-0.7,0-1.5-0.3-2.2C10.5,7.1,10,6.3,9.6,6C9.5,6,9.4,5.9,9.3,5.8
+                                          c-0.5-0.4-1-0.6-1.6-0.7C6.9,4.9,5.8,5.1,5,5.5C4.6,5.7,4.1,6.1,3.9,6.4C3.8,6.5,3.8,6.5,3.8,6.6L3.5,7C3.4,7.2,3.2,7.5,3.1,7.7
+                                          c0,0.1-0.1,0.2-0.1,0.4C2.9,8.4,2.9,9.1,2.9,9.5z M6.8,12.4c-0.2,0-0.5-0.1-0.7-0.1c-0.6-0.1-1.1-0.5-1.5-0.9
+                                          C3.7,10.5,3.4,9,3.9,7.8C4,7.5,4.3,7,4.5,6.8c0.1-0.1,0.2-0.2,0.2-0.2C4.8,6.6,4.9,6.5,5,6.4c0.4-0.3,0.9-0.5,1.4-0.6
+                                          C7,5.7,7.5,5.8,8.1,6c0.1,0,0.2,0.1,0.3,0.1c0.3,0.1,0.5,0.3,0.7,0.5c0.2,0.1,0.4,0.5,0.6,0.7c0.2,0.4,0.4,0.7,0.5,1.1
+                                          c0.3,1.2-0.2,2.3-0.9,3c-0.3,0.3-0.5,0.5-0.9,0.7c-0.2,0.1-0.4,0.2-0.6,0.2C7.3,12.4,7.2,12.4,6.8,12.4z M4.4,9.2
+                                          c0,0.1,0.1,0.4,0.1,0.5c0.2,0.9,0.9,1.6,1.8,1.8c0.1,0,0.2,0,0.3,0.1c0,0,0.1,0,0.1,0c0.3,0,0.6,0,0.9-0.1c0.9-0.2,1.6-1,1.8-1.8
+                                          c0.1-0.3,0.1-0.6,0.1-0.9c0-0.1,0-0.1,0-0.1C9.4,8.3,9.3,7.9,9,7.6C9,7.5,9,7.5,8.9,7.4C8.8,7.4,8.8,7.3,8.7,7.3
+                                          C8.1,6.6,7.2,6.4,6.3,6.6C6.2,6.6,6,6.7,5.9,6.8c-0.7,0.3-1.2,1-1.4,1.7c-0.1,0.3,0,0.2-0.1,0.4C4.4,9,4.4,9,4.4,9.2z M5.5,9
+                                          C5.4,9,5.3,8.9,5.2,8.7c-0.1-0.3,0.3-0.8,0.5-1c0.2-0.2,0.8-0.5,1.1-0.4C7,7.4,7,7.6,7,7.7C7,8.1,6.6,8,6.2,8.3C5.8,8.6,6,9,5.5,9z
+                                          M0.8,3.6c0-0.1,0.1-0.2,0.1-0.3C1,3.2,1.1,3.2,1.3,3.2c0.3,0,0.6,0,0.9,0c0.5,0,1.2,0,1.7-0.1c0.9-0.3,1-1,1.2-1.2
+                                          c0,0,0.1-0.1,0.1-0.1c0.1-0.1,0.4-0.3,0.6-0.3h2.4c0.1,0,0.4,0.1,0.5,0.2l0.1,0.1C8.8,1.8,8.9,1.9,8.9,2C9,2.1,9,2.2,9.1,2.3
+                                          c0.2,0.4,0.6,0.7,1,0.8c0.5,0.2,1.1,0.1,1.7,0.1c0.3,0,0.6,0,0.9,0c0.3,0,0.5,0.2,0.5,0.4v6.6c0,0.2-0.1,0.3-0.2,0.4
+                                          c-0.1,0.1-0.3,0.1-0.5,0.1c-0.2,0-1,0-1,0c0,0,0,0-0.1,0.1c0,0,0,0.1,0,0.1c0,0.1,0,0.1-0.1,0.2l-0.2,0.4c0.3,0,1.3,0,1.7,0
+                                          c0.1,0,0.3-0.1,0.4-0.1c0.4-0.2,0.6-0.6,0.6-0.9V3.5c0-0.1-0.1-0.4-0.1-0.5c-0.1-0.2-0.2-0.2-0.3-0.3c-0.3-0.3-0.6-0.2-1-0.2
+                                          c-0.1-0.1,0-0.3,0-0.4c0-0.1-0.1-0.2-0.3-0.2h-0.9C11.1,1.9,11,2,11,2.1c0,0.1,0,0.3,0,0.4c-0.2,0-0.4,0-0.6,0
+                                          C9.9,2.3,9.7,1.9,9.5,1.5C9.3,1.3,9.2,1.1,8.9,0.9C8.8,0.9,8.6,0.8,8.5,0.8c-0.3-0.1-2.1,0-2.5,0c-0.4,0-0.5,0-0.9,0.2
+                                          C4.8,1,4.6,1.2,4.5,1.4c-0.3,0.4-0.3,0.9-1.2,1c-0.2,0-1.8,0-2.2,0c-0.2,0-0.3,0-0.5,0.1C0.3,2.7,0,3.2,0,3.5v6.8
+                                          c0,0.1,0.1,0.3,0.1,0.4c0.1,0.1,0.1,0.2,0.2,0.3c0.1,0.2,0.3,0.3,0.6,0.4c0.3,0.1,1.5,0,1.9,0c0-0.1,0-0.1-0.1-0.2l-0.2-0.4
+                                          c0,0,0-0.2-0.1-0.2c-0.1,0-0.9,0-1,0c-0.2,0-0.3,0-0.5-0.1c-0.1-0.1-0.2-0.2-0.2-0.4L0.8,3.6L0.8,3.6z"/>
+                                  </svg>
+                              </button> -->
+                          </div>
+                      </div>
+                      <span class="col-12 text-center w-100 mt-2">
+                          {{userDataService.userEmail}}
+                      </span>
+                  </div>
+                  <div class="col p-field">
+                    <div class="row gl-row-underline">
+                      <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                        <label for="usuario">Empresa:</label>
+                      </div>
+                      <div class="col-7">
+                        <!-- <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled> -->
+                        <input id="empresa" type="text" value="{{userDataService.companyName}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col p-field">
+                    <div class="row gl-row-underline">
+                      <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                        <label style="font-size: 12px;" for="usuario">Correo:</label>
+                      </div>
+                      <div class="col-7">
+                        <!-- <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled> -->
+                        <input id="correo" type="text" value="{{userDataService.userEmail}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col p-field">
+                    <div class="row gl-row-underline">
+                      <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                        <label for="usuario">Usuario:</label>
+                      </div>
+                      <div class="col-7">
+                        <!-- <input id="conductor" type="text" value="{{config.nombre_conductor}}" pInputText class="p-inputtext-sm" placeholder="" disabled> -->
+                        <input id="usuario" type="text" value="{{userDataService.userName}}" pInputText class="p-inputtext-sm" placeholder="" disabled>
+                      </div>
+                    </div>
+                    <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+                      <label>
+                        <p-checkbox [(ngModel)]="userInfoForm.changePass" name="checkbox_changepass" [binary]="true" inputId="binary"></p-checkbox>
+                        Cambiar Contraseña
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <ng-container *ngIf="userInfoForm.changePass == true" >
+                    <div class="col p-field">
+                      <div class="row gl-row-underline">
+                        <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                          <label>CONTRASEÑA ACTUAL:</label>
+                        </div>
+                        <div class="col-7">
+                          <input type="password" [(ngModel)]="userInfoForm.oldPass" name="oldPass"  pInputText class="p-inputtext-sm" pTooltip="Ingrese su contraseña actual..." tooltipPosition="right"/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col p-field">
+                      <div class="row gl-row-underline">
+                        <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                          <label>NUEVA CONTRASEÑA:</label>
+                        </div>
+                        <div class="col-7">
+                          <input type="password" [(ngModel)]="userInfoForm.newPass" name="newPass"  pInputText class="p-inputtext-sm" pTooltip="Ingrese una contraseña segura..." tooltipPosition="right"/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col p-field">
+                      <div class="row gl-row-underline">
+                        <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                          <label>CONFIRMAR CONTRASEÑA:</label>
+                        </div>
+                        <div class="col-7">
+                          <input type="password" [(ngModel)]="userInfoForm.newPassRepeat" name="newPassRepeat" pInputText class="p-inputtext-sm" pTooltip="Recuerde que las contraseñas deben ser iguales" tooltipPosition="right"/>
+                        </div>
+                      </div>
+                    </div><br>
+                  </ng-container>
+                  
+                  <!-- <ng-container *ngIf="userInfoForm.changePass == true">
+                    <div class="gl-row-underline">
+                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label>CONTRASEÑA ACTUAL:</label>
+                        </div>
+                        <div class="col-12">
+                            <input type="password" [(ngModel)]="userInfoForm.oldPass" name="oldPass"  pInputText pTooltip="Ingrese su contraseña actual..." tooltipPosition="right"/>
+                        </div>
+                    </div>
+                    <div class="gl-row-underline">
+                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label>NUEVA CONTRASEÑA:</label>
+                        </div>
+                        <div class="col-12">
+                            <input type="password" [(ngModel)]="userInfoForm.newPass" name="newPass"  pInputText pTooltip="Ingrese una contraseña segura..." tooltipPosition="right"/>
+                        </div>
+                    </div>
+                    <div class="gl-row-underline">
+                        <div class="col-12 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label>REPITE LA NUEVA CONTRASEÑA:</label>
+                        </div>
+                        <div class="col-12">
+                            <input type="password" [(ngModel)]="userInfoForm.newPassRepeat" name="newPassRepeat" pInputText pTooltip="Recuerde que las contraseñas deben ser iguales" tooltipPosition="right"/>
+                        </div>
+                    </div>
+                  </ng-container> -->
+
+                  <ng-container *ngIf="userInfoForm.changePass == false">
+                    
+                    <div class="col p-field">
+                      <div class="row gl-row-underline">
+                        <div class="col-8 d-flex align-items-center justify-content-start text-start fw-bold">
+                          <h6>Información en Plataforma:</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col p-field">
+                        <div class="row gl-row-underline">
+                          <div class="col-8 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label for="vehicles">Nº Vehículos:</label>
+                          </div>
+                          <div class="col-4 d-flex justify-content-start">
+                            <input id="vehicles" type="text" [value]="userInfoForm.vehiclesLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                          </div>
+                        </div>
+                        <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+                          <label>
+                            <p-checkbox [(ngModel)]="userInfoForm.showVehicle" name="checkbox_vehicles" [binary]="true" inputId="binary"></p-checkbox>
+                            Ver Lista de vehículos
+                          </label>
+                        </div> -->
+                      </div>
+                      <div class="col p-field">
+                        <div class="row gl-row-underline">
+                          <div class="col-8 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label for="geopuntos">Nº Geopuntos:</label>
+                          </div>
+                          <div class="col-4 d-flex justify-content-start">
+                            <input id="geopuntos" type="text" [value]="userInfoForm.geopointsLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                          </div>
+                        </div>
+                        <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+                          <label>
+                            <p-checkbox [(ngModel)]="userInfoForm.showGeopuntos" name="checkbox_vehicles" [binary]="true" inputId="binary"></p-checkbox>
+                            Ver Lista de Geopuntos
+                          </label>
+                        </div> -->
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col p-field">
+                        <div class="row gl-row-underline">
+                          <div class="col-8 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label for="geopol">Nº Geocercas Poligonales:</label>
+                          </div>
+                          <div class="col-4 d-flex justify-content-end">
+                            <input id="geopol" type="text" [value]="userInfoForm.geocercaPoligLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                          </div>
+                        </div>
+                        <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+                          <label>
+                            <p-checkbox [(ngModel)]="userInfoForm.showGeocercasPol" name="checkbox_vehicles" [binary]="true" inputId="binary"></p-checkbox>
+                            Ver Lista de Geocercas Poligonales
+                          </label>
+                        </div> -->
+                      </div>
+                      <div class="col p-field">
+                        <div class="row gl-row-underline">
+                          <div class="col-8 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label for="geocir">Nº Geocercas Circulares:</label>
+                          </div>
+                          <div class="col-4 d-flex justify-content-end">
+                            <input id="geocir" type="text" [value]="userInfoForm.geocercaCircLenght" pInputText class="p-inputtext-sm text-center" placeholder="" disabled>
+                          </div>
+                        </div>
+                        <!-- <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+                          <label>
+                            <p-checkbox [(ngModel)]="userInfoForm.showGeocercasCir" name="checkbox_vehicles" [binary]="true" inputId="binary"></p-checkbox>
+                            Ver Lista de Geocercas Circulares
+                          </label>
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top: 15px;">
+                      <div class="col p-field">
+                        <div class="row gl-row-underline">
+                          <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label for="eventos">Nº de Eventos:</label>
+                          </div>
+                          <div *ngIf="showEventos == false" class="col-7 d-flex justify-content-end">
+                            <input id="eventos" type="text" [value]="userInfoForm.eventosLenght+' registros'" pInputText class="p-inputtext-sm text-end" placeholder="" disabled>
+                          </div>
+                          <div *ngIf="showEventos == true" class="col-7 d-flex justify-content-start">
+                            <p-dropdown [options]="events" [appendTo]="'body'" [group]="true" placeholder="Lista de Eventos" emptyMessage="No tiene Eventos" optionLabel="name" [style]="{'max-height':'200px','max-width':'200px'}" (onChange)="showEventos = false">
+                              <ng-template let-group pTemplate="group">
+                                <div class="p-d-flex p-ai-center">
+                                    <span>{{group.label}}</span>
+                                </div>
+                              </ng-template>
+                            </p-dropdown>
+                          </div>
+                        </div>
+                        <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+                          <label>
+                            <p-checkbox [(ngModel)]="showEventos" name="checkbox_eventos" [binary]="true" ></p-checkbox>
+                            Ver
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col p-field">
+                        <div class="row gl-row-underline">
+                          <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+                            <label for="reportes">Nº de Reportes:</label>
+                          </div>
+                          <div *ngIf="showReportes == false" class="col-7 d-flex justify-content-end">
+                            <input id="reportes" type="text" [value]="userInfoForm.reportesLenght +' registros'" pInputText class="p-inputtext-sm text-end" placeholder="" disabled>
+                          </div>
+                          <div *ngIf="showReportes == true" class="col-7 d-flex justify-content-start">
+                            <p-dropdown [options]="reports" [appendTo]="'body'" placeholder="Lista de Reportes" emptyMessage="No tiene Reportes" optionLabel="name_report" [style]="{'max-height':'200px','max-width':'200px'}" (onChange)="showReportes = false"></p-dropdown>
+                          </div>
+                        </div>
+                        <div style="padding: 0px 0.3rem; margin-top: 0.25rem; text-align: right;">
+                          <label>
+                            <p-checkbox [(ngModel)]="showReportes" name="checkbox_reportes" [binary]="true"></p-checkbox>
+                            Ver 
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  <br><br><br><br><br><br><br><br><br>
+                  </ng-container>
+                  
+                  <p-footer *ngIf="userInfoForm.changePass == true">
+                      <div class="row d-flex justify-content-center">
+                          <div class="col-6">
+                              <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
+                          </div>
+                          <div class="col-6">
+                              <button _ngcontent-cic-c118="" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading" type="submit" >Guardar</button>
+                          </div>
+                          </div>
+                          <div class="" *ngIf="loading">
+                      </div>
+                  </p-footer>
+              </div>
+          </div>
+      </form>
+  </div> 
+</div>

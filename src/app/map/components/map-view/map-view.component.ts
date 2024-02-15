@@ -2,8 +2,6 @@ import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef } from '
 import * as L from 'leaflet';
 import 'leaflet-editable';
 import 'leaflet-path-drag';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-
 import { MapService } from '../../../vehicles/services/map.service';
 import { MapServicesService } from '../../services/map-services.service';
 import { GeofencesService } from '../../../geofences/services/geofences.service';
@@ -11,10 +9,9 @@ import { GeopointsService } from '../../../geopoints/services/geopoints.service'
 import { CircularGeofencesService } from 'src/app/geofences/services/circular-geofences.service';
 import { PolylineGeogencesService } from 'src/app/geofences/services/polyline-geogences.service';
 import { HistorialService } from 'src/app/historial/services/historial.service';
-import { isThisTypeNode } from 'typescript';
-import { MenuItem } from 'primeng-lts/api';
-import { MultimediaService } from 'src/app/multiview/services/multimedia.service';
-
+import { MessageService, Message } from 'primeng-lts/api';
+import { ToastService } from 'src/app/shared/services/toast.service';
+import { Dropdown } from 'primeng-lts/dropdown';
 
 declare var $: any;
 
@@ -24,28 +21,42 @@ declare var $: any;
   styleUrls: [
     './map-view.component.scss'
   ],
+  providers: [MessageService]
 })
 export class MapViewComponent implements OnInit, AfterViewInit {
   //private map!: L.Map;
   @Input() container = "map";
-
-  
+  vehiclesIsLoaded = false;
+  @ViewChild('_searchDropdown') searchDropdown!: Dropdown;
   
 
   constructor(
-    private mapService: MapService,
+    public mapService: MapService,
     private circularGeofencesService: CircularGeofencesService,
     private polylineGeofenceService: PolylineGeogencesService,
     public mapServicesService: MapServicesService,
     public geofencesService: GeofencesService,
     public geopointsService: GeopointsService,
     public historialService: HistorialService,
-  ) {}
+    private messageService: MessageService,
+    private toastService: ToastService
+  ) {
+
+    this.toastService.toastMessageCallback.subscribe( (message: Message) => {
+      this.messageService.add(message);
+    });
+    this.toastService.toastClearCallback.subscribe( (key:string) => {
+      if(key.length > 0){
+        this.messageService.clear(key);
+      }else{
+        this.messageService.clear();
+      }
+    });
+  }
   // constructor() { }
 
   ngOnInit(): void {
 
-    
   }
 
   async ngAfterViewInit() {
@@ -55,9 +66,16 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     await this.geopointsService.initialize();
     this.circularGeofencesService.initialize();
     this.polylineGeofenceService.initialize(); 
-
     this.setLayers();
-
+    if(this.mapService.vehicleService.statusDataVehicle){
+      this.vehiclesIsLoaded = true;
+      console.log("mapService.vehicleService.vehicles",this.mapService.vehicleService.vehicles);
+    }else{
+      this.mapService.vehicleService.dataCompleted.subscribe(()=>{
+        this.vehiclesIsLoaded = true;
+        console.log("mapService.vehicleService.vehicles2",this.mapService.vehicleService.vehicles);
+      });
+    }
     //=============Agregar Buscador de direccion.====================
     // const searchControl = GeoSearchControl({
     //   provider: new OpenStreetMapProvider(),
@@ -270,5 +288,16 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.mapServicesService.display = false;
   }
 
-  
+  searchItem(event:any){
+    console.log(event.value);
+    if(event.value){
+      this.mapServicesService.map.fitBounds([[parseFloat(event.value.latitud),parseFloat(event.value.longitud)]],{}).setZoom(16)
+    }
+  }
+
+  showSearchDropdown(){
+    console.log("searchDropdown");
+    this.searchDropdown.show();
+    this.searchDropdown.applyFocus();
+  }
 }

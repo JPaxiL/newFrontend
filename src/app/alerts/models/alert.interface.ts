@@ -18,6 +18,7 @@ export interface Alert {
   usuario_id: string,
   fecha_desde: string,
   fecha_hasta: string,
+  slug?: string,
   bol_fecha_caducidad: boolean,
   fecha_desdex: string,
   fecha_hastax: string,
@@ -33,5 +34,30 @@ export interface Alert {
   sonido_sistema_bol?:boolean,
   notificacion_email_bol?:boolean,
   activo_bol?:boolean,
-  ventana_emergente?:boolean,
+  ventana_emergente?:string,
+  bol_evaluation?:boolean,
+  type_evaluation?: TypeEvaluation,
+  event_id?: string,
+  evaluations?: Evaluation[],
+  evaluated?:number,
+}
+
+export type TypeEvaluation = "unique" | "multiple"
+
+export interface Evaluation {
+  id?: string,
+  usuario_id?: string,
+  event_id?: string,
+  imei?: string,
+  fecha?: string,
+  nombre?: string,
+  tipo_evento?: string,
+  fecha_evaluacion?: string,
+  criterio_evaluacion?: string,
+  observacion_evaluacion?:string,
+  operador_monitoreo?: string,
+  senales_posible_fatiga?: boolean,
+  identificacion_video?: string,
+  valoracion_evento?: string,
+  uuid_event?: string
 }

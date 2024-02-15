@@ -2,13 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild, OnDestroy, Output, EventEmitt
 import { TreeNode } from 'primeng-lts/api';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 
-import {DialogModule} from 'primeng-lts/dialog';
-
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FollowService } from '../../services/follow.service';
 import Swal from 'sweetalert2';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 @Component({
   selector: 'app-tree-table',
@@ -19,8 +18,9 @@ export class TreeTableComponent implements OnInit {
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
-  vehicleIconState: boolean = false;
-
+  showVehiclesFixes: boolean = true;
+  vehicleIconState: boolean = true;
+  vehicleTransmissionStatus: boolean = true;
   sortOrder: number=1;
   display: boolean = false;
   displayDelete: boolean = false;
@@ -37,12 +37,14 @@ export class TreeTableComponent implements OnInit {
   list2: any = [];
   selectedList1: any = [];
   selectedList2: any = [];
+
   private dataEdit : any = {
     id : -1,
     name : "",
     type : ""
   };
   alreadyLoaded: boolean = false;
+  readonlyNameGroup: boolean = false;
 
   @ViewChild('nameEdit',{ static:true}) nameEdit!: ElementRef;
   color: any = {
@@ -56,12 +58,12 @@ export class TreeTableComponent implements OnInit {
   };
 
   hint: any = {
-    10: 'En movimiento',
-    20: 'Detenido encendido',
-    30: 'Detenido apagado',
-    40: 'Sin transmisión',
-    50: 'Sin cobertura',
-    60: 'GPS sin señal',
+    10: 'Unidad en Movimiento',
+    20: 'Unidad Detenida con Ignición',
+    30: 'Unidad Detenida sin Ignición',
+    40: 'Unidad sin Transmisión',
+    50: 'Unidad sin Cobertura',
+    60: 'Unidad con Error GPS',
     100: 'No definido',
   };
 
@@ -70,6 +72,7 @@ export class TreeTableComponent implements OnInit {
     eye: true,
     imei: false,
     vehicle: true,
+    tag_driver: false,//HASTA QUE SE IMPLEMENTE DRIVERS
     tag: true,
     follow: true,
     limit: true,
@@ -82,8 +85,9 @@ export class TreeTableComponent implements OnInit {
 
   @ViewChild('tt') tt!:any;
 
+
   constructor(
-    private vehicleService:VehicleService,
+    public vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private spinner: NgxSpinnerService,
@@ -116,7 +120,6 @@ export class TreeTableComponent implements OnInit {
 
     });
 
-
   }
 
   ngOnInit(): void {
@@ -127,6 +130,8 @@ export class TreeTableComponent implements OnInit {
       this.loading=false;
       this.alreadyLoaded = true;
       this.headerScrollHandler();
+      console.log(this.vehicleService.vehiclesFixes);
+      this.showVehiclesFixes= this.vehicleService.unitsFixesStatus;
     }
     this.cols = [
           { field: 'eye', header: 'eye' },
@@ -142,7 +147,12 @@ export class TreeTableComponent implements OnInit {
     window.addEventListener('resize', this.treeTableResizing, true);
     screen.orientation.addEventListener('change', this.treeTableResizing);
     // console.log(this.vehicleService.vehicles);
+    
+
+    // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
+
   }
+
 
   headerScrollHandler(){
     setTimeout(()=> {
@@ -202,18 +212,35 @@ export class TreeTableComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        await this.onSubmitEdit();
+        if (currType== 'pinUp'){
+          await this.onSubmitEditFixes();
+        }else{
+          await this.onSubmitEdit();
+        }
       },
     }).then((data) => {
-      if(data.isConfirmed) {
-        Swal.fire(
-          'Éxito',
-          `El ${currType} se editó exitosamente`,
-          'success'
-        );
-      } else {
-        console.log(`(Vehicle Group) Hubo un error al editar el ${currType}`);
+      if (currType== 'pinUp'){
+        if(data.isConfirmed) {
+          Swal.fire(
+            'Éxito',
+            `Las unidades Fijadas se editaron exitosamente`,
+            'success'
+          );
+        } else {
+          console.log(`(Vehicle Group) Hubo un error al editar las unidades Fijadas`);
+        }
+      }else{
+        if(data.isConfirmed) {
+          Swal.fire(
+            'Éxito',
+            `El ${currType} se editó exitosamente`,
+            'success'
+          );
+        } else {
+          console.log(`(Vehicle Group) Hubo un error al editar el ${currType}`);
+        }
       }
+      
       this.loading=false;
     });
   }
@@ -243,6 +270,26 @@ export class TreeTableComponent implements OnInit {
         }).catch(errorMsg => {
           console.log(errorMsg);
         });
+    }
+  }
+  async onSubmitEditFixes(){
+    const req = {
+      vehicles: this.list2.map((item: { id: any; }) => item.id)
+    };
+    console.log('Enviando...',req);
+    let response = await this.vehicleConfigService.updateUnitFixes(req);
+    // console.log(response);
+    if(response.success){
+      await this.vehicleService.updateUnitFixes(req['vehicles']);
+      this.updateGroup();
+      this.vehicleService.reloadTableTree.emit();
+      this.displayEditGroup = false;
+    }else{
+      Swal.fire(
+        'Ups',
+        `Ocurrió un problema al actualizar Las unidades Fijadas`,
+        'error'
+      );
     }
   }
   updateGroup(){
@@ -298,6 +345,8 @@ export class TreeTableComponent implements OnInit {
           vehicles[key].nameconvoy=this.nameEdit.nativeElement.value;
         }
       }
+    }else{
+      console.log('Update Units Fixes...');
     }
 
 
@@ -310,6 +359,7 @@ export class TreeTableComponent implements OnInit {
     this.displayEditGroup = true;
     this.textHeaderEdit = data.type+" "+data.name;
     this.nameEdit.nativeElement.value = data.name;
+    this.readonlyNameGroup = false;
 
     //list 1
     const vehicles = this.vehicleService.vehicles;
@@ -349,6 +399,80 @@ export class TreeTableComponent implements OnInit {
 
   }
   
+  showEditFixes(data: any){
+    this.readonlyNameGroup = true;
+    this.dataEdit = data;
+    // console.log('show edit data',data);
+    this.displayEditGroup = true;
+    this.textHeaderEdit = " "+data.name;
+    this.nameEdit.nativeElement.value = data.name;
+
+    const vehicles = this.vehicleService.vehicles;
+    const vehiclesFixes = this.vehicleService.vehiclesFixes;
+    let aux1:any=[];
+    let aux2=[];
+    aux1 = vehicles;
+    for (const key in vehiclesFixes) {
+      aux1 = aux1.filter((vehicle: any)=>vehicle.id!=vehiclesFixes[key]);
+      const foundVehicle:any = this.vehicleService.vehicles.find((vehicle: any)=>vehicle.id==vehiclesFixes[key]);
+      if (foundVehicle){
+        aux2.push(foundVehicle);
+      }
+    }
+    this.list2 = aux2;
+    this.list1 = aux1;
+    // console.log('LISTA --> 1',this.list1);
+    // console.log('LISTA --> 2',this.list2);
+  }
+  cleanFixes(data:any){
+    Swal.fire({
+      title: 'Confirmación',
+      text: `¿Está seguro de Limpiar la lista de Unidades Fijadas?`,
+      icon: 'warning',
+      showLoaderOnConfirm: true,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      confirmButtonText: 'Limpiar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        actions: 'w-100',
+        cancelButton: 'col-4',
+        confirmButton: 'col-4',
+      },
+      preConfirm: async () => {
+        await this.onDeleteFixes(data);
+      },
+    }).then((data) => {
+      if(data.isConfirmed) {
+        Swal.fire(
+          'Limpiar',
+          `Limpieza de Unidades Fijadas exitosa`,
+          'success'
+        );
+      }
+    });
+    
+  }
+  async onDeleteFixes(data:any){
+    const req = {
+      type: data.name,
+    };
+    let array:any =[]
+    console.log('Enviando a Limpiar...',req);
+    let response = await this.vehicleConfigService.cleanUnitFixes(req);
+    if(response.success){
+      await this.vehicleService.updateUnitFixes(array);
+      this.updateGroup();
+      this.vehicleService.reloadTableTree.emit();
+      this.displayEditGroup = false;
+    }else{
+      Swal.fire(
+        'Ups',
+        `Ocurrió un problema al limpiar Las unidades Fijadas`,
+        'error'
+      );
+    }
+  }
   showDelete(data: any){
     this.textDelete = data['type'];
     if(data['id']==null){
@@ -574,6 +698,40 @@ export class TreeTableComponent implements OnInit {
 
     // //console.log("display-->",this.display);
   }
+
+  onChangeSelection(show_name:string){
+    // console.log('Vehicles de Tree:',this.vehicles);
+    const vehicles = this.vehicleService.vehicles;
+    let tempShowName = '';
+    for (const index of vehicles) {
+      // console.log('vehicle ->',index);
+      if(show_name=='num_plate'){
+        tempShowName = index.plate_number!;
+      }else if (show_name=='cod_interno'){
+        tempShowName = index.cod_interno!;
+      }else if (show_name =='name'){
+        tempShowName = index.name_old!;
+      }
+      if (!tempShowName){
+        // Busca el valor correspondiente en nameShows basado en selectedNameShowVehicle
+        const selectedOption = this.vehicleService.optionsFilterNameVehicle.find(option => option.value === this.vehicleService.selectedFilterNameVehicle);
+        // Verifica si se encontró una opción correspondiente
+        if (selectedOption) {
+          tempShowName = "Unidad Sin " + selectedOption.label;
+        } else {
+          tempShowName = "Unidad Sin Nombre";
+        }
+      }
+      index.name= tempShowName;
+    }
+    if(this.vehicleService.listTable==0){
+      this.vehicleService.reloadTable.emit();
+    }else{
+      this.vehicleService.vehiclesTree = this.vehicleService.createNode(vehicles);
+      this.vehicleService.reloadTableTree.emit();
+    }
+    this.vehicleService.onClickSelection(show_name);
+  }
   ngOnDestroy(): void {
     this.vehicleService.treeTableStatus=false;
     window.removeEventListener('resize', this.treeTableResizing, true);
@@ -595,6 +753,9 @@ export class TreeTableComponent implements OnInit {
     }
     // //console.log("colmun = ",this.column);
   }
+
+  
+  
   onClickEye(IMEI: string){
     this.vehicleService.onClickEye(IMEI);
   }
@@ -604,6 +765,9 @@ export class TreeTableComponent implements OnInit {
   onSort(data: any){
     console.log("sort desde tree", data);
     this.sortOrder=data;
+  }
+  onClickDriver(IMEI: string){
+    this.vehicleService.onClickDriver(IMEI);
   }
   onClickTag(IMEI: string){
     this.vehicleService.onClickTag(IMEI);
@@ -631,8 +795,8 @@ export class TreeTableComponent implements OnInit {
 
   public onQuickFilterChanged(data: any) {
     // //console.log("tt",this.tt);
-    this.tt.filterGlobal(data.target.value, 'contains')
-    this.tt.defaultSortOrder=-1;
+    this.tt.filterGlobal(data.target.value, 'contains');
+    this.tt.defaultSortOrder = -1;
   }
 
   getContrastYIQ(hex: string){
@@ -641,6 +805,12 @@ export class TreeTableComponent implements OnInit {
     var b = parseInt(hex.slice(5,7),16);
     var yiq = ((r*299)+(g*587)+(b*114))/1000;
     return (yiq >= 128) ? '#000' : '#fff';
+  }
+
+  public onChangeUnitsFixes(){
+    this.vehicleService.unitsFixesStatus = this.showVehiclesFixes;
+    this.vehicleService.vehiclesTree = this.vehicleService.createNode(this.vehicleService.vehicles);
+    this.vehicleService.reloadTableTree.emit();
   }
 
 }

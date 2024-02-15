@@ -24,6 +24,18 @@
     <div class="panel-izq-container">
       <div class="panel-izq-form">
 
+        <div *ngIf="soloParaMi" class="modal-footer">
+          <div class="row w-100 justify-content-around">
+            <div class="col-5">
+              <button type="button" (click)="clickEnviarCorreoExcel()" class="btn btn-success not-cancel w-100" >Enviar Correo EXCEL</button>
+            </div>
+            <div class="col-5">
+              <button type="button" (click)="clickEliminarHistorial()" class="btn btn-success w-100" >Ocultar</button>
+            </div>
+          </div>
+        </div>
+
+
         <div class="gl-middleline gl-permanent-middleline gl-row-underline">
           <div class="row">
               <div class="col p-field w-25">

@@ -81,7 +81,7 @@
                         </div>
                         <div class="col p-field">
                             <div class="col-12">
-                                <label>ALERTA DEL SISTEMA:</label>
+                                <label>SONIDO DEL SISTEMA:</label>
                             </div>
                             <div class="row">
                                 <div class="col-12">
@@ -120,6 +120,20 @@
                             <div class="row">
                                 <div class="col-12">
                                     <p-dropdown [options]="booleanOptionsVentanaEmergente" formControlName="chkVentanaEmergente"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gl-middleline gl-permanent-middleline gl-row-underline">
+                    <div class="row">
+                        <div class="col-6 p-field">
+                            <div class="col-12">
+                                <label>ATENCIÓN DE EVENTOS:</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p-dropdown [options]="booleanOptionsAtencionEventos" formControlName="chkEvaluation"  optionLabel="label" optionValue="value" [appendTo]="'body'"></p-dropdown>
                                 </div>
                             </div>
                         </div>

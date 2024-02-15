@@ -4,6 +4,7 @@ import { PanelService } from '../../../panel/services/panel.service';
 import { VehicleService } from '../../../vehicles/services/vehicle.service';
 import { DriversService } from '../../services/drivers.service';
 import Swal from 'sweetalert2';
+import { Driver } from '../../models/interfaces';
 
 @Component({
   selector: 'app-drivers-list',
@@ -32,19 +33,10 @@ export class DriversListComponent implements OnInit {
     console.log(this.panelService.userData);
 
     if(!this.driversService.initializingDriver){
-      this.driversService.spinner.show('loadingDrivers');
+      this.driversService.initialize();//AHORA ES UN SERVICIO QUE SIEMPRE SE INICIA
     }
-
-
-    // this.userData = this.panelService.userData;
-
-    if (this.driversService.drivers.length > 0) {
-      this.driversService.getAll();
-
-    } else {
-      this.driversService.initialize();
-
-    }
+    // console.log(this.driversService.drivers);
+    // console.log('DRIVER ID 300->',this.driversService.getDriverById(300));
   }
 
   clickConfigurarDriver(id:any) {
@@ -86,10 +78,8 @@ export class DriversListComponent implements OnInit {
                 'Conductor se elimino correctamente',
                 'success'
               );
-              if(res.driver.tipo_identificacion=='imei'){
-                res.driver.id = null;
-                res.driver.nombre_conductor = 'Conductor No especificado';
-                this.vehicleService.updateDriverAndId(res.driver);
+              if(res.driver.tipo_identificacion.vehicle==true){
+                this.vehicleService.updateDriverAndId(res.driver,true);
               }
 
           } else if (res.text == 'no eliminado') {
@@ -123,8 +113,8 @@ export class DriversListComponent implements OnInit {
     console.log(this.driversService.drivers.length);
     this.driversService.modalActive=true;
     this.driversService.action='add';
-  
   }
+
   onSearchDriver(){
     console.log('searching ...',this.searchValueDriver);
     this.driversService.spinner.show('loadingDrivers');
@@ -138,26 +128,13 @@ export class DriversListComponent implements OnInit {
       const searchTerm = this.searchValueDriver.toLowerCase();
 
       // Filtrar los datos según el término de búsqueda
-      this.driversService.tblDataDriver = this.driversService.getTableDataDriver().filter((driver: { trama: { nombre_conductor: string; tracker_nombre: string; nro_llave: string;dni_conductor: string; }; }) => 
-        driver.trama.nombre_conductor.toLowerCase().includes(searchTerm) ||
-        (driver.trama.tracker_nombre && driver.trama.tracker_nombre.toLowerCase().includes(searchTerm)) ||
-        (driver.trama.nro_llave && driver.trama.nro_llave.toLowerCase().includes(searchTerm)) ||
-        (driver.trama.dni_conductor && driver.trama.dni_conductor.toLowerCase().includes(searchTerm)) 
+      this.driversService.tblDataDriver = this.driversService.getTableDataDriver().filter((driver:Driver) => 
+        driver.nombre_conductor.toLowerCase().includes(searchTerm) ||
+        (driver.tracker_nombre && driver.tracker_nombre.toLowerCase().includes(searchTerm)) ||
+        (driver.nro_llave && driver.nro_llave.toLowerCase().includes(searchTerm)) ||
+        (driver.dni_conductor && driver.dni_conductor.toLowerCase().includes(searchTerm)) 
       );
       console.log(this.driversService.tblDataDriver);
     }
   }
-
-  showHistoryDriver(){
-    console.log('showHistoryDriver ...');
-    this.driversService.historyDriverActive=true;
-    this.driversService.historyType='driver';
-  }
-
-  showHistoryDriverForPlate(){
-    console.log('showHistoryDriverVehicle ...');
-    this.driversService.historyDriverActive=true;
-    this.driversService.historyType='vehicle';
-  }
-
 }

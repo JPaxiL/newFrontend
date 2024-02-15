@@ -28,9 +28,10 @@ export class PlatformAlertsListComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.spinner.show('loadingPlatformAlertsSpinner');
-    this.loadData();
+    await this.loadData();
+    console.log("alerts Platform", this.alerts);
   }
 
   ngOnDestoy(){
@@ -56,6 +57,8 @@ export class PlatformAlertsListComponent implements OnInit {
 
   edit(id:string){
     let alert = this.alerts.find( (alert: Alert) => alert.id == id);
+    console.log("ALERT TO EDIT:::",alert);
+    
     this.AlertService.alertEdit = alert;
 
     $("#panelMonitoreo").show( "slow" );
