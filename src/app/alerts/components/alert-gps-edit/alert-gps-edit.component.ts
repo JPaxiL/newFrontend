@@ -238,7 +238,7 @@ export class AlertGpsEditComponent implements OnInit {
     this.alertForm.value.vehiculos = JSON.stringify(this.alertForm.value.vehicles);
 
     if(typeof this.alertForm.value.sonido == "undefined"){
-      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
+      this.alertForm.value.sonido =  'sonidos/globales/alarm8.mp3';
     }
 
     if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){

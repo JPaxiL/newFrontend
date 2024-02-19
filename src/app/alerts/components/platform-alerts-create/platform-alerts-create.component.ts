@@ -106,7 +106,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       chkCorreo: [false],
       sonido: [
         {
-          value: 'sonidos/alarm8.mp3',
+          value: 'sonidos/globales/alarm8.mp3',
           disabled: this.disabledEventSoundActive,
         },
       ],
@@ -265,7 +265,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
 
     if(typeof this.alertForm.value.sonido == "undefined"){
-      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
+      this.alertForm.value.sonido =  'sonidos/globales/alarm8.mp3';
     }
 
     if (
