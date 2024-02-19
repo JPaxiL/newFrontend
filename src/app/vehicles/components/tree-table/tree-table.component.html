@@ -272,7 +272,7 @@
           <th *ngIf="setting['eye']"><app-eye-header style="height: 1.25rem; display: flex;"></app-eye-header></th>
           <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
           <th *ngIf="setting['vehicle']"></th>
-          <th *ngIf="setting['imei']" style="text-align: center; white-space: nowrap;">IMEI</th>
+          <th *ngIf="setting['imei']"><app-tag-imei></app-tag-imei></th>
           <th *ngIf="setting['tag_driver']" ><app-tag-driver-header></app-tag-driver-header></th>
           <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
           <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>

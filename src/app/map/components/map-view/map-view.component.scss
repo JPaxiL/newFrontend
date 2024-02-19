@@ -59,36 +59,60 @@
       --event-main-color: #757575;
     }
     .desvio-carril-izq, .desvio-carril-izquierda{
-      --event-main-color: #006978;
+      --event-main-color: #0600ff;
     }
     .desvio-carril-der, .desvio-carril-derecha{
-      --event-main-color: #387002;
+      --event-main-color: #1f1aff;
     }
     .bloqueo-vision-mobileye{
-      --event-main-color: #424242;
+      --event-main-color: #3833ff;
     }
     .colision-peatones{
-      --event-main-color: #ba000d;
+      --event-main-color: #0400b3;
     }
 
     .colision-delantera{
-      --event-main-color: #ba000d;
+      --event-main-color: #514dff;
+    }
+
+    .actualizacion-estado-gps-360{
+      --event-main-color: #2e1a04;
+    }
+
+    .error-calibracion-360{
+      --event-main-color: #eea85d;
+    }    
+
+    .dvr-operativo{
+      --event-main-color: #b60098;
+    }
+
+    .antena-gps-desconectada{
+      --event-main-color: #7f0000;
+    }
+
+    .dvr-inoperativo{
+      --event-main-color: #83006e;
     }
 
     .posible-fatiga{
-      --event-main-color: #8d6e63;
+      --event-main-color: #0500e6;
     }
 
     .fatiga-extrema{
-      --event-main-color: #c53d13;
+      --event-main-color: #020066;
     }
 
     .frenada-brusca{
-      --event-main-color: #9e00c5;
+      --event-main-color: #cc0000;
+    }
+
+    .manipulacion-de-dispositivo{
+      --event-main-color: #b20000;
     }
 
     .aceleracion-brusca{
-      --event-main-color: #7c4dff;
+      --event-main-color: #ff1a1a;
     }
 
     .vehiculo-sin-programacion{
@@ -104,7 +128,7 @@
     }
 
     .bateria-desconectada{
-      --event-main-color: #f44336;
+      --event-main-color: #ff4d4d;
     }
 
     .motor-encendido{
@@ -116,54 +140,105 @@
     }
 
     .distraccion{
-      --event-main-color: #546e7a;
+      --event-main-color: #3732ff;
     }
 
     .no-rostro{
-      --event-main-color: #757575;
+      --event-main-color: #0500cc;
     }
 
-
-    .conductor-adormitado, .conductor-adormitado{
-      --event-main-color: #287b72;
+    .conductor-identificado-360{
+      --event-main-color: #efa85e;
     }
 
-    .conductor-somnoliento, .conductor-somnoliento{
-      --event-main-color: #2589e6;
+    .conductor-ausente-360{
+      --event-main-color: #c93d0e;
     }
 
-    .distraccion-detectada, .distraccion-detectada{
-      --event-main-color: #1f3fbe;
+    .conductor-adormitado-360, .conductor-adormitado-360{
+      --event-main-color: #ea8f2f;
     }
 
-    .conductor-somnoliento, .conductor-somnoliento{
+    .conductor-somnoliento-360, .conductor-somnoliento-360{
+      --event-main-color: #ef501a;
+    }
+
+    .cambio-conductor-360{
+      --event-main-color: #f1b474;
+    }
+
+    .celular_detectado_360{
+      --event-main-color: #a35c10;
+    }
+
+    .conductor-distraido-360, .conductor-distraido-360{
+      --event-main-color: #f3744a;
+    }
+
+/*     .conductor-somnoliento, .conductor-somnoliento{
       --event-main-color: #22915b;
+    } */
+
+    .conductor-no-identificado-360{
+      --event-main-color: #e1440f;
     }
 
-    .cinturon-NoDetectado, .cinturon-NoDetectado{
-      --event-main-color: #8237d8;
+    .cinturon-desabrochado-360, .cinturon-desabrochado-360{
+      --event-main-color: #d27615;
     }
 
     .celular-detectado, .celular-detectado{
       --event-main-color: #d1623a;
     }
 
-    .cigarro-detectado, .cigarro-detectado{
-      --event-main-color: #9e2b95;
+    .motor-encendido{
+      --event-main-color: #ff4c4c;
     }
-    .deteccion-manipulacion, .deteccion-manipulacion{
-      --event-main-color: #cf5739;
+
+    .motor-apagado{
+      --event-main-color: #ff3232;
     }
-    .error-camara, .error-camara{
-      --event-main-color: #1d7c28;
+
+    .error-sistema-360{
+      --event-main-color: #d8582d;
+    }
+
+    .ignicion-activada-360{
+      --event-main-color: #783119;
+    }
+
+    .ignicion-desactivada-360{
+      --event-main-color: #602714;
+    }
+
+    .inicio-sistema-ok-360{
+      --event-main-color: #f16232;
+    }
+
+    .sistema-ok-360{
+      --event-main-color: #ffc30d;
+    }
+
+    .sistema-reseteado-360{
+      --event-main-color: #d9a300;
+    }
+
+    .conductor-fumando-360, .conductor-fumando-360{
+      --event-main-color: #ba6913;
+    }
+    .deteccion-manipulacion-360, .deteccion-manipulacion-360{
+      --event-main-color: #f16232;
+    }
+    .error-de-camara-360, .error-de-camara-360{
+      --event-main-color: #f6997a;
     }
     /* COLORES DEFINIDOS */
     .zona-entrada, .zona-de-entrada{
-      --event-main-color: #F58634;
+      --event-main-color: #00a013;
     }
 
     .zona-salida, .zona-de-salida{
-      --event-main-color: #DFC136;
+      --event-main-color: #008710;
     }
 
     .tiempo-estadia-zona{
@@ -183,15 +258,15 @@
     }
 
     .infraccion{
-      --event-main-color: #373435;
+      --event-main-color: #003a07;
     }
 
     .sos-event, .sos{
-      --event-main-color: #A9BF45;
+      --event-main-color: #ff1919;
     }
 
     .exceso-velocidad{
-      --event-main-color: #EE3142;
+      --event-main-color: #00ba16;
     }
 
     .tiempo-estadia-zona, .tiempo-de-estadia-en-zona{
@@ -229,6 +304,7 @@
     .posible-fatiga,
     .fatiga-extrema,
     .frenada-brusca,
+    .manipulacion-de-dispositivo,
     .aceleracion-brusca,
     .vehiculo-sin-programacion,
     .mantenimiento-correctivo-realizado,
@@ -239,14 +315,14 @@
     .distraccion,
     .no-rostro,
 
-    .conductor-adormitado, .conductor-adormitado,
+    .conductor-adormitado-360, .conductor-adormitado-360,
     .conductor-somnoliento, .conductor-somnoliento,
-    .distraccion-detectada, .distraccion-detectada,
-    .cinturon-NoDetectado, .cinturon-NoDetectado,
+    .conductor-distraido-360, .conductor-distraido-360,
+    .cinturon-desabrochado-360, .cinturon-desabrochado-360,
     .celular-detectado, .celular-detectado,
-    .cigarro-detectado, .cigarro-detectado,
-    .deteccion-manipulacion, .deteccion-manipulacion,
-    .error-camara, .error-camara,
+    .conductor-fumando-360, .conductor-fumando-360,
+    .deteccion-manipulacion-360, .deteccion-manipulacion-360,
+    .error-de-camara-360, .error-de-camara-360,
     
     /* DEFINIDOS */
     .zona-entrada, .zona-de-entrada,
