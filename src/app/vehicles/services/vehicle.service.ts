@@ -790,7 +790,7 @@ export class VehicleService {
     this.fixes.push(0);
       map.push(
         {
-          data:{id:0,name:'Unidades Fijadas', col:3, type:'pinUp' },
+          data:{id:0,name:'UNIDADES FIJADAS', col:3, type:'pinUp' },
           expanded: true,
           children:[]
         }
@@ -810,7 +810,7 @@ export class VehicleService {
           console.log('ERROR NO DEBERIA INGRESAR AQUI...');
           map.push(
             {
-              data:{id:0,name:'Unidades Fijadas', col:3, type:'pinUp' },
+              data:{id:0,name:'UNIDADES FIJADAS', col:3, type:'pinUp' },
               expanded: true,
               children:[
                 {
