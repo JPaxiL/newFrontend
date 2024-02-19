@@ -227,7 +227,7 @@ export class TreeTableComponent implements OnInit {
             'success'
           );
         } else {
-          console.log(`(Vehicle Group) Hubo un error al editar las unidades Fijadas`);
+          console.log(`(Vehicle fixes) Hubo un error al editar las unidades Fijadas`);
         }
       }else{
         if(data.isConfirmed) {

@@ -202,7 +202,7 @@ export class UserInfoComponent implements OnInit {
     $("#panelMonitoreo").hide( "slow" );
   }
 
-  onSubmit(){
+  async onSubmit(){
     // Limpiar el array antes de agregar los datos actualizados
     
     console.log(this.userInfoForm); // Información del formulario general
@@ -234,9 +234,9 @@ export class UserInfoComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        var response:any;
-        response = await this.onSubmit();
-        this.userDataService.changePasswordUser(response).subscribe(
+        var req:any;
+        req = await this.onSubmit();
+        this.userDataService.changePasswordUser(req).subscribe(
           (response) => {
             // Manejar la respuesta del servidor si es necesario
             // console.log('Actualización exitosa:', response);
