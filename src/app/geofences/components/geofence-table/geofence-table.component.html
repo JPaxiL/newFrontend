@@ -100,7 +100,7 @@
             Opciones
           </div>
           <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
-            <span (click)="import('kml')">Importar de KML/KMZ</span>
+            <span (change)="import($event)">Importar de KML/KMZ</span>
           </div>
           <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
             <span (click)="export('kml')">Exportar a KML/KMZ</span>
@@ -112,6 +112,8 @@
             <span (click)="export('csv')">Exportar a CSV</span>
           </div>
         </div>
+
+        <input type="file" (change)="import($event)">
       </div>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
         <button type="button"  class="btn-gl-blue btn-dark-hover btn-circle flex-none me-2" ngbDropdownToggle>
