@@ -56,66 +56,67 @@ export class AlertService {
 
     // SONIDOS PERSONALIZADOS
     {
-      id: 28,
+      id: 28, //X
       ruta: 'sonidos/personalizados/aceleracion brusca.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 29,
+      id: 29, //X
       ruta: 'sonidos/personalizados/anticolisión frontal.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 30,
+      id: 30, //X
       ruta: 'sonidos/personalizados/desvio carril derecha.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 31,
+      id: 31, //X
       ruta: 'sonidos/personalizados/desvio carril izquierda.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 32,
+      id: 32, //X
       ruta: 'sonidos/personalizados/distracción.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 33,
+      id: 33, //X
       ruta: 'sonidos/personalizados/exceso de velocidad.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 34,
+      id: 34, //X
       ruta: 'sonidos/personalizados/fatiga extrema.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 35,
+      id: 35, //X
       ruta: 'sonidos/personalizados/frenada brusca.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 36,
+      id: 36, //X
       ruta: 'sonidos/personalizados/infracción.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 37,
+      id: 37, //x
       ruta: 'sonidos/personalizados/no rostro.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 38,
+      id: 38, //X
       ruta: 'sonidos/personalizados/posible fatiga.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 39,
+      id: 39, //X
       ruta: 'sonidos/personalizados/riesgo de colisión con peatones.mp3',
       label: 'Voz Personalizada',
     },
   ];
+  sonidosObtenidos: any;
 
   constructor(private http: HttpClient) {
     console.log('INICIANDO-----ALERTSERVICE');

@@ -64,7 +64,7 @@ export class GpsAlertsCreateComponent implements OnInit {
     public panelService: PanelService,
     private spinner: NgxSpinnerService
   ) {
-    this.listaSonidos = this.AlertService.listaSonidos;
+    this.listaSonidos = [...this.AlertService.listaSonidos];
   }
 
   ngOnInit(): void {
@@ -104,6 +104,66 @@ export class GpsAlertsCreateComponent implements OnInit {
     console.log('Lista Emails', this.alertForm.value.lista_emails);
     this.loadData();
   }
+
+  //Inicio Modificacion para mostrar alertas modifcadas por su tipo de alerta
+  actualizarSonidos() {
+    console.log(this.listaSonidos);
+    console.log('obtengo el id ' + this.alertForm.value.tipoAlerta);
+
+    const alert = this.events.find(
+      (event: any) =>
+        event.id.toString() === this.alertForm.value.tipoAlerta.toString()
+    );
+
+    console.log('alert antes de: ', alert);
+
+    if (alert) {
+      this.alertSelected = alert;
+      console.log('alerttt', alert);
+
+      // Obtén todos los elementos de la lista de sonidos hasta el id 27
+      let sonidosObtenidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (alert.id === 3) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 28
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.id === 4) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 35
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      }
+
+      if (sonidosObtenidos.length > 0) {
+        console.log('Sonidos obtenidos:', sonidosObtenidos);
+        this.listaSonidos = sonidosObtenidos;
+      } else {
+        console.log(
+          'No se encontraron sonidos para la alerta seleccionada o la función no devuelve un array.'
+        );
+      }
+    } else {
+      this.listaSonidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (this.listaSonidos.length > 0) {
+        console.log('Sonidos obtenidos:', this.listaSonidos);
+      } else {
+        console.log('No se encontraron sonidos para la alerta seleccionada.');
+      }
+    }
+  }
+  //Fin Modificacion para mostrar alertas modifcadas por su tipo de alerta
+
   public async loadData() {
     this.setDataVehicles();
     this.events = await this.AlertService.getEventsByType('gps');
@@ -113,51 +173,6 @@ export class GpsAlertsCreateComponent implements OnInit {
     this.hideLoadingSpinner();
     console.log('alertas cargadas', this.events);
   }
-  arrayejemplo: string[] | undefined;
-
-  //Inicio Modificacion para mostrar alertas modifcadas por su tipo de alerta
-  actualizarSonidos() {
-    console.log(this.listaSonidos);
-    console.log(this.alertForm.value.tipoAlerta);
-
-    const alert = this.events.find(
-      (event: any) =>
-        event.id.toString() === this.alertForm.value.tipoAlerta.toString()
-    );
-
-    if (alert) {
-      this.alertSelected = alert;
-      console.log('alerttt', alert);
-
-      // Obtén todos los elementos de la lista de sonidos hasta el id 28
-      let sonidosObtenidos = this.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 28
-      );
-
-      // Agrega el id 35 de los sonidos si el evento seleccionado es "Frenada Brusca" con id 4
-      if (alert.id === 4) {
-        sonidosObtenidos = [
-          ...sonidosObtenidos,
-          this.listaSonidos.find((sonido: { id: any }) => sonido.id === 35),
-        ];
-      }
-
-      if (sonidosObtenidos.length > 0) {
-        console.log('Sonidos obtenidos:', sonidosObtenidos);
-      } else {
-        console.log(
-          'No se encontraron sonidos para la alerta seleccionada o la función no devuelve un array.'
-        );
-      }
-    } else {
-      console.log('Evento no encontrado.');
-    }
-
-    /* this.alertSelected = alert;
-    console.log("alerttt",alert); */
-  }
-
-  //Fin Modificacion para mostrar alertas modifcadas por su tipo de alerta
 
   setDataVehicles() {
     let vehicles = this.VehicleService.getVehiclesData();
