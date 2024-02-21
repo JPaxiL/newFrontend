@@ -13,6 +13,21 @@
   
           <div class="dialog-form-container d-flex" >
             <div>
+              <p-table [value]="products">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                    </tr>
+                </ng-template>
+            </p-table>
+              <input type="file" (change)="fileKml($event)">
               <!--, tag_name_font_size, zone_type, grupo_convoy_id, operation_grupo_id, geo_tags)
 	 -->        <!--<input [(ngModel)]="usuarioId" type="email" placeholder=""> -->
               <input [(ngModel)]="nombreZona" type="text" placeholder="nombreZona">
