@@ -28,6 +28,7 @@ export class GeofencesService {
   public type: string = 'polig'; //[polig, cir, line]
   public action:string = 'add'; //[add,edit,delete]
   public actionTags: string = '';
+  public modalActive: boolean =false;
 
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();

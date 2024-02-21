@@ -1023,19 +1023,50 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       this.viewOptions = 'viewGen';
     }
   }
-
+  clickAgregarZona(){
+    console.log("aver");
+    this.geofencesService.modalActive=true;
+    this.geofencesService.action='add';
+  }
   import(dato: any) {
     console.log("import from ", dato);
+    this.geofencesService.modalActive=true;
+    this.geofencesService.action='add';
+    /*
     let file = dato.target.files[0];
-    //let fileReader = new FileReader();
+    let fileReader = new FileReader();
     let kmlString = file;
     console.log("johan1: ",kmlString);
-    let arreglos=kmlString.split(' ');
-    console.log("johan2: ",arreglos);
-     const fileReader.onload = function (event:any) {
+
+    */
+    //let arreglos=kmlString.split(' ');
+    //console.log("johan2: ",arreglos);
+    /*fileReader.onload = function (event:any) {
       let kmlString = event.target.result;
       console.log("datos : ",kmlString);
-      let csvContent = "usuario_id,nombre_zona,color_zona,visible_zona,nombre_visible_zona,vertices_zona,id,vel_act_zona\n"; 
+      let name = /<name>\s*([^<]+?)\s*<\/name>/g
+      let matchesName = kmlString.match(name);
+      let names = matchesName ? matchesName.map((match:any) => match.replace(/<name>\s*([^<]+?)\s*<\/name>/, '$1')) : [];
+  
+      let description = /<description>\s*([^<]+?)\s*<\/description>/g
+      let matchesDesc = kmlString.match(description);
+      let descripciones = matchesDesc ? matchesDesc.map((match:any) => match.replace(/<description>\s*([^<]+?)\s*<\/description>/, '$1')) : [];
+
+      let color = /<color>\s*([a-fA-F0-9]+)\s*<\/color>/g;
+      let matchesColor = kmlString.match(color);
+      let colores = matchesColor ? matchesColor.map((match:any) => match.replace(/<color>\s*([a-fA-F0-9]+)\s*<\/color>/, '$1')) : [];
+      
+      let description = /<description>\s*([^<]+?)\s*<\/description>/g
+      let matchesDesc = kmlString.match(description);
+      let descripciones = matchesDesc ? matchesDesc.map((match:any) => match.replace(/<description>\s*([^<]+?)\s*<\/description>/, '$1')) : [];
+                 
+
+      console.log('"color": ', colores);
+      console.log('"name": ', names);
+      console.log('"desc": ', descripciones);
+
+      */
+      /*let csvContent = "usuario_id,nombre_zona,color_zona,visible_zona,nombre_visible_zona,vertices_zona,id,vel_act_zona\n"; 
       let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
       let link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -1045,7 +1076,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       document.body.removeChild(link);
     };
 
-    fileReader.readAsText(file);
+    fileReader.readAsText(file);*/
 
 
   }

@@ -158,6 +158,7 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
 import { AddTagComponent } from './geofences/components/add-tag/add-tag.component';
 import { UnixTimeToDatePipe } from './core/pipes/unix-time-to-date.pipe';
 import {ToastModule} from 'primeng-lts/toast';
+import { GeofencesModalComponent } from './geofences/geofences-modal/geofences-modal.component';
 
 @NgModule({
   declarations: [
@@ -254,7 +255,8 @@ import {ToastModule} from 'primeng-lts/toast';
     CarouselComponent,
     SliderMultimediaComponent,
     AddTagComponent,
-    UnixTimeToDatePipe
+    UnixTimeToDatePipe,
+    GeofencesModalComponent
   ],
   imports: [
     ToastrModule.forRoot({
