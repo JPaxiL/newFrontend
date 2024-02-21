@@ -1196,7 +1196,7 @@ export const getIcon = (event_type: string) => {
       icon = 'assets/images/events-icons/fatiga.svg';
       break;
     case 'No Rostro':
-      icon = 'assets/images/events-icons/no-rostro.svg';
+      icon = 'assets/images/events-icons/conductor-no-rostro.svg';
       break;
     default:
       icon = '';

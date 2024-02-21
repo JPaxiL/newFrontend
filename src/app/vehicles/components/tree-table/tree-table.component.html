@@ -272,15 +272,15 @@
           <th *ngIf="setting['eye']"><app-eye-header style="height: 1.25rem; display: flex;"></app-eye-header></th>
           <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
           <th *ngIf="setting['vehicle']"></th>
-          <th *ngIf="setting['imei']"><app-tag-imei></app-tag-imei></th>
-          <th *ngIf="setting['tag_driver']" ><app-tag-driver-header></app-tag-driver-header></th>
-          <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
-          <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
-          <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
+          <th *ngIf="setting['imei']"><app-tag-imei></app-tag-imei><!-- Imei --></th> <!-- IMEI -->
+          <th *ngIf="setting['tag_driver']" ><app-tag-driver-header></app-tag-driver-header></th> <!-- MOSTRAR CONDUCTOR -->
+          <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th> <!-- MOSTRAR NOMBRE -->
+          <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th> <!-- SEGUIR VEHICULO -->
+          <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>  <!-- VELOCIDAD -->
           <th *ngIf="setting['gps']" ><app-gps-header></app-gps-header></th>
           <th *ngIf="setting['gsm']" ><app-gsm-header></app-gsm-header></th>
           <!-- <th *ngIf="setting['trans']"><app-transmission-header></app-transmission-header></th> -->
-          <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th>
+          <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th> <!-- CONFIGURAR -->
 
         </tr>
         <!-- <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
