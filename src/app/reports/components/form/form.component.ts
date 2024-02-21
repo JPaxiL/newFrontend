@@ -1948,7 +1948,7 @@ export class FormComponent implements OnInit {
     // this.updateCheckDefaultEvents();
     // Reiniciar Check All Type EVent
     this.eventsTypes.forEach((evType: any) => {
-      evType.active =false;
+      evType.selectAll =false;
     });
   }
 
