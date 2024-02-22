@@ -1,4 +1,231 @@
+export const getIconUrlHistory = (event: any): string => {
+  let iconUrl = '';
+  if (event.tipo == 'zona-de-entrada') {
+    iconUrl = 'assets/images/events-history/entrada_zona.svg';
+  } else if (event.tipo == 'zona-de-salida') {
+    iconUrl = 'assets/images/events-history/salida_zona.svg';
+  } else if (event.tipo == 'sos') {
+    iconUrl = 'assets/images/events-history/sos.svg';
+  } else if (event.tipo == 'tiempo-estadio-zona') {
+    iconUrl = 'assets/images/events-history/tiempo_estadia_zona.svg';
+  } else if (event.tipo == 'parada-en-zona-no-autorizada') {
+    iconUrl = 'assets/images/events-history/parada_zona_no_autorizada.svg';
+  } else if (event.tipo == 'manipulacion-de-dispositivo') {
+    iconUrl = 'assets/images/events-history/manipulacion_gps.svg';
+  } else if (event.tipo == 'dvr-operativo') {
+    iconUrl = 'assets/images/events-history/dvr_operativo.svg';
+  } else if (event.tipo == 'dvr-inoperativo') {
+    iconUrl = 'assets/images/events-history/dvr_inoperativo.svg';
+  } else if (event.tipo == 'antena-gps-desconectada') {
+    iconUrl = 'assets/images/events-history/antena_gps_desconectada.svg';
+  } else if (event.tipo == 'mantenimiento-correctivo') {
+    iconUrl = 'assets/images/events-history/mant_correctivo.svg';
+  } else if (event.tipo == 'mantenimiento-preventivo') {
+    iconUrl = 'assets/images/events-history/mant_preventivo.svg';
+  } else if (event.tipo == 'mantenimiento-correctivo-realizado') {
+    iconUrl = 'assets/images/events-history/mant_correctivo_realizado.svg';
+  } else if (event.tipo == 'mantenimiento-preventivo-realizado') {
+    iconUrl = 'assets/images/events-history/mant_preventivo_realizado.svg';
+  } else if (event.tipo == 'exceso-velocidad') {
+    iconUrl = 'assets/images/events-history/exceso_velocidad.svg';
+  } else if (event.tipo == 'infraccion') {
+    iconUrl = 'assets/images/events-history/infraccion.svg';
+  } else if (event.tipo == 'vehiculo-sin-programacion') {
+    iconUrl = 'assets/images/events-history/sin_programacion.svg';
+  } else if (event.tipo == 'frenada-brusca') {
+    iconUrl = 'assets/images/events-history/frenada_brusca.svg';
+  } else if (event.tipo == 'aceleracion-brusca') {
+    iconUrl = 'assets/images/events-history/aceleracion_brusca.svg';
+  } else if (event.tipo == 'bateria-desconectada') {
+    iconUrl = 'assets/images/events-history/bateria_desconectada.svg';
+  } else if (event.tipo == 'motor-encendido') {
+    iconUrl = 'assets/images/events-history/motor_encendido.svg';
+  } else if (event.tipo == 'motor-apagado') {
+    iconUrl = 'assets/images/events-history/motor_apagado.svg';
+  } else if (event.tipo == 'posible-fatiga') {
+    iconUrl = 'assets/images/events-history/posible_fatiga.svg';
+  } else if (event.tipo == 'fatiga-extrema') {
+    iconUrl = 'assets/images/events-history/fatiga_extrema.svg';
+  } else if (event.tipo == 'distraccion') {
+    iconUrl = 'assets/images/events-history/distraccion.svg';
+  } else if (event.tipo == 'desvio-de-carril-izquierda') {
+    iconUrl = 'assets/images/events-history/desvio_izquierda.svg';
+  } else if (event.tipo == 'desvio-de-carril-derecha') {
+    iconUrl = 'assets/images/events-history/desvio_derecha.svg';
+  } else if (event.tipo == 'bloqueo-vision-mobileye') {
+    iconUrl = 'assets/images/events-history/bloqueo_mobileye.svg';
+  } else if (event.tipo == 'colision-peatones') {
+    iconUrl = 'assets/images/events-history/colision_peaton.svg';
+  } else if (event.tipo == 'anticolision-frontal') {
+    iconUrl = 'assets/images/events-history/colision_delantera.svg';
+  } else if (event.tipo == 'no-rostro') {
+    iconUrl = 'assets/images/events-history/no-rostro.svg';
+  } else if (event.tipo == 'conductor-no-identificado') {
+    iconUrl = 'assets/images/events-history/conductor-no-rostro.svg';
+  } else if (event.tipo == 'conductor-identificado') {
+    iconUrl = 'assets/images/events-history/conductor_identificado.svg';
+  } else if (event.tipo == 'error-calibracion-360') {
+    iconUrl = 'assets/images/events-history/error_calibracion_360.svg';
+  } else if (event.tipo == 'error-de-camara-360') {
+    iconUrl = 'assets/images/events-history/error_de_camara_360.svg';
+  } else if (event.tipo == 'ignicion-desactivada-360') {
+    iconUrl = 'assets/images/events-history/ignicion_desactivada_360.svg';
+  } else if (event.tipo == 'ignicion-activada-360') {
+    iconUrl = 'assets/images/events-history/ignicion_activada_360.svg';
+  } else if (event.tipo == 'conductor-distraido-360') {
+    iconUrl = 'assets/images/events-history/conductor_distraido_360.svg';
+  } else if (event.tipo == 'conductor-adormitado-360') {
+    iconUrl = 'assets/images/events-history/conductor_adormitado_360.svg';
+  } else if (event.tipo == 'conductor-somnoliento-360') {
+    iconUrl = 'assets/images/events-history/conductor_somnoliento_360.svg';
+  } else if (event.tipo == 'conductor-fumando-360') {
+    iconUrl = 'assets/images/events-history/conductor_fumando_360.svg';
+  } else if (event.tipo == 'cinturon-desabrochado-360') {
+    iconUrl = 'assets/images/events-history/cinturon_desabrochado_360.svg';
+  } else if (event.tipo == 'uso-de-celular-360') {
+    iconUrl = 'assets/images/events-history/celular_detectado_360.svg';
+  } else if (event.tipo == 'inicio-sistema-ok-360') {
+    iconUrl = 'assets/images/events-history/inicio_sistema_ok_360.svg';
+  } else if (event.tipo == 'error-sistema-360') {
+    iconUrl = 'assets/images/events-history/error_sistema_360.svg';
+  } else if (event.tipo == 'sistema-ok-360') {
+    iconUrl = 'assets/images/events-history/sistema_ok_360.svg';
+  } else if (event.tipo == 'sistema-reseteado-360') {
+    iconUrl = 'assets/images/events-history/sistema_reseteado_360.svg';
+  } else if (event.tipo == 'deteccion-manipulacion-360') {
+    iconUrl = 'assets/images/events-history/deteccion_manipulacion_360.svg';
+  } else if (event.tipo == 'conductor-no-identificado-360') {
+    iconUrl = 'assets/images/events-history/conductor_no_identificado_360.svg';
+  } else if (event.tipo == 'cambio-conductor-360') {
+    iconUrl = 'assets/images/events-history/cambio_conductor_360.svg';
+  } else if (event.tipo == 'conductor-ausente-360') {
+    iconUrl = 'assets/images/events-history/conductor_ausente_360.svg';
+  } else if (event.tipo == 'conductor-identificado-360') {
+    iconUrl = 'assets/images/events-history/conductor_identificado_360.svg';
+  } else if (event.tipo == 'actualizacion-estado-gps-360') {
+    iconUrl = 'assets/images/events-history/actualizacion_gps_icon_360.svg';
+  } else {
+    iconUrl = 'assets/images/eventos/pin_point.svg';
+  }
+  return iconUrl;
+};
+
+export const getIconUrlPopups = (event: any): string => {
+  let iconUrl = '';
+  if (event.tipo == 'zona-de-entrada') {
+    iconUrl = 'assets/images/events-icons/entrada_zona.svg';
+  } else if (event.tipo == 'zona-de-salida') {
+    iconUrl = 'assets/images/events-icons/salida_zona.svg';
+  } else if (event.tipo == 'sos') {
+    iconUrl = 'assets/images/events-icons/sos.svg';
+  } else if (event.tipo == 'tiempo-estadio-zona') {
+    iconUrl = 'assets/images/events-icons/tiempo_estadia_zona.svg';
+  } else if (event.tipo == 'parada-en-zona-no-autorizada') {
+    iconUrl = 'assets/images/events-icons/parada_zona_no_autorizada.svg';
+  } else if (event.tipo == 'manipulacion-de-dispositivo') {
+    iconUrl = 'assets/images/events-icons/manipulacion_gps.svg';
+  } else if (event.tipo == 'dvr-operativo') {
+    iconUrl = 'assets/images/events-icons/dvr_operativo.svg';
+  } else if (event.tipo == 'dvr-inoperativo') {
+    iconUrl = 'assets/images/events-icons/dvr_inoperativo.svg';
+  } else if (event.tipo == 'antena-gps-desconectada') {
+    iconUrl = 'assets/images/events-icons/antena_gps_desconectada.svg';
+  } else if (event.tipo == 'mantenimiento-correctivo') {
+    iconUrl = 'assets/images/events-icons/mant_correctivo.svg';
+  } else if (event.tipo == 'mantenimiento-preventivo') {
+    iconUrl = 'assets/images/events-icons/mant_preventivo.svg';
+  } else if (event.tipo == 'mantenimiento-correctivo-realizado') {
+    iconUrl = 'assets/images/events-icons/mant_correctivo_realizado.svg';
+  } else if (event.tipo == 'mantenimiento-preventivo-realizado') {
+    iconUrl = 'assets/images/events-icons/mant_preventivo_realizado.svg';
+  } else if (event.tipo == 'exceso-velocidad') {
+    iconUrl = 'assets/images/events-icons/exceso_velocidad.svg';
+  } else if (event.tipo == 'infraccion') {
+    iconUrl = 'assets/images/events-icons/infraccion.svg';
+  } else if (event.tipo == 'vehiculo-sin-programacion') {
+    iconUrl = 'assets/images/events-icons/sin_programacion.svg';
+  } else if (event.tipo == 'frenada-brusca') {
+    iconUrl = 'assets/images/events-icons/frenada_brusca.svg';
+  } else if (event.tipo == 'aceleracion-brusca') {
+    iconUrl = 'assets/images/events-icons/aceleracion_brusca.svg';
+  } else if (event.tipo == 'bateria-desconectada') {
+    iconUrl = 'assets/images/events-icons/bateria_desconectada.svg';
+  } else if (event.tipo == 'motor-encendido') {
+    iconUrl = 'assets/images/events-icons/motor_encendido.svg';
+  } else if (event.tipo == 'motor-apagado') {
+    iconUrl = 'assets/images/events-icons/motor_apagado.svg';
+  } else if (event.tipo == 'posible-fatiga') {
+    iconUrl = 'assets/images/events-icons/posible_fatiga.svg';
+  } else if (event.tipo == 'fatiga-extrema') {
+    iconUrl = 'assets/images/events-icons/fatiga_extrema.svg';
+  } else if (event.tipo == 'distraccion') {
+    iconUrl = 'assets/images/events-icons/distraccion.svg';
+  } else if (event.tipo == 'distraccion-360') {
+    iconUrl = 'assets/images/events-icons/distraccion.svg';
+  } else if (event.tipo == 'desvio-de-carril-izquierda') {
+    iconUrl = 'assets/images/events-icons/desvio_izquierda.svg';
+  } else if (event.tipo == 'desvio-de-carril-derecha') {
+    iconUrl = 'assets/images/events-icons/desvio_derecha.svg';
+  } else if (event.tipo == 'bloqueo-vision-mobileye') {
+    iconUrl = 'assets/images/events-icons/bloqueo_mobileye.svg';
+  } else if (event.tipo == 'colision-peatones') {
+    iconUrl = 'assets/images/events-icons/colision_peaton.svg';
+  } else if (event.tipo == 'anticolision-frontal') {
+    iconUrl = 'assets/images/events-icons/colision_delantera.svg';
+  } else if (event.tipo == 'no-rostro') {
+    iconUrl = 'assets/images/events-icons/no-rostro.svg';
+  } else if (event.tipo == 'conductor-no-identificado') {
+    iconUrl = 'assets/images/events-icons/conductor-no-rostro.svg';
+  } else if (event.tipo == 'conductor-identificado') {
+    iconUrl = 'assets/images/events-icons/conductor_identificado.svg';
+  } else if (event.tipo == 'error-calibracion-360') {
+    iconUrl = 'assets/images/events-icons/error_calibracion_360.svg';
+  } else if (event.tipo == 'error-de-camara-360') {
+    iconUrl = 'assets/images/events-icons/error_de_camara_360.svg';
+  } else if (event.tipo == 'ignicion-desactivada-360') {
+    iconUrl = 'assets/images/events-icons/ignicion_desactivada_360.svg';
+  } else if (event.tipo == 'ignicion-activada-360') {
+    iconUrl = 'assets/images/events-icons/ignicion_activada_360.svg';
+  } else if (event.tipo == 'conductor-distraido-360') {
+    iconUrl = 'assets/images/events-icons/conductor_distraido_360.svg';
+  } else if (event.tipo == 'conductor-adormitado-360') {
+    iconUrl = 'assets/images/events-icons/conductor_adormitado_360.svg';
+  } else if (event.tipo == 'conductor-somnoliento-360') {
+    iconUrl = 'assets/images/events-icons/conductor_somnoliento_360.svg';
+  } else if (event.tipo == 'conductor-fumando-360') {
+    iconUrl = 'assets/images/events-icons/conductor_fumando_360.svg';
+  } else if (event.tipo == 'cinturon-desabrochado-360') {
+    iconUrl = 'assets/images/events-icons/cinturon_desabrochado_360.svg';
+  } else if (event.tipo == 'uso-de-celular-360') {
+    iconUrl = 'assets/images/events-icons/celular_detectado_360.svg';
+  } else if (event.tipo == 'inicio-sistema-ok-360') {
+    iconUrl = 'assets/images/events-icons/inicio_sistema_ok_360.svg';
+  } else if (event.tipo == 'error-sistema-360') {
+    iconUrl = 'assets/images/events-icons/error_sistema_360.svg';
+  } else if (event.tipo == 'sistema-ok-360') {
+    iconUrl = 'assets/images/events-icons/sistema_ok_360.svg';
+  } else if (event.tipo == 'sistema-reseteado-360') {
+    iconUrl = 'assets/images/events-icons/sistema_reseteado_360.svg';
+  } else if (event.tipo == 'deteccion-manipulacion-360') {
+    iconUrl = 'assets/images/events-icons/deteccion_manipulacion_360.svg';
+  } else if (event.tipo == 'conductor-no-identificado-360') {
+    iconUrl = 'assets/images/events-icons/conductor_no_identificado_360.svg';
+  } else if (event.tipo == 'cambio-conductor-360') {
+    iconUrl = 'assets/images/events-icons/cambio_conductor_360.svg';
+  } else if (event.tipo == 'conductor-ausente-360') {
+    iconUrl = 'assets/images/events-icons/conductor_ausente_360.svg';
+  } else if (event.tipo == 'conductor-identificado-360') {
+    iconUrl = 'assets/images/events-icons/conductor_identificado_360.svg';
+  } else if (event.tipo == 'actualizacion-estado-gps-360') {
+    iconUrl = 'assets/images/events-icons/actualizacion_gps_icon_360.svg';
+  } else {
+    iconUrl = 'assets/images/eventos/pin_point.svg';
+  }
+  return iconUrl;
+};
 export const getContentPopup = (event: any, d: any = '...') => {
+  const iconUrl = getIconUrlPopups(event);
+
   if (event.tipo == 'zona-de-entrada') {
     //PLATAFORMA
     return render_leaflet_tootlip(
@@ -15,7 +242,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/entrada_zona.svg'
+      iconUrl
     );
   } else if (event.tipo == 'zona-de-salida') {
     //PLATAFORMA
@@ -33,7 +260,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/salida_zona.svg'
+      iconUrl
     );
   } else if (event.tipo == 'tiempo-estadio-zona') {
     //PLATAFORMA
@@ -53,7 +280,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/tiempo_estadia_zona.svg'
+      iconUrl
     );
   } else if (event.tipo == 'parada-en-zona-no-autorizada') {
     //PLATAFORMA
@@ -72,29 +299,17 @@ export const getContentPopup = (event: any, d: any = '...') => {
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/parada_zona_no_autorizada.svg'
+      iconUrl
     );
     //INICIO ULTIMOS CREADOS 16/02/2024
   } else if (event.tipo == 'manipulacion-de-dispositivo') {
-    return render_leaflet_tootlip(
-      {},
-      'assets/images/events-icons/manipulacion_gps.svg'
-    );
+    return render_leaflet_tootlip({}, iconUrl);
   } else if (event.tipo == 'dvr-operativo') {
-    return render_leaflet_tootlip(
-      {},
-      'assets/images/events-icons/dvr_operativo.svg'
-    );
+    return render_leaflet_tootlip({}, iconUrl);
   } else if (event.tipo == 'dvr-inoperativo') {
-    return render_leaflet_tootlip(
-      {},
-      'assets/images/events-icons/dvr_inoperativo.svg'
-    );
+    return render_leaflet_tootlip({}, iconUrl);
   } else if (event.tipo == 'antena-gps-desconectada') {
-    return render_leaflet_tootlip(
-      {},
-      'assets/images/events-icons/antena_gps_desconectada.svg'
-    );
+    return render_leaflet_tootlip({}, iconUrl);
 
     //FIN ULTIMOS CREADOS 16/02/2024
   } else if (event.tipo == 'mantenimiento-correctivo') {
@@ -117,7 +332,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         int_mant_odometro: event.int_mant_odometro,
         referencia: event.referencia,
       },
-      'assets/images/events-icons/mant_correctivo.svg'
+      iconUrl
     );
   } else if (event.tipo == 'mantenimiento-preventivo') {
     if (event.int_mant_odometro == null) {
@@ -139,7 +354,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         int_mant_odometro: event.int_mant_odometro,
         referencia: event.referencia,
       },
-      'assets/images/events-icons/mant_preventivo.svg'
+      iconUrl
     );
   } else if (event.tipo == 'mantenimiento-correctivo-realizado') {
     var t_restante = string_diffechas(
@@ -158,7 +373,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/mant_correctivo_realizado.svg'
+      iconUrl
     );
   } else if (event.tipo == 'mantenimiento-preventivo-realizado') {
     return render_leaflet_tootlip(
@@ -173,7 +388,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/mant_preventivo_realizado.svg'
+      iconUrl
     );
   } /* else if (event.tipo == 'SOS') {
     return render_leaflet_tootlip(
@@ -204,7 +419,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/exceso_velocidad.svg'
+      iconUrl
     );
   } else if (event.tipo == 'infraccion') {
     if (event.nombre_zona == '') {
@@ -220,7 +435,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
           referencia: event.referencia,
           fecha_tracker: event.fecha_tracker,
         },
-        'assets/images/events-icons/infraccion.svg'
+        iconUrl
       );
     } else if (event.nombre_zona != '') {
       // PLATAFORMA
@@ -238,7 +453,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
           geocerca: event.nombre_zona,
           fecha_tracker: event.fecha_tracker,
         },
-        'assets/images/events-icons/infraccion.svg'
+        iconUrl
       );
     }
   } else if (event.tipo == 'vehiculo-sin-programacion') {
@@ -256,7 +471,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         geocerca: event.nombre_zona,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/sin_programacion.svg'
+      iconUrl
     );
   } else if (event.tipo == 'frenada-brusca') {
     return render_leaflet_tootlip(
@@ -271,7 +486,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/frenada_brusca.svg'
+      iconUrl
     );
   } else if (event.tipo == 'sos') {
     return render_leaflet_tootlip(
@@ -301,7 +516,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/aceleracion_brusca.svg'
+      iconUrl
     );
   } else if (event.tipo == 'bateria-desconectada') {
     return render_leaflet_tootlip(
@@ -316,7 +531,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/bateria_desconectada.svg'
+      iconUrl
     );
   } else if (event.tipo == 'motor-encendido') {
     return render_leaflet_tootlip(
@@ -332,7 +547,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         fecha_tracker: event.fecha_tracker,
       },
       //'assets/images/events-icons/motor.svg'
-      'assets/images/events-icons/motor_encendido.svg'
+      iconUrl
     );
   } else if (event.tipo == 'motor-apagado') {
     return render_leaflet_tootlip(
@@ -348,7 +563,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         fecha_tracker: event.fecha_tracker,
       },
       //'assets/images/events-icons/motor.svg'
-      'assets/images/events-icons/motor_apagado.svg'
+      iconUrl
     );
   } else if (event.tipo == 'posible-fatiga') {
     return render_leaflet_tootlip(
@@ -364,7 +579,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         fecha_tracker: event.fecha_tracker,
       },
       // 'assets/images/events-icons/fatiga.svg'
-      'assets/images/events-icons/posible_fatiga.svg'
+      iconUrl
     );
   } else if (event.tipo == 'fatiga-extrema') {
     return render_leaflet_tootlip(
@@ -380,7 +595,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         fecha_tracker: event.fecha_tracker,
       },
       // 'assets/images/events-icons/fatiga.svg'
-      'assets/images/events-icons/fatiga_extrema.svg'
+      iconUrl
     );
   } else if (event.tipo == 'distraccion') {
     return render_leaflet_tootlip(
@@ -396,7 +611,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         fecha_tracker: event.fecha_tracker,
       },
       //'assets/images/events-icons/distraccionWhite.svg'
-      'assets/images/events-icons/distraccion.svg'
+      iconUrl
     );
   } else if (event.tipo == 'distraccion-360') {
     return render_leaflet_tootlip(
@@ -411,7 +626,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/distraccion.svg'
+      iconUrl
     );
   } else if (event.tipo == 'desvio-de-carril-izquierda') {
     return render_leaflet_tootlip(
@@ -426,7 +641,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/desvio_izquierda.svg'
+      iconUrl
     );
   } else if (event.tipo == 'desvio-de-carril-derecha') {
     return render_leaflet_tootlip(
@@ -441,7 +656,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/desvio_derecha.svg'
+      iconUrl
     );
   } else if (event.tipo == 'bloqueo-vision-mobileye') {
     return render_leaflet_tootlip(
@@ -456,7 +671,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/bloqueo_mobileye.svg'
+      iconUrl
     );
   } else if (event.tipo == 'colision-peatones') {
     return render_leaflet_tootlip(
@@ -471,7 +686,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/colision_peaton.svg'
+      iconUrl
     );
     //Falta icono
   } else if (
@@ -492,7 +707,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/colision_delantera.svg'
     );
-  } else if (event.tipo == 'posible-fatiga') {
+  } /* else if (event.tipo == 'posible-fatiga') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre ?? event.name,
@@ -507,7 +722,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/posible-fatiga.svg'
     );
-  } else if (event.tipo == 'fatiga-extrema') {
+  } */ /* else if (event.tipo == 'fatiga-extrema') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre ?? event.name,
@@ -522,7 +737,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/fatiga.svg'
     );
-  } else if (event.tipo == 'no-rostro') {
+  } */ else if (event.tipo == 'no-rostro') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre ?? event.name,
@@ -535,7 +750,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/no-rostro.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-no-identificado') {
     return render_leaflet_tootlip(
@@ -550,7 +765,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/conductor-no-rostro.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-identificado') {
     return render_leaflet_tootlip(
@@ -565,7 +780,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
       },
-      'assets/images/events-icons/conductor_identificado.svg'
+      iconUrl
     );
   } else if (event.tipo == 'error-calibracion-360') {
     return render_leaflet_tootlip(
@@ -583,9 +798,9 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/error_calibracion_360.svg'
+      iconUrl
     );
-  } else if (event.tipo == 'error-de-camara-360') {
+  } /* else if (event.tipo == 'error-de-camara-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre ?? event.name,
@@ -603,7 +818,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       'assets/images/events-icons/bloqueo_mobileye.svg'
     );
-  } else if (event.tipo == 'ignicion-desactivada-360') {
+  } */ else if (event.tipo == 'ignicion-desactivada-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre ?? event.name,
@@ -620,7 +835,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         imei: event.imei,
       },
       //'assets/images/events-icons/motor.svg'
-      'assets/images/events-icons/ignicion_desactivada_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'ignicion-activada-360') {
     return render_leaflet_tootlip(
@@ -640,7 +855,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
 
       //'assets/images/events-icons/motor.svg',
-      'assets/images/events-icons/ignicion_activada_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-distraido-360') {
     return render_leaflet_tootlip(
@@ -658,7 +873,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/conductor_distraido_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-adormitado-360') {
     return render_leaflet_tootlip(
@@ -676,7 +891,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/conductor_adormitado_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-somnoliento-360') {
     return render_leaflet_tootlip(
@@ -694,7 +909,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/conductor_somnoliento_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-fumando-360') {
     return render_leaflet_tootlip(
@@ -712,7 +927,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/conductor_fumando_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'cinturon-desabrochado-360') {
     return render_leaflet_tootlip(
@@ -730,7 +945,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/cinturon_desabrochado_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'uso-de-celular-360') {
     return render_leaflet_tootlip(
@@ -748,7 +963,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/celular_detectado_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'error-de-camara-360') {
     return render_leaflet_tootlip(
@@ -766,7 +981,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/error_de_camara_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'inicio-sistema-ok-360') {
     return render_leaflet_tootlip(
@@ -785,7 +1000,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         imei: event.imei,
       },
       // 'assets/images/events-icons/mant_correctivo_realizado.png'
-      'assets/images/events-icons/inicio_sistema_ok_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'error-sistema-360') {
     return render_leaflet_tootlip(
@@ -803,7 +1018,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/error_sistema_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'sistema-ok-360') {
     return render_leaflet_tootlip(
@@ -822,7 +1037,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         imei: event.imei,
       },
       // 'assets/images/events-icons/mant_correctivo_realizado.png'
-      'assets/images/events-icons/sistema_ok_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'sistema-reseteado-360') {
     return render_leaflet_tootlip(
@@ -841,7 +1056,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         imei: event.imei,
       },
       // 'assets/images/events-icons/mant_preventivo.png'
-      'assets/images/events-icons/sistema_reseteado_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'deteccion-manipulacion-360') {
     return render_leaflet_tootlip(
@@ -859,7 +1074,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/deteccion_manipulacion_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-no-identificado-360') {
     return render_leaflet_tootlip(
@@ -877,7 +1092,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/conductor_no_identificado_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'cambio-conductor-360') {
     return render_leaflet_tootlip(
@@ -895,7 +1110,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/cambio_conductor_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-ausente-360') {
     return render_leaflet_tootlip(
@@ -913,7 +1128,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/conductor_ausente_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'conductor-identificado-360') {
     return render_leaflet_tootlip(
@@ -931,7 +1146,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/conductor_identificado_360.svg'
+      iconUrl
     );
   } else if (event.tipo == 'actualizacion-estado-gps-360') {
     return render_leaflet_tootlip(
@@ -949,7 +1164,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         parametros: event.parametros,
         imei: event.imei,
       },
-      'assets/images/events-icons/actualizacion_gps_icon_360.png'
+      iconUrl
     );
   }
 
@@ -981,7 +1196,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
       <div class="d-flex flex-row" style="font-size: 0.8rem; gap: 1rem; padding-bottom: 0.5rem;">
         <div class="d-flex flex-column justify-content-center" style="height: 45px;">
           <div>
-            <img src="${icon_src}" style="max-width: 45px !important; height: 45px; color:white !important"/>
+            <img src="${icon_src}" style="max-width: 45px !important; height: 45px; color:red !important"/>
           </div>
         </div>
         <div class="d-flex flex-column justify-content-center fw-bold" style="text-transform: uppercase;">

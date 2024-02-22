@@ -3,52 +3,53 @@
   overflow: auto;
 }
 
-.label-form-gl{
+.label-form-gl {
   font-size: 0.9rem;
   text-align: right;
   font-weight: bold;
 }
 
-
-:host ::ng-deep{
-  .p-dialog-content{
+:host ::ng-deep {
+  .p-dialog-content {
     padding: 0 1.5rem !important;
   }
 
-  .p-dialog-header .error-dialog{
+  .p-dialog-header .error-dialog {
     background-color: red;
   }
 
-  ng-select { 
+  ng-select {
     .ng-select-container {
       height: 2.625rem !important;
       color: #000;
       box-shadow: none !important;
     }
 
-    &:not(.ng-select-disabled) > .ng-select-container:hover{
-      border-color: #2196F3 !important;
+    &:not(.ng-select-disabled) > .ng-select-container:hover {
+      border-color: #2196f3 !important;
     }
-    
   }
 
-  .ng-select-container, .ng-dropdown-panel-items{
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  .ng-select-container,
+  .ng-dropdown-panel-items {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
     font-size: 1rem;
     font-weight: normal;
   }
 
   .p-datatable {
     & .p-datatable-tbody,
-    & .p-datatable-thead{
+    & .p-datatable-thead {
       & > tr {
-        font-size: 0.8rem;//0.875rem;
+        font-size: 0.8rem; //0.875rem;
 
-        &.historial-nested-table{
+        &.historial-nested-table {
           background-color: var(--gl-gray-subtitle);
           box-shadow: inset 0 0.625rem 0.625rem -0.5rem rgb(0 0 0 / 40%);
 
-          &::after{
+          &::after {
             content: "";
             position: absolute;
             right: 50%;
@@ -59,8 +60,8 @@
           }
         }
 
-        & > th, 
-        & >td {
+        & > th,
+        & > td {
           padding-left: 0.125rem;
           padding-right: 0.125rem;
           padding: 0.2rem 0rem;
@@ -68,7 +69,6 @@
       }
     }
   }
-  
-}
 
+}
 

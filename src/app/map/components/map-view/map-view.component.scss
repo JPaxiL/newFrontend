@@ -151,6 +151,10 @@
       --event-main-color: #efa85e;
     }
 
+    .conductor-identificado{
+      --event-main-color: #ff6666;
+    }
+
     .conductor-ausente-360{
       --event-main-color: #c93d0e;
     }
@@ -178,6 +182,10 @@
 /*     .conductor-somnoliento, .conductor-somnoliento{
       --event-main-color: #22915b;
     } */
+
+    .conductor-no-identificado{
+      --event-main-color: #e50000;
+    }
 
     .conductor-no-identificado-360{
       --event-main-color: #e1440f;
@@ -275,6 +283,10 @@
 
     .default-event{
       --event-main-color: #bdbdbd;
+    }
+
+    .color-prueba{
+      --event-main-color: #ff0000;
     }
 
   }

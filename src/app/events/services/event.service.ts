@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
 import { MapServicesService } from '../../map/services/map-services.service';
-import { getContentPopup } from '../helpers/event-helper';
+import { getContentPopup, getIconUrlHistory } from '../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { VehicleService } from '../../vehicles/services/vehicle.service';
@@ -20,7 +20,7 @@ import { DriversService } from 'src/app/drivers/services/drivers.service';
   providedIn: 'root',
 })
 export class EventService {
-  private URL_NAME = environment.apiUrl+'/api/event-name';
+  private URL_NAME = environment.apiUrl + '/api/event-name';
   @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() debugEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() pinPopupStream: EventEmitter<any> = new EventEmitter<any>();
@@ -36,25 +36,27 @@ export class EventService {
   public img_iconAnchor: any = [0, 30];
   public eventsLayers = new L.LayerGroup();
   public eventsCommon: any[] = [
-    "sos",
-    "aceleracion-brusca",
-    "distraccion",
-    "fatiga-extrema",
-    "somnolencia",
-    "no-rostro",
-    "colision-peatones",
-    "motor-encendido",
-    "motor-apagado",
-    "bloqueo-vision-mobileye",
-    "manipulacion-360",
-    "desvio-de-carril-derecha",
-    "desvio-de-carril-izquierda",
-    "frenada-brusca",
-    "conductor-adormitado-360",
-    "conductor-fumando",
-    "cinturon-de-seguridad-desabrochado",
-    "uso-del-celular",
-    ];
+    'sos',
+    'aceleracion-brusca',
+    'distraccion',
+    'fatiga-extrema',
+    'somnolencia',
+    'no-rostro',
+    'colision-peatones',
+    'motor-encendido',
+    'motor-apagado',
+    'bloqueo-vision-mobileye',
+    'manipulacion-360',
+    'desvio-de-carril-derecha',
+    'desvio-de-carril-izquierda',
+    'frenada-brusca',
+    'conductor-adormitado-360',
+    'conductor-fumando',
+    'cinturon-de-seguridad-desabrochado',
+    'uso-del-celular',
+
+    'desvio-de-carril-izquierda2',
+  ];
 
   public eventsHistorial: any = []; //==> Usado en el modulo historial
 
@@ -74,38 +76,37 @@ export class EventService {
 
   new_notif_stack: number[] = [];
 
- public eventsUserLoaded: boolean = false;
- public eventsGroupedList: any = [];
- public eventsLength: any;
+  public eventsUserLoaded: boolean = false;
+  public eventsGroupedList: any = [];
+  public eventsLength: any;
 
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
     private spinner: NgxSpinnerService,
     public vehicleService: VehicleService,
-    public driverService: DriversService,
-    ) {
-      this.vehicleService.dataCompleted.subscribe(vehicles=>{
-        //console.log("evento cargo antes que vehicles ...");
-        this.getVehiclesPlate();
-      });
-      // if(false){
-      // if(this.eventsLoaded){
-      //   this.vehicleService.dataCompleted.subscribe(vehicles=>{
-      //     // console.log("me entero que la data de vehiculos ya se completo. Aqui desde eventos :D");
-      //     // for (const index in this.events) {
-      //     //   console.log(this.events[index]);
-      //     //   this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
-      //     // }
-      //     this.getVehiclesPlate();
-      //   });
-      //   console.log("el modulo vehiculos a demorado mas que event");
-      // }else{
-      //   this.getVehiclesPlate();
-      //   console.log("el modulo event a demorado mas que vehiculos");
-      // }
-    }
-
+    public driverService: DriversService
+  ) {
+    this.vehicleService.dataCompleted.subscribe((vehicles) => {
+      //console.log("evento cargo antes que vehicles ...");
+      this.getVehiclesPlate();
+    });
+    // if(false){
+    // if(this.eventsLoaded){
+    //   this.vehicleService.dataCompleted.subscribe(vehicles=>{
+    //     // console.log("me entero que la data de vehiculos ya se completo. Aqui desde eventos :D");
+    //     // for (const index in this.events) {
+    //     //   console.log(this.events[index]);
+    //     //   this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
+    //     // }
+    //     this.getVehiclesPlate();
+    //   });
+    //   console.log("el modulo vehiculos a demorado mas que event");
+    // }else{
+    //   this.getVehiclesPlate();
+    //   console.log("el modulo event a demorado mas que vehiculos");
+    // }
+  }
 
   async initialize() {
     // console.log("inicializando service events ....");
@@ -115,26 +116,43 @@ export class EventService {
     this.getAll();
   }
 
-  public getVehiclesPlate(data_events?:any): void {
-    if(data_events){
+  public getVehiclesPlate(data_events?: any): void {
+    if (data_events) {
       for (const index in data_events) {
-        data_events[index].nombre_objeto = this.vehicleService.getVehicle(data_events[index].imei).name;
-        data_events[index].namedriver = this.driverService.getDriverById(data_events[index].driver_id);
-        console.log('DRIVER:',data_events[index].namedriver,' - Unidad:',data_events[index].nombre_objeto);
+        data_events[index].nombre_objeto = this.vehicleService.getVehicle(
+          data_events[index].imei
+        ).name;
+        data_events[index].namedriver = this.driverService.getDriverById(
+          data_events[index].driver_id
+        );
+        console.log(
+          'DRIVER:',
+          data_events[index].namedriver,
+          ' - Unidad:',
+          data_events[index].nombre_objeto
+        );
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
-    }else{
+    } else {
       for (const index in this.events) {
-        this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
-        this.events[index].namedriver = this.driverService.getDriverById(this.events[index].driver_id);
-        console.log('DRIVER:',this.events[index].namedriver,' - Unidad:',this.events[index].nombre_objeto);
+        this.events[index].nombre_objeto = this.vehicleService.getVehicle(
+          this.events[index].imei
+        ).name;
+        this.events[index].namedriver = this.driverService.getDriverById(
+          this.events[index].driver_id
+        );
+        console.log(
+          'DRIVER:',
+          this.events[index].namedriver,
+          ' - Unidad:',
+          this.events[index].nombre_objeto
+        );
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }
-
   }
 
-  public getEventName(): Observable<any>{
+  public getEventName(): Observable<any> {
     return this.http.get(this.URL_NAME);
   }
 
@@ -144,13 +162,13 @@ export class EventService {
     return this.http.get<any>(`${environment.apiUrl}/api/getPermissEvents`);
   }
 
-  public loadNameEvent(event: any){
+  public loadNameEvent(event: any) {
     // console.log("buscando evento "+event.tipo,this.eventsCommon.indexOf(event.tipo));
-    if(this.eventsCommon.indexOf(event.tipo)<0){
+    if (this.eventsCommon.indexOf(event.tipo) < 0) {
       // console.log("evento personalizado");
       // return this.eventPersonalice(event.event_user_id);
       return event.nombre;
-    }else{
+    } else {
       // console.log("evento comun");
       return this.eventCommon(event.tipo);
     }
@@ -158,17 +176,17 @@ export class EventService {
     //   console.log("consiguiendo los nombres de los eventos",name);
     //   this.events_names = name.data;
     // });
-    return "---";
+    return '---';
   }
 
-  public eventCommon(slug: any): any{
+  public eventCommon(slug: any): any {
     for (const index in this.events_names) {
       // console.log(this.events_names[index].slug+"=="+slug);
-      if(this.events_names[index].slug==slug){
+      if (this.events_names[index].slug == slug) {
         return this.events_names[index].nombre;
       }
     }
-    return "--";
+    return '--';
   }
   // public eventPersonalice(event_user_id: any): any{
   //   for (const index in this.events_names) {
@@ -188,7 +206,10 @@ export class EventService {
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
       .then((response) => {
-         console.log("######################### ####### eventos cargados === -------------->",response.data);
+        console.log(
+          '######################### ####### eventos cargados === -------------->',
+          response.data
+        );
         // this.getEventName().subscribe(name=>{
         //    console.log("consiguiendo los nombres de los eventos",name.data);
         //   this.events_names = name.data;
@@ -199,7 +220,6 @@ export class EventService {
         //   this.getVehiclesPlate();
         // });
         this.events = response.data.map((event: any) => {
-
           //event.nombre=this.loadNameEvent(event); //conseguir el nombre que el usuario le puso
           let icon = L.icon({
             iconUrl: this.img_icon,
@@ -212,15 +232,20 @@ export class EventService {
           event.layer._myType = 'evento';
           event.layer._myId = event.id;
           // console.log('EVENTO ->',event);
-          event.namedriver = this.driverService.getDriverById(event.driver_id);// <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+          event.namedriver = this.driverService.getDriverById(event.driver_id); // <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
           // event.namedriver = "NO IDENTIFICADO";
           // event.layer.addTo(this.eventsLayers);
 
           // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
-          event.fecha_tracker = moment(event.fecha_tracker, 'YYYY/MM/DD hh:mm:ss').subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+          event.fecha_tracker = moment(
+            event.fecha_tracker,
+            'YYYY/MM/DD hh:mm:ss'
+          )
+            .subtract(5, 'hours')
+            .format('YYYY/MM/DD HH:mm:ss');
           //console.log('Evento de tabla: ', event);
           // console.log("view",event.viewed)
-          if(!event.viewed){
+          if (!event.viewed) {
             this.unreadCount++;
           }
           //event.bol_evaluation = this.alertService.alerts.find(alert => alert.slug)
@@ -238,19 +263,22 @@ export class EventService {
               valoracion_evento: '0',
               observacion_evaluacion: '',
               senales_posible_fatiga: false,
-              operador_monitoreo: ''
-            } as Evaluation
+              operador_monitoreo: '',
+            } as Evaluation,
           ];
           return event;
         });
         // return;
-        this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
+        this.strUnreadCount =
+          this.unreadCount > 99 ? '+99' : this.unreadCount.toString();
         this.eventsLoaded = true;
-        while(this.socketEvents.length > 0){
+        while (this.socketEvents.length > 0) {
           let last_event = this.socketEvents.pop();
-          if(this.events.findIndex(event => event.id == last_event.id) == -1){
+          if (
+            this.events.findIndex((event) => event.id == last_event.id) == -1
+          ) {
             // this.events.nombre="XDDD";
-            if(last_event.bol_evaluation){
+            if (last_event.bol_evaluation) {
               last_event.evaluations = [
                 {
                   event_id: last_event.evento_id,
@@ -265,8 +293,8 @@ export class EventService {
                   valoracion_evento: '0',
                   observacion_evaluacion: '',
                   senales_posible_fatiga: false,
-                  operador_monitoreo: ''
-                } as Evaluation
+                  operador_monitoreo: '',
+                } as Evaluation,
               ];
             }
             this.events.unshift(last_event);
@@ -279,11 +307,11 @@ export class EventService {
         this.enableSocketEvents = false;
         this.showEventPanel();
       });
-      return this.events;
+    return this.events;
   }
 
   public getData() {
-    if(!this.statusLoadPlate){
+    if (!this.statusLoadPlate) {
       this.getVehiclesPlate();
       this.statusLoadPlate = true;
     }
@@ -294,19 +322,19 @@ export class EventService {
     return this.classFilterArray;
   }
 
-  public addNewEvent(event:any){
-    console.log("addNewEvent ........... ",event);
-//     evento: "motor-encendido"
-// evento_id: 19
+  public addNewEvent(event: any) {
+    console.log('addNewEvent ........... ', event);
+    //     evento: "motor-encendido"
+    // evento_id: 19
     event.event_user_id = event.evento_id;
     //event.nombre=this.loadNameEvent(event);
     event.evaluated = 0;
-    if(!this.eventsLoaded || this.enableSocketEvents){
+    if (!this.eventsLoaded || this.enableSocketEvents) {
       // console.log("event socket");
       this.socketEvents.unshift(event);
     } else {
       // console.log("event ---XD");
-      if(event.bol_evaluation){
+      if (event.bol_evaluation) {
         event.evaluations = [
           {
             event_id: event.evento_id,
@@ -322,46 +350,52 @@ export class EventService {
             observacion_evaluacion: '',
             senales_posible_fatiga: false,
             operador_monitoreo: '',
-          } as Evaluation
+          } as Evaluation,
         ];
       }
       this.events.unshift(event);
       this.updateUnreadCounter();
-      console.log("SONARAA?",event);
-      if(typeof event.sonido_sistema_bol != 'undefined' && event.sonido_sistema_bol == true){
-        console.log("SI SINOoooo");
+      console.log('SONARAA?', event);
+      if (
+        typeof event.sonido_sistema_bol != 'undefined' &&
+        event.sonido_sistema_bol == true
+      ) {
+        console.log('SI SINOoooo');
         this.playNotificationSound(event.ruta_sonido);
       }
       this.attachClassesToEvents();
     }
 
     this.newEventStream.emit(this.events);
-    console.log("new Event added: ", event);
+    console.log('new Event added: ', event);
     // this.eventService.sortEventsTableData();
   }
 
-  playNotificationSound(path: string){
-    if(typeof path != 'undefined' && path != ''){
-      if(this.audio.currentSrc != '' && !this.audio.ended){
+  playNotificationSound(path: string) {
+    if (typeof path != 'undefined' && path != '') {
+      if (this.audio.currentSrc != '' && !this.audio.ended) {
         this.audio.pause();
       }
       this.audio = new Audio('assets/sonidos/' + path);
       let audioPromise = this.audio.play();
 
       if (audioPromise !== undefined) {
-        audioPromise.then(() => {
-          console.log('Playing notification sound')
-        })
-        .catch((error: any) => {
-          //console.log(error);
-          // Auto-play was prevented
-        });
+        audioPromise
+          .then(() => {
+            console.log('Playing notification sound');
+          })
+          .catch((error: any) => {
+            //console.log(error);
+            // Auto-play was prevented
+          });
       }
     }
   }
 
   public async getAllEventsForTheFilter() {
-    const response:ResponseInterface = await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/events`).toPromise();
+    const response: ResponseInterface = await this.http
+      .get<ResponseInterface>(`${environment.apiUrl}/api/events`)
+      .toPromise();
     let events = response.data;
     // console.log("events en eventService",events);
 
@@ -369,12 +403,12 @@ export class EventService {
     //   return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
     // });
 
-    this.classFilterArray = events.map( (event:any) => ({
-      id:event.id,
-      option:this.toCamelCase(event.name),
-      tipo:event.slug,
-      clase:event.slug
-    }))
+    this.classFilterArray = events.map((event: any) => ({
+      id: event.id,
+      option: this.toCamelCase(event.name),
+      tipo: event.slug,
+      clase: event.slug,
+    }));
     this.classFilterArray.push({
       id: 999,
       option: 'Exceso de Velocidad',
@@ -387,293 +421,357 @@ export class EventService {
     return this.classFilterArray;
   }
 
-  toCamelCase(str:any){
-    const palabras = str.split(" ");
+  toCamelCase(str: any) {
+    const palabras = str.split(' ');
 
-    var palabraM = palabras.map((palabra:any) => {
-      if (palabra=='de' || palabra=='en' || palabra=='con' || palabra=='de' || palabra=='la' ) {
-        return palabra;
-      } else {
-        return palabra[0].toUpperCase() + palabra.substring(1);
-      }
-    }).join(" ");
+    var palabraM = palabras
+      .map((palabra: any) => {
+        if (
+          palabra == 'de' ||
+          palabra == 'en' ||
+          palabra == 'con' ||
+          palabra == 'de' ||
+          palabra == 'la'
+        ) {
+          return palabra;
+        } else {
+          return palabra[0].toUpperCase() + palabra.substring(1);
+        }
+      })
+      .join(' ');
     return palabraM;
   }
 
+  //== Para el uso del modulo historial
 
-    //== Para el uso del modulo historial
+  eventsClassList = [
+    { tipo: 'zona-de-entrada', clase: 'zona-entrada' },
+    { tipo: 'zona-de-salida', clase: 'zona-salida' },
+    { tipo: 'tiempo-estadio-zona', clase: 'tiempo-estadia-zona' },
+    {
+      tipo: 'parada-en-zona-no-autorizada',
+      clase: 'parada-zona-no-autorizada',
+    },
+    { tipo: 'mantenimiento-correctivo', clase: 'mantenimiento-correctivo' },
+    { tipo: 'mantenimiento-preventivo', clase: 'mantenimiento-preventivo' },
+    {
+      tipo: 'mantenimiento-correctivo-realizado',
+      clase: 'mantenimiento-correctivo-realizado',
+    },
+    {
+      tipo: 'mantenimiento-preventivo-realizado',
+      clase: 'mantenimiento-preventivo-realizado',
+    },
+    { tipo: 'sos', clase: 'sos-event' },
+    { tipo: 'exceso-velocidad', clase: 'exceso-velocidad' },
+    { tipo: 'infraccion', clase: 'infraccion' },
+    { tipo: 'vehiculo-sin-programacion', clase: 'vehiculo-sin-programacion' },
+    { tipo: 'frenada-brusca', clase: 'frenada-brusca' },
+    { tipo: 'aceleracion-brusca', clase: 'aceleracion-brusca' },
+    { tipo: 'bateria-desconectada', clase: 'bateria-desconectada' },
+    { tipo: 'motor-encendido', clase: 'motor-encendido' },
+    { tipo: 'motor-apagado', clase: 'motor-apagado' },
+    { tipo: 'fatiga', clase: 'fatiga' },
+    { tipo: 'somnolencia-360', clase: 'somnolencia' },
+    { tipo: 'distraccion', clase: 'distraccion' },
+    { tipo: 'desvio-de-carril-izquierda', clase: 'desvio-carril-izq' },
+    { tipo: 'desvio-de-carril-derecha', clase: 'desvio-carril-der' },
+    { tipo: 'bloqueo-vision-mobileye', clase: 'bloqueo-vision-mobileye' },
+    { tipo: 'colision-peatones', clase: 'colision-peatones' },
+    { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
+    { tipo: 'posible-fatiga', clase: 'posible-fatiga' },
+    { tipo: 'fatiga-extrema', clase: 'fatiga-extrema' },
+    { tipo: 'no-rostro', clase: 'no-rostro' },
+    { tipo: 'error-de-camara-360', clase: 'error-de-camara-360' },
+    { tipo: 'cinturon-desabrochado-360', clase: 'cinturon-desabrochado-360' },
+    { tipo: 'conductor-distraido-360', clase: 'conductor-distraido-360' },
+    { tipo: 'conductor-fumando-360', clase: 'conductor-fumando-360' },
+    { tipo: 'ignicion-activada-360', clase: 'ignicion-activada-360' },
+    { tipo: 'conductor-adormitado-360', clase: 'conductor-adormitado-360' },
+    { tipo: 'conductor-somnoliento-360', clase: 'conductor-somnoliento-360' },
+    { tipo: 'uso-del-celular-360', clase: 'celular-detectado' },
+    { tipo: 'sistema-ok-360', clase: 'sistema-ok-360' },
+    { tipo: 'sistema-reseteado-360', clase: 'sistema-reseteado-360' },
+    { tipo: 'deteccion-manipulacion-360', clase: 'deteccion-manipulacion-360' },
+    {
+      tipo: 'conductor-no-identificado-360',
+      clase: 'conductor-no-identificado-360',
+    },
+    { tipo: 'cambio-conductor-360', clase: 'cambio-conductor-360' },
+    { tipo: 'conductor-identificado-360', clase: 'conductor-identificado-360' },
+    { tipo: 'conductor-ausente-360', clase: 'conductor-ausente-360' },
+    {
+      tipo: 'actualizacion-estado-gps-360',
+      clase: 'actualizacion-estado-gps-360',
+    },
+    { tipo: 'conductor-no-identificado', clase: 'conductor-no-identificado' },
+    { tipo: 'conductor-identificado', clase: 'conductor-identificado' },
+    {
+      tipo: 'manipulacion-de-dispositivo',
+      clase: 'manipulacion-de-dispositivo',
+    },
+    { tipo: 'error-calibracion-360', clase: 'error-calibracion-360' },
+    { tipo: 'uso-de-celular-360', clase: 'celular_detectado_360' },
+    { tipo: 'error-sistema-360', clase: 'error-sistema-360' },
+    { tipo: 'ignicion-desactivada-360', clase: 'ignicion-desactivada-360' },
+    { tipo: 'inicio-sistema-ok-360', clase: 'inicio-sistema-ok-360' },
+    { tipo: 'motor-encendido', clase: 'motor-encendido' },
+    { tipo: 'motor-apagado', clase: 'motor-apagado' },
+    { tipo: 'dvr-operativo', clase: 'dvr-operativo' },
+    { tipo: 'dvr-inoperativo', clase: 'dvr-inoperativo' },
+    { tipo: 'antena-gps-desconectada', clase: 'antena-gps-desconectada' },
+  ];
 
-    eventsClassList = [
-      { tipo: 'zona-de-entrada', clase: 'zona-entrada' },
-      { tipo: 'zona-de-salida', clase: 'zona-salida' },
-      { tipo: 'tiempo-estadio-zona', clase: 'tiempo-estadia-zona' },
-      { tipo: 'parada-en-zona-no-autorizada', clase: 'parada-zona-no-autorizada' },
-      { tipo: 'mantenimiento-correctivo', clase: 'mantenimiento-correctivo' },
-      { tipo: 'mantenimiento-preventivo', clase: 'mantenimiento-preventivo' },
-      { tipo: 'mantenimiento-correctivo-realizado', clase: 'mantenimiento-correctivo-realizado' },
-      { tipo: 'mantenimiento-preventivo-realizado', clase: 'mantenimiento-preventivo-realizado' },
-      { tipo: 'sos', clase: 'sos-event' },
-      { tipo: 'exceso-velocidad', clase: 'exceso-velocidad' },
-      { tipo: 'infraccion', clase: 'infraccion' },
-      { tipo: 'vehiculo-sin-programacion', clase: 'vehiculo-sin-programacion' },
-      { tipo: 'frenada-brusca', clase: 'frenada-brusca' },
-      { tipo: 'aceleracion-brusca', clase: 'aceleracion-brusca' },
-      { tipo: 'bateria-desconectada', clase: 'bateria-desconectada' },
-      { tipo: 'motor-encendido', clase: 'motor-encendido' },
-      { tipo: 'motor-apagado', clase: 'motor-apagado' },
-      { tipo: 'fatiga', clase: 'fatiga' },
-      { tipo: 'somnolencia-360', clase: 'somnolencia' },
-      { tipo: 'distraccion', clase: 'distraccion' },
-      { tipo: 'desvio-de-carril-izquierda', clase: 'desvio-carril-izq' },
-      { tipo: 'desvio-de-carril-derecha', clase: 'desvio-carril-der' },
-      { tipo: 'bloqueo-vision-mobileye', clase: 'bloqueo-vision-mobileye' },
-      { tipo: 'colision-peatones', clase: 'colision-peatones' },
-      { tipo: 'anticolision-frontal', clase: 'colision-delantera' },
-      { tipo: 'posible-fatiga', clase: 'posible-fatiga' },
-      { tipo: 'fatiga-extrema', clase: 'fatiga-extrema' },
-      { tipo: 'no-rostro', clase: 'no-rostro' },
-      { tipo: 'error-de-camara-360', clase: 'error-de-camara-360' },
-      { tipo: 'cinturon-desabrochado-360', clase: 'cinturon-desabrochado-360' },
-      { tipo: 'conductor-distraido-360', clase: 'conductor-distraido-360' },
-      { tipo: 'conductor-fumando-360', clase: 'conductor-fumando-360' },
-      { tipo: 'ignicion-activada-360', clase: 'ignicion-activada-360' },
-      { tipo: 'conductor-adormitado-360', clase: 'conductor-adormitado-360' },
-      { tipo: 'conductor-somnoliento-360', clase: 'conductor-somnoliento-360' },
-      { tipo: 'uso-del-celular-360', clase: 'celular-detectado' },
-      { tipo: 'sistema-ok-360', clase: 'sistema-ok-360' },
-      { tipo: 'sistema-reseteado-360', clase: 'sistema-reseteado-360' },
-      { tipo: 'deteccion-manipulacion-360', clase: 'deteccion-manipulacion-360' },
-      { tipo: 'conductor-no-identificado-360', clase: 'conductor-no-identificado-360' },
-      { tipo: 'cambio-conductor-360', clase: 'cambio-conductor-360' },
-      { tipo: 'conductor-identificado-360', clase: 'conductor-identificado-360' },
-      { tipo: 'conductor-ausente-360', clase: 'conductor-ausente-360' },
-      { tipo: 'actualizacion-estado-gps-360', clase: 'actualizacion-estado-gps-360' },
-      { tipo: 'conductor-no-identificado', clase: 'no-rostro' },
-      { tipo: 'conductor-identificado', clase: 'no-rostro' },
-      { tipo: 'manipulacion-de-dispositivo', clase: 'manipulacion-de-dispositivo' },
-      { tipo: 'error-calibracion-360', clase: 'error-calibracion-360' },
-      { tipo: 'uso-de-celular-360', clase: 'celular_detectado_360' },
-      { tipo: 'error-sistema-360', clase: 'error-sistema-360' },
-      { tipo: 'ignicion-desactivada-360', clase: 'ignicion-desactivada-360' },
-      { tipo: 'inicio-sistema-ok-360', clase: 'inicio-sistema-ok-360' },
-      { tipo: 'motor-encendido', clase: 'motor-encendido' },
-      { tipo: 'motor-apagado', clase: 'motor-apagado' },
-      { tipo: 'dvr-operativo', clase: 'dvr-operativo' },
-      { tipo: 'dvr-inoperativo', clase: 'dvr-inoperativo' },
-      { tipo: 'antena-gps-desconectada', clase: 'antena-gps-desconectada' },
-    ];
+  public async ShowAllHistorial(param: any) {
+    // console.log("========= ShowAllHistorial ===========");
 
+    await this.http
+      .post<ResponseInterface>(
+        `${environment.apiUrl}/api/dataEventUserHistorial`,
+        param
+      )
+      .toPromise()
+      .then((response: any) => {
+        // console.log("=======================ShowAllHistorial event");
+        // console.log("data show historial event",response.data);
+        this.eventsHistorial = response.data;
 
-    public async ShowAllHistorial(param : any) {
-        // console.log("========= ShowAllHistorial ===========");
+        for (let index = 0; index < this.eventsHistorial.length; index++) {
+          let data = this.filterImei(
+            this.vehicleService.vehicles,
+            this.eventsHistorial[index].imei
+          );
+          // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
+          // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
+          if (data != undefined) {
+            //console.log("name ====",data.name);
+            this.eventsHistorial[index].nombre_objeto = data.name;
+          }
 
-        await this.http.post<ResponseInterface>(`${environment.apiUrl}/api/dataEventUserHistorial`,param)
-          .toPromise().then((response:any) => {
-            // console.log("=======================ShowAllHistorial event");
-            // console.log("data show historial event",response.data);
-            this.eventsHistorial = response.data;
+          const event = this.eventsHistorial[index];
 
+          const iconUrl = getIconUrlHistory(event);
 
-
-            for (let index = 0; index < this.eventsHistorial.length; index++) {
-
-              let data = this.filterImei(this.vehicleService.vehicles, this.eventsHistorial[index].imei);
-              // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
-              // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
-              if (data != undefined) {
-                //console.log("name ====",data.name);
-                this.eventsHistorial[index].nombre_objeto = data.name;
-              }
-
-              let icon = L.icon({
-                iconUrl: this.img_icon,
-                iconSize: this.img_iconSize, // size of the icon
-                iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
-              });
-              this.getVehiclesPlate(this.eventsHistorial);
-              const event = this.eventsHistorial[index];
-              event.layer = L.marker([event.latitud, event.longitud], {
-                icon: icon,
-              });
-              event.layer._myType = 'eventoHistorial';
-              event.layer._myId = event.id;
-              //---------
-              var eventClass:any = this.eventsClassList.filter((eventClass:any) => eventClass.tipo == event.tipo);
-              eventClass = (eventClass.length > 0? eventClass[0].clase: 'default-event');
-
-              //nombre_objeto
-              // // this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
-              // event.layer.bindPopup(getContentPopup(event), {
-              //   className: eventClass,
-              //   minWidth: 250,
-              //   maxWidth: 350,
-              // } );
-              // // event.layer.addTo(this.mapService.map);//.openPopup();
-
-
-              const objParams:any = {};
-              if(event.parametros&&typeof(event.parametros)=='string'){
-                event.parametros.split('|').forEach((item:any) => {
-                  const [key, value] = item.split('=');
-                  objParams[key] = value;
-                });
-                event.parametros = objParams;
-              }
-              //console.log("eventosssss");
-
-              event.layer.bindPopup(getContentPopup(event), {
-                className: eventClass,
-                minWidth: 250,
-                maxWidth: 350,
-              });
-
-              event.layer.on('click', () => {
-                console.log("CLIIIIICK");
-                this.pinPopupStream.emit(event);
-              });
-            }
-
-            console.log(this.eventsHistorial);
-
+          let icon = L.icon({
+            iconUrl: iconUrl,
+            iconSize: this.img_iconSize, // size of the icon
+            iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
           });
-    }
+          this.getVehiclesPlate(this.eventsHistorial);
 
-    private filterImei(data: any, imei: any) {
-      // console.log("imei",imei);
-      for (const index in data) {
-        // console.log("IMEI",data[index].IMEI);
-        if (String(data[index].IMEI) == String(imei)) {
+          event.layer = L.marker([event.latitud, event.longitud], {
+            icon: icon,
+          });
+          event.layer._myType = 'eventoHistorial';
+          event.layer._myId = event.id;
+          //---------
+          var eventClass: any = this.eventsClassList.filter(
+            (eventClass: any) => eventClass.tipo == event.tipo
+          );
+          eventClass =
+            eventClass.length > 0 ? eventClass[0].clase : 'default-event';
 
-          console.log("return true");
-          return data[index];
+          //nombre_objeto
+          // // this.mapService.map.fitBounds([[event.layer.getLatLng().lat, event.layer.getLatLng().lng]], {padding: [50, 50]});
+          // event.layer.bindPopup(getContentPopup(event), {
+          //   className: eventClass,
+          //   minWidth: 250,
+          //   maxWidth: 350,
+          // } );
+          // // event.layer.addTo(this.mapService.map);//.openPopup();
+
+          const objParams: any = {};
+          if (event.parametros && typeof event.parametros == 'string') {
+            event.parametros.split('|').forEach((item: any) => {
+              const [key, value] = item.split('=');
+              objParams[key] = value;
+            });
+            event.parametros = objParams;
+          }
+          //console.log("eventosssss");
+
+          event.layer.bindPopup(getContentPopup(event), {
+            className: eventClass,
+            minWidth: 250,
+            maxWidth: 350,
+          });
+
+          event.layer.on('click', () => {
+            console.log('CLIIIIICK');
+            this.pinPopupStream.emit(event);
+          });
         }
+
+        console.log(this.eventsHistorial);
+      });
+  }
+
+  private filterImei(data: any, imei: any) {
+    // console.log("imei",imei);
+    for (const index in data) {
+      // console.log("IMEI",data[index].IMEI);
+      if (String(data[index].IMEI) == String(imei)) {
+        console.log('return true');
+        return data[index];
       }
-      console.log("return false");
-      return undefined;
-
     }
+    console.log('return false');
+    return undefined;
+  }
 
-    public attachClassesToEvents(single_event?: any){
-      let events = typeof single_event == 'undefined'? this.events: single_event;
-      events.forEach((event: any) => {
-        //console.log(event.evento);
-        //console.log(this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ));
+  public attachClassesToEvents(single_event?: any) {
+    let events =
+      typeof single_event == 'undefined' ? this.events : single_event;
+    events.forEach((event: any) => {
+      //console.log(event.evento);
+      //console.log(this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) ));
 
-        //Usar este IF en caso de querer usar las clases obtenidas en getAllEventsForTheFilter
-        /* if(typeof event.clase == 'undefined' || event.clase == ''){
+      //Usar este IF en caso de querer usar las clases obtenidas en getAllEventsForTheFilter
+      /* if(typeof event.clase == 'undefined' || event.clase == ''){
           const eventFilter = this.classFilterArray.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) );
           event.clase = typeof eventFilter == 'undefined'? 'default-event': eventFilter.clase;
         } */
 
-        //Usar este IF en caso de querer usar el objeto declarado localmente para obtener las clases
-        if(typeof event.clase == 'undefined' || event.clase == ''){
-          const eventFilter = this.eventsClassList.find( (eachFilter: { tipo: string; }) => this.prepareStrings(eachFilter.tipo) === this.prepareStrings(event.evento) );
-          event.clase = typeof eventFilter == 'undefined'? 'default-event': eventFilter.clase;
-          if(typeof eventFilter == 'undefined'){
-            console.log('No se pudo asignar clase a evento: ', event)
-          }
+      //Usar este IF en caso de querer usar el objeto declarado localmente para obtener las clases
+      if (typeof event.clase == 'undefined' || event.clase == '') {
+        const eventFilter = this.eventsClassList.find(
+          (eachFilter: { tipo: string }) =>
+            this.prepareStrings(eachFilter.tipo) ===
+            this.prepareStrings(event.evento)
+        );
+        event.clase =
+          typeof eventFilter == 'undefined'
+            ? 'default-event'
+            : eventFilter.clase;
+        if (typeof eventFilter == 'undefined') {
+          console.log('No se pudo asignar clase a evento: ', event);
         }
-      });
-    }
-
-    private prepareStrings(str: string){
-      return str.normalize('NFKD').replace(/[^\w ]/g, '').toLowerCase();
-    }
-
-    async getEventsByImeis(imeis:any,to:any,from:any){
-      const response:ResponseInterface = await this.http
-      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {
-        imeis:imeis,
-        to:to,
-        from:from
-      })
-      .toPromise();
-      return response.data;
-    }
-
-    async getEvaluations(id: string){
-      const response:ResponseInterface = await this.http
-      .get<ResponseInterface>(`${environment.apiUrl}/api/evaluations/event-user/${id}`)
-      .toPromise();
-      return response.data;
-    }
-
-    async saveEvaluations(evaluation: Evaluation){
-      const response:ResponseInterface = await this.http
-      .post<ResponseInterface>(`${environment.apiUrl}/api/evaluation`,evaluation)
-      .toPromise();
-      return response.data;
-    }
-
-    async getEventsByImeisAndEventType(imeis:any,to:any,from:any, event_type:any){
-      const response:ResponseInterface = await this.http
-      .post<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-by-imeis`, {
-        imeis:imeis,
-        to:to,
-        from:from,
-        event_type:event_type
-      })
-      .toPromise();
-
-      return response.data;
-    }
-
-    increaseUnreadCounter(){
-      this.unreadCount++;
-      this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
-    }
-
-    decreaseUnreadCounter(){
-      this.unreadCount--;
-      this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
-    }
-
-    updateUnreadCounter(){
-      let counter = 0;
-      this.events.forEach(event => {
-        if(event.viewed == false){
-          counter++;
-        }
-      });
-      console.log("contador de eventos = ",counter);
-      this.unreadCount = counter;
-      this.strUnreadCount = this.unreadCount > 99? '+99': this.unreadCount.toString();
-    }
-
-    showEventPanel(){
-      console.log("show event panel ....");
-      if(this.filterLoaded && this.eventsLoaded){
-        this.attachClassesToEvents();
-        this.eventsFiltered = this.getData();
-
-        this.sortEventsTableData(); //Initial table sort
-        this.spinner.hide('loadingEventList');
-        console.log('Ocultar Spinner');
-      } else {
-        console.log('Failed attempt');
       }
-    }
+    });
+  }
 
+  private prepareStrings(str: string) {
+    return str
+      .normalize('NFKD')
+      .replace(/[^\w ]/g, '')
+      .toLowerCase();
+  }
+
+  async getEventsByImeis(imeis: any, to: any, from: any) {
+    const response: ResponseInterface = await this.http
+      .post<ResponseInterface>(
+        `${environment.apiUrl}/api/event-user/get-by-imeis`,
+        {
+          imeis: imeis,
+          to: to,
+          from: from,
+        }
+      )
+      .toPromise();
+    return response.data;
+  }
+
+  async getEvaluations(id: string) {
+    const response: ResponseInterface = await this.http
+      .get<ResponseInterface>(
+        `${environment.apiUrl}/api/evaluations/event-user/${id}`
+      )
+      .toPromise();
+    return response.data;
+  }
+
+  async saveEvaluations(evaluation: Evaluation) {
+    const response: ResponseInterface = await this.http
+      .post<ResponseInterface>(
+        `${environment.apiUrl}/api/evaluation`,
+        evaluation
+      )
+      .toPromise();
+    return response.data;
+  }
+
+  async getEventsByImeisAndEventType(
+    imeis: any,
+    to: any,
+    from: any,
+    event_type: any
+  ) {
+    const response: ResponseInterface = await this.http
+      .post<ResponseInterface>(
+        `${environment.apiUrl}/api/event-user/get-by-imeis`,
+        {
+          imeis: imeis,
+          to: to,
+          from: from,
+          event_type: event_type,
+        }
+      )
+      .toPromise();
+
+    return response.data;
+  }
+
+  increaseUnreadCounter() {
+    this.unreadCount++;
+    this.strUnreadCount =
+      this.unreadCount > 99 ? '+99' : this.unreadCount.toString();
+  }
+
+  decreaseUnreadCounter() {
+    this.unreadCount--;
+    this.strUnreadCount =
+      this.unreadCount > 99 ? '+99' : this.unreadCount.toString();
+  }
+
+  updateUnreadCounter() {
+    let counter = 0;
+    this.events.forEach((event) => {
+      if (event.viewed == false) {
+        counter++;
+      }
+    });
+    console.log('contador de eventos = ', counter);
+    this.unreadCount = counter;
+    this.strUnreadCount =
+      this.unreadCount > 99 ? '+99' : this.unreadCount.toString();
+  }
+
+  showEventPanel() {
+    console.log('show event panel ....');
+    if (this.filterLoaded && this.eventsLoaded) {
+      this.attachClassesToEvents();
+      this.eventsFiltered = this.getData();
+
+      this.sortEventsTableData(); //Initial table sort
+      this.spinner.hide('loadingEventList');
+      console.log('Ocultar Spinner');
+    } else {
+      console.log('Failed attempt');
+    }
+  }
 
   //Sort called from event-list.component
-  sortEventsTableData(){
-    this.eventsFiltered.sort((a,b) => {
-      if(a.fecha_tracker > b.fecha_tracker){
+  sortEventsTableData() {
+    this.eventsFiltered.sort((a, b) => {
+      if (a.fecha_tracker > b.fecha_tracker) {
         return -1;
       }
-      if(a.fecha_tracker < b.fecha_tracker){
+      if (a.fecha_tracker < b.fecha_tracker) {
         return 1;
       }
-      if(this.new_notif_stack.indexOf(a.id) > -1 ){
-        if(this.new_notif_stack.indexOf(b.id) > -1){
-          if(this.new_notif_stack.indexOf(a.id) > this.new_notif_stack.indexOf(b.id)) {
+      if (this.new_notif_stack.indexOf(a.id) > -1) {
+        if (this.new_notif_stack.indexOf(b.id) > -1) {
+          if (
+            this.new_notif_stack.indexOf(a.id) >
+            this.new_notif_stack.indexOf(b.id)
+          ) {
             return -1;
           }
           return 1;
         }
         return -1;
       } else {
-        if(this.new_notif_stack.indexOf(b.id) > -1){
+        if (this.new_notif_stack.indexOf(b.id) > -1) {
           return 1;
         }
         return -1;
@@ -682,95 +780,112 @@ export class EventService {
     //console.log('Data Sorted', this.events);
   }
 
-  checkDuplicates(){
-    for(let i=0; i < this.events.length; i++){
+  checkDuplicates() {
+    for (let i = 0; i < this.events.length; i++) {
       let currEvent = this.events[i];
-      let auxArr = this.events.filter(event => {
+      let auxArr = this.events.filter((event) => {
         event.id == currEvent.id;
       });
-      if(auxArr.length > 1){
+      if (auxArr.length > 1) {
         console.log('EVENTO DUPLICADO DETECTADO!', currEvent.id);
       }
     }
   }
 
-  markAsRead(event_id:string){
-    console.log("desde event service ... ");
-    this.http.get<any>(environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id).subscribe({
-      next: data => {
-        console.log(' desde event service Mark ' + event_id + ' as read Success? : ', data.success);
-      },
-      error: () => {
-        console.log(event_id + ': Hubo un error al marcar como leído');
-      }
-    });
+  markAsRead(event_id: string) {
+    console.log('desde event service ... ');
+    this.http
+      .get<any>(
+        environment.apiUrl + '/api/event-user/mark-as-viewed/' + event_id
+      )
+      .subscribe({
+        next: (data) => {
+          console.log(
+            ' desde event service Mark ' + event_id + ' as read Success? : ',
+            data.success
+          );
+        },
+        error: () => {
+          console.log(event_id + ': Hubo un error al marcar como leído');
+        },
+      });
   }
 
-  async getReference(lat: any, lng: any){
-    const response:ResponseInterface = await this.http
-      .get<ResponseInterface>(`${environment.apiUrl}/api/event-user/get-reference`, {
-        params:
+  async getReference(lat: any, lng: any) {
+    const response: ResponseInterface = await this.http
+      .get<ResponseInterface>(
+        `${environment.apiUrl}/api/event-user/get-reference`,
         {
-          latitud:lat,
-          longitud:lng
+          params: {
+            latitud: lat,
+            longitud: lng,
+          },
         }
-      })
+      )
       .toPromise();
 
-      // console.log("===============================");
-      // console.log(response);
+    // console.log("===============================");
+    // console.log(response);
 
-      return response.data;
+    return response.data;
   }
 
   /**
    * name
    */
-  public getContentPopup(event:any) {
+  public getContentPopup(event: any) {
     return getContentPopup(event);
   }
 
-  public changeNameEvent (name:string){
-    if (name == 'gps'){
+  public changeNameEvent(name: string) {
+    if (name == 'gps') {
       return 'EVENTOS GPS TRACKER';
-    }else if(name == 'platform'){
+    } else if (name == 'platform') {
       return 'EVENTOS PLATAFORMA';
-    // }else if (name == 'accessories'){
-    }else if (name == '360'){
-      return 'EVENTOS FATIGA 360º'
-    }else if (name == 'security'){
-      return 'EVENTOS SEGURIDAD VEHICULAR'
-    }else if (name == 'mobile'){
-      return 'EVENTOS SOLUCIONES MÓVILES´'
-    }else {
-      return 'EVENTOS '+name.toUpperCase();
+      // }else if (name == 'accessories'){
+    } else if (name == '360') {
+      return 'EVENTOS FATIGA 360º';
+    } else if (name == 'security') {
+      return 'EVENTOS SEGURIDAD VEHICULAR';
+    } else if (name == 'mobile') {
+      return 'EVENTOS SOLUCIONES MÓVILES´';
+    } else {
+      return 'EVENTOS ' + name.toUpperCase();
     }
   }
 
-  public createEventList (data:any):any[]{
-    console.log("[event.service] createEventList",data);
+  public createEventList(data: any): any[] {
+    console.log('[event.service] createEventList', data);
     // let status_event = false;
-    let map: any=[];
+    let map: any = [];
     for (let event of data) {
-      console.log("event: ",event);
+      console.log('event: ', event);
       // status_event= false;
       event.event_category = this.changeNameEvent(event.event_category);
 
-      const existingTypeEvent = map.find((item: { label: any; items: any[]; }) => item.label === event.event_category);
-      console.log("existingTypeEvent",existingTypeEvent);
+      const existingTypeEvent = map.find(
+        (item: { label: any; items: any[] }) =>
+          item.label === event.event_category
+      );
+      console.log('existingTypeEvent', existingTypeEvent);
       if (existingTypeEvent) {
         // El tipo de evento ya existe en el mapa
-        console.log("el tipo de evento existe en el mapa.....");
-        const existingEvent = existingTypeEvent.items.find((existingItem: { name: any; value: any; }) => existingItem.value === event.slug);
+        console.log('el tipo de evento existe en el mapa.....');
+        const existingEvent = existingTypeEvent.items.find(
+          (existingItem: { name: any; value: any }) =>
+            existingItem.value === event.slug
+        );
 
         if (!existingEvent) {
-           console.log("El id_event no existe para este tipo de evento, lo agregamos");
+          console.log(
+            'El id_event no existe para este tipo de evento, lo agregamos'
+          );
           existingTypeEvent.items.push({
             name: event.name_event,
-            value: event.slug
+            value: event.slug,
           });
-        }else{
-          console.log("no existe el evento ",existingEvent);
+        } else {
+          console.log('no existe el evento ', existingEvent);
         }
       } else {
         // El tipo de evento no existe en el mapa, lo añadimos
@@ -780,16 +895,14 @@ export class EventService {
             {
               name: event.name_event,
               value: event.slug,
-            }
-          ]
+            },
+          ],
         });
       }
-
     }
     this.eventsGroupedList = map;
     this.eventsLength = data.length;
     this.eventsUserLoaded = true;
     return map;
   }
-
 }
