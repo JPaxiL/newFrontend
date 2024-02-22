@@ -112,7 +112,7 @@
                         </div>
                         
                         <ng-container *ngIf="showChangeItem == true">
-                            <div class="flex align-items h-5 column" >
+                            <!-- <div class="flex align-items h-5 column" >
                                 <div class="">
                                     <object data="assets/images/user_config/gif completo.gif" style="width: 40px;"></object>
                                 </div>
@@ -144,7 +144,51 @@
                                         <span class="slider"></span>
                                     </label>
                                 </div>
+                            </div> -->
+                            <div class="container contenido_checkbox">
+                                <div class="row">
+                                    <div class="col-4 checks">
+                                        <div class="flex align-items h-5 column">
+                                            <div>
+                                                <object data="assets/images/user_config/gifcompleto.gif" style="width: 70px;"></object>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <label class="switch ">
+                                                    <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox" (change)="switchActive(1);">
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 checks">
+                                        <div class="flex align-items h-5 column">
+                                            <div >
+                                                <object data="assets/images/user_config/flecha3colores.gif" style="width: 70px;"></object>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <label class="switch">
+                                                    <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2);">
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 checks">
+                                        <div class="flex align-items h-5 column">
+                                            <div>
+                                                <object data="assets/images/user_config/vista2bus.gif " style="width: 70px;"></object>
+                                            </div>
+                                            <div  class="d-flex justify-content-center">
+                                                <label class="switch">
+                                                    <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox" (change)="switchActive(3);">
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            
                         </ng-container>
                         
                         

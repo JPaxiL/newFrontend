@@ -31,7 +31,7 @@ export class EventService {
   public events_names: any[] = [];
   public eventsFiltered: any[] = [];
   public nombreComponente: string = 'EVENT-USER';
-  public img_icon: string = 'assets/images/eventos/pin_point.svg';
+  /* public img_icon: string = 'assets/images/eventos/pin_point.svg'; */
   public img_iconSize: any = [30, 30];
   public img_iconAnchor: any = [0, 30];
   public eventsLayers = new L.LayerGroup();
@@ -219,10 +219,12 @@ export class EventService {
         //   console.log("vehicles cargo antes que eventos ...");
         //   this.getVehiclesPlate();
         // });
+     
         this.events = response.data.map((event: any) => {
           //event.nombre=this.loadNameEvent(event); //conseguir el nombre que el usuario le puso
+          const iconUrl = getIconUrlHistory(event);
           let icon = L.icon({
-            iconUrl: this.img_icon,
+            iconUrl: iconUrl,
             iconSize: this.img_iconSize, // size of the icon
             iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
           });
