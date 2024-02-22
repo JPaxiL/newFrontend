@@ -639,7 +639,7 @@ export class FormComponent implements OnInit {
         eventsTypesToUpdate.active = true;
       }
     });
-    console.log('test types -->',this.eventsTypes);
+    console.log('test types -->',this.eventsTypes,this.events);
   }
   endInit(){
     if(this.errorFlag == 1){
@@ -1346,7 +1346,7 @@ export class FormComponent implements OnInit {
           this.showLimitTime = true;
           this.showAtencionEventsCipia = true;
           // this.showEvents = true;
-
+          this.updateCheckDefaultEvents();
           this.eC = {
             Fecha :true,
             FechaServidor :true,
@@ -1829,11 +1829,12 @@ export class FormComponent implements OnInit {
       satelite:false,
     };
 
+    
+    //6. Eventos
     this.events.forEach((event: {name_form: any; active: boolean;}) => {
       event.active = false;
       this.eV[event.name_form] = false;
     });
-    //6. Eventos
     // this.eV = {
     //   GPSbateriaBaja:false,
     //   GPSbateriaDesconectada:false,
@@ -1943,7 +1944,12 @@ export class FormComponent implements OnInit {
     this.timeInit = new Date('12/03/2018 00:00');
     this.timeEnd = new Date('12/03/2018 23:59');
     this.onTimeChange(); */
-    this.updateCheckDefaultEvents();
+
+    // this.updateCheckDefaultEvents();
+    // Reiniciar Check All Type EVent
+    this.eventsTypes.forEach((evType: any) => {
+      evType.selectAll =false;
+    });
   }
 
   logDropState(){

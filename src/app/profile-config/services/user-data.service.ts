@@ -37,7 +37,7 @@ export class UserDataService {
 
   constructor(private http: HttpClient,private sanitizer: DomSanitizer,public spinner: NgxSpinnerService) {}
 
-  getUserData(){
+  async getUserData(){
     console.log('USER DATA SERVICE LOADING');
     //tambien llamamos los tipos de vehicles
     this.http.post<any>(environment.apiUrl + '/api/userData', {}).subscribe({
@@ -98,6 +98,10 @@ export class UserDataService {
     }else{
       return '';
     }
+  }
+
+  async setDefaultStatusUserData(){
+    this.userDataInitialized = false;
   }
 
 }

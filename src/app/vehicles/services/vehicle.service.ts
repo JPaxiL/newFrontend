@@ -79,7 +79,7 @@ export class VehicleService {
     ) {
   }
 
-  public initialize(){
+  public async initialize(){
     /*
       procedimiento
         cargar data,
@@ -115,6 +115,7 @@ export class VehicleService {
         this.statusDataVehicle = true;
         this.statusDataVehicleTree = true;
         this.listOperations = this.generatedListOperations();
+        console.log('VEHICLE SERVICE LOADED');
         this.dataCompleted.emit(this.vehicles);
         this.dataTreeCompleted.emit(this.vehiclesTree);
         this.vehicleCompleted.emit(true);
@@ -125,7 +126,6 @@ export class VehicleService {
           }
         }
         this.allEyes.state = this.countOpenEyes > 0;
-        console.log('VEHICLE SERVICE LOADED');
       },
       () => {
         console.log('Error al obtener los vehículos')
@@ -838,9 +838,8 @@ export class VehicleService {
     return map;
   }
 
-  public setDefaultStatusDataVehicle(){
+  public async setDefaultStatusDataVehicle(){
     this.statusDataVehicle=false;
-    console.log('ChangesStatus');
   }
 
 }

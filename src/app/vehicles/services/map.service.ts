@@ -601,7 +601,7 @@ export class MapService {
           // OBTENER EL NOMBRE EN BASE AL ID DRIVER
           vehicles[index].namedriver = this.driversService.getDriverById(data.driver_id);
           vehicles[index].id_conductor = data.driver_id;
-          console.log('DRIVER->',data.IMEI,' - ',data.driver_id,':',vehicles[index].namedriver);
+          console.log('DRIVER ->',data.IMEI,' - ',data.driver_id,':',vehicles[index].namedriver);
         }
 
         vehicles[index].latitud = data.Latitud.toString();
@@ -618,6 +618,12 @@ export class MapService {
         // const date = moment(vehicles[index].dt_tracker).subtract(5, 'hours');
 
         vehicles[index] = this.vehicleService.formatVehicle(vehicles[index]);
+        
+        // MOSTRAR Ibutton ID de parametrosGet y su IMEI
+        if (vehicles[index].parametros!.includes('iButton ID=') && (vehicles[index].parametrosGet as any)['iButton ID'] !== 0) {
+          console.log('IButton ID:', (vehicles[index].parametrosGet as any)['iButton ID']);
+          console.log('IMEI:', vehicles[index].IMEI);
+        }
         if(this.imeiPopup==data.IMEI.toString()){
           let options = {
             imei: data.IMEI,
