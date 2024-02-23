@@ -10,7 +10,7 @@ import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { IGeofence, ITag } from '../models/interfaces';
-
+import { Datas} from '../../geofences/geofences-modal/geofences-modal';
 @Injectable({
   providedIn: 'root'
 })
@@ -29,6 +29,10 @@ export class GeofencesService {
   public action:string = 'add'; //[add,edit,delete]
   public actionTags: string = '';
   public modalActive: boolean =false;
+
+  private sharedData = new BehaviorSubject<Datas[]>([]);
+
+  public modalActiveGeoDet: boolean =false;
 
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
@@ -541,6 +545,21 @@ export class GeofencesService {
   public async removeListTag(tag: any){
     const tagsNew = this.listTag.filter((tg: {id: any;})=>tg.id !== tag.id);
     this.listTag = tagsNew;
+  }
+
+
+
+  //
+  getdatos(): Observable<any> {
+    return this.http.get('https://fakestoreapi.com/products?sort=desc');
+  }
+
+  setData(data: Datas[]) {
+    this.sharedData.next(data);
+  }
+
+  getData1(): Observable<Datas[] | null> {
+    return this.sharedData.asObservable();
   }
 
 }

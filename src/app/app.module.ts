@@ -159,6 +159,8 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
 import { UnixTimeToDatePipe } from './core/pipes/unix-time-to-date.pipe';
 import {ToastModule} from 'primeng-lts/toast';
 import { GeofencesModalComponent } from './geofences/geofences-modal/geofences-modal.component';
+import { ButtonModule} from 'primeng-lts/button';
+import { ModalGeoDetComponent } from './geofences/components/modal-geo-det/modal-geo-det.component';
 
 @NgModule({
   declarations: [
@@ -256,7 +258,8 @@ import { GeofencesModalComponent } from './geofences/geofences-modal/geofences-m
     SliderMultimediaComponent,
     AddTagComponent,
     UnixTimeToDatePipe,
-    GeofencesModalComponent
+    GeofencesModalComponent,
+    ModalGeoDetComponent
   ],
   imports: [
     ToastrModule.forRoot({
@@ -266,7 +269,8 @@ import { GeofencesModalComponent } from './geofences/geofences-modal/geofences-m
       positionClass: 'toast-bottom-right',
       maxOpened: 4,
       autoDismiss: true,
-    }),
+    }
+    ),
     RouterModule, 
     BrowserModule,
     DataTablesModule,
@@ -315,6 +319,7 @@ import { GeofencesModalComponent } from './geofences/geofences-modal/geofences-m
     SidebarModule,
     CarouselModule,
     ProgressSpinnerModule,
+    ButtonModule,
     NgxsStoragePluginModule.forRoot({
       key: ['auth.token', 'auth.access_token', 'auth.name', 'auth.expires_in', 'auth.refresh_token']
     }),

@@ -11,6 +11,7 @@ import { IMapMinimap, UserTracker } from '../models/interfaces';
 import { EventService } from 'src/app/events/services/event.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,8 @@ export class MinimapService {
 
   private clustering = true;
 
+  public mapCreationSource$ = new BehaviorSubject<Boolean>(false);
+
   dif_mayor = 0.00;
   dif_divide = 0.00;
   dif_X = 0.00;
@@ -43,6 +46,9 @@ export class MinimapService {
   timeNow:any = []; // Array para almacenar los tiempos
   timeWait:number = 7200000; // 7200 segundos en milisegundos
 
+
+  
+
   @Output() sendData = new EventEmitter<any>();
   @Output() vehicleServiceReady = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
@@ -54,6 +60,7 @@ export class MinimapService {
     public eventService: EventService,
     public driversService: DriversService,
   ) {
+    
     // this.driversService.initialize();
     this.userDataService.getUserData();
     this.userDataService.userDataCompleted.subscribe(res=>{
@@ -174,7 +181,6 @@ export class MinimapService {
     });
 
   }
-
   onEvent(events:any){
     console.log(events);
     const aux = events[0];
@@ -883,4 +889,5 @@ export class MinimapService {
       }
     }, this.timeWait);
   }
+
 }

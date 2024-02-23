@@ -1,75 +1,90 @@
-<p>geofences-modal works!</p>
-<p-dialog [(visible)]="geofencesService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'640px'}" >
+<p-dialog [(visible)]="geofencesService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'640px'}">
 
-    <ng-template class="p-dialog-title" pTemplate="header">
-      <div>
-        <i class="fa fa-user me-2" aria-hidden="true"></i>
-      </div>
-    </ng-template>
-  
-      <div class="dialog-body-container">
-  
-        <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
-  
-          <div class="dialog-form-container d-flex" >
-            <div>
-              <p-table [value]="products">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Quantity</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-product>
-                    <tr>
-                    </tr>
-                </ng-template>
-            </p-table>
-              <input type="file" (change)="fileKml($event)">
-              <!--, tag_name_font_size, zone_type, grupo_convoy_id, operation_grupo_id, geo_tags)
-	 -->        <!--<input [(ngModel)]="usuarioId" type="email" placeholder=""> -->
-              <input [(ngModel)]="nombreZona" type="text" placeholder="nombreZona">
-              <input [(ngModel)]="colorZona" type="text" placeholder="colorZona">
-              <input [(ngModel)]="visibleZona" type="text" placeholder="visibleZona">
-              <input [(ngModel)]="nomVisibleZona" type="text" placeholder="nomVisibleZona">
-              <input [(ngModel)]="verticesZona" type="text" placeholder="verticesZona">
-              <input [(ngModel)]="velActZona" type="text" placeholder="velActZona">
-              <input [(ngModel)]="velZona" type="text" placeholder="velZona">
-              <input [(ngModel)]="tiempoActZona" type="text" placeholder="tiempoActZona">
-              <input [(ngModel)]="tiempoZona" type="text" placeholder="tiempoZona">
-              <input [(ngModel)]="geom" type="text" placeholder="geom">
-              <input [(ngModel)]="catZona" type="text" placeholder="catZona">
-              <input [(ngModel)]="vel2Zona" type="text" placeholder="vel2Zona">
-              <input [(ngModel)]="vel3Zona" type="text" placeholder="vel3Zona">
-              <input [(ngModel)]="velMax" type="text" placeholder="velMax">
-              <input [(ngModel)]="updatedAt" type="text" placeholder="updatedAt">
-              <input [(ngModel)]="descripcion" type="text" placeholder="descripcion">
-              <input [(ngModel)]="bolEliminado" type="text" placeholder="bolEliminado">
-              <input [(ngModel)]="descripcion" type="text" placeholder="descripcion">
-              <input [(ngModel)]="tagNameFontSize" type="text" placeholder="tagNameFontSize">
-              <input [(ngModel)]="zoneType" type="text" placeholder="zoneType">
-              <input [(ngModel)]="grupoConvoyId" type="text" placeholder="grupoConvoyId">
-              <input [(ngModel)]="operationGrupeId" type="text" placeholder="operationGrupeId">
-              <input [(ngModel)]="geoTags" type="text" placeholder="geoTags">
-            </div>
-          </div>
+  <ng-template class="p-dialog-title" pTemplate="header">
+    <div>
+      <i class="fa fa-user me-2" aria-hidden="true"></i>
+    </div>
+  </ng-template>
+
+  <div class="dialog-body-container">
+
+    <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+
+      <div class="dialog-form-container d-flex">
+        <div>
+          <p-button>
+
+          </p-button>
+
+          <button (click)="activarCreateMap()">activarCreateMap</button>
+          <!---    --> 
+
+          <p-table #dt [value]="dataGeo" [rows]="10" [paginator]="true"
+            [globalFilterFields]="['name','country.name','representative.name','status']" [(selection)]="dataGeo"
+            [rowHover]="true" dataKey="id"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true">
+            <ng-template pTemplate="caption">
+              <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">Manage Products</h5>
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Search..." />
+                </span>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+                <th>descripcion</th>
+                <th pSortableColumn="price">Color <p-sortIcon field="price"></p-sortIcon></th>
+
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-dataGeo>
+              <tr>
+                <td>{{dataGeo.name}}</td>
+                <td>{{dataGeo.description}}</td>
+                <td>{{dataGeo.color}}</td>
+                <td>
+                  <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                  (click)="geocercaDet(dataGeo.name)"></button>
+                  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                    (click)="deleteProduct(product)"></button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+              <div class="p-d-flex p-ai-center p-jc-between">
+                In total there are {{products ? products.length : 0 }} products.
+              </div>
+            </ng-template>
+          </p-table>
+          <input type="file" (change)="fileKml($event)">
+          <button (click)="enviarDatosOtroComponente()">Enviar datos a otro componente</button>
+          <!--, tag_name_font_size, zone_type, grupo_convoy_id, operation_grupo_id, geo_tags)
+	 --> <!--<input [(ngModel)]="usuarioId" type="email" placeholder=""> -->
+          
         </div>
       </div>
-      <!-- <ng-template pTemplate="footer" style="width: 60vw;"> -->
-          <div class="row justify-content-center mt-4 pt-2 panel-izq-container-footer">
-            <div class="col-4">
-                <button type="button" class="btn-gl-cancel btn-dark-hover w-100" (click)="geofencesService.modalActive=false">Cancelar</button>
-            </div>
-            <div class="col-4">
-                <button (click)="guardarRegistro()" class="btn-gl-save btn-dark-hover w-100" >Guardar</button>
-            </div>
-          </div>
-      <!-- </ng-template> -->
-    <ng-template pTemplate="footer" style="width: 60vw;">
-    </ng-template>
-  
-  
-  </p-dialog>
-  
+    </div>
+  </div>
+  <app-modal-geo-det></app-modal-geo-det>
+  <!-- <ng-template pTemplate="footer" style="width: 60vw;"> -->
+  <div class="row justify-content-center mt-4 pt-2 panel-izq-container-footer">
+    <div class="col-4">
+      <button type="button" class="btn-gl-cancel btn-dark-hover w-100"
+        (click)="geofencesService.modalActive=false">Cancelar</button>
+    </div>
+    <div class="col-4">
+      <button (click)="guardarRegistro()" class="btn-gl-save btn-dark-hover w-100">Guardar</button>
+    </div>
+  </div>
+  <!-- </ng-template> -->
+  <ng-template pTemplate="footer" style="width: 60vw;">
+  </ng-template>
+
+
+</p-dialog>

@@ -1,57 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { GeofencesService } from '../services/geofences.service';
-
-
+import { Modales, Datas } from './geofences-modal';
+import { MinimapService } from 'src/app/multiview/services/minimap.service';
 @Component({
   selector: 'app-geofences-modal',
   templateUrl: './geofences-modal.component.html',
   styleUrls: ['./geofences-modal.component.scss']
 })
 export class GeofencesModalComponent implements OnInit {
-  public nombreZona: string;
-  public colorZona: string;
-  public visibleZona: string;
-  public nomVisibleZona: string;
-  public verticesZona: string;
-  public velActZona: string;
-  public tiempoZona: string;
-  public velZona: string;
-  public tiempoActZona: string;
-  public geom: string;
-  public catZona: number = 0;
-  public vel2Zona: number = 0;
-  public vel3Zona: number = 0;
-  public velMax: number = 0;
-  public updatedAt: Date;
-  public descripcion: string;
-  public bolEliminado: boolean;
-  public tagNameFontSize: number = 0;
-  public zoneType: string;
-  public grupoConvoyId: number = 0;
-  public operationGrupeId: number = 0;
-  public geoTags: string;
+  datos: Modales[] = [];
+  dataGeo: Datas[] = [];
 
-  constructor(public geofencesService: GeofencesService) {
-    this.nombreZona = '';
-    this.colorZona = '';
-    this.visibleZona = '';
-    this.nomVisibleZona = '';
-    this.verticesZona = '';
-    this.velActZona = '';
-    this.tiempoZona = '';
-    this.velZona = '';
-    this.tiempoActZona = '';
-    this.geom = '';
-    this.updatedAt = new Date();
-    this.descripcion = '';
-    this.bolEliminado = false;
-    this.zoneType = '';
-    this.geoTags = '';
+  constructor(public geofencesService: GeofencesService, public minimapServices:MinimapService ) {
   }
   guardarRegistro(): void {
 
-    console.log('Datos recibidos:', this.nombreZona, this.colorZona);
-    // Puedes realizar cualquier lógica adicional con los datos aquí
+    console.log('Datos recibidos:');
+
   }
 
   fileKml(event: any) {
@@ -62,7 +27,7 @@ export class GeofencesModalComponent implements OnInit {
       reader.onload = (e: any) => {
         const fileContent = e.target.result;
         console.log("johan2", fileContent);
-        const regex = /<name>\s*([\s\S]*?)\s*<\/name>|<description>\s*([\s\S]*?)\s*<\/description>|<coordinates>\s*([\s\S]*?)\s*<\/coordinates>|<color>\s*([a-fA-F0-9]+)\s*<\/color>/g;
+        const regex = /<Placemark>\s*<name>\s*([\s\S]*?)\s*<\/name>|<description>\s*([\s\S]*?)\s*<\/description>|<coordinates>\s*([\s\S]*?)\s*<\/coordinates>|<LineStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/g;
         const datas: { name?: string, description?: string, coordinates?: string, color?: string }[] = [];
         let item: { name?: string, description?: string, coordinates?: string, color?: string } = {};
         let match;
@@ -73,19 +38,58 @@ export class GeofencesModalComponent implements OnInit {
           if (match[4] !== undefined) {
             item['color'] = match[4].trim();
             datas.push(item);
-            item = {}; // Reiniciar el objeto para el próximo conjunto de coincidencias
+            item = {};
           }
         }
         console.log("johan3: ", datas);
-        this.datas.getProductsSmall().then(datas => this.datas = data);
+
+        const convertedData: Datas[] = datas.map((data: any) => {
+          return {
+            name: data.name || '',
+            description: data.description || '',
+            coordinates: data.coordinates || '',
+            color: data.color || ''
+          };
+        });
+        this.dataGeo = convertedData;
+        console.log("datageo: ", this.dataGeo);
       };
       reader.readAsText(file);
     }
   }
-  
-  ngOnInit(): void {
-    
+  geocercaDet(item: string) {
+    console.log("detallados: ", item);
+    for (const i of this.dataGeo) {
+      if (i.name == item) {
+        console.log("aver: ",i);
+        this.geofencesService.setData([i]);
+        this.geofencesService.modalActiveGeoDet = true;
+        this.geofencesService.action = 'add';
+      }
+    }
+
+  }
+  enviarDatosOtroComponente() {
+    this.geofencesService.setData(this.dataGeo);
   }
 
+
+  ngOnInit(): void {
+    this.getdatacomp();
+    this.minimapServices.mapCreationSource$.next(true);
+  }
+  getdatacomp() {
+    this.geofencesService.getdatos().subscribe(
+      response => {
+        console.log("otradata:", response);
+        this.datos = response;
+      }
+    )
+  }
+
+  activarCreateMap() {
+    console.log("geocercamap");
+    this.minimapServices.mapCreationSource$.next(true);
+  }
 
 }

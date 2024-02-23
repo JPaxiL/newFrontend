@@ -1,0 +1,59 @@
+<p-dialog [(visible)]="geofencesService.modalActiveGeoDet" [modal]="true" [resizable]="false" [style]="{'width':'640px'}">
+
+    <ng-template class="p-dialog-title" pTemplate="header">
+        <div>
+            <i class="fa fa-user me-2" aria-hidden="true"></i>
+        </div>
+    </ng-template>
+
+    <div class="dialog-body-container">
+
+        <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
+
+            <div class="dialog-form-container d-flex">
+                <div>
+
+                    <input [(ngModel)]="nombreZona" type="text" placeholder="nombreZona">
+          <input [(ngModel)]="colorZona" type="text" placeholder="colorZona">
+          <input [(ngModel)]="visibleZona" type="text" placeholder="visibleZona">
+          <input [(ngModel)]="nomVisibleZona" type="text" placeholder="nomVisibleZona">
+          <input [(ngModel)]="verticesZona" type="text" placeholder="verticesZona">
+          <input [(ngModel)]="velActZona" type="text" placeholder="velActZona">
+          <input [(ngModel)]="velZona" type="text" placeholder="velZona">
+          <input [(ngModel)]="tiempoActZona" type="text" placeholder="tiempoActZona">
+          <input [(ngModel)]="tiempoZona" type="text" placeholder="tiempoZona">
+          <input [(ngModel)]="geom" type="text" placeholder="geom">
+          <input [(ngModel)]="catZona" type="text" placeholder="catZona">
+          <input [(ngModel)]="vel2Zona" type="text" placeholder="vel2Zona">
+          <input [(ngModel)]="vel3Zona" type="text" placeholder="vel3Zona">
+          <input [(ngModel)]="velMax" type="text" placeholder="velMax">
+          <input [(ngModel)]="updatedAt" type="text" placeholder="updatedAt">
+          <input [(ngModel)]="descripcion" type="text" placeholder="descripcion">
+          <input [(ngModel)]="bolEliminado" type="text" placeholder="bolEliminado">
+          <input [(ngModel)]="descripcion" type="text" placeholder="descripcion">
+          <input [(ngModel)]="tagNameFontSize" type="text" placeholder="tagNameFontSize">
+          <input [(ngModel)]="zoneType" type="text" placeholder="zoneType">
+          <input [(ngModel)]="grupoConvoyId" type="text" placeholder="grupoConvoyId">
+          <input [(ngModel)]="operationGrupeId" type="text" placeholder="operationGrupeId">
+          <input [(ngModel)]="geoTags" type="text" placeholder="geoTags">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <ng-template pTemplate="footer" style="width: 60vw;"> -->
+    <div class="row justify-content-center mt-4 pt-2 panel-izq-container-footer">
+        <div class="col-4">
+            <button type="button"  (click)="geofencesService.modalActiveGeoDet=false" class="btn-gl-cancel btn-dark-hover w-100">Cancelar</button>
+        </div>
+        <div class="col-4">
+            <button class="btn-gl-save btn-dark-hover w-100">Guardar</button>
+        </div>
+    </div>
+    <!-- </ng-template> -->
+    <ng-template pTemplate="footer" style="width: 60vw;">
+    </ng-template>
+
+
+</p-dialog>

@@ -47,6 +47,10 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.minimapService.mapCreationSource$.subscribe(() => {
+      console.log("miniservicescomponet");
+      this.createMap();
+    });
     //Si es GridItem se debe convertir en tipo MinimapContent
     console.log("configuration: ", this.configuration);
     this.miniMap = {
@@ -55,6 +59,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
       nEvents: 0,
       events:[],
       mapConf: {containerId: 'map-container-'+this.idContainer!}
+
     }
     console.log("miniMap: ", this.miniMap);
     this.events = [
@@ -104,6 +109,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
         fecha_tracker: "24/07/2023 23:45:23"
       }
     ]
+   
   }
 
   ngOnDestroy() {
@@ -191,6 +197,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   }
 
   createMap() {
+    console.log("minimapp");
     console.log("CREATE MAPPPPPPPPPP");
     const containerId = 'map-container-'+this.idContainer.toString();
     const mapContainer = document.getElementById(containerId);
@@ -293,6 +300,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
         // Al menos uno de los servicios aún no está listo, puedes mostrar un mensaje de carga o realizar otras acciones según tus necesidades.
         console.log('Esperando a que todos los servicios estén listos...');
       }
+
     });
   }
 
