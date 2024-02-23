@@ -58,6 +58,25 @@ export class FormComponent implements OnInit {
     { label: 'Grupo', value: true },
     { label: 'Operacion', value: false }
   ];
+
+  selectedDuracion: any;
+  selectedToleracia: any;
+
+  listOptionsDuracion: any= [
+    // { name: '0 segundos', code: '0' },
+    { name: '15 segundos', code: 15 },
+    { name: '30 segundos', code: 30 },
+    { name: '45 segundos', code: 45 },
+    { name: '60 segundos', code: 60 }
+  ];
+  listOptionsToleracia: any= [
+    // { name: 'Toleracia 0', code: '0' },
+    { name: '3 km/h', code: 3 },
+    { name: '5 km/h', code: 5 },
+    { name: '10 km/h', code: 10 }
+  ];
+  chkRiesgo = true;
+
   /* checkboxParada: boolean = true; //Renamed to chkStops
   checkboxMovimiento: boolean = true; */ //Renamed to chkMovements
   // checkboxDuracion: boolean = false; //Renamed to chkDuracion
@@ -90,6 +109,7 @@ export class FormComponent implements OnInit {
 	//showZones = false;
 	showCheckboxs = false;
   showCheckboxsCipia = false;
+  showTipoExcesoVelocidad = false;
 
 	showCard = false;
 	showDivHorizontal = false;
@@ -291,6 +311,7 @@ export class FormComponent implements OnInit {
   //Reporte 6 - Reporte de Eventos , Seleccion de Campo
   eC = {
     Fecha :true,
+    Hora :true,
     FechaServidor :false,
     Evento :true,
     Codigo :true,
@@ -316,6 +337,7 @@ export class FormComponent implements OnInit {
     Referencia :false,
     EnlaceArchivo :false,
     Parametros : false,
+    Satelite:false,
 
     OperadorMonitoreo : false,  // R. Atención de Eventos
   }
@@ -825,6 +847,13 @@ export class FormComponent implements OnInit {
     console.log('Vehicles: ',this.vehicles);
   }
 
+  onchangeDuracion(){
+    console.log(this.selectedDuracion);
+    console.log(this.selectedToleracia);
+    console.log(this.chkRiesgo);
+
+  }
+
   selectAllVehicles(){
     this.selectedVehicles = this.chkAllVehicles? this.vehicles: [];
     this.onSelectedVehiclesChange();
@@ -896,6 +925,7 @@ export class FormComponent implements OnInit {
   reportar(new_tab?: any){
 
     this.reportService.eC = JSON.parse(JSON.stringify(this.eC));
+    this.reportService.chkRiesgo = this.chkRiesgo;
 
     console.log(new_tab !== undefined);
     this.reportService.workingOnReport = true;
@@ -935,6 +965,8 @@ export class FormComponent implements OnInit {
       console.log(this.selectedVehicles);
     }
 
+    var duracionExcesos = (this.selectedDuracion === undefined || this.selectedDuracion === null) ? 0: this.selectedDuracion.code;
+    var toleraciaExcesos = (this.selectedToleracia === undefined || this.selectedToleracia === null) ? 0: this.selectedToleracia.code;
 
 
 
@@ -993,6 +1025,11 @@ export class FormComponent implements OnInit {
 				chkFatigaDistraccion: this.chkFatigaDistraccion,
 				chkFrenada: this.chkFrenada,
 				chkAceleracion: this.chkAceleracion,
+
+        duracionExcesos: duracionExcesos,
+        toleraciaExcesos: toleraciaExcesos,
+        chkRiesgo: this.chkRiesgo,
+
 				limit : true,
 				numRep: reportSelect.codigo,//this.reports[this.selectedReport].codigo,//this.reports[this.selectedReport].id,
       }
@@ -1019,6 +1056,11 @@ export class FormComponent implements OnInit {
         chkFatigaDistraccion: this.chkFatigaDistraccion,
         chkFrenada: this.chkFrenada,
         chkAceleracion: this.chkAceleracion,
+
+        duracionExcesos: duracionExcesos,
+        toleraciaExcesos: toleraciaExcesos,
+        chkRiesgo: this.chkRiesgo,
+
         limit : true,
         numRep: reportSelect.codigo, //this.reports[this.selectedReport].codigo,//this.reports[this.selectedReport].id,
       };
@@ -1161,7 +1203,7 @@ export class FormComponent implements OnInit {
         }
       }
     }else if(this.selectedReport == 'R037' || this.selectedReport == 'R038' || 
-      this.selectedReport=='R040' || this.selectedReport == 'R039' || this.selectedReport == 'R020'){
+      this.selectedReport=='R040' || this.selectedReport == 'R039' || this.selectedReport == 'R020' || this.selectedReport == 'R041'){
       //PARA REPORTES QUE SOLO TIENEN DOS ARRAY
       //PARA REPORTES QUE TIENEN CONDUCTOR Y IDCONDUCTOR
       for(let index of data){
@@ -1206,6 +1248,7 @@ export class FormComponent implements OnInit {
 		this.showZones = false; // Seleccionador de geocercas
 		this.showCheckboxs = false;// Opciones reporte general
     this.showCheckboxsCipia = false;// Opciones reporte general CIPIA
+    this.showTipoExcesoVelocidad = false; //Opciones excesos de velocidad duracion tolerancia
 		this.showMovStop = false; //Ver Paradas y Movimiento
 		this.showDivHorizontal = false; // Nombre de cabecera del reporte
 		this.showLimitTime = false; //Configuracion de rango de tiempo -- true la mayoria
@@ -1312,6 +1355,7 @@ export class FormComponent implements OnInit {
 
           this.eC = {
             Fecha :true,
+            Hora :true,
             FechaServidor :false,
             Evento :true,
             Codigo :true,
@@ -1337,7 +1381,8 @@ export class FormComponent implements OnInit {
             Referencia :false,
             EnlaceArchivo :false,
             Parametros : false,
-        
+            Satelite:false,
+
             OperadorMonitoreo : false,  // R. Atención de Eventos
           }
 
@@ -1349,6 +1394,7 @@ export class FormComponent implements OnInit {
           this.updateCheckDefaultEvents();
           this.eC = {
             Fecha :true,
+            Hora :true,
             FechaServidor :true,
             Evento :true,
             Codigo :true,
@@ -1374,7 +1420,8 @@ export class FormComponent implements OnInit {
             Referencia :true,
             EnlaceArchivo :false,
             Parametros : false,
-        
+            Satelite:false,
+
             OperadorMonitoreo : true,  // R. Atención de Eventos
           }
 
@@ -1389,6 +1436,7 @@ export class FormComponent implements OnInit {
 
           this.eC = {
             Fecha :true,
+            Hora :true,
             FechaServidor :false,
             Evento :true,
             Codigo :true,
@@ -1414,9 +1462,48 @@ export class FormComponent implements OnInit {
             Referencia :false,
             EnlaceArchivo :false,
             Parametros : false,
-        
+            Satelite:false,
+
             OperadorMonitoreo : false,  // R. Atención de Eventos
           }
+
+      break;
+      case 'R041': 
+        this.showLimitTime = true;
+        this.showTipoExcesoVelocidad = true;
+
+        this.eC = {
+          Fecha :true,
+          Hora :true,
+          FechaServidor :false,
+          Evento :false,
+          Codigo :true,
+          Placa :true,
+          TipoUnidad :false,
+          IdConductor :false,
+          Conductor :true,
+      
+          FechaEvaluacion : false,
+          CriterioEvaluacion : false,
+          Observacion : false,
+          Validacion: false,
+      
+          VelMobileye :false,
+          VelGPS :false,
+          VelCAN :true,
+          VelECO :false,
+          VelGPSspeed :false,
+      
+          Zona :true,
+          PuntoCercano :false,
+          Ubicacion :true,
+          Referencia :false,
+          EnlaceArchivo :false,
+          Parametros : false,
+          Satelite:true,
+      
+          OperadorMonitoreo : false,  // R. Atención de Eventos
+        }
 
       break;
 
@@ -1754,6 +1841,9 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R039' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R040' && is_vehicle_selected)
+        ||
+        (this.selectedReport == 'R041' && is_vehicle_selected)
+        
       );
   }
 

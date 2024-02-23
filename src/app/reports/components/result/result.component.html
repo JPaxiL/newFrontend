@@ -6890,6 +6890,143 @@
     </div>
 
 
+    <!-- R041. REPORTE DE EXCESOS DE VELOCIDAD - DURACION, TOLERANCIA, NIVEL DE RIESGO -->
+    <div class="container grand-container multitable-container" *ngIf="report_data.num_rep == 'R041'">
+      <div *ngFor="let v_table of data;  let i = index;" class="p-card" style="padding: 1rem;">
+
+        <div class="subtable-title mb-3">
+          <!-- <div>
+            <div>VEHÍCULO</div>
+            <div>{{v_table[0][1]}}</div>
+          </div> -->
+          <div style="width: 100%; min-width: 100%;">
+            <div>PERIODO</div>
+            <div>{{period}}</div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="dtRendered">
+          <table [ngClass]="table_hide" dt-instance="dtInstance" datatable [dtOptions]="dtOptions4" class="table table-border row-border hover">
+            <thead>
+              <tr *ngIf="reportService.chkRiesgo">
+                  <th rowspan="2">Item</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Fecha">Fecha</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Hora">Hora</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Codigo">Unidad</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Placa">Placa</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Zona">Zona</th>
+                  <th rowspan="2" >Límite de Velocidad de Zona</th>
+
+                  <!-- <th rowspan="2" *ngIf="!reportService.chkRiesgo">Exceso de Velocidad</th> -->
+
+                  <th colspan="3" *ngIf="reportService.chkRiesgo">Exceso de Velocidad</th>
+
+                  <th rowspan="2">Inicio del Exceso</th>
+                  <th rowspan="2">Hora del Exceso</th>
+                  <th rowspan="2">Fin del Exceso</th>
+                  <th rowspan="2">Duración</th>
+
+                  <th rowspan="2" *ngIf="reportService.eC.IdConductor">ID Conductor</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Conductor">Conductor</th>
+
+                  <th rowspan="2" *ngIf="reportService.eC.VelMobileye">Vel.ADAS</th>
+                  <th rowspan="2" *ngIf="reportService.eC.VelGPSspeed">Vel.GPS</th>
+                  <th rowspan="2" *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Satelite">Satélite</th>
+                  <th rowspan="2" *ngIf="reportService.eC.Ubicacion">Ubicación</th>
+
+              </tr>
+
+              <tr *ngIf="reportService.chkRiesgo">
+                <th style="background: #ddd; color : blue;" *ngIf="reportService.chkRiesgo">Leve(1,2)</th>
+                <th style="background: #ddd; color : #FFC000;" *ngIf="reportService.chkRiesgo">Grave(3,5)</th>
+                <th style="background: #ddd; color : red;" *ngIf="reportService.chkRiesgo">Muy Grave(>=6)</th>
+              </tr>
+
+
+              <tr *ngIf="!reportService.chkRiesgo">
+                <th>Item</th>
+                <th *ngIf="reportService.eC.Fecha">Fecha</th>
+                <th *ngIf="reportService.eC.Hora">Hora</th>
+                <th *ngIf="reportService.eC.Codigo">Unidad</th>
+                <th *ngIf="reportService.eC.Placa">Placa</th>
+                <th *ngIf="reportService.eC.Zona">Zona</th>
+                <th >Límite de Velocidad de Zona</th>
+
+                <th >Exceso de Velocidad</th>
+
+                <!-- <th colspan="3" *ngIf="reportService.chkRiesgo">Exceso de Velocidad</th> -->
+
+                <th >Inicio del Exceso</th>
+                <th >Hora del Exceso</th>
+                <th >Fin del Exceso</th>
+                <th >Duración</th>
+
+                <th *ngIf="reportService.eC.IdConductor">ID Conductor</th>
+                <th *ngIf="reportService.eC.Conductor">Conductor</th>
+
+                <th *ngIf="reportService.eC.VelMobileye">Vel.ADAS</th>
+                <th *ngIf="reportService.eC.VelGPSspeed">Vel.GPS</th>
+                <th *ngIf="reportService.eC.VelCAN">Vel.CAN</th>
+                <th *ngIf="reportService.eC.Satelite">Satélite</th>
+                <th *ngIf="reportService.eC.Ubicacion">Ubicación</th>
+
+              </tr>
+
+
+
+            </thead>
+
+
+            <tbody>
+              <tr *ngFor="let row of v_table[1];  let i = index;">
+
+
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" >{{row.col1}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Fecha">{{row.fecha_inicio.split(' ')[0]}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Hora">{{row.fecha_inicio.split(' ')[1]}}</td>
+
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Codigo">{{row.codigo}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Placa">{{row.placa}} - {{row.orden}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Zona">{{row.nombre_zona}}</td>
+
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" >{{row.v0}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="!reportService.chkRiesgo">{{row.velocidad}}</td>
+
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.chkRiesgo">{{row.vel_leve}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.chkRiesgo">{{row.vel_grave}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.chkRiesgo">{{row.vel_muy_grave}}</td>
+
+                  <!-- <td>{{row.fecha_inicio}}</td>
+                  <td>{{row.hora_exceso}}</td>
+                  <td>{{row.fin_exceso}}</td>
+                  <td>{{row.duracion2}}</td> -->
+
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" >{{row.fecha_inicio.split(' ')[1]}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" >{{row.hora_exceso.split(' ')[1]}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" >{{row.fin_exceso.split(' ')[1]}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" >{{row.duracion2}}</td>
+
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.IdConductor">{{row.idConductor}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Conductor">{{row.conductor}}</td>
+
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.VelMobileye">{{row.velMobileye_ME460}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.VelGPSspeed">{{row.GPS_speed}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.VelCAN">{{row.can_speed}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Satelite">{{row.sat}}</td>
+                  <td [style.background-color]="row.es_resumen ? '#E5E3D9' : 'white'" *ngIf="reportService.eC.Ubicacion">
+                    <a *ngIf="!row.es_resumen" href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
+                  </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </ng-container>
+
+      </div>
+    </div>
+    
+
     <div *ngIf="dtRendered" class="export-container">
       <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R002'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
@@ -6926,6 +7063,8 @@
       <button *ngIf="report_data.num_rep == 'R038'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosEvaluacionCIPIA');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R039'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadNuevoFormato');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R040'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>
+
+      <button *ngIf="report_data.num_rep == 'R041'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadDuracionToleranciaRiesgo');">EXPORTAR EXCEL</button>
 
 
       <!-- <button *ngIf="report_data.num_rep == 'R028'" class="btn btn-gl btn-success btn-dark-hover" (click)="">EXPORTAR EXCEL</button> -->
