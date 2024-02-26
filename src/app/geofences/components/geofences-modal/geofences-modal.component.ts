@@ -1,17 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { GeofencesService } from '../services/geofences.service';
+import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { GeofencesService } from '../../services/geofences.service';
 import { Modales, Datas } from './geofences-modal';
 import { MinimapService } from 'src/app/multiview/services/minimap.service';
+import { MiniMap } from 'src/app/multiview/models/mini-map';
+import { GeofenceImportExportService } from '../../services/geofence-import-export.service';
+import { MapItemConfiguration } from 'src/app/multiview/models/interfaces';
+
 @Component({
   selector: 'app-geofences-modal',
   templateUrl: './geofences-modal.component.html',
   styleUrls: ['./geofences-modal.component.scss']
 })
-export class GeofencesModalComponent implements OnInit {
+export class GeofencesModalComponent implements OnInit,AfterViewInit {
   datos: Modales[] = [];
   dataGeo: Datas[] = [];
-
-  constructor(public geofencesService: GeofencesService, public minimapServices:MinimapService ) {
+  map!: L.Map;
+  confGeoMap: MapItemConfiguration= {
+    containerId: "geofence-minimap",
+    zoom: 14,
+    maxZoom: 16,
+    dataFitBounds: [[-12.0464,-77.0428]],
+  }
+  constructor(public geofencesService: GeofencesService, public geofenceImportExportService : GeofenceImportExportService) {
   }
   guardarRegistro(): void {
 
@@ -55,6 +65,7 @@ export class GeofencesModalComponent implements OnInit {
         console.log("datageo: ", this.dataGeo);
       };
       reader.readAsText(file);
+
     }
   }
   geocercaDet(item: string) {
@@ -76,7 +87,16 @@ export class GeofencesModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getdatacomp();
-    this.minimapServices.mapCreationSource$.next(true);
+
+    this.geofencesService.datos$.subscribe(datos => {
+      this.datos = datos;
+      console.log('Datos recibidos en el modal1:', this.datos);
+      this.dataGeo=datos;
+    });
+    
+  }
+  ngAfterViewInit(): void {
+    this.activarCreateMap();
   }
   getdatacomp() {
     this.geofencesService.getdatos().subscribe(
@@ -89,7 +109,7 @@ export class GeofencesModalComponent implements OnInit {
 
   activarCreateMap() {
     console.log("geocercamap");
-    this.minimapServices.mapCreationSource$.next(true);
+    this.geofenceImportExportService.startMiniMap(this.confGeoMap);
   }
 
 }

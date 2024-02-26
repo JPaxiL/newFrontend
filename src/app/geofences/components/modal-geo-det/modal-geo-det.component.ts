@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GeofencesService } from '../../services/geofences.service';
-import { Datas} from '../../geofences-modal/geofences-modal';
+import { Datas} from '../geofences-modal/geofences-modal';
 
 @Component({
   selector: 'app-modal-geo-det',

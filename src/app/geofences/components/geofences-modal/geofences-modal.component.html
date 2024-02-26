@@ -1,9 +1,10 @@
-<p-dialog [(visible)]="geofencesService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'640px'}">
+<p-dialog [(visible)]="geofencesService.modalActive" [modal]="true" [resizable]="false" [style]="{'width':'740px'}">
 
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
       <i class="fa fa-user me-2" aria-hidden="true"></i>
     </div>
+    fdsfds
   </ng-template>
 
   <div class="dialog-body-container">
@@ -12,21 +13,15 @@
 
       <div class="dialog-form-container d-flex">
         <div>
-          <p-button>
 
-          </p-button>
-
-          <button (click)="activarCreateMap()">activarCreateMap</button>
-          <!---    --> 
-
-          <p-table #dt [value]="dataGeo" [rows]="10" [paginator]="true"
+          <p-table #dt [value]="dataGeo" [rows]="5" [paginator]="true"
             [globalFilterFields]="['name','country.name','representative.name','status']" [(selection)]="dataGeo"
             [rowHover]="true" dataKey="id"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             [showCurrentPageReport]="true">
             <ng-template pTemplate="caption">
               <div class="p-d-flex p-ai-center p-jc-between">
-                <h5 class="p-m-0">Manage Products</h5>
+                <h5 class="p-m-0">Buscar por Nombre</h5>
                 <span class="p-input-icon-left">
                   <i class="pi pi-search"></i>
                   <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -62,8 +57,8 @@
               </div>
             </ng-template>
           </p-table>
-          <input type="file" (change)="fileKml($event)">
-          <button (click)="enviarDatosOtroComponente()">Enviar datos a otro componente</button>
+          <div [id]="'geofence-minimap'" class="w-100" style="height: 500px;">
+          </div>
           <!--, tag_name_font_size, zone_type, grupo_convoy_id, operation_grupo_id, geo_tags)
 	 --> <!--<input [(ngModel)]="usuarioId" type="email" placeholder=""> -->
           

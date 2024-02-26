@@ -15,7 +15,11 @@ import { Geofences } from '../../models/geofences';
 import { IGeofence, ITag } from '../../models/interfaces';
 import moment from 'moment';
 import { GeocercaAddComponent } from '../geocerca-add/geocerca-add.component';
+import { Datas } from '../geofences-modal/geofences-modal';
+import 'leaflet-omnivore';
+import * as togeojson from 'togeojson';
 //import { AnyNaptrRecord } from 'dns';
+//import { GeofencesModalComponent } from '../geofences-modal/geofences-modal.component';
 interface Column {
   field: string;
   header: string;
@@ -61,6 +65,12 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
   listTagsEmpty: boolean = false; //para validar si el array de list2 esta vacio en la creacion
   nameTagInit: string = ''; //en el caso de que no se edite el nombre de tag 
   alreadyLoaded: boolean = false;
+
+  //
+  dataGeo: Datas[] = [];
+
+  map: L.Map | undefined;
+  //
   @ViewChild('tt') tt!: any;
   @Output() eventDisplayTags = new EventEmitter<boolean>();
   @Output() onDeleteItem: EventEmitter<any> = new EventEmitter();
@@ -1028,58 +1038,53 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
     this.geofencesService.modalActive=true;
     this.geofencesService.action='add';
   }
-  import(dato: any) {
-    console.log("import from ", dato);
+
+
+
+  import(event: any) {
+    console.log("import from1 ", event);
     this.geofencesService.modalActive=true;
     this.geofencesService.action='add';
-    /*
-    let file = dato.target.files[0];
-    let fileReader = new FileReader();
-    let kmlString = file;
-    console.log("johan1: ",kmlString);
+   const file: File = event.target.files[0];
+    console.log("johan1", file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const fileContent = e.target.result;
+        console.log("johan2", fileContent);
+        const regex = /<Placemark>\s*<name>\s*([\s\S]*?)\s*<\/name>|<description>\s*([\s\S]*?)\s*<\/description>|<coordinates>\s*([\s\S]*?)\s*<\/coordinates>|<LineStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/g;
+        const datas: { name?: string, description?: string, coordinates?: string, color?: string }[] = [];
+        let item: { name?: string, description?: string, coordinates?: string, color?: string } = {};
+        let match;
+        while ((match = regex.exec(fileContent)) !== null) {
+          if (match[1] !== undefined) item['name'] = match[1].trim();
+          if (match[2] !== undefined) item['description'] = match[2].trim();
+          if (match[3] !== undefined) item['coordinates'] = match[3].trim();
+          if (match[4] !== undefined) {
+            item['color'] = match[4].trim();
+            datas.push(item);
+            item = {};
+          }
+        }
+        console.log("johan3: ", datas);
 
-    */
-    //let arreglos=kmlString.split(' ');
-    //console.log("johan2: ",arreglos);
-    /*fileReader.onload = function (event:any) {
-      let kmlString = event.target.result;
-      console.log("datos : ",kmlString);
-      let name = /<name>\s*([^<]+?)\s*<\/name>/g
-      let matchesName = kmlString.match(name);
-      let names = matchesName ? matchesName.map((match:any) => match.replace(/<name>\s*([^<]+?)\s*<\/name>/, '$1')) : [];
-  
-      let description = /<description>\s*([^<]+?)\s*<\/description>/g
-      let matchesDesc = kmlString.match(description);
-      let descripciones = matchesDesc ? matchesDesc.map((match:any) => match.replace(/<description>\s*([^<]+?)\s*<\/description>/, '$1')) : [];
-
-      let color = /<color>\s*([a-fA-F0-9]+)\s*<\/color>/g;
-      let matchesColor = kmlString.match(color);
-      let colores = matchesColor ? matchesColor.map((match:any) => match.replace(/<color>\s*([a-fA-F0-9]+)\s*<\/color>/, '$1')) : [];
-      
-      let description = /<description>\s*([^<]+?)\s*<\/description>/g
-      let matchesDesc = kmlString.match(description);
-      let descripciones = matchesDesc ? matchesDesc.map((match:any) => match.replace(/<description>\s*([^<]+?)\s*<\/description>/, '$1')) : [];
-                 
-
-      console.log('"color": ', colores);
-      console.log('"name": ', names);
-      console.log('"desc": ', descripciones);
-
-      */
-      /*let csvContent = "usuario_id,nombre_zona,color_zona,visible_zona,nombre_visible_zona,vertices_zona,id,vel_act_zona\n"; 
-      let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
-      let link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.setAttribute("download", "data.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
-
-    fileReader.readAsText(file);*/
-
-
+        const convertedData: Datas[] = datas.map((data: any) => {
+          return {
+            name: data.name || '',
+            description: data.description || '',
+            coordinates: data.coordinates || '',
+            color: data.color || ''
+          };
+        });
+        this.dataGeo = convertedData;
+        console.log("datageo fuera modal: ", this.dataGeo);
+        this.geofencesService.sendDataModal(this.dataGeo);
+      };
+      reader.readAsText(file);
+    }
+    
   }
+
 
   export(type: string) {
     console.log("export to ", type);

@@ -22,7 +22,7 @@ import { MinimapService } from '../services/minimap.service';
   ],
   //providers: [CircularGeofencesMinimapService,GeofencesMinimapService,GeopointsMinimapService]
 })
-export class MinimapComponent implements OnInit, AfterViewInit {
+export class MinimapComponent implements OnInit, AfterViewInit  {
   @Input() configuration!: GridItem;
   @Input() title!: string;
   @Input() idContainer!: string;
@@ -47,10 +47,6 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.minimapService.mapCreationSource$.subscribe(() => {
-      console.log("miniservicescomponet");
-      this.createMap();
-    });
     //Si es GridItem se debe convertir en tipo MinimapContent
     console.log("configuration: ", this.configuration);
     this.miniMap = {
@@ -111,7 +107,6 @@ export class MinimapComponent implements OnInit, AfterViewInit {
     ]
    
   }
-
   ngOnDestroy() {
     // Destruye el mapa al salir del componente para evitar el error
     if (this.mapItem) {
@@ -120,6 +115,9 @@ export class MinimapComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
+    
+
     if(this.minimapService.vehicleServiceIsReady){
       this.miniMap.vehicles = this.minimapService.getVehicles().filter((vh:UserTracker) => this.configuration.content?.imeis.includes(vh.IMEI!.toString()));
       this.createMap();
@@ -129,6 +127,7 @@ export class MinimapComponent implements OnInit, AfterViewInit {
         this.createMap();
       })
     }
+
   }
 
   openOverlay(event: any, id:string){

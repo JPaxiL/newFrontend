@@ -8,10 +8,12 @@ export abstract class MapBase implements IMapBase {
     markerClusterData?: any;
     
     constructor(containerId:string){
+        //console.log("que llega: ",containerId);
         this._containerId = containerId;
     }
 
     public createMap(dataFitBounds:[number,number][], zoom?:number,maxZoom?:number,editable?:boolean){
+        console.log("que llega: ",dataFitBounds);
         this.map = L.map(this._containerId, {
             preferCanvas:true,
             renderer: L.canvas(),

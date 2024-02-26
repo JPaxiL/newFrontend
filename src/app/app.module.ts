@@ -158,7 +158,7 @@ import { ShortenPipe } from './core/pipes/shorten.pipe';
 import { AddTagComponent } from './geofences/components/add-tag/add-tag.component';
 import { UnixTimeToDatePipe } from './core/pipes/unix-time-to-date.pipe';
 import {ToastModule} from 'primeng-lts/toast';
-import { GeofencesModalComponent } from './geofences/geofences-modal/geofences-modal.component';
+import { GeofencesModalComponent } from './geofences/components/geofences-modal/geofences-modal.component';
 import { ButtonModule} from 'primeng-lts/button';
 import { ModalGeoDetComponent } from './geofences/components/modal-geo-det/modal-geo-det.component';
 

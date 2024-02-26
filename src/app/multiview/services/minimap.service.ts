@@ -17,7 +17,8 @@ import { Subject, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class MinimapService {
-  
+
+
   @ViewChild('popupText') popupText!: ElementRef;
 
   public maps: IMapMinimap[] = [];
@@ -30,8 +31,6 @@ export class MinimapService {
   private marker: any = [];
 
   private clustering = true;
-
-  public mapCreationSource$ = new BehaviorSubject<Boolean>(false);
 
   dif_mayor = 0.00;
   dif_divide = 0.00;
@@ -465,6 +464,9 @@ export class MinimapService {
     }
     return g
   }
+
+
+
   diffSecondsNow(fecha:string):boolean {
     // Obtener la fecha y hora actual
     const fechaActual = moment();
