@@ -12,9 +12,3 @@ interface RatingProps{
     rate:number;
     count:number;
 }
-export interface Datas {
-    name: string;
-    description: string;
-    coordinates: string;
-    color: string;
-}

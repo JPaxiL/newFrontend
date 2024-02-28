@@ -9,8 +9,7 @@ import * as moment from 'moment';
 import * as L from 'leaflet';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
-import { IGeofence, ITag } from '../models/interfaces';
-import { Datas} from '../components/geofences-modal/geofences-modal';
+import { DataGeofence, IGeofence, ITag } from '../models/interfaces';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,13 +29,15 @@ export class GeofencesService {
   public actionTags: string = '';
   public modalActive: boolean =false;
 
-  private sharedData = new BehaviorSubject<Datas[]>([]);
+  private sharedData = new BehaviorSubject<DataGeofence[]>([]);
 
   public modalActiveGeoDet: boolean =false;
-
-  private datosSubject = new BehaviorSubject<any>(null);
+//
+  dataGeofencesCompleted = false;
+  importedGeofencesTemp: DataGeofence[]=[];
+  private datosSubject = new BehaviorSubject<DataGeofence[]>([]);
   datos$ = this.datosSubject.asObservable();
-
+//
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
   @Output() clickEye = new EventEmitter<any>();
@@ -557,11 +558,11 @@ export class GeofencesService {
     return this.http.get('https://fakestoreapi.com/products?sort=desc');
   }
 
-  setData(data: Datas[]) {
+  setData(data: DataGeofence[]) {
     this.sharedData.next(data);
   }
 
-  getData1(): Observable<Datas[] | null> {
+  getData1(): Observable<DataGeofence[] | null> {
     return this.sharedData.asObservable();
   }
 
@@ -570,8 +571,11 @@ export class GeofencesService {
 
 
 
-  sendDataModal(datos: any) {
+  sendDataModal(datos: DataGeofence[]) {
     console.log("senddatamodal",datos);
+    this.importedGeofencesTemp=datos;
+    this.dataGeofencesCompleted=true;
+    
     this.datosSubject.next(datos);
   }
 

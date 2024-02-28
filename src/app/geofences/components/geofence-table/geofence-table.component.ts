@@ -12,12 +12,9 @@ import * as L from 'leaflet';
 import 'leaflet-draw';
 import { Subscription, forkJoin } from 'rxjs';
 import { Geofences } from '../../models/geofences';
-import { IGeofence, ITag } from '../../models/interfaces';
+import { DataGeofence, IGeofence, ITag } from '../../models/interfaces';
 import moment from 'moment';
 import { GeocercaAddComponent } from '../geocerca-add/geocerca-add.component';
-import { Datas } from '../geofences-modal/geofences-modal';
-import 'leaflet-omnivore';
-import * as togeojson from 'togeojson';
 //import { AnyNaptrRecord } from 'dns';
 //import { GeofencesModalComponent } from '../geofences-modal/geofences-modal.component';
 interface Column {
@@ -67,7 +64,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
   alreadyLoaded: boolean = false;
 
   //
-  dataGeo: Datas[] = [];
+  dataGeo: DataGeofence[] = [];
 
   map: L.Map | undefined;
   //
@@ -1033,56 +1030,73 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
       this.viewOptions = 'viewGen';
     }
   }
-  clickAgregarZona(){
+  clickAgregarZona() {
     console.log("aver");
-    this.geofencesService.modalActive=true;
-    this.geofencesService.action='add';
+    this.geofencesService.modalActive = true;
+    this.geofencesService.action = 'add';
   }
 
 
 
   import(event: any) {
     console.log("import from1 ", event);
-    this.geofencesService.modalActive=true;
-    this.geofencesService.action='add';
-   const file: File = event.target.files[0];
+    this.geofencesService.modalActive = true;
+    this.geofencesService.action = 'add';
+    const file: File = event.target.files[0];
     console.log("johan1", file);
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const fileContent = e.target.result;
         console.log("johan2", fileContent);
-        const regex = /<Placemark>\s*<name>\s*([\s\S]*?)\s*<\/name>|<description>\s*([\s\S]*?)\s*<\/description>|<coordinates>\s*([\s\S]*?)\s*<\/coordinates>|<LineStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/g;
-        const datas: { name?: string, description?: string, coordinates?: string, color?: string }[] = [];
-        let item: { name?: string, description?: string, coordinates?: string, color?: string } = {};
+
+        const datas: { name?: string, description?: string, color?: string, coordinate?: string, width?: string }[] = [];
+
+        const regex = /<Placemark>[\s\S]*?<\/Placemark>/g;
+        const nameRegex = /<name>\s*([\s\S]*?)\s*<\/name>/;
+        const descriptionRegex = /<description>\s*([\s\S]*?)\s*<\/description>/;
+        const coordinatesRegex = /<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
+        const widthRegex = /<width>\s*([a-fA-F0-9]+)\s<\/width>/;
+        const colorPolyStyleRegex = /<PolyStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/;
         let match;
+
         while ((match = regex.exec(fileContent)) !== null) {
-          if (match[1] !== undefined) item['name'] = match[1].trim();
-          if (match[2] !== undefined) item['description'] = match[2].trim();
-          if (match[3] !== undefined) item['coordinates'] = match[3].trim();
-          if (match[4] !== undefined) {
-            item['color'] = match[4].trim();
-            datas.push(item);
-            item = {};
-          }
+          const nameMatch = nameRegex.exec(match[0]);
+          const descriptionMatch = descriptionRegex.exec(match[0]);
+          const colorMatch = colorPolyStyleRegex.exec(match[0]);
+          const coordinatesMatch = coordinatesRegex.exec(match[0]);
+          const widthMatch = widthRegex.exec(match[0]);
+
+          const data: DataGeofence = {};
+
+          if (nameMatch && nameMatch[1]) data.name = nameMatch[1].trim();
+          if (descriptionMatch && descriptionMatch[1]) data.description = descriptionMatch[1].trim();
+          if (colorMatch && colorMatch[1]) data.color = colorMatch[1].trim();
+          if (coordinatesMatch && coordinatesMatch[1]) data.coordinate = coordinatesMatch[1].trim();
+          if (widthMatch && widthMatch[1]) data.width = widthMatch[1].trim();
+
+          datas.push(data);
         }
+
         console.log("johan3: ", datas);
 
-        const convertedData: Datas[] = datas.map((data: any) => {
+        const convertedData: DataGeofence[] = datas.map((data: DataGeofence) => {
           return {
             name: data.name || '',
             description: data.description || '',
-            coordinates: data.coordinates || '',
-            color: data.color || ''
+            color: data.color || '',
+            coordinate: data.coordinate || 'default_coordinate_value',
+            width: data.width || ''
           };
         });
         this.dataGeo = convertedData;
         console.log("datageo fuera modal: ", this.dataGeo);
         this.geofencesService.sendDataModal(this.dataGeo);
+        //
       };
+      
       reader.readAsText(file);
     }
-    
   }
 
 

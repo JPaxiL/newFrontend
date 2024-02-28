@@ -196,7 +196,6 @@ export class MinimapComponent implements OnInit, AfterViewInit  {
   }
 
   createMap() {
-    console.log("minimapp");
     console.log("CREATE MAPPPPPPPPPP");
     const containerId = 'map-container-'+this.idContainer.toString();
     const mapContainer = document.getElementById(containerId);

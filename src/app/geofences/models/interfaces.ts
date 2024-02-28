@@ -42,3 +42,10 @@ export interface IOperation{
     idgrupo: string,
     namegrupo: string,
 } 
+export interface DataGeofence{
+    name?:string,
+    description?:string,
+    color?: string,
+    coordinate?: string,
+    width?: string, 
+}

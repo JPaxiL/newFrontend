@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { GeofencesService } from '../../services/geofences.service';
-import { Datas} from '../geofences-modal/geofences-modal';
-
+import { DataGeofence } from '../../models/interfaces';
 @Component({
   selector: 'app-modal-geo-det',
   templateUrl: './modal-geo-det.component.html',
   styleUrls: ['./modal-geo-det.component.scss']
 })
 export class ModalGeoDetComponent implements OnInit {
-  dataCompartida: Datas[] = [];
+  dataCompartida: DataGeofence[] = [];
 
   public nombreZona: string;
   public colorZona: string;
