@@ -8,6 +8,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FollowService } from '../../services/follow.service';
 import Swal from 'sweetalert2';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
+/* import { UserDataService } from 'src/app/profile-config/services/user-data.service'; */
+
+
 
 @Component({
   selector: 'app-tree-table',
@@ -15,7 +18,6 @@ import { UserTracker } from 'src/app/multiview/models/interfaces';
   styleUrls: ['./tree-table.component.scss']
 })
 export class TreeTableComponent implements OnInit {
-
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
   showVehiclesFixes: boolean = true;
@@ -87,11 +89,12 @@ export class TreeTableComponent implements OnInit {
 
 
   constructor(
+    /* private userDataService: UserDataService, */
     public vehicleService:VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService : VehicleConfigService,
     private spinner: NgxSpinnerService,
-    private followService:FollowService,
+    private followService:FollowService
   ) {
     // this.vehicleService.listTable=1;
     if(this.loading) {
@@ -123,6 +126,10 @@ export class TreeTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    /* const svgText = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"><path d="M8 14s6-3.5 6-7A4 4 0 0 0 8 2a4 4 0 0 0-6 6c0 3.5 6 7 6 7z"/></svg>'; */
+
+
     this.vehicleService.treeTableStatus = true;
     // //console.log("tree on init");
     if(this.vehicleService.statusDataVehicleTree){
@@ -786,6 +793,36 @@ export class TreeTableComponent implements OnInit {
   onTableTransmision(){
 
   }
+
+  /* cargasvg(map: any): void{
+
+    const e = this.vehicleService.vehicles;
+
+    for (const property in e) {
+     
+        this.generarSVG(e[property]);
+
+        console.log("DATOS DE DRAWICON", e[property])
+        console.log("DATOS MAP", map)
+      
+    }
+
+   
+  }
+
+
+  generarSVG(data: any) {
+    let iconUrl = this.userDataService.getSVGcontent(data.tipo);
+    
+    // Crear un nuevo elemento img
+    const imgElement = document.createElement('img');
+  
+    imgElement.src = iconUrl;
+  
+    // Añadir el elemento img al documento o a algún contenedor específico
+    document.body.appendChild(imgElement); // Por ejemplo, añadirlo al cuerpo del documento
+  } */
+  
 
   onClickFollow(rowData: any){
     rowData.follow = !rowData.follow;
