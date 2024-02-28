@@ -18,6 +18,7 @@ export class SocketWebService extends Socket {
     super({
       url: environment.socketUrl,
       options: {
+        //@ts-ignore
         withCredentials: false,
         cors: {
           origin: '*',
