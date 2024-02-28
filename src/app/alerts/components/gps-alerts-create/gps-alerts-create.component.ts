@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { PanelService } from 'src/app/panel/services/panel.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { id } from '@swimlane/ngx-charts';
+import { find } from 'lodash';
 
 declare var $: any;
 
@@ -21,6 +23,7 @@ export class GpsAlertsCreateComponent implements OnInit {
 
   public alertForm!: FormGroup;
   public events: any = [];
+  alertSelected: any;
 
   public loading: boolean = true;
 
@@ -59,9 +62,9 @@ export class GpsAlertsCreateComponent implements OnInit {
     private VehicleService: VehicleService,
     private formBuilder: FormBuilder,
     public panelService: PanelService,
-    private spinner: NgxSpinnerService,
+    private spinner: NgxSpinnerService
   ) {
-    this.listaSonidos = this.AlertService.listaSonidos;
+    this.listaSonidos = [...this.AlertService.listaSonidos];
   }
 
   ngOnInit(): void {
@@ -75,7 +78,7 @@ export class GpsAlertsCreateComponent implements OnInit {
       chkCorreo: [false],
       sonido: [
         {
-          value: 'sonidos/alarm8.mp3',
+          value: 'sonidos/globales/alarm8.mp3',
           disabled: this.disabledEventSoundActive,
         },
       ],
@@ -94,14 +97,72 @@ export class GpsAlertsCreateComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[false],
-      chkEvaluation:[false]
-
+      chkVentanaEmergente: [false],
+      chkEvaluation: [false],
     });
     this.loading = false;
     console.log('Lista Emails', this.alertForm.value.lista_emails);
     this.loadData();
   }
+
+  //Inicio Modificacion para mostrar alertas modifcadas por su tipo de alerta
+  actualizarSonidos() {
+    console.log(this.listaSonidos);
+    console.log('obtengo el id ' + this.alertForm.value.tipoAlerta);
+
+    const alert = this.events.find(
+      (event: any) =>
+        event.id.toString() === this.alertForm.value.tipoAlerta.toString()
+    );
+
+    console.log('alert antes de: ', alert);
+
+    if (alert) {
+      this.alertSelected = alert;
+      console.log('alerttt', alert);
+
+      // Obtén todos los elementos de la lista de sonidos hasta el id 27
+      let sonidosObtenidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (alert.id === 3) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 28
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.id === 4) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 35
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      }
+
+      if (sonidosObtenidos.length > 0) {
+        console.log('Sonidos obtenidos:', sonidosObtenidos);
+        this.listaSonidos = sonidosObtenidos;
+      } else {
+        console.log(
+          'No se encontraron sonidos para la alerta seleccionada o la función no devuelve un array.'
+        );
+      }
+    } else {
+      this.listaSonidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (this.listaSonidos.length > 0) {
+        console.log('Sonidos obtenidos:', this.listaSonidos);
+      } else {
+        console.log('No se encontraron sonidos para la alerta seleccionada.');
+      }
+    }
+  }
+  //Fin Modificacion para mostrar alertas modifcadas por su tipo de alerta
 
   public async loadData() {
     this.setDataVehicles();
@@ -110,7 +171,7 @@ export class GpsAlertsCreateComponent implements OnInit {
 
     this.loadingAlertDropdownReady = true;
     this.hideLoadingSpinner();
-    console.log("alertas cargadas",this.events);
+    console.log('alertas cargadas', this.events);
   }
 
   setDataVehicles() {
@@ -128,21 +189,22 @@ export class GpsAlertsCreateComponent implements OnInit {
   }
 
   playAudio(path: string) {
-    if(typeof path != 'undefined' && path != ''){
-      if(this.audio.currentSrc != '' && !this.audio.ended){
+    if (typeof path != 'undefined' && path != '') {
+      if (this.audio.currentSrc != '' && !this.audio.ended) {
         this.audio.pause();
       }
       this.audio = new Audio('assets/' + path);
       let audioPromise = this.audio.play();
 
       if (audioPromise !== undefined) {
-        audioPromise.then(() => {
-          //console.log('Playing notification sound')
-        })
-        .catch((error: any) => {
-          //console.log(error);
-          // Auto-play was prevented
-        });
+        audioPromise
+          .then(() => {
+            //console.log('Playing notification sound')
+          })
+          .catch((error: any) => {
+            //console.log(error);
+            // Auto-play was prevented
+          });
       }
     }
   }
@@ -155,8 +217,8 @@ export class GpsAlertsCreateComponent implements OnInit {
     }
   }
 
-  chkEmailHandler(){
-    if(this.alertForm.value.chkCorreo){
+  chkEmailHandler() {
+    if (this.alertForm.value.chkCorreo) {
       this.alertForm.controls['email'].enable();
     } else {
       this.alertForm.controls['email'].disable();
@@ -216,23 +278,28 @@ export class GpsAlertsCreateComponent implements OnInit {
       this.alertForm.value.vehicles
     );
 
-    if(typeof this.alertForm.value.sonido == "undefined"){
-      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
+    if (typeof this.alertForm.value.sonido == 'undefined') {
+      this.alertForm.value.sonido = 'sonidos/globales/alarm8.mp3';
     }
 
-    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+    if (
+      this.alertForm.value.chkCorreo &&
+      this.alertForm.value.lista_emails.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un correo', 'warning');
-      return
+      return;
     }
 
-    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+    if (
+      this.alertForm.value.chkwhatsapp &&
+      this.alertForm.value.lista_whatsapp.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un número', 'warning');
-      return
+      return;
     }
 
     if (this.alertForm.value.vehicles.length != 0) {
-
-      console.log("data enviada al backend",this.alertForm.value);
+      console.log('data enviada al backend', this.alertForm.value);
       // return;
 
       Swal.fire({
@@ -250,7 +317,7 @@ export class GpsAlertsCreateComponent implements OnInit {
           this.clickShowPanel('ALERTS-GPS');
         },
       }).then((data) => {
-        console.log("data de retorno",data);
+        console.log('data de retorno', data);
         if (data.isConfirmed) {
           Swal.fire(
             'Datos guardados',
@@ -272,8 +339,8 @@ export class GpsAlertsCreateComponent implements OnInit {
     this.panelService.nombreCabecera = item[0].name;
   }
 
-  hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){
+  hideLoadingSpinner() {
+    if (this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady) {
       this.spinner.hide('loadingAlertData');
     }
   }
@@ -287,7 +354,9 @@ export class GpsAlertsCreateComponent implements OnInit {
             this.alertForm.value.lista_whatsapp
           )
         ) {
-          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.value.lista_whatsapp.push(
+            this.alertForm.value.whatsapp
+          );
           this.alertForm.controls.whatsapp.reset();
         } else {
           Swal.fire({
@@ -303,7 +372,6 @@ export class GpsAlertsCreateComponent implements OnInit {
           icon: 'warning',
         });
       }
-
     }
   }
 
@@ -312,7 +380,6 @@ export class GpsAlertsCreateComponent implements OnInit {
   }
 
   chkWhatsappHandler() {
-
     if (this.alertForm.value.chkwhatsapp) {
       this.alertForm.controls['whatsapp'].enable();
     } else {

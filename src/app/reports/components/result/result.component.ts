@@ -69,6 +69,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   dtOptions: any = {};
   dtOptions2: any = {};
   dtOptions3: any = {};
+  dtOptions4: any = {};
 
   seeTableRepGerencial: boolean = true;
   indexTRG = 0;
@@ -3091,6 +3092,42 @@ export class ResultComponent implements OnDestroy, OnInit {
       destroy: true,
     };
 
+
+    this.dtOptions4 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+      language:{
+        // url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json',
+        info: ''
+      },
+      dom: 'lfrtip',
+      ordering: false,
+      paging: false,
+      searching: false,
+      lengthChange: false,
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+      buttons: [{
+        extend: 'excel',
+        text: '<i class="fa fa-file-excel-o" aria-hidden="true"click></i> Exportar a Excel',
+        className: 'btn btn-success'
+      }],
+      initComplete: () => {
+        this.dt_completed++;
+        //console.log('Terminado de cargar y popular tabla ' + this.dt_completed);
+        if(this.dt_completed == document.querySelectorAll('table[datatable]').length){
+          this.wrapElements(document.querySelectorAll('table[datatable]'));
+          this.table_hide = '';
+          if(!isIndependentWindow){
+            this.spinner.hide("reportSpinner");
+            this.reportService.workingOnReport = false;
+          }
+        }
+
+      },
+      destroy: true,
+    };
+    
   }
 
   
@@ -14126,6 +14163,365 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   
 }
+
+  exportExcelExcesosVelocidadDuracionToleranciaRiesgo(vrs: number) {
+
+    var rs = this.reportService.eC;
+    var table_width = 6;
+
+
+    if (rs.Fecha) { table_width++; }
+    if (rs.Hora) { table_width++;  };
+    if (rs.Codigo) {  table_width++;  };
+    if (rs.Placa) {  table_width++;  };
+    if (rs.Zona) {  table_width++; };
+    if (!this.reportService.chkRiesgo) {  table_width++;};
+    if (this.reportService.chkRiesgo) {  table_width = table_width + 3;};
+    if (rs.IdConductor) {  table_width++; };
+    if (rs.Conductor) {  table_width++; };
+    if (rs.VelMobileye) {  table_width++; };
+    if (rs.VelGPSspeed) {  table_width++; };
+    if (rs.VelCAN) {  table_width++; };
+    if (rs.Satelite) {  table_width++; };
+    if (rs.Ubicacion) {  table_width++; };
+
+    console.log("cont = "+ table_width);
+    
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+    var column_config:Columns[];
+    //var table_width = 12 + (this.chkDateHour? 2: 1) +1 + (this.user_id == 923? -2: 0);
+    //var table_width = cont;
+
+    var vehiculo_width = 0;//(this.chkDateHour? 5: 4) +1 + (this.user_id == 923? -2: 0);
+
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+    var zona_cell_ch_width = "zona".length;
+
+    var limite_velocidad_cell_ch_width = "Límite de Velocidad".length;
+
+    var leve_cell_ch_width = "Leve(1,2)".length;
+    var grave_cell_ch_width = "Grave(3,5)".length;
+    var muy_grave_cell_ch_width = "Muy Grave(>=6)".length;
+
+    //---
+    var duracion_cell_ch_width = "Duracion".length;
+
+    var id_conductor_cell_ch_width = "Id Conductor".length;
+    var conductor_cell_ch_width = "Conductor".length;
+
+    var vel_mobileye_cell_ch_width = "Vel.ADAS".length;
+    var vel_gps_speed_cell_ch_width = "Vel.GPS".length;
+    var vel_can_cell_ch_width = "Vel.GPS".length;
+    var satelite_cell_ch_width = "Satélite".length;
+    var ubicacion_cell_ch_width = "Ubicación".length;
+
+
+    // var allRows = [
+    var allRows: AllRows[] = [
+        {
+          cells: [
+            { value: "REPORTE DE EXCESOS DE VELOCIDAD", ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+    ];
+
+    this.sortedData.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {
+            cells: [
+              { value: "REPORTE DE EXCESOS DE VELOCIDAD.", ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+          {
+            cells: [
+              // { value: "VEHÍCULO", ...this.subHeaderVehicleHeaderConfig, colSpan: vehiculo_width },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderHeight
+          },
+          {
+            cells: [
+              // { value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width - vehiculo_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
+        ];
+
+        //if(this.chkDateHour) {
+
+          var array_campos_cabecera = [];
+
+          array_campos_cabecera.push({ value: "Item", ...this.colHeaderConfig });
+
+          if (rs.Fecha) { array_campos_cabecera.push({ value: "Fecha", ...this.colHeaderConfig }); }
+          if (rs.Hora) {  array_campos_cabecera.push({ value: "Hora", ...this.colHeaderConfig }); };
+          if (rs.Codigo) {  array_campos_cabecera.push({ value: "Unidad", ...this.colHeaderConfig }); };
+          if (rs.Placa) {  array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig }); };
+          if (rs.Zona) {  array_campos_cabecera.push({ value: "Zona", ...this.colHeaderConfig }); };
+          array_campos_cabecera.push({ value: "Límite de Velocidad de Zona", ...this.colHeaderConfig });
+          if (!this.reportService.chkRiesgo) {  array_campos_cabecera.push({ value: "Exceso de Velocidad", ...this.colHeaderConfig }); };
+
+          if (this.reportService.chkRiesgo) {  array_campos_cabecera.push({ value: "Leve(1,2)", ...this.colHeaderConfig }); };
+          if (this.reportService.chkRiesgo) {  array_campos_cabecera.push({ value: "Grave(3,5)", ...this.colHeaderConfig }); };
+          if (this.reportService.chkRiesgo) {  array_campos_cabecera.push({ value: "Muy Grave(>=6)", ...this.colHeaderConfig }); };
+
+          array_campos_cabecera.push({ value: "Inicio del Exceso", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Hora del Exceso", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Fin del Exceso", ...this.colHeaderConfig });
+          array_campos_cabecera.push({ value: "Duración", ...this.colHeaderConfig });
+
+          if (rs.IdConductor) { array_campos_cabecera.push({ value: "ID Conductor", ...this.colHeaderConfig }); };
+          if (rs.Conductor) { array_campos_cabecera.push({ value: "Conductor", ...this.colHeaderConfig }); };
+
+          if (rs.VelMobileye) { array_campos_cabecera.push({ value: "Vel.ADAS", ...this.colHeaderConfig }); };
+          if (rs.VelGPSspeed) { array_campos_cabecera.push({ value: "Vel.GPS", ...this.colHeaderConfig }); };
+          if (rs.VelCAN) { array_campos_cabecera.push({ value: "Vel.CAN", ...this.colHeaderConfig }); };
+          if (rs.Satelite) { array_campos_cabecera.push({ value: "Satélite", ...this.colHeaderConfig }); };
+          if (rs.Ubicacion) { array_campos_cabecera.push({ value: "Ubicación", ...this.colHeaderConfig }); };
+
+
+
+          
+          rows.push({
+            cells: array_campos_cabecera ,height: this.colsHeaderHeight
+          });
+
+
+          data[1].forEach((item: { col1:any, es_resumen:any, vel_leve:any, vel_grave:any, vel_muy_grave:any, hora_exceso:any, fin_exceso:any, duracion2:any, velMobileye_ME460:any, GPS_speed:any, can_speed:any, sat:any, v0:any, velocidad:any,nombre_zona:any, fecha_inicio:any, parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
+
+              //var fh = item.fecha.split(" ");
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+
+              codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
+              placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
+              zona_cell_ch_width = Math.max(zona_cell_ch_width, (item.nombre_zona??'').toString().length);
+              limite_velocidad_cell_ch_width = Math.max(limite_velocidad_cell_ch_width, (item.v0??'').toString().length);
+
+              leve_cell_ch_width = Math.max(leve_cell_ch_width, (item.vel_leve??'').toString().length);
+              grave_cell_ch_width = Math.max(grave_cell_ch_width, (item.vel_grave??'').toString().length);
+              muy_grave_cell_ch_width = Math.max(muy_grave_cell_ch_width, (item.vel_muy_grave??'').toString().length);
+              
+              //==
+              duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion2??'').toString().length);
+
+              id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
+              conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
+
+              vel_mobileye_cell_ch_width = Math.max(vel_mobileye_cell_ch_width, (item.vel_mobileye??'').toString().length);
+              vel_gps_speed_cell_ch_width = Math.max(vel_gps_speed_cell_ch_width, (item.vel_gps_speed??'').toString().length);
+              vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
+
+              satelite_cell_ch_width = Math.max(satelite_cell_ch_width, (item.vel_eco??'').toString().length);
+              ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+
+
+          
+              var color = "";
+              if (item.es_resumen) {
+                color = "#E5E3D9";
+                ubicacion = "";
+              }
+
+              var array_campos_cuerpo= [];
+
+              // array_campos_cuerpo.push({ value: (index + 1), background: color, ...this.bodyRowsConfig });
+              array_campos_cuerpo.push({ value: item.col1, background: color, ...this.bodyRowsConfig });
+              
+              if (rs.Fecha) { array_campos_cuerpo.push({ value: this.isChe(item.fecha_inicio), background: color, format: "yyyy/mm/dd", ...this.bodyRowsConfig }); };
+              if (rs.Hora) { array_campos_cuerpo.push({ value: this.isChs(item.fecha_inicio), background: color, format: "hh:mm:ss", ...this.bodyRowsConfig }); };
+
+              if (rs.Codigo) { array_campos_cuerpo.push({ value: item.codigo, background: color, ...this.bodyRowsConfig }); };
+              if (rs.Placa) { array_campos_cuerpo.push({ value: item.placa, background: color, ...this.bodyRowsConfig }); };
+              if (rs.Zona) { array_campos_cuerpo.push({ value: item.nombre_zona, background: color, ...this.bodyRowsConfig }); };
+
+              array_campos_cuerpo.push({ value: item.v0, background: color, ...this.bodyRowsConfig });
+              if (!this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.velocidad, background: color, ...this.bodyRowsConfig }); };
+              
+              if (this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.vel_leve, background: color, ...this.bodyRowsConfig }); };
+              if (this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.vel_grave, background: color, ...this.bodyRowsConfig }); };
+              if (this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.vel_muy_grave, background: color, ...this.bodyRowsConfig }); };
+
+              array_campos_cuerpo.push({ value: this.isChs(item.fecha_inicio), format: "hh:mm:ss", background: color, ...this.bodyRowsConfig });
+              array_campos_cuerpo.push({ value: this.isChs(item.hora_exceso), format: "hh:mm:ss", background: color, ...this.bodyRowsConfig });
+              array_campos_cuerpo.push({ value: this.isChs(item.fin_exceso), format: "hh:mm:ss", background: color, ...this.bodyRowsConfig });
+              array_campos_cuerpo.push({ value: item.duracion2, background: color, ...this.bodyRowsConfig });
+    
+              if (rs.IdConductor) { array_campos_cuerpo.push({ value: item.idConductor, background: color, ...this.bodyRowsConfig }); };
+              if (rs.Conductor) { array_campos_cuerpo.push({ value: item.conductor, background: color, ...this.bodyRowsConfig }); };
+
+              if (rs.VelMobileye) { array_campos_cuerpo.push({ value: item.velMobileye_ME460, background: color, ...this.bodyRowsConfig }); };
+              if (rs.VelGPSspeed) { array_campos_cuerpo.push({ value: item.GPS_speed, background: color, ...this.bodyRowsConfig }); };
+              if (rs.VelCAN) { array_campos_cuerpo.push({ value: item.can_speed, background: color, ...this.bodyRowsConfig }); };
+              if (rs.Satelite) { array_campos_cuerpo.push({ value: item.sat, background: color, ...this.bodyRowsConfig }); };
+              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula: 'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', background: color, color:'#0000FF', ...this.bodyRowsConfig}); };
+
+              rows.push({
+                cells: array_campos_cuerpo, height: this.bodyRowsHeight
+              });
+
+          });
+
+        //}
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+
+      column_config = [ { width: this.w_item }  ];
+
+      if (rs.Fecha) { column_config.push( { width: this.w_date } );  }
+      if (rs.Hora) { column_config.push( { width: this.w_hour } );  }
+      if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
+      if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
+      if (rs.Zona) { column_config.push( { width: this.calculateColWidth(zona_cell_ch_width) }  );  };
+
+      column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  ); 
+
+      if (!this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  );  };
+
+      if (this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(leve_cell_ch_width) }  );  };
+      if (this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(grave_cell_ch_width) }  );  };
+      if (this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(muy_grave_cell_ch_width) }  );  };
+
+      column_config.push( { width: this.w_hour });
+      column_config.push( { width: this.w_hour });
+      column_config.push( { width: this.w_hour });
+      column_config.push( { width: this.calculateColWidth(duracion_cell_ch_width) }  );
+
+      if (rs.IdConductor) { column_config.push( { width: this.calculateColWidth(id_conductor_cell_ch_width) }  );  };
+      if (rs.Conductor) { column_config.push( { width: this.calculateColWidth(conductor_cell_ch_width) }  );  };
+
+      if (rs.VelMobileye) { column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) }  );  };
+      if (rs.VelGPSspeed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) }  );  };
+      if (rs.VelCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) }  );  };
+      if (rs.Satelite) { column_config.push( { width: this.calculateColWidth(satelite_cell_ch_width) }  );  };
+      if (rs.Ubicacion) { column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) }  );  };
+
+
+
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+        },
+      columns: column_config,
+      title: data[0][1],
+      rows: rows
+      });
+
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+      zona_cell_ch_width = "zona".length;
+
+      limite_velocidad_cell_ch_width = "Límite de Velocidad de Zona".length;
+
+      leve_cell_ch_width = "Leve(1,2)".length;
+      grave_cell_ch_width = "Grave(3,5)".length;
+      muy_grave_cell_ch_width = "Muy Grave(>=6)".length;
+      //---
+      duracion_cell_ch_width = "Duracion".length;
+
+      id_conductor_cell_ch_width = "Id Conductor".length;
+      conductor_cell_ch_width = "Conductor".length;
+
+      vel_mobileye_cell_ch_width = "Vel.ADAS".length;
+      vel_gps_speed_cell_ch_width = "Vel.GPS".length;
+      vel_can_cell_ch_width = "Vel.GPS".length;
+      satelite_cell_ch_width = "Satélite".length;
+      ubicacion_cell_ch_width = "Ubicación".length;
+
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+        allRows[0].cells![0].colSpan = table_width;
+
+        column_config = [ { width: this.w_item }  ];
+
+        if (rs.Fecha) { column_config.push( { width: this.w_date } );  }
+        if (rs.Hora) { column_config.push( { width: this.w_hour } );  }
+        if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
+        if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
+        if (rs.Zona) { column_config.push( { width: this.calculateColWidth(zona_cell_ch_width) }  );  };
+
+        column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  ); 
+
+        if (!this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  );  };
+
+        if (this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(leve_cell_ch_width) }  );  };
+        if (this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(grave_cell_ch_width) }  );  };
+        if (this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(muy_grave_cell_ch_width) }  );  };
+
+        column_config.push( { width: this.w_hour });
+        column_config.push( { width: this.w_hour });
+        column_config.push( { width: this.w_hour });
+        column_config.push( { width: this.calculateColWidth(duracion_cell_ch_width) }  );
+
+        if (rs.IdConductor) { column_config.push( { width: this.calculateColWidth(id_conductor_cell_ch_width) }  );  };
+        if (rs.Conductor) { column_config.push( { width: this.calculateColWidth(conductor_cell_ch_width) }  );  };
+
+        if (rs.VelMobileye) { column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) }  );  };
+        if (rs.VelGPSspeed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) }  );  };
+        if (rs.VelCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) }  );  };
+        if (rs.Satelite) { column_config.push( { width: this.calculateColWidth(satelite_cell_ch_width) }  );  };
+        if (rs.Ubicacion) { column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) }  );  };
+
+        
+
+
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: this.headerRowSpan
+        },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteExcesosVelocidad.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
 
   exportExcelCoordenadasGeocercas(vrs: number) {
     // dateHour();

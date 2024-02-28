@@ -272,15 +272,15 @@
           <th *ngIf="setting['eye']"><app-eye-header style="height: 1.25rem; display: flex;"></app-eye-header></th>
           <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
           <th *ngIf="setting['vehicle']"></th>
-          <th *ngIf="setting['imei']" style="text-align: center; white-space: nowrap;">IMEI</th>
-          <th *ngIf="setting['tag_driver']" ><app-tag-driver-header></app-tag-driver-header></th>
-          <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
-          <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
-          <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
+          <th *ngIf="setting['imei']"><app-tag-imei></app-tag-imei><!-- Imei --></th> <!-- IMEI -->
+          <th *ngIf="setting['tag_driver']" ><app-tag-driver-header></app-tag-driver-header></th> <!-- MOSTRAR CONDUCTOR -->
+          <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th> <!-- MOSTRAR NOMBRE -->
+          <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th> <!-- SEGUIR VEHICULO -->
+          <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>  <!-- VELOCIDAD -->
           <th *ngIf="setting['gps']" ><app-gps-header></app-gps-header></th>
           <th *ngIf="setting['gsm']" ><app-gsm-header></app-gsm-header></th>
           <!-- <th *ngIf="setting['trans']"><app-transmission-header></app-transmission-header></th> -->
-          <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th>
+          <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th> <!-- CONFIGURAR -->
 
         </tr>
         <!-- <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
@@ -295,7 +295,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header">
                 <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
-                {{rowData["name"]}}
+                {{rowData["name"]}}&nbsp;&nbsp;&nbsp; <img src="assets/images/eventos/pin_point_white.svg" alt="Pin Point Image" style="width: 20px; height: 20px;">
               </div>
 
               <div class="d-flex justify-content-end pe-3 flex-none">
@@ -308,12 +308,12 @@
                       <div ngbDropdownMenu class="gl-custom-dropdown treetable-dropdown">
                         <div (click)="showEditFixes(rowData)" ngbDropdownItem>
                           <span class="btn-label">
-                            Editar {{rowData['type'] === 'pinUp' ? 'Unidades Fijadas': 'Unidades'}}
+                            Editar {{rowData['type'] === 'pinUp' ? 'UNIDADES FIJADAS': 'Unidades'}}
                           </span>
                         </div>
                         <div (click)="cleanFixes(rowData)" ngbDropdownItem>
                           <span class="btn-label">
-                            Limpiar {{rowData['type'] === 'pinUp' ? 'Unidades Fijadas': 'Unidades'}}
+                            Limpiar {{rowData['type'] === 'pinUp' ? 'UNIDADES FIJADAS': 'Unidades'}}
                           </span>
                         </div>
                       </div>

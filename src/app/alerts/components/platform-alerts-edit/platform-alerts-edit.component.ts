@@ -47,7 +47,6 @@ export class PlatformAlertsEditComponent implements OnInit {
   public disabledWhatsapp = true;
   alertSelected: any;
 
-
   booleanOptions = [
     { label: 'Sí', value: true },
     { label: 'No', value: false },
@@ -58,7 +57,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     { label: 'Desactivado', value: false },
   ];
 
-  listaSonidos:any = [];
+  listaSonidos: any = [];
   audio = new Audio();
 
   loadingAlertDropdownReady: boolean = false;
@@ -89,22 +88,26 @@ export class PlatformAlertsEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     public panelService: PanelService,
     private geofencesService: GeofencesService,
-    private spinner: NgxSpinnerService,
+    private spinner: NgxSpinnerService
   ) {
-    this.listaSonidos = this.AlertService.listaSonidos;
+    this.listaSonidos = [...this.AlertService.listaSonidos];
   }
 
   async ngOnInit() {
     this.spinner.show('loadingAlertData');
-    
+
     let alert = this.AlertService.getAlertEditData();
-    console.log("ALERT::::::", alert);
-    
+    console.log('ALERT::::::', alert);
+
     //this.vehiclesSelected = alert.imei.split(',');
     //this.geoSelected = alert.valor_verificado.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
-    let notificacion_system = arrayNotificationSystem[2].toLowerCase() === 'true';
-    let emails = alert.notificacion_direcion_email == ''? []: alert.notificacion_direcion_email.split(',');
+    let notificacion_system =
+      arrayNotificationSystem[2].toLowerCase() === 'true';
+    let emails =
+      alert.notificacion_direcion_email == ''
+        ? []
+        : alert.notificacion_direcion_email.split(',');
     let notificacion_email = alert.notificacion_email.toLowerCase() === 'true';
     this.disabledEventSoundActive = !notificacion_system;
     this.disabledEmail = !notificacion_email;
@@ -128,15 +131,19 @@ export class PlatformAlertsEditComponent implements OnInit {
       day: fecha_hasta[2],
     };
 */
-    this.vehiclesSelected = alert.imei ==''? []: alert.imei.split(',');
-    this.geoSelected = alert.valor_verificado == ''? []: alert.valor_verificado.split(',');
+    this.vehiclesSelected = alert.imei == '' ? [] : alert.imei.split(',');
+    this.geoSelected =
+      alert.valor_verificado == '' ? [] : alert.valor_verificado.split(',');
 
-
-    let notificacion_whatsapp = alert.notificacion_whatsapp.toLowerCase() === 'true';
+    let notificacion_whatsapp =
+      alert.notificacion_whatsapp.toLowerCase() === 'true';
     this.disabledWhatsapp = !notificacion_whatsapp;
 
     let whatsapps;
-    if(alert.notificacion_whatsapp_lista == null || alert.notificacion_whatsapp_lista == ''){
+    if (
+      alert.notificacion_whatsapp_lista == null ||
+      alert.notificacion_whatsapp_lista == ''
+    ) {
       whatsapps = [];
     } else {
       whatsapps = alert.notificacion_whatsapp_lista.split(',');
@@ -195,28 +202,28 @@ export class PlatformAlertsEditComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[ventana_emergente],
-      chkEvaluation:[alert.bol_evaluation]
+      chkVentanaEmergente: [ventana_emergente],
+      chkEvaluation: [alert.bol_evaluation],
     });
-    console.log("ALERTFORM:::", this.alertForm);
+    console.log('ALERTFORM:::', this.alertForm);
     this.events = await this.AlertService.getEventsByType('platform');
-    console.log("Events after Load: ", this.events);
+    console.log('Events after Load: ', this.events);
     this.loadData();
-    console.log("After load Data:");
-    
+    console.log('After load Data:');
+
     this.chageAlertType();
-    console.log("After chageAlertType");
-    
+    console.log('After chageAlertType');
+
     this.loading = false;
   }
 
   public loadData() {
-    console.log("Call LoadData;;;");
-    
+    console.log('Call LoadData;;;');
+
     this.setDataGeofences();
     this.setDataVehicles();
-    console.log("after setDataVehicles");
-    
+    console.log('after setDataVehicles');
+
     this.alertForm.patchValue({
       //tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
       tipoAlerta: this.alertForm.value.tipoAlerta,
@@ -230,10 +237,10 @@ export class PlatformAlertsEditComponent implements OnInit {
   setDataVehicles() {
     let vehicles = this.VehicleService.getVehiclesData();
 
-    this.vehicles = vehicles.map((vehicle: any) => {  
+    this.vehicles = vehicles.map((vehicle: any) => {
       return {
         value: vehicle.IMEI,
-        label: vehicle.name
+        label: vehicle.name,
       };
     });
 
@@ -246,7 +253,7 @@ export class PlatformAlertsEditComponent implements OnInit {
     this.geocercas = geocercas.map((geocerca: any) => {
       return {
         value: String(geocerca.id),
-        label: geocerca.zone_name
+        label: geocerca.zone_name,
       };
     });
 
@@ -275,27 +282,27 @@ export class PlatformAlertsEditComponent implements OnInit {
   }
 
   playAudio(path: string) {
-    if(typeof path != 'undefined' && path != ''){
-      if(this.audio.currentSrc != '' && !this.audio.ended){
+    if (typeof path != 'undefined' && path != '') {
+      if (this.audio.currentSrc != '' && !this.audio.ended) {
         this.audio.pause();
       }
       this.audio = new Audio('assets/' + path);
       let audioPromise = this.audio.play();
 
       if (audioPromise !== undefined) {
-        audioPromise.then(() => {
-          //console.log('Playing notification sound')
-        })
-        .catch((error: any) => {
-          //console.log(error);
-          // Auto-play was prevented
-        });
+        audioPromise
+          .then(() => {
+            //console.log('Playing notification sound')
+          })
+          .catch((error: any) => {
+            //console.log(error);
+            // Auto-play was prevented
+          });
       }
     }
   }
 
   onSubmit(event: any) {
-
     event.preventDefault();
 
     this.alertForm.value.vehiculos = JSON.stringify(
@@ -327,14 +334,20 @@ export class PlatformAlertsEditComponent implements OnInit {
       this.alertForm.value.velocidad_limite_infraccion = null;
     }
 
-    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+    if (
+      this.alertForm.value.chkCorreo &&
+      this.alertForm.value.lista_emails.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un correo', 'warning');
-      return
+      return;
     }
 
-    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+    if (
+      this.alertForm.value.chkwhatsapp &&
+      this.alertForm.value.lista_whatsapp.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un número', 'warning');
-      return
+      return;
     }
 
     if (this.alertForm.value.vehiculos.length != 0) {
@@ -429,17 +442,70 @@ export class PlatformAlertsEditComponent implements OnInit {
   }
 
   chageAlertType() {
-    console.log("tipoAlerta",this.alertForm.value.tipoAlerta);
-    console.log("events",this.events);
-    const alert = this.events.find((event:any) => event.id.toString() == this.alertForm.value.tipoAlerta.toString());
-    this.alertSelected = alert;
-    console.log("alerttt",alert);
-    if(this.alertSelected.slug == 'infraccion'){
+    console.log('tipoAlerta', this.alertForm.value.tipoAlerta);
+    console.log(this.alertForm.value.tipoAlerta);
+    const alert = this.events.find(
+      (event: any) =>
+        event.id.toString() === this.alertForm.value.tipoAlerta.toString()
+    );
+    /*     this.alertSelected = alert;
+    console.log("alerttt",alert); */
+
+    // Inicio Alerta Perzonalizada
+
+    if (alert) {
+      this.alertSelected = alert;
+      console.log('alerttt', alert);
+
+      // Obtén todos los elementos de la lista de sonidos hasta el id 27
+      let sonidosObtenidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (alert.id === 26) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 36
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.id === 64) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 33
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      }
+
+      if (sonidosObtenidos.length > 0) {
+        console.log('Sonidos obtenidos:', sonidosObtenidos);
+        this.listaSonidos = sonidosObtenidos;
+      } else {
+        console.log(
+          'No se encontraron sonidos para la alerta seleccionada o la función no devuelve un array.'
+        );
+      }
+    } else {
+      this.listaSonidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (this.listaSonidos.length > 0) {
+        console.log('Sonidos obtenidos:', this.listaSonidos);
+      } else {
+        console.log('No se encontraron sonidos para la alerta seleccionada.');
+      }
+    }
+
+    // Fin Alerta Perzonalizada
+
+    if (this.alertSelected.slug == 'infraccion') {
       this.alertForm.controls['velocidad_limite_infraccion'].enable();
-    }else{
+    } else {
       this.alertForm.controls['velocidad_limite_infraccion'].disable();
     }
-    console.log("selectedAlert: ::: ", this.alertSelected);
+    console.log('selectedAlert: ::: ', this.alertSelected);
     switch (this.alertSelected.slug) {
       case 'zona-de-entrada':
       case 'zona-de-salida':
@@ -509,24 +575,35 @@ export class PlatformAlertsEditComponent implements OnInit {
     }
   }
 
-  hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){
+  hideLoadingSpinner() {
+    if (
+      this.loadingAlertDropdownReady &&
+      this.loadingVehicleMultiselectReady &&
+      this.loadingGeofencesMultiselectReady
+    ) {
       this.spinner.hide('loadingAlertData');
     }
   }
 
-  obtenerTipoAlerta( strAlerta: string){
-    console.log("strAlerta",strAlerta);
-    for(let i = 0; i < this.events.length; i++){
-      if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
+  obtenerTipoAlerta(strAlerta: string) {
+    console.log('strAlerta', strAlerta);
+    for (let i = 0; i < this.events.length; i++) {
+      if (
+        this.prepareString(strAlerta) == this.prepareString(this.events[i].name)
+      ) {
         return this.events[i].name;
       }
     }
     return strAlerta;
   }
 
-  prepareString(str: string){
-    return str.toLowerCase().normalize('NFKD').replace(/[^\w ]/g, '').replace(/  +/g, ' ').trim();
+  prepareString(str: string) {
+    return str
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[^\w ]/g, '')
+      .replace(/  +/g, ' ')
+      .trim();
     //return str.toLowerCase().normalize('NFKD').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/  +/g, ' ').trim();
   }
 
@@ -539,7 +616,9 @@ export class PlatformAlertsEditComponent implements OnInit {
             this.alertForm.value.lista_whatsapp
           )
         ) {
-          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.value.lista_whatsapp.push(
+            this.alertForm.value.whatsapp
+          );
           this.alertForm.controls.whatsapp.reset();
         } else {
           Swal.fire({
@@ -555,7 +634,6 @@ export class PlatformAlertsEditComponent implements OnInit {
           icon: 'warning',
         });
       }
-
     }
   }
 
@@ -564,7 +642,6 @@ export class PlatformAlertsEditComponent implements OnInit {
   }
 
   chkWhatsappHandler() {
-
     if (this.alertForm.value.chkwhatsapp) {
       this.alertForm.controls['whatsapp'].enable();
     } else {

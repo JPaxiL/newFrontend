@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, NgModule } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, NgModule,OnDestroy} from '@angular/core';
 import { PanelService } from 'src/app/panel/services/panel.service';
 import { BrowserModule } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
@@ -64,7 +64,6 @@ export class UserConfigComponent implements OnInit {
       this.hideStateColors(false)
     }
     this.initFormTableVehiclesDefault();
-
   }
 
   initForm() {
@@ -213,7 +212,7 @@ export class UserConfigComponent implements OnInit {
       preConfirm: async () => {
         
         this.userDataService.updateUserConfig(response).subscribe(
-          (response) => {
+          async (response) => {
             // Manejar la respuesta del servidor si es necesario
             console.log('Actualización exitosa:', response);  
             if (!response.res){
@@ -224,39 +223,42 @@ export class UserConfigComponent implements OnInit {
                 'warning'
               );
             }else if (response.res){
-              // console.log('INICIANDO USER DATA SERVICE PRIMERO');
-              // Desuscribe el observador anterior si existe
-              if (this.userDataCompletedSubscription) {
-                console.log('DESUSCRIPCION USERDATA ...');
-                this.userDataCompletedSubscription.unsubscribe();
-              }
-              // Llamas a getUserData y esperas a que se complete
-              this.userDataService.getUserData();
-              // Crea una nueva suscripción y guárdala en la variable para poder desuscribirte luego
-              this.userDataCompletedSubscription = this.userDataService.userDataCompleted.subscribe(async (completed: boolean) => {
-                if (completed) {
-                  // Desuscribe el observador anterior si existe
-                  if (this.vehicleCompletedSubscription) {
-                    console.log('DESUSCRIPCION VEHICLE...');
-                    this.vehicleCompletedSubscription.unsubscribe();
-                  }
-                  // Inicializa vehicleService después de que userDataService esté completo
-                  this.vehicleService.setDefaultStatusDataVehicle();
-                  this.vehicleService.initialize();
-                  // Suscripción a vehicleCompleted para mostrar el mensaje una vez que vehicleService se inicializa
-                  this.vehicleCompletedSubscription = this.vehicleService.vehicleCompleted.subscribe(async (vehicleComplete: boolean) => {
-                    if (vehicleComplete) {
-                      this.loading = false;
+              // await this.userDataService.setDefaultStatusUserData();
+              // await this.userDataService.getUserData();
+              // while (!this.userDataService.userDataInitialized) {
+              //   await this.delay(1000); // Espera 1 segundo antes de verificar nuevamente
+              // }
+              // await this.vehicleService.setDefaultStatusDataVehicle();
+              // await this.vehicleService.initialize();
+              // this.loading = false;
+              // Swal.fire(
+              //   '',
+              //   'Los datos se guardaron y actualizaron correctamente!!',
+              //   'success'
+              // );
+              
+              await this.userDataService.setDefaultStatusUserData();
+              await this.userDataService.getUserData();
+              this.userDataCompletedSubscription = this.userDataService.userDataCompleted.subscribe(async (userDataCompleted: boolean) => {
+                if (userDataCompleted && this.userDataService.userDataInitialized) {
+                  this.unSubscribeUserCompleted();
+                  await this.vehicleService.setDefaultStatusDataVehicle();
+                  await this.vehicleService.initialize();
+                  this.vehicleCompletedSubscription = this.vehicleService.vehicleCompleted.subscribe(async (vehicleDataCompleted:boolean) =>{
+                    if(vehicleDataCompleted && this.vehicleService.statusDataVehicle){
+                      console.log('Resp 5');
+                      this.unSubscribeVehicleCompleted();
+                      this.loading=false;
                       Swal.fire(
                         '',
                         'Los datos se guardaron y actualizaron correctamente!!',
                         'success'
                       );
                     }
-                  });
+                  })
                 }
               });
-              
+
             }
           },
           (error) => {
@@ -274,6 +276,17 @@ export class UserConfigComponent implements OnInit {
     }).then(async (data) => {
       // console.log('testing respuesta...',data);
     });
+  }
+
+  unSubscribeUserCompleted(){
+    if (this.userDataCompletedSubscription) {
+      this.userDataCompletedSubscription.unsubscribe();
+    }
+  }
+  unSubscribeVehicleCompleted(){
+    if (this.vehicleCompletedSubscription){
+      this.vehicleCompletedSubscription.unsubscribe();
+    }
   }
 
   hideStateColors(hideColor:boolean){
@@ -295,4 +308,7 @@ export class UserConfigComponent implements OnInit {
     }
   }
 
+  // delay(ms: number) {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // }
 }

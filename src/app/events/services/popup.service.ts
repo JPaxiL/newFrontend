@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
 import { EventService } from './event.service';
-import { getIcon } from '../helpers/event-helper';
-import { Vehicle } from 'src/app/vehicles/models/vehicle';
+/* import { getIcon } from '../helpers/event-helper';
+ */import { Vehicle } from 'src/app/vehicles/models/vehicle';
 
 @Injectable({
   providedIn: 'root'
@@ -99,9 +99,9 @@ export class PopupService {
 
     const infoDiv = document.createElement('div');
     infoDiv.classList.add('info-popup-events');
-    let icon = getIcon(event.tipo);
+/*     let icon = getIcon(event.tipo);
     infoDiv.innerHTML = `<img src="${icon}" style="max-width: 20px !important; height: 20px;"/> <span>${event.tipo}</span>`;
-
+ */
     const divElement = document.createElement('div');
     divElement.classList.add('map-content-popup-events');
     divElement.id = `map-event-${this.popupCount}`
