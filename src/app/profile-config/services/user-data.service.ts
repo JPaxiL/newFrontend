@@ -47,12 +47,15 @@ export class UserDataService {
       next: async (data) => {
         //this.userData = this.panelService.userData = data[0];
         console.log('User Data Info ->: ', data);
+
         // console.log('User Data obtenida ======> ',  data.data);
         // console.log('User VEHICLES obtenida ======> ',  data.data2);
         // console.log('User CONFIG DATA obtenida ======> ',  data.data3);
         this.typeVehicles = await data.data2;
         this.typeVehiclesUserData = await data.data3;
         this.userData = await data.data;
+
+        // this.crearCarpetaTemporal(this.typeVehiclesUserData);
 
         this.typeVehiclesUserData.forEach(
           async (vehicle: {
@@ -62,9 +65,7 @@ export class UserDataService {
             customsvg: any;
             var_color: string;
           }) => {
-            vehicle.customurl = `./assets/images/objects/nuevo/${vehicle.name_type.toLowerCase()}/${
-              vehicle.var_icono
-            }`;
+            vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicle.var_icono}`;
 
             vehicle.customsvg = await this.busSVGCallback(
               vehicle.var_color,
@@ -74,7 +75,6 @@ export class UserDataService {
             console.log('TESTUSERDATA', vehicle);
           }
         );
-
 
         this.userName = data.data.nombre_usuario
           .normalize('NFKD')
@@ -97,6 +97,63 @@ export class UserDataService {
     });
   }
 
+/*   private crearCarpetaTemporal(vehicle: any[]) {
+    this.typeVehiclesUserData.forEach(
+      async (vehicle: {
+        customurl: string;
+        var_icono: any;
+        name_type: any;
+        customsvg: any;
+        var_color: string;
+      }) => {
+        vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicle.var_icono}`;
+
+        vehicle.customsvg = await this.busSVGCallback(
+          vehicle.var_color,
+          vehicle.customurl
+        );
+
+        console.log('TESTUSERDATA', vehicle);
+
+        const customsvgPath = `./assets/images/objects/nuevo/customsvg/${vehicle.var_icono}`;
+        this.guardarSVG(customsvgPath, vehicle.customsvg);
+      }
+    );
+
+    const carpetaTemporalKey = 'carpetaTemporal';
+
+    // Verificar si la carpeta ya existe
+    const carpetaTemporalStr = localStorage.getItem(carpetaTemporalKey);
+
+    if (!carpetaTemporalStr) {
+      // Si no existe, crearla
+      const carpetaTemporal = vehicle;
+
+      localStorage.setItem(carpetaTemporalKey, JSON.stringify(carpetaTemporal));
+
+      console.log('Carpeta temporal creada con éxito:', carpetaTemporal);
+    } else {
+      console.log('La carpeta temporal ya existe:', carpetaTemporalStr);
+
+      try {
+        // Intentar convertir la cadena JSON a un objeto para imprimirlo
+        const carpetaTemporal = JSON.parse(carpetaTemporalStr);
+        console.log('Contenido de la carpeta temporal:', carpetaTemporal);
+      } catch (error) {
+        console.error('Error al analizar la carpeta temporal:', error);
+      }
+    }
+  }
+
+  private guardarSVG(filePath: string, svgContent: string) {
+    
+    const fs = require('fs');
+    fs.writeFileSync(filePath, svgContent, 'utf-8');
+  }
+*/
+
+
+  
   public getSVGcontent(idtype: number) {
     const contentSVG = this.typeVehiclesUserData.find(
       (type: { type_vehicle_id: number }) => type.type_vehicle_id == idtype
@@ -105,16 +162,14 @@ export class UserDataService {
   }
 
   public busSVGCallback(var_color: string, customurl: string): Promise<string> {
-
-    console.log('dato2 color', var_color);
-    console.log('dato2 url', customurl);
+    /*  console.log('dato2 color', var_color);
+    console.log('dato2 url', customurl); */
 
     return new Promise<string>((resolve, reject) => {
       this.busSVG(
         customurl,
         var_color,
         (bussvg: string) => {
-          console.log('Icon URL actualizado en getUserData:', bussvg);
           resolve(bussvg);
         },
         (error: Error) => {
@@ -125,7 +180,7 @@ export class UserDataService {
     });
   }
 
-  private busSVG(
+  public busSVG(
     svgPath: string,
     colorHex: string,
     callback: (result: string) => void,
@@ -150,9 +205,9 @@ export class UserDataService {
 
           const bussvg = `data:image/svg+xml;base64,${btoa(div.innerHTML)}`;
           callback(bussvg);
-          console.log('Icon URL actualizado:', bussvg);
+          /*  console.log('Icon URL actualizado:', bussvg); */
         } else {
-          console.log('Elemento <style> no encontrado en el SVG.');
+          /*  console.log('Elemento <style> no encontrado en el SVG.'); */
           errorCallback(new Error('Elemento <style> no encontrado en el SVG.'));
         }
       })
@@ -161,7 +216,6 @@ export class UserDataService {
         errorCallback(error);
       });
   }
-
 
   public getReportsForUser(): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/api/getPermissReports`);

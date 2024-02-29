@@ -133,7 +133,7 @@ export class TreeTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cargasvg();
+   /*  this.cargasvg(); */
     /* const svgText =
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"><path d="M8 14s6-3.5 6-7A4 4 0 0 0 8 2a4 4 0 0 0-6 6c0 3.5 6 7 6 7z"/></svg>';
     this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svgText); */
@@ -167,7 +167,7 @@ export class TreeTableComponent implements OnInit {
   }
 
   // INICIO EL PROCESO DE CARGAR SVG EN LA LISTA DEL POPUP
-  cargasvg(): void {
+  /* cargasvg(): void {
     const e = this.vehicleService.vehicles;
 
     for (const property in e) {
@@ -212,7 +212,7 @@ export class TreeTableComponent implements OnInit {
     } else {
       console.error('Elemento SVG no encontrado');
     }
-  }
+  } */
 
   // FIN EL PROCESO DE CARGAR SVG EN LA LISTA DEL POPUP
 

@@ -867,7 +867,7 @@ export class MapService {
                 vehicles[index].parametros!.includes('Custom_ign=')
               ) {
                 let iconUrl =
-                  './assets/images/objects/nuevo/' + vehicles[index].icon;
+                  './assets/images/objects/nuevo/defult/' + vehicles[index].icon_name;
                 // console.log('ENTRO VEHICLE A EVALUAR ESTADO ->',vehicles[index].name,vehicles[index].parametros,vehicles[index].speed);
                 if (
                   this.userDataService.changeItemIcon == 'vehicles' &&
@@ -1543,9 +1543,9 @@ export class MapService {
     /* let iconUrl = './assets/images/objects/nuevo/' + data.icon; */
 
     let iconUrl = this.userDataService.getSVGcontent(data.tipo);
-    console.log("VERIFICAR QUE ES DATA.TIPO",data)
+    /* console.log("VERIFICAR QUE ES DATA.TIPO",data)
 
-    console.log("ICONURL", iconUrl);
+    console.log("ICONURL", iconUrl); */
 
 
 
