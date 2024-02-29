@@ -895,8 +895,8 @@ export class MapService {
                     // console.log('PINTADO EXCESS',vehicles[index].name);
                   } else {
                     iconUrl =
-                      './assets/images/objects/nuevo/state_relenti/bus.svg' +
-                      vehicles[index].icon_def;
+                      './assets/images/objects/nuevo/state_relenti/bus.svg' /*+
+                      vehicles[index].icon_def; */
                     // console.log('PINTADO RELENTI',vehicles[index].name,iconUrl);
                   }
                   // this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
