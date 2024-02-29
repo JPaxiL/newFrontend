@@ -1092,6 +1092,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         this.dataGeo = convertedData;
         console.log("datageo fuera modal: ", this.dataGeo);
         this.geofencesService.sendDataModal(this.dataGeo);
+        //this.geofencesService.sendDataModal(this.dataGeo);
         //
       };
       

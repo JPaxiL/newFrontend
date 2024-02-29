@@ -1,5 +1,5 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ResponseInterface } from 'src/app/core/interfaces/response-interface';
 import { environment } from 'src/environments/environment';
@@ -30,13 +30,13 @@ export class GeofencesService {
   public modalActive: boolean =false;
 
   private sharedData = new BehaviorSubject<DataGeofence[]>([]);
-
-  public modalActiveGeoDet: boolean =false;
 //
-  dataGeofencesCompleted = false;
-  importedGeofencesTemp: DataGeofence[]=[];
-  private datosSubject = new BehaviorSubject<DataGeofence[]>([]);
-  datos$ = this.datosSubject.asObservable();
+  public modalActiveGeoDet: boolean =false;
+
+  //dataGeofencesCompleted = false;
+  //importedGeofencesTemp: DataGeofence[]=[];
+  private dataSubject = new BehaviorSubject<DataGeofence[]>([]);
+  data$ = this.dataSubject.asObservable();
 //
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
@@ -573,10 +573,11 @@ export class GeofencesService {
 
   sendDataModal(datos: DataGeofence[]) {
     console.log("senddatamodal",datos);
-    this.importedGeofencesTemp=datos;
-    this.dataGeofencesCompleted=true;
-    
-    this.datosSubject.next(datos);
+   // this.importedGeofencesTemp=datos;
+   
+   //this.dataGeofencesCompleted=true;
+   this.dataSubject.next(datos);
+   // this.datosSubject.next(datos);
   }
 
   //
