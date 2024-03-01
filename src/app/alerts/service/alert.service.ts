@@ -21,98 +21,98 @@ export class AlertService {
   public alertsForEventSocket: any[] = [];
 
   public listaSonidos = [
-    { id: 1, ruta: 'sonidos/globales/alarm8.mp3', label: 'Sonido 1' },
-    { id: 2, ruta: 'sonidos/globales/alarm2.mp3', label: 'Sonido 2' },
-    { id: 3, ruta: 'sonidos/globales/CartoonBullets3.mp3', label: 'Sonido 3' },
-    { id: 4, ruta: 'sonidos/globales/DjStop4.mp3', label: 'Sonido 4' },
-    { id: 5, ruta: 'sonidos/globales/messenger5.mp3', label: 'Sonido 5' },
-    { id: 6, ruta: 'sonidos/globales/Ping6.mp3', label: 'Sonido 6' },
-    { id: 7, ruta: 'sonidos/globales/Twitter7.mp3', label: 'Sonido 7' },
-    { id: 8, ruta: 'sonidos/globales/Whatsap8.mp3', label: 'Sonido 8' },
-    { id: 9, ruta: 'sonidos/globales/WhatsappSound9.mp3', label: 'Sonido 9' },
+    { id: 1, ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
+    { id: 2, ruta: 'sonidos/alarm2.mp3', label: 'Sonido 2' },
+    { id: 3, ruta: 'sonidos/CartoonBullets3.mp3', label: 'Sonido 3' },
+    { id: 4, ruta: 'sonidos/DjStop4.mp3', label: 'Sonido 4' },
+    { id: 5, ruta: 'sonidos/messenger5.mp3', label: 'Sonido 5' },
+    { id: 6, ruta: 'sonidos/Ping6.mp3', label: 'Sonido 6' },
+    { id: 7, ruta: 'sonidos/Twitter7.mp3', label: 'Sonido 7' },
+    { id: 8, ruta: 'sonidos/Whatsap8.mp3', label: 'Sonido 8' },
+    { id: 9, ruta: 'sonidos/WhatsappSound9.mp3', label: 'Sonido 9' },
     // Nuevos sonidos
-    { id: 10, ruta: 'sonidos/globales/bloop.mp3', label: 'Sonido 10' },
-    { id: 11, ruta: 'sonidos/globales/error.mp3', label: 'Sonido 11' },
-    { id: 12, ruta: 'sonidos/globales/happypop1.mp3', label: 'Sonido 12' },
-    { id: 13, ruta: 'sonidos/globales/happypop2.mp3', label: 'Sonido 13' },
-    { id: 14, ruta: 'sonidos/globales/phonehanging.mp3', label: 'Sonido 14' },
-    { id: 15, ruta: 'sonidos/globales/notification.mp3', label: 'Sonido 15' },
-    { id: 16, ruta: 'sonidos/globales/ringtone.mp3', label: 'Sonido 16' },
-    { id: 17, ruta: 'sonidos/globales/shortsuccess.mp3', label: 'Sonido 17' },
+    { id: 10, ruta: 'sonidos/bloop.mp3', label: 'Sonido 10' },
+    { id: 11, ruta: 'sonidos/error.mp3', label: 'Sonido 11' },
+    { id: 12, ruta: 'sonidos/happypop1.mp3', label: 'Sonido 12' },
+    { id: 13, ruta: 'sonidos/happypop2.mp3', label: 'Sonido 13' },
+    { id: 14, ruta: 'sonidos/phonehanging.mp3', label: 'Sonido 14' },
+    { id: 15, ruta: 'sonidos/notification.mp3', label: 'Sonido 15' },
+    { id: 16, ruta: 'sonidos/ringtone.mp3', label: 'Sonido 16' },
+    { id: 17, ruta: 'sonidos/shortsuccess.mp3', label: 'Sonido 17' },
     {
       id: 18,
-      ruta: 'sonidos/globales/notificationemail.mp3',
+      ruta: 'sonidos/notificationemail.mp3',
       label: 'Sonido 18',
     },
 
-    { id: 19, ruta: 'sonidos/globales/sound.mp3', label: 'Sonido 19' },
-    { id: 20, ruta: 'sonidos/globales/sound1.mp3', label: 'Sonido 20' },
-    { id: 21, ruta: 'sonidos/globales/ALARMA1.mp3', label: 'Sonido 22' },
-    { id: 23, ruta: 'sonidos/globales/ALARMA2.mp3', label: 'Sonido 23' },
-    { id: 24, ruta: 'sonidos/globales/ALARMA3.mp3', label: 'Sonido 24' },
-    { id: 25, ruta: 'sonidos/globales/ALARMA4.mp3', label: 'Sonido 25' },
-    { id: 26, ruta: 'sonidos/globales/digitalalarm.mp3', label: 'Sonido 26' },
-    { id: 27, ruta: 'sonidos/globales/watchalarm.mp3', label: 'Sonido 27' },
+    { id: 19, ruta: 'sonidos/sound.mp3', label: 'Sonido 19' },
+    { id: 20, ruta: 'sonidos/sound1.mp3', label: 'Sonido 20' },
+    { id: 21, ruta: 'sonidos/ALARMA1.mp3', label: 'Sonido 22' },
+    { id: 23, ruta: 'sonidos/ALARMA2.mp3', label: 'Sonido 23' },
+    { id: 24, ruta: 'sonidos/ALARMA3.mp3', label: 'Sonido 24' },
+    { id: 25, ruta: 'sonidos/ALARMA4.mp3', label: 'Sonido 25' },
+    { id: 26, ruta: 'sonidos/digitalalarm.mp3', label: 'Sonido 26' },
+    { id: 27, ruta: 'sonidos/watchalarm.mp3', label: 'Sonido 27' },
 
     // SONIDOS PERSONALIZADOS
     {
       id: 28, //X
-      ruta: 'sonidos/personalizados/aceleracion brusca.mp3',
+      ruta: 'sonidos/aceleracion brusca.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 29, //X
-      ruta: 'sonidos/personalizados/anticolisión frontal.mp3',
+      ruta: 'sonidos/anticolisión frontal.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 30, //X
-      ruta: 'sonidos/personalizados/desvio carril derecha.mp3',
+      ruta: 'sonidos/desvio carril derecha.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 31, //X
-      ruta: 'sonidos/personalizados/desvio carril izquierda.mp3',
+      ruta: 'sonidos/desvio carril izquierda.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 32, //X
-      ruta: 'sonidos/personalizados/distracción.mp3',
+      ruta: 'sonidos/distracción.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 33, //X
-      ruta: 'sonidos/personalizados/exceso de velocidad.mp3',
+      ruta: 'sonidos/exceso de velocidad.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 34, //X
-      ruta: 'sonidos/personalizados/fatiga extrema.mp3',
+      ruta: 'sonidos/fatiga extrema.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 35, //X
-      ruta: 'sonidos/personalizados/frenada brusca.mp3',
+      ruta: 'sonidos/frenada brusca.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 36, //X
-      ruta: 'sonidos/personalizados/infracción.mp3',
+      ruta: 'sonidos/infracción.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 37, //x
-      ruta: 'sonidos/personalizados/no rostro.mp3',
+      ruta: 'sonidos/no rostro.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 38, //X
-      ruta: 'sonidos/personalizados/posible fatiga.mp3',
+      ruta: 'sonidos/posible fatiga.mp3',
       label: 'Voz Personalizada',
     },
     {
       id: 39, //X
-      ruta: 'sonidos/personalizados/riesgo de colisión con peatones.mp3',
+      ruta: 'sonidos/riesgo de colisión con peatones.mp3',
       label: 'Voz Personalizada',
     },
   ];

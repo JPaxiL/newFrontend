@@ -82,7 +82,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
       chkwhatsapp: [false],
       sonido: [
         {
-          value: 'sonidos/globales/alarm8.mp3',
+          value: 'sonidos/alarm8.mp3',
           disabled: this.disabledEventSoundActive,
         },
       ],
@@ -339,7 +339,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
     );
 
     if (typeof this.alertForm.value.sonido == 'undefined') {
-      this.alertForm.value.sonido = 'sonidos/globales/alarm8.mp3';
+      this.alertForm.value.sonido = 'sonidos/alarm8.mp3';
     }
 
     if (this.alertForm.value.vehicles.length != 0) {

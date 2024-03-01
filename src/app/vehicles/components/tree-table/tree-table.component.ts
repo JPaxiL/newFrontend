@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { data } from 'jquery';
+
 
 @Component({
   selector: 'app-tree-table',
@@ -26,7 +26,9 @@ import { data } from 'jquery';
   styleUrls: ['./tree-table.component.scss'],
 })
 export class TreeTableComponent implements OnInit {
-  svgContent: SafeHtml | undefined;
+  nuevoSvgCode: SafeHtml | undefined;
+
+
 
   @Output() eventDisplayGroup = new EventEmitter<boolean>();
 
@@ -96,16 +98,18 @@ export class TreeTableComponent implements OnInit {
   };
 
   @ViewChild('tt') tt!: any;
-
   constructor(
-    private sanitizer: DomSanitizer,
     private userDataService: UserDataService,
     public vehicleService: VehicleService,
     private configDropdown: NgbDropdownConfig,
     private vehicleConfigService: VehicleConfigService,
     private spinner: NgxSpinnerService,
-    private followService: FollowService
+    private followService: FollowService,
+    private sanitizer: DomSanitizer
   ) {
+    
+    this.generateSVG();
+
     // this.vehicleService.listTable=1;
     if (this.loading) {
       this.spinner.show('loadingTreeTable');
@@ -133,11 +137,6 @@ export class TreeTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   /*  this.cargasvg(); */
-    /* const svgText =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"><path d="M8 14s6-3.5 6-7A4 4 0 0 0 8 2a4 4 0 0 0-6 6c0 3.5 6 7 6 7z"/></svg>';
-    this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svgText); */
-
     this.vehicleService.treeTableStatus = true;
     // //console.log("tree on init");
     if (this.vehicleService.statusDataVehicleTree) {
@@ -166,55 +165,28 @@ export class TreeTableComponent implements OnInit {
     // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
   }
 
-  // INICIO EL PROCESO DE CARGAR SVG EN LA LISTA DEL POPUP
-  /* cargasvg(): void {
-    const e = this.vehicleService.vehicles;
+  async generateSVG() {
+    const svgContent = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+        <rect width="100%" height="100%" fill="#3498db" />
+        <text x="50%" y="50%" fill="#fff" text-anchor="middle" dominant-baseline="middle">Hello SVG!</text>
+      </svg>
+    `;
 
-    for (const property in e) {
-      const data = e[property];
-
-      // Llamar a generarSVG con el objeto actual
-      this.generarSVG(data);
-
-      console.log('DATOS DE DRAWICON', data);
-    }
+    // Sanitizar y asignar el SVG
+    this.nuevoSvgCode = this.sanitizer.bypassSecurityTrustHtml(await this.toBase64(svgContent));
+    
   }
 
-  generarSVG(data: any) {
-    for (const property in data) {
-      const currentVehicle = data[property];
+  private toBase64(svgContent: string): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(new Blob([svgContent], { type: 'image/svg+xml' }));
+    });
+  }
 
-      // Llamar a generarSVG con el objeto actual
-      console.log('DATOS DE DRAWICON', currentVehicle);
-    }
 
-    const iconUrl = this.userDataService.getSVGcontent(data.tipo);
-    console.log('generarSVG iconUrl', iconUrl);
-
-    // Crear un nuevo elemento SVG
-    const newSvgElement = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'svg'
-    );
-
-    // Establecer el contenido del SVG en base64 como atributo
-    newSvgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    newSvgElement.setAttribute('width', '16');
-    newSvgElement.setAttribute('height', '16');
-    newSvgElement.setAttribute('fill', 'currentColor');
-    newSvgElement.setAttribute('viewBox', '0 0 16 16');
-    newSvgElement.innerHTML = `<image xlink:href="data:image/svg+xml;base64,${iconUrl}" width="100%" height="100%" />`;
-
-    // Reemplazar el elemento SVG existente con el nuevo
-    const svgElement = document.getElementById('svg');
-    if (svgElement) {
-      svgElement.replaceWith(newSvgElement);
-    } else {
-      console.error('Elemento SVG no encontrado');
-    }
-  } */
-
-  // FIN EL PROCESO DE CARGAR SVG EN LA LISTA DEL POPUP
 
   headerScrollHandler() {
     setTimeout(() => {

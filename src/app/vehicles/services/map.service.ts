@@ -861,13 +861,13 @@ export class MapService {
               // //console.log('aux = ', aux['_latlng']);
               //_popup
               // vehicles[index].limit_speed = 10; //COMENTAR SOLO PARA PRUEBAS
-              // console.log('INFO VEHICLE--> ,',vehicles[index]);
+              //console.log('INFO VEHICLE--> ,',vehicles[index]);
               if (
                 vehicles[index].parametros!.includes('di4=') ||
                 vehicles[index].parametros!.includes('Custom_ign=')
               ) {
                 let iconUrl =
-                  './assets/images/objects/nuevo/defult/' + vehicles[index].icon_name;
+                  './assets/images/objects/nuevo/default/' + vehicles[index].icon_def;
                 // console.log('ENTRO VEHICLE A EVALUAR ESTADO ->',vehicles[index].name,vehicles[index].parametros,vehicles[index].speed);
                 if (
                   this.userDataService.changeItemIcon == 'vehicles' &&
@@ -882,21 +882,21 @@ export class MapService {
                     vehicles[index].speed! < vehicles[index].limit_speed!
                   ) {
                     iconUrl =
-                      './assets/images/objects/nuevo/state_moved/bus.svg' /* +
-                      vehicles[index].icon_def; */
+                      './assets/images/objects/nuevo/state_moved/' +
+                      vehicles[index].icon_def;
                     // console.log('PINTADO MOVED',vehicles[index].name);
                   } else if (
                     vehicles[index].speed != 0 &&
                     vehicles[index].speed! > vehicles[index].limit_speed!
                   ) {
                     iconUrl =
-                      './assets/images/objects/nuevo/state_excess/bus.svg' /* +
-                      vehicles[index].icon_def; */
+                      './assets/images/objects/nuevo/state_excess/' +
+                      vehicles[index].icon_def;
                     // console.log('PINTADO EXCESS',vehicles[index].name);
                   } else {
                     iconUrl =
-                      './assets/images/objects/nuevo/state_relenti/bus.svg' /*+
-                      vehicles[index].icon_def; */
+                      './assets/images/objects/nuevo/state_relenti/' +
+                      vehicles[index].icon_def;
                     // console.log('PINTADO RELENTI',vehicles[index].name,iconUrl);
                   }
                   // this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
@@ -940,7 +940,7 @@ export class MapService {
                 }
                 this.timeChangeIconUrl(
                   vehicles[index].IMEI!,
-                  vehicles[index].icon!,
+                  vehicles[index].icon_def!,
                   key
                 );
                 // CREA EL MARKERCLUSTER
@@ -1713,7 +1713,7 @@ export class MapService {
   public get getClustering(): boolean {
     return this.clustering;
   }
-  public timeChangeIconUrl(imei: string, icon: string, key: any) {
+  public timeChangeIconUrl(imei: string, icon_def: string, key: any) {
     // this.timeWait = 15000; // 150 segundos en milisegundos
 
     if (this.timeNow[imei]) {
@@ -1732,7 +1732,7 @@ export class MapService {
           '*************** PASO 2 Horas Cambiando color a default ---->',
           imei
         );
-        const iconUrl = './assets/images/objects/nuevo/' + icon;
+        const iconUrl = './assets/images/objects/nuevo/default/' + icon_def;
         this.markerClusterGroup.getLayers()[key]['options']['icon']['options'][
           'iconUrl'
         ] = iconUrl;

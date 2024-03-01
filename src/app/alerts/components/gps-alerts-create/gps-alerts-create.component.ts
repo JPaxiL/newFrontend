@@ -78,7 +78,7 @@ export class GpsAlertsCreateComponent implements OnInit {
       chkCorreo: [false],
       sonido: [
         {
-          value: 'sonidos/globales/alarm8.mp3',
+          value: 'sonidos/alarm8.mp3',
           disabled: this.disabledEventSoundActive,
         },
       ],
@@ -279,7 +279,7 @@ export class GpsAlertsCreateComponent implements OnInit {
     );
 
     if (typeof this.alertForm.value.sonido == 'undefined') {
-      this.alertForm.value.sonido = 'sonidos/globales/alarm8.mp3';
+      this.alertForm.value.sonido = 'sonidos/alarm8.mp3';
     }
 
     if (

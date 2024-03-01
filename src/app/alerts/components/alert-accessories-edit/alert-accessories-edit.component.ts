@@ -447,7 +447,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
     );
 
     if (typeof this.alertForm.value.sonido == 'undefined') {
-      this.alertForm.value.sonido = 'sonidos/globales/alarm8.mp3';
+      this.alertForm.value.sonido = 'sonidos/alarm8.mp3';
     }
 
     if (

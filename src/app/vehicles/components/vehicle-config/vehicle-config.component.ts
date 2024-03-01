@@ -119,7 +119,7 @@ export class VehicleConfigComponent implements OnInit {
 
     console.log(this.config);
     // console.log("vehicle config = ",this.config);
-    this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
+    this.iconUrl = `assets/images/objects/nuevo/backup/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
     
   }
   
