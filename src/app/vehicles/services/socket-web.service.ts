@@ -16,7 +16,14 @@ export class SocketWebService extends Socket {
     private vehicleService: VehicleService
   ) {
     super({
-      url: environment.socketUrl
+      url: environment.socketUrl,
+      options: {
+        //@ts-ignore
+        withCredentials: false,
+        cors: {
+          origin: '*',
+        },
+      }
     });
     this.start();
     this.listen();

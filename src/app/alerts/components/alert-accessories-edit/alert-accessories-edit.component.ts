@@ -27,9 +27,9 @@ export class AlertAccessoriesEditComponent implements OnInit {
     { id: 'ALERTS-ACCESSORIES', name: 'Alertas 360' },
     { id: 'ALERTS-SECURITY', name: 'Alertas Seguridad Vehicular' },
     { id: 'ALERTS-MOBILE', name: 'Alertas Soluciones Móviles' },
-    { id: 'ALERTS-360', name: 'Alertas Fatiga 360' },
+    { id: 'ALERTS-360', name: 'Alertas Fatiga 360' }
   );
-  type = "";
+  type = '';
   public alertForm!: FormGroup;
   public events: any = [];
   public loading: boolean = true;
@@ -41,7 +41,6 @@ export class AlertAccessoriesEditComponent implements OnInit {
   overlay = false;
   loadingEventSelectInput: boolean = true;
   audio = new Audio();
-
 
   booleanOptions = [
     { label: 'Sí', value: true },
@@ -61,39 +60,51 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
   loadingAlertDropdownReady: boolean = false;
   loadingVehicleMultiselectReady: boolean = false;
-
+  alertSelected: any;
 
   constructor(
     private alertService: AlertService,
     private VehicleService: VehicleService,
     private formBuilder: FormBuilder,
     public panelService: PanelService,
-    private spinner: NgxSpinnerService,
+    private spinner: NgxSpinnerService
   ) {
-    this.listaSonidos = this.alertService.listaSonidos;
-    this.type = this.panelService.nombreComponente == "ALERTS-SECURITY-EDIT"? "security" : (this.panelService.nombreComponente == "ALERTS-MOBILE-EDIT"? "mobile":"360");
+    /* this.listaSonidos = this.alertService.listaSonidos; */
+    this.type =
+      this.panelService.nombreComponente == 'ALERTS-SECURITY-EDIT'
+        ? 'security'
+        : this.panelService.nombreComponente == 'ALERTS-MOBILE-EDIT'
+        ? 'mobile'
+        : '360';
     this.loadData();
   }
 
   ngOnInit(): void {
     this.spinner.show('loadingAlertData');
     let alert = this.alertService.getAlertEditData();
-    console.log("ALERT:::::", alert);
-    this.vehiclesSelected = alert.imei ==''? []: alert.imei.split(',');
+    /* console.log("ALERT:::::", alert); */
+    this.vehiclesSelected = alert.imei == '' ? [] : alert.imei.split(',');
     let arrayNotificationSystem = alert.sistema_notificacion.split(',');
     let notificacion_system =
       arrayNotificationSystem[2].toLowerCase() === 'true';
-    let emails = alert.notificacion_direcion_email == ''? []: alert.notificacion_direcion_email.split(',');
+    let emails =
+      alert.notificacion_direcion_email == ''
+        ? []
+        : alert.notificacion_direcion_email.split(',');
     let notificacion_email = alert.notificacion_email.toLowerCase() === 'true';
     this.disabledEventSoundActive = !notificacion_system;
     this.disabledEmail = !notificacion_email;
     let activo = alert.activo === 'true' ? true : false;
 
-    let notificacion_whatsapp = alert.notificacion_whatsapp.toLowerCase() === 'true';
+    let notificacion_whatsapp =
+      alert.notificacion_whatsapp.toLowerCase() === 'true';
     this.disabledWhatsapp = !notificacion_whatsapp;
 
     let whatsapps;
-    if(alert.notificacion_whatsapp_lista == null || alert.notificacion_whatsapp_lista == ''){
+    if (
+      alert.notificacion_whatsapp_lista == null ||
+      alert.notificacion_whatsapp_lista == ''
+    ) {
       whatsapps = [];
     } else {
       whatsapps = alert.notificacion_whatsapp_lista.split(',');
@@ -132,8 +143,8 @@ export class AlertAccessoriesEditComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[ventana_emergente],
-      chkEvaluation:[evaluation]
+      chkVentanaEmergente: [ventana_emergente],
+      chkEvaluation: [evaluation],
     });
 
     this.loading = false;
@@ -141,14 +152,203 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
   public async loadData() {
     this.setDataVehicles();
+
+    /* console.log('obtengo el id ' + this.alertForm.value.tipoAlerta); */
+
     this.events = await this.alertService.getEventsByType(this.type);
+    console.log(this.events);
+
+    const tipoAlerta = this.alertForm.value.tipoAlerta;
+    console.log('Tipo de alerta seleccionado:', tipoAlerta);
+
+    if (tipoAlerta) {
+      this.alertSelected = alert;
+      console.log('El evento es de ' + tipoAlerta);
+
+      // Obtén todos los elementos de la lista de sonidos hasta el id 27
+      let sonidosObtenidos = this.alertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (tipoAlerta == 'Fatiga Extrema') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 34
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Anticolisión Frontal') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 29
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Riesgo de Colisión con Peatones') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 39
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'No Rostro') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 37
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Desvío de Carril Hacia la Izquierda') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 31
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Desvío de Carril Hacia la Derecha') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 30
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Posible Fatiga') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 38
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Distracción') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 32
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      }
+
+      if (sonidosObtenidos.length > 0) {
+        console.log('Sonidos obtenidos:', sonidosObtenidos);
+        this.listaSonidos = sonidosObtenidos;
+      } else {
+        console.log(
+          'No se encontraron sonidos para la alerta seleccionada o la función no devuelve un array.'
+        );
+      }
+    } else {
+      this.listaSonidos = this.alertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (this.listaSonidos.length > 0) {
+        console.log('Sonidos obtenidos:', this.listaSonidos);
+      } else {
+        console.log('No se encontraron sonidos para la alerta seleccionada.');
+      }
+    }
+
+
+
     this.alertForm.patchValue({
-      tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta??''),
+      tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta ?? ''),
     });
     this.loadingEventSelectInput = false;
 
     this.loadingAlertDropdownReady = true;
     this.hideLoadingSpinner();
+  }
+
+  actualizarSonidos() {
+    const tipoAlerta = this.alertForm.value.tipoAlerta;
+    console.log('Tipo de alerta seleccionado:', tipoAlerta);
+
+    if (tipoAlerta) {
+      this.alertSelected = alert;
+      console.log('El evento es de ' + tipoAlerta);
+
+      // Obtén todos los elementos de la lista de sonidos hasta el id 27
+      let sonidosObtenidos = this.alertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (tipoAlerta == 'Fatiga Extrema') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 34
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Anticolisión Frontal') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 29
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Riesgo de Colisión con Peatones') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 39
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'No Rostro') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 37
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Desvío de Carril Hacia la Izquierda') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 31
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Desvío de Carril Hacia la Derecha') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 30
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Posible Fatiga') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 38
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (tipoAlerta == 'Distracción') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 32
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      }
+
+      if (sonidosObtenidos.length > 0) {
+        console.log('Sonidos obtenidos:', sonidosObtenidos);
+        this.listaSonidos = sonidosObtenidos;
+      } else {
+        console.log(
+          'No se encontraron sonidos para la alerta seleccionada o la función no devuelve un array.'
+        );
+      }
+    } else {
+      this.listaSonidos = this.alertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (this.listaSonidos.length > 0) {
+        console.log('Sonidos obtenidos:', this.listaSonidos);
+      } else {
+        console.log('No se encontraron sonidos para la alerta seleccionada.');
+      }
+    }
   }
 
   setDataVehicles() {
@@ -166,21 +366,22 @@ export class AlertAccessoriesEditComponent implements OnInit {
   }
 
   playAudio(path: string) {
-    if(typeof path != 'undefined' && path != ''){
-      if(this.audio.currentSrc != '' && !this.audio.ended){
+    if (typeof path != 'undefined' && path != '') {
+      if (this.audio.currentSrc != '' && !this.audio.ended) {
         this.audio.pause();
       }
       this.audio = new Audio('assets/' + path);
       let audioPromise = this.audio.play();
 
       if (audioPromise !== undefined) {
-        audioPromise.then(() => {
-          //console.log('Playing notification sound')
-        })
-        .catch((error: any) => {
-          //console.log(error);
-          // Auto-play was prevented
-        });
+        audioPromise
+          .then(() => {
+            //console.log('Playing notification sound')
+          })
+          .catch((error: any) => {
+            //console.log(error);
+            // Auto-play was prevented
+          });
       }
     }
   }
@@ -246,17 +447,23 @@ export class AlertAccessoriesEditComponent implements OnInit {
     );
 
     if (typeof this.alertForm.value.sonido == 'undefined') {
-      this.alertForm.value.sonido = 'sonidos/alarm8.mp3';
+      this.alertForm.value.sonido = 'sonidos/globales/alarm8.mp3';
     }
 
-    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+    if (
+      this.alertForm.value.chkCorreo &&
+      this.alertForm.value.lista_emails.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un correo', 'warning');
-      return
+      return;
     }
 
-    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+    if (
+      this.alertForm.value.chkwhatsapp &&
+      this.alertForm.value.lista_whatsapp.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un número', 'warning');
-      return
+      return;
     }
 
     if (this.alertForm.value.vehicles.length != 0) {
@@ -290,28 +497,30 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
   clickShowPanel(): void {
     $('#panelMonitoreo').show('slow');
-    if(this.type == "security"){;
-      this.panelService.nombreComponente = "ALERTS-SECURITY";
-      this.panelService.nombreCabecera =   "Alertas Seguridad Vehicular";
-    }else if(this.type == "mobile"){
-      this.panelService.nombreComponente = "ALERTS-MOBILE";
-      this.panelService.nombreCabecera =   "Alertas Solución Móvil";
-    }else{
-      this.panelService.nombreComponente = "ALERTS-360";
-      this.panelService.nombreCabecera =   "Alertas Fatiga 360";
+    if (this.type == 'security') {
+      this.panelService.nombreComponente = 'ALERTS-SECURITY';
+      this.panelService.nombreCabecera = 'Alertas Seguridad Vehicular';
+    } else if (this.type == 'mobile') {
+      this.panelService.nombreComponente = 'ALERTS-MOBILE';
+      this.panelService.nombreCabecera = 'Alertas Solución Móvil';
+    } else {
+      this.panelService.nombreComponente = 'ALERTS-360';
+      this.panelService.nombreCabecera = 'Alertas Fatiga 360';
     }
   }
 
-  hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady){
+  hideLoadingSpinner() {
+    if (this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady) {
       this.spinner.hide('loadingAlertData');
     }
   }
 
-  obtenerTipoAlerta( strAlerta: string){
+  obtenerTipoAlerta(strAlerta: string) {
     //console.log(this.events);
-    for(let i = 0; i < this.events.length; i++){
-      if(this.prepareString(strAlerta) == this.prepareString(this.events[i].name)){
+    for (let i = 0; i < this.events.length; i++) {
+      if (
+        this.prepareString(strAlerta) == this.prepareString(this.events[i].name)
+      ) {
         // console.log('Se encontro match');
         return this.events[i].name;
       }
@@ -319,8 +528,13 @@ export class AlertAccessoriesEditComponent implements OnInit {
     return strAlerta;
   }
 
-  prepareString(str: string){
-    return str.toLowerCase().normalize('NFKD').replace(/[^\w ]/g, '').replace(/  +/g, ' ').trim();
+  prepareString(str: string) {
+    return str
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[^\w ]/g, '')
+      .replace(/  +/g, ' ')
+      .trim();
     //return str.toLowerCase().normalize('NFKD').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/  +/g, ' ').trim();
   }
 
@@ -333,7 +547,9 @@ export class AlertAccessoriesEditComponent implements OnInit {
             this.alertForm.value.lista_whatsapp
           )
         ) {
-          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.value.lista_whatsapp.push(
+            this.alertForm.value.whatsapp
+          );
           this.alertForm.controls.whatsapp.reset();
         } else {
           Swal.fire({
@@ -349,7 +565,6 @@ export class AlertAccessoriesEditComponent implements OnInit {
           icon: 'warning',
         });
       }
-
     }
   }
 
@@ -358,12 +573,10 @@ export class AlertAccessoriesEditComponent implements OnInit {
   }
 
   chkWhatsappHandler() {
-
     if (this.alertForm.value.chkwhatsapp) {
       this.alertForm.controls['whatsapp'].enable();
     } else {
       this.alertForm.controls['whatsapp'].disable();
     }
   }
-
 }
