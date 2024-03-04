@@ -165,7 +165,7 @@ export class TreeTableComponent implements OnInit {
     // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
   }
 
-  async generateSVG() {
+  generateSVG(): void {
     const svgContent = `
       <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
         <rect width="100%" height="100%" fill="#3498db" />
@@ -174,16 +174,7 @@ export class TreeTableComponent implements OnInit {
     `;
 
     // Sanitizar y asignar el SVG
-    this.nuevoSvgCode = this.sanitizer.bypassSecurityTrustHtml(await this.toBase64(svgContent));
-    
-  }
-
-  private toBase64(svgContent: string): Promise<string> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.readAsDataURL(new Blob([svgContent], { type: 'image/svg+xml' }));
-    });
+    this.nuevoSvgCode = this.sanitizer.bypassSecurityTrustHtml(svgContent);
   }
 
 
