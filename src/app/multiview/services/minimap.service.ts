@@ -563,7 +563,7 @@ export class MinimapService {
 
               // console.log('INFO DEL VEHICLE--->',item.minimapConf!.vehicles![index]);
               if (item.minimapConf!.vehicles![index].parametros!.includes('di4=') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=')){
-                let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.minimapConf!.vehicles![index].icon);
+                let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/backup/'+item.minimapConf!.vehicles![index].icon);
                 if (this.userDataService.changeItemIcon == 'vehicles' && (item.minimapConf!.vehicles![index].parametros!.includes('|di4=1|') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=1'))){
                   //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
                   // Si la cadena contiene |di4=1| o custom_ign=1
