@@ -69,7 +69,7 @@
                       src="assets/images/objects/nuevo/{{ car.icon }}"
                       style="display: inline-block; margin: 2px 0 2px 2px"
                     />
-                    
+
                     <label>{{ car.name }}</label>
                   </div>
                 </ng-template>
@@ -711,8 +711,7 @@
             style="min-width: 215px"
             class="vehicle-column"
           >
-        
-          <div [innerHTML]="svgContent"></div>
+            <!-- <div [innerHTML]="svgContent"></div> -->
             <div
               class="d-flex justify-content-center align-items-center mx-2"
               (click)="onClickIcon(rowData['IMEI'])"
@@ -731,14 +730,18 @@
               <div
                 class="flex-none icon-float-right vehicle-icon ms-2"
                 *ngIf="vehicleIconState"
-                
               >
-                <!-- <img border="0" width="25" height="25" src="assets/images/objects/nuevo/backup/{{ rowData['icon'] }}"> -->
+                <img
+                  border="0"
+                  width="25"
+                  height="25"
+                  src="assets/images/objects/nuevo/backup/{{ rowData['icon'] }}"
+                />
 
-               <!--  <div [innerHTML]="nuevoSvgCode"></div> -->
-            
+                <!--  <div [innerHTML]="nuevoSvgCode"></div> -->
+
                 <!-- <img border="0" width="25" height="25" src="{{ rowData['icon'] }}"> -->
-                <div [innerHTML]="svgContent"></div>
+                <!-- <div [innerHTML]="svgContent"></div> -->
 
                 <!-- <img
                   border="0"
