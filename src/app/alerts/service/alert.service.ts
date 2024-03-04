@@ -19,6 +19,7 @@ export class AlertService {
   dataCompleted = false;
 
   public alertsForEventSocket: any[] = [];
+//EXCESO DE VELOCIDAD FALTANTE
 
   public listaSonidos = [
     { id: 1, ruta: 'sonidos/alarm8.mp3', label: 'Sonido 1' },
@@ -113,6 +114,11 @@ export class AlertService {
     {
       id: 39, //X
       ruta: 'sonidos/riesgo de colisión con peatones.mp3',
+      label: 'Voz Personalizada',
+    }, 
+    {
+      id: 40, //X
+      ruta: 'sonidos/exceso_velocidad.mp3',
       label: 'Voz Personalizada',
     },
   ];

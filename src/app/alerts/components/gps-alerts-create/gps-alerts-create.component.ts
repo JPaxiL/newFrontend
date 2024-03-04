@@ -140,6 +140,20 @@ export class GpsAlertsCreateComponent implements OnInit {
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
+      } else if (alert.id === 64) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 33
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.id === 29) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 37
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
       }
 
       if (sonidosObtenidos.length > 0) {
