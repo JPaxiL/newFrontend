@@ -47,7 +47,6 @@ export class UserDataService {
       next: async (data) => {
         //this.userData = this.panelService.userData = data[0];
         console.log('User Data Info ->: ', data);
-
         // console.log('User Data obtenida ======> ',  data.data);
         // console.log('User VEHICLES obtenida ======> ',  data.data2);
         // console.log('User CONFIG DATA obtenida ======> ',  data.data3);

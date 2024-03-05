@@ -1552,7 +1552,7 @@ export class MapService {
 
     /* console.log("VERIFICAR QUE ES DATA.TIPO",data)
 
-    console.log("ICONURL", iconUrl); */
+    console.log("ICONURL", iconUrl);
 
 
 
