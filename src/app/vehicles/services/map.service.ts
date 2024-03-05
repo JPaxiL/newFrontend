@@ -1543,9 +1543,9 @@ export class MapService {
     /* let iconUrl = './assets/images/objects/nuevo/' + data.icon; */
 
     let iconUrl = this.userDataService.getSVGcontent(data.tipo);
-    /* console.log("VERIFICAR QUE ES DATA.TIPO",data)
+    /* console.log("VERIFICAR QUE ES DATA.TIPO",data)*/
 
-    console.log("ICONURL", iconUrl); */
+    console.log("ICONURL", iconUrl); 
 
 
 
