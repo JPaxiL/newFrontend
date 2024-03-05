@@ -303,11 +303,32 @@ export const getContentPopup = (event: any, d: any = '...') => {
     );
     //INICIO ULTIMOS CREADOS 16/02/2024
   } else if (event.tipo == 'manipulacion-de-dispositivo') {
-    return render_leaflet_tootlip({}, iconUrl);
+    return render_leaflet_tootlip({
+      tipo: event.nombre ?? event.name,
+      nombre_objeto: event.nombre_objeto,
+      latitud: event.latitud,
+      longitud: event.longitud,
+      name_driver: event.namedriver,
+      referencia: event.referencia
+    }, iconUrl);
   } else if (event.tipo == 'dvr-operativo') {
-    return render_leaflet_tootlip({}, iconUrl);
+    return render_leaflet_tootlip({
+      tipo: event.nombre ?? event.name,
+      nombre_objeto: event.nombre_objeto,
+      latitud: event.latitud,
+      longitud: event.longitud,
+      name_driver: event.namedriver,
+      referencia: event.referencia
+    }, iconUrl);
   } else if (event.tipo == 'dvr-inoperativo') {
-    return render_leaflet_tootlip({}, iconUrl);
+    return render_leaflet_tootlip({
+      tipo: event.nombre ?? event.name,
+      nombre_objeto: event.nombre_objeto,
+      latitud: event.latitud,
+      longitud: event.longitud,
+      name_driver: event.namedriver,
+      referencia: event.referencia
+    }, iconUrl);
   } else if (event.tipo == 'antena-gps-desconectada') {
     return render_leaflet_tootlip({}, iconUrl);
 
@@ -1194,8 +1215,8 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
   return `
     <style>
     .icon_modal_events{
-      font-size:13px; 
-      display:flex !important; 
+      font-size:13px;
+      display:flex !important;
       justify-content:center !important;
       align-items:center !important;
     }
@@ -1219,7 +1240,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           <span class="text_modal_events">${event_content.tipo}</span>
         </div>
       </div>
-      
+
       <div class="container">
         ${
           typeof event_content.nombre_objeto !== 'undefined'
@@ -1238,7 +1259,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           `
           : ''
           }
-        
+
 
         ${
           typeof event_content.name_driver !== 'undefined'
@@ -1257,8 +1278,8 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           `
           : ''
           }
-        
-          
+
+
 
 
         ${
@@ -1269,7 +1290,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
             <div class="row">
               <div class="col-1 icon_modal_events">
                 <span><i class="fas fa-user-circle"></i>LUMINARIA:</span>
-              </div>  
+              </div>
               <div class="col-10 ps-0">
                 <span class="text_modal_events">${event_content.luminaria}</span>
               </div>
@@ -1278,12 +1299,12 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           `
           : ''
           }
-      
+
 
         ${
           typeof event_content.latitud !== 'undefined' &&
           typeof event_content.latitud !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1303,7 +1324,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
 
         ${
           typeof event_content.int_mant_ultimo_mantenimiento !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1321,7 +1342,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.int_mant_horas_transcurridas !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1339,7 +1360,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.int_mant_horas_restantes !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1357,7 +1378,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.int_mant_odometro !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1375,7 +1396,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.ultimo_mantenimiento !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1393,7 +1414,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.voltaje !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1411,7 +1432,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.nombre_zona !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1429,7 +1450,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.velocidad !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1465,7 +1486,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.velocidad_limite !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1483,7 +1504,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.tiempo_limite_infraccion !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1501,7 +1522,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.tiempo_tolerancia !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1519,7 +1540,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.tiempo_estadia !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1537,7 +1558,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.geocerca !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1555,7 +1576,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
         }
         ${
           typeof event_content.referencia !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1574,7 +1595,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
 
         ${
           typeof event_content.fecha_tracker !== 'undefined'
-            ? 
+            ?
           `
           <div class="col-12">
             <div class="row">
@@ -1590,7 +1611,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           `
           : ''
         }
-        
+
 
 
       </div>
@@ -1706,7 +1727,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           }
         </tbody>
       </table>-->
-      
+
 
       ${
         event_content.parametros && event_content.parametros.gps == 'cipia'
@@ -1715,8 +1736,8 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
             '"></div>'
           : ''
       }
-    
-    
+
+
       </div>`;
 }
 
