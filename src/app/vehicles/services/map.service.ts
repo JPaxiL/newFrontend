@@ -881,22 +881,27 @@ export class MapService {
                     vehicles[index].speed != 0 &&
                     vehicles[index].speed! < vehicles[index].limit_speed!
                   ) {
-                    iconUrl =
-                      './assets/images/objects/nuevo/state_moved/' +
-                      vehicles[index].icon_def;
+                    // iconUrl =
+                    //   './assets/images/objects/nuevo/state_moved/' +
+                    //   vehicles[index].icon_def;
+                    iconUrl = vehicles[index].movement_svg;
                     // console.log('PINTADO MOVED',vehicles[index].name);
                   } else if (
                     vehicles[index].speed != 0 &&
                     vehicles[index].speed! > vehicles[index].limit_speed!
                   ) {
-                    iconUrl =
-                      './assets/images/objects/nuevo/state_excess/' +
-                      vehicles[index].icon_def;
+                    // iconUrl =
+                    //   './assets/images/objects/nuevo/state_excess/' +
+                    //   vehicles[index].icon_def;
+                    iconUrl = vehicles[index].excess_svg;
+
                     // console.log('PINTADO EXCESS',vehicles[index].name);
                   } else {
-                    iconUrl =
-                      './assets/images/objects/nuevo/state_relenti/' +
-                      vehicles[index].icon_def;
+                    // iconUrl =
+                    //   './assets/images/objects/nuevo/state_relenti/' +
+                    //   vehicles[index].icon_def;
+                    iconUrl = vehicles[index].relenti_svg;
+
                     // console.log('PINTADO RELENTI',vehicles[index].name,iconUrl);
                   }
                   // this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
@@ -1542,7 +1547,9 @@ export class MapService {
     // assets/images/objects/nuevo/{{ rowData['icon']
     /* let iconUrl = './assets/images/objects/nuevo/' + data.icon; */
 
-    let iconUrl = this.userDataService.getSVGcontent(data.tipo);
+    let iconUrl = data.custom_svg;
+    // let iconUrl = this.userDataService.getSVGcontent(data.tipo);
+
     /* console.log("VERIFICAR QUE ES DATA.TIPO",data)
 
     console.log("ICONURL", iconUrl); */

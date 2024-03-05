@@ -56,26 +56,52 @@ export class UserDataService {
         this.userData = await data.data;
 
         // this.crearCarpetaTemporal(this.typeVehiclesUserData);
-
-        this.typeVehiclesUserData.forEach(
+        let colorHex;
+        this.typeVehicles.forEach(
           async (vehicle: {
-            customurl: string;
+            id: any;
             var_icono: any;
-            name_type: any;
+            var_color: any;
+            customurl: any;
+            icon_url: any;
             customsvg: any;
-            var_color: string;
+            relenti_svg: any;
+            excess_svg: any;
+            movement_svg: any;
           }) => {
-            vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicle.var_icono}`;
+            const vehicleFound = this.typeVehiclesUserData.find(
+              (type: { var_color:string,var_icono: string, type_vehicle_id: number }) => type.type_vehicle_id == vehicle.id
+            );
+            if (vehicleFound){
+              vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicleFound.var_icono}`;
+              vehicle.icon_url = `backup/${vehicleFound.var_color}/${vehicleFound.var_icono}`;
+              vehicle.var_icono = vehicleFound.var_icono;
+              colorHex = vehicleFound.var_color;
+            }else{
+              vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicle.var_icono}`;
+              vehicle.icon_url = `backup/c4c2c1/${vehicle.var_icono}`;
+              vehicle.var_icono = vehicle.var_icono;
+              colorHex = 'c4c2c1';
+            }
 
             vehicle.customsvg = await this.busSVGCallback(
-              vehicle.var_color,
+              colorHex,
               vehicle.customurl
             );
-
-            console.log('TESTUSERDATA', vehicle);
+            vehicle.excess_svg = await this.busSVGCallback(
+              'FF0000',
+              vehicle.customurl
+            );
+            vehicle.relenti_svg = await this.busSVGCallback(
+              '000FFF',
+              vehicle.customurl
+            );
+            vehicle.movement_svg = await this.busSVGCallback(
+              '0CFF00',
+              vehicle.customurl
+            );
           }
         );
-
         this.userName = data.data.nombre_usuario
           .normalize('NFKD')
           .replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚäëïöüÄËÏÖÜ0-9 -_.@]+/g, '')
@@ -146,17 +172,17 @@ export class UserDataService {
   }
 
   private guardarSVG(filePath: string, svgContent: string) {
-    
+
     const fs = require('fs');
     fs.writeFileSync(filePath, svgContent, 'utf-8');
   }
 */
 
 
-  
+
   public getSVGcontent(idtype: number) {
-    const contentSVG = this.typeVehiclesUserData.find(
-      (type: { type_vehicle_id: number }) => type.type_vehicle_id == idtype
+    const contentSVG = this.typeVehicles.find(
+      (type: { id:number }) => type.id == idtype
     );
     return contentSVG.customsvg;
   }
