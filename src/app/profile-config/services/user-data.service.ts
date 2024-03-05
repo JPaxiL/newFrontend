@@ -88,15 +88,15 @@ export class UserDataService {
               vehicle.customurl
             );
             vehicle.excess_svg = await this.busSVGCallback(
-              'FF0000',
+              'FB472A',
               vehicle.customurl
             );
             vehicle.relenti_svg = await this.busSVGCallback(
-              '000FFF',
+              '0396F6',
               vehicle.customurl
             );
             vehicle.movement_svg = await this.busSVGCallback(
-              '0CFF00',
+              '04DE04',
               vehicle.customurl
             );
           }
