@@ -18,7 +18,7 @@ import { getIconUrlHistory } from '../helpers/event-helper';
 export class EventSocketService extends Socket {
   img_icon: string = '';
   img_iconSize: any;
-  img_iconAnchor: any;
+  img_iconAnchor: any = [14, 0];
   count: string = '0';
   user_id: any;
   data_debug!: any;
