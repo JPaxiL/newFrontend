@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, OnDestroy, OnInit, NgZone } from '@angular/core';
+import { AfterContentChecked, Component, OnDestroy, OnInit, NgZone , AfterContentInit, AfterViewInit} from '@angular/core';
 import { GeofencesService } from '../../services/geofences.service';
 import { GeofenceImportExportService } from '../../services/geofence-import-export.service';
 import { DataGeofence } from '../../models/interfaces';
@@ -9,7 +9,7 @@ import { MapItemConfiguration } from 'src/app/multiview/models/interfaces';
   templateUrl: './geofences-modal.component.html',
   styleUrls: ['./geofences-modal.component.scss']
 })
-export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnDestroy {
+export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnDestroy,AfterViewInit {
   datosGeo: DataGeofence[] = [];
   minimapElement: HTMLElement | null = null;
 
@@ -40,13 +40,7 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
   enviarDatosOtroComponente() {
     this.geofencesService.setData(this.datosGeo);
   }
-
-  ngOnInit(): void {
-    //this.getdatacomp();
-    //this.datosGeo=this.geofencesService.importedGeofencesTemp;;
-  }
-
-  ngAfterContentChecked(): void {
+  ngAfterViewInit(){
     this.minimapElement = document.getElementById('geofence-minimap');
     this.geofencesService.data$.subscribe(data => {
       // Se retrasa la actualización de los datos dentro de NgZone.run
@@ -54,9 +48,19 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
         this.datosGeo = data;
       });
       console.log("subscribe", this.datosGeo);
-      this.geofenceImportExportService.startMiniMap(this.confGeoMap,data);
+      this.geofenceImportExportService.startMiniMap(this.confGeoMap,this.datosGeo);
       // Aquí puedes hacer lo que necesites con los datos recibidos
     });
+  }
+  ngOnInit(): void {
+    
+    
+    //this.getdatacomp();
+    //this.datosGeo=this.geofencesService.importedGeofencesTemp;;
+  }
+
+  ngAfterContentChecked(): void {
+
   }
 
   ngOnDestroy(): void {

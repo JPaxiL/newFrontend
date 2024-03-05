@@ -1052,30 +1052,38 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
         const datas: { name?: string, description?: string, color?: string, coordinate?: string, width?: string }[] = [];
 
-        const regex = /<Placemark>[\s\S]*?<\/Placemark>/g;
+        const regex = /<Document>[\s\S]*?<\/Document>/g;
         const nameRegex = /<name>\s*([\s\S]*?)\s*<\/name>/;
         const descriptionRegex = /<description>\s*([\s\S]*?)\s*<\/description>/;
         const coordinatesRegex = /<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
+        //const coordinatesRegex = /<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
+
         const widthRegex = /<width>\s*([a-fA-F0-9]+)\s<\/width>/;
         const colorPolyStyleRegex = /<PolyStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/;
+        console.log("coordinatesRegex",coordinatesRegex);
         let match;
+        console.log("fileContent",coordinatesRegex.exec(fileContent));
 
         while ((match = regex.exec(fileContent)) !== null) {
+          
           const nameMatch = nameRegex.exec(match[0]);
           const descriptionMatch = descriptionRegex.exec(match[0]);
           const colorMatch = colorPolyStyleRegex.exec(match[0]);
           const coordinatesMatch = coordinatesRegex.exec(match[0]);
+        
+          console.log("entro:"),coordinatesMatch;
           const widthMatch = widthRegex.exec(match[0]);
 
           const data: DataGeofence = {};
 
-          if (nameMatch && nameMatch[1]) data.name = nameMatch[1].trim();
-          if (descriptionMatch && descriptionMatch[1]) data.description = descriptionMatch[1].trim();
-          if (colorMatch && colorMatch[1]) data.color = colorMatch[1].trim();
+          //if (nameMatch && nameMatch[1]) data.name = nameMatch[1].trim();
+          //if (descriptionMatch && descriptionMatch[1]) data.description = descriptionMatch[1].trim();
+          //if (colorMatch && colorMatch[1]) data.color = colorMatch[1].trim();
           if (coordinatesMatch && coordinatesMatch[1]) data.coordinate = coordinatesMatch[1].trim();
-          if (widthMatch && widthMatch[1]) data.width = widthMatch[1].trim();
+          //if (widthMatch && widthMatch[1]) data.width = widthMatch[1].trim();
 
           datas.push(data);
+          
         }
 
         console.log("johan3: ", datas);

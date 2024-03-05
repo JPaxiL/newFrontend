@@ -110,7 +110,7 @@ export class MiniMapGeofences extends MapBase {
         globalCoordinates.length = 0;
       }
     }
-    console.log("globalCoordenadas2:", globalCoordinatesGeo);
+    console.log("globalCoordenadas3:", globalCoordinatesGeo);
 
     const flattenedCoordinates: [number, number][] = [];
 
