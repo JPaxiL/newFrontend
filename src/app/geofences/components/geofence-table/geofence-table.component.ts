@@ -15,6 +15,9 @@ import { Geofences } from '../../models/geofences';
 import { DataGeofence, IGeofence, ITag } from '../../models/interfaces';
 import moment from 'moment';
 import { GeocercaAddComponent } from '../geocerca-add/geocerca-add.component';
+import { importExpr } from '@angular/compiler/src/output/output_ast';
+import { GeofenceImportExportService } from '../../services/geofence-import-export.service';
+import { GeofencesModalComponent } from '../geofences-modal/geofences-modal.component';
 //import { AnyNaptrRecord } from 'dns';
 //import { GeofencesModalComponent } from '../geofences-modal/geofences-modal.component';
 interface Column {
@@ -25,7 +28,8 @@ interface Column {
 @Component({
   selector: 'app-geofence-table',
   templateUrl: './geofence-table.component.html',
-  styleUrls: ['./geofence-table.component.scss']
+  styleUrls: ['./geofence-table.component.scss'],
+  providers: [GeofencesModalComponent],
 })
 export class GeofenceTableComponent implements OnInit, OnDestroy {
   files!: TreeNode[];
@@ -65,7 +69,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
   //
   dataGeo: DataGeofence[] = [];
-
+  @ViewChild("_modalChild") modalChild!: GeofencesModalComponent;
   map: L.Map | undefined;
   //
   @ViewChild('tt') tt!: any;
@@ -1099,7 +1103,9 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         });
         this.dataGeo = convertedData;
         console.log("datageo fuera modal: ", this.dataGeo);
-        this.geofencesService.sendDataModal(this.dataGeo);
+        this.modalChild.generateMap(this.dataGeo);
+        //this.geofencesService.generateMapGeofenceService(this.dataGeo);
+        //this.geofencesService.sendDataModal(this.dataGeo);
         //this.geofencesService.sendDataModal(this.dataGeo);
         //
       };

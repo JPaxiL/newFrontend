@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, OnDestroy, OnInit, NgZone , AfterContentInit, AfterViewInit} from '@angular/core';
+import { AfterContentChecked, Component, OnDestroy, OnInit, NgZone , AfterContentInit, AfterViewInit, Input} from '@angular/core';
 import { GeofencesService } from '../../services/geofences.service';
 import { GeofenceImportExportService } from '../../services/geofence-import-export.service';
 import { DataGeofence } from '../../models/interfaces';
@@ -10,7 +10,7 @@ import { MapItemConfiguration } from 'src/app/multiview/models/interfaces';
   styleUrls: ['./geofences-modal.component.scss']
 })
 export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnDestroy,AfterViewInit {
-  datosGeo: DataGeofence[] = [];
+  @Input() datosGeo: DataGeofence[] = [];
   minimapElement: HTMLElement | null = null;
 
   minimapGeo: any;
@@ -41,7 +41,8 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
     this.geofencesService.setData(this.datosGeo);
   }
   ngAfterViewInit(){
-    this.minimapElement = document.getElementById('geofence-minimap');
+    console.log("ngAfterViewInit",this.datosGeo);
+   /* this.minimapElement = document.getElementById('geofence-minimap');
     this.geofencesService.data$.subscribe(data => {
       // Se retrasa la actualización de los datos dentro de NgZone.run
       this.ngZone.run(() => {
@@ -50,7 +51,7 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
       console.log("subscribe", this.datosGeo);
       this.geofenceImportExportService.startMiniMap(this.confGeoMap,this.datosGeo);
       // Aquí puedes hacer lo que necesites con los datos recibidos
-    });
+    });*/
   }
   ngOnInit(): void {
     
@@ -69,5 +70,12 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
     if (this.minimapElement) {
       this.minimapElement.remove();
     }
+  }
+
+  generateMap(datos:DataGeofence[]){
+    console.log("generateMap:",datos)
+    this.datosGeo=datos;
+    //this.geofenceImportExportService.startMiniMap(this.confGeoMap,this.datosGeo);
+    this.geofenceImportExportService.startMiniMap(this.confGeoMap,datos);
   }
 }

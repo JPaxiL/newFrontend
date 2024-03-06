@@ -115,8 +115,8 @@
             <span (click)="export('csv')">Exportar a CSV</span>
           </div>
         </div>
-        <div *ngIf="(geofencesService.modalActive)">
-          <app-geofences-modal></app-geofences-modal>
+        <div>
+          <app-geofences-modal  #_modalChild></app-geofences-modal>
         </div>
       </div>
       <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">

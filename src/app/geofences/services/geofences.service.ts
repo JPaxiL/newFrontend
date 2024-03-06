@@ -567,10 +567,6 @@ export class GeofencesService {
   }
 
 
-  //
-
-
-
   sendDataModal(datos: DataGeofence[]) {
     console.log("senddatamodal",datos);
    // this.importedGeofencesTemp=datos;
