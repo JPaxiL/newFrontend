@@ -1225,19 +1225,23 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
       font-size:0.8rem;
     }
 
+    .event_tittle_modal_events{
+      font-size:0.9rem;
+    }
+
 
     </style>
 
     <div style="padding: 0.2rem;">
       <div class="d-flex flex-row" style="font-size: 0.8rem; gap: 1rem; padding-bottom: 0.5rem;">
-        <div class="d-flex flex-column justify-content-center" style="height: 45px;">
+        <div class="d-flex flex-column justify-content-center" style="height: 35px;">
           <div>
-            <img src="${icon_src}" style="max-width: 45px !important; height: 45px; color:red !important"/>
+            <img src="${icon_src}" style="max-width: 35px !important; height: 20px; color:red !important"/>
           </div>
         </div>
         <div class="d-flex flex-column justify-content-center fw-bold" style="text-transform: uppercase;">
-          <span>EVENTO:</span>
-          <span class="text_modal_events">${event_content.tipo}</span>
+          <span><!--EVENTO:--></span>
+          <span class="event_tittle_modal_events">${event_content.tipo}</span>
         </div>
       </div>
 

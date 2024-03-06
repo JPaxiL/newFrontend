@@ -245,89 +245,97 @@ export class MapService {
       // return 'Vehículo Sin Agrupación';
     }
   }
+
+  
+
   printPopup(data: any): void {
     let object = this.markerClusterGroup.getLayers();
-    //   let cont = 0;
+    console.log("printpopup", object);
+
     for (const key in object) {
-      if (
-        object[key]['_tooltip']['_content'] ==
-        this.marker[data.imei]._tooltip._content
-      ) {
-        const nameGroup = this.setNameGroup(
-          data.nameoperation,
-          data.namegrupo,
-          data.nameconvoy
-        );
-        const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
-        if (nameGroup) {
-          this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
-            '<div class="row"><div class="col-6" align="left"><strong>' +
-              data.name +
-              '</strong></div><div class="col-6" align="right"><strong>' +
-              data.speed +
-              ' km/h</strong></div></div>' +
-              '<aside class="">' +
-              // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-              '<small>' +
-              nameGroup +
-              '</small><br>' +
-              '<small>CONDUCTOR: ' +
-              data.namedriver +
-              '</small><br>' +
-              // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-              '<small>UBICACION: <a href="' +
-              googleMapsLink +
-              '" target="_blank">' +
-              data.latitud +
-              ', ' +
-              data.longitud +
-              '</a></small><br>' +
-              '<small>REFERENCIA: ' +
-              data.ref +
-              '</small><br>' +
-              '<small>FECHA DE TRANSMISION: ' +
-              data.dt_tracker +
-              '</small><br>' +
-              '<small>TIEMPO DE PARADA: ' +
-              data.tiempoParada +
-              '</small>' +
-              '</aside>'
-          );
-        } else {
-          this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
-            '<div class="row"><div class="col-6" align="left"><strong>' +
-              data.name +
-              '</strong></div><div class="col-6" align="right"><strong>' +
-              data.speed +
-              ' km/h</strong></div></div>' +
-              '<aside class="">' +
-              '<small>CONDUCTOR: ' +
-              data.namedriver +
-              '</small><br>' +
-              // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-              '<small>UBICACION: <a href="' +
-              googleMapsLink +
-              '" target="_blank">' +
-              data.latitud +
-              ', ' +
-              data.longitud +
-              '</a></small><br>' +
-              '<small>REFERENCIA: ' +
-              data.ref +
-              '</small><br>' +
-              '<small>FECHA DE TRANSMISION: ' +
-              data.dt_tracker +
-              '</small><br>' +
-              '<small>TIEMPO DE PARADA: ' +
-              data.tiempoParada +
-              '</small>' +
-              '</aside>'
-          );
+        if (
+            object[key]['_tooltip']['_content'] ==
+            this.marker[data.imei]._tooltip._content
+        ) {
+            // Eliminar el tooltip activo
+            const activeTooltip = document.querySelector('.tooltip');
+            if (activeTooltip) {
+                activeTooltip.remove();
+            }
+
+            const nameGroup = this.setNameGroup(
+                data.nameoperation,
+                data.namegrupo,
+                data.nameconvoy
+            );
+            const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
+            
+            if (nameGroup) {
+                this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
+                    '<div class="row"><div class="col-7" align="left"><strong>' +
+                        data.name +
+                        '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+                        data.speed +
+                        ' km/h</strong></div></div>' +
+                        '<aside class="">' +
+                        '<small>' +
+                        nameGroup +
+                        '</small><br>' +
+                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"></i></span> ' +
+                        data.namedriver +
+                        '</small><br>' +
+                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"></i></span><a href=" ' +
+                        googleMapsLink +
+                        '" target="_blank">' +
+                        data.latitud +
+                        ', ' +
+                        data.longitud +
+                        '</a></small><br>' +
+                        `<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"></i></span> ` +
+                        data.ref +
+                        '</small><br>' +
+                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"></i></span> ' +
+                        data.dt_tracker +
+                        '</small><br>' +
+                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"></i></span> ' +
+                        data.tiempoParada +
+                        '</small>' +
+                        '</aside>',
+                );
+            } else {
+                this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
+                    '<div class="row"><div class="col-7" align="left"><strong>' +
+                        data.name +
+                        '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded "> ' +
+                        data.speed +
+                        ' km/h</strong></div></div>' +
+                        '<aside class="">' +
+                        '<span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"></i></span> ' +
+                        data.namedriver +
+                        '</small><br>' +
+                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"></i></span><a href=" ' +
+                        googleMapsLink +
+                        '" target="_blank">' +
+                        data.latitud +
+                        ', ' +
+                        data.longitud +
+                        '</a></small><br>' +
+                        `<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"></i></span> ` +
+                        data.ref +
+                        '</small><br>' +
+                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"></i></span> ' +
+                        data.dt_tracker +
+                        '</small><br>' +
+                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"></i></span> ' +
+                        data.tiempoParada +
+                        '</small>' +
+                        '</aside>',
+                );
+            }
         }
-        // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
-      }
     }
-  }
+}
+
   string_diffechas(a: any, b: any): any {
     let c = Math.floor((b - a) / 1000) % 60;
     let d = Math.floor((b - a) / 60000) % 60;
@@ -520,9 +528,9 @@ export class MapService {
       vehicle.nameconvoy
     );
     let popupContent =
-      '<div class="row"><div class="col-6" align="left"><strong>' +
+      '<div class="row"><div class="col-7" align="left"><strong>' +
       vehicle.name +
-      '</strong></div><div class="col-6" align="right"><strong>' +
+      '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
       vehicle.speed +
       ' km/h</strong></div></div>' +
       '<aside class="">';
@@ -531,10 +539,10 @@ export class MapService {
       console.log('EXISTE nameGroup');
     }
     popupContent +=
-      '<small>CONDUCTOR: ' +
-      vehicle.namedriver +
+    '<span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor 2"><i class="fas fa-user-circle"></i></span> ' +
+    vehicle.namedriver +
       '</small><br>' +
-      '<small>UBICACION: <a href="' +
+      '<small><i class="fas fa-crosshairs"> Ubicacion: </i><a href=" ' +
       googleMapsLink +
       '" target="_blank">' +
       vehicle.latitud +
@@ -542,13 +550,13 @@ export class MapService {
       vehicle.longitud +
       '</a></small><br>' +
       // '<small>UBICACION: ' + vehicle.latitud + ', ' + vehicle.longitud + '</small><br>' +
-      '<small>REFERENCIA: ' +
+      `<small><i class="fas fa-map-marked-alt"> Referencia: </i> ` +
       vehicle.ref +
       '</small><br>' +
-      '<small>FECHA DE TRANSMISION: ' +
+      '<small><i class="fas fa-calendar-alt"> Fecha de Transmision: </i> ' +
       vehicle.dt_tracker +
       '</small><br>' +
-      '<small>TIEMPO DE PARADA: ' +
+      '<small><i class="fas fa-hourglass-half"> Tiempo de Parada: </i> ' +
       vehicle.tiempoParada +
       '</small>' +
       '</aside>';
@@ -959,9 +967,9 @@ export class MapService {
                   this.markerClusterGroup.getLayers()[key]['_popup'][
                     '_content'
                   ] =
-                    '<div class="row"><div class="col-6" align="left"><strong>' +
+                    '<div class="row"><div class="col-7" align="left"><strong>' +
                     vehicles[index].name +
-                    '</strong></div><div class="col-6" align="right"><strong>' +
+                    '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
                     vehicles[index].speed +
                     ' km/h</strong></div></div>' +
                     '<aside class="">' +
@@ -969,53 +977,55 @@ export class MapService {
                     nameGroup +
                     '</small><br>' +
                     // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
-                    '<small>CONDUCTOR: ' +
+                    '<small><i class="fas fa-user-circle"></i> ' +
                     vehicles[index].namedriver +
                     '</small><br>' +
                     // '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                    '<small>UBICACION: <a href="' +
+                    '<small><i class="fas fa-crosshairs"></i><a href=" ' +
                     googleMapsLink +
                     '" target="_blank">' +
                     vehicles[index].latitud +
                     ', ' +
                     vehicles[index].longitud +
                     '</a></small><br>' +
-                    '<small>REFERENCIA: ' +
-                    'Calculando ...' +
+                    `<small><i class="fas fa-map-marked-alt"></i> ` +
+                    '     Calculando ...' +
                     '</small><br>' +
-                    '<small>FECHA DE TRANSMISION: ' +
+                    '<small><i class="fas fa-calendar-alt"></i> ' +
                     vehicles[index].dt_tracker +
                     '</small><br>' +
-                    '<small>TIEMPO DE PARADA: Calculando ...</small>' +
+                    '<small><i class="fas fa-hourglass-half"></i> ' +
+                    '     Calculando ...'
                     '</aside>';
                 } else {
                   this.markerClusterGroup.getLayers()[key]['_popup'][
                     '_content'
                   ] =
-                    '<div class="row"><div class="col-6" align="left"><strong>' +
+                    '<div class="row"><div class="col-7" align="left"><strong>' +
                     vehicles[index].name +
-                    '</strong></div><div class="col-6" align="right"><strong>' +
+                    '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
                     vehicles[index].speed +
                     ' km/h</strong></div></div>' +
                     '<aside class="">' +
-                    '<small>CONDUCTOR: ' +
+                    '<small><i class="fas fa-user-circle"></i> ' +
                     vehicles[index].namedriver +
                     '</small><br>' +
                     // '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
-                    '<small>UBICACION: <a href="' +
+                    '<small><i class="fas fa-crosshairs"></i><a href=" ' +
                     googleMapsLink +
                     '" target="_blank">' +
                     vehicles[index].latitud +
                     ', ' +
                     vehicles[index].longitud +
                     '</a></small><br>' +
-                    '<small>REFERENCIA: ' +
-                    'Calculando ...' +
+                    `<small><i class="fas fa-map-marked-alt"></i> ` +
+                    '     Calculando ...' +
                     '</small><br>' +
-                    '<small>FECHA DE TRANSMISION: ' +
+                    '<small><i class="fas fa-calendar-alt"></i> ' +
                     vehicles[index].dt_tracker +
                     '</small><br>' +
-                    '<small>TIEMPO DE PARADA: Calculando ...</small>' +
+                    '<small><i class="fas fa-hourglass-half"></i> ' +
+                    '     Calculando ...'
                     '</aside>';
                 }
                 // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
@@ -1573,10 +1583,10 @@ export class MapService {
     const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
     if (nameGroup) {
       var popupText =
-        '<div class="row"><div class="col-6" align="left"><strong>' +
+        '<div class="row"><div class="col-7" align="left"><strong>' +
         data.name +
         '</strong></div>' +
-        '<div class="col-6" align="right"><strong>' +
+        '<div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded" ' +
         data.speed +
         ' km/h</strong></div></div>' +
         '<aside #popupText class="">' +
@@ -1584,54 +1594,54 @@ export class MapService {
         nameGroup +
         '</small><br>' +
         // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-        '<small>CONDUCTOR: ' +
+        '<small><i class="fas fa-user-circle"></i> ' +
         data.namedriver +
         '</small><br>' +
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small>UBICACION: <a href="' +
+        '<small><i class="fas fa-crosshairs"></i><a href=" ' +
         googleMapsLink +
         '" target="_blank">' +
         data.latitud +
         ', ' +
         data.longitud +
         '</a></small><br>' +
-        '<small>REFERENCIA: ' +
-        'NN' +
+        `<small><i class="fas fa-map-marked-alt"></i> ` +
+        '     NN' +
         '</small><br>' +
-        '<small>FECHA DE TRANSMISION: ' +
+        '<small><i class="fas fa-calendar-alt"></i> ' +
         data.dt_tracker +
         '</small><br>' +
-        '<small>TIEMPO DE PARADA: ' +
+        '<small><i class="fas fa-hourglass-half"></i> ' +
         this.time_stop +
         '</small>' +
         '</aside>';
     } else {
       var popupText =
-        '<div class="row"><div class="col-6" align="left"><strong>' +
+        '<div class="row"><div class="col-7" align="left"><strong>' +
         data.name +
         '</strong></div>' +
-        '<div class="col-6" align="right"><strong>' +
+        '<div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
         data.speed +
         ' km/h</strong></div></div>' +
         '<aside #popupText class="">' +
-        '<small>CONDUCTOR: ' +
+        '<small><i class="fas fa-user-circle"></i> ' +
         data.namedriver +
         '</small><br>' +
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small>UBICACION: <a href="' +
+        '<small><i class="fas fa-crosshairs"></i><a href=" ' +
         googleMapsLink +
         '" target="_blank">' +
         data.latitud +
         ', ' +
         data.longitud +
         '</a></small><br>' +
-        '<small>REFERENCIA: ' +
-        'NN' +
+        `<small><i class="fas fa-map-marked-alt"></i> ` +
+        '     NN' +
         '</small><br>' +
-        '<small>FECHA DE TRANSMISION: ' +
+        '<small><i class="fas fa-calendar-alt"></i> ' +
         data.dt_tracker +
         '</small><br>' +
-        '<small>TIEMPO DE PARADA: ' +
+        '<small><i class="fas fa-hourglass-half"></i> ' +
         this.time_stop +
         '</small>' +
         '</aside>';
