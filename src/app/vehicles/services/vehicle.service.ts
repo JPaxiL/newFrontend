@@ -144,16 +144,27 @@ export class VehicleService {
 
   public async changesColorVehicles() {
     // Obtener vehículos y agregar la propiedad 'customurl'
-    const vh = this.dataFormatVehicle(this.vehicles);
+    const vh = this.vehicles;
 
     console.log('Antes del bucle' ,);
     for (let i = 0; i < vh.length; i++) {
       const vehicle = vh[i];
       // vehicle.svgnew =  this.createSVG(vehicle.iconUrl, vehicle.icon_name);
-      
-      vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicle.var_icono}`;
+      const typeConfigVehicle = this.userDataService.typeVehicles.find(
+        (type: { var_icono: any, id: number }) => type.id == parseInt(vehicle.tipo!)
+      );
+      // console.log('VehiclesTypeConfig ->',typeConfigVehicle);
+      // vehicle.icon = typeConfigVehicle.var_icono;
+      vehicle.custom_url = typeConfigVehicle.customurl;
+      vehicle.custom_svg = typeConfigVehicle.customsvg;
+      vehicle.excess_svg = typeConfigVehicle.excess_svg;
+      vehicle.movement_svg = typeConfigVehicle.movement_svg;
+      vehicle.relenti_svg = typeConfigVehicle.relenti_svg;
+      // vehicle.icon = `backup/${vehicle.icon}`;
+      vehicle.icon =  typeConfigVehicle.icon_url;
 
-      console.log('porfiltro', vehicle.iconUrl, vehicle.icon_name);
+
+      // console.log('vehicle', vehicle);
     }
     console.log('Después del bucle');
 

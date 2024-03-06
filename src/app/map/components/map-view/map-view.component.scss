@@ -1,312 +1,324 @@
-  #map {
-    height: 100%;
-  }
+#map {
+  height: 100%;
+}
 
-  ::ng-deep{
-    .leaflet-popup-content{
-      &.leaflet-popup-scrolled{
-        border-top: none;
-        border-bottom: none;
-      }
+::ng-deep {
+  .leaflet-popup-content {
+    &.leaflet-popup-scrolled {
+      border-top: none;
+      border-bottom: none;
+    }
 
-      .infovehiculos{
-        margin: -0.125rem 0rem;
-        font-size: 0.875rem;
-        td > .dot-vehicle{
-          border-radius: 50%;
-          width: 10px;
-          height: 10px;
-          margin-right: 0.375rem;
-          &.green{
-            background-color: #45e845;
-          }
-          &.blue{
-            background-color: #2cadf2;
-          }
-          &.purple{
-            background-color: #b23ccf;
-          }
-          &.black{
-            background-color: #000;
-          }
-          &.orange{
-            background-color: #ffb300;
-          }
-          &.red{
-            background-color: #cc1013;
-          }
-          &.transm-color-not-defined{
-            background-color: #ABABAB;
-          }
+    .infovehiculos {
+      margin: -0.125rem 0rem;
+      font-size: 0.875rem;
+      td > .dot-vehicle {
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        margin-right: 0.375rem;
+        &.green {
+          background-color: #45e845;
+        }
+        &.blue {
+          background-color: #2cadf2;
+        }
+        &.purple {
+          background-color: #b23ccf;
+        }
+        &.black {
+          background-color: #000;
+        }
+        &.orange {
+          background-color: #ffb300;
+        }
+        &.red {
+          background-color: #cc1013;
+        }
+        &.transm-color-not-defined {
+          background-color: #ababab;
         }
       }
     }
-  
+  }
 
-    .view-container {
-      height: 100%;
-      width: 100%;
-    }
-    .grid-section {
-        height: 100%;
-    }
+  .view-container {
+    height: 100%;
+    width: 100%;
+  }
+  .grid-section {
+    height: 100%;
+  }
 
-    /* PROPUESTAS de COLOR*/
-    .fatiga{
-      --event-main-color: #546e7a;
-    }
-    .somnolencia{
-      --event-main-color: #757575;
-    }
-    .desvio-carril-izq, .desvio-carril-izquierda{
-      --event-main-color: #0600ff;
-    }
-    .desvio-carril-der, .desvio-carril-derecha{
-      --event-main-color: #1f1aff;
-    }
-    .bloqueo-vision-mobileye{
-      --event-main-color: #3833ff;
-    }
-    .colision-peatones{
-      --event-main-color: #0400b3;
-    }
+  /* PROPUESTAS de COLOR*/
+  .fatiga {
+    --event-main-color: #546e7a;
+  }
+  .somnolencia {
+    --event-main-color: #757575;
+  }
+  .desvio-carril-izq,
+  .desvio-carril-izquierda {
+    --event-main-color: #0600ff;
+  }
+  .desvio-carril-der,
+  .desvio-carril-derecha {
+    --event-main-color: #1f1aff;
+  }
+  .bloqueo-vision-mobileye {
+    --event-main-color: #3833ff;
+  }
+  .colision-peatones {
+    --event-main-color: #0400b3;
+  }
 
-    .colision-delantera{
-      --event-main-color: #514dff;
-    }
+  .colision-delantera {
+    --event-main-color: #514dff;
+  }
 
-    .actualizacion-estado-gps-360{
-      --event-main-color: #2e1a04;
-    }
+  .actualizacion-estado-gps-360 {
+    --event-main-color: #2e1a04;
+  }
 
-    .error-calibracion-360{
-      --event-main-color: #eea85d;
-    }    
+  .error-calibracion-360 {
+    --event-main-color: #eea85d;
+  }
 
-    .dvr-operativo{
-      --event-main-color: #b60098;
-    }
+  .dvr-operativo {
+    --event-main-color: #b60098;
+  }
 
-    .antena-gps-desconectada{
-      --event-main-color: #7f0000;
-    }
+  .antena-gps-desconectada {
+    --event-main-color: #7f0000;
+  }
 
-    .dvr-inoperativo{
-      --event-main-color: #83006e;
-    }
+  .dvr-inoperativo {
+    --event-main-color: #83006e;
+  }
 
-    .posible-fatiga{
-      --event-main-color: #0500e6;
-    }
+  .posible-fatiga {
+    --event-main-color: #0500e6;
+  }
 
-    .fatiga-extrema{
-      --event-main-color: #020066;
-    }
+  .fatiga-extrema {
+    --event-main-color: #020066;
+  }
 
-    .frenada-brusca{
-      --event-main-color: #cc0000;
-    }
+  .frenada-brusca {
+    --event-main-color: #cc0000;
+  }
 
-    .manipulacion-de-dispositivo{
-      --event-main-color: #b20000;
-    }
+  .manipulacion-de-dispositivo {
+    --event-main-color: #b20000;
+  }
 
-    .aceleracion-brusca{
-      --event-main-color: #ff1a1a;
-    }
+  .aceleracion-brusca {
+    --event-main-color: #ff1a1a;
+  }
 
-    .vehiculo-sin-programacion{
-      --event-main-color: #b4004e;
-    }
+  .vehiculo-sin-programacion {
+    --event-main-color: #b4004e;
+  }
 
-    .mantenimiento-correctivo-realizado{
-      --event-main-color: #7e57c2;
-    }
+  .mantenimiento-correctivo-realizado {
+    --event-main-color: #7e57c2;
+  }
 
-    .mantenimiento-preventivo-realizado{
-      --event-main-color: #5c6bc0;
-    }
+  .mantenimiento-preventivo-realizado {
+    --event-main-color: #5c6bc0;
+  }
 
-    .bateria-desconectada{
-      --event-main-color: #ff4d4d;
-    }
+  .bateria-desconectada {
+    --event-main-color: #ff4d4d;
+  }
 
-    .motor-encendido{
-      --event-main-color: #039be5;
-    }
+  .motor-encendido {
+    --event-main-color: #039be5;
+  }
 
-    .motor-apagado{
-      --event-main-color: #757575;
-    }
+  .motor-apagado {
+    --event-main-color: #757575;
+  }
 
-    .distraccion{
-      --event-main-color: #3732ff;
-    }
+  .distraccion {
+    --event-main-color: #3732ff;
+  }
 
-    .no-rostro{
-      --event-main-color: #0500cc;
-    }
+  .no-rostro {
+    --event-main-color: #0500cc;
+  }
 
-    .conductor-identificado-360{
-      --event-main-color: #efa85e;
-    }
+  .conductor-identificado-360 {
+    --event-main-color: #efa85e;
+  }
 
-    .conductor-identificado{
-      --event-main-color: #ff6666;
-    }
+  .conductor-identificado {
+    --event-main-color: #ff6666;
+  }
 
-    .conductor-ausente-360{
-      --event-main-color: #c93d0e;
-    }
+  .conductor-ausente-360 {
+    --event-main-color: #c93d0e;
+  }
 
-    .conductor-adormitado-360, .conductor-adormitado-360{
-      --event-main-color: #ea8f2f;
-    }
+  .conductor-adormitado-360,
+  .conductor-adormitado-360 {
+    --event-main-color: #ea8f2f;
+  }
 
-    .conductor-somnoliento-360, .conductor-somnoliento-360{
-      --event-main-color: #ef501a;
-    }
+  .conductor-somnoliento-360,
+  .conductor-somnoliento-360 {
+    --event-main-color: #ef501a;
+  }
 
-    .cambio-conductor-360{
-      --event-main-color: #f1b474;
-    }
+  .cambio-conductor-360 {
+    --event-main-color: #f1b474;
+  }
 
-    .celular_detectado_360{
-      --event-main-color: #a35c10;
-    }
+  .celular_detectado_360 {
+    --event-main-color: #a35c10;
+  }
 
-    .conductor-distraido-360, .conductor-distraido-360{
-      --event-main-color: #f3744a;
-    }
+  .conductor-distraido-360,
+  .conductor-distraido-360 {
+    --event-main-color: #f3744a;
+  }
 
-/*     .conductor-somnoliento, .conductor-somnoliento{
+  /*     .conductor-somnoliento, .conductor-somnoliento{
       --event-main-color: #22915b;
     } */
 
-    .conductor-no-identificado{
-      --event-main-color: #e50000;
-    }
-
-    .conductor-no-identificado-360{
-      --event-main-color: #e1440f;
-    }
-
-    .cinturon-desabrochado-360, .cinturon-desabrochado-360{
-      --event-main-color: #d27615;
-    }
-
-    .celular-detectado, .celular-detectado{
-      --event-main-color: #d1623a;
-    }
-
-    .motor-encendido{
-      --event-main-color: #ff4c4c;
-    }
-
-    .motor-apagado{
-      --event-main-color: #ff3232;
-    }
-
-    .error-sistema-360{
-      --event-main-color: #d8582d;
-    }
-
-    .ignicion-activada-360{
-      --event-main-color: #783119;
-    }
-
-    .ignicion-desactivada-360{
-      --event-main-color: #602714;
-    }
-
-    .inicio-sistema-ok-360{
-      --event-main-color: #f16232;
-    }
-
-    .sistema-ok-360{
-      --event-main-color: #ffc30d;
-    }
-
-    .sistema-reseteado-360{
-      --event-main-color: #d9a300;
-    }
-
-    .conductor-fumando-360, .conductor-fumando-360{
-      --event-main-color: #ba6913;
-    }
-    .deteccion-manipulacion-360, .deteccion-manipulacion-360{
-      --event-main-color: #f16232;
-    }
-    .error-de-camara-360, .error-de-camara-360{
-      --event-main-color: #f6997a;
-    }
-    /* COLORES DEFINIDOS */
-    .zona-entrada, .zona-de-entrada{
-      --event-main-color: #00a013;
-    }
-
-    .zona-salida, .zona-de-salida{
-      --event-main-color: #008710;
-    }
-
-    .tiempo-estadia-zona{
-      --event-main-color: #72BF88;
-    }
-
-    .parada-zona-no-autorizada, .parada-en-zona-no-autorizada{
-      --event-main-color: #00A3E4;
-    }
-
-    .mantenimiento-correctivo{
-      --event-main-color: #7C7BBB;
-    }
-
-    .mantenimiento-preventivo{
-      --event-main-color: #264E86;
-    }
-
-    .infraccion{
-      --event-main-color: #003a07;
-    }
-
-    .sos-event, .sos{
-      --event-main-color: #ff1919;
-    }
-
-    .exceso-velocidad{
-      --event-main-color: #00ba16;
-    }
-
-    .tiempo-estadia-zona, .tiempo-de-estadia-en-zona{
-      --event-main-color: #72BF88;
-    }
-
-    .default-event{
-      --event-main-color: #bdbdbd;
-    }
-
-    .color-prueba{
-      --event-main-color: #ff0000;
-    }
-
+  .conductor-no-identificado {
+    --event-main-color: #e50000;
   }
 
-  :host ::ng-deep {
+  .conductor-no-identificado-360 {
+    --event-main-color: #e1440f;
+  }
 
-    .leaflet-top.leaflet-left .leaflet-control-zoom.leaflet-bar.leaflet-control {
-      display: none;
+  .cinturon-desabrochado-360,
+  .cinturon-desabrochado-360 {
+    --event-main-color: #d27615;
+  }
+
+  .celular-detectado,
+  .celular-detectado {
+    --event-main-color: #d1623a;
+  }
+
+  .motor-encendido {
+    --event-main-color: #ff4c4c;
+  }
+
+  .motor-apagado {
+    --event-main-color: #ff3232;
+  }
+
+  .error-sistema-360 {
+    --event-main-color: #d8582d;
+  }
+
+  .ignicion-activada-360 {
+    --event-main-color: #783119;
+  }
+
+  .ignicion-desactivada-360 {
+    --event-main-color: #602714;
+  }
+
+  .inicio-sistema-ok-360 {
+    --event-main-color: #f16232;
+  }
+
+  .sistema-ok-360 {
+    --event-main-color: #ffc30d;
+  }
+
+  .sistema-reseteado-360 {
+    --event-main-color: #d9a300;
+  }
+
+  .conductor-fumando-360,
+  .conductor-fumando-360 {
+    --event-main-color: #ba6913;
+  }
+  .deteccion-manipulacion-360,
+  .deteccion-manipulacion-360 {
+    --event-main-color: #f16232;
+  }
+  .error-de-camara-360,
+  .error-de-camara-360 {
+    --event-main-color: #f6997a;
+  }
+  /* COLORES DEFINIDOS */
+  .zona-entrada,
+  .zona-de-entrada {
+    --event-main-color: #00a013;
+  }
+
+  .zona-salida,
+  .zona-de-salida {
+    --event-main-color: #008710;
+  }
+
+  .tiempo-estadia-zona {
+    --event-main-color: #72bf88;
+  }
+
+  .parada-zona-no-autorizada,
+  .parada-en-zona-no-autorizada {
+    --event-main-color: #00a3e4;
+  }
+
+  .mantenimiento-correctivo {
+    --event-main-color: #7c7bbb;
+  }
+
+  .mantenimiento-preventivo {
+    --event-main-color: #264e86;
+  }
+
+  .infraccion {
+    --event-main-color: #003a07;
+  }
+
+  .sos-event,
+  .sos {
+    --event-main-color: #ff1919;
+  }
+
+  .exceso-velocidad {
+    --event-main-color: #00ba16;
+  }
+
+  .tiempo-estadia-zona,
+  .tiempo-de-estadia-en-zona {
+    --event-main-color: #72bf88;
+  }
+
+  .default-event {
+    --event-main-color: #bdbdbd;
+  }
+
+  .color-prueba {
+    --event-main-color: #ff0000;
+  }
+}
+
+:host ::ng-deep {
+  .leaflet-top.leaflet-left .leaflet-control-zoom.leaflet-bar.leaflet-control {
+    display: none;
+  }
+
+  //740px para rem=16px
+  //655 causaba overflow, asi que se puso a 725px
+  @media (max-width: 725px) {
+    .leaflet-top.leaflet-right {
+      top: var(--navbar-height);
     }
+  }
 
-    //740px para rem=16px
-    //655 causaba overflow, asi que se puso a 725px
-    @media (max-width: 725px) {
-      .leaflet-top.leaflet-right {
-        top: var(--navbar-height);
-      }
-    }
-
-    /* PROPUESTAS */
-    .fatiga,
+  /* PROPUESTAS */
+  .fatiga,
     .somnolencia,
     .desvio-carril-izq, .desvio-carril-izquierda,
     .desvio-carril-der, .desvio-carril-derecha,
@@ -334,7 +346,7 @@
     .celular-detectado, .celular-detectado,
     .conductor-fumando-360, .conductor-fumando-360,
     .deteccion-manipulacion-360, .deteccion-manipulacion-360,
-    .error-de-camara-360, .error-de-camara-360,
+    .error-de-camara-360, .error-de-camara-360, .dvr-inoperativo,
     
     /* DEFINIDOS */
     .zona-entrada, .zona-de-entrada,
@@ -348,76 +360,73 @@
     .exceso-velocidad,
     .tiempo-estadia-zona,
     .conductor-identificado,
-    .default-event{
-
-      .leaflet-popup-content-wrapper,
-      a.leaflet-popup-close-button,
-      td a{
-        color: #fff;
-      }
-
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-tip-container > .leaflet-popup-tip{
-        background-color: var(--event-main-color);
-      }
-
+    .default-event {
+    .leaflet-popup-content-wrapper,
+    a.leaflet-popup-close-button,
+    td a {
+      color: #fff;
     }
 
-    .default-event{
-      .leaflet-popup-content-wrapper,
-      a.leaflet-popup-close-button,
-      td a{
-        color: #000;
-      }
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip-container > .leaflet-popup-tip {
+      background-color: var(--event-main-color);
     }
-
-    /* Nombres de vehículos */
-    .leaflet-tooltip.vehicle-tooltip{
-      border: none;
-      color: var(--gl-blue-dark);
-      text-shadow: 0 0 3px white;
-      //border-radius: 0.5rem;
-      background-color: transparent !important;
-      font-weight: bold;
-      line-height: 1rem;
-      box-shadow: none !important;
-      //-webkit-text-stroke: 0.75px black;
-      // text-align: center; /* Centrar el texto */
-      &::before{
-        display: none;
-      }
-    }
-
-    .leaflet-tooltip-right:before {
-      /* border-right-color: #000; */
-      border-right-color: var(--gl-light-blue);
-      left: 1px;
-    }
-    .leaflet-tooltip-left:before {
-      border-left-color: var(--gl-light-blue);
-      right: 1px;
-    }
-
-    /* Nombres de geocercas */
-    /* Nombres de geopuntos */
-    .leaflet-tooltip.leaflet-tooltip-own.leaflet-zoom-animated.leaflet-tooltip-center {
-      background: none;
-      border: none;
-      box-shadow: none;
-      > b {
-        padding: 0.25rem 0.5rem;
-        border-radius: 1rem;
-        font-size: 0.675rem;
-      }
-      &.geofence-tooltip > b,
-      &.geopoint-tooltip > b{
-        //Borde blanco para texto
-        text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
-               1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
-        /* text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
-               1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff; */
-      }
-
-    }
-
   }
+
+  .default-event {
+    .leaflet-popup-content-wrapper,
+    a.leaflet-popup-close-button,
+    td a {
+      color: #000;
+    }
+  }
+
+  /* Nombres de vehículos */
+  .leaflet-tooltip.vehicle-tooltip {
+    border: none;
+    color: rgb(4, 0, 255);
+    font-size: 13px;
+    text-shadow: 0 0 3px white;
+    //border-radius: 0.5rem;
+    background-color: transparent !important;
+    font-weight: bold;
+    line-height: 1rem;
+    box-shadow: none !important;
+    //-webkit-text-stroke: 0.75px black;
+    // text-align: center; /* Centrar el texto */
+    &::before {
+      display: none;
+    }
+  }
+
+  .leaflet-tooltip-right:before {
+    /* border-right-color: #000; */
+    border-right-color: var(--gl-light-blue);
+    left: 1px;
+  }
+  .leaflet-tooltip-left:before {
+    border-left-color: var(--gl-light-blue);
+    right: 1px;
+  }
+
+  /* Nombres de geocercas */
+  /* Nombres de geopuntos */
+  .leaflet-tooltip.leaflet-tooltip-own.leaflet-zoom-animated.leaflet-tooltip-center {
+    background: none;
+    border: none;
+    box-shadow: none;
+    > b {
+      padding: 0.25rem 0.5rem;
+      border-radius: 1rem;
+      font-size: 0.675rem;
+    }
+    &.geofence-tooltip > b,
+    &.geopoint-tooltip > b {
+      //Borde blanco para texto
+      text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
+        1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+      /* text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+               1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff; */
+    }
+  }
+}

@@ -78,7 +78,7 @@ export class GpsAlertsCreateComponent implements OnInit {
       chkCorreo: [false],
       sonido: [
         {
-          value: 'sonidos/globales/alarm8.mp3',
+          value: 'sonidos/alarm8.mp3',
           disabled: this.disabledEventSoundActive,
         },
       ],
@@ -136,6 +136,20 @@ export class GpsAlertsCreateComponent implements OnInit {
       } else if (alert.id === 4) {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
           (sonido: { id: any }) => sonido.id === 35
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.id === 64) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 33
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.id === 29) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 37
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
@@ -279,7 +293,7 @@ export class GpsAlertsCreateComponent implements OnInit {
     );
 
     if (typeof this.alertForm.value.sonido == 'undefined') {
-      this.alertForm.value.sonido = 'sonidos/globales/alarm8.mp3';
+      this.alertForm.value.sonido = 'sonidos/alarm8.mp3';
     }
 
     if (

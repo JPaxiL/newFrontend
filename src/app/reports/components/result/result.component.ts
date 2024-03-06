@@ -12535,7 +12535,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var vel_can_cell_ch_width = "vel.CAN".length;
     var vel_eco_cell_ch_width = "vel.ECO".length;
 
-    var zona_cell_ch_width = "Zona".length;
+    var zona_cell_ch_width = "Geocerca".length;
     var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
     var referencia_cell_ch_width = "Referencia".length;
@@ -12614,7 +12614,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (rs.VelCAN) { array_campos_cabecera.push({ value: "Vel.CAN", ...this.colHeaderConfig }); };
           if (rs.VelECO) { array_campos_cabecera.push({ value: "Vel.ECO", ...this.colHeaderConfig }); };
 
-          if (rs.Zona) { array_campos_cabecera.push({ value: "Zona", ...this.colHeaderConfig }); };
+          if (rs.Zona) { array_campos_cabecera.push({ value: "Geocerca", ...this.colHeaderConfig }); };
           if (rs.PuntoCercano) { array_campos_cabecera.push({ value: "Punto Cercano", ...this.colHeaderConfig }); };
           if (rs.Ubicacion) { array_campos_cabecera.push({ value: "Ubicación", ...this.colHeaderConfig }); };
           if (rs.Referencia) { array_campos_cabecera.push({ value: "Referencia", ...this.colHeaderConfig }); };
@@ -12766,7 +12766,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       vel_can_cell_ch_width = "vel.CAN".length;
       vel_eco_cell_ch_width = "vel.ECO".length;
   
-      zona_cell_ch_width = "Zona".length;
+      zona_cell_ch_width = "Geocerca".length;
       pc_cell_ch_width = "Punto Cercano".length;
       ubicacion_cell_ch_width = "Ubicacion".length;
       referencia_cell_ch_width = "Referencia".length;

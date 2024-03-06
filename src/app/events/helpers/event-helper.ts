@@ -303,11 +303,32 @@ export const getContentPopup = (event: any, d: any = '...') => {
     );
     //INICIO ULTIMOS CREADOS 16/02/2024
   } else if (event.tipo == 'manipulacion-de-dispositivo') {
-    return render_leaflet_tootlip({}, iconUrl);
+    return render_leaflet_tootlip({
+      tipo: event.nombre ?? event.name,
+      nombre_objeto: event.nombre_objeto,
+      latitud: event.latitud,
+      longitud: event.longitud,
+      name_driver: event.namedriver,
+      referencia: event.referencia
+    }, iconUrl);
   } else if (event.tipo == 'dvr-operativo') {
-    return render_leaflet_tootlip({}, iconUrl);
+    return render_leaflet_tootlip({
+      tipo: event.nombre ?? event.name,
+      nombre_objeto: event.nombre_objeto,
+      latitud: event.latitud,
+      longitud: event.longitud,
+      name_driver: event.namedriver,
+      referencia: event.referencia
+    }, iconUrl);
   } else if (event.tipo == 'dvr-inoperativo') {
-    return render_leaflet_tootlip({}, iconUrl);
+    return render_leaflet_tootlip({
+      tipo: event.nombre ?? event.name,
+      nombre_objeto: event.nombre_objeto,
+      latitud: event.latitud,
+      longitud: event.longitud,
+      name_driver: event.namedriver,
+      referencia: event.referencia
+    }, iconUrl);
   } else if (event.tipo == 'antena-gps-desconectada') {
     return render_leaflet_tootlip({}, iconUrl);
 
@@ -1192,37 +1213,433 @@ function string_diffechas(a: any, b: any) {
 
 function render_leaflet_tootlip(event_content: any, icon_src: string) {
   return `
+    <style>
+    .icon_modal_events{
+      font-size:13px;
+      display:flex !important;
+      justify-content:center !important;
+      align-items:center !important;
+    }
+
+    .text_modal_events{
+      font-size:0.8rem;
+    }
+
+    .event_tittle_modal_events{
+      font-size:0.9rem;
+    }
+
+
+    </style>
+
     <div style="padding: 0.2rem;">
       <div class="d-flex flex-row" style="font-size: 0.8rem; gap: 1rem; padding-bottom: 0.5rem;">
-        <div class="d-flex flex-column justify-content-center" style="height: 45px;">
+        <div class="d-flex flex-column justify-content-center" style="height: 35px;">
           <div>
-            <img src="${icon_src}" style="max-width: 45px !important; height: 45px; color:red !important"/>
+            <img src="${icon_src}" style="max-width: 35px !important; height: 20px; color:red !important"/>
           </div>
         </div>
         <div class="d-flex flex-column justify-content-center fw-bold" style="text-transform: uppercase;">
-          <span>EVENTO:</span>
-          <span>${event_content.tipo}</span>
+          <span><!--EVENTO:--></span>
+          <span class="event_tittle_modal_events">${event_content.tipo}</span>
         </div>
       </div>
-      <table class="dl-horizontal" style="border-collapse: separate; border-spacing: 2px;">
+
+      <div class="container">
+        ${
+          typeof event_content.nombre_objeto !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Unidad"><i class="fas fa-car" ></i></span>
+              </div>
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.nombre_objeto}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+          }
+
+
+        ${
+          typeof event_content.name_driver !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"></i></span>
+              </div>
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.name_driver}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+          }
+
+
+
+
+        ${
+          typeof event_content.luminaria !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-user-circle"></i>LUMINARIA:</span>
+              </div>
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.luminaria}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+          }
+
+
+        ${
+          typeof event_content.latitud !== 'undefined' &&
+          typeof event_content.latitud !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"></i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events"><a href="http://maps.google.com/maps?q=${event_content.latitud},${event_content.longitud}&amp;t=m" target="_blank" style="color:white !important">${event_content.latitud} °,  ${event_content.longitud} °</a></span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+
+
+        ${
+          typeof event_content.int_mant_ultimo_mantenimiento !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">ÚLTIMO MANTENIMIENTO:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.int_mant_ultimo_mantenimiento} h</span>
+              </div>
+            </div>
+          </div>
+          `
+            : ''
+        }
+        ${
+          typeof event_content.int_mant_horas_transcurridas !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">HORAS TRANSCURRIDAS:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.int_mant_horas_transcurridas} h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.int_mant_horas_restantes !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">HORAS RESTANTES:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.int_mant_horas_restantes} h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.int_mant_odometro !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">ODÓMETRO ACTUAL:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.int_mant_odometro} h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.ultimo_mantenimiento !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">ÚLTIMO MANTENIMIENTO:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.ultimo_mantenimiento} h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.voltaje !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">VOLTAJE:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.voltaje} h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.nombre_zona !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">ZONA:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.nombre_zona}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.velocidad !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Velocidad"><i class="fas fa-shipping-fast"></i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.velocidad} km/h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.velocidad_unidad !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-shipping-fast">VELOCIDAD:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.velocidad_unidad} km/h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.velocidad_limite !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Limite de Velocidad"><i class="fas fa-tachometer-alt"></i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.velocidad_limite} km/h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.tiempo_limite_infraccion !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">LÍMITE DE TIEMPO</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.tiempo_limite_infraccion} h</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.tiempo_tolerancia !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">TIEMPO DE TOLERANCIA</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.tiempo_tolerancia}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.tiempo_estadia !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span><i class="fas fa-crosshairs">TIEMPO DE ESTADÍA:</i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.tiempo_estadia}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.geocerca !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Geocerca"><i class="fas fa-road"></i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.geocerca}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+        ${
+          typeof event_content.referencia !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"></i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.referencia}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+
+        ${
+          typeof event_content.fecha_tracker !== 'undefined'
+            ?
+          `
+          <div class="col-12">
+            <div class="row">
+              <div class="col-1 icon_modal_events">
+                <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha - Hora"><i class="fas fa-calendar-alt"></i></span>
+              </div>
+
+              <div class="col-10 ps-0">
+                <span class="text_modal_events">${event_content.fecha_tracker}</span>
+              </div>
+            </div>
+          </div>
+          `
+          : ''
+        }
+
+
+
+      </div>
+
+
+      <!--<table class="dl-horizontal" style="border-collapse: separate; border-spacing: 2px;">
         <colgroup>
-          <col style="width:50%"></col>
-          <col style="width:50%"></col>
+          <col style="width:1%"></col>
+          <col style="width:99%"></col>
         </colgroup>
         <tbody style="font-size: 0.7rem;">
           ${
             typeof event_content.nombre_objeto !== 'undefined'
-              ? `<tr><td>UNIDAD:</td><td>${event_content.nombre_objeto}</td></tr>`
+              ? `<tr><td>UNIDAD:</i></td><td>${event_content.nombre_objeto}</td></tr>`
               : ''
           }
           ${
             typeof event_content.name_driver !== 'undefined'
-              ? `<tr><td>CONDUCTOR:</td><td>${event_content.name_driver}</td></tr>`
+              ? `<tr><td> CONDUCTOR:</td><td>${event_content.name_driver}</td></tr>`
               : ''
           }
           ${
             typeof event_content.luminaria !== 'undefined'
-              ? `<tr><td>LUMINARIA:</td><td>${event_content.luminaria}</td></tr>`
+              ? `<tr><td> LUMINARIA:</td><td>${event_content.luminaria}</td></tr>`
               : ''
           }
           ${
@@ -1233,7 +1650,7 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
           }
           ${
             typeof event_content.int_mant_ultimo_mantenimiento !== 'undefined'
-              ? `<tr><td>ÚLTIMO MANTENIMIENTO:</td><td>${event_content.int_mant_ultimo_mantenimiento} h</td></tr>`
+              ? `<tr><td> ÚLTIMO MANTENIMIENTO:</td><td>${event_content.int_mant_ultimo_mantenimiento} h</td></tr>`
               : ''
           }
           ${
@@ -1297,22 +1714,25 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
               : ''
           }
           ${
-            typeof event_content.referencia !== 'undefined'
-              ? `<tr><td>REFERENCIA:</td><td>${event_content.referencia}</td></tr>`
-              : ''
-          }
-          ${
             typeof event_content.geocerca !== 'undefined'
               ? `<tr><td>GEOCERCA:</td><td>${event_content.geocerca}</td></tr>`
               : ''
           }
+          ${
+            typeof event_content.referencia !== 'undefined'
+              ? `<tr><td>REFERENCIA:</td><td>${event_content.referencia}</td></tr>`
+              : ''
+          }
+
           ${
             typeof event_content.fecha_tracker !== 'undefined'
               ? `<tr><td>FECHA - HORA:</td><td>${event_content.fecha_tracker}</td></tr>`
               : ''
           }
         </tbody>
-      </table>
+      </table>-->
+
+
       ${
         event_content.parametros && event_content.parametros.gps == 'cipia'
           ? '<div class="multimedia-slider" id="multimedia-' +
@@ -1320,7 +1740,9 @@ function render_leaflet_tootlip(event_content: any, icon_src: string) {
             '"></div>'
           : ''
       }
-    </div>`;
+
+
+      </div>`;
 }
 
 export const getIcon = (event_type: string) => {

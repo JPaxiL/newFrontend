@@ -33,7 +33,7 @@ export class EventService {
   public nombreComponente: string = 'EVENT-USER';
   /* public img_icon: string = 'assets/images/eventos/pin_point.svg'; */
   public img_iconSize: any = [30, 30];
-  public img_iconAnchor: any = [0, 30];
+  public img_iconAnchor: any = [14, 0];
   public eventsLayers = new L.LayerGroup();
   public eventsCommon: any[] = [
     'sos',

@@ -80,6 +80,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadData();
     this.spinner.show('loadingAlertData');
     let alert = this.alertService.getAlertEditData();
     /* console.log("ALERT:::::", alert); */
@@ -226,6 +227,13 @@ export class AlertAccessoriesEditComponent implements OnInit {
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
+      } else if (tipoAlerta == 'Exceso de Velocidad') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 40
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
       }
 
       if (sonidosObtenidos.length > 0) {
@@ -247,8 +255,6 @@ export class AlertAccessoriesEditComponent implements OnInit {
         console.log('No se encontraron sonidos para la alerta seleccionada.');
       }
     }
-
-
 
     this.alertForm.patchValue({
       tipoAlerta: this.obtenerTipoAlerta(this.alertForm.value.tipoAlerta ?? ''),
@@ -447,7 +453,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
     );
 
     if (typeof this.alertForm.value.sonido == 'undefined') {
-      this.alertForm.value.sonido = 'sonidos/globales/alarm8.mp3';
+      this.alertForm.value.sonido = 'sonidos/alarm8.mp3';
     }
 
     if (
