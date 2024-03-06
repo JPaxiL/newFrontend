@@ -272,9 +272,9 @@ export class MapService {
             
             if (nameGroup) {
                 this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
-                    '<div class="row"><div class="col-7" align="left"><strong>' +
+                    '<div class="row"><div class="col-6" align="left"><strong>' +
                         data.name +
-                        '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+                        '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
                         data.speed +
                         ' km/h</strong></div></div>' +
                         '<aside class="">' +
@@ -304,9 +304,9 @@ export class MapService {
                 );
             } else {
                 this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
-                    '<div class="row"><div class="col-7" align="left"><strong>' +
+                    '<div class="row"><div class="col-6" align="left"><strong>' +
                         data.name +
-                        '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded "> ' +
+                        '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded "> ' +
                         data.speed +
                         ' km/h</strong></div></div>' +
                         '<aside class="">' +
@@ -528,9 +528,9 @@ export class MapService {
       vehicle.nameconvoy
     );
     let popupContent =
-      '<div class="row"><div class="col-7" align="left"><strong>' +
+      '<div class="row"><div class="col-6" align="left"><strong>' +
       vehicle.name +
-      '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+      '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
       vehicle.speed +
       ' km/h</strong></div></div>' +
       '<aside class="">';
@@ -967,9 +967,9 @@ export class MapService {
                   this.markerClusterGroup.getLayers()[key]['_popup'][
                     '_content'
                   ] =
-                    '<div class="row"><div class="col-7" align="left"><strong>' +
+                    '<div class="row"><div class="col-6" align="left"><strong>' +
                     vehicles[index].name +
-                    '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+                    '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
                     vehicles[index].speed +
                     ' km/h</strong></div></div>' +
                     '<aside class="">' +
@@ -1001,9 +1001,9 @@ export class MapService {
                   this.markerClusterGroup.getLayers()[key]['_popup'][
                     '_content'
                   ] =
-                    '<div class="row"><div class="col-7" align="left"><strong>' +
+                    '<div class="row"><div class="col-6" align="left"><strong>' +
                     vehicles[index].name +
-                    '</strong></div><div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+                    '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
                     vehicles[index].speed +
                     ' km/h</strong></div></div>' +
                     '<aside class="">' +
@@ -1583,10 +1583,10 @@ export class MapService {
     const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
     if (nameGroup) {
       var popupText =
-        '<div class="row"><div class="col-7" align="left"><strong>' +
+        '<div class="row"><div class="col-6" align="left"><strong>' +
         data.name +
         '</strong></div>' +
-        '<div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded" ' +
+        '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded" ' +
         data.speed +
         ' km/h</strong></div></div>' +
         '<aside #popupText class="">' +
@@ -1617,10 +1617,10 @@ export class MapService {
         '</aside>';
     } else {
       var popupText =
-        '<div class="row"><div class="col-7" align="left"><strong>' +
+        '<div class="row"><div class="col-6" align="left"><strong>' +
         data.name +
         '</strong></div>' +
-        '<div class="col-5" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+        '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
         data.speed +
         ' km/h</strong></div></div>' +
         '<aside #popupText class="">' +
