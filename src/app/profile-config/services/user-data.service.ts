@@ -67,16 +67,21 @@ export class UserDataService {
             relenti_svg: any;
             excess_svg: any;
             movement_svg: any;
+            movement_onda: any;
           }) => {
             const vehicleFound = this.typeVehiclesUserData.find(
-              (type: { var_color:string,var_icono: string, type_vehicle_id: number }) => type.type_vehicle_id == vehicle.id
+              (type: {
+                var_color: string;
+                var_icono: string;
+                type_vehicle_id: number;
+              }) => type.type_vehicle_id == vehicle.id
             );
-            if (vehicleFound){
+            if (vehicleFound) {
               vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicleFound.var_icono}`;
               vehicle.icon_url = `backup/${vehicleFound.var_color}/${vehicleFound.var_icono}`;
               vehicle.var_icono = vehicleFound.var_icono;
               colorHex = vehicleFound.var_color;
-            }else{
+            } else {
               vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicle.var_icono}`;
               vehicle.icon_url = `backup/c4c2c1/${vehicle.var_icono}`;
               vehicle.var_icono = vehicle.var_icono;
@@ -99,6 +104,10 @@ export class UserDataService {
               '04DE04',
               vehicle.customurl
             );
+            vehicle.movement_onda = await this.busSVGCallback2(
+              colorHex,
+              vehicle.customurl
+            );
           }
         );
         this.userName = data.data.nombre_usuario
@@ -115,6 +124,8 @@ export class UserDataService {
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);
         this.geopointsPrivileges.emit(true);
+
+        console.log('vehicle');
       },
       error: (errorMsg) => {
         console.log('No se pudo obtener datos del usuario', errorMsg);
@@ -122,7 +133,7 @@ export class UserDataService {
     });
   }
 
-/*   private crearCarpetaTemporal(vehicle: any[]) {
+  /*   private crearCarpetaTemporal(vehicle: any[]) {
     this.typeVehiclesUserData.forEach(
       async (vehicle: {
         customurl: string;
@@ -177,11 +188,9 @@ export class UserDataService {
   }
 */
 
-
-
   public getSVGcontent(idtype: number) {
     const contentSVG = this.typeVehicles.find(
-      (type: { id:number }) => type.id == idtype
+      (type: { id: number }) => type.id == idtype
     );
     return contentSVG.customsvg;
   }
@@ -241,6 +250,176 @@ export class UserDataService {
         errorCallback(error);
       });
   }
+
+  // gif con ondas
+
+  public busSVGCallback2(
+    var_color: string,
+    customurl: string
+  ): Promise<string> {
+    console.log('dato2 color', var_color);
+    console.log('dato2 url', customurl);
+
+    return new Promise<string>((resolve, reject) => {
+      this.busSVG2(
+        customurl,
+        var_color,
+        (bussvg2: string) => {
+          console.log('REGRESAAPROMESA', bussvg2);
+          resolve(bussvg2);
+        },
+        (error: Error) => {
+          console.error('Error al cargar el SVG en getUserData:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  public busSVGdasdsad(
+    svgPath: string,
+    colorHex: string,
+    callback: (result: string) => void,
+    errorCallback: (error: Error) => void
+) {
+    const svgBase64Promise = fetch(svgPath)
+        .then((response) => response.text())
+        .then((svgText) => {
+            const parser = new DOMParser();
+            const svgDocument = parser.parseFromString(svgText, 'image/svg+xml');
+            const styleElement = svgDocument.querySelector('style');
+
+            if (styleElement) {
+                let styleContent = styleElement.innerHTML;
+                styleContent = styleContent.replace(/\.cls-14\s*\{[^}]*\}/, (match) =>
+                    match.replace(/fill\s*:\s*#[^;]*/, `fill: #${colorHex}`)
+                );
+                styleElement.innerHTML = styleContent;
+
+                const div = document.createElement('div');
+                div.appendChild(svgDocument.documentElement.cloneNode(true));
+
+                // Convertir el SVG a base64
+                return `data:image/svg+xml;base64,${btoa(div.innerHTML)}`;
+            } else {
+                throw new Error('Elemento <style> no encontrado en el SVG.');
+            }
+        });
+
+    const gifPath = './assets/images/objects/nuevo/gif/onda_verde.gif';
+
+    // Cargar el GIF y convertirlo a base64
+    const gifBase64Promise = fetch(gifPath)
+        .then((response) => response.blob())
+        .then((gifBlob) => {
+            return new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result as string);
+                };
+
+                reader.onerror = reject;
+                reader.readAsDataURL(gifBlob);
+            });
+        })
+        .catch((error) => {
+            console.error('Error al cargar el GIF:', error);
+            errorCallback(error);
+            throw error; // Propagar el error para detener la ejecución
+        });
+
+    // Esperar a que ambas promesas se resuelvan
+    Promise.all([svgBase64Promise, gifBase64Promise])
+        .then(([svgBase64, gifBase64]) => {
+            // Crear el contenido HTML combinado
+            const combinedHTML = `
+                <div style="position: relative;">
+                    <img src="${svgBase64}" alt="SVG en Base64" style="width: 24px; height: 24px; position: absolute;" />
+                    <img src="${gifBase64}" alt="GIF en Base64" style="width: 24px; height: 24px; position: absolute;" />
+                </div>
+            `;
+
+            // Llamar al callback con el resultado combinado en base64
+            callback(combinedHTML);
+
+            console.log('Contenido HTML combinado en Base64:', combinedHTML);
+        })
+        .catch((error) => {
+            // El error ya fue manejado anteriormente
+        });
+}
+
+  
+  
+  
+
+  public busSVG2(
+    svgPath: string,
+    colorHex: string,
+    callback: (result: string) => void,
+    errorCallback: (error: Error) => void
+  ) {
+    fetch(svgPath)
+      .then((response) => response.text())
+      .then((svgText) => {
+        const parser = new DOMParser();
+        const svgDocument = parser.parseFromString(svgText, 'image/svg+xml');
+        const styleElement = svgDocument.querySelector('style');
+  
+        if (styleElement) {
+          let styleContent = styleElement.innerHTML;
+          styleContent = styleContent.replace(/\.cls-14\s*\{[^}]*\}/, (match) =>
+            match.replace(/fill\s*:\s*#[^;]*/, `fill: #${colorHex}`)
+          );
+          styleElement.innerHTML = styleContent;
+  
+          const div = document.createElement('div');
+          div.appendChild(svgDocument.documentElement.cloneNode(true));
+  
+          // Convertir el SVG a base64
+          const bussvg2 = `data:image/svg+xml;base64,${btoa(div.innerHTML)}`;
+          const gifPath = './assets/images/objects/nuevo/gif/onda_verde.gif';
+  
+          // Ahora cargar el GIF
+          fetch(gifPath)
+            .then((response) => response.blob())
+            .then((gifBlob) => {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                // Convertir el GIF a base64
+                const gifBase64 = reader.result as string;
+  
+                // Crear el contenido HTML combinado
+                /* const bussvg2 = `
+                  <div style="position: relative;">
+                    <img src="${svgBase64}" alt="SVG en Base64" style="width: 24px; height: 24px; position: absolute;" />
+                    <img src="${gifBase64}" alt="GIF en Base64" style="width: 24px; height: 24px; position: absolute;" />
+                  </div>
+                `; */
+  
+                // Llamar al callback con el resultado combinado
+                callback(bussvg2);
+  
+                console.log('Contenido HTML combinado:', bussvg2);
+              };
+  
+              reader.readAsDataURL(gifBlob);
+            })
+            .catch((error) => {
+              console.error('Error al cargar el GIF:', error);
+              errorCallback(error);
+            });
+        } else {
+          errorCallback(new Error('Elemento <style> no encontrado en el SVG.'));
+        }
+      })
+      .catch((error) => {
+        console.error('Error al cargar el SVG:', error);
+        errorCallback(error);
+      });
+  }
+  
+  
 
   public getReportsForUser(): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/api/getPermissReports`);

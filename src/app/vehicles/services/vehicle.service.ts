@@ -160,6 +160,8 @@ export class VehicleService {
       vehicle.excess_svg = typeConfigVehicle.excess_svg;
       vehicle.movement_svg = typeConfigVehicle.movement_svg;
       vehicle.relenti_svg = typeConfigVehicle.relenti_svg;
+      vehicle.movement_onda = typeConfigVehicle.movement_onda;
+
       // vehicle.icon = `backup/${vehicle.icon}`;
       vehicle.icon =  typeConfigVehicle.icon_url;
 
