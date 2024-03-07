@@ -110,10 +110,10 @@ export class EventListComponent implements OnInit {
     {
       label: 'Operadores',
       items: [
-        {
-          label: 'HANCCO DIAZ, Gary Maurizio',
-          value: 'HANCCO DIAZ, Gary Maurizio',
-        },
+        // {
+        //   label: 'HANCCO DIAZ, Gary Maurizio',
+        //   value: 'HANCCO DIAZ, Gary Maurizio',
+        // },
         {
           label: 'HUACHO OCHOA, Gonzalo Joe',
           value: 'HUACHO OCHOA, Gonzalo Joe',
@@ -123,6 +123,19 @@ export class EventListComponent implements OnInit {
           label: 'ROJAS RONDON, Carla Alejandra',
           value: 'ROJAS RONDON, Carla Alejandra',
         },
+        {
+          label: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
+          value: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
+        },
+        {
+          label: '⁠HUAMANI MILLIO, Maria Belen',
+          value: '⁠HUAMANI MILLIO, Maria Belen',
+        },
+        {
+          label: '⁠SUAREZ PACURI, Ayelen Melani',
+          value: '⁠⁠SUAREZ PACURI, Ayelen Melani',
+        },
+
       ],
     },
   ];

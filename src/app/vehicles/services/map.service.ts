@@ -22,6 +22,8 @@ import { TabService } from 'src/app/panel/services/tab.service';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 // import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/takeWhile';
@@ -31,6 +33,7 @@ import { DriversService } from 'src/app/drivers/services/drivers.service';
   providedIn: 'root',
 })
 export class MapService {
+  gifBase64: string | undefined;
   @ViewChild('popupText') popupText!: ElementRef;
 
   public map!: L.Map;
@@ -82,7 +85,8 @@ export class MapService {
     private tabService: TabService,
     private userDataService: UserDataService,
     private vehicleConfigService: VehicleConfigService,
-    private driversService: DriversService
+    private driversService: DriversService,
+    private http: HttpClient
   ) {
     // this.interval = setInterval(function(this){
     //   // this.localStorage
@@ -246,95 +250,97 @@ export class MapService {
     }
   }
 
-  
-
   printPopup(data: any): void {
     let object = this.markerClusterGroup.getLayers();
-    console.log("printpopup", object);
+    console.log('printpopup', object);
 
     for (const key in object) {
-        if (
-            object[key]['_tooltip']['_content'] ==
-            this.marker[data.imei]._tooltip._content
-        ) {
-            // Eliminar el tooltip activo
-            const activeTooltip = document.querySelector('.tooltip');
-            if (activeTooltip) {
-                activeTooltip.remove();
-            }
-
-            const nameGroup = this.setNameGroup(
-                data.nameoperation,
-                data.namegrupo,
-                data.nameconvoy
-            );
-            const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
-            
-            if (nameGroup) {
-                this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
-                    '<div class="row"><div class="col-6" align="left"><strong>' +
-                        data.name +
-                        '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
-                        data.speed +
-                        ' km/h</strong></div></div>' +
-                        '<aside class="">' +
-                        '<small>' +
-                        nameGroup +
-                        '</small><br>' +
-                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"></i></span> ' +
-                        data.namedriver +
-                        '</small><br>' +
-                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"></i></span><a href=" ' +
-                        googleMapsLink +
-                        '" target="_blank">' +
-                        data.latitud +
-                        ', ' +
-                        data.longitud +
-                        '</a></small><br>' +
-                        `<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"></i></span> ` +
-                        data.ref +
-                        '</small><br>' +
-                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"></i></span> ' +
-                        data.dt_tracker +
-                        '</small><br>' +
-                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"></i></span> ' +
-                        data.tiempoParada +
-                        '</small>' +
-                        '</aside>',
-                );
-            } else {
-                this.markerClusterGroup.getLayers()[key]['_popup'].setContent(
-                    '<div class="row"><div class="col-6" align="left"><strong>' +
-                        data.name +
-                        '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded "> ' +
-                        data.speed +
-                        ' km/h</strong></div></div>' +
-                        '<aside class="">' +
-                        '<span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"></i></span> ' +
-                        data.namedriver +
-                        '</small><br>' +
-                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"></i></span><a href=" ' +
-                        googleMapsLink +
-                        '" target="_blank">' +
-                        data.latitud +
-                        ', ' +
-                        data.longitud +
-                        '</a></small><br>' +
-                        `<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"></i></span> ` +
-                        data.ref +
-                        '</small><br>' +
-                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"></i></span> ' +
-                        data.dt_tracker +
-                        '</small><br>' +
-                        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"></i></span> ' +
-                        data.tiempoParada +
-                        '</small>' +
-                        '</aside>',
-                );
-            }
+      if (
+        object[key]['_tooltip']['_content'] ==
+        this.marker[data.imei]._tooltip._content
+      ) {
+        // Eliminar el tooltip activo
+        const activeTooltip = document.querySelector('.tooltip');
+        if (activeTooltip) {
+          activeTooltip.remove();
         }
+
+        const nameGroup = this.setNameGroup(
+          data.nameoperation,
+          data.namegrupo,
+          data.nameconvoy
+        );
+        const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
+
+        if (nameGroup) {
+          this.markerClusterGroup
+            .getLayers()
+            [key]['_popup'].setContent(
+              '<div class="row"><div class="col-6" align="left"><strong>' +
+                data.name +
+                '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+                data.speed +
+                ' km/h</strong></div></div>' +
+                '<aside class="">' +
+                '<small>' +
+                nameGroup +
+                '</small><br>' +
+                '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"></i></span> ' +
+                data.namedriver +
+                '</small><br>' +
+                '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"></i></span><a href=" ' +
+                googleMapsLink +
+                '" target="_blank">' +
+                data.latitud +
+                ', ' +
+                data.longitud +
+                '</a></small><br>' +
+                `<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"></i></span> ` +
+                data.ref +
+                '</small><br>' +
+                '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"></i></span> ' +
+                data.dt_tracker +
+                '</small><br>' +
+                '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"></i></span> ' +
+                data.tiempoParada +
+                '</small>' +
+                '</aside>'
+            );
+        } else {
+          this.markerClusterGroup
+            .getLayers()
+            [key]['_popup'].setContent(
+              '<div class="row"><div class="col-6" align="left"><strong>' +
+                data.name +
+                '</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded "> ' +
+                data.speed +
+                ' km/h</strong></div></div>' +
+                '<aside class="">' +
+                '<span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"></i></span> ' +
+                data.namedriver +
+                '</small><br>' +
+                '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"></i></span><a href=" ' +
+                googleMapsLink +
+                '" target="_blank">' +
+                data.latitud +
+                ', ' +
+                data.longitud +
+                '</a></small><br>' +
+                `<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"></i></span> ` +
+                data.ref +
+                '</small><br>' +
+                '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"></i></span> ' +
+                data.dt_tracker +
+                '</small><br>' +
+                '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"></i></span> ' +
+                data.tiempoParada +
+                '</small>' +
+                '</aside>'
+            );
+        }
+      }
     }
-}
+  }
 
   string_diffechas(a: any, b: any): any {
     let c = Math.floor((b - a) / 1000) % 60;
@@ -539,8 +545,8 @@ export class MapService {
       console.log('EXISTE nameGroup');
     }
     popupContent +=
-    '<span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor 2"><i class="fas fa-user-circle"></i></span> ' +
-    vehicle.namedriver +
+      '<span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor 2"><i class="fas fa-user-circle"></i></span> ' +
+      vehicle.namedriver +
       '</small><br>' +
       '<small><i class="fas fa-crosshairs"> Ubicacion: </i><a href=" ' +
       googleMapsLink +
@@ -685,6 +691,13 @@ export class MapService {
     // console.log('Resulta ',diferenciaEnSegundos>15);
     return diferenciaEnSegundos > 15;
   }
+
+  getGifBase64(): Observable<string> {
+    const gifPath = './assets/images/objects/nuevo/gif/onda_azul.gif'; // Ajusta la ruta según tu estructura de carpetas
+
+    return this.http.get(gifPath, { responseType: 'text' });
+  }
+
   monitor(data: any, map: any): void {
     if (this.vehicleService.statusDataVehicle) {
       const vehicles = this.vehicleService.vehicles;
@@ -875,8 +888,11 @@ export class MapService {
                 vehicles[index].parametros!.includes('Custom_ign=')
               ) {
                 let iconUrl =
-                  './assets/images/objects/nuevo/default/' + vehicles[index].icon_def;
+                  './assets/images/objects/nuevo/default/' +
+                  vehicles[index].icon_def;
+                let iconUrl2 = '';
                 // console.log('ENTRO VEHICLE A EVALUAR ESTADO ->',vehicles[index].name,vehicles[index].parametros,vehicles[index].speed);
+
                 if (
                   this.userDataService.changeItemIcon == 'vehicles' &&
                   (vehicles[index].parametros!.includes('|di4=1|') ||
@@ -926,12 +942,26 @@ export class MapService {
                     vehicles[index].speed != 0 &&
                     vehicles[index].speed! < vehicles[index].limit_speed!
                   ) {
+                    /* iconUrl = './assets/images/objects/nuevo/gif/onda_verde.gif'; */
+                   /*  const ondaIconUrl = vehicles[index].movement_onda;
+                    const ondaGifIconUrl =
+                      './assets/images/objects/nuevo/gif/onda_verde.gif'; */
+
+                   /*  iconUrl = ondaIconUrl + ondaGifIconUrl; */
+
+                   
                     iconUrl =
                       './assets/images/objects/nuevo/state_moved/' +
                       vehicles[index].icon_color +
                       '/' +
                       vehicles[index].icon_name +
                       '.webp';
+
+                    /* iconUrl = vehicles[index].custom_svg */
+
+                    /*  console.log("vehiculodefault",iconUrl)
+                      console.log("vehiculodefaultdata",data)
+                      console.log("vehiculodeindex",vehicles[index]) */
                   } else if (
                     vehicles[index].speed != 0 &&
                     vehicles[index].speed! > vehicles[index].limit_speed!
@@ -995,8 +1025,8 @@ export class MapService {
                     vehicles[index].dt_tracker +
                     '</small><br>' +
                     '<small><i class="fas fa-hourglass-half"></i> ' +
-                    '     Calculando ...'
-                    '</aside>';
+                    '     Calculando ...';
+                  ('</aside>');
                 } else {
                   this.markerClusterGroup.getLayers()[key]['_popup'][
                     '_content'
@@ -1025,10 +1055,11 @@ export class MapService {
                     vehicles[index].dt_tracker +
                     '</small><br>' +
                     '<small><i class="fas fa-hourglass-half"></i> ' +
-                    '     Calculando ...'
-                    '</aside>';
+                    '     Calculando ...';
+                  ('</aside>');
                 }
                 // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
+
                 this.markerClusterGroup.getLayers()[key]['options']['icon'][
                   'options'
                 ]['iconUrl'] = iconUrl;
@@ -1558,13 +1589,13 @@ export class MapService {
     /* let iconUrl = './assets/images/objects/nuevo/' + data.icon; */
 
     let iconUrl = data.custom_svg;
+    /* console.log("VEHICULOICONURL", iconUrl)
+    console.log("dataiconurl", data) */
     // let iconUrl = this.userDataService.getSVGcontent(data.tipo);
 
     /* console.log("VERIFICAR QUE ES DATA.TIPO",data)
 
     console.log("ICONURL", iconUrl);*/
-
-
 
     // let iconOndaUrl = './assets/images/user_config/circulo_movimiento.svg';
 
