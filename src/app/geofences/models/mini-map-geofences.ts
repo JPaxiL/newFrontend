@@ -121,13 +121,18 @@ export class MiniMapGeofences extends MapBase {
         flattenedCoordinates.push([coord[0], coord[1]]);
       }
     }
-
-//    this.setFitBounds(flattenedCoordinates);
-    const geofenceData: GeoJSON.Polygon = {
-      "type": "Polygon",
-      "coordinates": globalCoordinatesGeo,
-    };
-    L.geoJSON(geofenceData).addTo(this.map!);
+    console.log("logitud:", globalCoordinatesGeo.length);
+    for (const polygonCoordinates of globalCoordinatesGeo) {
+      console.log("polygonCoordinates", polygonCoordinates); // Agregar este log para verificar los datos de cada polígono
+      // Crear un objeto GeoJSON para el polígono actual
+      const geofenceData: GeoJSON.Polygon = {
+        "type": "Polygon",
+        "coordinates": [polygonCoordinates], // Envuelve las coordenadas del polígono actual en un arreglo
+      };  
+      
+      // Agregar el polígono al mapa
+      L.geoJSON(geofenceData).addTo(this.map!);
+    }
   }
 
   public setFitBounds(dataFitBounds: [number, number][]): void {

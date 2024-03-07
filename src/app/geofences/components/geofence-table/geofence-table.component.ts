@@ -1054,41 +1054,47 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         const fileContent = e.target.result;
         console.log("johan2", fileContent);
 
-        const datas: { name?: string, description?: string, color?: string, coordinate?: string, width?: string }[] = [];
+        let datas: { name?: string, description?: string, color?: string, coordinate?: string, width?: string }[] = [];
 
-        const regex = /<Document>[\s\S]*?<\/Document>/g;
+        const regex = /<(Document|kml)>[\s\S]*?<\/\1>/;
         const nameRegex = /<name>\s*([\s\S]*?)\s*<\/name>/;
         const descriptionRegex = /<description>\s*([\s\S]*?)\s*<\/description>/;
+       //<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>\s*<\/LinearRing>\s*<\/outerBoundaryIs>\s*<\/Polygon>
+
+       //cosas a cunsiderar nombre del documento, nombre de cada placermark
         const coordinatesRegex = /<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
-        //const coordinatesRegex = /<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
 
         const widthRegex = /<width>\s*([a-fA-F0-9]+)\s<\/width>/;
         const colorPolyStyleRegex = /<PolyStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/;
-        console.log("coordinatesRegex",coordinatesRegex);
+        console.log("regex", regex);  
         let match;
-        console.log("fileContent",coordinatesRegex.exec(fileContent));
+        console.log("fileContent", regex.exec(fileContent));
 
         while ((match = regex.exec(fileContent)) !== null) {
-          
+
           const nameMatch = nameRegex.exec(match[0]);
           const descriptionMatch = descriptionRegex.exec(match[0]);
           const colorMatch = colorPolyStyleRegex.exec(match[0]);
           const coordinatesMatch = coordinatesRegex.exec(match[0]);
-        
-          console.log("entro:"),coordinatesMatch;
+
+          console.log("entro:"), coordinatesMatch;
           const widthMatch = widthRegex.exec(match[0]);
 
           const data: DataGeofence = {};
 
-          //if (nameMatch && nameMatch[1]) data.name = nameMatch[1].trim();
-          //if (descriptionMatch && descriptionMatch[1]) data.description = descriptionMatch[1].trim();
-          //if (colorMatch && colorMatch[1]) data.color = colorMatch[1].trim();
+          if (nameMatch && nameMatch[1]) data.name = nameMatch[1].trim();
+          if (descriptionMatch && descriptionMatch[1]) data.description = descriptionMatch[1].trim();
+          if (colorMatch && colorMatch[1]) data.color = colorMatch[1].trim();
           if (coordinatesMatch && coordinatesMatch[1]) data.coordinate = coordinatesMatch[1].trim();
-          //if (widthMatch && widthMatch[1]) data.width = widthMatch[1].trim();
+          if (widthMatch && widthMatch[1]) data.width = widthMatch[1].trim();
 
           datas.push(data);
-          
+
         }
+
+        // Filtrar los objetos del arreglo datas que tengan la propiedad coordinate definida y no esté vacía
+        console.log("johan22: ", datas);
+        datas = datas.filter(data => data.coordinate !== undefined && data.coordinate.trim() !== '');
 
         console.log("johan3: ", datas);
 
@@ -1109,7 +1115,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         //this.geofencesService.sendDataModal(this.dataGeo);
         //
       };
-      
+
       reader.readAsText(file);
     }
   }

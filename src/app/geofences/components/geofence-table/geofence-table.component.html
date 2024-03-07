@@ -115,7 +115,7 @@
             <span (click)="export('csv')">Exportar a CSV</span>
           </div>
         </div>
-        <div>
+        <div *ngIf="(geofencesService.modalActive)">
           <app-geofences-modal  #_modalChild></app-geofences-modal>
         </div>
       </div>

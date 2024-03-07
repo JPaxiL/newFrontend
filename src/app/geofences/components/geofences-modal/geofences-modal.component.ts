@@ -10,7 +10,7 @@ import { MapItemConfiguration } from 'src/app/multiview/models/interfaces';
   styleUrls: ['./geofences-modal.component.scss']
 })
 export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnDestroy,AfterViewInit {
-  @Input() datosGeo: DataGeofence[] = [];
+  datosGeo: DataGeofence[] = [];
   minimapElement: HTMLElement | null = null;
 
   minimapGeo: any;
@@ -73,7 +73,7 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
   }
 
   generateMap(datos:DataGeofence[]){
-    console.log("generateMap:",datos)
+    console.log(" :",datos)
     this.datosGeo=datos;
     //this.geofenceImportExportService.startMiniMap(this.confGeoMap,this.datosGeo);
     this.geofenceImportExportService.startMiniMap(this.confGeoMap,datos);

@@ -33,10 +33,6 @@ export class GeofencesService {
 //
   public modalActiveGeoDet: boolean =false;
 
-  //dataGeofencesCompleted = false;
-  //importedGeofencesTemp: DataGeofence[]=[];
-  private dataSubject = new BehaviorSubject<DataGeofence[]>([]);
-  data$ = this.dataSubject.asObservable();
 //
   @Output() dataTreeCompleted = new EventEmitter<any>();
   @Output() dataCompleted = new EventEmitter<any>();
@@ -567,14 +563,6 @@ export class GeofencesService {
   }
 
 
-  sendDataModal(datos: DataGeofence[]) {
-    console.log("senddatamodal",datos);
-   // this.importedGeofencesTemp=datos;
-   
-   //this.dataGeofencesCompleted=true;
-   this.dataSubject.next(datos);
-   // this.datosSubject.next(datos);
-  }
 
   //
 
