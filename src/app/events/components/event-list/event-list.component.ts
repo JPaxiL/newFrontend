@@ -26,6 +26,7 @@ import Swal from 'sweetalert2';
 })
 export class EventListComponent implements OnInit {
   tipoEvento: any = [];
+
   selectedEvent: any[] = [];
   activeEvent: any = false;
 
@@ -178,6 +179,7 @@ export class EventListComponent implements OnInit {
   async ngOnInit() {
     //console.log("event list on init ========================================================================");
     this.selectedEvent = [];
+
     if (!this.eventService.eventsLoaded || !this.eventService.filterLoaded) {
       this.spinner.show('loadingEventList');
     }
@@ -228,6 +230,7 @@ export class EventListComponent implements OnInit {
   public changeTypeEvent() {
     if (this.selectedEvent.length === 0 && this.placa === '') {
       this.eventService.eventsFiltered = this.eventService.getData();
+
       this.noResults = false;
     } else {
       this.eventService.eventsFiltered = this.eventService
@@ -316,7 +319,7 @@ export class EventListComponent implements OnInit {
       [[event.layer.getLatLng().lat, event.layer.getLatLng().lng]],
       { padding: [50, 50] }
     );
-    
+
       console.log("eventlayer",event.layer)
 
     event.layer.bindPopup(getContentPopup(event), {
