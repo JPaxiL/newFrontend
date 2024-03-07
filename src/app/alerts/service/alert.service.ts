@@ -47,13 +47,13 @@ export class AlertService {
     },
 
     { id: 19, ruta: 'sonidos/sound.mp3', label: 'Sonido 19' },
-    { id: 20, ruta: 'sonidos/sound1.mp3', label: 'Sonido 20' },
-    { id: 21, ruta: 'sonidos/ALARMA1.mp3', label: 'Sonido 22' },
-    { id: 23, ruta: 'sonidos/ALARMA2.mp3', label: 'Sonido 23' },
-    { id: 24, ruta: 'sonidos/ALARMA3.mp3', label: 'Sonido 24' },
-    { id: 25, ruta: 'sonidos/ALARMA4.mp3', label: 'Sonido 25' },
-    { id: 26, ruta: 'sonidos/digitalalarm.mp3', label: 'Sonido 26' },
-    { id: 27, ruta: 'sonidos/watchalarm.mp3', label: 'Sonido 27' },
+    { id: 20, ruta: 'sonidos/sound1.MP3', label: 'Sonido 20' },
+    { id: 21, ruta: 'sonidos/ALARMA1.MP3', label: 'Sonido 21' },
+    { id: 23, ruta: 'sonidos/ALARMA2.MP3', label: 'Sonido 22' },
+    { id: 24, ruta: 'sonidos/ALARMA3.MP3', label: 'Sonido 23' },
+    { id: 25, ruta: 'sonidos/ALARMA4.MP3', label: 'Sonido 24' },
+    { id: 26, ruta: 'sonidos/digitalalarm.mp3', label: 'Sonido 25' },
+    { id: 27, ruta: 'sonidos/watchalarm.mp3', label: 'Sonido 26' },
 
     // SONIDOS PERSONALIZADOS
     {
