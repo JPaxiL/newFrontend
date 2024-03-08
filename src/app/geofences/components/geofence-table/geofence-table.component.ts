@@ -1056,45 +1056,38 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
         let datas: { name?: string, description?: string, color?: string, coordinate?: string, width?: string }[] = [];
 
-        const regex = /<(Document|kml)>[\s\S]*?<\/\1>/;
+        //const regex = /<(Document|kml)>[\s\S]*?<\/\1>/;
         const nameRegex = /<name>\s*([\s\S]*?)\s*<\/name>/;
         const descriptionRegex = /<description>\s*([\s\S]*?)\s*<\/description>/;
-       //<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>\s*<\/LinearRing>\s*<\/outerBoundaryIs>\s*<\/Polygon>
+        //<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>\s*<\/LinearRing>\s*<\/outerBoundaryIs>\s*<\/Polygon>
 
-       //cosas a cunsiderar nombre del documento, nombre de cada placermark
+        //cosas a cunsiderar nombre del documento, nombre de cada placermark
         const coordinatesRegex = /<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
 
         const widthRegex = /<width>\s*([a-fA-F0-9]+)\s<\/width>/;
         const colorPolyStyleRegex = /<PolyStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/;
-        console.log("regex", regex);  
+        //console.log("regex", regex);
         let match;
-        console.log("fileContent", regex.exec(fileContent));
-
-        while ((match = regex.exec(fileContent)) !== null) {
-
-          const nameMatch = nameRegex.exec(match[0]);
-          const descriptionMatch = descriptionRegex.exec(match[0]);
-          const colorMatch = colorPolyStyleRegex.exec(match[0]);
-          const coordinatesMatch = coordinatesRegex.exec(match[0]);
-
-          console.log("entro:"), coordinatesMatch;
-          const widthMatch = widthRegex.exec(match[0]);
-
-          const data: DataGeofence = {};
-
-          if (nameMatch && nameMatch[1]) data.name = nameMatch[1].trim();
-          if (descriptionMatch && descriptionMatch[1]) data.description = descriptionMatch[1].trim();
-          if (colorMatch && colorMatch[1]) data.color = colorMatch[1].trim();
-          if (coordinatesMatch && coordinatesMatch[1]) data.coordinate = coordinatesMatch[1].trim();
-          if (widthMatch && widthMatch[1]) data.width = widthMatch[1].trim();
-
-          datas.push(data);
-
+        //console.log("fileContent", regex.exec(fileContent));
+        const regex: RegExp = /<name>([\s\S]*?)<\/name>/g; // Expresión regular para buscar contenido entre etiquetas <name> y </name>
+        //const names: string[] = [];
+        console.log("fileContent", regex.exec(fileContent))
+        const combinedRegex = /<name>\s*([\s\S]*?)\s*<\/name>|<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/g;
+        console.log("conbinedRegex", combinedRegex.exec(fileContent));
+        while ((match = combinedRegex.exec(fileContent)) !== null) {
+          const name = match[1] !== undefined ? match[1].replace(/[\n\t]/g, '') : undefined;
+          const coordinate = match[2] !== undefined ? match[2].replace(/[\n\t]/g, '') : undefined;
+          console.log("ambos:", name, "--", coordinate);
+          this.dataGeo.push({ name, coordinate });
         }
-
+        /*
+        while ((match = coordinatesRegex.exec(fileContent)) !== null) {
+          this.dataGeo.push({ coordinate: match[1].replace(/[\n\t]/g, '') });
+          //const data: DataGeofence = {};
+        }*/
+        console.log("names:", this.dataGeo);
         // Filtrar los objetos del arreglo datas que tengan la propiedad coordinate definida y no esté vacía
         console.log("johan22: ", datas);
-        datas = datas.filter(data => data.coordinate !== undefined && data.coordinate.trim() !== '');
 
         console.log("johan3: ", datas);
 
