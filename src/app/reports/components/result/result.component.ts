@@ -61,9 +61,10 @@ export interface ReportData{
 })
 
 export class ResultComponent implements OnDestroy, OnInit {
+  // COMMENT DEVELOP - TEST
   @ViewChild(DataTableDirective)
   dtElement!: DataTableDirective;
-  currentActiveTables: string[] = []; 
+  currentActiveTables: string[] = [];
   directSorting: boolean = true;
 
   dtOptions: any = {};
@@ -523,7 +524,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           { orderData: [ 2, 1 ], targets: [2] }, //hora
         ],
       },
-      { 
+      {
         //REPORTE DE ANTICOLISIÓN FRONTAL
         //REPORTE DE COLISIÓN CON PEATONES
         //REPORTE DE DESVÍO DE CARRIL HACIA LA IZQUIERDA
@@ -544,13 +545,13 @@ export class ResultComponent implements OnDestroy, OnInit {
         ],
       },
     ];
-    
+
     const isIndependentWindow = document.getElementById('vehicle_label') === null;
     if(isIndependentWindow){
       //Verificar si reporte es una ventana o componente
       var report_data = JSON.parse(localStorage.getItem('report_data')!);
       // console.log(report_data);
-      
+
     }
     localStorage.removeItem('report_data');
 
@@ -575,7 +576,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         } else {
           console.log('TABLA SINGULAR');
         } */
-        
+
         this.data = data.data;
         this.sortedData = JSON.parse(JSON.stringify(this.data));
 
@@ -643,7 +644,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       } else {
         this.setDataTablesConfig(isIndependentWindow, report_data.data.length);
       }
-      
+
       this.chkDateHour = report_data.chkDateHour;
       this.chkFatigaSomnolencia = report_data.chkFatigaSomnolencia;
       this.chkFatigaDistraccion = report_data.chkFatigaDistraccion;
@@ -654,11 +655,11 @@ export class ResultComponent implements OnDestroy, OnInit {
       this.repTitle = report_data.repTitle;
       this.period = report_data.period;
       this.params = report_data.params;
-      
+
       if(this.chkTableDropdown && !this.isSingleTableReport()){
         this.prepareVehicleDropdown();
       }
-      
+
       document.querySelector('body')!.style.backgroundColor = 'rgb(250,250,250)';
       document.querySelector('body')!.style.padding = '0.8rem';
       this.titleService.setTitle(this.report_data.rep_title);
@@ -694,7 +695,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     this.user_id = Number(localStorage.getItem('user_id'));
     // console.log(this.user_id);
 
-    
+
   }
 
   setDataTablesConfig(isIndependentWindow: boolean, numberOfTables: number){
@@ -759,7 +760,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         // console.log("======================= AKI");
 
         // console.log(this.num_rep);
-        
+
         // // if (this.num_rep == 19) {
         // if (this.num_rep == 'R020') {
         //     // this.runReportGerencial(1);
@@ -776,9 +777,9 @@ export class ResultComponent implements OnDestroy, OnInit {
           this.dtOptions.order = this.dtTableCurrentOrder;
         }
         const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-        if(   isIndependentWindow 
+        if(   isIndependentWindow
           ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-          let sortedDataTableIndex = -1; 
+          let sortedDataTableIndex = -1;
           //console.log( 'DataTables has redrawn the table', oSettings );
           if(this.isSingleTableReport()){
             console.log( 'DataTables has redrawn (Single Table). Table info: ', {
@@ -802,10 +803,10 @@ export class ResultComponent implements OnDestroy, OnInit {
             strAscDesc: oSettings.aaSorting[0]['1'],
             intAscDesc: oSettings.aaSorting[0]['_idx'],
             object: oSettings.aaSorting,
-          } ); 
+          } );
           let sortingColIndex = oSettings.aaSorting[0]['0'];
           let sortingOrder = oSettings.aaSorting[0]['1'];
-          
+
           if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
             let columnName: string;
             switch(this.report_data.num_rep){
@@ -818,8 +819,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 if(!this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
                   console.log('Eliminar Solo Movimientos');
                   for(let i = 0; i < tableHeaders.length; i++){
-                    if( tableHeaders[i] == 'ubicacion' || 
-                        tableHeaders[i] == 'pCercano' || 
+                    if( tableHeaders[i] == 'ubicacion' ||
+                        tableHeaders[i] == 'pCercano' ||
                         tableHeaders[i] == 'referencia'){
                       tableHeaders.splice(i, 1);
                       i--;
@@ -830,10 +831,10 @@ export class ResultComponent implements OnDestroy, OnInit {
                 if(this.sortedData[sortedDataTableIndex][2].Paradas && !this.sortedData[sortedDataTableIndex][2].Movimientos){
                   console.log('Eliminar Solo Paradas');
                   for(let i = 0; i < tableHeaders.length; i++){
-                    if( tableHeaders[i] == 'recorrido' || 
-                        tableHeaders[i] == 'maxima_velocidad' || 
-                        tableHeaders[i] == 'vel_max_can' || 
-                        tableHeaders[i] == 'vel_promedio' || 
+                    if( tableHeaders[i] == 'recorrido' ||
+                        tableHeaders[i] == 'maxima_velocidad' ||
+                        tableHeaders[i] == 'vel_max_can' ||
+                        tableHeaders[i] == 'vel_promedio' ||
                         tableHeaders[i] == 'vel_prom_can'){
                       tableHeaders.splice(i, 1);
                       i--;
@@ -847,12 +848,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                   case 'fecha_ini':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
                           return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                         return this.dateComparison(a['fecha'], b['fecha'], sortingOrder);
                       });
                     }
@@ -860,12 +861,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                   case 'hora_ini':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
                           return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
                       });
                     }
@@ -873,12 +874,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                   case 'fecha_fin':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
                           return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                         return this.dateComparison(a['fechasig'], b['fechasig'], sortingOrder);
                       });
                     }
@@ -886,12 +887,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                   case 'hora_fin':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
                           return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fechasig.split(' ')[1], b.fechasig.split(' ')[1], sortingOrder);
                       });
                     }
@@ -899,33 +900,33 @@ export class ResultComponent implements OnDestroy, OnInit {
                   case 'duracion':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
                           return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                         return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                       });
                     }
                     break;
-                  case 'recorrido': 
-                  case 'maxima_velocidad': 
+                  case 'recorrido':
+                  case 'maxima_velocidad':
                   case 'vel_max_can':
                   case 'vel_promedio':
                   case 'vel_prom_can':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
-                          let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
-                          let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
+                          let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]);
+                          let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]);
                           return this.numericComparison(term1, term2, sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
-                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]);
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
@@ -934,18 +935,18 @@ export class ResultComponent implements OnDestroy, OnInit {
                   case 'referencia':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
-                          let term1 = a.esInt == 1? '---': a[columnName]; 
-                          let term2 = b.esInt == 1? '---': b[columnName]; 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
+                          let term1 = a.esInt == 1? '---': a[columnName];
+                          let term2 = b.esInt == 1? '---': b[columnName];
                           console.log('refs', [term1, term2]);
                           console.log('refs result', this.textComparison(term1, term2, sortingOrder));
                           return this.textComparison(term1, term2, sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                        let term1 = a.esInt == 1? '---': a[columnName]; 
-                        let term2 = b.esInt == 1? '---': b[columnName]; 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                        let term1 = a.esInt == 1? '---': a[columnName];
+                        let term2 = b.esInt == 1? '---': b[columnName];
                         console.log('refs', [term1, term2]);
                         console.log('refs result', this.textComparison(term1, term2, sortingOrder));
                         return this.textComparison(term1, term2, sortingOrder);
@@ -955,16 +956,16 @@ export class ResultComponent implements OnDestroy, OnInit {
                   case 'ubicacion':
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
-                          let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
-                          let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
+                          let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`;
+                          let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`;
                           return this.textComparison(term1, term2, sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
-                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`;
+                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`;
                         return this.textComparison(term1, term2, sortingOrder);
                       });
                     }
@@ -972,12 +973,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                   default:
                     if(this.chkTableDropdown){
                       for(let i = 0; i < numberOfTables; i++){
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                        this.sortedData[i][1].sort((a: any, b: any) => {
                           return this.textComparison(a[columnName], b[columnName], sortingOrder);
                         });
                       }
                     } else {
-                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                      this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
@@ -988,26 +989,26 @@ export class ResultComponent implements OnDestroy, OnInit {
               case 'R008': //REPORTE DE POSICION
                 columnName = columnsConfig.headers[sortingColIndex - 1];
                 if(columnName == 'fecha'){
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.dateComparison(a[columnName], b[columnName], sortingOrder);
                   });
                 }
                 if(columnName == 'hora'){
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.dateComparison(a.fecha.split(' ')[1], b.fecha.split(' ')[1], sortingOrder);
                   });
                 }
                 if(columnName == 'ubicacion'){
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                   });
                 } else {
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.textComparison(a[columnName], b[columnName], sortingOrder);
                   });
                 }
                 console.log(this.sortedData);
-                break; 
+                break;
               default:
                 break;
             }
@@ -1037,7 +1038,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           //  dataOfSortedTable: this.sortedData[sortedDataTableIndex][1],
           //} );
         }
-        
+
       }, */
     };
 
@@ -1052,9 +1053,9 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
             //console.log( 'DataTables has redrawn the table', oSettings );
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
@@ -1074,7 +1075,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -1086,8 +1087,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               if(!this.sortedData[sortedDataTableIndex][2].Paradas && this.sortedData[sortedDataTableIndex][2].Movimientos){
                 //console.log('Eliminar Solo Movimientos');
                 for(let i = 0; i < tableHeaders.length; i++){
-                  if( tableHeaders[i] == 'ubicacion' || 
-                      tableHeaders[i] == 'pCercano' || 
+                  if( tableHeaders[i] == 'ubicacion' ||
+                      tableHeaders[i] == 'pCercano' ||
                       tableHeaders[i] == 'referencia'){
                     tableHeaders.splice(i, 1);
                     i--;
@@ -1098,10 +1099,10 @@ export class ResultComponent implements OnDestroy, OnInit {
               if(this.sortedData[sortedDataTableIndex][2].Paradas && !this.sortedData[sortedDataTableIndex][2].Movimientos){
                 //console.log('Eliminar Solo Paradas');
                 for(let i = 0; i < tableHeaders.length; i++){
-                  if( tableHeaders[i] == 'recorrido' || 
-                      tableHeaders[i] == 'maxima_velocidad' || 
-                      tableHeaders[i] == 'vel_max_can' || 
-                      tableHeaders[i] == 'vel_promedio' || 
+                  if( tableHeaders[i] == 'recorrido' ||
+                      tableHeaders[i] == 'maxima_velocidad' ||
+                      tableHeaders[i] == 'vel_max_can' ||
+                      tableHeaders[i] == 'vel_promedio' ||
                       tableHeaders[i] == 'vel_prom_can'){
                     tableHeaders.splice(i, 1);
                     i--;
@@ -1117,12 +1118,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_ini':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                     });
                   }
@@ -1130,12 +1131,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_ini':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                     });
                   }
@@ -1143,12 +1144,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_fin':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fechasig, b.fechasig, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fechasig, b.fechasig, sortingOrder);
                     });
                   }
@@ -1156,12 +1157,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_fin':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fechasig, b.fechasig, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fechasig, b.fechasig, sortingOrder, true);
                     });
                   }
@@ -1169,33 +1170,33 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'duracion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                     });
                   }
                   break;
-                case 'recorrido': 
-                case 'maxima_velocidad': 
+                case 'recorrido':
+                case 'maxima_velocidad':
                 case 'vel_max_can':
                 case 'vel_promedio':
                 case 'vel_prom_can':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
-                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
-                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]);
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
-                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]);
+                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]);
                       return this.numericComparison(term1, term2, sortingOrder);
                     });
                   }
@@ -1204,18 +1205,18 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'referencia':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
-                        let term1 = a.esInt == 1? '---': a[columnName]; 
-                        let term2 = b.esInt == 1? '---': b[columnName]; 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
+                        let term1 = a.esInt == 1? '---': a[columnName];
+                        let term2 = b.esInt == 1? '---': b[columnName];
                         console.log('refs', [term1, term2]);
                         console.log('refs result', this.textComparison(term1, term2, sortingOrder));
                         return this.textComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = a.esInt == 1? '---': a[columnName]; 
-                      let term2 = b.esInt == 1? '---': b[columnName]; 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                      let term1 = a.esInt == 1? '---': a[columnName];
+                      let term2 = b.esInt == 1? '---': b[columnName];
                       console.log('refs', [term1, term2]);
                       console.log('refs result', this.textComparison(term1, term2, sortingOrder));
                       return this.textComparison(term1, term2, sortingOrder);
@@ -1225,16 +1226,16 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
-                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
-                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
+                        let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`;
+                        let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`;
                         return this.textComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`; 
-                      let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`; 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                      let term1 = a.esInt == 1? '---': `${a.latitud}, ${a.longitud}`;
+                      let term2 = b.esInt == 1? '---': `${b.latitud}, ${b.longitud}`;
                       return this.textComparison(term1, term2, sortingOrder);
                     });
                   }
@@ -1242,21 +1243,21 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
-  
+
             if(this.directSorting){
               this.directSorting = false;
               for(let i = 0; i < this.currentActiveTables.length; i++){
@@ -1269,7 +1270,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               }
               this.directSorting = true;
             }
-  
+
           } else {
             console.log('An fnDrawCallback has been fired by an old table', oSettings.sTableId);
           }
@@ -1284,32 +1285,32 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
 
-              
+
               if(!this.chkDuracion){
                 //Limite de velocidad
                 for(let i = 0; i < tableHeaders.length; i++){
-                  if( tableHeaders[i] == 'fecha_ini' || 
-                      tableHeaders[i] == 'hora_ini' || 
-                      tableHeaders[i] == 'fecha_fin' || 
-                      tableHeaders[i] == 'hora_fin' || 
-                      tableHeaders[i] == 'duracion' || 
-                      tableHeaders[i] == 'cant_tramas' || 
-                      tableHeaders[i] == 'string_tramas' || 
-                      tableHeaders[i] == 'vel_min' || 
-                      tableHeaders[i] == 'vel_max' || 
+                  if( tableHeaders[i] == 'fecha_ini' ||
+                      tableHeaders[i] == 'hora_ini' ||
+                      tableHeaders[i] == 'fecha_fin' ||
+                      tableHeaders[i] == 'hora_fin' ||
+                      tableHeaders[i] == 'duracion' ||
+                      tableHeaders[i] == 'cant_tramas' ||
+                      tableHeaders[i] == 'string_tramas' ||
+                      tableHeaders[i] == 'vel_min' ||
+                      tableHeaders[i] == 'vel_max' ||
                       tableHeaders[i] == 'ZC'){
                     tableHeaders.splice(i, 1);
                     i--;
@@ -1318,9 +1319,9 @@ export class ResultComponent implements OnDestroy, OnInit {
               } else {
                 //Duracion
                 for(let i = 0; i < tableHeaders.length; i++){
-                  if( tableHeaders[i] == 'nombre' || 
-                      tableHeaders[i] == 'fecha' || 
-                      tableHeaders[i] == 'hora' || 
+                  if( tableHeaders[i] == 'nombre' ||
+                      tableHeaders[i] == 'fecha' ||
+                      tableHeaders[i] == 'hora' ||
                       tableHeaders[i] == 'maxima_velocidad'){
                     tableHeaders.splice(i, 1);
                     i--;
@@ -1337,12 +1338,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                     });
                   }
@@ -1350,12 +1351,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                     });
                   }
@@ -1363,12 +1364,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'maxima_velocidad':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                     });
                   }
@@ -1378,12 +1379,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_ini':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder);
                     });
                   }
@@ -1391,12 +1392,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_ini':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_inicial, b.fecha_inicial, sortingOrder, true);
                     });
                   }
@@ -1404,12 +1405,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_fin':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
                     });
                   }
@@ -1417,12 +1418,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_fin':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
                     });
                   }
@@ -1430,43 +1431,43 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'duracion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                     });
                   }
                   break;
-                case 'cant_tramas': 
+                case 'cant_tramas':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(parseInt(a[columnName]), parseInt(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(parseInt(a[columnName]), parseInt(b[columnName]), sortingOrder);
                     });
                   }
                   break;
-                case 'vel_min': 
+                case 'vel_min':
                 case 'vel_max':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
-                        let term1 = parseFloat(a[columnName].split(' ')[0]); 
-                        let term2 = parseFloat(b[columnName].split(' ')[0]); 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
+                        let term1 = parseFloat(a[columnName].split(' ')[0]);
+                        let term2 = parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = parseFloat(a[columnName].split(' ')[0]); 
-                      let term2 = parseFloat(b[columnName].split(' ')[0]); 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                      let term1 = parseFloat(a[columnName].split(' ')[0]);
+                      let term2 = parseFloat(b[columnName].split(' ')[0]);
                       return this.numericComparison(term1, term2, sortingOrder);
                     });
                   }
@@ -1476,16 +1477,16 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'vel_prom_can':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
-                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
-                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
+                        let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]);
+                        let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
-                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]); 
-                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]); 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
+                      let term1 = a.esInt == 0? -1: parseFloat(a[columnName].split(' ')[0]);
+                      let term2 = b.esInt == 0? -1: parseFloat(b[columnName].split(' ')[0]);
                       return this.numericComparison(term1, term2, sortingOrder);
                     });
                   }
@@ -1494,12 +1495,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -1508,19 +1509,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -1550,15 +1551,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -1571,12 +1572,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_in':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                     });
                   }
@@ -1584,12 +1585,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_in':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                     });
                   }
@@ -1597,14 +1598,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_out':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
                         let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
                         return this.dateComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
                       let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
                       return this.dateComparison(term1, term2, sortingOrder);
@@ -1614,14 +1615,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_out':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
                         let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
                         return this.dateComparison(term1, term2, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = a.fecha_out == 'n/a'? '1970/01/01 00:00:00': a.fecha_out;
                       let term2 = b.fecha_out == 'n/a'? '1970/01/01 00:00:00': b.fecha_out;
                       return this.dateComparison(term1, term2, sortingOrder, true);
@@ -1631,14 +1632,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'duracion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = a.duracion == 'n/a'? -1: this.intervalToSeconds(a.duracion);
                         let term2 = b.duracion == 'n/a'? -1: this.intervalToSeconds(b.duracion);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = a.duracion == 'n/a'? -1: this.intervalToSeconds(a.duracion);
                       let term2 = b.duracion == 'n/a'? -1: this.intervalToSeconds(b.duracion);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -1648,12 +1649,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -1661,19 +1662,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -1703,15 +1704,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -1724,12 +1725,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                     });
                   }
@@ -1737,12 +1738,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                     });
                   }
@@ -1756,12 +1757,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'altitude':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                     });
                   }
@@ -1769,7 +1770,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'di4':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = a.di4 != 1 && a.di4 != 0? -1: this.Math.abs(a.di4 - 1); //1 es Abierto
                         let term2 = b.di4 != 1 && b.di4 != 0? -1: this.Math.abs(b.di4 - 1); //0 es cerrado
                         //Pero alfabeticamente hablando, 1 deberia ir antes del 0, entonces se les resta 1 y aplica abs
@@ -1778,7 +1779,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = a.di4 != 1 && a.di4 != 0? -1: this.Math.abs(a.di4 - 1);
                       let term2 = b.di4 != 1 && b.di4 != 0? -1: this.Math.abs(b.di4 - 1);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -1789,14 +1790,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'can_rpm':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName].toFixed(2));
                         let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName].toFixed(2));
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName].toFixed(2));
                       let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName].toFixed(2));
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -1806,12 +1807,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -1819,12 +1820,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'combusrestante':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                     });
                   }
@@ -1832,19 +1833,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -1874,15 +1875,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -1898,8 +1899,8 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'velocidad':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
-                        this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
+                        this.sortedData[i][1].sort((a: any, b: any) => {
                           let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
                           let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                           return this.numericComparison(term1, term2, sortingOrder);
@@ -1907,7 +1908,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
                       let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -1917,12 +1918,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_ini':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder);
                     });
                   }
@@ -1930,12 +1931,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_ini':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_inicio, b.fecha_inicio, sortingOrder, true);
                     });
                   }
@@ -1943,12 +1944,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha_fin':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
                     });
                   }
@@ -1956,12 +1957,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora_fin':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
                     });
                   }
@@ -1969,12 +1970,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'duracion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(this.intervalToSeconds(a[columnName]), this.intervalToSeconds(b[columnName]), sortingOrder);
                     });
                   }
@@ -1982,12 +1983,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -1995,19 +1996,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -2039,15 +2040,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -2060,12 +2061,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder);
                     });
                   }
@@ -2073,12 +2074,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_tracker, b.fecha_tracker, sortingOrder, true);
                     });
                   }
@@ -2087,14 +2088,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'vel_can':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
                         let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName])? -1: parseFloat(a[columnName]);
                       let term2 = isNaN(b[columnName])? -1: parseFloat(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2104,12 +2105,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -2117,19 +2118,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -2153,7 +2154,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       case 'R008': //REPORTE DE POSICIÓN
         this.dtOptions["fnDrawCallback"] = ( oSettings: any ) => {
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
@@ -2165,35 +2166,35 @@ export class ResultComponent implements OnDestroy, OnInit {
               //console.log('Sorting Column...', columnName);
               switch(columnName){
                 case 'fecha':
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                   });
                   break;
                 case 'hora':
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                   });
                   break;
                 case 'velocidad':
                 case 'velocidad_can':
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                   });
                   break;
                 case 'odometro':
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     let term1 = a.odometro == '-'? -1: parseFloat(a.odometro);
                     let term2 = b.odometro == '-'? -1: parseFloat(b.odometro);
                     return this.numericComparison(term1, term2, sortingOrder);
                   });
                   break;
                 case 'ubicacion':
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                   });
                   break;
                 default:
-                  this.sortedData.sort((a: any, b: any) => { 
+                  this.sortedData.sort((a: any, b: any) => {
                     return this.textComparison(a[columnName], b[columnName], sortingOrder);
                   });
                   break;
@@ -2218,15 +2219,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -2239,12 +2240,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder);
                     });
                   }
@@ -2252,12 +2253,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha_final, b.fecha_final, sortingOrder, true);
                     });
                   }
@@ -2265,14 +2266,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'idConductor':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                         let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                       let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2283,14 +2284,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'vel_can':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                         let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                       let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2300,12 +2301,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -2313,19 +2314,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -2355,15 +2356,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -2385,12 +2386,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                     });
                   }
@@ -2398,12 +2399,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                     });
                   }
@@ -2411,14 +2412,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'idConductor':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                         let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                       let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2429,14 +2430,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'vel_can':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                         let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                       let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2446,14 +2447,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ai1x':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
                         let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
                         return this.textComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
                       let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
                       return this.textComparison(term1, term2, sortingOrder);
@@ -2463,12 +2464,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -2476,19 +2477,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -2520,15 +2521,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -2541,12 +2542,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                     });
                   }
@@ -2554,12 +2555,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                     });
                   }
@@ -2567,14 +2568,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'idConductor':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                         let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                       let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2585,14 +2586,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'vel_can':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                         let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                       let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2602,14 +2603,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ai1x':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
                         let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
                         return this.textComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = a[columnName] > 1000? `Rostro detectado ${a[columnName]}`: `Rostro ausente ${a[columnName]}`;
                       let term2 = b[columnName] > 1000? `Rostro detectado ${b[columnName]}`: `Rostro ausente ${b[columnName]}`;
                       return this.textComparison(term1, term2, sortingOrder);
@@ -2619,12 +2620,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -2632,19 +2633,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -2678,15 +2679,15 @@ export class ResultComponent implements OnDestroy, OnInit {
           }
 
           const dataTableIndex = parseInt(oSettings.sTableId.split('_')[2]);
-          if(   isIndependentWindow 
+          if(   isIndependentWindow
             ||  (this.dataTableStartingIndex <= dataTableIndex && dataTableIndex <= this.dataTableEndingIndex)){
-            let sortedDataTableIndex = -1; 
+            let sortedDataTableIndex = -1;
 
             sortedDataTableIndex = this.chkTableDropdown? this.reportTableVehicleSelected.index: dataTableIndex - this.dataTableStartingIndex;
 
             let sortingColIndex = oSettings.aaSorting[0]['0'];
             let sortingOrder = oSettings.aaSorting[0]['1'];
-            
+
             if(sortingColIndex > 0 && reportExistInConfig && headersExistInColumnsConfig){
               let columnName: string;
               let tableHeaders = [...columnsConfig.headers];
@@ -2699,12 +2700,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'fecha':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder);
                     });
                   }
@@ -2712,12 +2713,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'hora':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.dateComparison(a.fecha, b.fecha, sortingOrder, true);
                     });
                   }
@@ -2725,14 +2726,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'idConductor':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                         let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName])? -1: parseInt(a[columnName]);
                       let term2 = isNaN(b[columnName])? -1: parseInt(b[columnName]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2742,12 +2743,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'vel_gps_speed':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.numericComparison(parseFloat(a[columnName]), parseFloat(b[columnName]), sortingOrder);
                     });
                   }
@@ -2755,14 +2756,14 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'vel_can':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                         let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                         return this.numericComparison(term1, term2, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       let term1 = isNaN(a[columnName].split(' ')[0])? -1: parseFloat(a[columnName].split(' ')[0]);
                       let term2 = isNaN(b[columnName].split(' ')[0])? -1: parseFloat(b[columnName].split(' ')[0]);
                       return this.numericComparison(term1, term2, sortingOrder);
@@ -2772,12 +2773,12 @@ export class ResultComponent implements OnDestroy, OnInit {
                 case 'ubicacion':
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(`${a.latitud}, ${a.longitud}`, `${b.latitud}, ${b.longitud}`, sortingOrder);
                     });
                   }
@@ -2785,19 +2786,19 @@ export class ResultComponent implements OnDestroy, OnInit {
                 default:
                   if(this.chkTableDropdown){
                     for(let i = 0; i < numberOfTables; i++){
-                      this.sortedData[i][1].sort((a: any, b: any) => { 
+                      this.sortedData[i][1].sort((a: any, b: any) => {
                         return this.textComparison(a[columnName], b[columnName], sortingOrder);
                       });
                     }
                   } else {
-                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => { 
+                    this.sortedData[sortedDataTableIndex][1].sort((a: any, b: any) => {
                       return this.textComparison(a[columnName], b[columnName], sortingOrder);
                     });
                   }
                   break;
               }
               console.log(this.sortedData[sortedDataTableIndex][1]);
-              
+
             }
 
             if(this.directSorting){
@@ -2836,7 +2837,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       switch(this.report_data.num_rep){
         case 'R001': //REPORTE DE PARADAS Y MOVIMIENTOS
           this.dtOptions.columnDefs.push(
-            { 
+            {
               targets: [6],
               "render": ( data: string, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
@@ -2851,7 +2852,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           //PARADAS Y MOVIMIENTOS
           if(this.data[0][2].Paradas && this.data[0][2].Movimientos){
             this.dtOptions.columnDefs.push(
-              { 
+              {
                 targets: [8, 9, 10, 12, 13],
                 "render": ( data: string, type: any, row: any, meta: any ) => {
                   if(type === 'sort' || type === 'type'){
@@ -2866,7 +2867,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           //SOLO MOVIMIENTOS
           if(!this.data[0][2].Paradas && this.data[0][2].Movimientos){
             this.dtOptions.columnDefs.push(
-              { 
+              {
                 targets: [7, 8, 9, 10, 11],
                 "render": ( data: string, type: any, row: any, meta: any ) => {
                   if(type === 'sort' || type === 'type'){
@@ -2884,7 +2885,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             this.dtOptions.columnDefs.push(
               { orderData: [ 2, 3 ], targets: [2] },
               { orderData: [ 3, 2 ], targets: [3] },
-              { 
+              {
                 targets: [4], // Maxima velocidad
                 "render": ( data: string, type: any, row: any, meta: any ) => {
                   if(type === 'sort' || type === 'type'){
@@ -2901,7 +2902,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               { orderData: [ 2, 1 ], targets: [2] },
               { orderData: [ 3, 4 ], targets: [3] },
               { orderData: [ 4, 3 ], targets: [4] },
-              { 
+              {
                 targets: [5], // Duracion
                 "render": ( data: string, type: any, row: any, meta: any ) => {
                   if(type === 'sort' || type === 'type'){
@@ -2911,7 +2912,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                   }
                 }
               },
-              { 
+              {
                 targets: [8, 9], //Vel min y Vel max
                 "render": ( data: string, type: any, row: any, meta: any ) => {
                   if(type === 'sort' || type === 'type'){
@@ -2926,7 +2927,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           break;
         case 'R003': //REPORTE DE ENTRADA Y SALIDA
           this.dtOptions.columnDefs.push(
-            { 
+            {
               targets: [5], //Duracion
               "render": ( data: string, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
@@ -2943,7 +2944,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           break;
         case 'R005': //REPORTE DE EXCESOS EN ZONA
           this.dtOptions.columnDefs.push(
-            { 
+            {
               targets: [6], //duracion
               "render": ( data: string, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
@@ -2959,7 +2960,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           break;
         case 'R007': //REPORTE DE EVENTOS
           this.dtOptions.columnDefs.push(
-            { 
+            {
               targets: [5, 6], //velocidad gps  y velocidad_can
               "render": ( data: string, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
@@ -2973,7 +2974,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           break;
         case 'R008': //REPORTE DE POSICIÓN
           this.dtOptions.columnDefs.push(
-            { 
+            {
               targets: [7, 8], //velocidad  y velocidad_can
               "render": ( data: string, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
@@ -2985,7 +2986,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             },
           );
           this.dtOptions.columnDefs.push(
-            { 
+            {
               targets: [9], //odometro
               "render": ( data: string, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
@@ -2999,7 +3000,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           break;
         case 'R011': //REPORTE DE FRENADA Y ACELERACIÓN BRUSCA
         case 'R012': //REPORTE DE DISTRACCIÓN Y POSIBLE FATIGA
-        
+
         case 'R014': //REPORTE DE FATIGA EXTREMA
         case 'R015': //REPORTE DE ANTICOLISIÓN FRONTAL
         case 'R016': //REPORTE DE COLISIÓN CON PEATONES
@@ -3007,7 +3008,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         case 'R018': //REPORTE DE DESVÍO DE CARRIL HACIA LA DERECHA
         case 'R019': //REPORTE DE BLOQUEO DE VISIÓN DE MOBILEYE
           this.dtOptions.columnDefs.push(
-            { 
+            {
               targets: [8, 9], //velocidad gps  y velocidad can
               "render": ( data: string | number, type: any, row: any, meta: any ) => {
                 if(type === 'sort' || type === 'type'){
@@ -3024,7 +3025,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           break;
       }
     }
-    
+
     this.dtOptions2 = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -3127,10 +3128,10 @@ export class ResultComponent implements OnDestroy, OnInit {
       },
       destroy: true,
     };
-    
+
   }
 
-  
+
   prepareStringForComparison(str: string){
     return str.toLowerCase();
   }
@@ -3437,7 +3438,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         //     this.exportOneTable = true;
         //     let arr = [JSON.parse(JSON.stringify(this.sortedData[0]))];
         //     // var arr = [];
-        //     // arr.push([ 
+        //     // arr.push([
         //     //     ['0000000','ABC-123'],
         //     //     [],
         //     //     ['-1', '-2', '-3', '-4', '-5', '-6', '-7', '-8', '-9']
@@ -3456,7 +3457,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         // console.log(this.sortedDataOneTabla );
         // console.log("_____________________________________");
 
-      
+
         this[fn_name as keyof ResultComponent](this.reportOption);
         this.reportOption = 0;
       }
@@ -3477,7 +3478,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       //     this.exportOneTable = true;
       //     let arr = [JSON.parse(JSON.stringify(this.sortedData[0]))];
       //     // var arr = [];
-      //     // arr.push([ 
+      //     // arr.push([
       //     //     ['0000000','ABC-123'],
       //     //     [],
       //     //     ['-1', '-2', '-3', '-4', '-5', '-6', '-7', '-8', '-9']
@@ -3546,7 +3547,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   showModal() {
     this.reportService.modalActive = true;
   }
-  
+
   verTodos(periodo:any, imei:any, dateHour:any, vehiculo:any, dataParam:any) {
     console.log("===========================================");
     console.log(periodo);
@@ -3576,7 +3577,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         console.log(typeof data);
         console.log(data);
         // console.log("---> "+this.report_data.num_rep);
-        
+
         this.reportService.modalActive = true;
 
         this.reportService.objGeneral.data = data;
@@ -3587,7 +3588,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
         console.log(this.reportService.objGeneral);
-        
+
         this.spinner.hide("reportSpinner");
 
         console.log("MODAL ACTIVATE");
@@ -3728,7 +3729,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //this.sortedData.forEach((table_data: any) => {
     sortedData.forEach((table_data: any) => {
-     
+
       if(table_data[1].length > 0){
         column_config = [];
 
@@ -4771,7 +4772,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCuerpo.push({ value: item.nombre_zona, ...this.bodyRowsConfig });
           //cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
           cellsCuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig });
-          
+
           cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
 
           rows.push({
@@ -5240,7 +5241,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // var geocerca_restante_cell_ch_width = "Geocerca ".length;
     var tramo_restante_cell_ch_width = "Tramo ".length;
 
-    
+
     var referencia_motor_cell_ch_width = "Referencia".length;
     var ubicacion_cell_ch_width = "Ubicación".length;
 
@@ -5525,9 +5526,9 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   showModalFatigaExtrema(row:any) {
     console.log("----------- showModalFatigaExtrema -----");
-    
+
     console.log(row);
-    
+
     this.modalDetalleRepFatigaExtrema = true;
     this.detalleFatigaExtrema = row;
   }
@@ -6597,7 +6598,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig },
 
                 { value: item.tramo, ...this.bodyRowsConfig },
-                { value: item.referencia, ...this.bodyRowsConfig }, 
+                { value: item.referencia, ...this.bodyRowsConfig },
               ],
               height: this.bodyRowsHeight,
             });
@@ -6793,7 +6794,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           nom_excel = "ReporteAceleracionBrusca.xlsx";
         }
       }
-    } 
+    }
 
 
 
@@ -7085,7 +7086,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         }
       }
     }
-    
+
 
     var exportFileEx = [];
     var bol_datos_ex = false;
@@ -7182,9 +7183,9 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           var cellsCabecera = [];
 
-          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig }); 
-          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig }); 
-          cellsCabecera.push({ value: "Hora", ...this.colHeaderConfig }); 
+          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig });
+          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig });
+          cellsCabecera.push({ value: "Hora", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Código", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Placa", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
@@ -7200,7 +7201,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCabecera.push({ value: "Punto Cercano", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Ubicación", ...this.colHeaderConfig });
 
-          rows.push({ 
+          rows.push({
             cells: cellsCabecera,
             height: this.colsHeaderHeight
           });
@@ -7259,13 +7260,13 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var cellsCuerpo = [];
 
-            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig }); 
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig }); 
-            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig }); 
+            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
-  
+
             cellsCuerpo.push({ value: item.idConductor, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.conductor, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.velGPS+" Km/h", ...this.bodyRowsConfig });
@@ -7276,8 +7277,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             cellsCuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
-  
-            rows.push({ 
+
+            rows.push({
               cells: cellsCuerpo,
               height: this.bodyRowsHeight
             });
@@ -7315,8 +7316,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           var cellsCabecera = [];
 
-          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig }); 
-          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig }); 
+          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig });
+          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Código", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Placa", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
@@ -7332,7 +7333,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCabecera.push({ value: "Punto Cercano", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Ubicación", ...this.colHeaderConfig });
 
-          rows.push({ 
+          rows.push({
             cells: cellsCabecera,
             height: this.colsHeaderHeight
           });
@@ -7384,12 +7385,12 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var cellsCuerpo = [];
 
-            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig }); 
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig }); 
+            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
-  
+
             cellsCuerpo.push({ value: item.idConductor, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.conductor, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.velGPS+" Km/h", ...this.bodyRowsConfig });
@@ -7400,8 +7401,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             cellsCuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
-  
-            rows.push({ 
+
+            rows.push({
               cells: cellsCuerpo,
               height: this.bodyRowsHeight
             });
@@ -10461,7 +10462,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             height: this.colsHeaderHeight
           });
 
-          
+
 
           // data[1].forEach(function(item:any, index:any){
           data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; descripcion: string; ai1x: number; tramo: string; PC: any; tipo_mantenimiento: any; campoResumen: any; GPS_speed: any; convoy: any; referencia: any}, index: number) => {
@@ -10542,7 +10543,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             { width: this.calculateColWidth(referencia_cell_ch_width) },
             { width: this.calculateColWidth(ubicacion_cell_ch_width) },
           );
-          
+
           exportFileEx.push({
             freezePane: {
                 rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
@@ -10555,14 +10556,14 @@ export class ResultComponent implements OnDestroy, OnInit {
           codigo_cell_ch_width = "Codigo".length;
           placa_cell_ch_width = "placa".length;
           tipo_unidad_cell_ch_width = "Tipo de Unidad".length;
-      
+
           id_conductor_cell_ch_width = "ID conductor".length;
           conductor_cell_ch_width = "Conductor".length;
-      
+
           vel_gps_cell_ch_width = "Vel. GPS".length;
           vel_can_cell_ch_width = "Vel. CAN".length;
           ai1_cell_ch_width = "ai1".length;
-      
+
           tramo_cell_ch_width = "tramo".length;
           referencia_cell_ch_width = "Referencia".length;
           ubicacion_cell_ch_width = "Ubicacion".length;
@@ -10755,10 +10756,10 @@ export class ResultComponent implements OnDestroy, OnInit {
             distancia_cell_ch_width = Math.max(distancia_cell_ch_width, (item.distancia??'').toString().length);
             o_inicial_cell_ch_width = Math.max(o_inicial_cell_ch_width, (item.odometro_inicial??'').toString().length);
             o_final_cell_ch_width = Math.max(o_final_cell_ch_width, (item.odometro_final??'').toString().length);
-            
+
             id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
             conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
-          
+
 
             rows.push({
               cells: [
@@ -10828,7 +10829,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
             conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
-          
+
 
             rows.push({
 
@@ -10919,14 +10920,14 @@ export class ResultComponent implements OnDestroy, OnInit {
           placa_cell_ch_width = "placa".length;
           origen_cell_ch_width = "origen".length;
           destino_cell_ch_width = "destino".length;
-      
+
           distancia_cell_ch_width = "distancia".length;
           o_inicial_cell_ch_width = "O.Inicial".length;
           o_final_cell_ch_width = "O.Final".length;
-      
+
           id_conductor_cell_ch_width = "ID conductor".length;
           conductor_cell_ch_width = "conductor".length;
-          
+
         }
         // //********************************************* excel version 1 *********************************
 
@@ -11046,7 +11047,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // var pc_cell_ch_width = "Punto Cercano".length;
     // var ubicacion_cell_ch_width = "Ubicacion".length;
 
-    
+
     // var allRows = [
     var allRows: AllRows[] = [
         {
@@ -11143,7 +11144,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             // <th>Id Conductor</th>
             // <th>Conductor</th>
 
-  
+
             // var codigo_cell_ch_width = "codigo".length;
             // var placa_cell_ch_width = "placa".length;
             // // var tipo_unidad_cell_ch_width = "Tipo de Unidad".length;
@@ -11162,7 +11163,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             // <td>{{row.idConductor}}</td>
             // <td>{{row.conductor}}</td>
 
-            
+
             rows.push({
               cells: [
                 { value: (index + 1), ...this.bodyRowsConfig },
@@ -11361,7 +11362,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // var pc_cell_ch_width = "Punto Cercano".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
 
-    
+
     // var allRows = [
     var allRows: AllRows[] = [
         {
@@ -11492,7 +11493,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; descripcion: string; ai1x: number; tramo: string; PC: any; tipo_mantenimiento: any; campoResumen: any; GPS_speed: any; velGPS: any; convoy: any; notificacion: any;}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
-            
+
             codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
             placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
             tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
@@ -11551,7 +11552,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             { width: this.calculateColWidth(conductor_cell_ch_width) },
             { width: this.calculateColWidth(tramo_cell_ch_width) },
             { width: this.calculateColWidth(ubicacion_cell_ch_width) },
-        
+
           );
 
           exportFileEx.push({
@@ -11565,7 +11566,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           codigo_cell_ch_width = "codigo".length;
           placa_cell_ch_width = "placa".length;
-          tipo_unidad_cell_ch_width = "Tipo de Unidad".length;      
+          tipo_unidad_cell_ch_width = "Tipo de Unidad".length;
           id_conductor_cell_ch_width = "ID conductor".length;
           conductor_cell_ch_width = "conductor".length;
           tramo_cell_ch_width = "tramo".length;
@@ -11611,7 +11612,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         { width: this.calculateColWidth(conductor_cell_ch_width) },
         { width: this.calculateColWidth(tramo_cell_ch_width) },
         { width: this.calculateColWidth(ubicacion_cell_ch_width) },
-    
+
       );
 
       exportFileEx.push({
@@ -11643,7 +11644,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
   }
 
-  
+
   exportExcelAlcotester(vrs: number) {
     // dateHour();
     var nom_excel: string = 'ReporteAlcotester.xlsx';
@@ -11671,7 +11672,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var referencia_cell_ch_width = "Referencia".length;
     var ubicacion_cell_ch_width = "Ubicacion".length;
 
-    
+
     // var allRows = [
     var allRows: AllRows[] = [
         {
@@ -11806,7 +11807,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             data[1].forEach((item: { fecha: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps_speed: any; vel_can: any; descripcion: string; ai1x: number; tramo: string; PC: any; tipo_mantenimiento: any; campoResumen: any; GPS_speed: any; velGPS: any; convoy: any; notificacion: any; resultados:any; referencia:any}, index: number) => {
 
             var ubicacion = item.latitud + "," + item.longitud;
-            
+
             codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
             placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
             tipo_unidad_cell_ch_width = Math.max(tipo_unidad_cell_ch_width, (item.tipo_unidad??'').toString().length);
@@ -11815,7 +11816,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             tramo_cell_ch_width = Math.max(tramo_cell_ch_width, (item.tramo??'').toString().length);
             referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
             ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
-            
+
 
             rows.push({
 
@@ -11881,7 +11882,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           codigo_cell_ch_width = "codigo".length;
           placa_cell_ch_width = "placa".length;
-          tipo_unidad_cell_ch_width = "Tipo de Unidad".length;      
+          tipo_unidad_cell_ch_width = "Tipo de Unidad".length;
           resultados_cell_ch_width = "Resultados".length;
 
           tramo_cell_ch_width = "Tramo".length;
@@ -11989,7 +11990,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     //     }
     //   }
     // }
-    
+
 
     var exportFileEx = [];
     var bol_datos_ex = false;
@@ -12033,7 +12034,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       // //this.data.forEach((table_data: any) => {
 			// var TEM = [[[],this.tablaFormatoBetsy_1]]
-  
+
 			// //vm.datos.forEach( (data,idx) => {
       //   console.log("DATA =======");
 			// 	console.log(data);
@@ -12115,9 +12116,9 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           var cellsCabecera = [];
 
-          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig }); 
-          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig }); 
-          cellsCabecera.push({ value: "Hora", ...this.colHeaderConfig }); 
+          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig });
+          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig });
+          cellsCabecera.push({ value: "Hora", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Código", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Placa", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
@@ -12141,7 +12142,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCabecera.push({ value: "Operador de Monitoreo", ...this.colHeaderConfig });
 
 
-          rows.push({ 
+          rows.push({
             cells: cellsCabecera,
             height: this.colsHeaderHeight
           });
@@ -12183,13 +12184,13 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var cellsCuerpo = [];
 
-            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig }); 
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig }); 
-            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig }); 
+            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd", ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChs(item.fecha), format: "hh:mm:ss", ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
-  
+
             cellsCuerpo.push({ value: item.idConductor, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.conductor, ...this.bodyRowsConfig });
 
@@ -12208,7 +12209,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             cellsCuerpo.push({ value: item.operador_monitoreo, ...this.bodyRowsConfig });
 
-            rows.push({ 
+            rows.push({
               cells: cellsCuerpo,
               height: this.bodyRowsHeight
             });
@@ -12221,8 +12222,8 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           var cellsCabecera = [];
 
-          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig }); 
-          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig }); 
+          cellsCabecera.push({ value: "Item", ...this.colHeaderConfig });
+          cellsCabecera.push({ value: "Fecha", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Código", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Placa", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig });
@@ -12238,7 +12239,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           cellsCabecera.push({ value: "Punto Cercano", ...this.colHeaderConfig });
           cellsCabecera.push({ value: "Ubicación", ...this.colHeaderConfig });
 
-          rows.push({ 
+          rows.push({
             cells: cellsCabecera,
             height: this.colsHeaderHeight
           });
@@ -12263,7 +12264,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             criterio_evaluacion_cell_ch_width = Math.max(criterio_evaluacion_cell_ch_width, (item.criterio_evaluacion??'').toString().length);
             observacion_evaluacion_cell_ch_width = Math.max(observacion_evaluacion_cell_ch_width, (item.observacion_evaluacion??'').toString().length);
 
-          
+
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.vel_can??'').toString().length);
             // descripcion_cell_ch_width = Math.max(descripcion_cell_ch_width, (item.descripcion??'').toString().length);
@@ -12277,12 +12278,12 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             var cellsCuerpo = [];
 
-            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig }); 
-            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig }); 
+            cellsCuerpo.push({ value: (index + 1), ...this.bodyRowsConfig });
+            cellsCuerpo.push({ value: this.isChe(item.fecha), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.codigo, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.placa, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.tipo_unidad, ...this.bodyRowsConfig });
-  
+
             cellsCuerpo.push({ value: item.idConductor, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.conductor, ...this.bodyRowsConfig });
 
@@ -12298,10 +12299,10 @@ export class ResultComponent implements OnDestroy, OnInit {
             cellsCuerpo.push({ value: item.tramo, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: item.PC, ...this.bodyRowsConfig });
             cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig });
-  
+
             cellsCuerpo.push({ value: item.operador_monitoreo, ...this.bodyRowsConfig });
 
-            rows.push({ 
+            rows.push({
               cells: cellsCuerpo,
               height: this.bodyRowsHeight
             });
@@ -12482,7 +12483,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   exportExcelEventosCIPIA(vrs: number) {
 
     var rs = this.reportService.eC;
-    
+
     var cont = 1;
     for (let clave in rs){
         console.log(clave);
@@ -12495,15 +12496,15 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (rs[clave]) {
             cont = cont +1;
             if (this.chkDateHour && clave == 'Fecha') { cont = cont +1; }
-            if (this.chkDateHour && clave == 'FechaServidor') { cont = cont +1; }  
-            if (clave == 'EnlaceArchivo') { cont = cont +1; }  
-            if (clave == 'Parametros') { cont = cont - 1; }  
+            if (this.chkDateHour && clave == 'FechaServidor') { cont = cont +1; }
+            if (clave == 'EnlaceArchivo') { cont = cont +1; }
+            if (clave == 'Parametros') { cont = cont - 1; }
 
         }
     }
 
     console.log("cont = "+ cont);
-    
+
 
 
     //vm.dateHour();
@@ -12543,7 +12544,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var parametros_cell_ch_width = "Parametros".length; //Enlace a Archivo
 
 
-    
+
 
     // var allRows = [
     var allRows: AllRows[] = [
@@ -12675,14 +12676,14 @@ export class ResultComponent implements OnDestroy, OnInit {
 
               if (rs.IdConductor) { array_campos_cuerpo.push({ value: item.idConductor, ...this.bodyRowsConfig }); };
               if (rs.Conductor) { array_campos_cuerpo.push({ value: item.conductor, ...this.bodyRowsConfig }); };
-              
+
 
               if (rs.VelMobileye) { array_campos_cuerpo.push({ value: item.vel_mobileye, ...this.bodyRowsConfig }); };
               if (rs.VelGPS) { array_campos_cuerpo.push({ value: item.vel_gps, ...this.bodyRowsConfig }); };
               if (rs.VelGPSspeed) { array_campos_cuerpo.push({ value: item.vel_gps_speed, ...this.bodyRowsConfig }); };
               if (rs.VelCAN) { array_campos_cuerpo.push({ value: item.vel_can, ...this.bodyRowsConfig }); };
               if (rs.VelECO) { array_campos_cuerpo.push({ value: item.vel_eco, ...this.bodyRowsConfig }); };
-    
+
 
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
@@ -12690,8 +12691,8 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.Ubicacion) { array_campos_cuerpo.push({ formula: 'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig}); };
 
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
-              
-              if (rs.EnlaceArchivo) { 
+
+              if (rs.EnlaceArchivo) {
                   array_campos_cuerpo.push({ formula: 'HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
                   array_campos_cuerpo.push({ formula: 'HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });   };
 
@@ -12756,16 +12757,16 @@ export class ResultComponent implements OnDestroy, OnInit {
       codigo_cell_ch_width = "codigo".length;
       placa_cell_ch_width = "placa".length;
       tipo_unidad_cell_ch_width = "Tipo unidad".length;
-  
+
       id_conductor_cell_ch_width = "Id Conductor".length;
       conductor_cell_ch_width = "Conductor".length;
-  
+
       vel_mobileye_cell_ch_width = "vel.Mobileye".length;
       vel_gps_cell_ch_width = "vel.GPS".length;
       vel_gps_speed_cell_ch_width = "vel.GPS speed".length;
       vel_can_cell_ch_width = "vel.CAN".length;
       vel_eco_cell_ch_width = "vel.ECO".length;
-  
+
       zona_cell_ch_width = "Geocerca".length;
       pc_cell_ch_width = "Punto Cercano".length;
       ubicacion_cell_ch_width = "Ubicacion".length;
@@ -12793,31 +12794,31 @@ export class ResultComponent implements OnDestroy, OnInit {
     if (vrs == 2) {
         allRows[0].cells![0].colSpan = table_width;
 
-   
+
         column_config = [ { width: this.w_item }  ];
 
         if (!this.chkDateHour && rs.Fecha) {  column_config.push( { width: this.w_date_and_hour } );  };
         if (this.chkDateHour && rs.Fecha) { column_config.push( { width: this.w_date } );  }
         if (this.chkDateHour && rs.Fecha) { column_config.push( { width: this.w_hour } );  }
-  
+
         if (!this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  column_config.push( { width: this.w_date_and_hour } );  };
         if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_date } );  }
         if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  }
-  
+
         if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(evento_cell_ch_width) }  );  };
         if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
         if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
         if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
-  
+
         if (rs.IdConductor) { column_config.push( { width: this.calculateColWidth(id_conductor_cell_ch_width) }  ); };
         if (rs.Conductor) {   column_config.push( { width: this.calculateColWidth(conductor_cell_ch_width) }  ); };
-  
+
         if (rs.VelMobileye) { column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) }  ); };
         if (rs.VelGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) }  ); };
         if (rs.VelGPSspeed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) }  ); };
         if (rs.VelCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) }  ); };
         if (rs.VelECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) }  ); };
-  
+
         if (rs.Zona) { column_config.push( { width: this.calculateColWidth(zona_cell_ch_width) }  ); };
         if (rs.PuntoCercano) { column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) }  ); };
         if (rs.Ubicacion) { column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) }  ); };
@@ -12827,7 +12828,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         if (rs.Parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) }  );  };
 
-        
+
 
 
       exportFileEx.push({
@@ -12863,7 +12864,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   exportExcelEventosEvaluacionCIPIA(vrs: number) {
 
     var rs = this.reportService.eC;
-    
+
     var cont = 1;
     for (let clave in rs){
         console.log(clave);
@@ -12876,15 +12877,15 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (rs[clave]) {
             cont = cont +1;
             if (this.chkDateHour && clave == 'Fecha') { cont = cont +1; }
-            if (this.chkDateHour && clave == 'FechaServidor') { cont = cont +1; }  
-            if (clave == 'EnlaceArchivo') { cont = cont +1; }  
-            if (clave == 'Parametros') { cont = cont - 1; }  
+            if (this.chkDateHour && clave == 'FechaServidor') { cont = cont +1; }
+            if (clave == 'EnlaceArchivo') { cont = cont +1; }
+            if (clave == 'Parametros') { cont = cont - 1; }
 
         }
     }
 
     console.log("cont = "+ cont);
-    
+
 
 
     //vm.dateHour();
@@ -13039,7 +13040,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               id_conductor_cell_ch_width = Math.max(id_conductor_cell_ch_width, (item.idConductor??'').toString().length);
               conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
 
-               
+
               criterio_evaluacion_cell_ch_width = Math.max(criterio_evaluacion_cell_ch_width, (item.criterio_evaluacion??'').toString().length);
 
               observacion_cell_ch_width = Math.max(observacion_cell_ch_width, (item.observacion_evaluacion??'').toString().length);
@@ -13078,7 +13079,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
               if (rs.IdConductor) { array_campos_cuerpo.push({ value: item.idConductor, ...this.bodyRowsConfig }); };
               if (rs.Conductor) { array_campos_cuerpo.push({ value: item.conductor, ...this.bodyRowsConfig }); };
-              
+
 
               if (!this.chkDateHour && rs.FechaEvaluacion) { array_campos_cuerpo.push({ value: this.isChe(item.fecha_evaluacion), format: "yyyy/mm/dd hh:mm:ss", ...this.bodyRowsConfig }); };
               if (this.chkDateHour && rs.FechaEvaluacion) { array_campos_cuerpo.push({ value: this.isChe(item.fecha_evaluacion), format: "yyyy/mm/dd", ...this.bodyRowsConfig }); }
@@ -13093,14 +13094,14 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.VelGPSspeed) { array_campos_cuerpo.push({ value: item.vel_gps_speed +"", ...this.bodyRowsConfig }); };
               if (rs.VelCAN) { array_campos_cuerpo.push({ value: item.vel_can +"", ...this.bodyRowsConfig }); };
               if (rs.VelECO) { array_campos_cuerpo.push({ value: item.vel_eco +"", ...this.bodyRowsConfig }); };
-    
+
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
               //if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
               if (rs.Ubicacion) { array_campos_cuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig, fontSize: this.c1_2 }); };
 
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
-              if (rs.EnlaceArchivo) { 
+              if (rs.EnlaceArchivo) {
                   array_campos_cuerpo.push({ formula: 'HYPERLINK("'+item.enlaceImageCIPIA+'","Imagen")', color:'#0000FF', ...this.bodyRowsConfig });
                   array_campos_cuerpo.push({ formula: 'HYPERLINK("'+item.enlaceVideoCIPIA+'","Video")', color:'#0000FF', ...this.bodyRowsConfig });   };
 
@@ -13137,7 +13138,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
 
-      
+
       if (rs.IdConductor) { column_config.push( { width: this.calculateColWidth(id_conductor_cell_ch_width) }  ); };
       if (rs.Conductor) {   column_config.push( { width: this.calculateColWidth(conductor_cell_ch_width) }  ); };
 
@@ -13149,7 +13150,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (rs.Observacion) { column_config.push( { width: this.calculateColWidth(observacion_cell_ch_width) }  ); };
 
 
-      
+
       if (rs.VelMobileye) { column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) }  ); };
       if (rs.VelGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) }  ); };
       if (rs.VelGPSspeed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) }  ); };
@@ -13181,13 +13182,13 @@ export class ResultComponent implements OnDestroy, OnInit {
       codigo_cell_ch_width = "codigo".length;
       placa_cell_ch_width = "placa".length;
       tipo_unidad_cell_ch_width = "Tipo unidad".length;
-  
+
       id_conductor_cell_ch_width = "Id Conductor".length;
       conductor_cell_ch_width = "Conductor".length;
-  
+
       // fecha_evaluacion_cell_ch_width = "Fecha de Evaluación".length;
       criterio_evaluacion_cell_ch_width = "Criterio de Evaluación".length;
-  
+
       observacion_cell_ch_width = "Observación".length;
       // validacion_cell_ch_width = "Validación".length;
 
@@ -13196,7 +13197,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       vel_gps_speed_cell_ch_width = "vel.GPS speed".length;
       vel_can_cell_ch_width = "vel.CAN".length;
       vel_eco_cell_ch_width = "vel.ECO".length;
-  
+
       zona_cell_ch_width = "Zona".length;
       pc_cell_ch_width = "Punto Cercano".length;
       ubicacion_cell_ch_width = "Ubicacion".length;
@@ -13225,13 +13226,13 @@ export class ResultComponent implements OnDestroy, OnInit {
     if (vrs == 2) {
         allRows[0].cells![0].colSpan = table_width;
 
-   
+
         column_config = [ { width: this.w_item }  ];
 
         if (!this.chkDateHour && rs.Fecha) {  column_config.push( { width: this.w_date_and_hour } );  };
         if (this.chkDateHour && rs.Fecha) { column_config.push( { width: this.w_date } );  }
         if (this.chkDateHour && rs.Fecha) { column_config.push( { width: this.w_hour } );  }
-  
+
         if (!this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  column_config.push( { width: this.w_date_and_hour } );  };
         if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_date } );  };
         if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  };
@@ -13241,27 +13242,27 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
         if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
         if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
-  
+
         if (rs.IdConductor) { column_config.push( { width: this.calculateColWidth(id_conductor_cell_ch_width) }  ); };
         if (rs.Conductor) {   column_config.push( { width: this.calculateColWidth(conductor_cell_ch_width) }  ); };
-  
+
 
 
         if (!this.chkDateHour && rs.FechaEvaluacion) {  column_config.push( { width: this.w_date_and_hour } );  };
         if (this.chkDateHour && rs.FechaEvaluacion)  { column_config.push( { width: this.w_date } );  };
         if (this.chkDateHour && rs.FechaEvaluacion) { column_config.push( { width: this.w_hour } );  };
-  
+
         if (rs.CriterioEvaluacion) { column_config.push( { width: this.calculateColWidth(criterio_evaluacion_cell_ch_width) }  ); };
         if (rs.Observacion) { column_config.push( { width: this.calculateColWidth(observacion_cell_ch_width) }  ); };
-  
 
-        
+
+
         if (rs.VelMobileye) { column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) }  ); };
         if (rs.VelGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) }  ); };
         if (rs.VelGPSspeed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) }  ); };
         if (rs.VelCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) }  ); };
         if (rs.VelECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) }  ); };
-  
+
         if (rs.Zona) { column_config.push( { width: this.calculateColWidth(zona_cell_ch_width) }  ); };
         if (rs.PuntoCercano) { column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) }  ); };
         if (rs.Ubicacion) { column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) }  ); };
@@ -13272,7 +13273,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         // if (rs.Parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) }  );  };
         if (rs.OperadorMonitoreo) { column_config.push( { width: this.calculateColWidth(operador_monitoreo_cell_ch_width) }  );  };
 
-        
+
 
 
       exportFileEx.push({
@@ -13785,7 +13786,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 { value: item.nombre_zona, ...this.bodyRowsConfig },
                 { value: item.v0+" Km/h", ...this.bodyRowsConfig },
                 { value: item.velocidad+" Km/h", ...this.bodyRowsConfig },
-                
+
                 //{ value: ubicacion, ...this.bodyRowsConfig },
                 { formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig },
 
@@ -13932,14 +13933,14 @@ export class ResultComponent implements OnDestroy, OnInit {
       }
       console.log(row);
       console.log(row.criterio_evaluacion);
-      
+
       row.es_antiguo_criterio = false;
 
       if (row.criterio_evaluacion == "INCLINACIÓN DE LA CABEZA HACIA ADELANTE Y/O HACIA ATRÁS"  ||
         row.criterio_evaluacion == "PARPADEO INVOLUNTARIO"  ||
         row.criterio_evaluacion == "GESTOS O MOVIMIENTOS A MANERA DE AUTOGESTIÓN"  ||
         row.criterio_evaluacion == "BOSTEZO CONTINUO (>=3 EN 30 SEG.)" ||
-        row.criterio_evaluacion == "MANO CON ACCIÓN DE FROTACIÓN EN LOS OJOS" 
+        row.criterio_evaluacion == "MANO CON ACCIÓN DE FROTACIÓN EN LOS OJOS"
       ) {
         row.senales_posible_fatiga = true;
       } else {
@@ -13974,12 +13975,12 @@ export class ResultComponent implements OnDestroy, OnInit {
               this.data[0][1][index].imei = this.data[0][1][index].tracker_imei;
               this.data[0][1][index].event_id = this.data[0][1][index].evento_id;
 
-              
+
               arr_params.push( this.data[0][1][index] );
           }
 
       }
-    
+
 
 
       var dataParams = {array_items:arr_params, user_id:this.reportService.getUserId()};
@@ -13988,14 +13989,14 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       this.http.post(environment.apiUrl + "/api/saveEventUserEvaluacion", dataParams).subscribe({
         next: datos => {
-  
+
           console.log("========== values");
           console.log(datos);
           this.spinner.hide("reportSpinner");
         }
       });
 
-      
+
 
     // this.sortedData.forEach((data: any,idx:any) => {
 
@@ -14029,7 +14030,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // console.log(this.data);
     // console.log(this.arr_evaluacion2);
 
-    
+
     // var tipoR = vm.optionR();
     // var rutaUrl = "X";
     // if (tipoR == 101) {
@@ -14040,7 +14041,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     var dataParams:any =  this.reportService.getParams();
 
-    
+
 
     dataParams['fecha_hasta2'] = dataParams['fecha_hasta'];
     dataParams['fecha_hasta'] = moment(new Date()).format("YYYY-MM-DD") + 'T' + moment(new Date()).format("HH:mm:ss") + '-05:00';
@@ -14064,7 +14065,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
           // console.log("-------------- nuevas tramas "+i);
           // console.log(this.data);
-          
+
           console.log(values[i][1]);
           this.data[i][0] = values[i][0];
           this.data[i][1] = values[i][1];
@@ -14123,14 +14124,14 @@ export class ResultComponent implements OnDestroy, OnInit {
     // 	console.log(values);
     // 	console.log(values[0]);
     // 	// vm.datos = values[0];
-      
+
     // 	for (let i = 0; i < vm.datos.length; i++) {
     // 		//const lista_eventos = vm.datos[i][1];
     // 		console.log("-------------- nuevas tramas");
     // 		console.log(values[0][i][1]);
     // 		vm.datos[i][0] = values[0][i][0];
     // 		vm.datos[i][1] = values[0][i][1];
-    
+
     // 		for (let j = 0; j < vm.datos[i][1].length; j++) {
     // 			var row = vm.datos[i][1][j];
     // 			for (let i2 = 0; i2 < vm.arr_evaluacion2.length; i2++) {
@@ -14147,7 +14148,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // 	console.log("==========  vm.datos :");
     // 	console.log(vm.datos);
     // 	console.log("==========  vm.arr_evaluacion 2 :");
-      
+
     // 	// console.log(vm.arr_evaluacion);
     // 	console.log(vm.arr_evaluacion2);
     // 	vm.arr_evaluacion = undefined;
@@ -14161,7 +14162,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     // console.log("============= 2 ============");
     // console.log(vm.datos);
 
-  
+
 }
 
   exportExcelExcesosVelocidadDuracionToleranciaRiesgo(vrs: number) {
@@ -14186,7 +14187,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     if (rs.Ubicacion) {  table_width++; };
 
     console.log("cont = "+ table_width);
-    
+
     //vm.dateHour();
     var exportFileEx = [];
     var bol_datos_ex = false;
@@ -14295,7 +14296,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 
-          
+
           rows.push({
             cells: array_campos_cabecera ,height: this.colsHeaderHeight
           });
@@ -14314,7 +14315,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               leve_cell_ch_width = Math.max(leve_cell_ch_width, (item.vel_leve??'').toString().length);
               grave_cell_ch_width = Math.max(grave_cell_ch_width, (item.vel_grave??'').toString().length);
               muy_grave_cell_ch_width = Math.max(muy_grave_cell_ch_width, (item.vel_muy_grave??'').toString().length);
-              
+
               //==
               duracion_cell_ch_width = Math.max(duracion_cell_ch_width, (item.duracion2??'').toString().length);
 
@@ -14329,7 +14330,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
 
 
-          
+
               var color = "";
               if (item.es_resumen) {
                 color = "#E5E3D9";
@@ -14340,7 +14341,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
               // array_campos_cuerpo.push({ value: (index + 1), background: color, ...this.bodyRowsConfig });
               array_campos_cuerpo.push({ value: item.col1, background: color, ...this.bodyRowsConfig });
-              
+
               if (rs.Fecha) { array_campos_cuerpo.push({ value: this.isChe(item.fecha_inicio), background: color, format: "yyyy/mm/dd", ...this.bodyRowsConfig }); };
               if (rs.Hora) { array_campos_cuerpo.push({ value: this.isChs(item.fecha_inicio), background: color, format: "hh:mm:ss", ...this.bodyRowsConfig }); };
 
@@ -14350,7 +14351,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
               array_campos_cuerpo.push({ value: item.v0, background: color, ...this.bodyRowsConfig });
               if (!this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.velocidad, background: color, ...this.bodyRowsConfig }); };
-              
+
               if (this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.vel_leve, background: color, ...this.bodyRowsConfig }); };
               if (this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.vel_grave, background: color, ...this.bodyRowsConfig }); };
               if (this.reportService.chkRiesgo) { array_campos_cuerpo.push({ value: item.vel_muy_grave, background: color, ...this.bodyRowsConfig }); };
@@ -14359,7 +14360,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               array_campos_cuerpo.push({ value: this.isChs(item.hora_exceso), format: "hh:mm:ss", background: color, ...this.bodyRowsConfig });
               array_campos_cuerpo.push({ value: this.isChs(item.fin_exceso), format: "hh:mm:ss", background: color, ...this.bodyRowsConfig });
               array_campos_cuerpo.push({ value: item.duracion2, background: color, ...this.bodyRowsConfig });
-    
+
               if (rs.IdConductor) { array_campos_cuerpo.push({ value: item.idConductor, background: color, ...this.bodyRowsConfig }); };
               if (rs.Conductor) { array_campos_cuerpo.push({ value: item.conductor, background: color, ...this.bodyRowsConfig }); };
 
@@ -14388,7 +14389,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.Zona) { column_config.push( { width: this.calculateColWidth(zona_cell_ch_width) }  );  };
 
-      column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  ); 
+      column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  );
 
       if (!this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  );  };
 
@@ -14470,7 +14471,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
         if (rs.Zona) { column_config.push( { width: this.calculateColWidth(zona_cell_ch_width) }  );  };
 
-        column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  ); 
+        column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  );
 
         if (!this.reportService.chkRiesgo) { column_config.push( { width: this.calculateColWidth(limite_velocidad_cell_ch_width) }  );  };
 
@@ -14492,7 +14493,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         if (rs.Satelite) { column_config.push( { width: this.calculateColWidth(satelite_cell_ch_width) }  );  };
         if (rs.Ubicacion) { column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) }  );  };
 
-        
+
 
 
       exportFileEx.push({
@@ -14542,7 +14543,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var vel_tolerable_cell_ch_width = "Vel.Tolerable".length;
     var zona_color_cell_ch_width = "Zona Color".length;
 
-    
+
     // var allRows = [
     var allRows: AllRows[] = [
         {
@@ -14620,13 +14621,13 @@ export class ResultComponent implements OnDestroy, OnInit {
             nombre_geocerca_cell_ch_width = Math.max(nombre_geocerca_cell_ch_width, (item.zone_name??'').toString().length);
             latitud_cell_ch_width = Math.max(latitud_cell_ch_width, (item.lat??'').toString().length);
             longitud_cell_ch_width = Math.max(longitud_cell_ch_width, (item.lng??'').toString().length);
-            
+
             velocidad_cell_ch_width = Math.max(velocidad_cell_ch_width, (item.vel_max??'').toString().length);
             vel_muy_grave_cell_ch_width = Math.max(vel_muy_grave_cell_ch_width, (item.vel3_zona??'').toString().length);
             vel_grave_cell_ch_width = Math.max(vel_grave_cell_ch_width, (item.vel2_zona??'').toString().length);
             vel_tolerable_cell_ch_width = Math.max(vel_tolerable_cell_ch_width, (item.vel_zona??'').toString().length);
             zona_color_cell_ch_width = Math.max(zona_color_cell_ch_width, (item.zone_color??'').toString().length);
-  
+
 
 
             rows.push({
@@ -14676,13 +14677,13 @@ export class ResultComponent implements OnDestroy, OnInit {
               nombre_geocerca_cell_ch_width = Math.max(nombre_geocerca_cell_ch_width, (item.zone_name??'').toString().length);
               latitud_cell_ch_width = Math.max(latitud_cell_ch_width, (item.lat??'').toString().length);
               longitud_cell_ch_width = Math.max(longitud_cell_ch_width, (item.lng??'').toString().length);
-              
+
               velocidad_cell_ch_width = Math.max(velocidad_cell_ch_width, (item.vel_max??'').toString().length);
               vel_muy_grave_cell_ch_width = Math.max(vel_muy_grave_cell_ch_width, (item.vel3_zona??'').toString().length);
               vel_grave_cell_ch_width = Math.max(vel_grave_cell_ch_width, (item.vel2_zona??'').toString().length);
               vel_tolerable_cell_ch_width = Math.max(vel_tolerable_cell_ch_width, (item.vel_zona??'').toString().length);
               zona_color_cell_ch_width = Math.max(zona_color_cell_ch_width, (item.zone_color??'').toString().length);
-    
+
 
             rows.push({
 
@@ -14712,7 +14713,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             column_config = [
               { width: this.w_item },
             ];
-   
+
             column_config.push(
               { width: this.calculateColWidth(nro_geocerca_cell_ch_width) },
               { width: this.calculateColWidth(nombre_geocerca_cell_ch_width) },
@@ -14741,14 +14742,14 @@ export class ResultComponent implements OnDestroy, OnInit {
             nombre_geocerca_cell_ch_width = "Nombre Geocerca".length;
             latitud_cell_ch_width = "Latitud".length;
             longitud_cell_ch_width = "Longitud".length;
-        
+
             velocidad_cell_ch_width = "Velocidad".length;
             vel_muy_grave_cell_ch_width = "Vel.Muy Grave".length;
             vel_grave_cell_ch_width = "Vel.Grave".length;
             vel_tolerable_cell_ch_width = "Vel.Tolerable".length;
             zona_color_cell_ch_width = "Zona Color".length;
 
-            
+
 
 
         }
@@ -14835,7 +14836,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var latitud2_cell_ch_width = "Latitud 2".length;
     var longitud2_cell_ch_width = "Longitud 2".length;
 
-    
+
     // var allRows = [
     var allRows: AllRows[] = [
         {
@@ -14917,7 +14918,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             visibilidad_nombre_cell_ch_width = Math.max(visibilidad_nombre_cell_ch_width, (item.geopunto_nombre_visible??'').toString().length);
             latitud2_cell_ch_width = Math.max(latitud2_cell_ch_width, (item.lat_1??'').toString().length);
             longitud2_cell_ch_width = Math.max(longitud2_cell_ch_width, (item.lng_1??'').toString().length);
-  
+
 
             rows.push({
               cells: [
@@ -14970,7 +14971,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             visibilidad_nombre_cell_ch_width = Math.max(visibilidad_nombre_cell_ch_width, (item.geopunto_nombre_visible??'').toString().length);
             latitud2_cell_ch_width = Math.max(latitud2_cell_ch_width, (item.lat_1??'').toString().length);
             longitud2_cell_ch_width = Math.max(longitud2_cell_ch_width, (item.lng_1??'').toString().length);
-  
+
             rows.push({
 
               cells: [
@@ -14998,7 +14999,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             column_config = [
               { width: this.w_item },
             ];
-   
+
             column_config.push(
               { width: this.calculateColWidth(nro_punto_cell_ch_width) },
               { width: this.calculateColWidth(nombre_punto_cell_ch_width) },
@@ -15021,13 +15022,13 @@ export class ResultComponent implements OnDestroy, OnInit {
               title: "Resultado1", //data[0][1],
               rows: rows
             });
-            
+
             nro_punto_cell_ch_width = "Nº Punto".length;
             nombre_punto_cell_ch_width = "Nombre Punto".length;
             latitud_cell_ch_width = "Latitud".length;
             longitud_cell_ch_width = "Longitud".length;
             color_cell_ch_width = "Color".length;
-        
+
             visibilidad_punto_cell_ch_width = "Visibilidad Punto".length;
             visibilidad_nombre_cell_ch_width = "Visibilidad Nombre".length;
             latitud2_cell_ch_width = "Latitud 2".length;
@@ -15120,7 +15121,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var vel_tolerable_cell_ch_width = "Vel.Tolerable".length;
     var zona_color_cell_ch_width = "Zona Color".length;
 
-  
+
     // var allRows = [
     var allRows: AllRows[] = [
         {
@@ -15207,7 +15208,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_grave_cell_ch_width = Math.max(vel_grave_cell_ch_width, (item.v2??'').toString().length);
             vel_tolerable_cell_ch_width = Math.max(vel_tolerable_cell_ch_width, (item.v1??'').toString().length);
             zona_color_cell_ch_width = Math.max(zona_color_cell_ch_width, (item.geocerca_color??'').toString().length);
-  
+
             rows.push({
               cells: [
                 { value: (index + 1), ...this.bodyRowsConfig },
@@ -15260,13 +15261,13 @@ export class ResultComponent implements OnDestroy, OnInit {
               longitud_cell_ch_width = Math.max(longitud_cell_ch_width, (item.lng??'').toString().length);
               radio_cell_ch_width = Math.max(radio_cell_ch_width, (item.radio??'').toString().length);
               diametro_cell_ch_width = Math.max(diametro_cell_ch_width, (item.diametro??'').toString().length);
-  
+
               velocidad_cell_ch_width = Math.max(velocidad_cell_ch_width, (item.v0??'').toString().length);
               vel_muy_grave_cell_ch_width = Math.max(vel_muy_grave_cell_ch_width, (item.v3??'').toString().length);
               vel_grave_cell_ch_width = Math.max(vel_grave_cell_ch_width, (item.v2??'').toString().length);
               vel_tolerable_cell_ch_width = Math.max(vel_tolerable_cell_ch_width, (item.v1??'').toString().length);
               zona_color_cell_ch_width = Math.max(zona_color_cell_ch_width, (item.geocerca_color??'').toString().length);
-    
+
 
             rows.push({
 
@@ -15298,7 +15299,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             column_config = [
               { width: this.w_item },
             ];
-   
+
             column_config.push(
               { width: this.calculateColWidth(nro_geocerca_cell_ch_width) },
               { width: this.calculateColWidth(nombre_geocerca_cell_ch_width) },
@@ -15338,7 +15339,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             vel_tolerable_cell_ch_width = "Vel.Tolerable".length;
             zona_color_cell_ch_width = "Zona Color".length;
 
-            
+
 
 
         }
@@ -15432,7 +15433,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
   //================== Datos reporte formato Betsy =====================
 
-  //  tablaFormatoBetsy_1: any = []; 
+  //  tablaFormatoBetsy_1: any = [];
    rep_contReport : any;
    arr_evaluacion2:any;
 
@@ -15444,7 +15445,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   //================ Datos reporte formato Betsy FIN ===================
 
   fatigaExtremaNewFormato (){
-			
+
     //console.log("_______________fatigaExtremaNewFormato");
     // var id = parseInt(reportServices.getuserD());
     // console.log(id);
@@ -15480,13 +15481,13 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       for (let i = 0; i < this.data.length; i++) {
         const lista_eventos = this.data[i][1];
-        
+
         //var arr_elements = [];
         for (let j = 0; j < lista_eventos.length; j++) {
           // arr_elements.push([ lista_eventos[j].criterio_evaluacion, lista_eventos[j].observacion_evaluacion, lista_eventos[j].fecha_evaluacion, lista_eventos[j].operador_monitoreo ]);
           //======================= formato 2 ===========================
-          this.tablaFormatoBetsy_1.push(lista_eventos[j]); 
-  
+          this.tablaFormatoBetsy_1.push(lista_eventos[j]);
+
         }
         // console.log(arr_elements);
         //vm.arr_evaluacion.push(arr_elements);
@@ -15515,7 +15516,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       // console.log(this.tablaFormatoBetsy_1);
 
       for (let i = 0; i < this.tablaFormatoBetsy_1.length; i++) {
-	
+
         this.arr_evaluacion2[i][3] = this.tablaFormatoBetsy_1[i].operador_monitoreo;
 
 
@@ -15528,7 +15529,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 
-            //FUNCION PARA GUARDAR 
+            //FUNCION PARA GUARDAR
 
             this.arr_evaluacion2[i][0] = this.tablaFormatoBetsy_1[i].criterio_evaluacion;
             this.arr_evaluacion2[i][1] = this.tablaFormatoBetsy_1[i].observacion_evaluacion;
@@ -15558,13 +15559,13 @@ export class ResultComponent implements OnDestroy, OnInit {
     // // var dataParams =  reportServices.getParam();
 
     // var contReport =  reportServices.getNroGenReport();
-    
+
 
     // // console.log(dataParams);
     // // console.log(dataParams['fecha_hasta'] +" - "+vm.rep_fecha_fin);
     // // console.log(dataParams['fecha_hasta'] +" - "+vm.rep_fecha_fin);
     // // console.log(dataParams['vehiculos']   +" - "+vm.rep_vehiculos);
-    // // if (dataParams['fecha_desde'] == vm.rep_fecha_ini && 
+    // // if (dataParams['fecha_desde'] == vm.rep_fecha_ini &&
     // // 	dataParams['fecha_hasta'] == vm.rep_fecha_fin &&
     // // 	dataParams['vehiculos']   == vm.rep_vehiculos ) {
     // // 	console.log("fecha hasta igual .... misma consulta");
@@ -15597,13 +15598,13 @@ export class ResultComponent implements OnDestroy, OnInit {
     //   console.log(vm.datos);
     //   for (let i = 0; i < vm.datos.length; i++) {
     //     const lista_eventos = vm.datos[i][1];
-        
+
     //     var arr_elements = [];
     //     for (let j = 0; j < lista_eventos.length; j++) {
     //       // arr_elements.push([ lista_eventos[j].criterio_evaluacion, lista_eventos[j].observacion_evaluacion, lista_eventos[j].fecha_evaluacion, lista_eventos[j].operador_monitoreo ]);
     //       //======================= formato 2 ===========================
-    //       vm.tablaFormatoBetsy_1.push(lista_eventos[j]); 
-  
+    //       vm.tablaFormatoBetsy_1.push(lista_eventos[j]);
+
     //     }
     //     // console.log(arr_elements);
     //     //vm.arr_evaluacion.push(arr_elements);
@@ -15686,7 +15687,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 
-    //         //FUNCION PARA GUARDAR 
+    //         //FUNCION PARA GUARDAR
 
     //         vm.arr_evaluacion2[i][0] = vm.tablaFormatoBetsy_1[i].criterio_evaluacion;
     //         vm.arr_evaluacion2[i][1] = vm.tablaFormatoBetsy_1[i].observacion_evaluacion;
@@ -15711,7 +15712,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     //   }
     // }
-    
+
 
     // console.log(vm.datos);
     // console.log(vm.arr_evaluacion);
@@ -15719,7 +15720,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     return  false;
   }
-		
+
   guardarReporteFatigaExtrema() {
     console.log("================ guardarReporteFatigaExtrema");
 
@@ -15736,19 +15737,19 @@ export class ResultComponent implements OnDestroy, OnInit {
 
     for (let i = 0; i < this.arr_evaluacion2.length; i++) {
 
-      if (this.arr_evaluacion_ini[i][0] == this.arr_evaluacion2[i][0] && 
-        this.arr_evaluacion_ini[i][1] == this.arr_evaluacion2[i][1] && 
+      if (this.arr_evaluacion_ini[i][0] == this.arr_evaluacion2[i][0] &&
+        this.arr_evaluacion_ini[i][1] == this.arr_evaluacion2[i][1] &&
         this.arr_evaluacion_ini[i][3] == this.arr_evaluacion2[i][3] ) {
       } else {
         console.log("CAMBIAR============================================");
         console.log(this.tablaFormatoBetsy_1[i]);
         arr_params.push( this.tablaFormatoBetsy_1[i] );
-          
+
         this.arr_evaluacion_ini[i][0] = this.arr_evaluacion2[i][0];
         this.arr_evaluacion_ini[i][1] = this.arr_evaluacion2[i][1];
         this.arr_evaluacion_ini[i][3] = this.arr_evaluacion2[i][3];
       }
-      
+
     }
 
     var dataParams = {array_items:arr_params, user_id:this.reportService.getUserId()};
@@ -15756,7 +15757,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     console.log(dataParams);
     //reportServices.setSpinnerValue(true);
     this.spinner.show("reportSpinner");
-    
+
     console.log(environment.apiUrl + "/api/saveEventUserEvaluacion");
     this.http.post(environment.apiUrl + "/api/saveEventUserEvaluacion", dataParams).subscribe({
       next: datos => {
@@ -15782,7 +15783,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       console.log(this.data);
 			console.log(this.arr_evaluacion2);
 
-      
+
 			// var tipoR = vm.optionR();
 			// var rutaUrl = "X";
 			// if (tipoR == 101) {
@@ -15793,7 +15794,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 			var dataParams:any =  this.reportService.getParams();
 
-      
+
 
 			dataParams['fecha_hasta2'] = dataParams['fecha_hasta'];
 			dataParams['fecha_hasta'] = moment(new Date()).format("YYYY-MM-DD") + 'T' + moment(new Date()).format("HH:mm:ss") + '-05:00';
@@ -15817,7 +15818,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
             console.log("-------------- nuevas tramas "+i);
             console.log(this.data);
-            
+
             console.log(values[i][1]);
             this.data[i][0] = values[i][0];
             this.data[i][1] = values[i][1];
@@ -15876,14 +15877,14 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// 	console.log(values);
 			// 	console.log(values[0]);
 			// 	// vm.datos = values[0];
-				
+
 			// 	for (let i = 0; i < vm.datos.length; i++) {
 			// 		//const lista_eventos = vm.datos[i][1];
 			// 		console.log("-------------- nuevas tramas");
 			// 		console.log(values[0][i][1]);
 			// 		vm.datos[i][0] = values[0][i][0];
 			// 		vm.datos[i][1] = values[0][i][1];
-			
+
 			// 		for (let j = 0; j < vm.datos[i][1].length; j++) {
 			// 			var row = vm.datos[i][1][j];
 			// 			for (let i2 = 0; i2 < vm.arr_evaluacion2.length; i2++) {
@@ -15900,7 +15901,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// 	console.log("==========  vm.datos :");
 			// 	console.log(vm.datos);
 			// 	console.log("==========  vm.arr_evaluacion 2 :");
-				
+
 			// 	// console.log(vm.arr_evaluacion);
 			// 	console.log(vm.arr_evaluacion2);
 			// 	vm.arr_evaluacion = undefined;
@@ -15914,7 +15915,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// console.log("============= 2 ============");
 			// console.log(vm.datos);
 
-		
+
   }
 
 
@@ -16396,11 +16397,11 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// 		} else {
 
 			// 			if (reportServices.chkApiGoogle) {
-				
-			// 				console.log("API ACTIVADA");
-			
 
-			
+			// 				console.log("API ACTIVADA");
+
+
+
 			// 				console.log("fnc_direccion--xD");
 			// 				var f = new google.maps.Geocoder();
 			// 				var g = '';
@@ -16412,7 +16413,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// 						console.log(a);
 			// 						console.log(b);
 			// 						console.log("*********************2");
-			
+
 			// 						if (b == "OK") {
 			// 									console.log("Api google : OK");
 			// 									var g = "";
@@ -16450,10 +16451,10 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// 							trama.referencia = "No encontrado...";
 			// 							console.log("3------->>>>> " + "No encontrado...");
 			// 						}
-			
+
 			// 				});
-			
-			
+
+
 			// 			} else {
 			// 				console.log("NO TIENE API ACTIVADA");
 			// 				//============== OSM
@@ -16483,19 +16484,19 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// 										console.log("no cambio de nombre");
 			// 										console.log(gT[i].referencia);
 			// 									}
-			// 								} 
+			// 								}
 			// 							}
 			// 							console.log("se encontrarton "+count);
 			// 							//============puntos cercanos
 
-			// 							//============guardar nueva direccion 
+			// 							//============guardar nueva direccion
 			// 							var cnav = { lat:trama.lat, lng:trama.lng ,dir:g };
 			// 							$q.all([
-			// 								api.post('geocoder/save',cnav)  
+			// 								api.post('geocoder/save',cnav)
 			// 							]).then(responseG => {
 			// 									console.log(responseG);//Se guardo elemento
 			// 							});
-			// 							//============guardar nueva direccion 
+			// 							//============guardar nueva direccion
 
 
 			// 						} else {
@@ -16543,7 +16544,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 			// 				// });
 
 			// 			}
-						
+
 			// 		}
 
 
@@ -16574,9 +16575,9 @@ export class ResultComponent implements OnDestroy, OnInit {
       var bol_datos_pdf = false;
 
 
-      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss"); 
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
       console.log(fecha_ejecucion);
-      
+
       this.data.forEach((data:any, index:any) => {
         console.log(data);
         console.log(index);
@@ -17083,8 +17084,8 @@ export class ResultComponent implements OnDestroy, OnInit {
             nom_pdf = "ReporteAceleracionBrusca.pdf";
           }
         }
-      } 
-      
+      }
+
 			this.data.forEach((data:any, index:any) =>{
 				if(data[1].length > 0){
 					bol_datos_pdf = true;
@@ -17213,7 +17214,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               cuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               cuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' });
@@ -17223,7 +17224,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               cuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               tabla.push(cuerpo);
 
 						});
@@ -17300,7 +17301,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               cuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               cuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' });
@@ -17310,7 +17311,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               cuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               tabla.push(cuerpo);
 
 						});
@@ -17395,7 +17396,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         }
       }
 
-      
+
 			this.data.forEach((data:any, index:any)=>{
 				console.log(data);
 				console.log(index);
@@ -17544,18 +17545,18 @@ export class ResultComponent implements OnDestroy, OnInit {
               cuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               cuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
               if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion){ cuerpo.push({ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' }); };
-  
+
               cuerpo.push({ text: rec_facial, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               tabla.push(cuerpo);
 
 
@@ -17648,19 +17649,19 @@ export class ResultComponent implements OnDestroy, OnInit {
               cuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               cuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.velGPS+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.vel_can+" Km/h", bold: true, fontSize: 6, alignment: 'center' });
               if (this.chkFatigaSomnolencia && this.chkFatigaDistraccion){ cuerpo.push({ text: item.descripcion, bold: true, fontSize: 6, alignment: 'center' }); };
 
-  
+
               cuerpo.push({ text: rec_facial, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
               cuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
-  
+
               tabla.push(cuerpo);
 
 						});
