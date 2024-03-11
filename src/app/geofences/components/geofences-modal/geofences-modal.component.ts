@@ -34,7 +34,6 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
 
   geocercaDet(item: any) {
     console.log("detallados: ", item);
-    this.geofenceImportExportService.coordinateGeofence(item);
   }
 
   enviarDatosOtroComponente() {
@@ -75,7 +74,8 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
   generateMap(datos:DataGeofence[]){
     console.log(" :",datos)
     this.datosGeo=datos;
-    //this.geofenceImportExportService.startMiniMap(this.confGeoMap,this.datosGeo);
-    this.geofenceImportExportService.startMiniMap(this.confGeoMap,datos);
+
+    this.geofenceImportExportService.startMiniMap(this.confGeoMap);
+    this.geofenceImportExportService.addGeofences(datos);
   }
 }

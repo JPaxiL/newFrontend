@@ -14,14 +14,13 @@ export class GeofenceImportExportService {
 
   constructor() { }
 
-  startMiniMap(config:MapItemConfiguration,datos:DataGeofence[]){
+  startMiniMap(config:MapItemConfiguration){
     this.minimap= new MiniMapGeofences(config);
     this.minimap.createMap();
-    console.log("startminimap",datos); 
-    this.minimap.setLayers(datos);
+    this.minimap.setLayers();
+    
   };
-  coordinateGeofence(datos:DataGeofence[]){
-    this.minimap.coordenadasGeo(datos);
+  addGeofences(datos: DataGeofence[]){
+this.minimap.coordenadasGeo(datos);
   }
-
 }

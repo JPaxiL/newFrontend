@@ -69,6 +69,7 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
   //
   dataGeo: DataGeofence[] = [];
+  tempData: DataGeofence = {};
   @ViewChild("_modalChild") modalChild!: GeofencesModalComponent;
   map: L.Map | undefined;
   //
@@ -1044,6 +1045,9 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
   import(event: any) {
     console.log("import from1 ", event);
+    if (this.dataGeo.length != 0) {
+      this.dataGeo = []
+    }
     this.geofencesService.modalActive = true;
     this.geofencesService.action = 'add';
     const file: File = event.target.files[0];
@@ -1054,59 +1058,92 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         const fileContent = e.target.result;
         console.log("johan2", fileContent);
 
-        let datas: { name?: string, description?: string, color?: string, coordinate?: string, width?: string }[] = [];
 
-        //const regex = /<(Document|kml)>[\s\S]*?<\/\1>/;
-        const nameRegex = /<name>\s*([\s\S]*?)\s*<\/name>/;
-        const descriptionRegex = /<description>\s*([\s\S]*?)\s*<\/description>/;
-        //<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>\s*<\/LinearRing>\s*<\/outerBoundaryIs>\s*<\/Polygon>
 
-        //cosas a cunsiderar nombre del documento, nombre de cada placermark
-        const coordinatesRegex = /<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
-
-        const widthRegex = /<width>\s*([a-fA-F0-9]+)\s<\/width>/;
-        const colorPolyStyleRegex = /<PolyStyle>\s*<color>\s*([a-fA-F0-9]+)\s*<\/color>/;
-        //console.log("regex", regex);
         let match;
-        //console.log("fileContent", regex.exec(fileContent));
-        const regex: RegExp = /<name>([\s\S]*?)<\/name>/g; // Expresión regular para buscar contenido entre etiquetas <name> y </name>
-        //const names: string[] = [];
-        console.log("fileContent", regex.exec(fileContent))
-        const combinedRegex = /<name>\s*([\s\S]*?)\s*<\/name>|<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/g;
-        console.log("conbinedRegex", combinedRegex.exec(fileContent));
-        while ((match = combinedRegex.exec(fileContent)) !== null) {
-          const name = match[1] !== undefined ? match[1].replace(/[\n\t]/g, '') : undefined;
-          const coordinate = match[2] !== undefined ? match[2].replace(/[\n\t]/g, '') : undefined;
-          console.log("ambos:", name, "--", coordinate);
-          this.dataGeo.push({ name, coordinate });
+
+        //parte actual echa
+        const PlacemarkRegex = /<Placemark[^>]*>([\s\S]*?)<\/Placemark>/g;
+        const nameRegex = /<name>([\s\S]*?)<\/name>/;
+        const coordinateRegex = /<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>([\s\S]*?)<\/coordinates>\s*<\/LinearRing>\s*<\/outerBoundaryIs>/;
+        const descriptionRegex = /<description>\s*([\s\S]*?)\s*<\/description>/;
+
+        const styleRegex = /<Style>\s*([\s\S]*?)\s*<\/Style>/;
+        const polyColorRegex = /<color>\s*([\s\S]*?)\s*<\/color>/;
+        const polyWidthRegex = /<width>\s*([\s\S]*?)\s*<\/width>/;
+        const polyStyleRegex = /<PolyStyle>s*([\s\S]*?)\s*<\/PolyStyle>/;
+        //parte a futuro cuando se actualize la base dedatos zonas
+        const LineStyleRegex = /<LineStyle>s*([\s\S]*?)\s*<\/LineStyle>/;
+        const lineColorRegex = /<color>\s*([\s\S]*?)\s*<\/color>/;
+        const lineWidthRegex = /<width>\s*([\s\S]*?)\s*<\/width>/;
+        console.log("match:", fileContent)
+        while (match = PlacemarkRegex.exec(fileContent)) {
+
+          const coordinate = coordinateRegex.exec(match[1]);
+
+          //const color = colorRegex.exec(match[1]);
+          if (coordinate) {
+            let polyColorMatch,polyWidthMatch,lineColorMatch,lineWidthMatch;
+            const name = nameRegex.exec(match[1]);
+            const description = descriptionRegex.exec(match[1]);
+            console.log("match1:", name ? name[1] : "");
+            console.log("match2:", coordinate ? coordinate[1] : "");
+            console.log("match3:", description ? description[1] : "");
+
+
+            const styleMatch = styleRegex.exec(match[1]);
+            if (styleMatch) {
+              const polyMatch = polyStyleRegex.exec(styleMatch[1]);
+              const polyline = LineStyleRegex.exec(styleMatch[1]);
+              if (polyMatch) {
+                 polyColorMatch = polyColorRegex.exec(polyMatch[1]);
+                 polyWidthMatch = polyWidthRegex.exec(polyMatch[1]);
+              }
+              if (polyline) {
+                 lineColorMatch = polyColorRegex.exec(polyline[1]);
+                 lineWidthMatch = polyWidthRegex.exec(polyline[1]);
+              }
+
+            }
+            this.dataGeo.push(
+              {
+                name: name ? name[1].replace(/[\n\t]/g, '') : "",
+                coordinate: coordinate ? coordinate[1].replace(/[\n\t]/g, '') : "",
+                description: description ? description[1].replace(/[\n\t]/g, '') : "",
+                color: polyColorMatch ? polyColorMatch[1].replace(/[\n\t]/g,'') : "",
+                width: polyWidthMatch ? polyWidthMatch[1].replace(/[\n\t]/g,'') : "",
+
+              }
+            )
+
+
+          }
+
+
         }
-        /*
-        while ((match = coordinatesRegex.exec(fileContent)) !== null) {
-          this.dataGeo.push({ coordinate: match[1].replace(/[\n\t]/g, '') });
-          //const data: DataGeofence = {};
-        }*/
-        console.log("names:", this.dataGeo);
-        // Filtrar los objetos del arreglo datas que tengan la propiedad coordinate definida y no esté vacía
-        console.log("johan22: ", datas);
 
-        console.log("johan3: ", datas);
 
-        const convertedData: DataGeofence[] = datas.map((data: DataGeofence) => {
-          return {
-            name: data.name || '',
-            description: data.description || '',
-            color: data.color || '',
-            coordinate: data.coordinate || 'default_coordinate_value',
-            width: data.width || ''
-          };
-        });
-        this.dataGeo = convertedData;
-        console.log("datageo fuera modal: ", this.dataGeo);
+
+        // Iterar sobre los elementos <Placemark>
+        /* while ((match = kmlRegex.exec(fileContent)) !== null) {
+           console.log("prueba2",match);
+             const kmlRegexContent = match[1];
+             // Buscar el nombre dentro del contenido del Placemark
+             const nameMatch = nameRegex.exec(kmlRegexContent);
+             const name = nameMatch ? nameMatch[1].replace(/[\n\t]/g, '') : undefined;
+         
+             // Buscar las coordenadas dentro del contenido del Placemark
+             const coordinatesMatch = coordinatesRegex.exec(kmlRegexContent);
+             const coordinates = coordinatesMatch ? coordinatesMatch[1].replace(/[\n\t]/g, '') : undefined;
+         
+             // Si se encontraron tanto el nombre como las coordenadas, agregar al array this.dataGeo
+             if (name !== undefined && coordinates !== undefined) {
+                 this.dataGeo.push({ name, coordinate: coordinates });
+             }
+         }*/
+
+        console.log("prueba3:", this.dataGeo);
         this.modalChild.generateMap(this.dataGeo);
-        //this.geofencesService.generateMapGeofenceService(this.dataGeo);
-        //this.geofencesService.sendDataModal(this.dataGeo);
-        //this.geofencesService.sendDataModal(this.dataGeo);
-        //
       };
 
       reader.readAsText(file);

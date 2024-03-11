@@ -26,9 +26,7 @@ export class MiniMapGeofences extends MapBase {
     }
   }
 
-  setLayers(datos: DataGeofence[]) {
-
-    console.log("setLayers", datos);
+  setLayers() {
     const mainLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; GL Tracker',
       minZoom: 4,
@@ -89,8 +87,6 @@ export class MiniMapGeofences extends MapBase {
     L.control.layers(baseLayers).addTo(this.map!);
 
     this.map!.zoomControl.setPosition('topright');
-    console.log("geocercas4:", datos);
-    this.coordenadasGeo(datos);
   };
   coordenadasGeo(datos: DataGeofence[]) {
     console.log("globalCoordenadas1:", datos);
@@ -98,9 +94,17 @@ export class MiniMapGeofences extends MapBase {
     const globalCoordinatesGeo: number[][][] = [];
 
     for (const data of datos) {
-      console.log("globalCoordenadas2:", data.coordinate);
+
       if (data) {
-        const coordinatesSets = data.coordinate!.split(' ');
+        //const coordinatesSets = data.coordinate!.split(' ');
+        //console.log("globalCoordenadas2:", coordinatesSets);
+        const coordinatesSets = data.coordinate!.trim().split(' ');
+
+        // Filtrar los conjuntos de coordenadas que no son solo espacios
+        const filteredCoordinates = coordinatesSets.filter(coordSet => coordSet.trim() !== '');
+        console.log("globalCoordenadas2.1:", coordinatesSets);
+
+        console.log("globalCoordenadas2.2:", filteredCoordinates);
 
         for (const coordSet of coordinatesSets) {
           const coordinatesArray = coordSet.split(',').map((coord: string) => parseFloat(coord));
@@ -112,26 +116,33 @@ export class MiniMapGeofences extends MapBase {
     }
     console.log("globalCoordenadas3:", globalCoordinatesGeo);
 
-    const flattenedCoordinates: [number, number][] = [];
+    for (let polygonCoordinates= 0;polygonCoordinates < globalCoordinatesGeo.length;polygonCoordinates++) {
+      console.log("polygonCoordinates", globalCoordinatesGeo[polygonCoordinates]); // Agregar este log para verificar los datos de cada polígono
 
-    for (const coordinates of globalCoordinatesGeo) {
-      // Itera sobre cada conjunto de coordenadas
-      for (const coord of coordinates) {
-        // Añade un par de coordenadas al arreglo
-        flattenedCoordinates.push([coord[0], coord[1]]);
-      }
-    }
-    console.log("logitud:", globalCoordinatesGeo.length);
-    for (const polygonCoordinates of globalCoordinatesGeo) {
-      console.log("polygonCoordinates", polygonCoordinates); // Agregar este log para verificar los datos de cada polígono
       // Crear un objeto GeoJSON para el polígono actual
       const geofenceData: GeoJSON.Polygon = {
         "type": "Polygon",
-        "coordinates": [polygonCoordinates], // Envuelve las coordenadas del polígono actual en un arreglo
-      };  
+        "coordinates": [globalCoordinatesGeo[polygonCoordinates]], // Envuelve las coordenadas del polígono actual en un arreglo
+      };
+
+      const r = parseInt(datos[polygonCoordinates].color!.substring(0, 2), 16);
+      const g = parseInt(datos[polygonCoordinates].color!.substring(2, 4), 16);
+      const b = parseInt(datos[polygonCoordinates].color!.substring(4, 6), 16);
+
+      // Definir un estilo para el polígono
+      const styleOptions: L.PathOptions = {
+        fillColor: `rgb(${r},${g},${b})`, // Color de relleno del polígono
+        fillOpacity: 0.5, // Opacidad del relleno
+        color: `rgb(${r},${g},${b})`, // Color del borde del polígono
+        weight: 2, // Grosor del borde
+      };
+
       
-      // Agregar el polígono al mapa
-      L.geoJSON(geofenceData).addTo(this.map!);
+
+      // Agregar el polígono al mapa con el estilo definido
+      L.geoJSON(geofenceData, {
+        style: styleOptions, // Estilo del polígono
+      }).bindTooltip(feature => datos[polygonCoordinates].description!).addTo(this.map!);
     }
   }
 
