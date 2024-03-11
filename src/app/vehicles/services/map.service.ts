@@ -98,10 +98,10 @@ export class MapService {
       zoomToBoundsOnClick: false,
     });
     //PARA ONDAS
-    // this.markerClusterGroupOnda = L.markerClusterGroup({
-    //   removeOutsideVisibleBounds: true,
-    //   zoomToBoundsOnClick: false
-    // });
+    this.markerClusterGroupOnda = L.markerClusterGroup({
+      removeOutsideVisibleBounds: true,
+      zoomToBoundsOnClick: false,
+    });
 
     this.vehicleService.drawIconMap.subscribe((e) => {
       this.onDrawIcon(this.map);
@@ -379,14 +379,16 @@ export class MapService {
     if (vehicle!.eye == true) {
       // this.map.addLayer(this.marker[IMEI]);
       this.markerClusterGroup.addLayer(this.marker[IMEI]);
-      // this.markerClusterGroupOnda.addLayer(this.markerOnda[IMEI]);
+      //console.log("RESULETO ",this.markerClusterGroup.addLayer(this.marker[IMEI]))
+
+      //this.markerClusterGroupOnda.addLayer(this.markerOnda[IMEI]);
       this.tagClick(vehicle!.IMEI!, false);
       this.vehicleService.countOpenEyes++;
     } else {
       //console.log('quitar vehiculo del mapa ...',vehicle);
       // this.map.removeLayer(this.marker[IMEI]);
       this.markerClusterGroup.removeLayer(this.marker[IMEI]);
-      // this.markerClusterGroupOnda.removeLayer(this.markerOnda[IMEI]);
+      this.markerClusterGroupOnda.removeLayer(this.markerOnda[IMEI]);
       this.vehicleService.countOpenEyes--;
     }
     this.vehicleService.allEyes.state = this.vehicleService.countOpenEyes > 0;
@@ -862,8 +864,12 @@ export class MapService {
           // console.log('buscando layer');
           let cont = 0;
           let object = this.markerClusterGroup.getLayers();
+          let ondas = this.markerClusterGroupOnda.getLayers();
+          /* console.log('MASKERCLUSTERGROUP', ondas); */
           for (const key in object) {
             // console.log("object[key]['_tooltip']['_content']==vehicles[index].name==>"+object[key]['_tooltip']['_content']+"=="+vehicles[index].name)
+            /* console.log("object[key]['_tooltip']['_content']",object[key]['_tooltip']['_content'])
+            console.log( "vehicles[index].name", vehicles[index].name) */
             if (
               object[key]['_tooltip']['_content'] ==
               '<span>' + vehicles[index].name + '</span>'
@@ -872,13 +878,16 @@ export class MapService {
               let oldCoords = this.markerClusterGroup
                 .getLayers()
                 [key].getLatLng();
+              /* let oldOndasCoords = this.markerClusterGroupOnda
+                .getLayers()
+                [key].getLatLng(); */
 
               let coord = {
                 lat: vehicles[index].latitud,
                 lng: vehicles[index].longitud,
               };
 
-              // //console.log('coord',coord);
+              // console.log('coord',coord);
               // //console.log('aux = ', aux['_latlng']);
               //_popup
               // vehicles[index].limit_speed = 10; //COMENTAR SOLO PARA PRUEBAS
@@ -890,7 +899,7 @@ export class MapService {
                 let iconUrl =
                   './assets/images/objects/nuevo/default/' +
                   vehicles[index].icon_def;
-                let iconUrl2 = '';
+                /* let iconUrl2 = ''; */
                 // console.log('ENTRO VEHICLE A EVALUAR ESTADO ->',vehicles[index].name,vehicles[index].parametros,vehicles[index].speed);
 
                 if (
@@ -942,14 +951,13 @@ export class MapService {
                     vehicles[index].speed != 0 &&
                     vehicles[index].speed! < vehicles[index].limit_speed!
                   ) {
-                    /* iconUrl = './assets/images/objects/nuevo/gif/onda_verde.gif'; */
-                   /*  const ondaIconUrl = vehicles[index].movement_onda;
+                    /* iconUrl = './assets/images/objects/nuevo/gif/trailer.gif'; */
+                    /*  const ondaIconUrl = vehicles[index].movement_onda;
                     const ondaGifIconUrl =
                       './assets/images/objects/nuevo/gif/onda_verde.gif'; */
 
-                   /*  iconUrl = ondaIconUrl + ondaGifIconUrl; */
+                    /*  iconUrl = ondaIconUrl + ondaGifIconUrl; */
 
-                   
                     iconUrl =
                       './assets/images/objects/nuevo/state_moved/' +
                       vehicles[index].icon_color +
@@ -1063,6 +1071,15 @@ export class MapService {
                 this.markerClusterGroup.getLayers()[key]['options']['icon'][
                   'options'
                 ]['iconUrl'] = iconUrl;
+
+                /*  this.markerClusterGroupOnda.getLayers()[key]['options']['icon'][
+                  'options'
+                ]['iconUrl'] = iconUrl;
+
+                this.markerClusterGroupOnda.getLayers()[key]['options']['icon'][
+                  'options'
+                ]['shadowSize'] = [30, 30]; */
+
                 this.markerClusterGroup.getLayers()[key]['options']['icon'][
                   'options'
                 ]['shadowSize'] = [30, 30];
@@ -1352,6 +1369,7 @@ export class MapService {
     };
 
     this.markerClusterGroup.clearLayers();
+    this.markerClusterGroupOnda.clearLayers();
     // this.markerClusterGroupOnda.clearLayers();
     for (const property in e) {
       //console.log("e----- ", property);
@@ -1571,7 +1589,235 @@ export class MapService {
 
   private drawIcon(data: any, map: any): void {
     //SOLO PARA ONDAS CON GIF
-    // if (this.userDataService.changeItemIcon == 'ondas'){
+    if (this.userDataService.changeItemIcon == 'rondas') {
+      let iconUrl = data.custom_svg;
+
+      const iconMarker = L.icon({
+        iconUrl: iconUrl,
+        iconSize: [55, 55],
+        iconAnchor: [30, 45],
+        popupAnchor: [-3, -40],
+      });
+
+      let nameGroup = this.setNameGroup(
+        data.nameoperation,
+        data.namegrupo,
+        data.nameconvoy
+      );
+      const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
+      if (nameGroup) {
+        var popupText =
+          '<div class="row"><div class="col-6" align="left"><strong>' +
+          data.name +
+          '</strong></div>' +
+          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded" ' +
+          data.speed +
+          ' km/h</strong></div></div>' +
+          '<aside #popupText class="">' +
+          '<small>' +
+          nameGroup +
+          '</small><br>' +
+          // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+          '<small><i class="fas fa-user-circle"></i> ' +
+          data.namedriver +
+          '</small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
+          googleMapsLink +
+          '" target="_blank">' +
+          data.latitud +
+          ', ' +
+          data.longitud +
+          '</a></small><br>' +
+          `<small><i class="fas fa-map-marked-alt"></i> ` +
+          '     NN' +
+          '</small><br>' +
+          '<small><i class="fas fa-calendar-alt"></i> ' +
+          data.dt_tracker +
+          '</small><br>' +
+          '<small><i class="fas fa-hourglass-half"></i> ' +
+          this.time_stop +
+          '</small>' +
+          '</aside>';
+      } else {
+        var popupText =
+          '<div class="row"><div class="col-6" align="left"><strong>' +
+          data.name +
+          '</strong></div>' +
+          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+          data.speed +
+          ' km/h</strong></div></div>' +
+          '<aside #popupText class="">' +
+          '<small><i class="fas fa-user-circle"></i> ' +
+          data.namedriver +
+          '</small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
+          googleMapsLink +
+          '" target="_blank">' +
+          data.latitud +
+          ', ' +
+          data.longitud +
+          '</a></small><br>' +
+          `<small><i class="fas fa-map-marked-alt"></i> ` +
+          '     NN' +
+          '</small><br>' +
+          '<small><i class="fas fa-calendar-alt"></i> ' +
+          data.dt_tracker +
+          '</small><br>' +
+          '<small><i class="fas fa-hourglass-half"></i> ' +
+          this.time_stop +
+          '</small>' +
+          '</aside>';
+      }
+
+      const myIcono = L.icon({
+        iconUrl: './assets/images/objects/nuevo/gif/onda_azul.gif',
+        iconSize: [60, 60],
+        iconAnchor: [28, 43],
+      });
+
+      const tempMarker1 = L.marker([data.latitud, data.longitud], {
+        icon: myIcono,
+      });
+
+      const tempMarker = L.marker([data.latitud, data.longitud], {
+        icon: iconMarker,
+      }).bindPopup(popupText);
+
+      tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+        permanent: true,
+        offset: [0, 12],
+        className: 'vehicle-tooltip',
+      });
+
+      let options = {
+        imei: data.IMEI,
+        name: data.name,
+        nameconvoy: data.nameconvoy,
+        namegrupo: data.namegrupo,
+        nameoperation: data.nameoperation,
+        namedriver: data.namedriver,
+        longitud: data.longitud,
+        latitud: data.latitud,
+        speed: data.speed,
+        dt_tracker: data.dt_tracker,
+        paradaDesde: '',
+        vehicleService: this.vehicleService,
+      };
+      tempMarker.on('click', this.timeStop, options);
+      this.marker[data.IMEI] = tempMarker;
+      this.markerClusterGroup.addLayer(tempMarker);
+      this.markerClusterGroup.addTo(this.map);
+      this.markerClusterGroupOnda.addLayer(tempMarker1);
+      this.markerClusterGroupOnda.addTo(this.map);
+    } else {
+      let iconUrl = data.custom_svg;
+      const iconMarker = L.icon({
+        iconUrl: iconUrl,
+        iconSize: [55, 55],
+        iconAnchor: [30, 45],
+        popupAnchor: [-3, -40],
+      });
+      let nameGroup = this.setNameGroup(
+        data.nameoperation,
+        data.namegrupo,
+        data.nameconvoy
+      );
+      const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
+      if (nameGroup) {
+        var popupText =
+          '<div class="row"><div class="col-6" align="left"><strong>' +
+          data.name +
+          '</strong></div>' +
+          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded" ' +
+          data.speed +
+          ' km/h</strong></div></div>' +
+          '<aside #popupText class="">' +
+          '<small>' +
+          nameGroup +
+          '</small><br>' +
+          // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
+          '<small><i class="fas fa-user-circle"></i> ' +
+          data.namedriver +
+          '</small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
+          googleMapsLink +
+          '" target="_blank">' +
+          data.latitud +
+          ', ' +
+          data.longitud +
+          '</a></small><br>' +
+          `<small><i class="fas fa-map-marked-alt"></i> ` +
+          '     NN' +
+          '</small><br>' +
+          '<small><i class="fas fa-calendar-alt"></i> ' +
+          data.dt_tracker +
+          '</small><br>' +
+          '<small><i class="fas fa-hourglass-half"></i> ' +
+          this.time_stop +
+          '</small>' +
+          '</aside>';
+      } else {
+        var popupText =
+          '<div class="row"><div class="col-6" align="left"><strong>' +
+          data.name +
+          '</strong></div>' +
+          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
+          data.speed +
+          ' km/h</strong></div></div>' +
+          '<aside #popupText class="">' +
+          '<small><i class="fas fa-user-circle"></i> ' +
+          data.namedriver +
+          '</small><br>' +
+          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
+          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
+          googleMapsLink +
+          '" target="_blank">' +
+          data.latitud +
+          ', ' +
+          data.longitud +
+          '</a></small><br>' +
+          `<small><i class="fas fa-map-marked-alt"></i> ` +
+          '     NN' +
+          '</small><br>' +
+          '<small><i class="fas fa-calendar-alt"></i> ' +
+          data.dt_tracker +
+          '</small><br>' +
+          '<small><i class="fas fa-hourglass-half"></i> ' +
+          this.time_stop +
+          '</small>' +
+          '</aside>';
+      }
+      const tempMarker = L.marker([data.latitud, data.longitud], {
+        icon: iconMarker,
+      }).bindPopup(popupText);
+      tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+        permanent: true,
+        offset: [0, 12],
+        className: 'vehicle-tooltip',
+      });
+      let options = {
+        imei: data.IMEI,
+        name: data.name,
+        nameconvoy: data.nameconvoy,
+        namegrupo: data.namegrupo,
+        nameoperation: data.nameoperation,
+        namedriver: data.namedriver,
+        longitud: data.longitud,
+        latitud: data.latitud,
+        speed: data.speed,
+        dt_tracker: data.dt_tracker,
+        paradaDesde: '',
+        vehicleService: this.vehicleService,
+      };
+      tempMarker.on('click', this.timeStop, options);
+      this.marker[data.IMEI] = tempMarker;
+      this.markerClusterGroup.addLayer(tempMarker);
+      this.markerClusterGroup.addTo(this.map);
+    
+    }
     //   //CREAR ONDA DEL VEHICLE
     //   let iconOndaUrl = './assets/images/user_config/test_onda.gif';
     //   const iconMarkerShadow = L.icon({
@@ -1588,7 +1834,14 @@ export class MapService {
     // assets/images/objects/nuevo/{{ rowData['icon']
     /* let iconUrl = './assets/images/objects/nuevo/' + data.icon; */
 
-    let iconUrl = data.custom_svg;
+
+
+
+    /* let iconUrl = data.custom_svg; */
+
+
+
+
     /* console.log("VEHICULOICONURL", iconUrl)
     console.log("dataiconurl", data) */
     // let iconUrl = this.userDataService.getSVGcontent(data.tipo);
@@ -1599,13 +1852,16 @@ export class MapService {
 
     // let iconOndaUrl = './assets/images/user_config/circulo_movimiento.svg';
 
-    const iconMarker = L.icon({
+
+
+
+
+    /* const iconMarker = L.icon({
       iconUrl: iconUrl,
       iconSize: [55, 55],
       iconAnchor: [30, 45],
       popupAnchor: [-3, -40],
     });
-
     let nameGroup = this.setNameGroup(
       data.nameoperation,
       data.namegrupo,
@@ -1677,24 +1933,72 @@ export class MapService {
         '</small>' +
         '</aside>';
     }
+    const myIcono = L.icon({
+      iconUrl: './assets/images/objects/nuevo/gif/onda_azul.gif',
+      iconSize: [30, 30],
+      iconAnchor: [17, 27],
+    }); */
 
+
+
+
+
+    /*  const iconGroup = L.featureGroup();
+    iconGroup.addLayer(
+      L.marker([data.latitud, data.longitud], { icon: iconMarker })
+    );
+    iconGroup.addLayer(
+      L.marker([data.latitud, data.longitud], { icon: myIcono })
+    ); */
+
+    /* const tempMarker = iconGroup.addTo(map).bindPopup(popupText); */
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
+
+
+
+
+
+
+
+    /* const tempMarker1 = L.marker([data.latitud, data.longitud], {
+      icon: myIcono,
+    }).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {
       icon: iconMarker,
-    }).bindPopup(popupText);
+    }).bindPopup(popupText); */
+
+
+
+
+
+
     // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
-    tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+
+
+
+
+    
+    /* tempMarker.bindTooltip(`<span>${data.name}</span>`, {
       permanent: true,
       offset: [0, 12],
       className: 'vehicle-tooltip',
-    });
+    }); */
+
+
+
+
+
     // tempMarker.bindTooltip(`<span>${data.name}</span><br><span>${data.namedriver}</span>`, {
     //   permanent: true,
     //   offset: [0, 0],
     //   className: 'vehicle-tooltip', });
 
-    let options = {
+
+
+
+
+    /* let options = {
       imei: data.IMEI,
       name: data.name,
       nameconvoy: data.nameconvoy,
@@ -1708,14 +2012,22 @@ export class MapService {
       paradaDesde: '',
       vehicleService: this.vehicleService,
     };
-    // //console.log('envia cero data',data.speed);
-    // console.log('envia cero XD',options);
     tempMarker.on('click', this.timeStop, options);
-    // tempMarker.on('click',this.timeStop,options);
-    // // this
     this.marker[data.IMEI] = tempMarker;
 
+    this.markerClusterGroupOnda.addLayer(tempMarker1);
     this.markerClusterGroup.addLayer(tempMarker);
+    this.markerClusterGroup.addTo(this.map);
+    this.markerClusterGroupOnda.addTo(this.map); */
+
+
+
+    // //console.log('envia cero data',data.speed);
+    // console.log('envia cero XD',options);
+    
+    // tempMarker.on('click',this.timeStop,options);
+    // // this
+    
     // ////console.log('this.markerClusterGroup',this.markerClusterGroup);
     // let object = this.markerClusterGroup.getLayers();
     // let cont = 0;
@@ -1730,7 +2042,9 @@ export class MapService {
     //   }
     // }
     //console.log('registros encontrados ---> '+cont);
-    this.markerClusterGroup.addTo(this.map);
+    // this.markerClusterGroupOnda.addTo(this.map);
+
+    
     //console.log('marker placa '+data.name+' IMEI = ',this.marker[data.IMEI]);
     // //console.log('length = ',this.markerClusterGroup.getLayers().length-1);
 
@@ -1738,7 +2052,7 @@ export class MapService {
     // let layer = this.markerClusterGroup.hasLayer(tempMarker);
     // //console.log('haslayer',layer); true si existe el layer
     //console.log('this.markerClusterGroup',this.markerClusterGroup);
-    let layers = this.markerClusterGroup.getLayers();
+    // let layers = this.markerClusterGroup.getLayers();
     //console.log('layers',layers);
 
     // //console.log('maker',this.marker);

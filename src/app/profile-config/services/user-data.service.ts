@@ -265,7 +265,7 @@ export class UserDataService {
         customurl,
         var_color,
         (bussvg2: string) => {
-          console.log('REGRESAAPROMESA', bussvg2);
+          /* console.log('REGRESAAPROMESA', bussvg2); */
           resolve(bussvg2);
         },
         (error: Error) => {
@@ -400,7 +400,7 @@ export class UserDataService {
                 // Llamar al callback con el resultado combinado
                 callback(bussvg2);
   
-                console.log('Contenido HTML combinado:', bussvg2);
+                /* console.log('Contenido HTML combinado:', bussvg2); */
               };
   
               reader.readAsDataURL(gifBlob);

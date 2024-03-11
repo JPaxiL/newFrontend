@@ -122,7 +122,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
   actualizarSonidos() {
     console.log(this.listaSonidos);
-    console.log(this.alertForm.value.tipoAlerta);
+    console.log("tipoalerta",this.alertForm.value.tipoAlerta);
 
     const alert = this.events.find(
       (event: any) =>
@@ -135,61 +135,61 @@ export class AlertAccessoriesCreateComponent implements OnInit {
 
       // Obtén todos los elementos de la lista de sonidos hasta el id 27
       let sonidosObtenidos = this.AlertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
-      if (alert.id === 30) {
+      if (alert.name == 'Fatiga Extrema') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 34
+          (sonido: { id: any }) => sonido.id === 33
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
-      } else if (alert.id === 27) {
+      } else if (alert.name == 'Anticolisión Frontal') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 29
+          (sonido: { id: any }) => sonido.id === 28
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
-      } else if (alert.id === 28) {
-        const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 39
-        );
-        if (vozPersonalizada) {
-          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
-        }
-      } else if (alert.id === 29) {
-        const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 37
-        );
-        if (vozPersonalizada) {
-          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
-        }
-      } else if (alert.id === 31) {
-        const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 31
-        );
-        if (vozPersonalizada) {
-          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
-        }
-      } else if (alert.id === 32) {
-        const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 30
-        );
-        if (vozPersonalizada) {
-          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
-        }
-      } else if (alert.id === 40) {
+      } else if (alert.name == 'Riesgo de Colisión con Peatones') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
           (sonido: { id: any }) => sonido.id === 38
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
-      } else if (alert.id === 41) {
+      } else if (alert.name == 'No Rostro') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 32
+          (sonido: { id: any }) => sonido.id === 36
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.name == 'Desvío de Carril Hacia la Izquierda') {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 30
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.name == 'Desvío de Carril Hacia la Derecha') {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 29
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.name == 'Posible Fatiga') {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 37
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.name == 'Distracción') {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 31
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
@@ -206,7 +206,7 @@ export class AlertAccessoriesCreateComponent implements OnInit {
       }
     } else {
       this.listaSonidos = this.AlertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
       if (this.listaSonidos.length > 0) {

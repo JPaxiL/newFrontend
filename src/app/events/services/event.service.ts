@@ -54,7 +54,7 @@ export class EventService {
     'conductor-fumando',
     'cinturon-de-seguridad-desabrochado',
     'uso-del-celular',
-
+    'exceso-velocidad',
     'desvio-de-carril-izquierda2',
   ];
 

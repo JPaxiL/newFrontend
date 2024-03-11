@@ -169,19 +169,19 @@ export class AlertGpsEditComponent implements OnInit {
       console.log('alerttt', alert);
 
       let sonidosObtenidos = this.alertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
-      if (alert.id === 3) {
+      if (alert.name === 'Aceleracion Brusca') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 28
+          (sonido: { id: any }) => sonido.id === 27
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
-      } else if (alert.id === 4) {
+      } else if (alert.name === 'Frenada Brusca') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 35
+          (sonido: { id: any }) => sonido.id === 34
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
@@ -198,7 +198,7 @@ export class AlertGpsEditComponent implements OnInit {
       }
     } else {
       this.listaSonidos = this.alertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
       if (this.listaSonidos.length > 0) {
