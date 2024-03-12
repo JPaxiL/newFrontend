@@ -14,6 +14,7 @@ import { BrowserDetectorService } from '../../services/browser-detector.service'
 import { EventService } from 'src/app/events/services/event.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 import Swal from 'sweetalert2';
 // import { threadId } from 'worker_threads';
@@ -30,6 +31,7 @@ export class FormComponent implements OnInit {
   reports: any=[];
   events: any=[];
   selectedReport: any={};
+  ListVehicles: any=[];
   vehicles: any=[];
   selectedVehicles: any=[];
   convoys: any=[];
@@ -396,10 +398,13 @@ export class FormComponent implements OnInit {
       spinner.show("fullScreenSpinner");
       this.titleService.setTitle('Reportes');
       // this.vehicles=this.vehicleService.vehicles;
-      this.vehicleService.dataCompleted.subscribe(vehicles=>{
+      this.vehicleService.dataCompleted.subscribe(async vehicles=>{
         if(vehicles){
-          this.vehicles = vehicles;
-          console.log('Vehicles: ',vehicles);
+          // this.vehicles = vehicles;
+          this.vehicles = await this.reducedInfoVehicles(vehicles);
+          this.ListVehicles = this.vehicles;
+          console.log('Vehicles: ',this.vehicles);
+
           // this.convoys = _.uniqBy(this.vehicles, 'nameconvoy');
           // this.groups = _.uniqBy(this.vehicles, 'namegrupo');
           // this.convoys = this.convoys.map((convoy: { convoy: any; }) => { return convoy.convoy});
@@ -494,6 +499,24 @@ export class FormComponent implements OnInit {
 
 
     }
+  async reducedInfoVehicles(vehicles:any) {
+      // Reducir y especificar la cantidad de informacion a enviar por vehiculo
+      const reducedVehicles = vehicles.map((vh: UserTracker) => {
+        return {
+          IMEI: vh.IMEI,
+          name: vh.name,
+          driver_id: vh.driver_id,
+          namegrupo: vh.namegrupo,
+          idgrupo: vh.idgrupo,
+          nameconvoy: vh.nameconvoy,
+          idconvoy: vh.idconvoy,
+          nameoperation: vh.nameoperation,
+          idoperation: vh.idoperation,
+          tipo: vh.tipo,
+        };
+      });
+      return reducedVehicles;
+  }
 
   ngOnInit(): void {
     //LISTA DE EVENTOS
@@ -693,7 +716,7 @@ export class FormComponent implements OnInit {
   onOptionSelected(){
 
     let aux: any[] = [];
-    aux = this.vehicleService.vehicles
+    aux = this.ListVehicles
     for (const vehicle of aux) {
       const id_operation = vehicle.idoperation;
       // const id_grupo = vehicle.idgrupo;
@@ -734,7 +757,7 @@ export class FormComponent implements OnInit {
     // console.log('Groups: ',this.groups);
 
     //actualizar lista de vehiculos
-    this.vehicles = this.vehicleService.vehicles;
+    this.vehicles = this.ListVehicles;
     this.disabledGroup = true;
     this.disabledConvoy = true;
     this.groups = [];
@@ -758,7 +781,7 @@ export class FormComponent implements OnInit {
 
     if (this.listOptionCheckbox == 'grupo' || this.listOptionCheckbox == 'convoy'){
        //filtrar grupos en base a operacion seleccionada
-      aux = this.vehicleService.vehicles.filter((gp:any) => gp.idoperation==this.selectedOperation);
+      aux = this.ListVehicles.filter((gp:any) => gp.idoperation==this.selectedOperation);
       for (const vehicle of aux) {
         const id_grupo = vehicle.idgrupo;
         const filteredGroup = {
@@ -780,7 +803,7 @@ export class FormComponent implements OnInit {
       this.placeholderConvoy = 'Seleccione un Grupo Primero...';
     }
     //filtrar vehiculos
-    aux2 = this.vehicleService.vehicles.filter((vh:any) => vh.idoperation == this.selectedOperation);
+    aux2 = this.ListVehicles.filter((vh:any) => vh.idoperation == this.selectedOperation);
     this.vehicles = aux2;
 
     this.chkAllVehicles = false;
@@ -801,7 +824,7 @@ export class FormComponent implements OnInit {
 
     if (this.listOptionCheckbox == 'convoy'){
        //filtrar grupos en base a operacion seleccionada
-      aux = this.vehicleService.vehicles.filter((cv:any) => cv.idgrupo==this.selectedGroup && cv.idoperation == this.selectedOperation);
+      aux = this.ListVehicles.filter((cv:any) => cv.idgrupo==this.selectedGroup && cv.idoperation == this.selectedOperation);
       for (const vehicle of aux) {
         const id_convoy = vehicle.idconvoy;
         const filteredGroup = {
@@ -820,7 +843,7 @@ export class FormComponent implements OnInit {
     }
 
     //filtrar vehiculos
-    aux2 = this.vehicleService.vehicles.filter((vh:any) => vh.idgrupo == this.selectedGroup && vh.idoperation == this.selectedOperation);
+    aux2 = this.ListVehicles.filter((vh:any) => vh.idgrupo == this.selectedGroup && vh.idoperation == this.selectedOperation);
     this.vehicles = aux2;
     // for (const vehicle of aux2) {
     //   const id_operation = vehicle.idoperation;
@@ -839,7 +862,7 @@ export class FormComponent implements OnInit {
     this.vehicles = [];
     this.selectedVehicles = [];
     let aux:any[] =[];
-    aux = this.vehicleService.vehicles.filter((vh:any) => vh.idconvoy == this.selectedConvoy && vh.idgrupo == this.selectedGroup && vh.idoperation == this.selectedOperation);
+    aux = this.ListVehicles.filter((vh:any) => vh.idconvoy == this.selectedConvoy && vh.idgrupo == this.selectedGroup && vh.idoperation == this.selectedOperation);
     this.vehicles = aux;
 
     this.chkAllVehicles = false;
