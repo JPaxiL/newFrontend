@@ -97,7 +97,13 @@ export interface UserTracker {
     tolva?: string,
     tag?: boolean,
     tag_driver?: boolean,
-    cod_interno?: string | null
+    cod_interno?: string | null,
+    custom_url?: string;
+    custom_svg?: any,
+    relenti_svg?:any,
+    movement_svg?:any,
+    excess_svg?:any,
+    movement_onda?:any | null,
 }
 
 export interface ScreenView {

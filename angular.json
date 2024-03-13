@@ -76,13 +76,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "50mb"
+                  "maximumWarning": "35mb",
+                  "maximumError": "100mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "50kb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "5mb"
                 }
               ]
             },
@@ -104,13 +104,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "50mb"
+                  "maximumWarning": "35mb",
+                  "maximumError": "100mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "50kb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "5mb"
                 }
               ]
             },
@@ -124,13 +124,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "50mb"
+                  "maximumWarning": "35mb",
+                  "maximumError": "100mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "50kb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "5mb"
                 }
               ]
             }

@@ -16,7 +16,7 @@ export class ReportService {
   chkApiGoogle : any = false;
   contReport : any = 0;
   userId : any = 0;
-
+  chkRiesgo : any = false;
 
   eC:any; //Reporte 6 - Reporte de Eventos , Seleccion de Campo = Eventos Campos
 

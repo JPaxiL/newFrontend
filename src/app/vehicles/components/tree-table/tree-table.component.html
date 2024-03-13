@@ -1,26 +1,46 @@
-<app-vehicle-config [display]="display" [config]="config" (eventDisplay)="onChangeDisplay($event)" (eventUpdate)="onUpdate($event)"></app-vehicle-config>
+<app-vehicle-config
+  [display]="display"
+  [config]="config"
+  (eventDisplay)="onChangeDisplay($event)"
+  (eventUpdate)="onUpdate($event)"
+></app-vehicle-config>
 
-<p-dialog header="" icon="pi pi-info-circle" [style]="{width: '50vw'}" [(visible)]="displayEditGroup" [modal]="true" [resizable]="false">
+<p-dialog
+  header=""
+  icon="pi pi-info-circle"
+  [style]="{ width: '50vw' }"
+  [(visible)]="displayEditGroup"
+  [modal]="true"
+  [resizable]="false"
+>
   <ng-template class="p-dialog-title" pTemplate="header">
     <div>
       <i class="fa fa-pencil me-2" aria-hidden="true"></i>
-      <strong>Editar {{textHeaderEdit}}</strong>
+      <strong>Editar {{ textHeaderEdit }}</strong>
     </div>
   </ng-template>
   <div class="dialog-body-container">
-
     <div class="p-fluid p-formgrid p-grid">
-
       <div class="dialog-form-container">
-
         <div class="row gl-out-middleline">
           <div class="col p-field p-0">
             <div class="row gl-row-underline m-0 w-100">
-              <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
+              <div
+                class="col-5 d-flex align-items-center justify-content-start text-start fw-bold"
+              >
                 <label for="float-input">Nombre:</label>
               </div>
               <div class="col-7">
-                <input  #nameEdit id="float-input" type="text" pInputText class="p-inputtext-sm" placeholder="" [disabled]="loading" [readonly]="readonlyNameGroup">
+                <input
+                  #nameEdit
+                  id="float-input"
+                  type="text"
+                  pInputText
+                  class="p-inputtext-sm"
+                  placeholder=""
+                  [disabled]="loading"
+                  [readonly]="readonlyNameGroup"
+                />
               </div>
             </div>
           </div>
@@ -29,29 +49,59 @@
         <div class="flex-column mt-3">
           <div class="row gl-listbox-container">
             <div class="col">
-
-              <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
+              <p-listbox
+                [options]="list1"
+                [(ngModel)]="selectedList1"
+                [multiple]="true"
+                [checkbox]="true"
+                [filter]="true"
+                filterPlaceHolder="Buscar por placa"
+                optionLabel="name"
+                [listStyle]="{ height: '200px' }"
+                [disabled]="loading"
+              >
                 <ng-template let-car pTemplate="item">
-                    <div class="car-item">
-                      <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                      <label>{{car.name}}</label>
-                    </div>
+                  <div class="car-item">
+                    <img
+                      border="0"
+                      width="25"
+                      height="25"
+                      src="assets/images/objects/nuevo/{{ car.icon }}"
+                      style="display: inline-block; margin: 2px 0 2px 2px"
+                    />
+
+                    <label>{{ car.name }}</label>
+                  </div>
                 </ng-template>
               </p-listbox>
             </div>
 
-            <div class="col-1 d-flex flex-column justify-content-center align-items-center">
-              <div style="height: 1.5rem;"></div>
+            <div
+              class="col-1 d-flex flex-column justify-content-center align-items-center"
+            >
+              <div style="height: 1.5rem"></div>
               <div class="">
-                <button (click)="upList2()" type="button" class="btn btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
+                <button
+                  (click)="upList2()"
+                  type="button"
+                  class="btn btn-gl-light-blue btn-circle"
+                  name="button"
+                  [disabled]="loading"
+                >
                   <span>
                     <i class="fa fa-arrow-right" aria-hidden="true"></i>
                   </span>
                 </button>
               </div>
-              <div style="height: 1rem;"></div>
+              <div style="height: 1rem"></div>
               <div class="">
-                <button (click)="upList1()" type="button" class="btn btn-gl-light-blue btn-circle" name="button" [disabled]="loading">
+                <button
+                  (click)="upList1()"
+                  type="button"
+                  class="btn btn-gl-light-blue btn-circle"
+                  name="button"
+                  [disabled]="loading"
+                >
                   <span>
                     <i class="fa fa-arrow-left" aria-hidden="true"></i>
                   </span>
@@ -60,121 +110,219 @@
             </div>
 
             <div class="col">
-              <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
+              <p-listbox
+                [options]="list2"
+                [(ngModel)]="selectedList2"
+                [multiple]="true"
+                [checkbox]="true"
+                [filter]="true"
+                filterPlaceHolder="Buscar por placa"
+                optionLabel="name"
+                [listStyle]="{ height: '200px' }"
+                [disabled]="loading"
+              >
                 <ng-template let-car pTemplate="item">
-                    <div class="car-item">
-                      <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
-                      <label>{{car.name}}</label>
-                    </div>
+                  <div class="car-item">
+                    <img
+                      border="0"
+                      width="25"
+                      height="25"
+                      src="assets/images/objects/nuevo/{{ car.icon }}"
+                      style="display: inline-block; margin: 2px 0 2px 2px"
+                    />
+                    <label>{{ car.name }}</label>
+                  </div>
                 </ng-template>
               </p-listbox>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   </div>
   <p-footer>
     <div class="row d-flex justify-content-center">
       <div class="col-4">
-        <button (click)="displayEditGroup=false" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading"loading>Cancelar</button>
+        <button
+          (click)="displayEditGroup = false"
+          type="button"
+          class="btn-gl-cancel btn-dark-hover btn-sm w-100"
+          [disabled]="loading"
+          loading
+        >
+          Cancelar
+        </button>
       </div>
       <div class="col-4">
-        <button (click)="onConfirmationEdit()" type="button" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading"loading>Guardar</button>
+        <button
+          (click)="onConfirmationEdit()"
+          type="button"
+          class="btn-gl-save btn-dark-hover btn-sm w-100"
+          [disabled]="loading"
+          loading
+        >
+          Guardar
+        </button>
       </div>
     </div>
   </p-footer>
-
 </p-dialog>
 
-<div style="position: relative; height: 100%;">
-  <ngx-spinner *ngIf="!alreadyLoaded" bdColor = "rgba(0, 0, 0, 0.8)" name="loadingTreeTable" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" > Cargando Vehículos... </p></ngx-spinner>
+<div style="position: relative; height: 100%">
+  <ngx-spinner
+    *ngIf="!alreadyLoaded"
+    bdColor="rgba(0, 0, 0, 0.8)"
+    name="loadingTreeTable"
+    size="medium"
+    color="#fff"
+    type="ball-pulse"
+    [fullScreen]="false"
+    ><p style="color: white">Cargando Vehículos...</p></ngx-spinner
+  >
 
   <div id="rowBusqueda" class="bg-gl-blue-dark">
     <div class="d-flex">
       <div class="d-flex flex-grow-1">
-
         <span class="p-input-icon-right flex-grow-1 me-2">
           <i class="fa fa-search" aria-hidden="true"></i>
-          <input (keyup)="onQuickFilterChanged($event)" type="text" ng-model="something.terms" placeholder="IMEI/Placa/Código/Nombre" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-change="something.search()" aria-invalid="false">
+          <input
+            (keyup)="onQuickFilterChanged($event)"
+            type="text"
+            ng-model="something.terms"
+            placeholder="IMEI/Placa/Código/Nombre"
+            class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+            ng-change="something.search()"
+            aria-invalid="false"
+          />
         </span>
 
-        <button (click)="onClickGroup()" type="button" class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2" title="Nuevo Operación/Grupo/Convoy" data-bs-toggle="tooltip" data-bs-placement="auto" container="body" onclick="this.blur();">
+        <button
+          (click)="onClickGroup()"
+          type="button"
+          class="btn-gl-blue btn-circle btn-dark-hover flex-none me-2"
+          title="Nuevo Operación/Grupo/Convoy"
+          data-bs-toggle="tooltip"
+          data-bs-placement="auto"
+          container="body"
+          onclick="this.blur();"
+        >
           <i class="fa fa-plus" aria-hidden="true"></i>
         </button>
 
-        <div ngbDropdown container="body" placement="right-top left-top" class="flex-none">
-          <button class="btn-gl-gray-blue btn-dark-hover btn-circle" ngbDropdownToggle>
+        <div
+          ngbDropdown
+          container="body"
+          placement="right-top left-top"
+          class="flex-none"
+        >
+          <button
+            class="btn-gl-gray-blue btn-dark-hover btn-circle"
+            ngbDropdownToggle
+          >
             <i class="fa fa-fw fa-bars fa-1" aria-hidden="true"></i>
           </button>
-          <div ngbDropdownMenu class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior">
-            <div class="text-center">
-              Personalizar Panel
-            </div>
+          <div
+            ngbDropdownMenu
+            class="gl-custom-dropdown dropdown-customize-vehicle-panel disable-chkbox-behavior"
+          >
+            <div class="text-center">Personalizar Panel</div>
             <div class="container pt-2 png-checkbox-container">
               <div class="button-group">
-                <p-selectButton [options]="vehicleService.optionsFilterNameVehicle" [(ngModel)]="vehicleService.selectedFilterNameVehicle" (onChange)="onChangeSelection($event.value)"></p-selectButton>
+                <p-selectButton
+                  [options]="vehicleService.optionsFilterNameVehicle"
+                  [(ngModel)]="vehicleService.selectedFilterNameVehicle"
+                  (onChange)="onChangeSelection($event.value)"
+                ></p-selectButton>
               </div>
               <div class="dropdown-divider"></div>
               <div>
                 <span (click)="onClickSetting('eye')">
-                  <p-checkbox [(ngModel)]="setting['eye']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['eye']"
+                    [binary]="true"
+                  ></p-checkbox>
                   Ver
                 </span>
               </div>
               <div>
                 <label>
-                  <p-checkbox [(ngModel)]="showVehiclesFixes" (change)="onChangeUnitsFixes()" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="showVehiclesFixes"
+                    (change)="onChangeUnitsFixes()"
+                    [binary]="true"
+                  ></p-checkbox>
                   Ver Unidades Fijadas
                 </label>
               </div>
               <div>
                 <label>
-                  <p-checkbox [(ngModel)]="vehicleTransmissionStatus" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="vehicleTransmissionStatus"
+                    [binary]="true"
+                  ></p-checkbox>
                   Estado de Transmisión
                 </label>
               </div>
               <div>
                 <label>
-                  <p-checkbox [(ngModel)]="vehicleIconState" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="vehicleIconState"
+                    [binary]="true"
+                  ></p-checkbox>
                   Ícono de Vehículo
                 </label>
               </div>
               <div>
                 <span (click)="onClickSetting('imei')">
-                  <p-checkbox [(ngModel)]="setting['imei']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['imei']"
+                    [binary]="true"
+                  ></p-checkbox>
                   IMEI
                 </span>
               </div>
               <div>
                 <span (click)="onClickSetting('vehicle')">
-                  <p-checkbox [(ngModel)]="setting['vehicle']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['vehicle']"
+                    [binary]="true"
+                  ></p-checkbox>
                   Vehículos
                 </span>
               </div>
               <div>
                 <span (click)="onClickSetting('tag_driver')">
-                  <p-checkbox [(ngModel)]="setting['tag_driver']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['tag_driver']"
+                    [binary]="true"
+                  ></p-checkbox>
                   Mostrar Conductor
                 </span>
               </div>
               <div>
                 <span (click)="onClickSetting('tag')">
-                  <p-checkbox [(ngModel)]="setting['tag']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['tag']"
+                    [binary]="true"
+                  ></p-checkbox>
                   Mostrar nombre
                 </span>
               </div>
               <div>
                 <span (click)="onClickSetting('follow')">
-                  <p-checkbox [(ngModel)]="setting['follow']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['follow']"
+                    [binary]="true"
+                  ></p-checkbox>
                   Seguir Vehículo
                 </span>
               </div>
               <div>
                 <span (click)="onClickSetting('limit')">
-                  <p-checkbox [(ngModel)]="setting['limit']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['limit']"
+                    [binary]="true"
+                  ></p-checkbox>
                   Velocidad
                 </span>
               </div>
@@ -196,53 +344,75 @@
                   Transmisión
                 </span>
               </div> -->
-              
+
               <div>
                 <span (click)="onClickSetting('config')">
-                  <p-checkbox [(ngModel)]="setting['config']" [binary]="true"></p-checkbox>
+                  <p-checkbox
+                    [(ngModel)]="setting['config']"
+                    [binary]="true"
+                  ></p-checkbox>
                   Configurar
                 </span>
               </div>
               <div class="dropdown-divider"></div>
-
             </div>
 
             <!-- <div class="dropdown-item active-view" style="padding: 0.125rem 0.75rem;"> -->
-            <div class="dropdown-item active" style="padding: 0.125rem 0.75rem;">
-              <i  class="fas fa-sitemap ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <div class="dropdown-item active" style="padding: 0.125rem 0.75rem">
+              <i
+                class="fas fa-sitemap ag-grid-header-icon text-center"
+                style="width: 20px"
+              ></i>
               <span (click)="onTableGroup()">Vista por Operación</span>
             </div>
-            <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
-              <i class="fas fa-list ag-grid-header-icon text-center" style="width: 20px;"></i>
+            <div class="dropdown-item" style="padding: 0.125rem 0.75rem">
+              <i
+                class="fas fa-list ag-grid-header-icon text-center"
+                style="width: 20px"
+              ></i>
               <span (click)="onTableGeneral()">Vista General</span>
             </div>
             <!-- <div class="dropdown-item" style="padding: 0.125rem 0.75rem;">
               <i class="fas fa-signal ag-grid-header-icon text-center" style="width: 20px;"></i>
               <span (click)="onTableTransmision()">Vista por Transmisión*</span>
             </div> -->
-
           </div>
         </div>
-
       </div>
     </div>
   </div>
   <div class="">
     <!-- Cambiar scrollHeight a 100% - 4.375rem artificialmente -->
     <!-- scrollHeight no soporta porcentajes % -->
-    <p-treeTable #tt [value]="vehicles" [loading]="loading"
-      scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--footbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))" 
-      styleClass="p-treetable-sm" 
-      sortField="id" 
+    <p-treeTable
+      #tt
+      [value]="vehicles"
+      [loading]="loading"
+      scrollHeight="calc(100vh - calc(calc(calc(var(--navbar-height) + var(--footbar-height) + var(--row-busqueda-height)) + calc(var(--pm-vehiculos-header-height) + var(--treetable-header-height)))))"
+      styleClass="p-treetable-sm"
+      sortField="id"
       [resizableColumns]="true"
       [reorderableColumns]="false"
       [columns]="cols"
       [scrollable]="true"
-      [sortOrder]="[-'id']" 
-      [virtualScroll]="true" [virtualRowHeight]="30"
-      [ngClass]="{'vehicle-treetable' : true}"
+      [sortOrder]="[-'id']"
+      [virtualScroll]="true"
+      [virtualRowHeight]="30"
+      [ngClass]="{ 'vehicle-treetable': true }"
       (onFilter)="headerScrollHandler()"
-      [globalFilterFields]="['name','IMEI','plate_number','sim_number','cod_interno','nameconvoy','namegrupo','nameoperation','nametype_vehicle']"> <!-- Added to filter by IMEI -->
+      [globalFilterFields]="[
+        'name',
+        'IMEI',
+        'plate_number',
+        'sim_number',
+        'cod_interno',
+        'nameconvoy',
+        'namegrupo',
+        'nameoperation',
+        'nametype_vehicle'
+      ]"
+    >
+      <!-- Added to filter by IMEI -->
       <!-- <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -251,149 +421,347 @@
       </ng-template> -->
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col style="width: 0.5rem;">
-          <col style="width: 40px;" *ngIf="setting['eye']">
-          <col style="width: 100%;" *ngIf="setting['vehicle']">
-          <col style="width: 50%;" *ngIf="setting['imei']">
-          <col style="width: 30px;" *ngIf="setting['tag_driver']">
-          <col style="width: 35px;" *ngIf="setting['tag']">
-          <col style="width: 35px;" *ngIf="setting['follow']">
-          <col style="width: 35px;" *ngIf="setting['limit']">
-          <col style="width: 35px;" *ngIf="setting['gps']">
-          <col style="width: 35px;" *ngIf="setting['gsm']">
-          <col style="width: 35px;" *ngIf="setting['trans']">
-          <col style="width: 35px;" *ngIf="setting['config']">
+          <col style="width: 0.5rem" />
+          <col style="width: 40px" *ngIf="setting['eye']" />
+          <col style="width: 100%" *ngIf="setting['vehicle']" />
+          <col style="width: 50%" *ngIf="setting['imei']" />
+          <col style="width: 30px" *ngIf="setting['tag_driver']" />
+          <col style="width: 35px" *ngIf="setting['tag']" />
+          <col style="width: 35px" *ngIf="setting['follow']" />
+          <col style="width: 35px" *ngIf="setting['limit']" />
+          <col style="width: 35px" *ngIf="setting['gps']" />
+          <col style="width: 35px" *ngIf="setting['gsm']" />
+          <col style="width: 35px" *ngIf="setting['trans']" />
+          <col style="width: 35px" *ngIf="setting['config']" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
-
         <tr>
           <th></th>
-          <th *ngIf="setting['eye']"><app-eye-header style="height: 1.25rem; display: flex;"></app-eye-header></th>
+          <th *ngIf="setting['eye']">
+            <app-eye-header
+              style="height: 1.25rem; display: flex"
+            ></app-eye-header>
+          </th>
           <!-- <th *ngIf="setting['vehicle']"><app-vehicle-header (sort)="onSort($event)" ></app-vehicle-header></th> -->
           <th *ngIf="setting['vehicle']"></th>
-          <th *ngIf="setting['imei']" style="text-align: center; white-space: nowrap;">IMEI</th>
-          <th *ngIf="setting['tag_driver']" ><app-tag-driver-header></app-tag-driver-header></th>
-          <th *ngIf="setting['tag']" ><app-tag-header></app-tag-header></th>
-          <th *ngIf="setting['follow']" ><app-follow-header></app-follow-header></th>
-          <th *ngIf="setting['limit']" ><app-limit-header></app-limit-header></th>
-          <th *ngIf="setting['gps']" ><app-gps-header></app-gps-header></th>
-          <th *ngIf="setting['gsm']" ><app-gsm-header></app-gsm-header></th>
+          <th *ngIf="setting['imei']">
+            <app-tag-imei></app-tag-imei
+            ><!-- Imei -->
+          </th>
+          <!-- IMEI -->
+          <th *ngIf="setting['tag_driver']">
+            <app-tag-driver-header></app-tag-driver-header>
+          </th>
+          <!-- MOSTRAR CONDUCTOR -->
+          <th *ngIf="setting['tag']"><app-tag-header></app-tag-header></th>
+          <!-- MOSTRAR NOMBRE -->
+          <th *ngIf="setting['follow']">
+            <app-follow-header></app-follow-header>
+          </th>
+          <!-- SEGUIR VEHICULO -->
+          <th *ngIf="setting['limit']">
+            <app-limit-header></app-limit-header>
+          </th>
+          <!-- VELOCIDAD -->
+          <th *ngIf="setting['gps']"><app-gps-header></app-gps-header></th>
+          <th *ngIf="setting['gsm']"><app-gsm-header></app-gsm-header></th>
           <!-- <th *ngIf="setting['trans']"><app-transmission-header></app-transmission-header></th> -->
-          <th *ngIf="setting['config']" ><app-setting-header></app-setting-header></th>
-
+          <th *ngIf="setting['config']">
+            <app-setting-header></app-setting-header>
+          </th>
+          <!-- CONFIGURAR -->
         </tr>
         <!-- <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
           {{col.header}}
           <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
         </th> -->
       </ng-template>
-      <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-        <tr *ngIf="rowData['col']==3 && rowData['type'] == 'pinUp'" [ngClass]="{'row-header-pinup': rowData['type'] === 'pinUp'}">
+      <ng-template
+        pTemplate="body"
+        let-rowNode
+        let-rowData="rowData"
+        let-columns="columns"
+      >
+        <tr
+          *ngIf="rowData['col'] == 3 && rowData['type'] == 'pinUp'"
+          [ngClass]="{ 'row-header-pinup': rowData['type'] === 'pinUp' }"
+        >
           <td></td>
           <td [attr.colspan]="column">
             <div class="d-flex justify-content-between align-items-center">
-              <div class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header">
-                <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
-                {{rowData["name"]}}
+              <div
+                class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header"
+              >
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{ rowData["name"] }}&nbsp;&nbsp;&nbsp;
+                <img
+                  src="assets/images/eventos/pin_point_white.svg"
+                  alt="Pin Point Image"
+                  style="width: 20px; height: 20px"
+                />
               </div>
 
               <div class="d-flex justify-content-end pe-3 flex-none">
-                <div class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
+                <div
+                  class="col-3 p-0 m-0 d-flex flex-column justify-content-center"
+                >
                   <div class="d-flex justify-content-end">
-                    <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
-                      <span ngbDropdownToggle class="btn-label burger-options" title="Opciones" data-bs-toggle="tooltip" data-bs-placement="top">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="stroke-width:1.5;" viewBox="0 0 16 16" class="dropdown-toggle bi bi-list" aria-expanded="false"><path _ngcontent-atd-c211="" fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
+                    <div
+                      ngbDropdown
+                      style="width: 16px"
+                      container="body"
+                      [autoClose]="true"
+                      placement="right-top right-bottom left-top left-bottom"
+                    >
+                      <span
+                        ngbDropdownToggle
+                        class="btn-label burger-options"
+                        title="Opciones"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          style="stroke-width: 1.5"
+                          viewBox="0 0 16 16"
+                          class="dropdown-toggle bi bi-list"
+                          aria-expanded="false"
+                        >
+                          <path
+                            _ngcontent-atd-c211=""
+                            fill-rule="evenodd"
+                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+                          ></path>
+                        </svg>
                       </span>
-                      <div ngbDropdownMenu class="gl-custom-dropdown treetable-dropdown">
+                      <div
+                        ngbDropdownMenu
+                        class="gl-custom-dropdown treetable-dropdown"
+                      >
                         <div (click)="showEditFixes(rowData)" ngbDropdownItem>
                           <span class="btn-label">
-                            Editar {{rowData['type'] === 'pinUp' ? 'Unidades Fijadas': 'Unidades'}}
+                            Editar
+                            {{
+                              rowData["type"] === "pinUp"
+                                ? "UNIDADES FIJADAS"
+                                : "Unidades"
+                            }}
                           </span>
                         </div>
                         <div (click)="cleanFixes(rowData)" ngbDropdownItem>
                           <span class="btn-label">
-                            Limpiar {{rowData['type'] === 'pinUp' ? 'Unidades Fijadas': 'Unidades'}}
+                            Limpiar
+                            {{
+                              rowData["type"] === "pinUp"
+                                ? "UNIDADES FIJADAS"
+                                : "Unidades"
+                            }}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div style="width: 48px;"></div>
+                    <div style="width: 48px"></div>
                   </div>
                 </div>
               </div>
             </div>
           </td>
         </tr>
-        <tr *ngIf="rowData['col']==3 && rowData['type']!= 'pinUp'" [ngClass]="{'row-header-operacion': rowData['type'] === 'operacion','row-header-grupo': rowData['type'] === 'grupo', 'row-header-convoy': rowData['type'] === 'convoy','row-header-pinup': rowData['type'] === 'pinUp'}">
+        <tr
+          *ngIf="rowData['col'] == 3 && rowData['type'] != 'pinUp'"
+          [ngClass]="{
+            'row-header-operacion': rowData['type'] === 'operacion',
+            'row-header-grupo': rowData['type'] === 'grupo',
+            'row-header-convoy': rowData['type'] === 'convoy',
+            'row-header-pinup': rowData['type'] === 'pinUp'
+          }"
+        >
           <td></td>
           <td [attr.colspan]="column">
             <div class="d-flex justify-content-between align-items-center">
               <!-- INFO DEL OPE/GROUP/CONVOY -->
-              <div class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header">
-                <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler>
-                {{rowData['type'] === 'operacion' && rowData['name'] !== 'Unidades Sin Operacion' ? 'Operación: ' : rowData['type'] === 'grupo' && rowData['name'] !== 'Unidades Sin Grupo' ? 'Grupo: ' : rowData['type'] === 'convoy' && rowData['name'] !== 'Unidades Sin Convoy' ? 'Convoy: ' : ''}}{{rowData["name"]}}
+              <div
+                class="d-flex justify-content-start flex-grow-1 align-items-center treetable-toggler-header"
+              >
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{
+                  rowData["type"] === "operacion" &&
+                  rowData["name"] !== "Unidades Sin Operacion"
+                    ? "Operación: "
+                    : rowData["type"] === "grupo" &&
+                      rowData["name"] !== "Unidades Sin Grupo"
+                    ? "Grupo: "
+                    : rowData["type"] === "convoy" &&
+                      rowData["name"] !== "Unidades Sin Convoy"
+                    ? "Convoy: "
+                    : ""
+                }}{{ rowData["name"] }}
                 <!-- {{rowData['type'] === 'grupo' && rowData['name']!='Unidades Sin Grupo'? 'Grupo: ': rowData['type'] === 'convoy' && rowData['name']!='Unidades Sin Convoy'? 'Convoy: ': ''}}{{rowData["name"]}} -->
               </div>
               <!-- OPCIONES EDIT/DELETE -->
               <div class="d-flex justify-content-end pe-3 flex-none">
-                <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'&&rowData['name']!='Unidades Sin Operacion'" class="col-3 p-0 m-0 d-flex flex-column justify-content-center">
+                <div
+                  *ngIf="
+                    rowData['name'] != 'Unidades Sin Convoy' &&
+                    rowData['name'] != 'Unidades Sin Grupo' &&
+                    rowData['name'] != 'Unidades Sin Operacion'
+                  "
+                  class="col-3 p-0 m-0 d-flex flex-column justify-content-center"
+                >
                   <div class="d-flex justify-content-end">
-                    <div ngbDropdown style="width: 16px;" container="body" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
-                      <span ngbDropdownToggle class="btn-label burger-options" title="Opciones" data-bs-toggle="tooltip" data-bs-placement="top">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="stroke-width:1.5;" viewBox="0 0 16 16" class="dropdown-toggle bi bi-list" aria-expanded="false"><path _ngcontent-atd-c211="" fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
+                    <div
+                      ngbDropdown
+                      style="width: 16px"
+                      container="body"
+                      [autoClose]="true"
+                      placement="right-top right-bottom left-top left-bottom"
+                    >
+                      <span
+                        ngbDropdownToggle
+                        class="btn-label burger-options"
+                        title="Opciones"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          style="stroke-width: 1.5"
+                          viewBox="0 0 16 16"
+                          class="dropdown-toggle bi bi-list"
+                          aria-expanded="false"
+                        >
+                          <path
+                            _ngcontent-atd-c211=""
+                            fill-rule="evenodd"
+                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+                          ></path>
+                        </svg>
                       </span>
-                      <div ngbDropdownMenu class="gl-custom-dropdown treetable-dropdown">
-                        <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'&&rowData['name']!='Unidades Sin Operacion'" (click)="showEditGroup(rowData)" ngbDropdownItem>
+                      <div
+                        ngbDropdownMenu
+                        class="gl-custom-dropdown treetable-dropdown"
+                      >
+                        <div
+                          *ngIf="
+                            rowData['name'] != 'Unidades Sin Convoy' &&
+                            rowData['name'] != 'Unidades Sin Grupo' &&
+                            rowData['name'] != 'Unidades Sin Operacion'
+                          "
+                          (click)="showEditGroup(rowData)"
+                          ngbDropdownItem
+                        >
                           <span class="btn-label">
-                            Editar {{rowData['type']}}
+                            Editar {{ rowData["type"] }}
                           </span>
                         </div>
-                        <div *ngIf="rowData['name']!='Unidades Sin Convoy'&&rowData['name']!='Unidades Sin Grupo'&&rowData['name']!='Unidades Sin Operacion'" (click)="showDelete(rowData)" ngbDropdownItem>
+                        <div
+                          *ngIf="
+                            rowData['name'] != 'Unidades Sin Convoy' &&
+                            rowData['name'] != 'Unidades Sin Grupo' &&
+                            rowData['name'] != 'Unidades Sin Operacion'
+                          "
+                          (click)="showDelete(rowData)"
+                          ngbDropdownItem
+                        >
                           <span class="btn-label">
-                            Descomponer {{rowData['type']}}
+                            Descomponer {{ rowData["type"] }}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div style="width: 48px;"></div>
+                    <div style="width: 48px"></div>
                   </div>
                 </div>
               </div>
             </div>
           </td>
         </tr>
-        <tr *ngIf="rowData['col']!=3">
+        <tr *ngIf="rowData['col'] != 3">
           <td></td>
           <td *ngIf="setting['eye']" class="eye-column">
             <!-- <span class="btn-label"><i class="fa fa-eye-slash" style="color:#444444;"></i></span> -->
             <!-- <p-treeTableToggler [rowNode]="rowNode" ></p-treeTableToggler> -->
-            <div *ngIf="rowData['eye'] == true" class="" style="font-size: 14px; text-align: center;">
-              <span (click)="onClickEye(rowData['IMEI'])" class="btn-label"><i class="fas fa-eye"></i></span>
+            <div
+              *ngIf="rowData['eye'] == true"
+              class=""
+              style="font-size: 14px; text-align: center"
+            >
+              <span (click)="onClickEye(rowData['IMEI'])" class="btn-label"
+                ><i class="fas fa-eye"></i
+              ></span>
             </div>
-            <div *ngIf="rowData['eye'] == false" class="" style="font-size: 14px; text-align: center;">
-              <span (click)="onClickEye(rowData['IMEI'])" class="btn-label"><i class="fa fa-eye-slash"></i></span>
+            <div
+              *ngIf="rowData['eye'] == false"
+              class=""
+              style="font-size: 14px; text-align: center"
+            >
+              <span (click)="onClickEye(rowData['IMEI'])" class="btn-label"
+                ><i class="fa fa-eye-slash"></i
+              ></span>
             </div>
             <!-- <span class="btn-label"><i class="fa fa-eye" style="color:#444444;"></i></span> -->
           </td>
-          <td *ngIf="setting['vehicle']" style="min-width: 215px;" class="vehicle-column">
-            <div class="d-flex justify-content-center align-items-center mx-2" (click)="onClickIcon(rowData['IMEI'])">
-              <div *ngIf="vehicleTransmissionStatus" class="vehicle-transmission-status" style="background-color:{{color[rowData['point_color']]}}" title="{{hint[rowData['point_color']]}}" data-bs-toggle="tooltip" data-bs-placement="top" container="body"></div>
+          <td
+            *ngIf="setting['vehicle']"
+            style="min-width: 215px"
+            class="vehicle-column"
+          >
+            <!-- <div [innerHTML]="svgContent"></div> -->
+            <div
+              class="d-flex justify-content-center align-items-center mx-2"
+              (click)="onClickIcon(rowData['IMEI'])"
+            >
+              <div
+                *ngIf="vehicleTransmissionStatus"
+                class="vehicle-transmission-status"
+                style="background-color:{{ color[rowData['point_color']] }}"
+                title="{{ hint[rowData['point_color']] }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                container="body"
+              ></div>
               <!-- <div id="div_svg_{{rowData['id']}}" [innerHTML]="userDataService.svgContentsSafe[rowData['icon']]" class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState" style="width: 25px; height: 25px">
               </div> -->
-              <div class="flex-none icon-float-right vehicle-icon ms-2" *ngIf="vehicleIconState">
-                <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{ rowData['icon'] }}">
+              <div
+                class="flex-none icon-float-right vehicle-icon ms-2"
+                *ngIf="vehicleIconState"
+              >
+                <img
+                  border="0"
+                  width="33"
+                  height="33"
+                  src="assets/images/objects/nuevo/{{ rowData['icon'] }}"
+                />
+
+                <!--  <div [innerHTML]="nuevoSvgCode"></div> -->
+
+                <!-- <img border="0" width="25" height="25" src="{{ rowData['icon'] }}"> -->
+                <!-- <div [innerHTML]="svgContent"></div> -->
+
+                <!-- <img
+                  border="0"
+                  width="25"
+                  height="25"
+                  src="{{ formattedVehicles.customurl }}"
+                /> -->
               </div>
               <!-- Imprime el SVG directamente para verificar su contenido -->
-                <!-- {{userDataService.svgContents['auto.svg']}} -->
-                <!-- <div #svgContainer id="svgContainer_{{ rowData['id'] }}" border="0" style="width: 25px; height: 25px">
+              <!-- {{userDataService.svgContents['auto.svg']}} -->
+              <!-- <div #svgContainer id="svgContainer_{{ rowData['id'] }}" border="0" style="width: 25px; height: 25px">
                 </div> -->
-                <!-- <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 63.95 50.38"><defs><style>.cls-1{fill:#332e2e;}.cls-2{fill:#443e3b;}.cls-3{fill:#d3d2d1;}.body{fill:#c4c2c1;}.cls-6{fill:#87e5ff;}.cls-12,.cls-8{fill:#4b464a;}.cls-13,.cls-9{fill:#342f31;}.cls-9{opacity:0.7;}.cls-10{fill:#f2f8fd;}.cls-11{fill:#a14d2a;}.cls-12{opacity:0.5;}.cls-14{fill:#fff;}</style></defs><polygon class="cls-1" points="31.1 37.84 32.45 39.79 30.65 42.94 24.5 39.41 31.1 37.84"/><polygon class="cls-1" points="59.3 21.64 60.57 23.59 58.85 26.74 52.62 23.14 59.3 21.64"/><path class="cls-1" d="M98.11,100.55a2.48,2.48,0,0,1,2.55-.23l2.25,1.28-5.1,8.77-2.25-1.27a2.67,2.67,0,0,1-1-2.33,8.14,8.14,0,0,1,3.6-6.22" transform="translate(-73.76 -60.24)"/><path class="cls-2" d="M96.83,108.05c0,2.25,1.58,3.22,3.6,2.1a8,8,0,0,0,3.6-6.23c0-2.25-1.57-3.22-3.6-2.1a7.79,7.79,0,0,0-3.6,6.23" transform="translate(-73.76 -60.24)"/><path class="cls-3" d="M100.36,109a5.33,5.33,0,0,0,2.47-4.28c0-1.57-1-2.25-2.4-1.5A5.33,5.33,0,0,0,98,107.45c0,1.57,1.05,2.25,2.4,1.5" transform="translate(-73.76 -60.24)"/><path class="cls-1" d="M126.31,84.27a2.45,2.45,0,0,1,2.55-.22l2.25,1.27L126,94.1l-2.25-1.28a2.65,2.65,0,0,1-1.05-2.32,7.76,7.76,0,0,1,3.6-6.23" transform="translate(-73.76 -60.24)"/><path class="cls-2" d="M125,91.77c0,2.25,1.57,3.23,3.6,2.1a8,8,0,0,0,3.6-6.22c0-2.25-1.58-3.23-3.6-2.1a8,8,0,0,0-3.6,6.22" transform="translate(-73.76 -60.24)"/><path class="cls-3" d="M128.56,92.67A5.31,5.31,0,0,0,131,88.4c0-1.58-1.05-2.25-2.4-1.5a5.31,5.31,0,0,0-2.47,4.27c-.08,1.58,1,2.25,2.4,1.5" transform="translate(-73.76 -60.24)"/><path class="body" d="M85.66,82.62l5.77-6.15a7.12,7.12,0,0,1,1.8-1.5l25.35-14.62c.3-.15,3.08,4.72,3.08,4.72l11.4,3.15L136.13,75a5.13,5.13,0,0,1,.38,1.88V81.2c.15.15.37.3.37.52v1.2a1.85,1.85,0,0,1-.67,1.43l-2.63,2-1,.6v-.3c0-2.32-1.88-3.07-4.2-1.72s-4.2,4.27-4.2,6.6v.3l-19.8,11.32v-.3c0-2.32-1.88-3.07-4.2-1.72s-4.2,4.27-4.2,6.6v.3l-1.35.82a11,11,0,0,1-8.4-.22,50.73,50.73,0,0,1-9.83-5.78,6.42,6.42,0,0,1-2.62-5.17v-.23c0-.3.07-.52.07-.9,0-1.5-.07-2.47-.07-2.92V92c.07-2.85,11.85-9.38,11.85-9.38" transform="translate(-73.76 -60.24)"/><path class="body" d="M87.91,109.1a10.55,10.55,0,0,0,6.82-.3l1.35-.83v-.3a7.87,7.87,0,0,1,1.65-4.27Zm14.85-8.55c1,.15,1.65,1,1.65,2.4v.3l19.8-11.48v-.3a7.79,7.79,0,0,1,1.65-4.27Zm33.75-19.5v.07c.15.15.37.3.37.53v1.2a1.83,1.83,0,0,1-.67,1.42l-2.63,2-1,.6v-.23a2.23,2.23,0,0,0-1.65-2.4Z" transform="translate(-73.76 -60.24)"/><path class="body" d="M93.23,75l25.35-14.62a1.28,1.28,0,0,1,1,0S130,66,133,68a.21.21,0,0,1,0,.37c-2.32,1.28-18,9.9-19.57,10.73s-5.85,3.45-7.13,4.12a.65.65,0,0,1-.52.08c-2.48-.75-13.65-7.5-13.28-7.8s.45-.3.75-.53" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M100.88,91.17a1.13,1.13,0,0,0,.83-.3,2.07,2.07,0,0,0,.67-.75c.6-1,2.1-4.42,2.78-5.85a.27.27,0,0,0-.15-.37A85.86,85.86,0,0,1,92,76.4a.22.22,0,0,0-.3,0l-5.1,5.4a.46.46,0,0,0,0,.6,47.22,47.22,0,0,0,13.87,8.7.87.87,0,0,0,.45.07" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M104.11,91.25a67.36,67.36,0,0,1,3.45-7.58,2.07,2.07,0,0,1,.75-.67l3.22-1.88a.35.35,0,0,1,.53.23A56.12,56.12,0,0,1,113.48,87c0,.08-.15.23-.22.3l-8.63,5c-.82.37-1.27.45-.52-1" transform="translate(-73.76 -60.24)"/><path class="body" d="M85.36,82.85c1.12,1.42,7.57,7.57,17.25,10.57,0,0-9.23,7.28-12.45,7.73-2.48.3-4.8-1.05-8.48-3.08-7-3.82-7.65-5.25-7.65-6-.15-2.55,9.08-8,11.33-9.22" transform="translate(-73.76 -60.24)"/><path class="cls-8" d="M74,96.57s.08.23.23.23.82-2.18,1.12-2a87.31,87.31,0,0,0,9.23,5.48,3.38,3.38,0,0,1,1.5,1.72l.6,1.8c.67,2.7,5,2.4,7.72,1.5a.89.89,0,0,1,1.2.83V108a.8.8,0,0,1-.37.68l-.45.22a11,11,0,0,1-8.4-.22,50.73,50.73,0,0,1-9.83-5.78,6.69,6.69,0,0,1-2.77-4.35c0-.3-.15-2.4.22-2.7Z" transform="translate(-73.76 -60.24)"/><path class="cls-9" d="M74.56,97.25c.15-.53.67-2.25,1-2.1,3.38,2.32,7,4.42,9,5.47a2.9,2.9,0,0,1,1.28,1.65,14.79,14.79,0,0,0,.75,2.55c-3.45-1-11.18-5.55-12-7.57" transform="translate(-73.76 -60.24)"/><path class="cls-10" d="M92.78,101.75c.75-.15,1.5,1.12.45,2.17-.9.9-4.5.68-5.7-.07-.22-.15-1-2.55-.67-2.48a14.09,14.09,0,0,0,5.92.38" transform="translate(-73.76 -60.24)"/><path class="cls-11" d="M92.78,101.75c.83-.15,1.58,1.12.45,2.17a1.48,1.48,0,0,1-.67.38,5.08,5.08,0,0,0,.22-2.55" transform="translate(-73.76 -60.24)"/><path class="cls-10" d="M74.18,95.67c-.07,0-.15-.15-.15-.22a11.18,11.18,0,0,1-.15-2.63c.15.75.9,1.2,1,1.43a3.19,3.19,0,0,1-.68,1.42" transform="translate(-73.76 -60.24)"/><path class="cls-12" d="M73.81,96.8c.07.15.15.22.22.37a4,4,0,0,0,.75.9c.3.3.68.68,1.13,1.05A40.52,40.52,0,0,0,83,103.55c.68.37,1.35.67,2,1a21.38,21.38,0,0,0,2,.82c.68.23,1.35.38,2,.53a8.44,8.44,0,0,0,1.8.22,11.42,11.42,0,0,0,1.58-.07l1.2-.23a2.79,2.79,0,0,0,1-.37c.08-.08.15,0,.23.07s0,.15-.08.23a7,7,0,0,1-1,.45c-.3.07-.75.22-1.2.3a5.46,5.46,0,0,1-1.58.07,15.82,15.82,0,0,1-1.87-.15,10.1,10.1,0,0,1-2-.52c-.67-.23-1.42-.53-2.1-.83s-1.35-.67-2.1-1.05c-1.35-.75-2.7-1.5-4-2.25a30.09,30.09,0,0,1-3.23-2.32,7.92,7.92,0,0,1-1.12-1.13,5.63,5.63,0,0,1-.68-1,.58.58,0,0,1-.07-.6" transform="translate(-73.76 -60.24)"/><path class="cls-8" d="M136.51,81.5V80l.75.75a1.52,1.52,0,0,1,.45,1.12v1a1.75,1.75,0,0,1-.68,1.43l-1.8,1.42a1.67,1.67,0,0,1-.6.38l-1,.6-.45-.23V83.37Z" transform="translate(-73.76 -60.24)"/><path class="cls-13" d="M111.91,90.5l1.27-.75a.43.43,0,0,0,.23-.38v-.3c0-.15-.08-.15-.23-.07l-1.27.75a.4.4,0,0,0-.23.37v.3c0,.15.08.15.23.08" transform="translate(-73.76 -60.24)"/><path class="cls-13" d="M123.38,83.9l1.28-.75a.42.42,0,0,0,.22-.38v-.3c0-.15-.07-.15-.22-.07l-1.28.75a.4.4,0,0,0-.22.37v.3c0,.08.07.15.22.08" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M131.93,76.77l-6.45,3.6L123,74.9c2.25-1.28,3.82-2.1,5.1-2.7a1.14,1.14,0,0,1,1.57.52Z" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M113.86,80c.6-.38,6-3.38,8.4-4.73l2.47,5.4-9.22,5.4c-.23-1.12-.6-2.17-.9-3.15-.38-1.2-.68-2-.9-2.62-.08-.08,0-.23.15-.3" transform="translate(-73.76 -60.24)"/><polygon class="cls-14" points="3.57 41.44 7.47 43.84 7.47 45.04 3.57 42.64 3.57 41.44"/></svg> -->
-                <!-- <object type="image/svg+xml" data="assets/images/objects/nuevo/{{ rowData['icon'] }}" width="25" height="25"></object> -->
+              <!-- <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 63.95 50.38"><defs><style>.cls-1{fill:#332e2e;}.cls-2{fill:#443e3b;}.cls-3{fill:#d3d2d1;}.body{fill:#c4c2c1;}.cls-6{fill:#87e5ff;}.cls-12,.cls-8{fill:#4b464a;}.cls-13,.cls-9{fill:#342f31;}.cls-9{opacity:0.7;}.cls-10{fill:#f2f8fd;}.cls-11{fill:#a14d2a;}.cls-12{opacity:0.5;}.cls-14{fill:#fff;}</style></defs><polygon class="cls-1" points="31.1 37.84 32.45 39.79 30.65 42.94 24.5 39.41 31.1 37.84"/><polygon class="cls-1" points="59.3 21.64 60.57 23.59 58.85 26.74 52.62 23.14 59.3 21.64"/><path class="cls-1" d="M98.11,100.55a2.48,2.48,0,0,1,2.55-.23l2.25,1.28-5.1,8.77-2.25-1.27a2.67,2.67,0,0,1-1-2.33,8.14,8.14,0,0,1,3.6-6.22" transform="translate(-73.76 -60.24)"/><path class="cls-2" d="M96.83,108.05c0,2.25,1.58,3.22,3.6,2.1a8,8,0,0,0,3.6-6.23c0-2.25-1.57-3.22-3.6-2.1a7.79,7.79,0,0,0-3.6,6.23" transform="translate(-73.76 -60.24)"/><path class="cls-3" d="M100.36,109a5.33,5.33,0,0,0,2.47-4.28c0-1.57-1-2.25-2.4-1.5A5.33,5.33,0,0,0,98,107.45c0,1.57,1.05,2.25,2.4,1.5" transform="translate(-73.76 -60.24)"/><path class="cls-1" d="M126.31,84.27a2.45,2.45,0,0,1,2.55-.22l2.25,1.27L126,94.1l-2.25-1.28a2.65,2.65,0,0,1-1.05-2.32,7.76,7.76,0,0,1,3.6-6.23" transform="translate(-73.76 -60.24)"/><path class="cls-2" d="M125,91.77c0,2.25,1.57,3.23,3.6,2.1a8,8,0,0,0,3.6-6.22c0-2.25-1.58-3.23-3.6-2.1a8,8,0,0,0-3.6,6.22" transform="translate(-73.76 -60.24)"/><path class="cls-3" d="M128.56,92.67A5.31,5.31,0,0,0,131,88.4c0-1.58-1.05-2.25-2.4-1.5a5.31,5.31,0,0,0-2.47,4.27c-.08,1.58,1,2.25,2.4,1.5" transform="translate(-73.76 -60.24)"/><path class="body" d="M85.66,82.62l5.77-6.15a7.12,7.12,0,0,1,1.8-1.5l25.35-14.62c.3-.15,3.08,4.72,3.08,4.72l11.4,3.15L136.13,75a5.13,5.13,0,0,1,.38,1.88V81.2c.15.15.37.3.37.52v1.2a1.85,1.85,0,0,1-.67,1.43l-2.63,2-1,.6v-.3c0-2.32-1.88-3.07-4.2-1.72s-4.2,4.27-4.2,6.6v.3l-19.8,11.32v-.3c0-2.32-1.88-3.07-4.2-1.72s-4.2,4.27-4.2,6.6v.3l-1.35.82a11,11,0,0,1-8.4-.22,50.73,50.73,0,0,1-9.83-5.78,6.42,6.42,0,0,1-2.62-5.17v-.23c0-.3.07-.52.07-.9,0-1.5-.07-2.47-.07-2.92V92c.07-2.85,11.85-9.38,11.85-9.38" transform="translate(-73.76 -60.24)"/><path class="body" d="M87.91,109.1a10.55,10.55,0,0,0,6.82-.3l1.35-.83v-.3a7.87,7.87,0,0,1,1.65-4.27Zm14.85-8.55c1,.15,1.65,1,1.65,2.4v.3l19.8-11.48v-.3a7.79,7.79,0,0,1,1.65-4.27Zm33.75-19.5v.07c.15.15.37.3.37.53v1.2a1.83,1.83,0,0,1-.67,1.42l-2.63,2-1,.6v-.23a2.23,2.23,0,0,0-1.65-2.4Z" transform="translate(-73.76 -60.24)"/><path class="body" d="M93.23,75l25.35-14.62a1.28,1.28,0,0,1,1,0S130,66,133,68a.21.21,0,0,1,0,.37c-2.32,1.28-18,9.9-19.57,10.73s-5.85,3.45-7.13,4.12a.65.65,0,0,1-.52.08c-2.48-.75-13.65-7.5-13.28-7.8s.45-.3.75-.53" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M100.88,91.17a1.13,1.13,0,0,0,.83-.3,2.07,2.07,0,0,0,.67-.75c.6-1,2.1-4.42,2.78-5.85a.27.27,0,0,0-.15-.37A85.86,85.86,0,0,1,92,76.4a.22.22,0,0,0-.3,0l-5.1,5.4a.46.46,0,0,0,0,.6,47.22,47.22,0,0,0,13.87,8.7.87.87,0,0,0,.45.07" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M104.11,91.25a67.36,67.36,0,0,1,3.45-7.58,2.07,2.07,0,0,1,.75-.67l3.22-1.88a.35.35,0,0,1,.53.23A56.12,56.12,0,0,1,113.48,87c0,.08-.15.23-.22.3l-8.63,5c-.82.37-1.27.45-.52-1" transform="translate(-73.76 -60.24)"/><path class="body" d="M85.36,82.85c1.12,1.42,7.57,7.57,17.25,10.57,0,0-9.23,7.28-12.45,7.73-2.48.3-4.8-1.05-8.48-3.08-7-3.82-7.65-5.25-7.65-6-.15-2.55,9.08-8,11.33-9.22" transform="translate(-73.76 -60.24)"/><path class="cls-8" d="M74,96.57s.08.23.23.23.82-2.18,1.12-2a87.31,87.31,0,0,0,9.23,5.48,3.38,3.38,0,0,1,1.5,1.72l.6,1.8c.67,2.7,5,2.4,7.72,1.5a.89.89,0,0,1,1.2.83V108a.8.8,0,0,1-.37.68l-.45.22a11,11,0,0,1-8.4-.22,50.73,50.73,0,0,1-9.83-5.78,6.69,6.69,0,0,1-2.77-4.35c0-.3-.15-2.4.22-2.7Z" transform="translate(-73.76 -60.24)"/><path class="cls-9" d="M74.56,97.25c.15-.53.67-2.25,1-2.1,3.38,2.32,7,4.42,9,5.47a2.9,2.9,0,0,1,1.28,1.65,14.79,14.79,0,0,0,.75,2.55c-3.45-1-11.18-5.55-12-7.57" transform="translate(-73.76 -60.24)"/><path class="cls-10" d="M92.78,101.75c.75-.15,1.5,1.12.45,2.17-.9.9-4.5.68-5.7-.07-.22-.15-1-2.55-.67-2.48a14.09,14.09,0,0,0,5.92.38" transform="translate(-73.76 -60.24)"/><path class="cls-11" d="M92.78,101.75c.83-.15,1.58,1.12.45,2.17a1.48,1.48,0,0,1-.67.38,5.08,5.08,0,0,0,.22-2.55" transform="translate(-73.76 -60.24)"/><path class="cls-10" d="M74.18,95.67c-.07,0-.15-.15-.15-.22a11.18,11.18,0,0,1-.15-2.63c.15.75.9,1.2,1,1.43a3.19,3.19,0,0,1-.68,1.42" transform="translate(-73.76 -60.24)"/><path class="cls-12" d="M73.81,96.8c.07.15.15.22.22.37a4,4,0,0,0,.75.9c.3.3.68.68,1.13,1.05A40.52,40.52,0,0,0,83,103.55c.68.37,1.35.67,2,1a21.38,21.38,0,0,0,2,.82c.68.23,1.35.38,2,.53a8.44,8.44,0,0,0,1.8.22,11.42,11.42,0,0,0,1.58-.07l1.2-.23a2.79,2.79,0,0,0,1-.37c.08-.08.15,0,.23.07s0,.15-.08.23a7,7,0,0,1-1,.45c-.3.07-.75.22-1.2.3a5.46,5.46,0,0,1-1.58.07,15.82,15.82,0,0,1-1.87-.15,10.1,10.1,0,0,1-2-.52c-.67-.23-1.42-.53-2.1-.83s-1.35-.67-2.1-1.05c-1.35-.75-2.7-1.5-4-2.25a30.09,30.09,0,0,1-3.23-2.32,7.92,7.92,0,0,1-1.12-1.13,5.63,5.63,0,0,1-.68-1,.58.58,0,0,1-.07-.6" transform="translate(-73.76 -60.24)"/><path class="cls-8" d="M136.51,81.5V80l.75.75a1.52,1.52,0,0,1,.45,1.12v1a1.75,1.75,0,0,1-.68,1.43l-1.8,1.42a1.67,1.67,0,0,1-.6.38l-1,.6-.45-.23V83.37Z" transform="translate(-73.76 -60.24)"/><path class="cls-13" d="M111.91,90.5l1.27-.75a.43.43,0,0,0,.23-.38v-.3c0-.15-.08-.15-.23-.07l-1.27.75a.4.4,0,0,0-.23.37v.3c0,.15.08.15.23.08" transform="translate(-73.76 -60.24)"/><path class="cls-13" d="M123.38,83.9l1.28-.75a.42.42,0,0,0,.22-.38v-.3c0-.15-.07-.15-.22-.07l-1.28.75a.4.4,0,0,0-.22.37v.3c0,.08.07.15.22.08" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M131.93,76.77l-6.45,3.6L123,74.9c2.25-1.28,3.82-2.1,5.1-2.7a1.14,1.14,0,0,1,1.57.52Z" transform="translate(-73.76 -60.24)"/><path class="cls-6" d="M113.86,80c.6-.38,6-3.38,8.4-4.73l2.47,5.4-9.22,5.4c-.23-1.12-.6-2.17-.9-3.15-.38-1.2-.68-2-.9-2.62-.08-.08,0-.23.15-.3" transform="translate(-73.76 -60.24)"/><polygon class="cls-14" points="3.57 41.44 7.47 43.84 7.47 45.04 3.57 42.64 3.57 41.44"/></svg> -->
+              <!-- <object type="image/svg+xml" data="assets/images/objects/nuevo/{{ rowData['icon'] }}" width="25" height="25"></object> -->
 
-              <div class="flex-grow-1 d-flex flex-column text-start vehicle-data">
-                <strong>{{rowData['name']}}</strong>
-                <span>{{rowData['dt_tracker']}}</span>
+              <div
+                class="flex-grow-1 d-flex flex-column text-start vehicle-data"
+              >
+                <strong>{{ rowData["name"] }}</strong>
+                <span>{{ rowData["dt_tracker"] }}</span>
                 <!-- <aside class="">
                   {{rowData['name']}} <br>
                   <small>
@@ -404,27 +772,61 @@
             </div>
           </td>
           <td *ngIf="setting['imei']">
-            {{rowData['IMEI']}}
+            {{ rowData["IMEI"] }}
           </td>
-          <td *ngIf="setting['tag_driver']" class="inline-png-checkbox disable-chkbox-behavior">
-            <span class="btn-label" title="{{(rowData.tag_driver? 'Ocultar': 'Mostrar') + 'conductor'}}" (click)="onClickDriver(rowData['IMEI'])">
-              <p-checkbox [(ngModel)]="rowData.tag_driver" [binary]="true"></p-checkbox>
+          <td
+            *ngIf="setting['tag_driver']"
+            class="inline-png-checkbox disable-chkbox-behavior"
+          >
+            <span
+              class="btn-label"
+              title="{{
+                (rowData.tag_driver ? 'Ocultar' : 'Mostrar') + 'conductor'
+              }}"
+              (click)="onClickDriver(rowData['IMEI'])"
+            >
+              <p-checkbox
+                [(ngModel)]="rowData.tag_driver"
+                [binary]="true"
+              ></p-checkbox>
             </span>
           </td>
-          <td *ngIf="setting['tag']" class="inline-png-checkbox disable-chkbox-behavior">
+          <td
+            *ngIf="setting['tag']"
+            class="inline-png-checkbox disable-chkbox-behavior"
+          >
             <!-- <input type="checkbox" name="" value="" checked> -->
-            <span class="btn-label" title="{{(rowData.tag? 'Ocultar': 'Mostrar') + ' etiqueta de vehículo'}}" (click)="onClickTag(rowData['IMEI'])">
-              <p-checkbox [(ngModel)]="rowData.tag" [binary]="true"></p-checkbox>
+            <span
+              class="btn-label"
+              title="{{
+                (rowData.tag ? 'Ocultar' : 'Mostrar') + ' etiqueta de vehículo'
+              }}"
+              (click)="onClickTag(rowData['IMEI'])"
+            >
+              <p-checkbox
+                [(ngModel)]="rowData.tag"
+                [binary]="true"
+              ></p-checkbox>
             </span>
           </td>
-          <td *ngIf="setting['follow']" class="inline-png-checkbox follow-column">
-            <span class="btn-label" title="Seguir vehículo" (click)="onClickFollow(rowData)">
+          <td
+            *ngIf="setting['follow']"
+            class="inline-png-checkbox follow-column"
+          >
+            <span
+              class="btn-label"
+              title="Seguir vehículo"
+              (click)="onClickFollow(rowData)"
+            >
               <!-- <i class="fas fa-crosshairs" style="color:#444444; font-size: 14px;"></i> -->
-              <p-checkbox [(ngModel)]="rowData.follow" [binary]="true"></p-checkbox>
+              <p-checkbox
+                [(ngModel)]="rowData.follow"
+                [binary]="true"
+              ></p-checkbox>
             </span>
           </td>
           <td *ngIf="setting['limit']">
-            {{rowData['speed']}}
+            {{ rowData["speed"] }}
           </td>
           <td *ngIf="setting['gps']">
             <span class="btn-label"><i class="fa fa-wifi"></i></span>
@@ -444,5 +846,4 @@
       </ng-template>
     </p-treeTable>
   </div>
-
 </div>

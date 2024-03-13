@@ -108,7 +108,7 @@ export class VehicleConfigComponent implements OnInit {
   constructor(
     private configService: VehicleConfigService,
     private userDataService: UserDataService,
-    private http: HttpClient, 
+    private http: HttpClient,
   ) {}
 
 
@@ -120,9 +120,9 @@ export class VehicleConfigComponent implements OnInit {
     console.log(this.config);
     // console.log("vehicle config = ",this.config);
     this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
-    
+
   }
-  
+
 
   onClickCancel(){
     this.eventDisplay.emit(false);

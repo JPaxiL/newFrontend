@@ -52,7 +52,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
     { label: 'Desactivado', value: false },
   ];
 
-  listaSonidos:any = [];
+  listaSonidos: any = [];
   audio = new Audio();
 
   loadingAlertDropdownReady: boolean = false;
@@ -83,9 +83,9 @@ export class PlatformAlertsCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     public panelService: PanelService,
     private geofencesService: GeofencesService,
-    private spinner: NgxSpinnerService,
+    private spinner: NgxSpinnerService
   ) {
-    this.listaSonidos = this.AlertService.listaSonidos;
+    this.listaSonidos = [...this.AlertService.listaSonidos];
   }
 
   ngOnInit(): void {
@@ -135,8 +135,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
         { value: '', disabled: this.disabledWhatsapp },
         [Validators.required],
       ],
-      chkVentanaEmergente:[false],
-      chkEvaluation:[false]
+      chkVentanaEmergente: [false],
+      chkEvaluation: [false],
     });
     this.loading = false;
     this.loadData();
@@ -144,8 +144,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   public async loadData() {
     this.events = await this.AlertService.getEventsByType('platform');
-    console.log("EVENTSSS:::::",this.events);
-    
+    console.log('EVENTSSS:::::', this.events);
+
     this.loadingEventSelectInput = false;
     this.setDataVehicles();
     this.setDataGeofences();
@@ -154,27 +154,28 @@ export class PlatformAlertsCreateComponent implements OnInit {
     this.hideLoadingSpinner();
   }
 
-  changeVehicles(event:any){
-    console.log("event::::",event);
+  changeVehicles(event: any) {
+    console.log('event::::', event);
     const operations = new Set();
-    this.alertForm.value.vehicles.forEach((objeto:any) => {
-      const vh = this.vehicles.find((vh:any) => vh.value == objeto);
-      console.log("vh:",vh);
+    this.alertForm.value.vehicles.forEach((objeto: any) => {
+      const vh = this.vehicles.find((vh: any) => vh.value == objeto);
+      console.log('vh:', vh);
       operations.add(vh?.templateId);
     });
-    console.log("OPERATIONS::::",operations);
-    this.geocercasFiltradas = this.geocercas.filter(geofence => operations.has(geofence.templateId));
-    console.log("geocercasFiltradas::::",this.geocercasFiltradas.length);
-
+    console.log('OPERATIONS::::', operations);
+    this.geocercasFiltradas = this.geocercas.filter((geofence) =>
+      operations.has(geofence.templateId)
+    );
+    console.log('geocercasFiltradas::::', this.geocercasFiltradas.length);
   }
   setDataVehicles() {
     let vehicles = this.VehicleService.getVehiclesData();
 
     this.vehicles = vehicles.map((vehicle: any) => {
       return {
-        value:vehicle.IMEI,
+        value: vehicle.IMEI,
         label: vehicle.name,
-        templateId: vehicle.idoperation
+        templateId: vehicle.idoperation,
       };
     });
 
@@ -217,21 +218,22 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   playAudio(path: string) {
-    if(typeof path != 'undefined' && path != ''){
-      if(this.audio.currentSrc != '' && !this.audio.ended){
+    if (typeof path != 'undefined' && path != '') {
+      if (this.audio.currentSrc != '' && !this.audio.ended) {
         this.audio.pause();
       }
       this.audio = new Audio('assets/' + path);
       let audioPromise = this.audio.play();
 
       if (audioPromise !== undefined) {
-        audioPromise.then(() => {
-          //console.log('Playing notification sound')
-        })
-        .catch((error: any) => {
-          //console.log(error);
-          // Auto-play was prevented
-        });
+        audioPromise
+          .then(() => {
+            //console.log('Playing notification sound')
+          })
+          .catch((error: any) => {
+            //console.log(error);
+            // Auto-play was prevented
+          });
       }
     }
   }
@@ -264,8 +266,8 @@ export class PlatformAlertsCreateComponent implements OnInit {
       this.alertForm.value.tiempo_limite_infraccion = 0;
     }
 
-    if(typeof this.alertForm.value.sonido == "undefined"){
-      this.alertForm.value.sonido =  'sonidos/alarm8.mp3';
+    if (typeof this.alertForm.value.sonido == 'undefined') {
+      this.alertForm.value.sonido = 'sonidos/alarm8.mp3';
     }
 
     if (
@@ -274,18 +276,24 @@ export class PlatformAlertsCreateComponent implements OnInit {
       this.alertForm.value.velocidad_limite_infraccion = 0;
     }
 
-    if(this.alertForm.value.chkCorreo && this.alertForm.value.lista_emails.length == 0){
+    if (
+      this.alertForm.value.chkCorreo &&
+      this.alertForm.value.lista_emails.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un correo', 'warning');
-      return
+      return;
     }
 
-    if (this.alertForm.value.chkwhatsapp && this.alertForm.value.lista_whatsapp.length == 0) {
+    if (
+      this.alertForm.value.chkwhatsapp &&
+      this.alertForm.value.lista_whatsapp.length == 0
+    ) {
       Swal.fire('Error', 'Debe ingresar un número', 'warning');
-      return
+      return;
     }
 
     if (this.alertForm.value.vehiculos.length != 0) {
-      console.log("ANTES DE GUARDAR: ",this.alertForm.value);
+      console.log('ANTES DE GUARDAR: ', this.alertForm.value);
       Swal.fire({
         title: '¿Desea guardar los cambios?',
         //text: 'Espere un momento...',
@@ -378,14 +386,67 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
   changeAlertType() {
     console.log(this.alertForm.value.tipoAlerta);
-    const alert = this.events.find((event:any) => event.id.toString() == this.alertForm.value.tipoAlerta.toString());
+    const alert = this.events.find(
+      (event: any) =>
+        event.id.toString() === this.alertForm.value.tipoAlerta.toString()
+    );
     this.alertSelected = alert;
-    console.log("alerttt",alert);
+    /* console.log('alerttt', alert); */
+
+    // INICIO SONIDOS PERSONALIZADOS
+
+    if (alert) {
+      this.alertSelected = alert;
+      console.log('alerttt', alert);
+
+      // Obtén todos los elementos de la lista de sonidos hasta el id 27
+      let sonidosObtenidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (alert.id === 26) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 36
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } else if (alert.id === 64) {
+        const vozPersonalizada = this.AlertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 33
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      }
+
+      if (sonidosObtenidos.length > 0) {
+        console.log('Sonidos obtenidos:', sonidosObtenidos);
+        this.listaSonidos = sonidosObtenidos;
+      } else {
+        console.log(
+          'No se encontraron sonidos para la alerta seleccionada o la función no devuelve un array.'
+        );
+      }
+    } else {
+      this.listaSonidos = this.AlertService.listaSonidos.filter(
+        (sonido: { id: any }) => sonido.id <= 27
+      );
+
+      if (this.listaSonidos.length > 0) {
+        console.log('Sonidos obtenidos:', this.listaSonidos);
+      } else {
+        console.log('No se encontraron sonidos para la alerta seleccionada.');
+      }
+    }
+
+    // FIN SONIDOS PERSONALIZADOS
+
     this.alertForm.value.velocidad_limite_infraccion = 0;
-    if(this.alertSelected.slug == 'infraccion'){
+    if (this.alertSelected.slug == 'infraccion') {
       this.alertForm.controls['velocidad_limite_infraccion'].enable();
       this.alertForm.value.chkFijarLimiteVelocidad = [true];
-    }else{
+    } else {
       this.alertForm.controls['velocidad_limite_infraccion'].disable();
     }
     switch (alert.slug) {
@@ -433,7 +494,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
   }
 
-  resetForm(){
+  resetForm() {
     this.alertForm.reset();
   }
   changechkFijarTiempo() {
@@ -456,8 +517,12 @@ export class PlatformAlertsCreateComponent implements OnInit {
     }
   }
 
-  hideLoadingSpinner(){
-    if(this.loadingAlertDropdownReady && this.loadingVehicleMultiselectReady && this.loadingGeofencesMultiselectReady){
+  hideLoadingSpinner() {
+    if (
+      this.loadingAlertDropdownReady &&
+      this.loadingVehicleMultiselectReady &&
+      this.loadingGeofencesMultiselectReady
+    ) {
       this.spinner.hide('loadingAlertData');
     }
   }
@@ -471,7 +536,9 @@ export class PlatformAlertsCreateComponent implements OnInit {
             this.alertForm.value.lista_whatsapp
           )
         ) {
-          this.alertForm.value.lista_whatsapp.push(this.alertForm.value.whatsapp);
+          this.alertForm.value.lista_whatsapp.push(
+            this.alertForm.value.whatsapp
+          );
           this.alertForm.controls.whatsapp.reset();
         } else {
           Swal.fire({
@@ -487,7 +554,6 @@ export class PlatformAlertsCreateComponent implements OnInit {
           icon: 'warning',
         });
       }
-
     }
   }
 
@@ -496,7 +562,6 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   chkWhatsappHandler() {
-
     if (this.alertForm.value.chkwhatsapp) {
       this.alertForm.controls['whatsapp'].enable();
     } else {

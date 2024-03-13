@@ -9,14 +9,15 @@ import { VehicleService } from '../../vehicles/services/vehicle.service';
 import { AlertService } from 'src/app/alerts/service/alert.service';
 import { PopupService } from './popup.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';
+import { getIconUrlHistory } from '../helpers/event-helper';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventSocketService extends Socket {
   img_icon: string = '';
-  img_iconSize: any;
-  img_iconAnchor: any;
+  img_iconSize: any ;
+  img_iconAnchor: any = [14, 0];
   count: string = '0';
   user_id: any;
   data_debug!: any;
@@ -183,10 +184,11 @@ export class EventSocketService extends Socket {
   }
 
   setLayer(event: any) {
+    const iconUrl = getIconUrlHistory(event);
     let icon = L.icon({
-      iconUrl: 'assets/images/eventos/pin_point.svg',
+      iconUrl: iconUrl,
       iconSize: [30, 30], // size of the icon
-      iconAnchor: [0, 30], //[20, 40], // point of the icon which will correspond to marker's location
+      iconAnchor: [14, 0], //[20, 40], // point of the icon which will correspond to marker's location
     });
     event.layer = L.marker([event.latitud, event.longitud], {
       icon: icon,

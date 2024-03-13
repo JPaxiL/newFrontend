@@ -53,7 +53,7 @@ export class PanelService {
 
   clickShowPanel( nomComponent:string ){
     console.log("-----clickShowPanel");
-    console.log(this.activePanelClass());
+    /* console.log(this.activePanelClass()); */
 
     if(this.nombreComponente == nomComponent || this.nombreComponente.includes(nomComponent)){
 
