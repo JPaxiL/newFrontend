@@ -1,14 +1,15 @@
 import { IMapMinimap, MapItemConfiguration, MinimapContent } from "src/app/multiview/models/interfaces";
 import { MapBase } from "src/app/map/models/map-base";
+import { GeofenceImportExportService } from "../services/geofence-import-export.service";
 import * as L from 'leaflet';
 import { DataGeofence } from "./interfaces";
+import { Geofences } from "./geofences";
 export class MiniMapGeofences extends MapBase {
 
   imeiPopup?: any;
   time_stop?: any;
   minimapConf!: MapItemConfiguration;
   datos?: DataGeofence;
-
   public constructor(minimapConf: MapItemConfiguration) {
     super(minimapConf!.containerId);
     this.minimapConf = minimapConf;
@@ -88,38 +89,14 @@ export class MiniMapGeofences extends MapBase {
 
     this.map!.zoomControl.setPosition('topright');
   };
-  coordenadasGeo(datos: DataGeofence[]) {
-    console.log("globalCoordenadas1:", datos);
-    const globalCoordinates: number[][] = [];
-    const globalCoordinatesGeo: number[][][] = [];
+  coordenadasGeo(coordinate: number[][][],datos: DataGeofence[]) {
+    console.log("globalCoordenadas1111:", datos);
+    let globalCoordinatesGeo: number[][][] = [];
 
-    for (const data of datos) {
+    globalCoordinatesGeo=coordinate;
 
-      if (data) {
-        //const coordinatesSets = data.coordinate!.split(' ');
-        //console.log("globalCoordenadas2:", coordinatesSets);
-        const coordinatesSets = data.coordinate!.trim().split(' ');
-
-        // Filtrar los conjuntos de coordenadas que no son solo espacios
-        const filteredCoordinates = coordinatesSets.filter(coordSet => coordSet.trim() !== '');
-        console.log("globalCoordenadas2.1:", coordinatesSets);
-
-        console.log("globalCoordenadas2.2:", filteredCoordinates);
-
-        for (const coordSet of coordinatesSets) {
-          const coordinatesArray = coordSet.split(',').map((coord: string) => parseFloat(coord));
-          globalCoordinates.push(coordinatesArray);
-        }
-        globalCoordinatesGeo.push([...globalCoordinates]);
-        globalCoordinates.length = 0;
-      }
-    }
-    console.log("globalCoordenadas3:", globalCoordinatesGeo);
-
-    for (let polygonCoordinates= 0;polygonCoordinates < globalCoordinatesGeo.length;polygonCoordinates++) {
-      console.log("polygonCoordinates", globalCoordinatesGeo[polygonCoordinates]); // Agregar este log para verificar los datos de cada polígono
-
-      // Crear un objeto GeoJSON para el polígono actual
+    console.log("coordenadasGeo", globalCoordinatesGeo)
+    for (let polygonCoordinates = 0; polygonCoordinates < globalCoordinatesGeo.length; polygonCoordinates++) {
       const geofenceData: GeoJSON.Polygon = {
         "type": "Polygon",
         "coordinates": [globalCoordinatesGeo[polygonCoordinates]], // Envuelve las coordenadas del polígono actual en un arreglo
@@ -129,41 +106,16 @@ export class MiniMapGeofences extends MapBase {
       const g = parseInt(datos[polygonCoordinates].color!.substring(2, 4), 16);
       const b = parseInt(datos[polygonCoordinates].color!.substring(4, 6), 16);
 
-      // Definir un estilo para el polígono
       const styleOptions: L.PathOptions = {
-        fillColor: `rgb(${r},${g},${b})`, // Color de relleno del polígono
-        fillOpacity: 0.5, // Opacidad del relleno
-        color: `rgb(${r},${g},${b})`, // Color del borde del polígono
-        weight: 2, // Grosor del borde
+        fillColor: `rgb(${r},${g},${b})`,
+        fillOpacity: 0.5, 
+        color: `rgb(${r},${g},${b})`, 
+        weight: 2, 
       };
 
-      
-
-      // Agregar el polígono al mapa con el estilo definido
       L.geoJSON(geofenceData, {
-        style: styleOptions, // Estilo del polígono
+        style: styleOptions,
       }).bindTooltip(feature => datos[polygonCoordinates].description!).addTo(this.map!);
     }
   }
-
-  public setFitBounds(dataFitBounds: [number, number][]): void {
-    this.map!.fitBounds(dataFitBounds);
-  }
-
-  /*protected getCenterMap(dataFitBounds: [number, number][]): [number, number] {
-    let lats: number[] = [];
-    let longs: number[] = [];
-    if (dataFitBounds.length === 0) {
-      return [0, 0];  // No se puede calcular el centro si no hay pares [lat,long]
-    }
-    // Calcula el promedio de latitudes y longitudes
-    lats = dataFitBounds.map((pair: [number, number]) => pair[0]!);
-    longs = dataFitBounds.map((pair: [number, number]) => pair[1]!);
-
-    const avgLatitude = lats.reduce((a, b) => a + b) / lats.length;
-    const avgLongitude = longs.reduce((a, b) => a + b) / longs.length;
-
-    return [avgLatitude, avgLongitude];
-  }*/
 }
-

@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, OnDestroy, OnInit, NgZone , AfterContentInit, AfterViewInit, Input} from '@angular/core';
+import { AfterContentChecked, Component, OnDestroy, OnInit, NgZone, AfterContentInit, AfterViewInit, Input } from '@angular/core';
 import { GeofencesService } from '../../services/geofences.service';
 import { GeofenceImportExportService } from '../../services/geofence-import-export.service';
 import { DataGeofence } from '../../models/interfaces';
@@ -9,7 +9,7 @@ import { MapItemConfiguration } from 'src/app/multiview/models/interfaces';
   templateUrl: './geofences-modal.component.html',
   styleUrls: ['./geofences-modal.component.scss']
 })
-export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnDestroy,AfterViewInit {
+export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnDestroy, AfterViewInit {
   datosGeo: DataGeofence[] = [];
   minimapElement: HTMLElement | null = null;
 
@@ -21,42 +21,35 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
     maxZoom: 16,
     dataFitBounds: [[-16.39889, -71.535]],
   }
-
   constructor(
     public geofencesService: GeofencesService,
     public geofenceImportExportService: GeofenceImportExportService,
     private ngZone: NgZone
-  ) {}
+  ) { }
 
   guardarRegistro(): void {
     console.log('Datos recibidos:');
   }
 
-  geocercaDet(item: any) {
-    console.log("detallados: ", item);
+  geocercaDet(item: DataGeofence) {
+    console.log("detalle1: ", item);
+    let prueba: DataGeofence []=[];
+    prueba.push(item);
+    const setCoordinates: number[][][] = this.geofenceImportExportService.coordinatesGeo(prueba);
+    console.log("detalle3", setCoordinates);
+    this.geofenceImportExportService.alignGeofence(setCoordinates);
+    //this.geofenceImportExportService.prueba();
   }
 
   enviarDatosOtroComponente() {
     this.geofencesService.setData(this.datosGeo);
   }
-  ngAfterViewInit(){
-    console.log("ngAfterViewInit",this.datosGeo);
-   /* this.minimapElement = document.getElementById('geofence-minimap');
-    this.geofencesService.data$.subscribe(data => {
-      // Se retrasa la actualización de los datos dentro de NgZone.run
-      this.ngZone.run(() => {
-        this.datosGeo = data;
-      });
-      console.log("subscribe", this.datosGeo);
-      this.geofenceImportExportService.startMiniMap(this.confGeoMap,this.datosGeo);
-      // Aquí puedes hacer lo que necesites con los datos recibidos
-    });*/
+
+  ngAfterViewInit() {
+    console.log("ngAfterViewInit", this.datosGeo);
   }
   ngOnInit(): void {
-    
-    
-    //this.getdatacomp();
-    //this.datosGeo=this.geofencesService.importedGeofencesTemp;;
+
   }
 
   ngAfterContentChecked(): void {
@@ -64,18 +57,19 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
   }
 
   ngOnDestroy(): void {
-    console.log("subscribe",this.minimapElement);
-    // Destruir el mapa cuando el componente se destruye
+
     if (this.minimapElement) {
       this.minimapElement.remove();
     }
   }
 
-  generateMap(datos:DataGeofence[]){
-    console.log(" :",datos)
-    this.datosGeo=datos;
-
+  generateMap(datos: DataGeofence[]) {
+    this.datosGeo = datos;
     this.geofenceImportExportService.startMiniMap(this.confGeoMap);
-    this.geofenceImportExportService.addGeofences(datos);
+    console.log("generatemap", datos);
+    const setCoordinates: number[][][] = this.geofenceImportExportService.coordinatesGeo(datos);
+    console.log("setCoordinates", setCoordinates);
+    this.geofenceImportExportService.alignGeofence(setCoordinates);
+    this.geofenceImportExportService.addGeofences(setCoordinates, datos);
   }
 }

@@ -48,4 +48,5 @@ export interface DataGeofence{
     color?: string,
     coordinate?: string,
     width?: string, 
+    tag?: string,
 }

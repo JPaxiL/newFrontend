@@ -1065,10 +1065,10 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         //parte actual echa
         const PlacemarkRegex = /<Placemark[^>]*>([\s\S]*?)<\/Placemark>/g;
         const nameRegex = /<name>([\s\S]*?)<\/name>/;
-        const coordinateRegex = /<Polygon>\s*<outerBoundaryIs>\s*<LinearRing>\s*<coordinates>([\s\S]*?)<\/coordinates>\s*<\/LinearRing>\s*<\/outerBoundaryIs>/;
+        const coordinateRegex = /<coordinates>\s*([\s\S]*?)\s*<\/coordinates>/;
         const descriptionRegex = /<description>\s*([\s\S]*?)\s*<\/description>/;
-
-        const styleRegex = /<Style>\s*([\s\S]*?)\s*<\/Style>/;
+        const polygonRegex = /<Polygon[^>]*>\s*([\s\S]*?)\s*<\/Polygon>/;
+        const styleRegex = /<Style[^>]*>\s*([\s\S]*?)\s*<\/Style>/;
         const polyColorRegex = /<color>\s*([\s\S]*?)\s*<\/color>/;
         const polyWidthRegex = /<width>\s*([\s\S]*?)\s*<\/width>/;
         const polyStyleRegex = /<PolyStyle>s*([\s\S]*?)\s*<\/PolyStyle>/;
@@ -1076,43 +1076,46 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
         const LineStyleRegex = /<LineStyle>s*([\s\S]*?)\s*<\/LineStyle>/;
         const lineColorRegex = /<color>\s*([\s\S]*?)\s*<\/color>/;
         const lineWidthRegex = /<width>\s*([\s\S]*?)\s*<\/width>/;
+        const tagsRegex = /<tag>\s*([\s\S]*?)\s*<\/tag>/;
+
         console.log("match:", fileContent)
         while (match = PlacemarkRegex.exec(fileContent)) {
 
-          const coordinate = coordinateRegex.exec(match[1]);
+          const polygon = polygonRegex.exec(match[1]);
+          
+          //siempre y cuando exista el poligono en el placemark
+          if (polygon) {
 
-          //const color = colorRegex.exec(match[1]);
-          if (coordinate) {
-            let polyColorMatch,polyWidthMatch,lineColorMatch,lineWidthMatch;
+            let polyColorMatch, polyWidthMatch, lineColorMatch, lineWidthMatch, coordinate;
+            coordinate = coordinateRegex.exec(polygon[1]);
+
             const name = nameRegex.exec(match[1]);
             const description = descriptionRegex.exec(match[1]);
             console.log("match1:", name ? name[1] : "");
             console.log("match2:", coordinate ? coordinate[1] : "");
             console.log("match3:", description ? description[1] : "");
-
-
+            const tags = tagsRegex.exec(match[1]);
             const styleMatch = styleRegex.exec(match[1]);
             if (styleMatch) {
               const polyMatch = polyStyleRegex.exec(styleMatch[1]);
               const polyline = LineStyleRegex.exec(styleMatch[1]);
               if (polyMatch) {
-                 polyColorMatch = polyColorRegex.exec(polyMatch[1]);
-                 polyWidthMatch = polyWidthRegex.exec(polyMatch[1]);
+                polyColorMatch = polyColorRegex.exec(polyMatch[1]);
+                polyWidthMatch = polyWidthRegex.exec(polyMatch[1]);
               }
               if (polyline) {
-                 lineColorMatch = polyColorRegex.exec(polyline[1]);
-                 lineWidthMatch = polyWidthRegex.exec(polyline[1]);
+                lineColorMatch = polyColorRegex.exec(polyline[1]);
+                lineWidthMatch = polyWidthRegex.exec(polyline[1]);
               }
-
             }
             this.dataGeo.push(
               {
                 name: name ? name[1].replace(/[\n\t]/g, '') : "",
                 coordinate: coordinate ? coordinate[1].replace(/[\n\t]/g, '') : "",
                 description: description ? description[1].replace(/[\n\t]/g, '') : "",
-                color: polyColorMatch ? polyColorMatch[1].replace(/[\n\t]/g,'') : "",
-                width: polyWidthMatch ? polyWidthMatch[1].replace(/[\n\t]/g,'') : "",
-
+                color: polyColorMatch ? polyColorMatch[1].replace(/[\n\t]/g, '') : "",
+                width: polyWidthMatch ? polyWidthMatch[1].replace(/[\n\t]/g, '') : "",
+                tag: tags ? tags[1].replace(/[\n\t]/g, '') : "",
               }
             )
 
@@ -1121,26 +1124,6 @@ export class GeofenceTableComponent implements OnInit, OnDestroy {
 
 
         }
-
-
-
-        // Iterar sobre los elementos <Placemark>
-        /* while ((match = kmlRegex.exec(fileContent)) !== null) {
-           console.log("prueba2",match);
-             const kmlRegexContent = match[1];
-             // Buscar el nombre dentro del contenido del Placemark
-             const nameMatch = nameRegex.exec(kmlRegexContent);
-             const name = nameMatch ? nameMatch[1].replace(/[\n\t]/g, '') : undefined;
-         
-             // Buscar las coordenadas dentro del contenido del Placemark
-             const coordinatesMatch = coordinatesRegex.exec(kmlRegexContent);
-             const coordinates = coordinatesMatch ? coordinatesMatch[1].replace(/[\n\t]/g, '') : undefined;
-         
-             // Si se encontraron tanto el nombre como las coordenadas, agregar al array this.dataGeo
-             if (name !== undefined && coordinates !== undefined) {
-                 this.dataGeo.push({ name, coordinate: coordinates });
-             }
-         }*/
 
         console.log("prueba3:", this.dataGeo);
         this.modalChild.generateMap(this.dataGeo);

@@ -13,7 +13,6 @@ export abstract class MapBase implements IMapBase {
     }
 
     public createMap(dataFitBounds:[number,number][], zoom?:number,maxZoom?:number,editable?:boolean){
-        console.log("que llega: ",dataFitBounds);
         this.map = L.map(this._containerId, {
             preferCanvas:true,
             renderer: L.canvas(),
@@ -30,6 +29,7 @@ export abstract class MapBase implements IMapBase {
     };
 
     public setFitBounds(dataFitBounds: [number, number][]): void {
+        console.log("ultima:",dataFitBounds)
         this.map!.fitBounds(dataFitBounds);
     }
 
