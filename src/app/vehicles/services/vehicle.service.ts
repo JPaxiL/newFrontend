@@ -158,10 +158,31 @@ export class VehicleService {
       // vehicle.icon = typeConfigVehicle.var_icono;
       vehicle.custom_url = typeConfigVehicle.customurl;
       vehicle.custom_svg = typeConfigVehicle.customsvg;
+
+
+
+      //
+
       vehicle.excess_svg = typeConfigVehicle.excess_svg;
       vehicle.movement_svg = typeConfigVehicle.movement_svg;
       vehicle.relenti_svg = typeConfigVehicle.relenti_svg;
       //vehicle.movement_onda = typeConfigVehicle.movement_onda;
+
+
+
+
+
+
+      //VEHICULOS EN MOVIMIENTO
+      vehicle.customurldownright = typeConfigVehicle.customurldownright;
+
+
+
+
+
+
+
+
 
       // vehicle.icon = `backup/${vehicle.icon}`;
       vehicle.icon =  typeConfigVehicle.icon_url;
