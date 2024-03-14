@@ -1,5 +1,43 @@
 stages:
+  - build
   - deploy
+
+build_dev:
+  image: node:16.20.2
+  stage: build
+  script:
+    - npm install --legacy-peer-deps
+    - npm install -g @angular/cli@11.2.12
+    - ng build --configuration=development
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - develop
+build_test:
+  image: node:16.20.2
+  stage: build
+  script:
+    - npm install --legacy-peer-deps
+    - npm install -g @angular/cli@11.2.12
+    - ng build --configuration=test
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - test
+build_prod:
+  image: node:16.20.2
+  stage: build
+  script:
+    - npm install --legacy-peer-deps
+    - npm install -g @angular/cli@11.2.12
+    - ng build --configuration=production
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - master
 
 deploy_testing:
   image: ubuntu:latest
@@ -11,7 +49,7 @@ deploy_testing:
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/test/newFrontend && git pull origin test && exit"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/platform/test/frontend && git pull origin test && exit"
   after_script:
     - rm -rf ~/.ssh
   only:
@@ -27,7 +65,7 @@ deploy_development:
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/development/newFrontend && git pull origin develop && exit"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/platform/dev/frontend && git pull origin develop && exit"
   after_script:
     - rm -rf ~/.ssh
   only:
@@ -43,7 +81,7 @@ deploy_production:
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/plataforma/production/newFrontend && git pull origin master && exit"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/platform/prod/frontend && git pull origin master && exit"
   after_script:
     - rm -rf ~/.ssh
   only:
