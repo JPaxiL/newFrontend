@@ -103,7 +103,7 @@ export interface UserTracker {
     relenti_svg?:any,
     movement_svg?:any,
     excess_svg?:any,
-    movement_onda?:any | null,
+    //movement_onda?:any | null,
 }
 
 export interface ScreenView {

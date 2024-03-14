@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import RefData from '../data/refData';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+import { ConsoleService } from '@ng-select/ng-select/lib/console.service';
 
 @Injectable({
   providedIn: 'root',
@@ -160,7 +161,7 @@ export class VehicleService {
       vehicle.excess_svg = typeConfigVehicle.excess_svg;
       vehicle.movement_svg = typeConfigVehicle.movement_svg;
       vehicle.relenti_svg = typeConfigVehicle.relenti_svg;
-      vehicle.movement_onda = typeConfigVehicle.movement_onda;
+      //vehicle.movement_onda = typeConfigVehicle.movement_onda;
 
       // vehicle.icon = `backup/${vehicle.icon}`;
       vehicle.icon =  typeConfigVehicle.icon_url;
@@ -1043,6 +1044,12 @@ export class VehicleService {
     console.log('mapa con Fixes:', map);
     return map;
   }
+
+
+  
+
+  
+  
 
   public async setDefaultStatusDataVehicle() {
     this.statusDataVehicle = false;
