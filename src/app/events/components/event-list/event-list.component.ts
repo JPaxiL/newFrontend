@@ -232,23 +232,27 @@ export class EventListComponent implements OnInit {
       );
     } else {
       this.spinner.show('loadingHistorialForm');
-      console.log(
-        'TEST IN EVENTS PANEL->',
-        this.eventService.eventsGroupedList
-      );
+      // console.log(
+      //   'TEST IN EVENTS PANEL->',
+      //   this.eventService.eventsGroupedList
+      // );
       this.spinner.hide('loadingHistorialForm');
     }
   }
 
   public changeTypeEvent() {
+    console.log("cambiando filtro de eventos ...... *****************+ ");
+    console.log("selectedEvent",this.selectedEvent);
     if (this.selectedEvent.length === 0 && this.placa === '') {
       this.eventService.eventsFiltered = this.eventService.getData();
 
       this.noResults = false;
     } else {
+      this.eventService.getEventFilter(this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
+          // console.log(" --- event: ",event);
           return this.eventFilter(event);
         });
       this.noResults = this.eventService.eventsFiltered.length === 0;
@@ -449,7 +453,8 @@ export class EventListComponent implements OnInit {
   }
 
   private eventFilter(event: any) {
-    // console.log("filter ===> ");
+
+    // console.log("eventFilter filter ===> ");
     // console.log("event",event);
     // console.log("tipo select",event.tipo +"=="+ this.selectedEvent);
     const eventsTypesSelected: string[] = this.selectedEvent.map(

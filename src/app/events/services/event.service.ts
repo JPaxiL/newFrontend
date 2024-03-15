@@ -80,6 +80,8 @@ export class EventService {
   public eventsGroupedList: any = [];
   public eventsLength: any;
 
+  private get_event_filter_status = true;
+
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -88,31 +90,12 @@ export class EventService {
     public driverService: DriversService
   ) {
     this.vehicleService.dataCompleted.subscribe((vehicles) => {
-      //console.log("evento cargo antes que vehicles ...");
       this.getVehiclesPlate();
     });
-    // if(false){
-    // if(this.eventsLoaded){
-    //   this.vehicleService.dataCompleted.subscribe(vehicles=>{
-    //     // console.log("me entero que la data de vehiculos ya se completo. Aqui desde eventos :D");
-    //     // for (const index in this.events) {
-    //     //   console.log(this.events[index]);
-    //     //   this.events[index].nombre_objeto = this.vehicleService.getVehicle(this.events[index].imei).name;
-    //     // }
-    //     this.getVehiclesPlate();
-    //   });
-    //   console.log("el modulo vehiculos a demorado mas que event");
-    // }else{
-    //   this.getVehiclesPlate();
-    //   console.log("el modulo event a demorado mas que vehiculos");
-    // }
+
   }
 
   async initialize() {
-    // console.log("inicializando service events ....");
-    // if(!this.alertService.dataCompleted){
-    //   await this.alertService.getAll();
-    // }
     this.getAll();
   }
 
@@ -125,13 +108,6 @@ export class EventService {
         data_events[index].namedriver = this.driverService.getDriverById(
           data_events[index].driver_id
         );
-        console.log(
-          'DRIVER:',
-          data_events[index].namedriver,
-          ' - Unidad:',
-          data_events[index].nombre_objeto
-        );
-        // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     } else {
       for (const index in this.events) {
@@ -141,12 +117,12 @@ export class EventService {
         this.events[index].namedriver = this.driverService.getDriverById(
           this.events[index].driver_id
         );
-        console.log(
-          'DRIVER:',
-          this.events[index].namedriver,
-          ' - Unidad:',
-          this.events[index].nombre_objeto
-        );
+        // console.log(
+        //   'DRIVER:',
+        //   this.events[index].namedriver,
+        //   ' - Unidad:',
+        //   this.events[index].nombre_objeto
+        // );
         // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }
@@ -162,113 +138,105 @@ export class EventService {
     return this.http.get<any>(`${environment.apiUrl}/api/getPermissEvents`);
   }
 
-  public loadNameEvent(event: any) {
-    // console.log("buscando evento "+event.tipo,this.eventsCommon.indexOf(event.tipo));
-    if (this.eventsCommon.indexOf(event.tipo) < 0) {
-      // console.log("evento personalizado");
-      // return this.eventPersonalice(event.event_user_id);
-      return event.nombre;
-    } else {
-      // console.log("evento comun");
-      return this.eventCommon(event.tipo);
-    }
-    // this.getEventName().subscribe(name=>{
-    //   console.log("consiguiendo los nombres de los eventos",name);
-    //   this.events_names = name.data;
-    // });
-    return '---';
-  }
-
-  public eventCommon(slug: any): any {
-    for (const index in this.events_names) {
-      // console.log(this.events_names[index].slug+"=="+slug);
-      if (this.events_names[index].slug == slug) {
-        return this.events_names[index].nombre;
+  public async getEventFilter(selectedEvent: any){
+    for (const index in selectedEvent) {
+      if(selectedEvent[index].value=="posible-fatiga"&&this.get_event_filter_status){
+        console.log("Ejecutando busqueda de eventos de posible fatiga solo una vez :D");
+        this.get_event_filter_status=false;
+        this.requestEventSlug("posible-fatiga");
       }
     }
-    return '--';
   }
-  // public eventPersonalice(event_user_id: any): any{
-  //   for (const index in this.events_names) {
-  //     if(this.events_names[index].event_user_id==event_user_id){
-  //       return this.events_names[index].nombre;
-  //     }
-  //   }
-  //   return "--";
-  // }
+
+  private async requestEventSlug(event_slug: string){
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/event-user/`+event_slug)
+    .toPromise()
+    .then((res) =>{
+      console.log("exito al buscar eventos con slug "+event_slug);
+      console.log("eventos encontrados",res);
+      this.integrateEvent(res.data)
+      //res.data
+    });
+  }
+
+  public integrateEvent (data: any){
+    console.log("integrando eventos nuevos a la lista general");
+    console.log("this.events",this.events);
+    for (const i in data) {
+      console.log("-->",data[i]);
+      let status=true;
+      for (const j in this.events) {
+        if(this.events[j].id==data[i].id)status=false;
+      }
+      if(status){
+        let event = this.formatEvent(data[i]);
+        this.events.push(event);
+
+      }
+    }
+    this.newEventStream.emit(this.events);
+  }
+
+  public formatEvent(event: any){
+    const iconUrl = getIconUrlHistory(event);
+    let icon = L.icon({
+      iconUrl: iconUrl,
+      iconSize: this.img_iconSize, // size of the icon
+      iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
+    });
+    event.layer = L.marker([event.latitud, event.longitud], {
+      icon: icon,
+    });
+    event.layer._myType = 'evento';
+    event.layer._myId = event.id;
+    // console.log('EVENTO ->',event);
+    event.namedriver = this.driverService.getDriverById(event.driver_id); // <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+    // event.namedriver = "NO IDENTIFICADO";
+    // event.layer.addTo(this.eventsLayers);
+
+    // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
+    event.fecha_tracker = moment(
+      event.fecha_tracker,
+      'YYYY/MM/DD hh:mm:ss'
+    )
+      .subtract(5, 'hours')
+      .format('YYYY/MM/DD HH:mm:ss');
+    event.evaluations = [
+      {
+        event_id: event.evento_id,
+        usuario_id: event.usuario_id,
+        imei: event.imei,
+        fecha: event.fecha_tracker,
+        nombre: event.nombre_objeto,
+        tipo_evento: event.name,
+        uuid_event: event.uuid_event,
+        criterio_evaluacion: '',
+        identificacion_video: '',
+        valoracion_evento: '0',
+        observacion_evaluacion: '',
+        senales_posible_fatiga: false,
+        operador_monitoreo: '',
+      } as Evaluation,
+    ];
+    return event;
+  }
   public async getAll(
     key: string = '',
     show_in_page: number = 15,
     page: number = 1
   ) {
-    console.log('[event.service] getAll()');
+    // console.log('[event.service] getAll()');
     await this.http
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
       .then((response) => {
         console.log(
-          '######################### ####### eventos cargados === -------------->',
+          '########### [event.service] getAll(). Exito al cargar eventos ################',
           response.data
         );
-        // this.getEventName().subscribe(name=>{
-        //    console.log("consiguiendo los nombres de los eventos",name.data);
-        //   this.events_names = name.data;
-        //   // for (const index in this.events) {
-        //   //   this.events[index].nombre=this.loadNameEvent(this.events[index]);
-        //   // }
-        //   console.log("vehicles cargo antes que eventos ...");
-        //   this.getVehiclesPlate();
-        // });
-     
-        this.events = response.data.map((event: any) => {
-          //event.nombre=this.loadNameEvent(event); //conseguir el nombre que el usuario le puso
-          const iconUrl = getIconUrlHistory(event);
-          let icon = L.icon({
-            iconUrl: iconUrl,
-            iconSize: this.img_iconSize, // size of the icon
-            iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
-          });
-          event.layer = L.marker([event.latitud, event.longitud], {
-            icon: icon,
-          });
-          event.layer._myType = 'evento';
-          event.layer._myId = event.id;
-          // console.log('EVENTO ->',event);
-          event.namedriver = this.driverService.getDriverById(event.driver_id); // <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
-          // event.namedriver = "NO IDENTIFICADO";
-          // event.layer.addTo(this.eventsLayers);
 
-          // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
-          event.fecha_tracker = moment(
-            event.fecha_tracker,
-            'YYYY/MM/DD hh:mm:ss'
-          )
-            .subtract(5, 'hours')
-            .format('YYYY/MM/DD HH:mm:ss');
-          //console.log('Evento de tabla: ', event);
-          // console.log("view",event.viewed)
-          if (!event.viewed) {
-            this.unreadCount++;
-          }
-          //event.bol_evaluation = this.alertService.alerts.find(alert => alert.slug)
-          event.evaluations = [
-            {
-              event_id: event.evento_id,
-              usuario_id: event.usuario_id,
-              imei: event.imei,
-              fecha: event.fecha_tracker,
-              nombre: event.nombre_objeto,
-              tipo_evento: event.name,
-              uuid_event: event.uuid_event,
-              criterio_evaluacion: '',
-              identificacion_video: '',
-              valoracion_evento: '0',
-              observacion_evaluacion: '',
-              senales_posible_fatiga: false,
-              operador_monitoreo: '',
-            } as Evaluation,
-          ];
-          return event;
+        this.events = response.data.map((event: any) => {
+          return this.formatEvent(event);
         });
         // return;
         this.strUnreadCount =
@@ -276,9 +244,9 @@ export class EventService {
         this.eventsLoaded = true;
         while (this.socketEvents.length > 0) {
           let last_event = this.socketEvents.pop();
-          if (
-            this.events.findIndex((event) => event.id == last_event.id) == -1
-          ) {
+          // if (
+          //   this.events.findIndex((event) => event.id == last_event.id) == -1
+          // ) {
             // this.events.nombre="XDDD";
             if (last_event.bol_evaluation) {
               last_event.evaluations = [
@@ -301,9 +269,10 @@ export class EventService {
             }
             this.events.unshift(last_event);
             //this.increaseUnreadCounter();
-          } else {
-            console.log('Evento duplicado: ', last_event);
-          }
+          // } else {
+          //   // esto no existe el caso todo se trabaja en events_platform
+          //   console.log('Evento duplicado: ', last_event);
+          // }
         }
         this.updateUnreadCounter();
         this.enableSocketEvents = false;
@@ -329,7 +298,6 @@ export class EventService {
     //     evento: "motor-encendido"
     // evento_id: 19
     event.event_user_id = event.evento_id;
-    //event.nombre=this.loadNameEvent(event);
     event.evaluated = 0;
     if (!this.eventsLoaded || this.enableSocketEvents) {
       // console.log("event socket");
@@ -369,8 +337,6 @@ export class EventService {
     }
 
     this.newEventStream.emit(this.events);
-    console.log('new Event added: ', event);
-    // this.eventService.sortEventsTableData();
   }
 
   playNotificationSound(path: string) {
@@ -399,7 +365,7 @@ export class EventService {
       .get<ResponseInterface>(`${environment.apiUrl}/api/events`)
       .toPromise();
     let events = response.data;
-    // console.log("events en eventService",events);
+    console.log("[event.service] getAllEventsForTheFilter -> events en eventService",events);
 
     // events = events.filter(function( obj:any ) {
     //   return obj.id !== 23;  // id=23	name=Somnolencia	slug=somnolencia	type=accessories		 ==> 7.	Quitar los eventos de Somnolencia
@@ -683,6 +649,7 @@ export class EventService {
   }
 
   async saveEvaluations(evaluation: Evaluation) {
+    console.log("save evaluation:",evaluation);
     const response: ResponseInterface = await this.http
       .post<ResponseInterface>(
         `${environment.apiUrl}/api/evaluation`,
@@ -783,15 +750,7 @@ export class EventService {
   }
 
   checkDuplicates() {
-    for (let i = 0; i < this.events.length; i++) {
-      let currEvent = this.events[i];
-      let auxArr = this.events.filter((event) => {
-        event.id == currEvent.id;
-      });
-      if (auxArr.length > 1) {
-        console.log('EVENTO DUPLICADO DETECTADO!', currEvent.id);
-      }
-    }
+    // no hay eventos duplicados todo se resuelve en events_plataform
   }
 
   markAsRead(event_id: string) {
@@ -857,11 +816,11 @@ export class EventService {
   }
 
   public createEventList(data: any): any[] {
-    console.log('[event.service] createEventList', data);
+    // console.log('[event.service] createEventList', data);
     // let status_event = false;
     let map: any = [];
     for (let event of data) {
-      console.log('event: ', event);
+      // console.log('event: ', event);
       // status_event= false;
       event.event_category = this.changeNameEvent(event.event_category);
 
@@ -869,25 +828,25 @@ export class EventService {
         (item: { label: any; items: any[] }) =>
           item.label === event.event_category
       );
-      console.log('existingTypeEvent', existingTypeEvent);
+      // console.log('existingTypeEvent', existingTypeEvent);
       if (existingTypeEvent) {
         // El tipo de evento ya existe en el mapa
-        console.log('el tipo de evento existe en el mapa.....');
+        // console.log('el tipo de evento existe en el mapa.....');
         const existingEvent = existingTypeEvent.items.find(
           (existingItem: { name: any; value: any }) =>
             existingItem.value === event.slug
         );
 
         if (!existingEvent) {
-          console.log(
-            'El id_event no existe para este tipo de evento, lo agregamos'
-          );
+          // console.log(
+          //   'El id_event no existe para este tipo de evento, lo agregamos'
+          // );
           existingTypeEvent.items.push({
             name: event.name_event,
             value: event.slug,
           });
         } else {
-          console.log('no existe el evento ', existingEvent);
+          // console.log('no existe el evento ', existingEvent);
         }
       } else {
         // El tipo de evento no existe en el mapa, lo añadimos

@@ -10,8 +10,8 @@ export const environment = {
   secretClient: 'au2vdKGrRK013Sy1rlgu5H7yb9k1LOzTx5wXz9Uu',
   socketUrl: 'https://escucha.glmonitoreo.com/',
   // socketUrl: 'http://localhost:3030',
-  socketEvent: 'https://eventos.glmonitoreo.com/'
-  //socketEvent: 'http://localhost:5000'
+  //socketEvent: 'https://eventos.glmonitoreo.com/'
+  socketEvent: 'http://localhost:5000'
 };
 
 /*
