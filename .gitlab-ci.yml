@@ -65,7 +65,7 @@ deploy_development:
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/platform/dev/frontend && git pull origin develop && exit"
+    - scp -r $CI_PROJECT_DIR/dist/* $SERVER_USER@$SERVER_HOST:/var/www/html/platform/dev/frontend/dist/
   after_script:
     - rm -rf ~/.ssh
   only:
