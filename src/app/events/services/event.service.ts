@@ -163,7 +163,7 @@ export class EventService {
     console.log("integrando eventos nuevos a la lista general");
     console.log("this.events",this.events);
     for (const i in data) {
-      console.log("-->",data[i]);
+      // console.log("-->",data[i]);
       let status=true;
       for (const j in this.events) {
         if(this.events[j].id==data[i].id)status=false;
@@ -174,6 +174,7 @@ export class EventService {
 
       }
     }
+    // console.log("end integrate --->",this.events);
     this.newEventStream.emit(this.events);
   }
 
