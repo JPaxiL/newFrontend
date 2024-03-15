@@ -168,68 +168,61 @@ export class AlertAccessoriesEditComponent implements OnInit {
 
       // Obtén todos los elementos de la lista de sonidos hasta el id 27
       let sonidosObtenidos = this.alertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
       if (tipoAlerta == 'Fatiga Extrema') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 34
+          (sonido: { id: any }) => sonido.id === 33
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
       } else if (tipoAlerta == 'Anticolisión Frontal') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 29
+          (sonido: { id: any }) => sonido.id === 28
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
       } else if (tipoAlerta == 'Riesgo de Colisión con Peatones') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 39
+          (sonido: { id: any }) => sonido.id === 38
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
       } else if (tipoAlerta == 'No Rostro') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 37
+          (sonido: { id: any }) => sonido.id === 36
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
       } else if (tipoAlerta == 'Desvío de Carril Hacia la Izquierda') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 31
+          (sonido: { id: any }) => sonido.id === 30
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
       } else if (tipoAlerta == 'Desvío de Carril Hacia la Derecha') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 30
+          (sonido: { id: any }) => sonido.id === 29
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
       } else if (tipoAlerta == 'Posible Fatiga') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 38
+          (sonido: { id: any }) => sonido.id === 37
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
       } else if (tipoAlerta == 'Distracción') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 32
-        );
-        if (vozPersonalizada) {
-          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
-        }
-      } else if (tipoAlerta == 'Exceso de Velocidad') {
-        const vozPersonalizada = this.alertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 40
+          (sonido: { id: any }) => sonido.id === 31
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
@@ -246,7 +239,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
       }
     } else {
       this.listaSonidos = this.alertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
       if (this.listaSonidos.length > 0) {
@@ -278,7 +271,7 @@ export class AlertAccessoriesEditComponent implements OnInit {
         (sonido: { id: any }) => sonido.id <= 27
       );
 
-      if (tipoAlerta == 'Fatiga Extrema') {
+     /*  if (tipoAlerta == 'Fatiga Extrema') {
         const vozPersonalizada = this.alertService.listaSonidos.find(
           (sonido: { id: any }) => sonido.id === 34
         );
@@ -334,7 +327,14 @@ export class AlertAccessoriesEditComponent implements OnInit {
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
-      }
+      }  else if (tipoAlerta == 'Exceso de Velocidad') {
+        const vozPersonalizada = this.alertService.listaSonidos.find(
+          (sonido: { id: any }) => sonido.id === 33
+        );
+        if (vozPersonalizada) {
+          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
+        }
+      } */
 
       if (sonidosObtenidos.length > 0) {
         console.log('Sonidos obtenidos:', sonidosObtenidos);

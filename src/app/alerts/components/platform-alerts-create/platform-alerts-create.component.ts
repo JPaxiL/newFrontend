@@ -385,7 +385,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
   }
 
   changeAlertType() {
-    console.log(this.alertForm.value.tipoAlerta);
+    console.log("cambioalerta",this.alertForm.value.tipoAlerta);
     const alert = this.events.find(
       (event: any) =>
         event.id.toString() === this.alertForm.value.tipoAlerta.toString()
@@ -401,19 +401,19 @@ export class PlatformAlertsCreateComponent implements OnInit {
 
       // Obtén todos los elementos de la lista de sonidos hasta el id 27
       let sonidosObtenidos = this.AlertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
-      if (alert.id === 26) {
+      if (alert.name === 'Infracción') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 36
+          (sonido: { id: any }) => sonido.id === 35
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
-      } else if (alert.id === 64) {
+      } else if (alert.name === 'Exceso de Velocidad') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 33
+          (sonido: { id: any }) => sonido.id === 32
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
@@ -430,7 +430,7 @@ export class PlatformAlertsCreateComponent implements OnInit {
       }
     } else {
       this.listaSonidos = this.AlertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
       if (this.listaSonidos.length > 0) {

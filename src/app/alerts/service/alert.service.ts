@@ -48,76 +48,71 @@ export class AlertService {
     { id: 19, ruta: 'sonidos/sound.mp3', label: 'Sonido 19' },
     { id: 20, ruta: 'sonidos/sound1.MP3', label: 'Sonido 20' },
     { id: 21, ruta: 'sonidos/ALARMA1.MP3', label: 'Sonido 21' },
-    { id: 23, ruta: 'sonidos/ALARMA2.MP3', label: 'Sonido 22' },
-    { id: 24, ruta: 'sonidos/ALARMA3.MP3', label: 'Sonido 23' },
-    { id: 25, ruta: 'sonidos/ALARMA4.MP3', label: 'Sonido 24' },
-    { id: 26, ruta: 'sonidos/digitalalarm.mp3', label: 'Sonido 25' },
-    { id: 27, ruta: 'sonidos/watchalarm.mp3', label: 'Sonido 26' },
+    { id: 22, ruta: 'sonidos/ALARMA2.MP3', label: 'Sonido 22' },
+    { id: 23, ruta: 'sonidos/ALARMA3.MP3', label: 'Sonido 23' },
+    { id: 24, ruta: 'sonidos/ALARMA4.MP3', label: 'Sonido 24' },
+    { id: 25, ruta: 'sonidos/digitalalarm.mp3', label: 'Sonido 25' },
+    { id: 26, ruta: 'sonidos/watchalarm.mp3', label: 'Sonido 26' },
 
     // SONIDOS PERSONALIZADOS
     {
-      id: 28, //X
+      id: 27, //X
       ruta: 'sonidos/aceleracion brusca.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 29, //X
+      id: 28, //X
       ruta: 'sonidos/anticolisión frontal.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 30, //X
+      id: 29, //X
       ruta: 'sonidos/desvio carril derecha.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 31, //X
+      id: 30, //X
       ruta: 'sonidos/desvio carril izquierda.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 32, //X
+      id: 31, //X
       ruta: 'sonidos/distracción.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 33, //X
-      ruta: 'sonidos/exceso de velocidad.mp3',
+      id: 32, //X
+      ruta: 'sonidos/exceso velocidad.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 34, //X
+      id: 33, //X
       ruta: 'sonidos/fatiga extrema.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 35, //X
+      id: 34, //X
       ruta: 'sonidos/frenada brusca.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 36, //X
+      id: 35, //X
       ruta: 'sonidos/infracción.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 37, //x
+      id: 36, //x
       ruta: 'sonidos/no rostro.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 38, //X
+      id: 37, //X
       ruta: 'sonidos/posible fatiga.mp3',
       label: 'Voz Personalizada',
     },
     {
-      id: 39, //X
+      id: 38, //X
       ruta: 'sonidos/riesgo de colisión con peatones.mp3',
-      label: 'Voz Personalizada',
-    },
-    {
-      id: 40, //X
-      ruta: 'sonidos/exceso_velocidad.mp3',
       label: 'Voz Personalizada',
     },
   ];
