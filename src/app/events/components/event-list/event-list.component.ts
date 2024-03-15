@@ -253,7 +253,9 @@ export class EventListComponent implements OnInit {
         .getData()
         .filter((event: any) => {
           // console.log(" --- event: ",event);
-          return this.eventFilter(event);
+          let result_filter = this.eventFilter(event);
+          console.log("result_filter",result_filter);
+          return result_filter;
         });
       this.noResults = this.eventService.eventsFiltered.length === 0;
     }
@@ -465,15 +467,22 @@ export class EventListComponent implements OnInit {
     const vehicle = this.vehicleService.vehicles.find(
       (vh) => vh.IMEI == event.imei
     );
-    return (
-      ((event.nombre_objeto + vehicle?.IMEI + vehicle?.cod_interno)
-        .trim()
-        .toLowerCase()
-        .match(this.placa.trim().toLowerCase()) ||
-        this.placa == '') &&
-      (eventsTypesSelected.includes(event.tipo) ||
-        this.selectedEvent.length == 0)
-    );
+    if(vehicle!=undefined){
+      let aux_imei = vehicle.IMEI ?? "";
+      let aux_cod = vehicle.cod_interno ?? "";
+      let aux = event.nombre_objeto + aux_imei + aux_cod;
+      return (
+        ( aux.toString().trim()
+          .toLowerCase()
+          .match(this.placa.trim().toLowerCase()) ||
+          this.placa == '') &&
+        (eventsTypesSelected.includes(event.tipo) ||
+          this.selectedEvent.length == 0)
+      );
+    }else{
+      return false;
+    }
+
   }
 
   rowExpandend(event: any) {
