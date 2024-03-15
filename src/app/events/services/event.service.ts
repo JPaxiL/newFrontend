@@ -174,7 +174,8 @@ export class EventService {
       }
     }
     // console.log("end integrate --->",this.events);
-    this.newEventStream.emit(data);
+    //reparar esto 
+    // this.newEventStream.emit(data);
   }
 
   public formatEvent(event: any){

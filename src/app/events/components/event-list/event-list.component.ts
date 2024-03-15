@@ -205,7 +205,7 @@ export class EventListComponent implements OnInit {
       // console.log("desde event list ",res);
       this.data_debug = res.data;
     });
-    this.eventService.newEventStream.subscribe((res) => {
+    this.eventService.newEventStream.subscribe(() => {
       // console.log("desde event list ",res);
       this.searchByPlate();
       this.changeTypeEvent();
