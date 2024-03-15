@@ -73,7 +73,8 @@ export class MapService {
   // setInvterval = setInterval;
 
   timeNow: any = []; // Array para almacenar los tiempos
-  timeWait: number = 7200000; // 7200 segundos en milisegundos
+  timeWait: number = 7200000; // 7200 segundos en milisegundos 
+  //timeWait: number = 5000;
 
   @Output() sendData = new EventEmitter<any>();
   @Output() changeEye = new EventEmitter<any>();
@@ -379,16 +380,14 @@ export class MapService {
     if (vehicle!.eye == true) {
       // this.map.addLayer(this.marker[IMEI]);
       this.markerClusterGroup.addLayer(this.marker[IMEI]);
-      //console.log("RESULETO ",this.markerClusterGroup.addLayer(this.marker[IMEI]))
-
-      //this.markerClusterGroupOnda.addLayer(this.markerOnda[IMEI]);
+      // this.markerClusterGroupOnda.addLayer(this.markerOnda[IMEI]);
       this.tagClick(vehicle!.IMEI!, false);
       this.vehicleService.countOpenEyes++;
     } else {
       //console.log('quitar vehiculo del mapa ...',vehicle);
       // this.map.removeLayer(this.marker[IMEI]);
       this.markerClusterGroup.removeLayer(this.marker[IMEI]);
-      this.markerClusterGroupOnda.removeLayer(this.markerOnda[IMEI]);
+      // this.markerClusterGroupOnda.removeLayer(this.markerOnda[IMEI]);
       this.vehicleService.countOpenEyes--;
     }
     this.vehicleService.allEyes.state = this.vehicleService.countOpenEyes > 0;
@@ -694,16 +693,12 @@ export class MapService {
     return diferenciaEnSegundos > 15;
   }
 
-  getGifBase64(): Observable<string> {
-    const gifPath = './assets/images/objects/nuevo/gif/onda_azul.gif'; // Ajusta la ruta según tu estructura de carpetas
-
-    return this.http.get(gifPath, { responseType: 'text' });
-  }
-
   monitor(data: any, map: any): void {
     if (this.vehicleService.statusDataVehicle) {
       const vehicles = this.vehicleService.vehicles;
       const vehiclestree = this.vehicleService.vehiclesTree;
+
+      //console.log('vehicles', vehicles);
 
       const resultado = vehicles.find(
         (vehi: any) => vehi.IMEI == data.IMEI.toString()
@@ -864,12 +859,13 @@ export class MapService {
           // console.log('buscando layer');
           let cont = 0;
           let object = this.markerClusterGroup.getLayers();
-          let ondas = this.markerClusterGroupOnda.getLayers();
-          /* console.log('MASKERCLUSTERGROUP', ondas); */
+          //let onda = this.markerClusterGroupOnda.getLayers();
+
+          // console.log("object",object)
+          /* console.log("onda",onda) */
+
           for (const key in object) {
             // console.log("object[key]['_tooltip']['_content']==vehicles[index].name==>"+object[key]['_tooltip']['_content']+"=="+vehicles[index].name)
-            /* console.log("object[key]['_tooltip']['_content']",object[key]['_tooltip']['_content'])
-            console.log( "vehicles[index].name", vehicles[index].name) */
             if (
               object[key]['_tooltip']['_content'] ==
               '<span>' + vehicles[index].name + '</span>'
@@ -878,120 +874,125 @@ export class MapService {
               let oldCoords = this.markerClusterGroup
                 .getLayers()
                 [key].getLatLng();
-              /* let oldOndasCoords = this.markerClusterGroupOnda
-                .getLayers()
-                [key].getLatLng(); */
+              
+                
 
               let coord = {
                 lat: vehicles[index].latitud,
                 lng: vehicles[index].longitud,
               };
 
-              // console.log('coord',coord);
-              // //console.log('aux = ', aux['_latlng']);
-              //_popup
-              // vehicles[index].limit_speed = 10; //COMENTAR SOLO PARA PRUEBAS
-              //console.log('INFO VEHICLE--> ,',vehicles[index]);
+              console.log("coordenadaold",oldCoords)
+              console.log("coordenadanew",coord)
+
+              console.log("direccion",vehicles[index], vehicles[index].IMEI)
+
+              
               if (
                 vehicles[index].parametros!.includes('di4=') ||
                 vehicles[index].parametros!.includes('Custom_ign=')
               ) {
-                let iconUrl =
-                  './assets/images/objects/nuevo/default/' +
-                  vehicles[index].icon_def;
-                /* let iconUrl2 = ''; */
-                // console.log('ENTRO VEHICLE A EVALUAR ESTADO ->',vehicles[index].name,vehicles[index].parametros,vehicles[index].speed);
-
+               
+                let iconUrl = vehicles[index].custom_svg;
+              
                 if (
-                  this.userDataService.changeItemIcon == 'vehicles' &&
-                  (vehicles[index].parametros!.includes('|di4=1|') ||
-                    vehicles[index].parametros!.includes('Custom_ign=1'))
+                  vehicles[index].parametros!.includes('di4=1') ||
+                  vehicles[index].parametros!.includes('Custom_ign=1')
                 ) {
-                  //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
-                  // Si la cadena contiene |di4=1| o custom_ign=1
-                  // console.log('CHANGE STATE VEHICLE ->>');
-                  if (
-                    vehicles[index].speed != 0 &&
-                    vehicles[index].speed! < vehicles[index].limit_speed!
-                  ) {
-                    // iconUrl =
-                    //   './assets/images/objects/nuevo/state_moved/' +
-                    //   vehicles[index].icon_def;
-                    iconUrl = vehicles[index].movement_svg;
-                    // console.log('PINTADO MOVED',vehicles[index].name);
-                  } else if (
-                    vehicles[index].speed != 0 &&
-                    vehicles[index].speed! > vehicles[index].limit_speed!
-                  ) {
-                    // iconUrl =
-                    //   './assets/images/objects/nuevo/state_excess/' +
-                    //   vehicles[index].icon_def;
-                    iconUrl = vehicles[index].excess_svg;
+                  /* function calculateDirection(coord1: any, coord2: any): string {
+                    const angle = Math.atan2(coord1.lat - coord2.lat, coord1.lng - coord2.lng) * (180 / Math.PI);
 
-                    // console.log('PINTADO EXCESS',vehicles[index].name);
-                  } else {
-                    // iconUrl =
-                    //   './assets/images/objects/nuevo/state_relenti/' +
-                    //   vehicles[index].icon_def;
-                    iconUrl = vehicles[index].relenti_svg;
+                    if (angle > -22.5 && angle <= 22.5) return 'right';
+                    if (angle > 22.5 && angle <= 67.5) return 'upright';
+                    if (angle > 67.5 && angle <= 112.5) return 'up';
+                    if (angle > 112.5 && angle <= 157.5) return 'upleft';
+                    if (angle > 157.5 || angle <= -157.5) return 'left';
+                    if (angle > -157.5 && angle <= -112.5) return 'downleft';
+                    if (angle > -112.5 && angle <= -67.5) return 'down';
+                    if (angle > -67.5 && angle <= -22.5) return 'downright';
 
-                    // console.log('PINTADO RELENTI',vehicles[index].name,iconUrl);
-                  }
-                  // this.timeChangeIconUrl(vehicles[index].IMEI!,vehicles[index].icon!,key);
-                  //FALTA AGREGAR LAS DIRECCIONES AQUI UNA FUNCION
-                } else if (
-                  this.userDataService.changeItemIcon == 'ondas' &&
-                  (vehicles[index].parametros!.includes('|di4=1|') ||
-                    vehicles[index].parametros!.includes('Custom_ign=1'))
-                ) {
-                  //FUNCION PARA CAMBIAR DE COLOR ONDAS ICON FALTA AGREGAR IMAGENES CON ONDAS
-                  // Si la cadena contiene |di4=1| o custom_ign=1
-                  //ONDAS
-                  if (
-                    vehicles[index].speed != 0 &&
-                    vehicles[index].speed! < vehicles[index].limit_speed!
-                  ) {
-                    /* iconUrl = './assets/images/objects/nuevo/gif/trailer.gif'; */
-                    /*  const ondaIconUrl = vehicles[index].movement_onda;
-                    const ondaGifIconUrl =
-                      './assets/images/objects/nuevo/gif/onda_verde.gif'; */
+                    return '';
+                  } */
 
-                    /*  iconUrl = ondaIconUrl + ondaGifIconUrl; */
+                  if (this.userDataService.changeItemIcon == 'vehicles') {
+                    
+                     /*  this.dif_mayor = 0.0;
+                      this.dif_divide = 0.0;
+                      this.dif_X = 0.0;
+                      this.dif_Y = 0.0;
+                      this.direction = '';
+                      this.final_direction = '';
+                      this.direction_X = '';
+                      this.direction_Y = '';
+    
+                      if (
+                        coord.lat != oldCoords.lat &&
+                        coord.lng != oldCoords.lng
+                      ) {
+                        this.direction = calculateDirection(coord, oldCoords);
 
-                    iconUrl =
-                      './assets/images/objects/nuevo/state_moved/' +
-                      vehicles[index].icon_color +
-                      '/' +
-                      vehicles[index].icon_name +
-                      '.webp';
+                        if (this.direction === 'up') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBA.png"
+                        } else if (this.direction === 'down') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJO.png"
+                        } else if (this.direction === 'left') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/IZQUIERDA.png"
+                        } else if (this.direction === 'right') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/DERECHA.png"
+                        } else if (this.direction === 'upleft') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBAIZQUIERDA.png"
+                        } else if (this.direction === 'upright') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBADERECHA.png"
+                        } else if (this.direction === 'downleft') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJOIZQUIERDA.png"
+                        } else if (this.direction === 'downright') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJODERECHA.png"
+                        } else {
+                          iconUrl = vehicles[index].custom_svg;
+                        }
 
-                    /* iconUrl = vehicles[index].custom_svg */
+                      } else {
+                        if (
+                          this.markerClusterGroup.getLayers()[key]['options'][
+                            'icon'
+                          ]['options']['shadowUrl']
+                        ) {
+                          let old_direction = this.markerClusterGroup
+                            .getLayers()
+                            [key]['options']['icon']['options']['shadowUrl'].split(
+                              '_'
+                            );
+                        } else {
+                          this.markerClusterGroup.getLayers()[key]['options'][
+                            'icon'
+                          ]['options']['shadowUrl'] = '';
+                        }
+                      } */
+                    
+                    iconUrl = this.getStateVehicle(vehicles[index]);
 
-                    /*  console.log("vehiculodefault",iconUrl)
-                      console.log("vehiculodefaultdata",data)
-                      console.log("vehiculodeindex",vehicles[index]) */
-                  } else if (
-                    vehicles[index].speed != 0 &&
-                    vehicles[index].speed! > vehicles[index].limit_speed!
-                  ) {
-                    iconUrl =
-                      './assets/images/objects/nuevo/state_excess/' +
-                      vehicles[index].icon_color +
-                      '/' +
-                      vehicles[index].icon_name +
-                      '.webp';
-                  } else {
-                    iconUrl =
-                      './assets/images/objects/nuevo/state_relenti/' +
-                      vehicles[index].icon_color +
-                      '/' +
-                      vehicles[index].icon_name +
-                      '.webp';
+
+                  } else if (this.userDataService.changeItemIcon == 'ondas') {
+                    console.log('ONDA');
+                    let iconUrl2 = this.getStateOndas(vehicles[index]);
+                    this.markerClusterGroupOnda.getLayers()[key]['options'][
+                      'icon'
+                    ]['options']['iconUrl'] = iconUrl2;
+                    this.markerClusterGroupOnda
+                      .getLayers()
+                      [key].setLatLng(coord);
+
+                    console.log(
+                      'aaaaaaaaaaaaaaa',
+                      vehicles[index].IMEI,
+                      iconUrl2,
+                      this.markerClusterGroupOnda.getLayers()[key]
+                    );
                   }
                 }
                 this.timeChangeIconUrl(
                   vehicles[index].IMEI!,
-                  vehicles[index].icon_def!,
+                  vehicles[index].custom_svg!,
                   key
                 );
                 // CREA EL MARKERCLUSTER
@@ -1072,14 +1073,6 @@ export class MapService {
                   'options'
                 ]['iconUrl'] = iconUrl;
 
-                /*  this.markerClusterGroupOnda.getLayers()[key]['options']['icon'][
-                  'options'
-                ]['iconUrl'] = iconUrl;
-
-                this.markerClusterGroupOnda.getLayers()[key]['options']['icon'][
-                  'options'
-                ]['shadowSize'] = [30, 30]; */
-
                 this.markerClusterGroup.getLayers()[key]['options']['icon'][
                   'options'
                 ]['shadowSize'] = [30, 30];
@@ -1109,6 +1102,7 @@ export class MapService {
                       //arriba
                       this.direction_Y = 'up';
                       this.dif_Y = parseFloat(coord.lat!) - oldCoords.lat;
+                      console.log("dif_Y",this.dif_Y)
                       if (this.dif_Y >= this.dif_mayor) {
                         this.dif_mayor = this.dif_Y;
                         this.direction = 'up';
@@ -1148,14 +1142,18 @@ export class MapService {
                     if (this.direction == 'up' || this.direction == 'down') {
                       if (this.dif_X >= this.dif_divide) {
                         this.final_direction = `${this.direction}-${this.direction_X}`;
+                        iconUrl = "./assets/images/objects/statevehicles/vanD.svg"
                       } else {
                         this.final_direction = `${this.direction}`;
+                        iconUrl = "./assets/images/objects/statevehicles/vanD.svg"
                       }
                     } else {
                       if (this.dif_Y >= this.dif_divide) {
                         this.final_direction = `${this.direction_Y}-${this.direction}`;
+                        iconUrl = "./assets/images/objects/statevehicles/vanD.svg"
                       } else {
                         this.final_direction = `${this.direction}`;
+                        iconUrl = "./assets/images/objects/statevehicles/vanD.svg"
                       }
                     }
 
@@ -1203,6 +1201,10 @@ export class MapService {
                         ]['options'][
                           'shadowUrl'
                         ] = `./assets/images/excessCursor/arrow_${old_direction[1]}`;
+
+                        
+
+
                         this.markerClusterGroup.getLayers()[key]['options'][
                           'icon'
                         ]['options']['shadowAnchor'] = [14, 60];
@@ -1212,6 +1214,9 @@ export class MapService {
                         ]['options'][
                           'shadowUrl'
                         ] = `./assets/images/arrow_${old_direction[1]}`;
+
+                       
+
                         this.markerClusterGroup.getLayers()[key]['options'][
                           'icon'
                         ]['options']['shadowAnchor'] = [14, 60];
@@ -1264,6 +1269,7 @@ export class MapService {
                   ]['shadowUrl'] = '';
                 }
                 this.markerClusterGroup.getLayers()[key].setLatLng(coord);
+
                 let aux = this.markerClusterGroup.getLayers()[key];
                 // console.log('despues content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
                 //follow true
@@ -1289,6 +1295,27 @@ export class MapService {
       } //end if index vehicle
     }
   }
+
+  /* public getStateVehicle(vehicle: UserTracker): string {
+    if (
+      vehicle.parametros?.includes('di4=1') ||
+      vehicle.parametros?.includes('Custom_ign=1')
+    ) {
+      if (vehicle.speed != 0 &&
+        vehicle.speed! < vehicle.limit_speed!) {
+          return vehicle.movement_svg;
+      } else if(vehicle.speed != 0 &&
+        vehicle.speed! > vehicle.limit_speed! ){
+        return vehicle.excess_svg;
+      } else {
+        return vehicle.relenti_svg;
+      }
+    }
+    else{
+      return vehicle.custom_svg;
+    }
+   
+} */
 
   changeStatusEye(id: number): void {
     this.changeEye.emit(id);
@@ -1370,7 +1397,6 @@ export class MapService {
 
     this.markerClusterGroup.clearLayers();
     this.markerClusterGroupOnda.clearLayers();
-    // this.markerClusterGroupOnda.clearLayers();
     for (const property in e) {
       //console.log("e----- ", property);
       //console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
@@ -1587,281 +1613,69 @@ export class MapService {
     this.vehicleService.postTimeStop(params);
   }
 
-  private drawIcon(data: any, map: any): void {
-    //SOLO PARA ONDAS CON GIF
-    if (this.userDataService.changeItemIcon == 'rondas') {
-      let iconUrl = data.custom_svg;
+  public getStateVehicle(vehicle: UserTracker): string {
+    if (vehicle.speed != 0 && vehicle.speed! < vehicle.limit_speed!) {
+      return vehicle.movement_svg;
+    } else if (vehicle.speed == 0) {
+      return vehicle.relenti_svg;
+    } else if (vehicle.speed != 0 && vehicle.speed! > vehicle.limit_speed!) {
+      return vehicle.excess_svg;
+    }
+    return vehicle.custom_svg;
+  }
 
-      const iconMarker = L.icon({
-        iconUrl: iconUrl,
-        iconSize: [55, 55],
-        iconAnchor: [30, 45],
-        popupAnchor: [-3, -40],
-      });
-
-      let nameGroup = this.setNameGroup(
-        data.nameoperation,
-        data.namegrupo,
-        data.nameconvoy
-      );
-      const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
-      if (nameGroup) {
-        var popupText =
-          '<div class="row"><div class="col-6" align="left"><strong>' +
-          data.name +
-          '</strong></div>' +
-          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded" ' +
-          data.speed +
-          ' km/h</strong></div></div>' +
-          '<aside #popupText class="">' +
-          '<small>' +
-          nameGroup +
-          '</small><br>' +
-          // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-          '<small><i class="fas fa-user-circle"></i> ' +
-          data.namedriver +
-          '</small><br>' +
-          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
-          googleMapsLink +
-          '" target="_blank">' +
-          data.latitud +
-          ', ' +
-          data.longitud +
-          '</a></small><br>' +
-          `<small><i class="fas fa-map-marked-alt"></i> ` +
-          '     NN' +
-          '</small><br>' +
-          '<small><i class="fas fa-calendar-alt"></i> ' +
-          data.dt_tracker +
-          '</small><br>' +
-          '<small><i class="fas fa-hourglass-half"></i> ' +
-          this.time_stop +
-          '</small>' +
-          '</aside>';
+  public getStateOndas(data: any): string {
+    //console.log('detsateondas', data);
+    if (
+      data.parametros!.includes('di4=1') ||
+      data.parametros!.includes('Custom_ign=1')
+    ) {
+      if (data?.speed != 0 && data?.speed! < data?.limit_speed!) {
+       //console.log('velocidad < 90', data?.speed);
+        //console.log('velocidad < 90 IMEI', data?.IMEI);
+        return './assets/images/objects/nuevo/gif/onda_verde.gif';
+      } else if (data?.speed != 0 && data?.speed! > data?.limit_speed!) {
+        //console.log('velocidad > 90', data?.speed);
+        return './assets/images/objects/nuevo/gif/onda_roja.gif';
+      } else if (data?.speed == 0) {
+        //console.log('velocidad == 0 ', data?.speed);
+        return './assets/images/objects/nuevo/gif/onda_azul.gif';
       } else {
-        var popupText =
-          '<div class="row"><div class="col-6" align="left"><strong>' +
-          data.name +
-          '</strong></div>' +
-          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
-          data.speed +
-          ' km/h</strong></div></div>' +
-          '<aside #popupText class="">' +
-          '<small><i class="fas fa-user-circle"></i> ' +
-          data.namedriver +
-          '</small><br>' +
-          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
-          googleMapsLink +
-          '" target="_blank">' +
-          data.latitud +
-          ', ' +
-          data.longitud +
-          '</a></small><br>' +
-          `<small><i class="fas fa-map-marked-alt"></i> ` +
-          '     NN' +
-          '</small><br>' +
-          '<small><i class="fas fa-calendar-alt"></i> ' +
-          data.dt_tracker +
-          '</small><br>' +
-          '<small><i class="fas fa-hourglass-half"></i> ' +
-          this.time_stop +
-          '</small>' +
-          '</aside>';
+        return './assets/images/objects/nuevo/gif/blanco.png';
       }
+    }
+    return './assets/images/objects/nuevo/gif/blanco.png';
+  }
 
+  private drawIcon(data: any, map: any): void {
+    let iconUrl = data.custom_svg;
+
+    if (this.userDataService.changeItemIcon == 'ondas') {
+      let iconUrl2 = this.getStateOndas(data);
+      console.log('1234', iconUrl2);
       const myIcono = L.icon({
-        iconUrl: './assets/images/objects/nuevo/gif/onda_azul.gif',
+        iconUrl: iconUrl2,
         iconSize: [60, 60],
         iconAnchor: [28, 43],
       });
 
       const tempMarker1 = L.marker([data.latitud, data.longitud], {
         icon: myIcono,
-      });
-
-      const tempMarker = L.marker([data.latitud, data.longitud], {
-        icon: iconMarker,
-      }).bindPopup(popupText);
-
-      tempMarker.bindTooltip(`<span>${data.name}</span>`, {
-        permanent: true,
-        offset: [0, 12],
-        className: 'vehicle-tooltip',
-      });
-
-      let options = {
-        imei: data.IMEI,
-        name: data.name,
-        nameconvoy: data.nameconvoy,
-        namegrupo: data.namegrupo,
-        nameoperation: data.nameoperation,
-        namedriver: data.namedriver,
-        longitud: data.longitud,
-        latitud: data.latitud,
-        speed: data.speed,
-        dt_tracker: data.dt_tracker,
-        paradaDesde: '',
-        vehicleService: this.vehicleService,
-      };
-      tempMarker.on('click', this.timeStop, options);
-      this.marker[data.IMEI] = tempMarker;
-      this.markerClusterGroup.addLayer(tempMarker);
-      this.markerClusterGroup.addTo(this.map);
+      }).setZIndexOffset(-1);
+      this.marker[data.IMEI] = tempMarker1;
       this.markerClusterGroupOnda.addLayer(tempMarker1);
       this.markerClusterGroupOnda.addTo(this.map);
-    } else {
-      let iconUrl = data.custom_svg;
-      const iconMarker = L.icon({
-        iconUrl: iconUrl,
-        iconSize: [55, 55],
-        iconAnchor: [30, 45],
-        popupAnchor: [-3, -40],
-      });
-      let nameGroup = this.setNameGroup(
-        data.nameoperation,
-        data.namegrupo,
-        data.nameconvoy
-      );
-      const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
-      if (nameGroup) {
-        var popupText =
-          '<div class="row"><div class="col-6" align="left"><strong>' +
-          data.name +
-          '</strong></div>' +
-          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded" ' +
-          data.speed +
-          ' km/h</strong></div></div>' +
-          '<aside #popupText class="">' +
-          '<small>' +
-          nameGroup +
-          '</small><br>' +
-          // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-          '<small><i class="fas fa-user-circle"></i> ' +
-          data.namedriver +
-          '</small><br>' +
-          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
-          googleMapsLink +
-          '" target="_blank">' +
-          data.latitud +
-          ', ' +
-          data.longitud +
-          '</a></small><br>' +
-          `<small><i class="fas fa-map-marked-alt"></i> ` +
-          '     NN' +
-          '</small><br>' +
-          '<small><i class="fas fa-calendar-alt"></i> ' +
-          data.dt_tracker +
-          '</small><br>' +
-          '<small><i class="fas fa-hourglass-half"></i> ' +
-          this.time_stop +
-          '</small>' +
-          '</aside>';
-      } else {
-        var popupText =
-          '<div class="row"><div class="col-6" align="left"><strong>' +
-          data.name +
-          '</strong></div>' +
-          '<div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">' +
-          data.speed +
-          ' km/h</strong></div></div>' +
-          '<aside #popupText class="">' +
-          '<small><i class="fas fa-user-circle"></i> ' +
-          data.namedriver +
-          '</small><br>' +
-          // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-          '<small><i class="fas fa-crosshairs"></i><a href=" ' +
-          googleMapsLink +
-          '" target="_blank">' +
-          data.latitud +
-          ', ' +
-          data.longitud +
-          '</a></small><br>' +
-          `<small><i class="fas fa-map-marked-alt"></i> ` +
-          '     NN' +
-          '</small><br>' +
-          '<small><i class="fas fa-calendar-alt"></i> ' +
-          data.dt_tracker +
-          '</small><br>' +
-          '<small><i class="fas fa-hourglass-half"></i> ' +
-          this.time_stop +
-          '</small>' +
-          '</aside>';
-      }
-      const tempMarker = L.marker([data.latitud, data.longitud], {
-        icon: iconMarker,
-      }).bindPopup(popupText);
-      tempMarker.bindTooltip(`<span>${data.name}</span>`, {
-        permanent: true,
-        offset: [0, 12],
-        className: 'vehicle-tooltip',
-      });
-      let options = {
-        imei: data.IMEI,
-        name: data.name,
-        nameconvoy: data.nameconvoy,
-        namegrupo: data.namegrupo,
-        nameoperation: data.nameoperation,
-        namedriver: data.namedriver,
-        longitud: data.longitud,
-        latitud: data.latitud,
-        speed: data.speed,
-        dt_tracker: data.dt_tracker,
-        paradaDesde: '',
-        vehicleService: this.vehicleService,
-      };
-      tempMarker.on('click', this.timeStop, options);
-      this.marker[data.IMEI] = tempMarker;
-      this.markerClusterGroup.addLayer(tempMarker);
-      this.markerClusterGroup.addTo(this.map);
-    
     }
-    //   //CREAR ONDA DEL VEHICLE
-    //   let iconOndaUrl = './assets/images/user_config/test_onda.gif';
-    //   const iconMarkerShadow = L.icon({
-    //     iconUrl: iconOndaUrl,
-    //     iconSize: [60, 65],
-    //     iconAnchor: [40, 55],
-    //     popupAnchor:  [-3, -40]
-    //   });
-    //   const tempMarkerOnda = L.marker([data.latitud, data.longitud], {icon: iconMarkerShadow});
-    //   this.markerOnda[data.IMEI]=tempMarkerOnda;
-    //   this.markerClusterGroupOnda.addLayer(tempMarkerOnda);
-    //   this.markerClusterGroupOnda.addTo(this.map);
-    // }
-    // assets/images/objects/nuevo/{{ rowData['icon']
-    /* let iconUrl = './assets/images/objects/nuevo/' + data.icon; */
 
+    //}
 
-
-
-    /* let iconUrl = data.custom_svg; */
-
-
-
-
-    /* console.log("VEHICULOICONURL", iconUrl)
-    console.log("dataiconurl", data) */
-    // let iconUrl = this.userDataService.getSVGcontent(data.tipo);
-
-    /* console.log("VERIFICAR QUE ES DATA.TIPO",data)
-
-    console.log("ICONURL", iconUrl);*/
-
-    // let iconOndaUrl = './assets/images/user_config/circulo_movimiento.svg';
-
-
-
-
-
-    /* const iconMarker = L.icon({
+    const iconMarker = L.icon({
       iconUrl: iconUrl,
       iconSize: [55, 55],
       iconAnchor: [30, 45],
       popupAnchor: [-3, -40],
     });
+
     let nameGroup = this.setNameGroup(
       data.nameoperation,
       data.namegrupo,
@@ -1933,72 +1747,20 @@ export class MapService {
         '</small>' +
         '</aside>';
     }
-    const myIcono = L.icon({
-      iconUrl: './assets/images/objects/nuevo/gif/onda_azul.gif',
-      iconSize: [30, 30],
-      iconAnchor: [17, 27],
-    }); */
 
-
-
-
-
-    /*  const iconGroup = L.featureGroup();
-    iconGroup.addLayer(
-      L.marker([data.latitud, data.longitud], { icon: iconMarker })
-    );
-    iconGroup.addLayer(
-      L.marker([data.latitud, data.longitud], { icon: myIcono })
-    ); */
-
-    /* const tempMarker = iconGroup.addTo(map).bindPopup(popupText); */
-    // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
-
-
-
-
-
-
-
-    /* const tempMarker1 = L.marker([data.latitud, data.longitud], {
-      icon: myIcono,
-    }).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {
       icon: iconMarker,
-    }).bindPopup(popupText); */
+    })
+      .setZIndexOffset(1)
+      .bindPopup(popupText);
 
-
-
-
-
-
-    // tempMarker.imei = data.IMEI;
-    // tempMarker.bindLabel("My Label");
-
-
-
-
-    
-    /* tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+    tempMarker.bindTooltip(`<span>${data.name}</span>`, {
       permanent: true,
       offset: [0, 12],
       className: 'vehicle-tooltip',
-    }); */
+    });
 
-
-
-
-
-    // tempMarker.bindTooltip(`<span>${data.name}</span><br><span>${data.namedriver}</span>`, {
-    //   permanent: true,
-    //   offset: [0, 0],
-    //   className: 'vehicle-tooltip', });
-
-
-
-
-
-    /* let options = {
+    let options = {
       imei: data.IMEI,
       name: data.name,
       nameconvoy: data.nameconvoy,
@@ -2012,60 +1774,13 @@ export class MapService {
       paradaDesde: '',
       vehicleService: this.vehicleService,
     };
+
     tempMarker.on('click', this.timeStop, options);
+
     this.marker[data.IMEI] = tempMarker;
 
-    this.markerClusterGroupOnda.addLayer(tempMarker1);
     this.markerClusterGroup.addLayer(tempMarker);
     this.markerClusterGroup.addTo(this.map);
-    this.markerClusterGroupOnda.addTo(this.map); */
-
-
-
-    // //console.log('envia cero data',data.speed);
-    // console.log('envia cero XD',options);
-    
-    // tempMarker.on('click',this.timeStop,options);
-    // // this
-    
-    // ////console.log('this.markerClusterGroup',this.markerClusterGroup);
-    // let object = this.markerClusterGroup.getLayers();
-    // let cont = 0;
-    // for (const key in object) {
-    //   // console.log('Objetct[key] ->',object[key],tempMarker);
-    //   if (object[key]['_tooltip']['_content']==data.name) {
-    //     //NUNCA ENTRA
-    //     //console.log('dato encontrado'+object[key]['_tooltip']['_content']+'=='+data.name);
-    //     //console.log('key = ',key);
-    //     //console.log('content popup',this.markerClusterGroup.getLayers()[key]['_popup']['_content']);
-    //     cont++;
-    //   }
-    // }
-    //console.log('registros encontrados ---> '+cont);
-    // this.markerClusterGroupOnda.addTo(this.map);
-
-    
-    //console.log('marker placa '+data.name+' IMEI = ',this.marker[data.IMEI]);
-    // //console.log('length = ',this.markerClusterGroup.getLayers().length-1);
-
-    // //console.log('getlayer '+(this.markerClusterGroup.getLayers().length-1)+' -->',this.markerClusterGroup.getLayers()[this.markerClusterGroup.getLayers().length-1]);//ok
-    // let layer = this.markerClusterGroup.hasLayer(tempMarker);
-    // //console.log('haslayer',layer); true si existe el layer
-    //console.log('this.markerClusterGroup',this.markerClusterGroup);
-    // let layers = this.markerClusterGroup.getLayers();
-    //console.log('layers',layers);
-
-    // //console.log('maker',this.marker);
-    // var markers = L.markerClusterGroup({
-    // 	iconCreateFunction: function(cluster) {
-    //     return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
-    // 	}
-    // });
-
-    // markers.addLayer(tempMarker);
-    // this.map.addLayer(markers);
-    // this.markerClusterGroup.addLayer(L.marker([lat, lng], {icon: iconMarker}));
-    // map.addLayer(this.markerClusterGroup);
   }
 
   public changeClusteringVisibility(visibility: boolean) {
@@ -2075,7 +1790,7 @@ export class MapService {
   public get getClustering(): boolean {
     return this.clustering;
   }
-  public timeChangeIconUrl(imei: string, icon_def: string, key: any) {
+  public timeChangeIconUrl(imei: string, custom_svg: string, key: any) {
     // this.timeWait = 15000; // 150 segundos en milisegundos
 
     if (this.timeNow[imei]) {
@@ -2083,7 +1798,7 @@ export class MapService {
       // console.log('SE LIMPIO EL TEMPORIZADOR del -->',imei);
     }
     const tiempoUltimaActualizacion = Date.now(); // Actualiza el tiempo de la última actualización para este índice
-    // console.log('CREANDO TEMPORIZADOR NUEVO -->',imei);
+    // console.log('CREANDO TEMPORIZADOR NUEVO -->',imei);|
     this.timeNow[imei] = setTimeout(() => {
       // Verifica si ha pasado el tiempo especificado desde la última actualización
       const tiempoActual = Date.now();
@@ -2092,12 +1807,15 @@ export class MapService {
         // Realiza la acción si ha pasado el tiempo especificado sin actualización
         console.log(
           '*************** PASO 2 Horas Cambiando color a default ---->',
-          imei
+          imei, custom_svg
         );
-        const iconUrl = './assets/images/objects/nuevo/default/' + icon_def;
+        const iconUrl = custom_svg;
         this.markerClusterGroup.getLayers()[key]['options']['icon']['options'][
           'iconUrl'
         ] = iconUrl;
+        this.markerClusterGroupOnda.getLayers()[key]['options']['icon']['options'][
+          'iconUrl'
+        ] = './assets/images/objects/nuevo/gif/blanco.png';
         this.markerClusterGroup.getLayers()[key]['options']['icon']['options'][
           'shadowUrl'
         ] = '';
@@ -2105,219 +1823,3 @@ export class MapService {
     }, this.timeWait);
   }
 }
-//OLD CONFIGURATION
-// if(vehicles[index].speed != 0){
-
-//   let prueba = this.coords_vehicle.find(term => term.name == vehicles[index].name);
-
-//   let prueba2 = {...prueba};
-
-//   if(prueba){
-
-//     prueba.moreOldCoords = {...prueba.oldCoord};
-//     prueba.oldCoord = {...prueba.coords};
-//     prueba.coords = {
-//       lat : vehicles[index].latitud,
-//       lng : vehicles[index].longitud
-//     };
-
-//   }else{
-
-//     this.coords_vehicle.push({
-//       name: vehicles[index].name,
-//       coords: {
-//         lat : vehicles[index].latitud,
-//         lng : vehicles[index].longitud
-//       },
-//       oldCoord: this.markerClusterGroup.getLayers()[key].getLatLng(),
-//       moreOldCoords: this.markerClusterGroup.getLayers()[key].getLatLng(),
-//     })
-//   }
-
-//   this.dif_mayor = 0.00;
-//   this.dif_divide = 0.00;
-//   this.dif_X = 0.00;
-//   this.dif_Y = 0.00;
-//   this.direction = '';
-//   this.final_direction = '';
-//   this.direction_X = '';
-//   this.direction_Y = '';
-
-//   if(coord.lat != oldCoords.lat && coord.lng != oldCoords.lng)
-//   {
-//     if(coord.lat > oldCoords.lat){
-//       //arriba
-//       this.direction_Y = 'up';
-//       this.dif_Y = coord.lat-oldCoords.lat;
-//       if(this.dif_Y >= this.dif_mayor){
-//         this.dif_mayor = this.dif_Y;
-//         this.direction = 'up';
-//         this.dif_divide = this.dif_Y/2;
-//       }
-//     }else{
-//       //abajo
-//       this.direction_Y = 'down';
-//       this.dif_Y = oldCoords.lat-coord.lat;
-//       if(this.dif_Y >= this.dif_mayor){
-//         this.dif_mayor = this.dif_Y;
-//         this.direction = 'down';
-//         this.dif_divide = this.dif_Y/2;
-
-//       }
-//     }
-
-//     if(coord.lng > oldCoords.lng){
-//       //derecha
-//       this.direction_X = 'right';
-//       this.dif_X = coord.lng-oldCoords.lng;
-//       if(this.dif_X >= this.dif_mayor){
-//         this.dif_mayor = this.dif_X;
-//         this.direction = 'right';
-//         this.dif_divide = this.dif_X/2;
-//       }
-//     }else{
-//       //izquierda
-//       this.direction_X = 'left';
-//       this.dif_X = oldCoords.lng-coord.lng;
-//       if(this.dif_X >= this.dif_mayor){
-//         this.dif_mayor = this.dif_X;
-//         this.direction = 'left';
-//         this.dif_divide = this.dif_X/2;
-//       }
-//     }
-
-//     if(this.direction == 'up' || this.direction == 'down'){
-
-//       if(this.dif_X >= this.dif_divide){
-
-//         this.final_direction = `${this.direction}-${this.direction_X}`;
-
-//       }else{
-
-//         this.final_direction = `${this.direction}`;
-
-//       }
-
-//     }else{
-
-//       if(this.dif_Y >= this.dif_divide){
-
-//         this.final_direction = `${this.direction_Y}-${this.direction}`;
-//       }else{
-
-//         this.final_direction = `${this.direction}`;
-
-//       }
-//     }
-
-//     this.changePositionArrow(this.final_direction,key);
-
-//     this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-
-//   }
-//   else{
-
-//     if(prueba2.moreOldCoords){
-
-//       if(coord.lat != prueba2.moreOldCoords.lat && coord.lng != prueba2.moreOldCoords.lng)
-//       {
-//         if(coord.lat > prueba2.moreOldCoords.lat){
-//           //arriba
-//           this.direction_Y = 'up';
-//           this.dif_Y = coord.lat-prueba2.moreOldCoords.lat;
-//           if(this.dif_Y >= this.dif_mayor){
-//             this.dif_mayor = this.dif_Y;
-//             this.direction = 'up';
-//             this.dif_divide = this.dif_Y/2;
-//           }
-//         }else{
-//           //abajo
-//           this.direction_Y = 'down';
-//           this.dif_Y = prueba2.moreOldCoords.lat-coord.lat;
-//           if(this.dif_Y >= this.dif_mayor){
-//             this.dif_mayor = this.dif_Y;
-//             this.direction = 'down';
-//             this.dif_divide = this.dif_Y/2;
-
-//           }
-//         }
-
-//         if(coord.lng > prueba2.moreOldCoords.lng){
-//           //derecha
-//           this.direction_X = 'right';
-//           this.dif_X = coord.lng-prueba2.moreOldCoords.lng;
-//           if(this.dif_X >= this.dif_mayor){
-//             this.dif_mayor = this.dif_X;
-//             this.direction = 'right';
-//             this.dif_divide = this.dif_X/2;
-//           }
-//         }else{
-//           //izquierda
-//           this.direction_X = 'left';
-//           this.dif_X = prueba2.moreOldCoords.lng-coord.lng;
-//           if(this.dif_X >= this.dif_mayor){
-//             this.dif_mayor = this.dif_X;
-//             this.direction = 'left';
-//             this.dif_divide = this.dif_X/2;
-//           }
-//         }
-
-//         if(this.direction == 'up' || this.direction == 'down'){
-
-//           if(this.dif_X >= this.dif_divide){
-
-//             this.final_direction = `${this.direction}-${this.direction_X}`;
-
-//           }else{
-
-//             this.final_direction = `${this.direction}`;
-
-//           }
-
-//         }else{
-
-//           if(this.dif_Y >= this.dif_divide){
-
-//             this.final_direction = `${this.direction_Y}-${this.direction}`;
-//           }else{
-
-//             this.final_direction = `${this.direction}`;
-
-//           }
-//         }
-
-//         this.changePositionArrow(this.final_direction,key);
-
-//         this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${this.final_direction}.svg`;
-
-//       }
-//       else{
-//         if(this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']){
-
-//           let old_direction = this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl'].split('_');
-
-//           this.changePositionArrow(old_direction[1],key);
-
-//           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']=`./assets/images/arrow_${old_direction[1]}`;
-
-//         }
-//         else{
-
-//           this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-//           console.log('sin flecha',vehicles[index].name,prueba2);
-//           //console.log(vehicles[index].name);
-
-//         }
-
-//       }
-//     }else{
-//       console.log('no tiene modeCoordsData', vehicles[index].name,prueba2)
-//     }
-
-//   }
-
-// }else{
-//   this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-//   console.log('sin velocidad', vehicles[index].name);
-
-// }

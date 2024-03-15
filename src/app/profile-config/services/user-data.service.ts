@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Vehicle } from 'src/app/vehicles/models/vehicle';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,16 @@ export class UserDataService {
         let colorHex;
         this.typeVehicles.forEach(
           async (vehicle: {
+            customurldownright: any;
+            customurldownleft: any;
+            customurlupright: any;
+            customurlupleft: any;
+            customurlright: any;
+            customurlleft: any;
+            customurldown: any;
+            customurltop: any;
+
+
             id: any;
             var_icono: any;
             var_color: any;
@@ -77,7 +88,17 @@ export class UserDataService {
               }) => type.type_vehicle_id == vehicle.id
             );
             if (vehicleFound) {
-              vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicleFound.var_icono}`;
+              vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicleFound.var_icono}`; // tomado como direccion arriba y direccion abajo 
+
+              vehicle.customurltop = `./assets/images/objects/nuevo/default/up/${vehicleFound.var_icono}`; // falta svg o se usa el default
+              vehicle.customurldown = `./assets/images/objects/nuevo/default/down/${vehicleFound.var_icono}`; // falta svg o se usa el default
+              vehicle.customurlleft = `./assets/images/objects/nuevo/default/left/${vehicleFound.var_icono}`;
+              vehicle.customurlright = `./assets/images/objects/nuevo/default/right/${vehicleFound.var_icono}`;
+              vehicle.customurlupleft = `./assets/images/objects/nuevo/default/upleft/${vehicleFound.var_icono}`;
+              vehicle.customurlupright = `./assets/images/objects/nuevo/default/upright/${vehicleFound.var_icono}`;
+              vehicle.customurldownleft = `./assets/images/objects/nuevo/default/downleft/${vehicleFound.var_icono}`;
+              vehicle.customurldownright = `./assets/images/objects/nuevo/default/downright/${vehicleFound.var_icono}`;
+
               vehicle.icon_url = `backup/${vehicleFound.var_color}/${vehicleFound.var_icono}`;
               vehicle.var_icono = vehicleFound.var_icono;
               colorHex = vehicleFound.var_color;
@@ -104,11 +125,12 @@ export class UserDataService {
               '04DE04',
               vehicle.customurl
             );
-            vehicle.movement_onda = await this.busSVGCallback2(
+           /*  vehicle.directionup = await this.busSVGCallback2(
               colorHex,
               vehicle.customurl
-            );
-          }
+            ); */
+          },
+          console.log("SUPREMOVECHICLE",this.typeVehicles)
         );
         this.userName = data.data.nombre_usuario
           .normalize('NFKD')
@@ -132,61 +154,6 @@ export class UserDataService {
       },
     });
   }
-
-  /*   private crearCarpetaTemporal(vehicle: any[]) {
-    this.typeVehiclesUserData.forEach(
-      async (vehicle: {
-        customurl: string;
-        var_icono: any;
-        name_type: any;
-        customsvg: any;
-        var_color: string;
-      }) => {
-        vehicle.customurl = `./assets/images/objects/nuevo/default/${vehicle.var_icono}`;
-
-        vehicle.customsvg = await this.busSVGCallback(
-          vehicle.var_color,
-          vehicle.customurl
-        );
-
-        console.log('TESTUSERDATA', vehicle);
-
-        const customsvgPath = `./assets/images/objects/nuevo/customsvg/${vehicle.var_icono}`;
-        this.guardarSVG(customsvgPath, vehicle.customsvg);
-      }
-    );
-
-    const carpetaTemporalKey = 'carpetaTemporal';
-
-    // Verificar si la carpeta ya existe
-    const carpetaTemporalStr = localStorage.getItem(carpetaTemporalKey);
-
-    if (!carpetaTemporalStr) {
-      // Si no existe, crearla
-      const carpetaTemporal = vehicle;
-
-      localStorage.setItem(carpetaTemporalKey, JSON.stringify(carpetaTemporal));
-
-      console.log('Carpeta temporal creada con éxito:', carpetaTemporal);
-    } else {
-      console.log('La carpeta temporal ya existe:', carpetaTemporalStr);
-
-      try {
-        // Intentar convertir la cadena JSON a un objeto para imprimirlo
-        const carpetaTemporal = JSON.parse(carpetaTemporalStr);
-        console.log('Contenido de la carpeta temporal:', carpetaTemporal);
-      } catch (error) {
-        console.error('Error al analizar la carpeta temporal:', error);
-      }
-    }
-  }
-
-  private guardarSVG(filePath: string, svgContent: string) {
-
-    const fs = require('fs');
-    fs.writeFileSync(filePath, svgContent, 'utf-8');
-  }
-*/
 
   public getSVGcontent(idtype: number) {
     const contentSVG = this.typeVehicles.find(
@@ -250,6 +217,9 @@ export class UserDataService {
         errorCallback(error);
       });
   }
+
+
+ 
 
   // gif con ondas
 

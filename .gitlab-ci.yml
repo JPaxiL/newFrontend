@@ -1,5 +1,43 @@
 stages:
+  - build
   - deploy
+
+build_dev:
+  image: node:16.20.2
+  stage: build
+  script:
+    - npm install --legacy-peer-deps
+    - npm install -g @angular/cli@11.2.12
+    - ng build --configuration=development
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - develop
+build_test:
+  image: node:16.20.2
+  stage: build
+  script:
+    - npm install --legacy-peer-deps
+    - npm install -g @angular/cli@11.2.12
+    - ng build --configuration=test
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - test
+build_prod:
+  image: node:16.20.2
+  stage: build
+  script:
+    - npm install --legacy-peer-deps
+    - npm install -g @angular/cli@11.2.12
+    - ng build --configuration=production
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - master
 
 deploy_testing:
   image: ubuntu:latest
