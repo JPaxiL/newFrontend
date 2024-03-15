@@ -175,7 +175,7 @@ export class EventService {
       }
     }
     // console.log("end integrate --->",this.events);
-    this.newEventStream.emit(this.events);
+    this.newEventStream.emit(data);
   }
 
   public formatEvent(event: any){
