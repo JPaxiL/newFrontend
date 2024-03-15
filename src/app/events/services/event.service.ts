@@ -148,14 +148,13 @@ export class EventService {
     }
   }
 
-  private async requestEventSlug(event_slug: string){
-    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/event-user/`+event_slug)
+  public async requestEventSlug(event_slug: string){
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alternative-search/`+event_slug)
     .toPromise()
     .then((res) =>{
       console.log("exito al buscar eventos con slug "+event_slug);
       console.log("eventos encontrados",res);
-      this.integrateEvent(res.data)
-      //res.data
+      if(res.data!=null) this.integrateEvent(res.data);
     });
   }
 
