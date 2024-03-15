@@ -248,7 +248,7 @@ export class EventListComponent implements OnInit {
 
       this.noResults = false;
     } else {
-      this.eventService.getEventFilter(this.selectedEvent);
+      // this.eventService.getEventFilter(this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
