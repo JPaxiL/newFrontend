@@ -42,7 +42,7 @@ export class GeofenceImportExportService {
         });
       });
   
-      return [[minLat, minLng], [maxLat, maxLng]];
+      return [[minLng, minLat], [maxLng, maxLat ]];
     }
   coordinatesGeo(datos: DataGeofence []): number[][][] {
     console.log("globalCoordenadas1:", datos);

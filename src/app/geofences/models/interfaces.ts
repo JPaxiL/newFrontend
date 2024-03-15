@@ -50,3 +50,8 @@ export interface DataGeofence{
     width?: string, 
     tag?: string,
 }
+
+export interface City{
+    name:string,
+    code:string,
+}

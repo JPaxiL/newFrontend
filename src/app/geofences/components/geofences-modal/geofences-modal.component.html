@@ -37,6 +37,7 @@
                     <th pSortableColumn="description">descripcion</th>
                     <th pSortableColumn="color">Color <p-sortIcon field="price"></p-sortIcon></th>
                     <th pSortableColumn="tag">Etiquetas <p-sortIcon field="price"></p-sortIcon></th>
+                    <th pSortableColumn="speeds">Velocidades <p-sortIcon field="price"></p-sortIcon></th>
                     <th pSortableColumn="options">Opciones <p-sortIcon field="price"></p-sortIcon></th>
                   </tr>
                 </ng-template>
@@ -45,7 +46,9 @@
                     <td>{{dataGeo.name}}</td>
                     <td>{{dataGeo.description}}</td>
                     <td>{{dataGeo.color}}</td>
-                    <td>{{dataGeo.tag}}</td>
+                    <td><p-multiSelect [options]="this.tags" optionLabel="var_name"></p-multiSelect></td>
+                    <td><p-multiSelect [options]="this.prueba" optionLabel="velocidad"></p-multiSelect></td>
+                    
                     <td>
                       <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
                         (click)="geocercaDet(dataGeo)"></button>

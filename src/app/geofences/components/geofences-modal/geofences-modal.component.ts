@@ -12,6 +12,9 @@ import { MapItemConfiguration } from 'src/app/multiview/models/interfaces';
 export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnDestroy, AfterViewInit {
   datosGeo: DataGeofence[] = [];
   minimapElement: HTMLElement | null = null;
+  prueba:any;
+  etiquetaPrueba:any;
+  tags:any;
 
   minimapGeo: any;
   map!: L.Map;
@@ -25,7 +28,10 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
     public geofencesService: GeofencesService,
     public geofenceImportExportService: GeofenceImportExportService,
     private ngZone: NgZone
-  ) { }
+  ) { 
+
+    
+  }
 
   guardarRegistro(): void {
     console.log('Datos recibidos:');
@@ -49,7 +55,13 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
     console.log("ngAfterViewInit", this.datosGeo);
   }
   ngOnInit(): void {
-
+    const getTags_=this.geofencesService.getTag().subscribe(resp=>{
+      this.tags=resp.data;
+      console.log("respuestas:",this.tags);
+    });
+    console.log("getTag",getTags_);
+    this.datosVelocidades();
+    this.datosEtiqueta();
   }
 
   ngAfterContentChecked(): void {
@@ -72,4 +84,60 @@ export class GeofencesModalComponent implements OnInit, AfterContentChecked, OnD
     this.geofenceImportExportService.alignGeofence(setCoordinates);
     this.geofenceImportExportService.addGeofences(setCoordinates, datos);
   }
+  datosVelocidades(){
+    const pruebas:any[]=[
+      {
+        nroVelocidad:1,
+        velocidad:"lenta",
+        selected: false
+      },
+      {
+        nroVelocidad:2,
+        velocidad:"moderada",
+        selected: false
+      },{
+        nroVelocidad:3,
+        velocidad:"alta",
+        selected: false
+      },
+      {
+        nroVelocidad:4,
+        velocidad:"muy alta",
+        selected: false
+      },
+    ];
+    this.prueba=pruebas;
+}
+
+datosEtiqueta(){
+  const etiqueta:any[]=[
+    {
+      nroVelocidad:1,
+      velocidad:"azul",
+      selected: false
+    },
+    {
+      nroVelocidad:2,
+      velocidad:"amarillo",
+      selected: false
+    },{
+      nroVelocidad:3,
+      velocidad:"arequipa",
+      selected: false
+    },
+    {
+      nroVelocidad:4,
+      velocidad:"tacna",
+      selected: false
+    },
+    {
+      nroVelocidad:4,
+      velocidad:"lima",
+      selected: false
+    },
+  ];
+  this.etiquetaPrueba=etiqueta;
+}
+
+
 }
