@@ -254,6 +254,7 @@ export class MapService {
   printPopup(data: any): void {
     let object = this.markerClusterGroup.getLayers();
     //console.log('printpopup', object);
+    //console.log('printpopup', object);
 
     for (const key in object) {
       if (
@@ -899,10 +900,10 @@ export class MapService {
                 lng: vehicles[index].longitud,
               };
 
-              // console.log("coordenadaold",oldCoords)
-              // console.log("coordenadanew",coord)
+              //console.log("coordenadaold",oldCoords)
+              //console.log("coordenadanew",coord)
 
-              console.log("direccion",vehicles[index], vehicles[index].IMEI)
+              //console.log("direccion",vehicles[index], vehicles[index].IMEI)
 
 
               if (
@@ -942,8 +943,8 @@ export class MapService {
                   }
 
                   if (this.userDataService.changeItemIcon == 'vehicles') {
-                    
-                     /*  this.dif_mayor = 0.0;
+                     if(this.userDataService.changeRotateIcon == true){
+                      this.dif_mayor = 0.0;
                       this.dif_divide = 0.0;
                       this.dif_X = 0.0;
                       this.dif_Y = 0.0;
@@ -956,47 +957,24 @@ export class MapService {
                         coord.lat != oldCoords.lat &&
                         coord.lng != oldCoords.lng
                       ) {
-                        this.direction = calculateDirection(coord, oldCoords);
+                        this.direction = await this.calculateDirection(coord, oldCoords);
+                        let state = this.getStateVehicle(vehicles[index]);
 
-                        if (this.direction === 'up') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBA.png"
-                        } else if (this.direction === 'down') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJO.png"
-                        } else if (this.direction === 'left') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/IZQUIERDA.png"
-                        } else if (this.direction === 'right') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/DERECHA.png"
-                        } else if (this.direction === 'upleft') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBAIZQUIERDA.png"
-                        } else if (this.direction === 'upright') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBADERECHA.png"
-                        } else if (this.direction === 'downleft') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJOIZQUIERDA.png"
-                        } else if (this.direction === 'downright') {
-                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJODERECHA.png"
-                        } else {
-                          iconUrl = vehicles[index].custom_svg;
-                        }
+                        console.log("state",state, vehicles[index].name)
 
-                      } else {
-                        if (
-                          this.markerClusterGroup.getLayers()[key]['options'][
-                            'icon'
-                          ]['options']['shadowUrl']
-                        ) {
-                          let old_direction = this.markerClusterGroup
-                            .getLayers()
-                            [key]['options']['icon']['options']['shadowUrl'].split(
-                              '_'
-                            );
-                        } else {
-                          this.markerClusterGroup.getLayers()[key]['options'][
-                            'icon'
-                          ]['options']['shadowUrl'] = '';
-                        }
-                      } */
-                    
-                    iconUrl = this.getStateVehicle(vehicles[index]);
+                        iconUrl = this.userDataService.getDirectionSvg(vehicles[index].tipo!,state,this.direction);
+                        console.log("iconurlestado", state,this.direction)
+
+                      } 
+                    }else{
+                      let state = this.getStateVehicle(vehicles[index]);
+                      
+                      iconUrl = this.userDataService.getDirectionSvg(vehicles[index].tipo!,state);
+                    }
+                     
+    
+                      
+                    /* iconUrl = this.getStateVehicle(vehicles[index]); */
 
 
                   } else if (this.userDataService.changeItemIcon == 'ondas') {
@@ -1129,7 +1107,7 @@ export class MapService {
                       //arriba
                       this.direction_Y = 'up';
                       this.dif_Y = parseFloat(coord.lat!) - oldCoords.lat;
-                      console.log("dif_Y",this.dif_Y)
+                      //console.log("dif_Y",this.dif_Y)
                       if (this.dif_Y >= this.dif_mayor) {
                         this.dif_mayor = this.dif_Y;
                         this.direction = 'up';
@@ -1322,27 +1300,6 @@ export class MapService {
       } //end if index vehicle
     }
   }
-
-  /* public getStateVehicle(vehicle: UserTracker): string {
-    if (
-      vehicle.parametros?.includes('di4=1') ||
-      vehicle.parametros?.includes('Custom_ign=1')
-    ) {
-      if (vehicle.speed != 0 &&
-        vehicle.speed! < vehicle.limit_speed!) {
-          return vehicle.movement_svg;
-      } else if(vehicle.speed != 0 &&
-        vehicle.speed! > vehicle.limit_speed! ){
-        return vehicle.excess_svg;
-      } else {
-        return vehicle.relenti_svg;
-      }
-    }
-    else{
-      return vehicle.custom_svg;
-    }
-   
-} */
 
   changeStatusEye(id: number): void {
     this.changeEye.emit(id);

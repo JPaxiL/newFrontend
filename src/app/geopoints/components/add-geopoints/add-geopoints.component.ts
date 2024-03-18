@@ -626,3 +626,6 @@ export class AddGeopointsComponent implements OnInit, OnDestroy {
     }
   }
 }
+
+
+//add-geopoints.component

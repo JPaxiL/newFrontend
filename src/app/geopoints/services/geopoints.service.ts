@@ -297,3 +297,6 @@ export class GeopointsService {
   }
 
 }
+
+
+//geopoints.service
