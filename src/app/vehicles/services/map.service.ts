@@ -73,7 +73,7 @@ export class MapService {
   // setInvterval = setInterval;
 
   timeNow: any = []; // Array para almacenar los tiempos
-  timeWait: number = 7200000; // 7200 segundos en milisegundos 
+  timeWait: number = 7200000; // 7200 segundos en milisegundos
   //timeWait: number = 5000;
 
   @Output() sendData = new EventEmitter<any>();
@@ -750,14 +750,14 @@ export class MapService {
             data.driver_id
           );
           vehicles[index].id_conductor = data.driver_id;
-          console.log(
-            'DRIVER ->',
-            data.IMEI,
-            ' - ',
-            data.driver_id,
-            ':',
-            vehicles[index].namedriver
-          );
+          // console.log(
+          //   'DRIVER ->',
+          //   data.IMEI,
+          //   ' - ',
+          //   data.driver_id,
+          //   ':',
+          //   vehicles[index].namedriver
+          // );
         }
 
         vehicles[index].latitud = data.Latitud.toString();
@@ -780,11 +780,11 @@ export class MapService {
           vehicles[index].parametros!.includes('iButton ID=') &&
           (vehicles[index].parametrosGet as any)['iButton ID'] !== 0
         ) {
-          console.log(
-            'IButton ID:',
-            (vehicles[index].parametrosGet as any)['iButton ID']
-          );
-          console.log('IMEI:', vehicles[index].IMEI);
+          // console.log(
+          //   'IButton ID:',
+          //   (vehicles[index].parametrosGet as any)['iButton ID']
+          // );
+          // console.log('IMEI:', vehicles[index].IMEI);
         }
         if (this.imeiPopup == data.IMEI.toString()) {
           let options = {
@@ -891,27 +891,27 @@ export class MapService {
               let oldCoords = this.markerClusterGroup
                 .getLayers()
                 [key].getLatLng();
-              
-                
+
+
 
               let coord = {
                 lat: vehicles[index].latitud,
                 lng: vehicles[index].longitud,
               };
 
-              //console.log("coordenadaold",oldCoords)
-              //console.log("coordenadanew",coord)
+              // console.log("coordenadaold",oldCoords)
+              // console.log("coordenadanew",coord)
 
-              //console.log("direccion",vehicles[index], vehicles[index].IMEI)
+              console.log("direccion",vehicles[index], vehicles[index].IMEI)
 
-              
+
               if (
                 vehicles[index].parametros!.includes('di4=') ||
                 vehicles[index].parametros!.includes('Custom_ign=')
               ) {
-               
+
                 let iconUrl = vehicles[index].custom_svg;
-              
+
                 if (
                   vehicles[index].parametros!.includes('di4=1') ||
                   vehicles[index].parametros!.includes('Custom_ign=1')
@@ -942,8 +942,8 @@ export class MapService {
                   }
 
                   if (this.userDataService.changeItemIcon == 'vehicles') {
-                     if(this.userDataService.changeRotateIcon == true){
-                      this.dif_mayor = 0.0;
+                    
+                     /*  this.dif_mayor = 0.0;
                       this.dif_divide = 0.0;
                       this.dif_X = 0.0;
                       this.dif_Y = 0.0;
@@ -956,24 +956,47 @@ export class MapService {
                         coord.lat != oldCoords.lat &&
                         coord.lng != oldCoords.lng
                       ) {
-                        this.direction = await this.calculateDirection(coord, oldCoords);
-                        let state = this.getStateVehicle(vehicles[index]);
+                        this.direction = calculateDirection(coord, oldCoords);
 
-                        console.log("state",state, vehicles[index].name)
+                        if (this.direction === 'up') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBA.png"
+                        } else if (this.direction === 'down') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJO.png"
+                        } else if (this.direction === 'left') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/IZQUIERDA.png"
+                        } else if (this.direction === 'right') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/DERECHA.png"
+                        } else if (this.direction === 'upleft') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBAIZQUIERDA.png"
+                        } else if (this.direction === 'upright') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ARRIBADERECHA.png"
+                        } else if (this.direction === 'downleft') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJOIZQUIERDA.png"
+                        } else if (this.direction === 'downright') {
+                          iconUrl = "./assets/images/objects/nuevo/statevehicles/ABAJODERECHA.png"
+                        } else {
+                          iconUrl = vehicles[index].custom_svg;
+                        }
 
-                        iconUrl = this.userDataService.getDirectionSvg(vehicles[index].tipo!,state,this.direction);
-                        console.log("iconurlestado", state,this.direction)
-
-                      } 
-                    }else{
-                      let state = this.getStateVehicle(vehicles[index]);
-                      
-                      iconUrl = this.userDataService.getDirectionSvg(vehicles[index].tipo!,state);
-                    }
-                     
-    
-                      
-                    /* iconUrl = this.getStateVehicle(vehicles[index]); */
+                      } else {
+                        if (
+                          this.markerClusterGroup.getLayers()[key]['options'][
+                            'icon'
+                          ]['options']['shadowUrl']
+                        ) {
+                          let old_direction = this.markerClusterGroup
+                            .getLayers()
+                            [key]['options']['icon']['options']['shadowUrl'].split(
+                              '_'
+                            );
+                        } else {
+                          this.markerClusterGroup.getLayers()[key]['options'][
+                            'icon'
+                          ]['options']['shadowUrl'] = '';
+                        }
+                      } */
+                    
+                    iconUrl = this.getStateVehicle(vehicles[index]);
 
 
                   } else if (this.userDataService.changeItemIcon == 'ondas') {
@@ -986,12 +1009,12 @@ export class MapService {
                       .getLayers()
                       [key].setLatLng(coord);
 
-                    console.log(
-                      'aaaaaaaaaaaaaaa',
-                      vehicles[index].IMEI,
-                      iconUrl2,
-                      this.markerClusterGroupOnda.getLayers()[key]
-                    );
+                    // console.log(
+                    //   'aaaaaaaaaaaaaaa',
+                    //   vehicles[index].IMEI,
+                    //   iconUrl2,
+                    //   this.markerClusterGroupOnda.getLayers()[key]
+                    // );
                   }
                 }
                 this.timeChangeIconUrl(
@@ -1106,7 +1129,7 @@ export class MapService {
                       //arriba
                       this.direction_Y = 'up';
                       this.dif_Y = parseFloat(coord.lat!) - oldCoords.lat;
-                      //console.log("dif_Y",this.dif_Y)
+                      console.log("dif_Y",this.dif_Y)
                       if (this.dif_Y >= this.dif_mayor) {
                         this.dif_mayor = this.dif_Y;
                         this.direction = 'up';
@@ -1206,7 +1229,7 @@ export class MapService {
                           'shadowUrl'
                         ] = `./assets/images/excessCursor/arrow_${old_direction[1]}`;
 
-                        
+
 
 
                         this.markerClusterGroup.getLayers()[key]['options'][
@@ -1219,7 +1242,7 @@ export class MapService {
                           'shadowUrl'
                         ] = `./assets/images/arrow_${old_direction[1]}`;
 
-                       
+
 
                         this.markerClusterGroup.getLayers()[key]['options'][
                           'icon'
@@ -1299,6 +1322,27 @@ export class MapService {
       } //end if index vehicle
     }
   }
+
+  /* public getStateVehicle(vehicle: UserTracker): string {
+    if (
+      vehicle.parametros?.includes('di4=1') ||
+      vehicle.parametros?.includes('Custom_ign=1')
+    ) {
+      if (vehicle.speed != 0 &&
+        vehicle.speed! < vehicle.limit_speed!) {
+          return vehicle.movement_svg;
+      } else if(vehicle.speed != 0 &&
+        vehicle.speed! > vehicle.limit_speed! ){
+        return vehicle.excess_svg;
+      } else {
+        return vehicle.relenti_svg;
+      }
+    }
+    else{
+      return vehicle.custom_svg;
+    }
+   
+} */
 
   changeStatusEye(id: number): void {
     this.changeEye.emit(id);
