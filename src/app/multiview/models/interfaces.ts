@@ -29,6 +29,11 @@ export interface UnitItem {
 }
 
 export interface UserTracker {
+    customurlupleft?: any;
+    customurlleft?: any;
+    customurlright?: any;
+    customurlupright?: any;
+    customurldownleft?: any;
     customurldownright?: any;
     // timeLast?: boolean;
     driver_id?: string; //PARA LLAVE IBUTTON O ICIPIA

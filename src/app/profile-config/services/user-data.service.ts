@@ -30,6 +30,7 @@ export class UserDataService {
   reportsUser: any;
   eventsUser: any;
   reportsUserLoaded: boolean = false;
+  changeRotateIcon: boolean= false;
 
   @Output() userDataCompleted = new EventEmitter<any>();
   @Output() geofencesPrivileges = new EventEmitter<any>();
@@ -54,6 +55,7 @@ export class UserDataService {
         this.typeVehicles = await data.data2;
         this.typeVehiclesUserData = await data.data3;
         this.userData = await data.data;
+        this.changeItemIcon =  await this.getChangeItemColor();
 
         // this.crearCarpetaTemporal(this.typeVehiclesUserData);
         let colorHex;
@@ -67,6 +69,14 @@ export class UserDataService {
             customurlleft: any;
             customurldown: any;
             customurltop: any;
+
+            customDirectionSvg: any ;
+            relentiDirectionSvg: any ;
+            excessDirectionSvg: any ;
+            movementDirectionSvg: any ;
+
+            
+
 
 
             id: any;
@@ -109,26 +119,137 @@ export class UserDataService {
               colorHex = 'c4c2c1';
             }
 
+
             vehicle.customsvg = await this.busSVGCallback(
               colorHex,
               vehicle.customurl
             );
-            vehicle.excess_svg = await this.busSVGCallback(
-              'FB472A',
-              vehicle.customurl
-            );
-            vehicle.relenti_svg = await this.busSVGCallback(
-              '0396F6',
-              vehicle.customurl
-            );
-            vehicle.movement_svg = await this.busSVGCallback(
-              '04DE04',
-              vehicle.customurl
-            );
-           /*  vehicle.directionup = await this.busSVGCallback2(
-              colorHex,
-              vehicle.customurl
-            ); */
+
+            if(this.changeItemIcon== "vehicles"){
+              vehicle.excess_svg = await this.busSVGCallback(
+                'FB472A',
+                vehicle.customurl
+              );
+
+              vehicle.relenti_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurl
+              );
+              vehicle.movement_svg = await this.busSVGCallback(
+                '04DE04',
+                vehicle.customurl
+              );
+
+              if( this.changeRotateIcon == true){ 
+                vehicle.relentiDirectionSvg = await this.generateDirectionSvg('0396F6',vehicle.customurl);
+                vehicle.excessDirectionSvg = await this.generateDirectionSvg('FB472A',vehicle.customurl);
+                vehicle.movementDirectionSvg = await this.generateDirectionSvg('04DE04',vehicle.customurl);
+
+                console.log("directionssvg",vehicle.relentiDirectionSvg)
+                console.log("excessDirectionSvg",vehicle.excessDirectionSvg)
+                console.log("movementDirectionSvg",vehicle.movementDirectionSvg)
+              }
+
+            }
+            
+            if( this.changeRotateIcon == true){
+              vehicle.customDirectionSvg = await this.generateDirectionSvg(colorHex,vehicle.customurl);
+              console.log("directionssvg",vehicle.customDirectionSvg)
+            }
+
+
+
+            // vehiculos en moviento
+            /* 
+              vehicle.excess_svg = await this.busSVGCallback(
+                'FB472A',
+                vehicle.customurldownright
+              ); 
+              vehicle.relenti_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurldownright
+              );
+              vehicle.movement_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurldownright
+              );  
+
+
+              vehicle.excess_svg = await this.busSVGCallback(
+                'FB472A',
+                vehicle.customurldownleft
+              ); 
+              vehicle.relenti_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurldownleft
+              );
+              vehicle.movement_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurldownleft
+              );  
+
+
+              
+              vehicle.excess_svg = await this.busSVGCallback(
+                'FB472A',
+                vehicle.customurlupright
+              ); 
+              vehicle.relenti_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlupright
+              );
+              vehicle.movement_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlupright
+              ); 
+
+
+
+              vehicle.excess_svg = await this.busSVGCallback(
+                'FB472A',
+                vehicle.customurlupleft
+              ); 
+              vehicle.relenti_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlupleft
+              );
+              vehicle.movement_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlupleft
+              ); 
+
+
+
+
+              vehicle.excess_svg = await this.busSVGCallback(
+                'FB472A',
+                vehicle.customurlright
+              ); 
+              vehicle.relenti_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlright
+              );
+              vehicle.movement_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlright
+              ); 
+
+
+
+              vehicle.excess_svg = await this.busSVGCallback(
+                'FB472A',
+                vehicle.customurlleft
+              ); 
+              vehicle.relenti_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlleft
+              );
+              vehicle.movement_svg = await this.busSVGCallback(
+                '0396F6',
+                vehicle.customurlleft
+              ); 
+
+            */
           },
           console.log("SUPREMOVECHICLE",this.typeVehicles)
         );
@@ -141,7 +262,7 @@ export class UserDataService {
         this.companyName = data.data.var_nombre_comercial; //Otro var_razon_social
         this.userDataInitialized = true;
         this.spinner.hide('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
-        this.changeItemIcon = this.getChangeItemColor();
+        
         console.log('USER DATA SERVICE LOADED');
         this.userDataCompleted.emit(true);
         this.geofencesPrivileges.emit(true);
@@ -153,6 +274,110 @@ export class UserDataService {
         console.log('No se pudo obtener datos del usuario', errorMsg);
       },
     });
+  }
+
+  public getDirectionSvg(type: string,state:string,direction?:string):any{
+
+    //console.log("getdirection",type,state,direction);
+      const typeConfigVehicle = this.typeVehicles.find(
+        (typevh: { 
+          relentiDirectionSvg: any ;
+          excessDirectionSvg: any ;
+          movementDirectionSvg: any ;
+          customsvg: any;
+          relenti_svg: any;
+          excess_svg: any;
+          movement_svg: any;
+          customDirectionSvg: any,
+          id: number }) => typevh.id == parseInt(type)
+      );
+      if(!direction){
+        if(state == 'default'){
+          return typeConfigVehicle.customsvg;
+        }else if(state == 'excess'){
+          return typeConfigVehicle.excess_svg;
+        } else if(state=='movement'){
+          return typeConfigVehicle.movement_svg;
+        } else if(state == 'relenti'){
+          return typeConfigVehicle.relenti_svg;
+        }
+      } else{
+        if(state == 'default'){
+           return this.getDirection(typeConfigVehicle.customDirectionSvg,direction); 
+          
+        }else if(state == 'excess'){
+          return this.getDirection(typeConfigVehicle.excessDirectionSvg,direction); 
+          
+        } else if(state=='movement'){
+          //console.log("this.getDirection(typeConfigVehicle.movementDirectionSvg,direction)",this.getDirection(typeConfigVehicle.movementDirectionSvg,direction))
+          return this.getDirection(typeConfigVehicle.movementDirectionSvg,direction);
+          
+        } else if(state == 'relenti'){
+           return this.getDirection(typeConfigVehicle.relentiDirectionSvg,direction); 
+          
+        }
+        /* if(state == 'right'){
+          return this.getDirection(typeConfigVehicle.customDirectionSvg,direction); 
+        }else if(state == 'upright'){
+          return this.getDirection(typeConfigVehicle.excessDirectionSvg,direction); 
+        } else if(state=='up'){
+          return this.getDirection(typeConfigVehicle.movementDirectionSvg,direction);
+        } else if(state == 'upleft'){
+          return this.getDirection(typeConfigVehicle.relentiDirectionSvg,direction); 
+        } else if(state == 'left'){
+          return this.getDirection(typeConfigVehicle.relentiDirectionSvg,direction); 
+        } else if(state == 'downleft'){
+          return this.getDirection(typeConfigVehicle.relentiDirectionSvg,direction); 
+        }else if(state == 'down'){
+          return this.getDirection(typeConfigVehicle.relentiDirectionSvg,direction); 
+        } else if(state == 'downright'){
+          return this.getDirection(typeConfigVehicle.relentiDirectionSvg,direction); 
+        } */
+      }
+  }
+
+  private getDirection(directionssvg:any,direction:string):string {
+    if(direction == 'upleft'){
+      return directionssvg.UpLeft
+    }else if(direction == 'downleft'){
+      return directionssvg.DownLeft
+    }else if(direction == 'left'){
+      return directionssvg.Left
+    }else if(direction == 'right'){
+      return directionssvg.Right
+    }else if(direction == 'upright'){
+      return directionssvg.UpRight
+    }else if(direction == 'downright'){
+      return directionssvg.DownRight
+    }
+    return directionssvg.DownLeft
+  }
+
+  public async generateDirectionSvg(color:string, url: string):Promise<any>
+  {
+    var urlDirectionUpLeft = url.replace('default/','default/upleft/');
+    var urlDirectionDownLeft = url.replace('default/','default/downleft/');
+    var urlDirectionLeft = url.replace('default/','default/left/');
+    var urlDirectionRight = url.replace('default/','default/right/');
+    var urlDirectionUpRight = url.replace('default/','default/upright/');
+    var urlDirectionDownRight = url.replace('default/','default/downright/');
+
+    /* console.log("URL1",urlDirectionUpLeft);
+    console.log("URL2",urlDirectionDownLeft);
+    console.log("URL3",urlDirectionLeft);
+    console.log("URL4",urlDirectionRight);
+    console.log("URL5",urlDirectionUpRight);
+    console.log("URL6",urlDirectionDownRight); */
+
+    return {
+       UpLeft : await this.busSVGCallback(color,urlDirectionUpLeft),
+       DownLeft : await this.busSVGCallback(color,urlDirectionDownLeft),
+       Left : await this.busSVGCallback(color,urlDirectionLeft),
+       Right : await this.busSVGCallback(color,urlDirectionRight),
+       UpRight : await this.busSVGCallback(color,urlDirectionUpRight),
+       DownRight : await this.busSVGCallback(color,urlDirectionDownRight),
+    }
+
   }
 
   public getSVGcontent(idtype: number) {
@@ -415,7 +640,7 @@ export class UserDataService {
   }
 
   //FUNCION PARA SABER SI EL VEHICULO CAMBIA ESTADO O NO
-  getChangeItemColor() {
+  async getChangeItemColor() {
     if (this.userData.bol_ondas) {
       return 'ondas';
     } else if (this.userData.bol_vehicle) {
