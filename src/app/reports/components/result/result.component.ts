@@ -14631,6 +14631,306 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
   }
 
+
+
+  exportExcelCombustibleResumen(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var table_width = 16;// + (this.chkDateHour? 2: 1);
+    //var vehiculo_width = 4 + (this.chkDateHour? 2: 1);
+    var column_config = [];
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+
+    var fecha_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+    var hora_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+    var fecha_fin_gps_cell_ch_width = "Fecha Fin GPS".length;
+    var hora_fin_gps_cell_ch_width = "Hora Fin GPS".length;
+
+    var distancia_recorrida_cell_ch_width = "Distancia Recorrida".length;
+    var combustible_consumido_cell_ch_width = "Combustible Consumido".length;
+    var rendimiento_galon_cell_ch_width = "Rendimiento por Galón".length;
+    var velocidad_promedio_cell_ch_width = "Vel. Promedio".length;
+
+    var tiempo_movimiento_cell_ch_width = "Tiempo en Movimiento".length;
+    var tiempo_relenti_cell_ch_width = "Tiempo Relenti".length;
+    var tiempo_apagado_cell_ch_width = "Tiempo Apagado".length;
+    var odometro_inicial_cell_ch_width = "Odómetro Inicial".length;
+    var odometro_final_cell_ch_width = "Odometro Final".length;
+
+
+    var header_two_lines = true;
+
+    var allRows: AllRows[] = [
+        {
+          cells: [
+            { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+    ];
+
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {
+            cells: [
+              { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+          {
+            cells: [
+              // { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width },
+            ],
+            height: this.subHeaderHeight
+          },
+          {
+            cells: [
+              //{ value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
+        ];
+
+        //if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+
+              { value: "Fecha Inicio GPS", ...this.colHeaderConfig },
+              { value: "Hora Inicio GPS", ...this.colHeaderConfig },
+              { value: "Fecha Fin GPS", ...this.colHeaderConfig },
+              { value: "Hora Fin GPS", ...this.colHeaderConfig },
+
+              { value: "Distancia Recorrida", ...this.colHeaderConfig },
+              { value: "Combustible Consumido", ...this.colHeaderConfig },
+              { value: "Rendimiento por Galón", ...this.colHeaderConfig },
+              { value: "Vel. Promedio", ...this.colHeaderConfig },
+
+              { value: "Tiempo en Movimiento", ...this.colHeaderConfig },
+              { value: "Tiempo Relenti", ...this.colHeaderConfig },
+              { value: "Tiempo Apagado", ...this.colHeaderConfig },
+
+              { value: "Odómetro Inicial", ...this.colHeaderConfig },
+              { value: "Odometro Final", ...this.colHeaderConfig },
+
+              //=======================================
+
+            ],
+            height: header_two_lines? this.colsHeaderHeightTwoLine: this.colsHeaderHeight,
+          });
+
+
+
+          data[1].forEach((item: { odometro_fin:any; odometro_ini:any; tiempo_apagado:any; tiempo_relenti:any; tiempo_movimiento:any; velocidad_promedio:any; rendimiento_por_galon:any; combustible_consumido:any; total_distancia:any; hora_final:any; fecha_final:any; hora_inicio:any; fecha_inicio: any;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; nombre_zona: any; v0: any; velocidad: any;}, index: number) => {
+
+            // var fh = item.fecha.split(" ");
+            // var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+            codigo_cell_ch_width = Math.max( codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max( placa_cell_ch_width, (item.placa??'').toString().length);
+
+            fecha_inicio_gps_cell_ch_width = Math.max( fecha_inicio_gps_cell_ch_width, (item.fecha_inicio??'').toString().length);
+            hora_inicio_gps_cell_ch_width = Math.max( hora_inicio_gps_cell_ch_width, (item.hora_inicio??'').toString().length);
+            fecha_fin_gps_cell_ch_width = Math.max( fecha_fin_gps_cell_ch_width, (item.fecha_final??'').toString().length);
+            hora_fin_gps_cell_ch_width = Math.max( hora_fin_gps_cell_ch_width, (item.hora_final??'').toString().length);
+
+            distancia_recorrida_cell_ch_width = Math.max( distancia_recorrida_cell_ch_width, (item.total_distancia??'').toString().length);
+            combustible_consumido_cell_ch_width = Math.max( combustible_consumido_cell_ch_width, (item.combustible_consumido??'').toString().length);
+            rendimiento_galon_cell_ch_width = Math.max( rendimiento_galon_cell_ch_width, (item.rendimiento_por_galon??'').toString().length);
+            velocidad_promedio_cell_ch_width = Math.max( velocidad_promedio_cell_ch_width, (item.velocidad_promedio??'').toString().length);
+
+            tiempo_movimiento_cell_ch_width = Math.max( tiempo_movimiento_cell_ch_width, (item.tiempo_movimiento??'').toString().length);
+            tiempo_relenti_cell_ch_width = Math.max( tiempo_relenti_cell_ch_width, (item.tiempo_relenti??'').toString().length);
+            tiempo_apagado_cell_ch_width = Math.max( tiempo_apagado_cell_ch_width, (item.tiempo_apagado??'').toString().length);
+            odometro_inicial_cell_ch_width = Math.max( odometro_inicial_cell_ch_width, (item.odometro_ini??'').toString().length);
+            odometro_final_cell_ch_width = Math.max( odometro_final_cell_ch_width, (item.odometro_fin??'').toString().length);
+            //=============================================
+            
+            rows.push({
+              cells: [
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+
+                { value: item.fecha_inicio, ...this.bodyRowsConfig },
+                { value: item.hora_inicio, ...this.bodyRowsConfig },
+                { value: item.fecha_final, ...this.bodyRowsConfig },
+                { value: item.hora_final, ...this.bodyRowsConfig },
+
+                { value: item.total_distancia, ...this.bodyRowsConfig },
+                { value: item.combustible_consumido, ...this.bodyRowsConfig },
+                { value: item.rendimiento_por_galon, ...this.bodyRowsConfig },
+                { value: item.velocidad_promedio, ...this.bodyRowsConfig },
+
+                { value: item.tiempo_movimiento, ...this.bodyRowsConfig },
+                { value: item.tiempo_relenti, ...this.bodyRowsConfig },
+                { value: item.tiempo_apagado, ...this.bodyRowsConfig },
+                { value: item.odometro_ini, ...this.bodyRowsConfig },
+                { value: item.odometro_fin, ...this.bodyRowsConfig },
+
+              ],
+              height: this.bodyRowsHeight
+            });
+          });
+
+        //}
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.w_date },
+        { width: this.w_hour },
+        { width: this.w_date },
+        { width: this.w_hour },
+      ];
+
+
+      column_config.push(
+        // { width: this.calculateColWidth(fecha_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(fecha_fin_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_fin_gps_cell_ch_width) },
+
+        { width: this.calculateColWidth(distancia_recorrida_cell_ch_width) },
+        { width: this.calculateColWidth(combustible_consumido_cell_ch_width) },
+        { width: this.calculateColWidth(rendimiento_galon_cell_ch_width) },
+        { width: this.calculateColWidth(velocidad_promedio_cell_ch_width) },
+
+        { width: this.calculateColWidth(tiempo_movimiento_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_relenti_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_apagado_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_inicial_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_final_cell_ch_width) },
+      );
+
+
+
+
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+        },
+      columns: column_config,
+      title: "Resultado",//data[0][1],
+      rows: rows
+      });
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+
+      fecha_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+      hora_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+      fecha_fin_gps_cell_ch_width = "Fecha Fin GPS".length;
+      hora_fin_gps_cell_ch_width = "Hora Fin GPS".length;
+
+      distancia_recorrida_cell_ch_width = "Distancia Recorrida".length;
+      combustible_consumido_cell_ch_width = "Combustible Consumido".length;
+      rendimiento_galon_cell_ch_width = "Rendimiento por Galón".length;
+      velocidad_promedio_cell_ch_width = "Vel. Promedio".length;
+
+      tiempo_movimiento_cell_ch_width = "Tiempo en Movimiento".length;
+      tiempo_relenti_cell_ch_width = "Tiempo Relenti".length;
+      tiempo_apagado_cell_ch_width = "Tiempo Apagado".length;
+      odometro_inicial_cell_ch_width = "Odómetro Inicial".length;
+      odometro_final_cell_ch_width = "Odometro Final".length;
+
+
+
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.w_date },
+        { width: this.w_hour },
+        { width: this.w_date },
+        { width: this.w_hour },
+      ];
+      column_config.push(
+        // { width: this.calculateColWidth(fecha_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(fecha_fin_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_fin_gps_cell_ch_width) },
+
+        { width: this.calculateColWidth(distancia_recorrida_cell_ch_width) },
+        { width: this.calculateColWidth(combustible_consumido_cell_ch_width) },
+        { width: this.calculateColWidth(rendimiento_galon_cell_ch_width) },
+        { width: this.calculateColWidth(velocidad_promedio_cell_ch_width) },
+
+        { width: this.calculateColWidth(tiempo_movimiento_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_relenti_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_apagado_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_inicial_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_final_cell_ch_width) },
+      );
+
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: this.headerRowSpan
+        },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteCombustibleResumen.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
   exportExcelCoordenadasGeocercas(vrs: number) {
     // dateHour();
     var exportFileEx = [];
@@ -19591,10 +19891,3 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 }
-
-
-
-
-
-
-

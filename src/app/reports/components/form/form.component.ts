@@ -1867,7 +1867,8 @@ export class FormComponent implements OnInit {
         (this.selectedReport == 'R040' && is_vehicle_selected)
         ||
         (this.selectedReport == 'R041' && is_vehicle_selected)
-
+        ||
+        (this.selectedReport == 'R042' && is_vehicle_selected)
       );
   }
 
