@@ -248,13 +248,13 @@ export class EventListComponent implements OnInit {
 
       this.noResults = false;
     } else {
-      // this.eventService.getEventFilter(this.selectedEvent);
+      this.eventService.getEventFilter(this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
           // console.log(" --- event: ",event);
           let result_filter = this.eventFilter(event);
-          console.log("result_filter",result_filter);
+          // console.log("result_filter",result_filter);
           return result_filter;
         });
       this.noResults = this.eventService.eventsFiltered.length === 0;
@@ -445,7 +445,7 @@ export class EventListComponent implements OnInit {
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
-          console.log('this.eventFilter(event)', this.eventFilter(event));
+          // console.log('this.eventFilter(event)', this.eventFilter(event));
           return this.eventFilter(event);
         });
       this.noResults = this.eventService.eventsFiltered.length == 0;

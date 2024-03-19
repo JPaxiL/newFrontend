@@ -149,7 +149,7 @@ export class EventService {
   }
 
   public async requestEventSlug(event_slug: string){
-    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alternative-search/`+event_slug)
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alternative-event-user/`+event_slug)
     .toPromise()
     .then((res) =>{
       console.log("exito al buscar eventos con slug "+event_slug);
@@ -174,7 +174,7 @@ export class EventService {
       }
     }
     // console.log("end integrate --->",this.events);
-    //reparar esto 
+    //reparar esto
     // this.newEventStream.emit(data);
   }
 
