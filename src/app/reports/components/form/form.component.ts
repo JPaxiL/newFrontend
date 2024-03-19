@@ -1530,6 +1530,9 @@ export class FormComponent implements OnInit {
         }
 
       break;
+      case 'R042': //  - R042	REPORTE DE COMBUSTIBLE RESUMEN
+        this.showLimitTime = true;
+      break;
 
       default: break;
     }
