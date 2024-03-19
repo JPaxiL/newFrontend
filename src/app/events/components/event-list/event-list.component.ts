@@ -503,6 +503,7 @@ export class EventListComponent implements OnInit {
               (ev: any) => ev.id == event.data.id
             );
             auxEvent.evaluations = evaluations as Evaluation[];
+            auxEvent.evaluated = 1;
             //console.log("EVENTS EVALUATIONS GETS ", auxEvent);
           }
         })

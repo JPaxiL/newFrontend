@@ -168,14 +168,58 @@ export class EventService {
         if(this.events[j].id==data[i].id)status=false;
       }
       if(status){
-        let event = this.formatEvent(data[i]);
+        let event = this.formatEventIntegrate(data[i]);
         this.events.push(event);
 
       }
     }
     // console.log("end integrate --->",this.events);
     //reparar esto
-    // this.newEventStream.emit(data);
+    this.attachClassesToEvents();
+    this.newEventStream.emit(data);
+  }
+  public formatEventIntegrate(event: any){
+    // const iconUrl = getIconUrlHistory(event);
+    // let icon = L.icon({
+    //   iconUrl: iconUrl,
+    //   iconSize: this.img_iconSize, // size of the icon
+    //   iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
+    // });
+    // event.layer = L.marker([event.latitud, event.longitud], {
+    //   icon: icon,
+    // });
+    // event.layer._myType = 'evento';
+    // event.layer._myId = event.id;
+    // console.log('EVENTO ->',event);
+    // event.namedriver = this.driverService.getDriverById(event.driver_id); // <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+    // event.namedriver = "NO IDENTIFICADO";
+    // event.layer.addTo(this.eventsLayers);
+
+    // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
+    event.fecha_tracker = moment(
+      event.fecha_tracker,
+      'YYYY/MM/DD hh:mm:ss'
+    )
+      .subtract(5, 'hours')
+      .format('YYYY/MM/DD HH:mm:ss');
+    // event.evaluations = [
+    //   {
+    //     event_id: event.evento_id,
+    //     usuario_id: event.usuario_id,
+    //     imei: event.imei,
+    //     fecha: event.fecha_tracker,
+    //     nombre: event.nombre_objeto,
+    //     tipo_evento: event.name,
+    //     uuid_event: event.uuid_event,
+    //     criterio_evaluacion: '',
+    //     identificacion_video: '',
+    //     valoracion_evento: '0',
+    //     observacion_evaluacion: '',
+    //     senales_posible_fatiga: false,
+    //     operador_monitoreo: '',
+    //   } as Evaluation,
+    // ];
+    return event;
   }
 
   public formatEvent(event: any){
