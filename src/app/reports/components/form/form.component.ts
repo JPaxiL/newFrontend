@@ -1028,11 +1028,16 @@ export class FormComponent implements OnInit {
 
     if(cv){
       //Convoy o grupo seleccionado
+      var vehiculos_imei = []
+      for (let index = 0; index < convoyOrGroupArr.length; index++) {
+        const element = convoyOrGroupArr[index];
+        vehiculos_imei.push({IMEI: element.IMEI, name:element.name, nameconvoy:element.nameconvoy});
+      }
       var param = {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 				fecha_desde:M1,
         fecha_hasta:M2, // --N
-				vehiculos: JSON.stringify(convoyOrGroupArr),
+				vehiculos: JSON.stringify(vehiculos_imei),//JSON.stringify(convoyOrGroupArr),
         grupo:this.selectedConvoy,
         zonas:JSON.stringify(this.selectedZones),
 				url: reportSelect.url, //this.reports[this.selectedReport].url,
@@ -1058,12 +1063,17 @@ export class FormComponent implements OnInit {
 				numRep: reportSelect.codigo,//this.reports[this.selectedReport].codigo,//this.reports[this.selectedReport].id,
       }
     } else {
+      var vehiculos_imei = []
+      for (let index = 0; index < this.selectedVehicles.length; index++) {
+        const element = this.selectedVehicles[index];
+        vehiculos_imei.push({IMEI: element.IMEI, name:element.name, nameconvoy:element.nameconvoy});
+      }
       var param = {
         fecha_actual:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         fecha_desde:M1,
         fecha_hasta:M2, // --N
         //vehiculos: JSON.stringify(vm.selectedVehicle), grupos:vm.selectedConvoy, zonas:JSON.stringify(array_zona),
-        vehiculos: JSON.stringify(this.selectedVehicles),
+        vehiculos: JSON.stringify(vehiculos_imei),//JSON.stringify(this.selectedVehicles),
         grupo: this.selectedConvoy,
         zonas: JSON.stringify(this.selectedZones),
         url: reportSelect.url, //this.reports[this.selectedReport].url,
