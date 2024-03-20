@@ -16,7 +16,7 @@ import { DriversService } from 'src/app/drivers/services/drivers.service';
   providedIn: 'root'
 })
 export class MinimapService {
-  
+
   @ViewChild('popupText') popupText!: ElementRef;
 
   public maps: IMapMinimap[] = [];
@@ -58,9 +58,10 @@ export class MinimapService {
     this.userDataService.getUserData();
     this.userDataService.userDataCompleted.subscribe(res=>{
       this.driversService.initialize(); //NECESITA INFO DE USER DATA
+      this.vehicleService.setDefaultStatusDataVehicle();
+      this.vehicleService.initialize();
     })
-    this.vehicleService.setDefaultStatusDataVehicle();
-    this.vehicleService.initialize();
+
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("user data completadoooo",vehicles);
         this.vehicleServiceIsReady = true;
@@ -153,7 +154,7 @@ export class MinimapService {
             tiempoParada: tiempoParada,
           };
           // console.log("auxxxx",aux);
-          
+
           //Una vez llegado el evento con la data de tiempo de parada de un vehiculo,
           //Buscamos a que mapas pertenece el vehiculo y actualizamos el valor de imeiPopu y time_stop
           // de cada mapa ya que seran tomados al llamar a printPopup con el mapa correspondiente
@@ -228,7 +229,7 @@ export class MinimapService {
       }
 
       mapItem.markerClusterGroup.clearLayers();
-      
+
       for (const property in e){
         console.log("e----- ", property);
         console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
@@ -276,7 +277,7 @@ export class MinimapService {
   }
   private async drawIcon(data:any, mapItem: IMapMinimap): Promise<void>{
     // console.log("dataaaaa---",data);
-    
+
     //let iconUrl = './assets/images/objects/nuevo/'+data.icon;
     let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+data.icon);
     if(data.speed>0){
@@ -314,14 +315,14 @@ export class MinimapService {
         '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"> Tiempo de Parada: </i></span>'+mapItem.time_stop+'</small>'+
       '</aside>';
     }
-    
+
 
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
-    tempMarker.bindTooltip(`<span>${data.name}</span>`, { 
-      permanent: true, 
+    tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+      permanent: true,
       offset: [0, 12],
       className: 'vehicle-tooltip', });
     let options = {
@@ -357,7 +358,7 @@ export class MinimapService {
         cont++;
       }
     }
-    
+
     mapItem.markerClusterGroup.addTo(mapItem.map,{renderer:L.canvas()});
     //let layers = mapItem.markerClusterGroup.getLayers();
   }
@@ -479,18 +480,18 @@ export class MinimapService {
     return diferenciaEnSegundos > 15;
   }
   private async monitor(data: any): Promise<void>{
-    
+
     // console.log('DATA INGRESADA ->',data);
     this.maps.forEach(async (item) => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
       const resultado = item.minimapConf?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
       //console.log("data IMEI: ", data.IMEI.toString());
       //console.log("vehicles IMEIs: ", item.configuration?.vehicles!.map(item=> {return item.tracker_imei}));
-      
+
       if(resultado){
         const index = item.minimapConf!.vehicles!.indexOf(resultado);
         console.log("resultado e indice: ", resultado, index);
-        
+
         // const fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
         // if(this.diffSecondsNow(fecha_tracker)){
         //   console.log('DATA NO ENTRA POR SER DE VOLCADO');
@@ -499,7 +500,7 @@ export class MinimapService {
         data.fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
         // if(data.IMEI =='860640057372346'){
         //   data.driver_id=489;
-        //   console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker,data.fecha_tracker); 
+        //   console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker,data.fecha_tracker);
         //   console.log('TRAMA',data);
         //   console.log('VEHICLE OLD',item.minimapConf!.vehicles![index]);
         //   console.log(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker));
@@ -509,7 +510,7 @@ export class MinimapService {
         // }
         if(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker)){
           item.minimapConf!.vehicles![index].driver_id = data.driver_id;
-          // console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker); 
+          // console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker);
           // data.fecha_tracker = fecha_tracker;
           // console.log('TRAMA',data);
           // OBTENER EL NOMBRE EN BASE AL ID DRIVER
@@ -533,7 +534,7 @@ export class MinimapService {
         // console.log('Info Driver',tempInfoDriver);
         console.log("["+resultado.numero_placa+"] item.imeiPopup==data.IMEI.toString()", item.imeiPopup==data.IMEI.toString());
         if(item.imeiPopup==data.IMEI.toString()){
-          
+
           let options = {
             imei: data.IMEI,
             name: item.minimapConf!.vehicles![index].name,
@@ -554,7 +555,7 @@ export class MinimapService {
 
         console.log("["+resultado.numero_placa+"] item.configuration!.vehicles![index].eye", item.minimapConf!.vehicles![index].eye);
         if(item.minimapConf!.vehicles![index].eye){
-          
+
           let cont = 0;
           let object = item.markerClusterGroup.getLayers();
           for (const key in object) {
@@ -562,7 +563,7 @@ export class MinimapService {
             if (object[key]['_tooltip']['_content']=="<span>"+item.minimapConf!.vehicles![index].name+"</span>") {
               cont++;
               let oldCoords = item.markerClusterGroup.getLayers()[key].getLatLng();
-              
+
               let coord = {
                 lat : parseFloat(item.minimapConf!.vehicles![index].latitud!),
                 lng : parseFloat(item.minimapConf!.vehicles![index].longitud!)
@@ -654,11 +655,11 @@ export class MinimapService {
                     if(coord.lat > oldCoords.lat){
                       //arriba
                       this.direction_Y = 'up';
-                      this.dif_Y = coord.lat-oldCoords.lat;  
+                      this.dif_Y = coord.lat-oldCoords.lat;
                       if(this.dif_Y >= this.dif_mayor){
-                        this.dif_mayor = this.dif_Y; 
+                        this.dif_mayor = this.dif_Y;
                         this.direction = 'up';
-                        this.dif_divide = this.dif_Y/2; 
+                        this.dif_divide = this.dif_Y/2;
                       }
                     }else{
                       //abajo
@@ -668,14 +669,14 @@ export class MinimapService {
                         this.dif_mayor = this.dif_Y;
                         this.direction = 'down';
                         this.dif_divide = this.dif_Y/2;
-                        
+
                       }
                     }
-    
+
                     if(coord.lng > oldCoords.lng){
                       //derecha
                       this.direction_X = 'right';
-                      this.dif_X = coord.lng-oldCoords.lng; 
+                      this.dif_X = coord.lng-oldCoords.lng;
                       if(this.dif_X >= this.dif_mayor){
                         this.dif_mayor = this.dif_X;
                         this.direction = 'right';
@@ -691,35 +692,35 @@ export class MinimapService {
                         this.dif_divide = this.dif_X/2;
                       }
                     }
-                    
+
                     if(this.direction == 'up' || this.direction == 'down'){
-    
-                      if(this.dif_X >= this.dif_divide){ 
-    
+
+                      if(this.dif_X >= this.dif_divide){
+
                         this.final_direction = `${this.direction}-${this.direction_X}`;
-    
+
                       }else{
-    
+
                         this.final_direction = `${this.direction}`;
-                        
+
                       }
-    
+
                     }else{
-    
+
                       if(this.dif_Y >= this.dif_divide){
-    
+
                         this.final_direction = `${this.direction_Y}-${this.direction}`;
                       }else{
-    
+
                         this.final_direction = `${this.direction}`;
-                        
+
                       }
                     }
 
                     //this.changePositionArrow(this.final_direction,key);
 
                     // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
-                    // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+                    // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                     if(this.userDataService.changeItemIcon == 'cursor' && item.minimapConf!.vehicles![index].speed! > item.minimapConf!.vehicles![index].limit_speed!){
                       item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
                       item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/excessCursor/arrow_${this.final_direction}.svg`);
@@ -741,12 +742,12 @@ export class MinimapService {
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/excessCursor/arrow_${old_direction[1]}.svg`;
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/excessCursor/arrow_${old_direction[1]}`);
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                        
+
                       }else{
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/arrow_${old_direction[1]}.svg`;
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                      } 
+                      }
                     }
                     else{
                       item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
@@ -759,7 +760,7 @@ export class MinimapService {
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/relentiCursor/arrow_${old_direction[1]}.svg`;
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/relentiCursor/arrow_${old_direction[1]}`);
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                    
+
                   }else{
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/relentiCursor/arrow_down-left.svg`;
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/relentiCursor/arrow_down-left.svg`);
@@ -767,7 +768,7 @@ export class MinimapService {
                   }
                 }else{
                   item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                  
+
                 }
                 item.markerClusterGroup.getLayers()[key].setLatLng(coord);
                 let aux = item.markerClusterGroup.getLayers()[key];
@@ -830,7 +831,7 @@ export class MinimapService {
   }
 
   public changeClusteringVisibility(visibility: boolean){
-    
+
     this.clustering = visibility;
   }
 
@@ -841,7 +842,7 @@ export class MinimapService {
   static async loadAndConvertSVGToPNG(svgURL: string): Promise<string> {
     // Crear un elemento de imagen
     const img = new Image();
-    
+
     // Cargar el SVG desde la URL
     return new Promise<string>((resolve, reject) => {
       img.onload = async () => {
@@ -850,11 +851,11 @@ export class MinimapService {
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-    
+
         if (ctx) {
           // Dibujar la imagen en el lienzo
           ctx.drawImage(img, 0, 0, img.width, img.height);
-    
+
           // Convertir el lienzo a un formato PNG
           const dataURL = canvas.toDataURL('image/png');
           canvas.remove();
@@ -863,11 +864,11 @@ export class MinimapService {
           reject('Failed to get 2D context for canvas');
         }
       };
-    
+
       img.onerror = () => {
         reject('Failed to load SVG image');
       };
-    
+
       img.src = svgURL;
     });
   }
