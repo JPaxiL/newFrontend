@@ -10,6 +10,7 @@ import {
 import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
+import { ReferenceService } from '../../services/reference.service';
 import { getContentPopup } from '../../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpClient } from '@angular/common/http';
@@ -146,6 +147,7 @@ export class EventListComponent implements OnInit {
 
   constructor(
     public eventService: EventService,
+    public referenceService: ReferenceService,
     public mapService: MapServicesService,
     public ess: EventSocketService,
     private spinner: NgxSpinnerService,
@@ -209,6 +211,18 @@ export class EventListComponent implements OnInit {
       // console.log("desde event list ",res);
       this.searchByPlate();
       this.changeTypeEvent();
+    });
+    this.referenceService.searchReferenceEventCompleted.subscribe((event) => {
+      console.log("emit event completed reference ###################### ",event);
+      if(this.eventService.activeEvent.id == event.id){
+        console.log("evento aun en la mira ....");
+        // event.referencia = "XD";
+        this.showEvent(event);
+
+      }else{
+        console.log("evento ya dejo de estar en la mira...");
+      }
+
     });
 
     if (this.eventService.eventsUserLoaded == false) {
@@ -297,6 +311,8 @@ export class EventListComponent implements OnInit {
   }
 
   public showEvent(event: any) {
+    if(event.referencia==undefined) event.referencia= "Cargando ...";
+    console.log("show event ...",event);
     const objParams: any = {};
     /*
     antes de procesar parametros  string
@@ -312,16 +328,19 @@ export class EventListComponent implements OnInit {
     }
 
     if (this.eventService.activeEvent) {
-      if (
-        this.eventService.activeEvent.id == event.id &&
-        event.layer.isPopupOpen()
-      ) {
-        return;
+      if ( this.eventService.activeEvent.id == event.id && event.layer.isPopupOpen() ) {
+        console.log("evento ya esta abierto ????");
+
+        //return;
+      }else{
+        console.log("aqui hace nada T_T");
       }
       this.eventService.activeEvent.layer.closePopup();
       this.eventService.activeEvent.layer.unbindPopup();
       this.eventService.activeEvent.layer.off();
       this.hideEvent(this.eventService.activeEvent);
+    }else{
+      console.log("evento no esta activo ...")
     }
 
     if (!event.viewed) {
@@ -416,6 +435,8 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement) {
+    console.log("click en evento ...");
+    // this.eventService.activeEvent = event;
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if (false) {
@@ -423,11 +444,12 @@ export class EventListComponent implements OnInit {
     } else {
       currentRow.classList.add('watched-event');
       //console.log('Mostrando evento con ID: ', event.evento_id);
-      let reference = await this.eventService.getReference(
-        event.latitud,
-        event.longitud
-      );
-      event.referencia = reference.referencia;
+      // let reference = await this.eventService.getReference(
+      //   event.latitud,
+      //   event.longitud
+      // );
+      this.referenceService.searchReferenceEvent(event);
+      // event.referencia = "Cargando ...";
       this.showEvent(event);
     }
   }

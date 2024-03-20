@@ -35,28 +35,28 @@ export class EventService {
   public img_iconSize: any = [30, 30];
   public img_iconAnchor: any = [14, 0];
   public eventsLayers = new L.LayerGroup();
-  public eventsCommon: any[] = [
-    'sos',
-    'aceleracion-brusca',
-    'distraccion',
-    'fatiga-extrema',
-    'somnolencia',
-    'no-rostro',
-    'colision-peatones',
-    'motor-encendido',
-    'motor-apagado',
-    'bloqueo-vision-mobileye',
-    'manipulacion-360',
-    'desvio-de-carril-derecha',
-    'desvio-de-carril-izquierda',
-    'frenada-brusca',
-    'conductor-adormitado-360',
-    'conductor-fumando',
-    'cinturon-de-seguridad-desabrochado',
-    'uso-del-celular',
-    'exceso-velocidad',
-    'desvio-de-carril-izquierda2',
-  ];
+  // public eventsCommon: any[] = [
+  //   'sos',
+  //   'aceleracion-brusca',
+  //   'distraccion',
+  //   'fatiga-extrema',
+  //   'somnolencia',
+  //   'no-rostro',
+  //   'colision-peatones',
+  //   'motor-encendido',
+  //   'motor-apagado',
+  //   'bloqueo-vision-mobileye',
+  //   'manipulacion-360',
+  //   'desvio-de-carril-derecha',
+  //   'desvio-de-carril-izquierda',
+  //   'frenada-brusca',
+  //   'conductor-adormitado-360',
+  //   'conductor-fumando',
+  //   'cinturon-de-seguridad-desabrochado',
+  //   'uso-del-celular',
+  //   'exceso-velocidad',
+  //   'desvio-de-carril-izquierda2',
+  // ];
 
   public eventsHistorial: any = []; //==> Usado en el modulo historial
 
@@ -80,7 +80,10 @@ export class EventService {
   public eventsGroupedList: any = [];
   public eventsLength: any;
 
-  private get_event_filter_status = true;
+  public filterEventSelected: string[] = [];
+  public filterEventRequest: string[] = ['posible-fatiga','conductor-adormitado-360'];
+  public filterEventBackInTime: number = 48;
+  public filterEventRequestLengh: number = 500;
 
   constructor(
     private http: HttpClient,
@@ -100,6 +103,7 @@ export class EventService {
   }
 
   public getVehiclesPlate(data_events?: any): void {
+    console.log("getVehicles plate ....");
     if (data_events) {
       for (const index in data_events) {
         data_events[index].nombre_objeto = this.vehicleService.getVehicle(
@@ -117,13 +121,6 @@ export class EventService {
         this.events[index].namedriver = this.driverService.getDriverById(
           this.events[index].driver_id
         );
-        // console.log(
-        //   'DRIVER:',
-        //   this.events[index].namedriver,
-        //   ' - Unidad:',
-        //   this.events[index].nombre_objeto
-        // );
-        // if('860640057334650'==this.events[index].imei)console.log("vehicle retornado",this.vehicleService.getVehicle(this.events[index].imei));
       }
     }
   }
@@ -140,16 +137,17 @@ export class EventService {
 
   public async getEventFilter(selectedEvent: any){
     for (const index in selectedEvent) {
-      if(selectedEvent[index].value=="posible-fatiga"&&this.get_event_filter_status){
-        console.log("Ejecutando busqueda de eventos de posible fatiga solo una vez :D");
-        this.get_event_filter_status=false;
-        this.requestEventSlug("posible-fatiga");
+      let search_event_request = this.filterEventRequest.indexOf(selectedEvent[index].value);
+      let search_event_selected = this.filterEventSelected.indexOf(selectedEvent[index].value);
+      if(search_event_request >= 0 && search_event_selected < 0){
+        this.filterEventSelected.push(selectedEvent[index].value);
+        this.requestEventSlug(selectedEvent[index].value,this.filterEventBackInTime,this.filterEventRequestLengh);
       }
     }
   }
 
-  public async requestEventSlug(event_slug: string){
-    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alternative-event-user/`+event_slug)
+  public async requestEventSlug(event_slug: string, back_time: number, length: number){
+    await this.http.get<ResponseInterface>(`${environment.apiUrl}/api/alternative-event-user/`+event_slug+`?backtime=`+back_time+`&length=`+length)
     .toPromise()
     .then((res) =>{
       console.log("exito al buscar eventos con slug "+event_slug);
@@ -168,58 +166,14 @@ export class EventService {
         if(this.events[j].id==data[i].id)status=false;
       }
       if(status){
-        let event = this.formatEventIntegrate(data[i]);
+        let event = this.formatEvent(data[i]);
         this.events.push(event);
 
       }
     }
-    // console.log("end integrate --->",this.events);
-    //reparar esto
+    this.getVehiclesPlate();
     this.attachClassesToEvents();
     this.newEventStream.emit(data);
-  }
-  public formatEventIntegrate(event: any){
-    // const iconUrl = getIconUrlHistory(event);
-    // let icon = L.icon({
-    //   iconUrl: iconUrl,
-    //   iconSize: this.img_iconSize, // size of the icon
-    //   iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
-    // });
-    // event.layer = L.marker([event.latitud, event.longitud], {
-    //   icon: icon,
-    // });
-    // event.layer._myType = 'evento';
-    // event.layer._myId = event.id;
-    // console.log('EVENTO ->',event);
-    // event.namedriver = this.driverService.getDriverById(event.driver_id); // <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
-    // event.namedriver = "NO IDENTIFICADO";
-    // event.layer.addTo(this.eventsLayers);
-
-    // Corrección horaria (GMT -5). Estaba presente en event-socket, pero no aquí.
-    event.fecha_tracker = moment(
-      event.fecha_tracker,
-      'YYYY/MM/DD hh:mm:ss'
-    )
-      .subtract(5, 'hours')
-      .format('YYYY/MM/DD HH:mm:ss');
-    // event.evaluations = [
-    //   {
-    //     event_id: event.evento_id,
-    //     usuario_id: event.usuario_id,
-    //     imei: event.imei,
-    //     fecha: event.fecha_tracker,
-    //     nombre: event.nombre_objeto,
-    //     tipo_evento: event.name,
-    //     uuid_event: event.uuid_event,
-    //     criterio_evaluacion: '',
-    //     identificacion_video: '',
-    //     valoracion_evento: '0',
-    //     observacion_evaluacion: '',
-    //     senales_posible_fatiga: false,
-    //     operador_monitoreo: '',
-    //   } as Evaluation,
-    // ];
-    return event;
   }
 
   public formatEvent(event: any){
@@ -279,7 +233,7 @@ export class EventService {
           '########### [event.service] getAll(). Exito al cargar eventos ################',
           response.data
         );
-
+        // return;
         this.events = response.data.map((event: any) => {
           return this.formatEvent(event);
         });
@@ -818,6 +772,7 @@ export class EventService {
   }
 
   async getReference(lat: any, lng: any) {
+    console.log("en camino a ser reemplazado get reference ....");
     const response: ResponseInterface = await this.http
       .get<ResponseInterface>(
         `${environment.apiUrl}/api/event-user/get-reference`,
