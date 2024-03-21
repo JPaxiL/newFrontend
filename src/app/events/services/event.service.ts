@@ -163,7 +163,8 @@ export class EventService {
       // console.log("-->",data[i]);
       let status=true;
       for (const j in this.events) {
-        if(this.events[j].id==data[i].id)status=false;
+
+        if(this.events[j].uuid_event==data[i].uuid_event)status=false;
       }
       if(status){
         let event = this.formatEvent(data[i]);
@@ -177,17 +178,7 @@ export class EventService {
   }
 
   public formatEvent(event: any){
-    const iconUrl = getIconUrlHistory(event);
-    let icon = L.icon({
-      iconUrl: iconUrl,
-      iconSize: this.img_iconSize, // size of the icon
-      iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
-    });
-    event.layer = L.marker([event.latitud, event.longitud], {
-      icon: icon,
-    });
-    event.layer._myType = 'evento';
-    event.layer._myId = event.id;
+    event = this.setLayer(event);
     // console.log('EVENTO ->',event);
     event.namedriver = this.driverService.getDriverById(event.driver_id); // <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
     // event.namedriver = "NO IDENTIFICADO";
@@ -217,6 +208,21 @@ export class EventService {
         operador_monitoreo: '',
       } as Evaluation,
     ];
+    return event;
+  }
+
+  public setLayer (event: any){
+    const iconUrl = getIconUrlHistory(event);
+    let icon = L.icon({
+      iconUrl: iconUrl,
+      iconSize: this.img_iconSize, // size of the icon
+      iconAnchor: this.img_iconAnchor, //[20, 40], // point of the icon which will correspond to marker's location
+    });
+    event.layer = L.marker([event.latitud, event.longitud], {
+      icon: icon,
+    });
+    event.layer._myType = 'evento';
+    event.layer._myId = event.id;
     return event;
   }
   public async getAll(
@@ -282,6 +288,7 @@ export class EventService {
 
   public getData() {
     if (!this.statusLoadPlate) {
+      console.log("[getData] this.statusLoadPlate: ",this.statusLoadPlate);
       this.getVehiclesPlate();
       this.statusLoadPlate = true;
     }
@@ -294,34 +301,17 @@ export class EventService {
 
   public addNewEvent(event: any) {
     console.log('addNewEvent ........... ', event);
+    console.log("socketEvents: ",this.socketEvents);
     //     evento: "motor-encendido"
     // evento_id: 19
     event.event_user_id = event.evento_id;
     event.evaluated = 0;
     if (!this.eventsLoaded || this.enableSocketEvents) {
-      // console.log("event socket");
+      console.log("event socket");
       this.socketEvents.unshift(event);
     } else {
-      // console.log("event ---XD");
-      if (event.bol_evaluation) {
-        event.evaluations = [
-          {
-            event_id: event.evento_id,
-            usuario_id: event.usuario_id,
-            imei: event.imei,
-            fecha: event.fecha_tracker,
-            nombre: event.nombre_objeto,
-            tipo_evento: event.name,
-            uuid_event: event.uuid_event,
-            criterio_evaluacion: '',
-            identificacion_video: '',
-            valoracion_evento: '0',
-            observacion_evaluacion: '',
-            senales_posible_fatiga: false,
-            operador_monitoreo: '',
-          } as Evaluation,
-        ];
-      }
+      console.log("event ---XD");
+
       this.events.unshift(event);
       this.updateUnreadCounter();
       console.log('SONARAA?', event);
@@ -329,7 +319,7 @@ export class EventService {
         typeof event.sonido_sistema_bol != 'undefined' &&
         event.sonido_sistema_bol == true
       ) {
-        console.log('SI SINOoooo');
+        console.log('SI sonará');
         this.playNotificationSound(event.ruta_sonido);
       }
       this.attachClassesToEvents();
@@ -714,12 +704,13 @@ export class EventService {
       this.spinner.hide('loadingEventList');
       console.log('Ocultar Spinner');
     } else {
-      console.log('Failed attempt');
+      console.log('No se cargo filterLoad ni eventsloaded');
     }
   }
 
   //Sort called from event-list.component
   sortEventsTableData() {
+    console.log("sort data table --> #3########## eventsFiltered: ",this.eventsFiltered);
     this.eventsFiltered.sort((a, b) => {
       if (a.fecha_tracker > b.fecha_tracker) {
         return -1;
@@ -748,9 +739,9 @@ export class EventService {
     //console.log('Data Sorted', this.events);
   }
 
-  checkDuplicates() {
-    // no hay eventos duplicados todo se resuelve en events_plataform
-  }
+  // checkDuplicates() {
+  //   // no hay eventos duplicados todo se resuelve en events_plataform
+  // }
 
   markAsRead(event_id: string) {
     console.log('desde event service ... ');

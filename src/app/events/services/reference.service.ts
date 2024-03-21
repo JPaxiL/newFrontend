@@ -40,13 +40,14 @@ export class ReferenceService {
 
   }
   async queryReferenceEvent (event: any) {
+    console.log("event---> reference",event);
     await this.http
       .get<ResponseInterface>(
         `${environment.apiUrl}/api/event-user/get-reference`,
         {
           params: {
-            latitud: event.lat,
-            longitud: event.lng,
+            latitud: event.latitud,
+            longitud: event.longitud,
           },
         }
       )

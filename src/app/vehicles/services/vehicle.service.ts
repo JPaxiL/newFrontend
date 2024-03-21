@@ -111,7 +111,7 @@ export class VehicleService {
           // console.log("get vehicles",vehicles);
           this.vehicles = this.dataFormatVehicle(vehicles);
 
-          console.log('vehiculoss', this.vehicles);
+          // console.log('vehiculoss', this.vehicles);
 
           /* await this. */
           await this.changesColorVehicles();
@@ -122,7 +122,7 @@ export class VehicleService {
           this.statusDataVehicle = true;
           this.statusDataVehicleTree = true;
           this.listOperations = this.generatedListOperations();
-          console.log('VEHICLE SERVICE LOADED');
+          // console.log('VEHICLE SERVICE LOADED');
           this.dataCompleted.emit(this.vehicles);
           this.dataTreeCompleted.emit(this.vehiclesTree);
           this.vehicleCompleted.emit(true);
@@ -168,11 +168,6 @@ export class VehicleService {
       vehicle.relenti_svg = typeConfigVehicle.relenti_svg;
       //vehicle.movement_onda = typeConfigVehicle.movement_onda;
 
-
-
-
-
-
       //VEHICULOS EN MOVIMIENTO
       vehicle.customurldownright = typeConfigVehicle.customurldownright;
       vehicle.customurldownleft=typeConfigVehicle.customurldownleft;
@@ -180,13 +175,6 @@ export class VehicleService {
       vehicle.customurlupleft=typeConfigVehicle.customurlupleft;
       vehicle.customurlright=typeConfigVehicle.customurlright;
       vehicle.customurlleft=typeConfigVehicle.customurlleft;
-
-
-
-
-
-
-
 
       // vehicle.icon = `backup/${vehicle.icon}`;
       vehicle.icon =  typeConfigVehicle.icon_url;
@@ -376,6 +364,24 @@ export class VehicleService {
       }
     }
     return {};
+  }
+  public getVehicleStatus(imei: string): any {
+    // console.log("getVehicleStatus ...");
+    // console.log('imei ===',imei);
+    for (let index = 0; index < this.vehicles.length; index++) {
+      // const element = array[index];
+      // console.log(this.vehicles[index].IMEI);
+      if (this.vehicles[index].IMEI == imei) {
+        return {
+          data: this.vehicles[index],
+          status: true
+        }
+      }
+    }
+    return {
+      data: {},
+      status: false,
+    };
   }
 
   public getSession(): Observable<any> {
@@ -1071,10 +1077,10 @@ export class VehicleService {
   }
 
 
-  
 
-  
-  
+
+
+
 
   public async setDefaultStatusDataVehicle() {
     this.statusDataVehicle = false;
