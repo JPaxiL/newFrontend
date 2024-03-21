@@ -451,12 +451,14 @@ export class EventListComponent implements OnInit {
       let buffer = this.referenceService.getBuffer();
       if(buffer[event.id]==undefined){
           this.referenceService.searchReferenceEvent(event);
+
       }else{
         event.referencia = buffer[event.id];
+        this.showEvent(event);
       }
       // this.referenceService.searchReferenceEvent(event);
       // event.referencia = "Cargando ...";
-      this.showEvent(event);
+      // this.showEvent(event);
     }
   }
 
