@@ -141,7 +141,7 @@ export class EventSocketService extends Socket {
           this.eventService.new_notif_stack.push(even.evento_id);
           this.eventService.sortEventsTableData();
 
-          let alert = this.AlertService.getAlertById(even.evento_id);
+          let alert = this.AlertService.getAlertById(even.evento_id.toString());
           console.log("----alert",alert);
 
           if (alert) {

@@ -301,6 +301,8 @@ export class EventListComponent implements OnInit {
     antes de procesar parametros  string
     event-list.component.ts:130 despues de procesar parametros  object
     */
+   console.log("event",event);
+   
     if (event.parametros && typeof event.parametros == 'string') {
       event.parametros.split('|').forEach((item: any) => {
         const [key, value] = item.split('=');
@@ -309,7 +311,7 @@ export class EventListComponent implements OnInit {
       //reemplazo el atributo parametros (string) con el objeto
       event.parametros = objParams;
     }
-
+    
     if (this.eventService.activeEvent) {
       if (
         this.eventService.activeEvent.id == event.id &&
@@ -339,7 +341,7 @@ export class EventListComponent implements OnInit {
       { padding: [50, 50] }
     );
 
-      console.log("eventlayer",event.layer)
+    console.log("eventlayer",event.layer)
 
     event.layer.bindPopup(getContentPopup(event), {
       className: eventClass,

@@ -657,7 +657,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         name_driver: event.namedriver,
-
+        parametros: event.parametros,
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -672,7 +672,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         name_driver: event.namedriver,
-
+        parametros: event.parametros,
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -687,7 +687,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         name_driver: event.namedriver,
-
+        parametros: event.parametros,
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -702,7 +702,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         name_driver: event.namedriver,
-
+        parametros: event.parametros,
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -721,7 +721,7 @@ export const getContentPopup = (event: any, d: any = '...') => {
         latitud: event.latitud,
         longitud: event.longitud,
         name_driver: event.namedriver,
-
+        parametros: event.parametros,
         velocidad: event.velocidad,
         referencia: event.referencia,
         fecha_tracker: event.fecha_tracker,
@@ -1212,6 +1212,7 @@ function string_diffechas(a: any, b: any) {
 }
 
 function render_leaflet_tootlip(event_content: any, icon_src: string) {
+  //console.log("event_content: ", event_content);
   return `
     <style>
     .icon_modal_events{
