@@ -212,17 +212,9 @@ export class EventListComponent implements OnInit {
       this.searchByPlate();
       this.changeTypeEvent();
     });
+
     this.referenceService.searchReferenceEventCompleted.subscribe((event) => {
-      console.log("emit event completed reference ###################### ",event);
-      if(this.eventService.activeEvent.id == event.id){
-        console.log("evento aun en la mira ....");
-        // event.referencia = "XD";
-        this.showEvent(event);
-
-      }else{
-        console.log("evento ya dejo de estar en la mira...");
-      }
-
+      this.showEvent(event);
     });
 
     if (this.eventService.eventsUserLoaded == false) {
@@ -311,13 +303,13 @@ export class EventListComponent implements OnInit {
   }
 
   public showEvent(event: any) {
-    if(event.referencia==undefined) event.referencia= "Cargando ...";
-    console.log("show event ...",event);
     const objParams: any = {};
     /*
     antes de procesar parametros  string
     event-list.component.ts:130 despues de procesar parametros  object
     */
+   console.log("event",event);
+
     if (event.parametros && typeof event.parametros == 'string') {
       event.parametros.split('|').forEach((item: any) => {
         const [key, value] = item.split('=');
@@ -328,19 +320,16 @@ export class EventListComponent implements OnInit {
     }
 
     if (this.eventService.activeEvent) {
-      if ( this.eventService.activeEvent.id == event.id && event.layer.isPopupOpen() ) {
-        console.log("evento ya esta abierto ????");
-
-        //return;
-      }else{
-        console.log("aqui hace nada T_T");
+      if (
+        this.eventService.activeEvent.id == event.id &&
+        event.layer.isPopupOpen()
+      ) {
+        return;
       }
       this.eventService.activeEvent.layer.closePopup();
       this.eventService.activeEvent.layer.unbindPopup();
       this.eventService.activeEvent.layer.off();
       this.hideEvent(this.eventService.activeEvent);
-    }else{
-      console.log("evento no esta activo ...")
     }
 
     if (!event.viewed) {
@@ -359,7 +348,7 @@ export class EventListComponent implements OnInit {
       { padding: [50, 50] }
     );
 
-      console.log("eventlayer",event.layer)
+    console.log("eventlayer",event.layer)
 
     event.layer.bindPopup(getContentPopup(event), {
       className: eventClass,
@@ -435,8 +424,6 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement) {
-    console.log("click en evento ...");
-    // this.eventService.activeEvent = event;
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if (false) {

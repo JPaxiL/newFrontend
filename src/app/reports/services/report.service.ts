@@ -18,6 +18,8 @@ export class ReportService {
   userId : any = 0;
   chkRiesgo : any = false;
 
+  str_nombre_eventos : any;
+
   eC:any; //Reporte 6 - Reporte de Eventos , Seleccion de Campo = Eventos Campos
 
 
