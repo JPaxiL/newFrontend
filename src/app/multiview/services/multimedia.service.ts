@@ -619,13 +619,13 @@ export class MultimediaService {
     }
     this.isLoadedMultimediaCipia = true;
     this.completedMultimediaCipia.emit();
-    console.log(" MultimediaCipiaItems loaded: ", this.multimediaCipiaItems);
+    //console.log(" MultimediaCipiaItems loaded: ", this.multimediaCipiaItems);
   }
 
   async addMultimediaCipiaItem(eventId:string, item: MultimediaItem){
     this.multimediaCipiaItems[eventId].push(item);
     this.localStorageService.updateItem(eventId,this.multimediaCipiaItems[eventId]);
-    console.log("addMultimediaCipiaItem LocalStorage: ", this.localStorageService.getItem(eventId));
+    //console.log("addMultimediaCipiaItem LocalStorage: ", this.localStorageService.getItem(eventId));
     await this.loadMediaFromMultimediaItem(this.multimediaCipiaItems[eventId].length-1, eventId, this.destroy$);
   }
 
@@ -633,14 +633,14 @@ export class MultimediaService {
     this.multimediaCipiaItems[eventId] = [];
     this.localStorageService.setItem(eventId,[])
     this.addEventToListInLocalStorage(eventId);
-    console.log("update LocalStorage: ", this.localStorageService.getItem(eventId));
+    //console.log("update LocalStorage: ", this.localStorageService.getItem(eventId));
   }
 
   updateUrlToMultimediaCipiaItem(eventId:string, url:SafeUrl, blobId:string , index:number){
     this.multimediaCipiaItems[eventId][index].url = url;
     this.multimediaCipiaItems[eventId][index].blobId = blobId;
     this.localStorageService.updateItem(eventId, this.multimediaCipiaItems[eventId]);
-    console.log("update LocalStorage: ", this.localStorageService.getItem(eventId));
+    //console.log("update LocalStorage: ", this.localStorageService.getItem(eventId));
   }
 
   addEventToListInLocalStorage(eventId:string){
@@ -649,10 +649,10 @@ export class MultimediaService {
     if (events){
       events.push(eventId);
       this.localStorageService.updateItem(EVENTS_MULTIMEDIA_KEY, [...events]);
-      console.log("eventsInLocalStorageAfter: ", this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[]);
+      //console.log("eventsInLocalStorageAfter: ", this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[]);
     }else{
       this.localStorageService.setItem(EVENTS_MULTIMEDIA_KEY,[eventId]);
-      console.log("eventsInLocalStorage append: ", this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[]);
+      //console.log("eventsInLocalStorage append: ", this.localStorageService.getItem(EVENTS_MULTIMEDIA_KEY) as string[]);
 
     }
   }
@@ -662,7 +662,7 @@ export class MultimediaService {
 
     if(events){
       for (const event of events) {
-        console.log("deleting MultimediaCipiaItems from: ", event);
+        //console.log("deleting MultimediaCipiaItems from: ", event);
         
         let auxMultimediaCipiaItems:MultimediaItem[] = this.localStorageService.getItem(event) as MultimediaItem[];  
         if (auxMultimediaCipiaItems) {

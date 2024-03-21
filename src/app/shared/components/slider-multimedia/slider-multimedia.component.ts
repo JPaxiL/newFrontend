@@ -24,6 +24,8 @@ export class SliderMultimediaComponent implements OnInit {
   @Input() hasMultimedia = false;
   @Input() showTitle = true;
 
+  sliderContent!: HTMLElement;
+
   loading = false;
   error = false;
 
@@ -135,6 +137,8 @@ export class SliderMultimediaComponent implements OnInit {
     this.min_range = new Date(this.event.parametros.eventDateTime).getTime()-120000-(5*60*60*1000);
     this.max_range = new Date(this.event.parametros.eventDateTime).getTime()+120000-(5*60*60*1000);
     this.rangeValues = [new Date(this.event.parametros.eventDateTime).getTime()-15000-(5*60*60*1000),new Date(this.event.parametros.eventDateTime).getTime()+15000-(5*60*60*1000)]
+    this.sliderContent = document.querySelector('.slider-content')! as HTMLElement; 
+
   }
 
   checkCipiaMultimedia(params: any, imei:string){
@@ -269,14 +273,13 @@ export class SliderMultimediaComponent implements OnInit {
   }
 
   updateMaximizeState() {
-    const sliderContent = document.querySelector('.slider-content');
-    if (sliderContent) {
+    if (this.sliderContent) {
       if (this.isMaximized) {
         // Maximizar
-        sliderContent.classList.add('maximized');
+        this.sliderContent.classList.add('maximized');
       } else {
         // Minimizar
-        sliderContent.classList.remove('maximized');
+        this.sliderContent.classList.remove('maximized');
       }
     }
   }
