@@ -49,7 +49,7 @@ deploy_testing:
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/platform/test/frontend && git pull origin test && exit"
+    - scp -r $CI_PROJECT_DIR/dist/my-app/* $SERVER_USER@$SERVER_HOST:/var/www/html/platform/test/frontend/dist/my-app
   after_script:
     - rm -rf ~/.ssh
   only:
@@ -65,7 +65,7 @@ deploy_development:
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/platform/dev/frontend && git pull origin develop && exit"
+    - scp -r $CI_PROJECT_DIR/dist/my-app/* $SERVER_USER@$SERVER_HOST:/var/www/html/platform/dev/frontend/dist/my-app
   after_script:
     - rm -rf ~/.ssh
   only:
@@ -81,7 +81,7 @@ deploy_production:
     - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
     - ssh-keyscan -H $SERVER_HOST > ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd /var/www/html/platform/prod/frontend && git pull origin master && exit"
+    - scp -r $CI_PROJECT_DIR/dist/my-app/* $SERVER_USER@$SERVER_HOST:/var/www/html/platform/prod/frontend/dist/my-app
   after_script:
     - rm -rf ~/.ssh
   only:

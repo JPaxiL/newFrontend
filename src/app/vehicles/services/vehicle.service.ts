@@ -175,7 +175,11 @@ export class VehicleService {
 
       //VEHICULOS EN MOVIMIENTO
       vehicle.customurldownright = typeConfigVehicle.customurldownright;
-
+      vehicle.customurldownleft=typeConfigVehicle.customurldownleft;
+      vehicle.customurlupright=typeConfigVehicle.customurlupright;
+      vehicle.customurlupleft=typeConfigVehicle.customurlupleft;
+      vehicle.customurlright=typeConfigVehicle.customurlright;
+      vehicle.customurlleft=typeConfigVehicle.customurlleft;
 
 
 

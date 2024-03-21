@@ -232,24 +232,30 @@ export class EventListComponent implements OnInit {
       );
     } else {
       this.spinner.show('loadingHistorialForm');
-      console.log(
-        'TEST IN EVENTS PANEL->',
-        this.eventService.eventsGroupedList
-      );
+      // console.log(
+      //   'TEST IN EVENTS PANEL->',
+      //   this.eventService.eventsGroupedList
+      // );
       this.spinner.hide('loadingHistorialForm');
     }
   }
 
   public changeTypeEvent() {
+    console.log("cambiando filtro de eventos ...... *****************+ ");
+    console.log("selectedEvent",this.selectedEvent);
     if (this.selectedEvent.length === 0 && this.placa === '') {
       this.eventService.eventsFiltered = this.eventService.getData();
 
       this.noResults = false;
     } else {
+      this.eventService.getEventFilter(this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
-          return this.eventFilter(event);
+          // console.log(" --- event: ",event);
+          let result_filter = this.eventFilter(event);
+          // console.log("result_filter",result_filter);
+          return result_filter;
         });
       this.noResults = this.eventService.eventsFiltered.length === 0;
     }
@@ -438,7 +444,7 @@ export class EventListComponent implements OnInit {
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
-          console.log('this.eventFilter(event)', this.eventFilter(event));
+          // console.log('this.eventFilter(event)', this.eventFilter(event));
           return this.eventFilter(event);
         });
       this.noResults = this.eventService.eventsFiltered.length == 0;
@@ -448,7 +454,8 @@ export class EventListComponent implements OnInit {
   }
 
   private eventFilter(event: any) {
-    // console.log("filter ===> ");
+
+    // console.log("eventFilter filter ===> ");
     // console.log("event",event);
     // console.log("tipo select",event.tipo +"=="+ this.selectedEvent);
     const eventsTypesSelected: string[] = this.selectedEvent.map(
@@ -459,15 +466,22 @@ export class EventListComponent implements OnInit {
     const vehicle = this.vehicleService.vehicles.find(
       (vh) => vh.IMEI == event.imei
     );
-    return (
-      ((event.nombre_objeto + vehicle?.IMEI + vehicle?.cod_interno)
-        .trim()
-        .toLowerCase()
-        .match(this.placa.trim().toLowerCase()) ||
-        this.placa == '') &&
-      (eventsTypesSelected.includes(event.tipo) ||
-        this.selectedEvent.length == 0)
-    );
+    if(vehicle!=undefined){
+      let aux_imei = vehicle.IMEI ?? "";
+      let aux_cod = vehicle.cod_interno ?? "";
+      let aux = event.nombre_objeto + aux_imei + aux_cod;
+      return (
+        ( aux.toString().trim()
+          .toLowerCase()
+          .match(this.placa.trim().toLowerCase()) ||
+          this.placa == '') &&
+        (eventsTypesSelected.includes(event.tipo) ||
+          this.selectedEvent.length == 0)
+      );
+    }else{
+      return false;
+    }
+
   }
 
   rowExpandend(event: any) {
@@ -488,6 +502,7 @@ export class EventListComponent implements OnInit {
               (ev: any) => ev.id == event.data.id
             );
             auxEvent.evaluations = evaluations as Evaluation[];
+            auxEvent.evaluated = 1;
             //console.log("EVENTS EVALUATIONS GETS ", auxEvent);
           }
         })
