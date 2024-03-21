@@ -33,7 +33,7 @@
     <div *ngIf="showMultimedias" class="multimedia-body">
         <div class="multimedia-wrapper" #multimedia_wrapper>
             <ng-container *ngFor="let item of multimediaService.multimediaCipiaItems[event.parametros.eventId]; let i = index" >
-                <div class="multimedia-item" *ngIf="i==activeIndex-1">
+                <div class="multimedia-item" *ngIf="i==activeIndex-1" class="overflow-hidden">
                     <img *ngIf="!error && !loading && item.type=='image'" [src]="item.url" style="height: 100%;" alt="cargando..."/>
                     <div *ngIf="error" (click)="loadMedia(item)" class="error-multimedia d-flex flex-column align-items-center justify-content-center">
                         <i class="pi pi-refresh fs-2 cursor-pointer text-white"></i>
