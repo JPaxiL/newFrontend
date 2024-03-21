@@ -1139,16 +1139,20 @@ export class FormComponent implements OnInit {
       repTitle = reportSelect.value;
     }
 
-    this.reportService.str_nombre_eventos = " : ";
-    this.events.forEach((event: { name_form: string | number; active: boolean; name_event: string }) => {
-      if (event.active) {
-        if (this.reportService.str_nombre_eventos == " : ") {
-          this.reportService.str_nombre_eventos = this.reportService.str_nombre_eventos +""+ event.name_event.toUpperCase();
-        } else {
-          this.reportService.str_nombre_eventos = this.reportService.str_nombre_eventos + ", " + event.name_event.toUpperCase();
-        }
-      }
-    });
+    if (param.numRep == 'R037' || param.numRep == 'R038'|| param.numRep == 'R040') {
+        this.reportService.str_nombre_eventos = " : ";
+        this.events.forEach((event: { name_form: string | number; active: boolean; name_event: string }) => {
+          if (event.active) {
+            if (this.reportService.str_nombre_eventos == " : ") {
+              this.reportService.str_nombre_eventos = this.reportService.str_nombre_eventos +""+ event.name_event.toUpperCase();
+            } else {
+              this.reportService.str_nombre_eventos = this.reportService.str_nombre_eventos + ", " + event.name_event.toUpperCase();
+            }
+          }
+        });
+    } else {
+      this.reportService.str_nombre_eventos = "";
+    }
 
     console.log('API: ',environment.apiUrl + param.url, param);
     this.http.post(environment.apiUrl + param.url, param).subscribe({
