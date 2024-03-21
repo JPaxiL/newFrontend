@@ -22,18 +22,21 @@ export class ReferenceService {
     console.log("Hola mundo de referencias ...");
   }
 
+  public getBuffer () : any {
+    return this.buffer;
+  }
   async searchReferenceEvent (event: any) {
-    if(this.buffer[event.id]==undefined){
-      console.log("buscando en servicio");
+    // if(this.buffer[event.id]==undefined){
+    //   console.log("buscando en servicio");
       this.queryReferenceEvent(event);
-    }else{
-
-      event.referencia = this.buffer[event.id];
-      console.log(" referencia --->",event.referencia);
-      // event.referenci a = "lalalalalal ";
-      console.log("buscando en cache",event);
-      this.searchReferenceEventCompleted.emit(event);
-    }
+    // }else{
+    //
+    //   event.referencia = this.buffer[event.id];
+    //   console.log(" referencia --->",event.referencia);
+    //   // event.referenci a = "lalalalalal ";
+    //   console.log("buscando en cache",event);
+    //   this.searchReferenceEventCompleted.emit(event);
+    // }
 
   }
   async queryReferenceEvent (event: any) {

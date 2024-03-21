@@ -448,7 +448,13 @@ export class EventListComponent implements OnInit {
       //   event.latitud,
       //   event.longitud
       // );
-      this.referenceService.searchReferenceEvent(event);
+      let buffer = this.referenceService.getBuffer();
+      if(buffer[event.id]==undefined){
+          this.referenceService.searchReferenceEvent(event);
+      }else{
+        event.referencia = buffer[event.id];
+      }
+      // this.referenceService.searchReferenceEvent(event);
       // event.referencia = "Cargando ...";
       this.showEvent(event);
     }
