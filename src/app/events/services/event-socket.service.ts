@@ -10,6 +10,7 @@ import { AlertService } from 'src/app/alerts/service/alert.service';
 import { PopupService } from './popup.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';
 import { getIconUrlHistory } from '../helpers/event-helper';
+import { Evaluation } from 'src/app/alerts/models/alert.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -66,92 +67,46 @@ export class EventSocketService extends Socket {
     this.ioSocket.emit('status-imei',data);
 
   }
+  public evaluationEmit (info: any){
+    this.ioSocket.emit('event-evaluation',info);
+  }
   public listen() {
-    console.log("listen ...");
-
     this.AlertService.getAll();
-    console.log('Is Listening', this.vehicleService.vehicles);
-    //console.log(this.user_id);
-    // this.filterImei(this.vehicleService.vehicles);
-    this.ioSocket.on('res', (info: any) => {
-      console.log("res",info);
-      // this.data_debug = info.data;
-      this.eventService.debugEventStream.emit(info);
-    });
+
+    this.socketOnRes();
+    this.socketOnEvents();
+    this.socketOnEvaluation();
+
+  }
+
+  public socketOnEvaluation () {
+    this.ioSocket.on('event-evaluation', (info: any) => {
+      // console.log("info evaluation -----> ", info);
+      this.eventService.evaluationEventStream.emit(info);
+    })
+  }
+  public socketOnEvents () {
     this.ioSocket.on('events', (event: any, users: any) => {
-      // console.log("users",users); // filtrar por usuario cuando este listo el modulo
-      // console.log("recibiendo evento........",this.vehicleService.vehicles);
-      // return;
-      // let even = JSON.parse(event);
+
       console.log("Nuevo evento llegado: ", event);
-      
-      let even = event;
 
-      // console.log(' getAlertById =====> ', this.AlertService.getAlertById(even.id), this.user_id, even.usuario_id);
-      // console.log("this.vehicleService.vehicles,even.tracker_imei ========> ", this.vehicleService.vehicles,even.tracker_imei);
       console.log("EVENT User ID",this.user_id);
-      console.log("users.indexOf(parseInt(this.user_id))",users.indexOf(parseInt(this.user_id)));
+      console.log("users",users)
       if(users.indexOf(parseInt(this.user_id))>=0){
-        //this.count = this.count + 1;
-        let data = this.filterImei(this.vehicleService.vehicles, even.tracker_imei);
-        // console.log("this.vehicleService.vehicles ----->", this.vehicleService.getVehicle(even.tracker_imei));
-        // if(this.filterImei(this.vehicleService.vehicles,even.tracker_imei)){
-        if (data != undefined) {
-          // console.log("name ====",data.name);
-          console.log(even.nombre_objeto+" ========================================== "+data.name);
-          even.nombre_objeto = data.name;
+        let vehicle = this.vehicleService.getVehicleStatus(event.tracker_imei);
+        // console.log("vehicle",vehicle);
+        if (vehicle.status) {
+          event = this.formatEvent(event, vehicle.data);
 
-          //<------- BUSCAR EL NOMBRE
-          // console.log('EVENT LLEGO->',even);
-          // console.log('DRIVER INIT->',this.driverService.drivers);
-          even.namedriver = this.driverService.getDriverById(even.driver_id);// <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
-          // even.namedriver = "NO IDENTIFICADO";
-          
-          // if(this.eventService.events.findIndex(event => event.event_id == even.event_id) == -1 &&
-          //   this.eventService.socketEvents.findIndex(event => event.event_id == even.event_id) == -1){
-          //Si el evento no existe previamente
-          even.evento = even.descripcion_evento;
-          even.tipo = even.descripcion_evento;
-          if (event.descripcion_evento != 'infraccion' || event.descripcion_evento != 'infracción') {
-            even.fecha_tracker = moment(even.fecha_tracker).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
-            even.fecha_minuto = moment(even.fecha_minuto).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
-            even.fecha_servidor = moment(even.fecha_servidor).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
-          }
+          this.eventService.addNewEvent(event);
 
-          even.imei = even.tracker_imei;
-          //Si las alertas ya cargaron
-          if (this.AlertService.alertsForEventSocket.length > 0) {
-            //console.log(this.AlertService.alertsForEventSocket);
-            let alert_data = this.AlertService.alertsForEventSocket.find(alert => alert.evento_id == even.evento_id);
-            console.log("ALERTA CORRESPONDIENTE::::", alert_data);
-            
-            if (typeof alert_data != 'undefined') {
-              even['sonido_sistema_bol'] = alert_data.sonido_sistema_bol;
-              even['ruta_sonido'] = alert_data.ruta_sonido;
-            } else {
-              //Sonido por defecto de evento que no corresponde a una alerta
-              even['sonido_sistema_bol'] = true;
-              even['ruta_sonido'] = 'WhatsappSound9.mp3';
-            }
-          }
-
-          let newEvent = this.setLayer(even);
-          this.eventService.addNewEvent(newEvent);
-
-          this.eventService.new_notif_stack.push(even.evento_id);
+          this.eventService.new_notif_stack.push(event.evento_id);
           this.eventService.sortEventsTableData();
 
-          let alert = this.AlertService.getAlertById(even.evento_id.toString());
-          console.log("----alert",alert);
 
-          if (alert) {
-            if (alert.ventana_emergente?.toLowerCase() == 'true') {
-              this.eventPopup.emit({event: {...newEvent}, tracker: {...this.vehicleService.getVehicle(even.tracker_imei)}})
-              //this.popupService.createPopup(newEvent, this.vehicleService.getVehicle(even.tracker_imei));
-            }
-          }
         } else {
-          // console
+          console.log("vehiculo no existe para este usuario");
+          // vehiculo no existe para el usuario
         }
 
         // this.eventService.checkDuplicates(); // deprecado se controla desde el server
@@ -162,28 +117,94 @@ export class EventSocketService extends Socket {
       }
     });
   }
+  public formatEvent (event: any, vehicle: any): any {
+    console.log("format vehicle:",vehicle.name );
+    event.imei = event.tracker_imei;
+    event.nombre_objeto = vehicle.name; // add code vehicle to events
+    event.namedriver = this.driverService.getDriverById(event.driver_id);// <------- MODIFICAR CUANDO CONDUCTORES SERVICE EXISTA
+    event.evento = event.descripcion_evento;
+    event.tipo = event.descripcion_evento;
 
-  private filterImei(data: any, imei: any) {
-    // console.log("imei",imei);
-    for (const index in data) {
-      // console.log("IMEI",data[index].IMEI);
-      if (String(data[index].IMEI) == String(imei)) {
+    if (event.descripcion_evento != 'infraccion' || event.descripcion_evento != 'infracción') {
+      event.fecha_tracker = moment(event.fecha_tracker).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+      event.fecha_minuto = moment(event.fecha_minuto).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+      event.fecha_servidor = moment(event.fecha_servidor).subtract(5, 'hours').format("YYYY/MM/DD HH:mm:ss");
+    }
 
-        console.log("return true");
-        return data[index];
+    //Si las alertas ya cargaron
+    if (this.AlertService.alertsForEventSocket.length > 0) event = this.setAlert(event, vehicle);
+
+    event = this.setLayer(event);
+
+    if (event.bol_evaluation) {
+      event.evaluations = [
+        {
+          event_id: event.evento_id,
+          usuario_id: event.usuario_id,
+          imei: event.imei,
+          fecha: event.fecha_tracker,
+          nombre: event.nombre_objeto,
+          tipo_evento: event.name,
+          uuid_event: event.uuid_event,
+          criterio_evaluacion: '',
+          identificacion_video: '',
+          valoracion_evento: '0',
+          observacion_evaluacion: '',
+          senales_posible_fatiga: false,
+          operador_monitoreo: '',
+        } as Evaluation,
+      ];
+    }
+
+    return event;
+  }
+  public socketOnRes(){
+    this.ioSocket.on('res', (info: any) => {
+      console.log("res",info);
+      // this.data_debug = info.data;
+      this.eventService.debugEventStream.emit(info);
+    });
+  }
+  // public socketOnEventEvaluation(){
+  //   this.ioSocket.on('event-evaluation', (uuid: any) => {
+  //     /*
+  //       espero recibir
+  //       {
+  //         event_id: 123,
+  //         value: 1;
+  //       }
+  //     */
+  //     console.log("event-evaluation",uuid);
+  //     this.eventService.evaluationEventStream.emit(uuid);
+  //   })
+  // }
+  private setAlert(event: any, vehicle: any) {
+
+
+    let alert_data = this.AlertService.alertsForEventSocket.find(alert => alert.evento_id == event.evento_id);
+    console.log("ALERTA CORRESPONDIENTE::::", alert_data);
+
+    if (typeof alert_data != 'undefined') {
+      event['sonido_sistema_bol'] = alert_data.sonido_sistema_bol;
+      event['ruta_sonido'] = alert_data.ruta_sonido;
+    } else {
+      //Sonido por defecto de evento que no corresponde a una alerta
+      event['sonido_sistema_bol'] = true;
+      event['ruta_sonido'] = 'WhatsappSound9.mp3';
+    }
+
+    let alert = this.AlertService.getAlertById(event.evento_id);
+
+    if (alert) {
+      if (alert.ventana_emergente?.toLowerCase() == 'true') {
+        this.eventPopup.emit({event: {...event}, tracker: {...vehicle.data}})
       }
     }
-    console.log("return false");
-    return undefined;
 
-  }
-  public getIcon() {
-    // this.img_icon = 'assets/images/eventos/pin_point.svg';
-    // this.img_iconSize = [30, 30];
-    // this.img_iconAnchor = [0, 30];
+    return event;
   }
 
-  setLayer(event: any) {
+  private setLayer(event: any) {
     const iconUrl = getIconUrlHistory(event);
     let icon = L.icon({
       iconUrl: iconUrl,

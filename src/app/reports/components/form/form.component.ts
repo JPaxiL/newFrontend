@@ -313,7 +313,7 @@ export class FormComponent implements OnInit {
   //Reporte 6 - Reporte de Eventos , Seleccion de Campo
   eC = {
     Fecha :true,
-    Hora :true,
+    Hora :false,
     FechaServidor :false,
     Evento :true,
     Codigo :true,
@@ -1138,6 +1138,22 @@ export class FormComponent implements OnInit {
     } else {
       repTitle = reportSelect.value;
     }
+
+    if (param.numRep == 'R037' || param.numRep == 'R038'|| param.numRep == 'R040') {
+        this.reportService.str_nombre_eventos = " : ";
+        this.events.forEach((event: { name_form: string | number; active: boolean; name_event: string }) => {
+          if (event.active) {
+            if (this.reportService.str_nombre_eventos == " : ") {
+              this.reportService.str_nombre_eventos = this.reportService.str_nombre_eventos +""+ event.name_event.toUpperCase();
+            } else {
+              this.reportService.str_nombre_eventos = this.reportService.str_nombre_eventos + ", " + event.name_event.toUpperCase();
+            }
+          }
+        });
+    } else {
+      this.reportService.str_nombre_eventos = "";
+    }
+
     console.log('API: ',environment.apiUrl + param.url, param);
     this.http.post(environment.apiUrl + param.url, param).subscribe({
       next: data => {
@@ -1382,20 +1398,20 @@ export class FormComponent implements OnInit {
           this.showCheckboxsCipia = true;
           // this.showCheckboxs = true;
       break;
-      case 'R037':  //   - R037	REPORTE DE EVENTOS CIPIA
+      case 'R037':  //   - R037	REPORTE DE EVENTOS
           this.showLimitTime = true;
           this.showEventsCipia = true;
           // this.showEvents = true;
 
           this.eC = {
             Fecha :true,
-            Hora :true,
+            Hora :false,
             FechaServidor :false,
             Evento :true,
             Codigo :true,
             Placa :true,
             TipoUnidad :true,
-            IdConductor :true,
+            IdConductor :false,
             Conductor :true,
 
             FechaEvaluacion : false,
@@ -1405,7 +1421,7 @@ export class FormComponent implements OnInit {
 
             VelMobileye :false,
             VelGPS :true,
-            VelCAN :false,
+            VelCAN :true,
             VelECO :false,
             VelGPSspeed :false,
 
@@ -1421,20 +1437,20 @@ export class FormComponent implements OnInit {
           }
 
       break;
-      case 'R038':  //   - R038	REPORTE DE ATENCION DE EVENTOS CIPIA
+      case 'R038':  //   - R038	REPORTE DE ATENCIÓN DE EVENTOS 
           this.showLimitTime = true;
           this.showAtencionEventsCipia = true;
           // this.showEvents = true;
           this.updateCheckDefaultEvents();
           this.eC = {
             Fecha :true,
-            Hora :true,
+            Hora :false,
             FechaServidor :true,
             Evento :true,
             Codigo :true,
             Placa :true,
             TipoUnidad :true,
-            IdConductor :true,
+            IdConductor :false,
             Conductor :true,
 
             FechaEvaluacion : true,
@@ -1451,7 +1467,7 @@ export class FormComponent implements OnInit {
             Zona :true,
             PuntoCercano :true,
             Ubicacion :true,
-            Referencia :true,
+            Referencia :false,
             EnlaceArchivo :false,
             Parametros : false,
             Satelite:false,
@@ -1463,20 +1479,20 @@ export class FormComponent implements OnInit {
       case 'R039': //  - R039	REPORTE DE EXCESOS DE VELOCIDAD (NUEVO FORMATO)
         this.showLimitTime = true;
       break;
-      case 'R040':  //   - R040	REPORTE DE EVENTOS CIPIA INTERNO
+      case 'R040':  //   - R040	REPORTE DE EVENTOS INTERNO
           this.showLimitTime = true;
           this.showEventsCipia = true;
           // this.showEvents = true;
 
           this.eC = {
             Fecha :true,
-            Hora :true,
+            Hora :false,
             FechaServidor :false,
             Evento :true,
             Codigo :true,
             Placa :true,
             TipoUnidad :true,
-            IdConductor :true,
+            IdConductor :false,
             Conductor :true,
 
             FechaEvaluacion : false,
@@ -1486,7 +1502,7 @@ export class FormComponent implements OnInit {
 
             VelMobileye :false,
             VelGPS :true,
-            VelCAN :false,
+            VelCAN :true,
             VelECO :false,
             VelGPSspeed :false,
 
@@ -1508,7 +1524,7 @@ export class FormComponent implements OnInit {
 
         this.eC = {
           Fecha :true,
-          Hora :true,
+          Hora :false,
           FechaServidor :false,
           Evento :false,
           Codigo :true,
@@ -1789,9 +1805,7 @@ export class FormComponent implements OnInit {
   const alMenosUnFalse = this.events.some((event: { active: boolean; }) => event.active === false);
   // Actualizar this.ev.OtroTodos
   this.eV.OtroTodos = !alMenosUnFalse;
-
   console.log(this.eV);
-
   }
 
   validateForm(){

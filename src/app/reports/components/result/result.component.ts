@@ -12590,11 +12590,10 @@ export class ResultComponent implements OnDestroy, OnInit {
             if (clave == 'Parametros') { cont = cont - 1; }
 
         }
+        console.log("cont = "+ cont);
     }
 
     console.log("cont = "+ cont);
-
-
 
     //vm.dateHour();
     var exportFileEx = [];
@@ -12603,7 +12602,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     //var table_width = 12 + (this.chkDateHour? 2: 1) +1 + (this.user_id == 923? -2: 0);
     var table_width = cont;
 
-    var vehiculo_width = (this.chkDateHour? 5: 4) +1 + (this.user_id == 923? -2: 0);
+    //var vehiculo_width = (this.chkDateHour? 5: 4) + (this.user_id == 923? -2: 0);
+    var vehiculo_width = 5 + (this.user_id == 923? -2: 0);
 
     // var feha_evento_cell_ch_width = "Fecha Evento".length;
     // var hora_evento_cell_ch_width = "Hora Evento".length;
@@ -12656,7 +12656,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var allRows: AllRows[] = [
         {
           cells: [
-            { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+            { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
           ],
           height: this.headerRowsHeight
         },
@@ -12671,7 +12671,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         var rows:AllRows[] = [
           {
             cells: [
-              { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+              { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
             ],
             height: this.headerRowsHeight
           },
@@ -12707,7 +12707,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig }); };
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Hora Servidor", ...this.colHeaderConfig }); };
 
-          if (rs.Evento) { array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig }); };
+          if (rs.Evento) { array_campos_cabecera.push({ value: "Descripción", ...this.colHeaderConfig }); };
           if (rs.Codigo) { array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig }); };
           if (rs.Placa) { array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig }); };
           if (rs.TipoUnidad) { array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig }); };
@@ -13042,7 +13042,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var allRows: AllRows[] = [
         {
           cells: [
-            { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+            { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
           ],
           height: this.headerRowsHeight
         },
@@ -13058,7 +13058,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           {
             cells: [
               //{ value: "REPORTE DE ATENCION DE EVENTOS CIPIA.", ...this.headerCellConfig, colSpan: table_width }
-              { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+              { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
             ],
             height: this.headerRowsHeight
           },
@@ -13094,7 +13094,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig }); };
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Hora Servidor", ...this.colHeaderConfig }); };
 
-          if (rs.Evento) { array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig }); };
+          if (rs.Evento) { array_campos_cabecera.push({ value: "Descripción", ...this.colHeaderConfig }); };
           if (rs.Codigo) { array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig }); };
           if (rs.Placa) { array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig }); };
           if (rs.TipoUnidad) { array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig }); };
@@ -19891,3 +19891,4 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 }
+

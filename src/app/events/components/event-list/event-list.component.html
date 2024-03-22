@@ -42,16 +42,16 @@
           class="form-control"
           placeholder="Tipo de Evento"
         /> -->
-        <!--p-dropdown 
-          [options]="eventService.eventsGroupedList" 
-          [(ngModel)]="selectedEvent" 
-          optionLabel="option" 
-          optionValue="tipo" 
-          [appendTo]="'body'" 
-          [showClear]="true" 
-          [filter]="true" 
-          filterBy="option" 
-          placeholder="Todos los Eventos" 
+        <!--p-dropdown
+          [options]="eventService.eventsGroupedList"
+          [(ngModel)]="selectedEvent"
+          optionLabel="option"
+          optionValue="tipo"
+          [appendTo]="'body'"
+          [showClear]="true"
+          [filter]="true"
+          filterBy="option"
+          placeholder="Todos los Eventos"
           (ngModelChange)="changeTypeEvent()"></p-dropdown-->
         <p-multiSelect
           [options]="eventService.eventsGroupedList"
@@ -86,9 +86,13 @@
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-event let-expanded="expanded">
-          <tr #currRow (click)="switchEventOnMap(event, currRow)" [style]="{'font-size':'0.75rem'}" [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.uuid_event == eventService.activeEvent.uuid_event , 'evaluated-event': event.evaluated>0}" [class]="event.clase" [pRowToggler]="event.bol_evaluation?event:''">
+          <tr #currRow (click)="switchEventOnMap(event, currRow)"
+            [style]="{'font-size':'0.75rem'}"
+            [ngClass]="{ 'unread-event': !event.viewed, 'tr-selected': event.uuid_event == eventService.activeEvent.uuid_event , 'evaluated-event': event.evaluated>0}"
+            [class]="event.clase"
+            [pRowToggler]="event.bol_evaluation?event:''">
               <td>
-                  <button *ngIf="event.bol_evaluation" type="button" pButton pRipple 
+                  <button *ngIf="event.bol_evaluation" type="button" pButton pRipple
                     class="p-button-rounded p-button-plain p-button-text"
                     [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" #rowToggle></button>
               </td>
@@ -133,18 +137,18 @@
                               <span>{{event.name}}</span>
                             </div>
                         </div>
-                        
+
                         <div class="d-flex justify-content-between align-items-center">
                             <label class="col-5" for="lastname4" class="">Criterio de Evaluación</label>
                             <div class="col-7">
-                              <p-dropdown 
-                                [appendTo]="'body'" 
-                                [disabled]="evaluation.id" 
-                                [options]="evaluation_criteria" 
-                                [(ngModel)]="evaluation.criterio_evaluacion" 
-                                placeholder="Selecciona un criterio" 
-                                [group]="true" 
-                                (onChange)="criteriaSelected($event, evaluation)" 
+                              <p-dropdown
+                                [appendTo]="'body'"
+                                [disabled]="evaluation.id"
+                                [options]="evaluation_criteria"
+                                [(ngModel)]="evaluation.criterio_evaluacion"
+                                placeholder="Selecciona un criterio"
+                                [group]="true"
+                                (onChange)="criteriaSelected($event, evaluation)"
                                 [style]="{'max-width':'15rem'}"
                               >
                                 <ng-template let-group pTemplate="group">
@@ -160,11 +164,11 @@
                           <div class="col-7">
                             <span class="p-input-icon-left">
                                 <i class="pi pi-link"></i>
-                                <input 
-                                  [disabled]="evaluation.id" 
-                                  type="text" 
-                                  pInputText 
-                                  placeholder="url" 
+                                <input
+                                  [disabled]="evaluation.id"
+                                  type="text"
+                                  pInputText
+                                  placeholder="url"
                                   [(ngModel)]="evaluation.identificacion_video"
                                 />
                             </span>
@@ -185,13 +189,13 @@
                         <div class="d-flex justify-content-between align-items-center">
                           <label class="col-5" for="lastname4" class="">Operador de Monitoreo</label>
                           <div class="col-7">
-                            <p-dropdown 
-                              [appendTo]="'body'" 
-                              [disabled]="evaluation.id" 
-                              [options]="operators" 
-                              [(ngModel)]="evaluation.operador_monitoreo" 
-                              placeholder="Selecciona un operador" 
-                              editable="true" 
+                            <p-dropdown
+                              [appendTo]="'body'"
+                              [disabled]="evaluation.id"
+                              [options]="operators"
+                              [(ngModel)]="evaluation.operador_monitoreo"
+                              placeholder="Selecciona un operador"
+                              editable="true"
                               [group]="true"
                               [style]="{'max-width':'15rem'}"
                             >

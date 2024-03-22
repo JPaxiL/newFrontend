@@ -127,7 +127,7 @@
   </div>
   <div [ngClass]="table_hide" class="container grand-container">
     <!-- <div *ngIf="report_data.num_rep >= 0 && report_data.num_rep <= 22 " class="table-title p-card" style="margin-bottom: 0.25rem;">{{report_data.rep_title}}</div> -->
-    <div class="table-title p-card" style="margin-bottom: 0.25rem;">{{report_data.rep_title}}</div>
+    <div class="table-title p-card" style="margin-bottom: 0.25rem;">{{report_data.rep_title}} <span style="font-size: 1.5rem;"> {{ reportService.str_nombre_eventos }}</span> </div>
 
     <div class="table-subtitle p-card" style="margin-bottom: 0.25rem;">{{ report_data.rep_subtitle }}</div>
   </div>
@@ -6334,7 +6334,7 @@
                     <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
                     <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
 
-                    <th *ngIf="reportService.eC.Evento" >Evento</th>
+                    <th *ngIf="reportService.eC.Evento" >Descripción</th>
 
                     <th *ngIf="reportService.eC.Codigo">Código</th>
                     <th *ngIf="reportService.eC.Placa">Placa</th>
@@ -6443,7 +6443,7 @@
                   <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
                   <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
 
-                  <th *ngIf="reportService.eC.Evento" >Evento</th>
+                  <th *ngIf="reportService.eC.Evento" >Descripción</th>
 
                   <th *ngIf="reportService.eC.Codigo">Código</th>
                   <th *ngIf="reportService.eC.Placa">Placa</th>
@@ -6593,7 +6593,7 @@
                   <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor ">Fecha Servidor</th>
                   <th *ngIf="chkDateHour && user_id != 923 && reportService.eC.FechaServidor">Hora Servidor</th>
 
-                  <th *ngIf="reportService.eC.Evento" >Evento</th>
+                  <th *ngIf="reportService.eC.Evento" >Descripción</th>
 
                   <th *ngIf="reportService.eC.Codigo">Código</th>
                   <th *ngIf="reportService.eC.Placa">Placa</th>

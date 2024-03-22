@@ -678,7 +678,7 @@
             <div class="row">
               <div class="col-12">
                 <label class="bg-subtitle bg-subtitle-light">Eventos {{type.label}}
-                  <p-checkbox [(ngModel)]="type.selectAll" [binary]="true" inputId="binary" (onChange)="onSelectAllChange(type)" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  <!-- <p-checkbox [(ngModel)]="type.selectAll" [binary]="true" inputId="binary" (onChange)="onSelectAllChange(type)" [disabled]="reportService.workingOnReport"></p-checkbox> -->
                 </label>
               </div>
             </div>
@@ -1150,9 +1150,9 @@
                 <!-- <label>
                   <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary" (onChange)="onChkAllEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
                   Todos</label> -->
-                <label>
+                <!-- <label>
                   <p-checkbox [(ngModel)]="eV.OtroTodos" [binary]="true" inputId="binary" (onChange)="onChkAllEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Todos los Eventos</label>
+                  Todos los Eventos</label> -->
               </div>
             </div>
             <div class="col-6">
@@ -1194,7 +1194,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.Evento" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Evento</label>
+                  Descripción</label>
               </div>
             </div>
             <div class="col-6" style="margin-top: 5px">
@@ -1500,7 +1500,7 @@
               <div class="p-field">
                 <label>
                   <p-checkbox [(ngModel)]="eC.Evento" [binary]="true" inputId="binary" (onChange)="onChangeChkEvents()" [disabled]="reportService.workingOnReport"></p-checkbox>
-                  Evento</label>
+                  Descripción</label>
               </div>
             </div>
             <div class="col-6">
