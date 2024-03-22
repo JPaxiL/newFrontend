@@ -436,6 +436,7 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement) {
+    console.log("switchEventOnMap #########################");
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if (false) {
@@ -515,21 +516,22 @@ export class EventListComponent implements OnInit {
   }
 
   rowExpandend(event: any) {
+    console.log("########## uuid_event ");
     if (event.data) {
       this.expandedRows[event.data.uuid_event] =
         !this.expandedRows[event.data.uuid_event];
     }
     this.loading_evaluation = true;
-    //console.log("event.data", event.data);
 
-    if (event.data.id) {
+    if (event.data.uuid_event) {
       this.eventService
-        .getEvaluations(event.data.id)
+        .getEvaluations(event.data.uuid_event)
         .then((evaluations) => {
+          console.log("exito al buscar evaluation :",evaluations);
           if (evaluations.length > 0) {
             //console.log(" EVALUATIONS GETS ", evaluations);
             let auxEvent = this.eventService.eventsFiltered.find(
-              (ev: any) => ev.id == event.data.id
+              (ev: any) => ev.uuid_event == event.data.uuid_event
             );
             auxEvent.evaluations = evaluations as Evaluation[];
             auxEvent.evaluated = 1;
@@ -592,7 +594,7 @@ export class EventListComponent implements OnInit {
         );
         realEvent.evaluations = response as Evaluation[];
         realEvent.evaluated += 1;
-        //console.log("realEvent after response-->>",realEvent);
+        console.log("######################## realEvent after response-->>",realEvent);
         Swal.fire('Éxito', 'Los cambios se guardaron exitosamente', 'success');
         this.addEvaluation(realEvent.uuid_event);
         this.eventSocketService.evaluationEmit({id:realEvent.id, uuid:realEvent.uuid_event});
