@@ -29,6 +29,7 @@ export interface UnitItem {
 }
 
 export interface UserTracker {
+    sanitizer_custom_svg?: any;
     customurlupleft?: any;
     customurlleft?: any;
     customurlright?: any;

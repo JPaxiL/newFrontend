@@ -159,22 +159,8 @@ export class VehicleService {
       vehicle.custom_url = typeConfigVehicle.customurl;
       vehicle.custom_svg = typeConfigVehicle.customsvg;
 
+      vehicle.sanitizer_custom_svg = typeConfigVehicle.customSanitizerSvg
 
-
-      //
-
-      vehicle.excess_svg = typeConfigVehicle.excess_svg;
-      vehicle.movement_svg = typeConfigVehicle.movement_svg;
-      vehicle.relenti_svg = typeConfigVehicle.relenti_svg;
-      //vehicle.movement_onda = typeConfigVehicle.movement_onda;
-
-      //VEHICULOS EN MOVIMIENTO
-      vehicle.customurldownright = typeConfigVehicle.customurldownright;
-      vehicle.customurldownleft=typeConfigVehicle.customurldownleft;
-      vehicle.customurlupright=typeConfigVehicle.customurlupright;
-      vehicle.customurlupleft=typeConfigVehicle.customurlupleft;
-      vehicle.customurlright=typeConfigVehicle.customurlright;
-      vehicle.customurlleft=typeConfigVehicle.customurlleft;
 
       // vehicle.icon = `backup/${vehicle.icon}`;
       vehicle.icon =  typeConfigVehicle.icon_url;

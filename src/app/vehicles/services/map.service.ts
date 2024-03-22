@@ -918,7 +918,7 @@ export class MapService {
                   vehicles[index].parametros!.includes('Custom_ign=1')
                 ) {
                   
-                  if(this.userDataService.changeRotateIcon == true){
+                  if(this.userDataService.changeRotateIcon == true && this.userDataService.stateCustomDirectionSvg == true ){
                     this.dif_mayor = 0.0;
                     this.dif_divide = 0.0;
                     this.dif_X = 0.0;
@@ -934,16 +934,14 @@ export class MapService {
                     ) {
                       this.direction = await this.calculateDirection(coord, oldCoords);
 
-                      //console.log("this.getDirection(typeConfigVehicle.movementDirectionSvg,direction)",this.direction);
 
                       iconUrl = this.userDataService.getDirectionSvg(vehicles[index].tipo!,'default',this.direction);
-                      //console.log("getDirectionSvgICONURL",iconUrl);
 
                     } 
                   }
 
                   if (this.userDataService.changeItemIcon == 'vehicles') {
-                     if(this.userDataService.changeRotateIcon == true){
+                     if(this.userDataService.changeRotateIcon == true  && this.userDataService.stateVehiclesDirectionSvg == true ){
                       this.dif_mayor = 0.0;
                       this.dif_divide = 0.0;
                       this.dif_X = 0.0;
@@ -974,7 +972,6 @@ export class MapService {
                      
     
                       
-                    /* iconUrl = this.getStateVehicle(vehicles[index]); */
 
 
                   } else if (this.userDataService.changeItemIcon == 'ondas') {
@@ -987,12 +984,7 @@ export class MapService {
                       .getLayers()
                       [key].setLatLng(coord);
 
-                    // console.log(
-                    //   'aaaaaaaaaaaaaaa',
-                    //   vehicles[index].IMEI,
-                    //   iconUrl2,
-                    //   this.markerClusterGroupOnda.getLayers()[key]
-                    // );
+                    
                   }
                 }
                 this.timeChangeIconUrl(
@@ -1020,11 +1012,9 @@ export class MapService {
                     '<small>' +
                     nameGroup +
                     '</small><br>' +
-                    // '<small>CONVOY: '+vehicles[index].nameconvoy+'</small><br>'+
                     '<small><i class="fas fa-user-circle"></i> ' +
                     vehicles[index].namedriver +
                     '</small><br>' +
-                    // '<small>UBICACION: '+vehicles[index].latitud+', '+vehicles[index].longitud+'</small><br>'+
                     '<small><i class="fas fa-crosshairs"></i><a href=" ' +
                     googleMapsLink +
                     '" target="_blank">' +
@@ -1072,7 +1062,6 @@ export class MapService {
                     '     Calculando ...';
                   ('</aside>');
                 }
-                // this.markerClusterGroup.getLayers()[key]['options']['icon']['options']['iconUrl']='./assets/images/accbrusca.png';
 
                 this.markerClusterGroup.getLayers()[key]['options']['icon'][
                   'options'
@@ -1632,6 +1621,12 @@ export class MapService {
     return './assets/images/objects/nuevo/gif/blanco.png';
   }
 
+  public iconSvg (data: any, map: any){
+    let iconUrl = data.custom_svg;
+    //console.log("iconosvg",icon)
+  }
+
+
   private drawIcon(data: any, map: any): void {
     let iconUrl = data.custom_svg;
 
@@ -1641,7 +1636,7 @@ export class MapService {
       const myIcono = L.icon({
         iconUrl: iconUrl2,
         iconSize: [60, 60],
-        iconAnchor: [28, 43],
+        iconAnchor: [33, 43],
       });
 
       const tempMarker1 = L.marker([data.latitud, data.longitud], {

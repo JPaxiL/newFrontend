@@ -1,10 +1,12 @@
-import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, Input, Output, OnInit, EventEmitter, AfterViewInit,OnDestroy } from '@angular/core';
 
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import { HttpClient } from '@angular/common/http';
 
 import Swal from 'sweetalert2';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
+
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-vehicle-config',
@@ -30,7 +32,7 @@ export class VehicleConfigComponent implements OnInit {
   /* formDisplay : string = "block"; */
 
 
-  iconUrl: string = '';
+  iconUrl:any;
   selectedIcon: any = {};
   selectedType: any = {};
   vehicle: any = {};
@@ -109,23 +111,35 @@ export class VehicleConfigComponent implements OnInit {
     private configService: VehicleConfigService,
     private userDataService: UserDataService,
     private http: HttpClient,
+    private sanitizer: DomSanitizer,
   ) {}
 
 
   ngOnInit(): void {
 
   }
+
   async onShow(){
 
-    console.log(this.config);
+    console.log("config",this.config);
     // console.log("vehicle config = ",this.config);
-    this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
+    
+    //this.iconUrl = `assets/images/objects/nuevo/${this.config.icon}` ?? 'assets/images/objects/nuevo/imagen_no_encontrada.png';
+
+    //this.iconUrl = await this.sanitizer.bypassSecurityTrustResourceUrl(this.config.custom_svg);
+    this.iconUrl = await this.userDataService.getSanitizerSVG(this.config.tipo);
+   //console.log("vehicleicon = ",this.iconUrl);
+
+    //this.iconUrl = this.userDataService;
 
   }
 
 
   onClickCancel(){
+    console.log("ngOnDestroy");
+    this.iconUrl = "";
     this.eventDisplay.emit(false);
+    
   }
   confirm(){
     this.loading=true;
@@ -164,22 +178,11 @@ export class VehicleConfigComponent implements OnInit {
 
     this.vehicle = {
       IMEI: this.config.IMEI,
-      id_conductor: this.config.id_conductor,
-      idgrupo: this.config.idgrupo,
+  
+
       name : this.valueNull(this.name.nativeElement.value),
-      model: this.config.model,
-      sim_number : this.valueNull(this.sim.nativeElement.value),
-      plate_number : this.valueNull(this.placa.nativeElement.value),
-      // tolva : this.valueNull(this.tolva.nativeElement.value),
-      empresa : this.valueNull(this.empresa.nativeElement.value),
-      tipo : this.selectedType.id,
-      icon : this.selectedIcon.name,
-      int_correctivo_h: this.config.int_correctivo_h,
-      int_preventivo_h : this.config.int_preventivo_h,
-      bol_correctivo_ini : this.config.bol_correctivo_ini,
-      bol_correctivo_fin : this.config.bol_correctivo_fin,
-      dat_correctivo_ini : this.config.dat_correctivo_ini,
-      dat_correctivo_fin : this.config.dat_correctivo_fin
+      
+
 
     };
 

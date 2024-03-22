@@ -26,7 +26,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   styleUrls: ['./tree-table.component.scss'],
 })
 export class TreeTableComponent implements OnInit {
-  nuevoSvgCode: SafeHtml | undefined;
 
 
 
@@ -98,6 +97,7 @@ export class TreeTableComponent implements OnInit {
   };
 
   @ViewChild('tt') tt!: any;
+
   constructor(
     private userDataService: UserDataService,
     public vehicleService: VehicleService,
@@ -105,11 +105,9 @@ export class TreeTableComponent implements OnInit {
     private vehicleConfigService: VehicleConfigService,
     private spinner: NgxSpinnerService,
     private followService: FollowService,
-    private sanitizer: DomSanitizer
-  ) {
-    
-    this.generateSVG();
-
+    private sanitizer: DomSanitizer,
+    private domSanitizer:DomSanitizer 
+    ) {
     // this.vehicleService.listTable=1;
     if (this.loading) {
       this.spinner.show('loadingTreeTable');
@@ -135,6 +133,8 @@ export class TreeTableComponent implements OnInit {
       }
     });
   }
+
+
 
   ngOnInit(): void {
     this.vehicleService.treeTableStatus = true;
@@ -165,18 +165,8 @@ export class TreeTableComponent implements OnInit {
     // console.log('loading SVGS -->',this.userDataService.svgContents['minibus_van.svg']);
   }
 
-  generateSVG(): void {
-    const svgContent = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
-        <rect width="100%" height="100%" fill="#3498db" />
-        <text x="50%" y="50%" fill="#fff" text-anchor="middle" dominant-baseline="middle">Hello SVG!</text>
-      </svg>
-    `;
 
-    // Sanitizar y asignar el SVG
-    this.nuevoSvgCode = this.sanitizer.bypassSecurityTrustHtml(svgContent);
-  }
-
+ 
 
 
   headerScrollHandler() {
