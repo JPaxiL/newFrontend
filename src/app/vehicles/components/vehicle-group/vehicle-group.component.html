@@ -86,7 +86,7 @@
                   <p-listbox [options]="list1" [(ngModel)]="selectedList1" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
                     <ng-template let-car pTemplate="item">
                       <div class="car-item">
-                        <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
+                        <img border="0" width="25" height="25" [src]="car.sanitizer_custom_svg" style="display:inline-block;margin:2px 0 2px 2px">
                         <label>{{car.name}}</label>
                       </div>
                     </ng-template>
@@ -114,7 +114,7 @@
                   <p-listbox [options]="list2" [(ngModel)]="selectedList2" [multiple]="true" [checkbox]="true" [filter]="true" filterPlaceHolder="Buscar por placa" optionLabel="name" [listStyle]="{'height':'200px'}" [disabled]="loading">
                     <ng-template let-car pTemplate="item">
                       <div class="car-item">
-                        <img border="0" width="25" height="25" src="assets/images/objects/nuevo/{{car.icon}}" style="display:inline-block;margin:2px 0 2px 2px">
+                        <img border="0" width="25" height="25" [src]="car.sanitizer_custom_svg" style="display:inline-block;margin:2px 0 2px 2px">
                         <label>{{car.name}}</label>
                       </div>
                     </ng-template>

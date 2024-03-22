@@ -6,6 +6,7 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { Subscription } from 'rxjs';
 
+
 @Component({
   selector: 'app-user-config',
   templateUrl: './user-config.component.html',
@@ -13,6 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class UserConfigComponent implements OnInit {
   
+
   private userDataCompletedSubscription: Subscription | undefined;
   private vehicleCompletedSubscription: Subscription | undefined;
   userForm :any = {};
@@ -23,14 +25,25 @@ export class UserConfigComponent implements OnInit {
   typeVehiclesList:any = {};
   userTypeVehicleConfig: any = {};
   showChangeItem:boolean = false;
+  
+
+  showDirectionVehicles:boolean=false;
+
+
   bol_ondas!:boolean;
   bol_cursor!:boolean;
   bol_vehicle!:boolean;
+  bol_direction!:boolean;
 
   typeVehiclesForm: any = [];
   originalValues: any[] | undefined;
 
   filteredColorsVehicles: any[] = [];
+
+
+  color!: string;
+
+
   colorsVehicles: any[] = [
     { name: 'Por defecto', code: 'c4c2c1',color: '#c4c2c1' }, // Celeste
     { name: 'Celeste', code: '00ffff',color: '#00FFFF' }, // Celeste
@@ -52,12 +65,15 @@ export class UserConfigComponent implements OnInit {
   ngOnInit(): void {
     this.userDataService.spinner.show('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
     this.typeVehiclesList = this.userDataService.typeVehicles;
+    //console.log("this.typeVehiclesList",this.typeVehiclesList)
     this.initForm();
     // console.log(this.typeVehiclesList,this.userDataService.userData);
     if (this.userDataService.changeItemIcon){
       this.showChangeItem = true;
       console.log('VALOR DE CHANGE ITEM ->',this.userDataService.changeItemIcon);
     }
+    this.showDirectionVehicles = this.userDataService.changeRotateIcon;
+
     if(this.userForm.bol_ondas == true || this.userForm.bol_vehicle == true){
       this.hideStateColors(true)
     }else{
@@ -73,6 +89,7 @@ export class UserConfigComponent implements OnInit {
     this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
     this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
     this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
+    this.userForm.bol_direction = this.userDataService.userData.bol_direction;
     this.userForm.vehicles = this.typeVehiclesList ?? [];
   }
   
@@ -98,22 +115,38 @@ export class UserConfigComponent implements OnInit {
       this.userForm.bol_ondas = false;
       this.userForm.bol_cursor = false;
       this.userForm.bol_vehicle = false;
+      this.userForm.bol_direction = false;
       this.hideStateColors(false);
     }else{
       this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
       this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
       this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
+      this.userForm.bol_direction = this.userDataService.userData.bol_direction;
       if(this.userForm.bol_ondas == true || this.userForm.bol_vehicle == true){
         this.hideStateColors(true)
       }else{
         this.hideStateColors(false)
       }
     }
+
+    
   }
-  switchActive(option:number){
+
+  changeDirectionVehiclesCheckbox(){
+   /*  if(this.showDirectionVehicles == false){
+      this.userForm.bol_direction = false;
+    }else{
+      this.userForm.bol_direction = this.userDataService.userData.bol_direction;
+    } */
+    this.userForm.bol_direction = this.showDirectionVehicles;
+    console.log(this.showDirectionVehicles);
+  }
+
+  /* switchActive(option:number){
     if (option == 1) {
       this.userForm.bol_cursor = false;
       this.userForm.bol_vehicle = false;
+      
       this.hideStateColors(this.userForm.bol_cursor);
     } else if (option == 2) {
       this.userForm.bol_ondas = false;
@@ -124,14 +157,60 @@ export class UserConfigComponent implements OnInit {
       this.userForm.bol_ondas = false;
       this.userForm.bol_cursor = false;
       this.hideStateColors(this.userForm.bol_vehicle);
-    }else{
+
+    } else if (option == 4){
+      this.userForm.bol_direction = true;
+    } else{
+      this.userForm.bol_direction = false;
       this.userForm.bol_ondas = false;
       this.userForm.bol_cursor = false;
       this.userForm.bol_vehicle = false;
       this.hideStateColors(false);
     }
     // console.log('Mostrando changes...',this.userForm);
+  } */
+
+
+  switchActive(option: number) {
+    switch (option) {
+      case 1:
+        this.userForm.bol_cursor = false;
+        this.userForm.bol_vehicle = false;
+        this.hideStateColors(this.userForm.bol_cursor);
+        console.log("OPCION 1",this.userForm.bol_ondas);
+        break;
+      case 2:
+        this.userForm.bol_ondas = false;
+        this.userForm.bol_vehicle = false;
+        this.hideStateColors(false);
+        console.log("OPCION 2",this.userForm.bol_cursor);
+        break;
+      case 3:
+        this.userForm.bol_ondas = false;
+        this.userForm.bol_cursor = false;
+        this.hideStateColors(this.userForm.bol_vehicle);
+        console.log("OPCION 3",this.userForm.bol_vehicle);
+        break;
+      case 4:
+        if (!this.userForm.bol_direction) {
+          this.userForm.bol_direction = false;
+          console.log("OPCION 4", this.userForm.bol_direction);
+        }else{
+          this.userForm.bol_direction = true;
+          console.log("OPCION 4", this.userForm.bol_direction);
+        }
+        break;
+      default:
+        this.userForm.bol_direction = false;
+        this.userForm.bol_ondas = false;
+        this.userForm.bol_cursor = false;
+        this.userForm.bol_vehicle = false;
+        this.hideStateColors(false);
+        break;
+    }
+    // console.log('Mostrando changes...',this.userForm);
   }
+
 
   onClickCancel(){
     // this.userForm.oldPass = '';
@@ -140,6 +219,9 @@ export class UserConfigComponent implements OnInit {
     this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
     this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
     this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
+
+    this.userForm.bol_direction = this.userDataService.userData.bol_direction;
+
 
     this.typeVehiclesList = JSON.parse(JSON.stringify(this.originalValues)); // Restaurar los valores originales
     this.panelService.nombreComponente = '';
@@ -185,9 +267,13 @@ export class UserConfigComponent implements OnInit {
       bol_ondas: this.userForm.bol_ondas,
       bol_cursor: this.userForm.bol_cursor,
       bol_vehicle: this.userForm.bol_vehicle,
+
+      bol_direction: this.userForm.bol_direction,
+
       itemChanges: this.showChangeItem
+
     };
-    console.log(req); // Información del formulario general
+    console.log("SOLICITUDDATOS",req); // Información del formulario general
     return req;
   }
 
@@ -274,7 +360,10 @@ export class UserConfigComponent implements OnInit {
         );
       },
     }).then(async (data) => {
-      // console.log('testing respuesta...',data);
+      console.log('testing respuesta...',data);
+      if(data.isDismissed==true){
+        this.loading=false;
+      }
     });
   }
 
