@@ -207,10 +207,10 @@ export class EventListComponent implements OnInit {
       console.log("desde event list -> debugEventStream res: ",res);
       this.data_debug = res.data;
     });
-    this.eventService.evaluationEventStream.subscribe((uuid) => {
-      console.log("desde event list -> evaluationEventStream uuid: ",uuid);
+    this.eventService.evaluationEventStream.subscribe((info) => {
+      console.log("desde event list -> evaluationEventStream info: ",info);
       // this.data_debug = res.data;
-      this.eventService.integrateEvaluationEvent(uuid);
+      this.eventService.integrateEvaluationEvent(info);
     });
     this.eventService.newEventStream.subscribe(() => {
       // console.log("desde event list ",res);
@@ -595,7 +595,7 @@ export class EventListComponent implements OnInit {
         //console.log("realEvent after response-->>",realEvent);
         Swal.fire('Éxito', 'Los cambios se guardaron exitosamente', 'success');
         this.addEvaluation(realEvent.uuid_event);
-        this.eventSocketService.evaluationEmit(realEvent.uuid_event);
+        this.eventSocketService.evaluationEmit({id:realEvent.id, uuid:realEvent.uuid_event});
       })
       .catch((error) => {
         Swal.fire('Error', 'No se pudo guardar la evaluación', 'error');

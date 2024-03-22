@@ -68,8 +68,8 @@ export class EventSocketService extends Socket {
     this.ioSocket.emit('status-imei',data);
 
   }
-  public evaluationEmit (uuid: any){
-    this.ioSocket.emit('event-evaluation',uuid);
+  public evaluationEmit (info: any){
+    this.ioSocket.emit('event-evaluation',info);
   }
   public listen() {
     this.AlertService.getAll();
@@ -81,9 +81,9 @@ export class EventSocketService extends Socket {
   }
 
   public socketOnEvaluation () {
-    this.ioSocket.on('event-evaluation', (uuid: any) => {
-      // console.log("uuid evaluation -----> ", uuid);
-      this.eventService.evaluationEventStream.emit(uuid);
+    this.ioSocket.on('event-evaluation', (info: any) => {
+      // console.log("info evaluation -----> ", info);
+      this.eventService.evaluationEventStream.emit(info);
     })
   }
   public socketOnEvents () {

@@ -177,12 +177,13 @@ export class EventService {
     this.attachClassesToEvents();
     this.newEventStream.emit(data);
   }
-  public integrateEvaluationEvent (uuid: any) {
-    console.log("integrando evaluacion ...",uuid);
+  public integrateEvaluationEvent (info: any) {
+    console.log("integrando evaluacion ...",info);
     let data = [];
     for (const key in this.events) {
-      if(this.events[key].uuid_event == uuid){
+      if(this.events[key].uuid_event == info.uuid){
         this.events[key].evaluated=1;
+        this.events[key].id=info.id;
         data.push(this.events[key]);
       }
     }
