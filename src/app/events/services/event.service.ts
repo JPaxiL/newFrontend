@@ -182,8 +182,7 @@ export class EventService {
     let data = [];
     for (const key in this.events) {
       if(this.events[key].uuid_event == info.uuid){
-        this.events[key].evaluated=1;
-        this.events[key].id=info.id;
+        this.events[key].evaluated=1
         data.push(this.events[key]);
       }
     }
@@ -644,10 +643,10 @@ export class EventService {
     return response.data;
   }
 
-  async getEvaluations(id: string) {
+  async getEvaluations(uuid_event: string) {
     const response: ResponseInterface = await this.http
       .get<ResponseInterface>(
-        `${environment.apiUrl}/api/evaluations/event-user/${id}`
+        `${environment.apiUrl}/api/evaluations/event-user/${uuid_event}`
       )
       .toPromise();
     return response.data;
