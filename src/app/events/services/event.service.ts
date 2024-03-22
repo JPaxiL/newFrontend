@@ -644,6 +644,7 @@ export class EventService {
   }
 
   async getEvaluations(uuid_event: string) {
+    console.log("get evaluation uuid_event: ",uuid_event);
     const response: ResponseInterface = await this.http
       .get<ResponseInterface>(
         `${environment.apiUrl}/api/evaluations/event-user/${uuid_event}`

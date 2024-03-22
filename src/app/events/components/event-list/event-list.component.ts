@@ -436,6 +436,7 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement) {
+    console.log("switchEventOnMap #########################");
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if (false) {
@@ -515,16 +516,18 @@ export class EventListComponent implements OnInit {
   }
 
   rowExpandend(event: any) {
+    console.log("########## uuid_event ");
     if (event.data) {
       this.expandedRows[event.data.uuid_event] =
         !this.expandedRows[event.data.uuid_event];
     }
     this.loading_evaluation = true;
 
-    if (event.data.id) {
+    if (event.data.uuid_event) {
       this.eventService
         .getEvaluations(event.data.uuid_event)
         .then((evaluations) => {
+          console.log("exito al buscar evaluation :",evaluations);
           if (evaluations.length > 0) {
             //console.log(" EVALUATIONS GETS ", evaluations);
             let auxEvent = this.eventService.eventsFiltered.find(
