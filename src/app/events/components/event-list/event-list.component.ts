@@ -10,6 +10,7 @@ import {
 import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
+import { ReferenceService } from '../../services/reference.service';
 import { getContentPopup } from '../../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpClient } from '@angular/common/http';
@@ -26,12 +27,12 @@ import Swal from 'sweetalert2';
 })
 export class EventListComponent implements OnInit {
   tipoEvento: any = [];
-
   selectedEvent: any[] = [];
   activeEvent: any = false;
-
   noResults: boolean = false;
   expanded = false;
+
+  public uuid_evaluation: any = [];
   public events: any[] = [];
   public placa: string = '';
 
@@ -162,8 +163,9 @@ export class EventListComponent implements OnInit {
 
   constructor(
     public eventService: EventService,
+    public referenceService: ReferenceService,
     public mapService: MapServicesService,
-    public ess: EventSocketService,
+    public eventSocketService: EventSocketService,
     private spinner: NgxSpinnerService,
     private http: HttpClient,
     private resolver: ComponentFactoryResolver,
@@ -218,13 +220,22 @@ export class EventListComponent implements OnInit {
     this.selectedEvent = storedFilter ? [{ value: storedFilter }] : []; */
 
     this.eventService.debugEventStream.subscribe((res) => {
-      // console.log("desde event list ",res);
+      console.log("desde event list -> debugEventStream res: ",res);
       this.data_debug = res.data;
+    });
+    this.eventService.evaluationEventStream.subscribe((info) => {
+      console.log("desde event list -> evaluationEventStream info: ",info);
+      // this.data_debug = res.data;
+      this.eventService.integrateEvaluationEvent(info);
     });
     this.eventService.newEventStream.subscribe(() => {
       // console.log("desde event list ",res);
       this.searchByPlate();
       this.changeTypeEvent();
+    });
+
+    this.referenceService.searchReferenceEventCompleted.subscribe((event) => {
+      this.showEvent(event);
     });
 
     if (this.eventService.eventsUserLoaded == false) {
@@ -248,24 +259,30 @@ export class EventListComponent implements OnInit {
       );
     } else {
       this.spinner.show('loadingHistorialForm');
-      console.log(
-        'TEST IN EVENTS PANEL->',
-        this.eventService.eventsGroupedList
-      );
+      // console.log(
+      //   'TEST IN EVENTS PANEL->',
+      //   this.eventService.eventsGroupedList
+      // );
       this.spinner.hide('loadingHistorialForm');
     }
   }
 
   public changeTypeEvent() {
+    console.log("cambiando filtro de eventos ...... *****************+ ");
+    console.log("selectedEvent",this.selectedEvent);
     if (this.selectedEvent.length === 0 && this.placa === '') {
       this.eventService.eventsFiltered = this.eventService.getData();
 
       this.noResults = false;
     } else {
+      this.eventService.getEventFilter(this.selectedEvent);
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
-          return this.eventFilter(event);
+          // console.log(" --- event: ",event);
+          let result_filter = this.eventFilter(event);
+          // console.log("result_filter",result_filter);
+          return result_filter;
         });
       this.noResults = this.eventService.eventsFiltered.length === 0;
     }
@@ -277,7 +294,7 @@ export class EventListComponent implements OnInit {
     }
   }
   clickDatosDebug(): void {
-    this.ess.debug(this.imei_debug);
+    this.eventSocketService.debug(this.imei_debug);
   }
   clickEndDeveloper(): void {
     this.eventService.eventDeveloperStatus = false;
@@ -305,12 +322,21 @@ export class EventListComponent implements OnInit {
     /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
   }
 
+  public addEvaluation (uuid: any) {
+    let max = 10;
+    this.uuid_evaluation.push(uuid);
+    if(this.uuid_evaluation.length>max) this.uuid_evaluation.shift();
+
+  }
+
   public showEvent(event: any) {
     const objParams: any = {};
     /*
     antes de procesar parametros  string
     event-list.component.ts:130 despues de procesar parametros  object
     */
+   // console.log("event",event);
+
     if (event.parametros && typeof event.parametros == 'string') {
       event.parametros.split('|').forEach((item: any) => {
         const [key, value] = item.split('=');
@@ -349,7 +375,7 @@ export class EventListComponent implements OnInit {
       { padding: [50, 50] }
     );
 
-      console.log("eventlayer",event.layer)
+    // console.log("eventlayer",event.layer)
 
     event.layer.bindPopup(getContentPopup(event), {
       className: eventClass,
@@ -425,6 +451,7 @@ export class EventListComponent implements OnInit {
   }
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement) {
+    console.log("switchEventOnMap #########################");
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if (false) {
@@ -432,12 +459,21 @@ export class EventListComponent implements OnInit {
     } else {
       currentRow.classList.add('watched-event');
       //console.log('Mostrando evento con ID: ', event.evento_id);
-      let reference = await this.eventService.getReference(
-        event.latitud,
-        event.longitud
-      );
-      event.referencia = reference.referencia;
-      this.showEvent(event);
+      // let reference = await this.eventService.getReference(
+      //   event.latitud,
+      //   event.longitud
+      // );
+      let buffer = this.referenceService.getBuffer();
+      if(buffer[event.id]==undefined){
+          this.referenceService.searchReferenceEvent(event);
+
+      }else{
+        event.referencia = buffer[event.id];
+        this.showEvent(event);
+      }
+      // this.referenceService.searchReferenceEvent(event);
+      // event.referencia = "Cargando ...";
+      // this.showEvent(event);
     }
   }
 
@@ -454,7 +490,7 @@ export class EventListComponent implements OnInit {
       this.eventService.eventsFiltered = this.eventService
         .getData()
         .filter((event: any) => {
-          console.log('this.eventFilter(event)', this.eventFilter(event));
+          // console.log('this.eventFilter(event)', this.eventFilter(event));
           return this.eventFilter(event);
         });
       this.noResults = this.eventService.eventsFiltered.length == 0;
@@ -464,7 +500,8 @@ export class EventListComponent implements OnInit {
   }
 
   private eventFilter(event: any) {
-    // console.log("filter ===> ");
+
+    // console.log("eventFilter filter ===> ");
     // console.log("event",event);
     // console.log("tipo select",event.tipo +"=="+ this.selectedEvent);
     const eventsTypesSelected: string[] = this.selectedEvent.map(
@@ -475,35 +512,44 @@ export class EventListComponent implements OnInit {
     const vehicle = this.vehicleService.vehicles.find(
       (vh) => vh.IMEI == event.imei
     );
-    return (
-      ((event.nombre_objeto + vehicle?.IMEI + vehicle?.cod_interno)
-        .trim()
-        .toLowerCase()
-        .match(this.placa.trim().toLowerCase()) ||
-        this.placa == '') &&
-      (eventsTypesSelected.includes(event.tipo) ||
-        this.selectedEvent.length == 0)
-    );
+    if(vehicle!=undefined){
+      let aux_imei = vehicle.IMEI ?? "";
+      let aux_cod = vehicle.cod_interno ?? "";
+      let aux = event.nombre_objeto + aux_imei + aux_cod;
+      return (
+        ( aux.toString().trim()
+          .toLowerCase()
+          .match(this.placa.trim().toLowerCase()) ||
+          this.placa == '') &&
+        (eventsTypesSelected.includes(event.tipo) ||
+          this.selectedEvent.length == 0)
+      );
+    }else{
+      return false;
+    }
+
   }
 
   rowExpandend(event: any) {
+    console.log("########## uuid_event ");
     if (event.data) {
       this.expandedRows[event.data.uuid_event] =
         !this.expandedRows[event.data.uuid_event];
     }
     this.loading_evaluation = true;
-    //console.log("event.data", event.data);
 
-    if (event.data.id) {
+    if (event.data.uuid_event) {
       this.eventService
-        .getEvaluations(event.data.id)
+        .getEvaluations(event.data.uuid_event)
         .then((evaluations) => {
+          console.log("exito al buscar evaluation :",evaluations);
           if (evaluations.length > 0) {
             //console.log(" EVALUATIONS GETS ", evaluations);
             let auxEvent = this.eventService.eventsFiltered.find(
-              (ev: any) => ev.id == event.data.id
+              (ev: any) => ev.uuid_event == event.data.uuid_event
             );
             auxEvent.evaluations = evaluations as Evaluation[];
+            auxEvent.evaluated = 1;
             //console.log("EVENTS EVALUATIONS GETS ", auxEvent);
           }
         })
@@ -563,8 +609,10 @@ export class EventListComponent implements OnInit {
         );
         realEvent.evaluations = response as Evaluation[];
         realEvent.evaluated += 1;
-        //console.log("realEvent after response-->>",realEvent);
+        console.log("######################## realEvent after response-->>",realEvent);
         Swal.fire('Éxito', 'Los cambios se guardaron exitosamente', 'success');
+        this.addEvaluation(realEvent.uuid_event);
+        this.eventSocketService.evaluationEmit({id:realEvent.id, uuid:realEvent.uuid_event});
       })
       .catch((error) => {
         Swal.fire('Error', 'No se pudo guardar la evaluación', 'error');

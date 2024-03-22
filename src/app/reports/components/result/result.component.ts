@@ -5542,63 +5542,77 @@ export class ResultComponent implements OnDestroy, OnInit {
     var vehiculo_width = 0;
     var column_config = [];
 
-    var ubicacion_cell_ch_width = "Ubicacion".length;
+
+    //======================================================================
+    var pc_cell_ch_width = "Punto Cercano".length;
+    var vel_can_cell_ch_width = "Velocidad".length;
     var vel_gps_cell_ch_width = "Velocidad".length;
-    var vel_eco_cell_ch_width = "Velocidad".length;
     var vel_gps_speed_cell_ch_width = "Velocidad".length;
     var vel_mobileye_cell_ch_width = "Velocidad".length;
-
-    var altitud_cell_ch_width = "Altitud".length;
-    var angulo_cell_ch_width = "Angulo".length;
-    var fatiga_cell_ch_width = "Fatiga".length;
-    var frenada_extrema_brusca_cell_ch_width = "Extrema brusca".length;
-    var frenada_brusca_cell_ch_width = "Frenada".length;
-    var acelaracion_brusca_cell_ch_width = "Aceleracion".length;
+    var vel_eco_cell_ch_width = "Velocidad".length;
+    var duot2_state_cell_ch_width = "DUOT2 state".length;
+    var rev_x_min_cell_ch_width = "Rev.x.min".length;
     var rpm_alta_cell_ch_width = "RPM Alta".length;
-
-    var alcoholemia_cell_ch_width = "Alcoholemia".length;
-    var parametros_cell_ch_width = "Parametros".length;
     var nivel_de_combustible_cell_ch_width = "Combustible".length;
     var c_restante_cell_ch_width = "C. Restante".length;
     var c_motor_cell_ch_width = "C. Motor".length;
     var odometro_cell_ch_width = "Odometro".length;
-    var on_off_cell_ch_width = "On-off".length;
-    var rev_x_min_cell_ch_width = "Rev.x.min".length;
+    var altitud_cell_ch_width = "Altitud".length;
+    var angulo_cell_ch_width = "Angulo".length;
+
+    var alimentacion_gps_cell_ch_width = "Alimentación GPS".length;
+    var nivel_bateria_cell_ch_width = "Nivel de Batería".length;
+    var nivel_cobertura_cell_ch_width = "Nivel de Cobertura".length;
+    var temperatura_gps_cell_ch_width = "Temperatura GPS".length;
+    var satelite_cell_ch_width = "Satélite".length;
+    
     var reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
-    var vel_can_cell_ch_width = "Velocidad".length;
-    var pc_cell_ch_width = "Punto Cercano".length;
+    var on_off_cell_ch_width = "On-off".length;
+    var alcoholemia_cell_ch_width = "Alcoholemia".length;
+    var parametros_cell_ch_width = "Parametros".length;
+    var ubicacion_cell_ch_width = "Ubicacion".length;
     var referencia_cell_ch_width = "Referencia".length;
-    var duot2_state_cell_ch_width = "DUOT2 state".length;
+    var fatiga_cell_ch_width = "Fatiga".length;
+    var frenada_extrema_brusca_cell_ch_width = "Extrema brusca".length;
+    var frenada_brusca_cell_ch_width = "Frenada".length;
+    var acelaracion_brusca_cell_ch_width = "Aceleracion".length;
 
-
+    //==================================
     var bool_col_fServidor = false;
-    var bool_col_ubicacion = false;
+    var bool_col_pCercano = false;
+    var bool_col_velCAN = false;
     var bool_col_velGPS = false;
-    var bool_col_velECO = false;
     var bool_col_velGPS_speed = false;
     var bool_col_velMobileye_ME460 = false;
-
-    var bool_col_altitud = false;
-    var bool_col_angulo = false;
-    var bool_col_fatiga = false;
-    var bool_col_fExBrusca = false;
-    var bool_col_fBrusca = false;
-    var bool_col_aBrusca = false;
+    var bool_col_velECO = false;
+    var bool_col_DUOT2state = false;
+    var bool_col_RxM = false;
     var bool_col_RPMAlta = false;
-
-    var bool_col_alcoholemia = false;
-    var bool_col_parametros = false;
     var bool_col_cNivel = false;
     var bool_col_cRestante = false;
     var bool_col_cMotor = false;
     var bool_col_odometro = false;
-    var bool_col_onOff = false;
-    var bool_col_RxM = false;
+    var bool_col_altitud = false;
+    var bool_col_angulo = false;
+
+    var bool_col_alimentGps = false;
+    var bool_col_nivelBateria = false;
+    var bool_col_nivelCobertura = false;
+    var bool_col_temperaturaGps = false;
+    var bool_col_satelite = false;
+
     var bool_col_recFacial = false;
-    var bool_col_velCAN = false;
-    var bool_col_pCercano = false;
+    var bool_col_onOff = false;
+    var bool_col_alcoholemia = false;
+    var bool_col_parametros = false;
+    var bool_col_ubicacion = false;
     var bool_col_referencia = false;
-    var bool_col_DUOT2state = false;
+    var bool_col_fatiga = false;
+    var bool_col_fExBrusca = false;
+    var bool_col_fBrusca = false;
+    var bool_col_aBrusca = false;
+
+  
 
     var header_two_lines = false;
 
@@ -5625,33 +5639,69 @@ export class ResultComponent implements OnDestroy, OnInit {
           if(this.chkDateHour){ table_width++;  }
         }
 
-        if (data[2].ubicacion){ table_width++; bool_col_ubicacion = true;  }
-        if (data[2].velGPS){  table_width++; bool_col_velGPS = true;  }
-        if (data[2].velECO){  table_width++; bool_col_velECO = true;  }
-        if (data[2].velGPS_speed){  table_width++; bool_col_velGPS_speed = true;  }
-        if (data[2].velMobileye_ME460){  table_width++; bool_col_velMobileye_ME460 = true;  }
+        // if (data[2].ubicacion){ table_width++; bool_col_ubicacion = true;  }
+        // if (data[2].velGPS){  table_width++; bool_col_velGPS = true;  }
+        // if (data[2].velECO){  table_width++; bool_col_velECO = true;  }
+        // if (data[2].velGPS_speed){  table_width++; bool_col_velGPS_speed = true;  }
+        // if (data[2].velMobileye_ME460){  table_width++; bool_col_velMobileye_ME460 = true;  }
 
-        if (data[2].altitud){ table_width++; bool_col_altitud = true;  }
-        if (data[2].angulo){  table_width++; bool_col_angulo = true;  }
-        if (data[2].fatiga){  table_width++; bool_col_fatiga = true;  }
-        if (data[2].fExBrusca){ table_width++; bool_col_fExBrusca = true;  header_two_lines = true; }
-        if (data[2].fBrusca){ table_width++; bool_col_fBrusca = true;  header_two_lines = true; }
-        if (data[2].aBrusca){ table_width++; bool_col_aBrusca = true;  header_two_lines = true; }
-        if (data[2].RPMAlta){ table_width++; bool_col_RPMAlta = true;  }
+        // if (data[2].altitud){ table_width++; bool_col_altitud = true;  }
+        // if (data[2].angulo){  table_width++; bool_col_angulo = true;  }
+        // if (data[2].fatiga){  table_width++; bool_col_fatiga = true;  }
+        // if (data[2].fExBrusca){ table_width++; bool_col_fExBrusca = true;  header_two_lines = true; }
+        // if (data[2].fBrusca){ table_width++; bool_col_fBrusca = true;  header_two_lines = true; }
+        // if (data[2].aBrusca){ table_width++; bool_col_aBrusca = true;  header_two_lines = true; }
+        // if (data[2].RPMAlta){ table_width++; bool_col_RPMAlta = true;  }
 
-        if (data[2].alcoholemia){ table_width++; bool_col_alcoholemia = true;  }
-        if (data[2].parametros){  table_width++; bool_col_parametros = true;  }
-        if (data[2].cNivel){  table_width++; bool_col_cNivel = true;  header_two_lines = true; }
-        if (data[2].cRestante){ table_width++; bool_col_cRestante = true;  }
-        if (data[2].cMotor){  table_width++; bool_col_cMotor = true;  }
-        if (data[2].odometro){  table_width++; bool_col_odometro = true;  }
-        if (data[2].onOff){ table_width++; bool_col_onOff = true;  }
-        if (data[2].RxM){ table_width++; bool_col_RxM = true;  }
-        if (data[2].recFacial){ table_width++; bool_col_recFacial = true;  header_two_lines = true; }
-        if (data[2].velCAN){  table_width++; bool_col_velCAN = true;  }
-        if (data[2].pCercano){  table_width++; bool_col_pCercano = true;  }
-        if (data[2].referencia){  table_width++; bool_col_referencia = true;  }
-        if (data[2].DUOT2state){  table_width++; bool_col_DUOT2state = true;  }
+        // if (data[2].alcoholemia){ table_width++; bool_col_alcoholemia = true;  }
+        // if (data[2].parametros){  table_width++; bool_col_parametros = true;  }
+        // if (data[2].cNivel){  table_width++; bool_col_cNivel = true;  header_two_lines = true; }
+        // if (data[2].cRestante){ table_width++; bool_col_cRestante = true;  }
+        // if (data[2].cMotor){  table_width++; bool_col_cMotor = true;  }
+        // if (data[2].odometro){  table_width++; bool_col_odometro = true;  }
+        // if (data[2].onOff){ table_width++; bool_col_onOff = true;  }
+        // if (data[2].RxM){ table_width++; bool_col_RxM = true;  }
+        // if (data[2].recFacial){ table_width++; bool_col_recFacial = true;  header_two_lines = true; }
+        // if (data[2].velCAN){  table_width++; bool_col_velCAN = true;  }
+        // if (data[2].pCercano){  table_width++; bool_col_pCercano = true;  }
+        // if (data[2].referencia){  table_width++; bool_col_referencia = true;  }
+        // if (data[2].DUOT2state){  table_width++; bool_col_DUOT2state = true;  }
+
+
+        if (data[2].pCercano) { table_width++; bool_col_pCercano = true;  };
+        if (data[2].velCAN) { table_width++; bool_col_velCAN = true; };
+        if (data[2].velGPS) { table_width++; bool_col_velGPS = true; };
+        if (data[2].velGPS_speed) { table_width++; bool_col_velGPS_speed = true; };
+        if (data[2].velMobileye_ME460) { table_width++; bool_col_velMobileye_ME460 = true; };
+        if (data[2].velECO) { table_width++; bool_col_velECO = true; };
+        if (data[2].DUOT2state) { table_width++; bool_col_DUOT2state = true; };
+        if (data[2].RxM) { table_width++; bool_col_RxM = true; };
+        if (data[2].RPMAlta) { table_width++; bool_col_RPMAlta = true; };
+        if (data[2].cNivel) { table_width++; bool_col_cNivel = true; };
+        if (data[2].cRestante) { table_width++; bool_col_cRestante = true; };
+        if (data[2].cMotor) { table_width++; bool_col_cMotor = true; };
+        if (data[2].odometro) { table_width++; bool_col_odometro = true; };
+        if (data[2].altitud) { table_width++; bool_col_altitud = true; };
+        if (data[2].angulo) { table_width++; bool_col_angulo = true; };
+
+        if (data[2].alimentGps) { table_width++; bool_col_alimentGps = true; };
+        if (data[2].nivelBateria) { table_width++; bool_col_nivelBateria = true; };
+        if (data[2].nivelCobertura) { table_width++; bool_col_nivelCobertura = true; };
+        if (data[2].temperaturaGps) { table_width++; bool_col_temperaturaGps = true; };
+        if (data[2].satelite) { table_width++; bool_col_satelite = true; };
+
+        if (data[2].recFacial) { table_width++; bool_col_recFacial = true; };
+        if (data[2].onOff) { table_width++; bool_col_onOff = true; };
+        if (data[2].alcoholemia) { table_width++; bool_col_alcoholemia = true; };
+        if (data[2].parametros) { table_width++; bool_col_parametros = true; };
+        if (data[2].ubicacion) { table_width++; bool_col_ubicacion = true; };
+        if (data[2].referencia) { table_width++; bool_col_referencia = true; };
+        if (data[2].fatiga) { table_width++; bool_col_fatiga = true; };
+        if (data[2].fExBrusca) { table_width++; bool_col_fExBrusca = true; };
+        if (data[2].fBrusca) { table_width++; bool_col_fBrusca = true; };
+        if (data[2].aBrusca) { table_width++; bool_col_aBrusca = true; };
+
+
 
         vehiculo_width = 1 + (this.chkDateHour? 2:1) + (data[2].fServidor? (this.chkDateHour? 2:1): 0);
       }
@@ -5689,6 +5739,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         var cellsCampos :any = [];
 
         cellsCampos.push({ value: "Item", ...this.colHeaderConfig });
+
         if(this.chkDateHour) {
             cellsCampos.push({ value: "Fecha", ...this.colHeaderConfig });
             cellsCampos.push({ value: "Hora", ...this.colHeaderConfig });
@@ -5703,35 +5754,42 @@ export class ResultComponent implements OnDestroy, OnInit {
                 } else {
                     cellsCampos.push({ value: "Fecha servidor", ...this.colHeaderConfig });
                 }
-
         };
-        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig, wrap: header_two_lines }); };
+
+        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].velMobileye_ME460) { cellsCampos.push({ value: "Velocidad Mobileye", ...this.colHeaderConfig, wrap: header_two_lines }); };
-
-        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].RPMAlta) { cellsCampos.push({ value: "RPM Alta", ...this.colHeaderConfig, wrap: header_two_lines }); };
-
-        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].cNivel) { cellsCampos.push({ value: "Nivel de Combustible", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].cRestante) { cellsCampos.push({ value: "C. Restante", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].cMotor) { cellsCampos.push({ value: "C. Motor", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].odometro) { cellsCampos.push({ value: "Odómetro", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", ...this.colHeaderConfig, wrap: header_two_lines }); };
+
+        if (data[2].alimentGps) { cellsCampos.push({ value: "Alimentación GPS", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].nivelBateria) { cellsCampos.push({ value: "Nivel de Batería", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].nivelCobertura) { cellsCampos.push({ value: "Nivel de Cobertura", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].temperaturaGps) { cellsCampos.push({ value: "Temperatura GPS", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].satelite) { cellsCampos.push({ value: "Satélite", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].recFacial) { cellsCampos.push({ value: "Reconocimiento Facial", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", ...this.colHeaderConfig, wrap: header_two_lines }); };
         if (data[2].referencia) { cellsCampos.push({ value: "Referencia", ...this.colHeaderConfig, wrap: header_two_lines }); };
-        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", ...this.colHeaderConfig, wrap: header_two_lines }); };
+
+
+
 
         rows.push({
             cells: cellsCampos,
@@ -5741,7 +5799,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         //================= FIN CABECERA =================
 
         //====================  CUERPO =============================
-        data[1].forEach((item: { fecha: number;  lat: number; lng: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any;
+        data[1].forEach((item: { satelite:any; temperaturaGps:any; nivelCobertura:any; nivelBateria:any; alimentGps:any;fecha: number;  lat: number; lng: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any;
           vel_gps_speed: any; vel_can: any; tramo: string; PC: any;
         referencia:any; fServidor:any; velGPS:any; velECO:any; velGPS_speed:any; velMobileye_ME460:any; altitud:any; angulo:any; fatiga:any; fExBrusca:any; fBrusca:any; aBrusca:any; RPMAlta:any;
         alcohol_nombre:any; parametros:any; cNivel:any; cRestante:any; cMotor:any; odometro:any; onOff:any; RxM:any; recFacial:any; velCAN:any; pCercano:any; DUOT2state:any;
@@ -5749,44 +5807,46 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
             var ubicacion = item.lat.toFixed(6) + "," + item.lng.toFixed(6) + "";
-
             var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
-
             var parametros = this.breakParameterColValue(item.parametros??'');
-
             var cellsCuerpo = [];
 
-            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
+            //parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
+            //===========================================================
+            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.velCAN??'').toString().length);
+            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.velCAN??'').toString().length);
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, (item.velGPS??'').toString().length);
-            vel_eco_cell_ch_width = Math.max(vel_eco_cell_ch_width, (item.velECO??'').toString().length);
             vel_gps_speed_cell_ch_width = Math.max(vel_gps_speed_cell_ch_width, (item.velGPS_speed??'').toString().length);
             vel_mobileye_cell_ch_width = Math.max(vel_mobileye_cell_ch_width, (item.velMobileye_ME460??'').toString().length);
-
-            altitud_cell_ch_width = Math.max(altitud_cell_ch_width, (item.altitud??'').toString().length);
-            angulo_cell_ch_width = Math.max(angulo_cell_ch_width, (item.angulo??'').toString().length);
-            fatiga_cell_ch_width = Math.max(fatiga_cell_ch_width, (item.fatiga??'').toString().length);
-            frenada_extrema_brusca_cell_ch_width = Math.max(frenada_extrema_brusca_cell_ch_width, (item.fExBrusca??'').toString().length);
-            frenada_brusca_cell_ch_width = Math.max(frenada_brusca_cell_ch_width, (item.fBrusca??'').toString().length);
-            acelaracion_brusca_cell_ch_width = Math.max(acelaracion_brusca_cell_ch_width, (item.aBrusca??'').toString().length);
+            vel_eco_cell_ch_width = Math.max(vel_eco_cell_ch_width, (item.velECO??'').toString().length);
+            duot2_state_cell_ch_width = Math.max(duot2_state_cell_ch_width, (item.DUOT2state??'').toString().length);
+            rev_x_min_cell_ch_width = Math.max(rev_x_min_cell_ch_width, (item.RxM??'').toString().length);
             rpm_alta_cell_ch_width = Math.max(rpm_alta_cell_ch_width, (item.RPMAlta??'').toString().length);
-
-            alcoholemia_cell_ch_width = Math.max(alcoholemia_cell_ch_width, (item.alcohol_nombre??'').toString().length);
-
-            //parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
-            parametros_cell_ch_width = Math.max(parametros_cell_ch_width, this.getChWidth(parametros));
-
-
             nivel_de_combustible_cell_ch_width = Math.max(nivel_de_combustible_cell_ch_width, (item.cNivel??'').toString().length);
             c_restante_cell_ch_width = Math.max(c_restante_cell_ch_width, (item.cRestante??'').toString().length);
             c_motor_cell_ch_width = Math.max(c_motor_cell_ch_width, (item.cMotor??'').toString().length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
-            on_off_cell_ch_width = Math.max(on_off_cell_ch_width, (item.onOff??'').toString().length);
-            rev_x_min_cell_ch_width = Math.max(rev_x_min_cell_ch_width, (item.RxM??'').toString().length);
+            altitud_cell_ch_width = Math.max(altitud_cell_ch_width, (item.altitud??'').toString().length);
+            angulo_cell_ch_width = Math.max(angulo_cell_ch_width, (item.angulo??'').toString().length);
+
+            alimentacion_gps_cell_ch_width = Math.max(alimentacion_gps_cell_ch_width, (item.alimentGps??'').toString().length);
+            nivel_bateria_cell_ch_width = Math.max(nivel_bateria_cell_ch_width, (item.nivelBateria??'').toString().length);
+            nivel_cobertura_cell_ch_width = Math.max(nivel_cobertura_cell_ch_width, (item.nivelCobertura??'').toString().length);
+            temperatura_gps_cell_ch_width = Math.max(temperatura_gps_cell_ch_width, (item.temperaturaGps??'').toString().length);
+            satelite_cell_ch_width = Math.max(satelite_cell_ch_width, (item.satelite??'').toString().length);
+
             reconocimiento_facial_cell_ch_width = Math.max(reconocimiento_facial_cell_ch_width, (item.recFacial??'').toString().length);
-            vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, (item.velCAN??'').toString().length);
-            pc_cell_ch_width = Math.max(pc_cell_ch_width, (item.velCAN??'').toString().length);
+            on_off_cell_ch_width = Math.max(on_off_cell_ch_width, (item.onOff??'').toString().length);
+            alcoholemia_cell_ch_width = Math.max(alcoholemia_cell_ch_width, (item.alcohol_nombre??'').toString().length);
+            parametros_cell_ch_width = Math.max(parametros_cell_ch_width, this.getChWidth(parametros));
+            ubicacion_cell_ch_width = Math.max(ubicacion_cell_ch_width, (ubicacion??'').toString().length);
             referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.pCercano??'').toString().length);
-            duot2_state_cell_ch_width = Math.max(duot2_state_cell_ch_width, (item.DUOT2state??'').toString().length);
+            fatiga_cell_ch_width = Math.max(fatiga_cell_ch_width, (item.fatiga??'').toString().length);
+            frenada_extrema_brusca_cell_ch_width = Math.max(frenada_extrema_brusca_cell_ch_width, (item.fExBrusca??'').toString().length);
+            frenada_brusca_cell_ch_width = Math.max(frenada_brusca_cell_ch_width, (item.fBrusca??'').toString().length);
+            acelaracion_brusca_cell_ch_width = Math.max(acelaracion_brusca_cell_ch_width, (item.aBrusca??'').toString().length);
+
+
 
             cellsCuerpo.push({ value: index + 1, ...this.bodyRowsConfig });
             if(this.chkDateHour) {
@@ -5808,35 +5868,40 @@ export class ResultComponent implements OnDestroy, OnInit {
             };
 
             //if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
-            if (data[2].ubicacion) { cellsCuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig }); };
-
+            //==================================================
+            if (data[2].pCercano) { cellsCuerpo.push({ value: item.pCercano, ...this.bodyRowsConfig }); };
+            if (data[2].velCAN) { cellsCuerpo.push({ value: item.velCAN, ...this.bodyRowsConfig }); };
             if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, ...this.bodyRowsConfig }); };
-            if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, ...this.bodyRowsConfig }); };
             if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, ...this.bodyRowsConfig }); };
             if (data[2].velMobileye_ME460) { cellsCuerpo.push({ value: item.velMobileye_ME460, ...this.bodyRowsConfig }); };
-
-            if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, ...this.bodyRowsConfig }); };
-            if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, ...this.bodyRowsConfig }); };
-            if (data[2].fatiga) { cellsCuerpo.push({ value: item.fatiga, ...this.bodyRowsConfig }); };
-            if (data[2].fExBrusca) { cellsCuerpo.push({ value: item.fExBrusca, ...this.bodyRowsConfig }); };
-            if (data[2].fBrusca) { cellsCuerpo.push({ value: item.fBrusca, ...this.bodyRowsConfig }); };
-            if (data[2].aBrusca) { cellsCuerpo.push({ value: item.aBrusca, ...this.bodyRowsConfig }); };
+            if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, ...this.bodyRowsConfig }); };
+            if (data[2].DUOT2state) { cellsCuerpo.push({ value: item.DUOT2state, ...this.bodyRowsConfig }); };
+            if (data[2].RxM) { cellsCuerpo.push({ value: item.RxM, ...this.bodyRowsConfig }); };
             if (data[2].RPMAlta) { cellsCuerpo.push({ value: item.RPMAlta, ...this.bodyRowsConfig }); };
-
-            if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, ...this.bodyRowsConfig }); };
-            if (data[2].parametros) { cellsCuerpo.push({ value: parametros, ...this.bodyRowsConfig, wrap: true }); };
             if (data[2].cNivel) { cellsCuerpo.push({ value: item.cNivel, ...this.bodyRowsConfig }); };
             if (data[2].cRestante) { cellsCuerpo.push({ value: item.cRestante, ...this.bodyRowsConfig }); };
             if (data[2].cMotor) { cellsCuerpo.push({ value: item.cMotor, ...this.bodyRowsConfig }); };
             if (data[2].odometro) { cellsCuerpo.push({ value: item.odometro, ...this.bodyRowsConfig }); };
-            if (data[2].onOff) { cellsCuerpo.push({ value: item.onOff, ...this.bodyRowsConfig }); };
-            if (data[2].RxM) { cellsCuerpo.push({ value: item.RxM, ...this.bodyRowsConfig }); };
-            if (data[2].recFacial) { cellsCuerpo.push({ value: item.recFacial, ...this.bodyRowsConfig }); };
-            if (data[2].velCAN) { cellsCuerpo.push({ value: item.velCAN, ...this.bodyRowsConfig }); };
-            if (data[2].pCercano) { cellsCuerpo.push({ value: item.pCercano, ...this.bodyRowsConfig }); };
-            if (data[2].referencia) { cellsCuerpo.push({ value: rreeff, ...this.bodyRowsConfig }); };
+            if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, ...this.bodyRowsConfig }); };
+            if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, ...this.bodyRowsConfig }); };
 
-            if (data[2].DUOT2state) { cellsCuerpo.push({ value: item.DUOT2state, ...this.bodyRowsConfig }); };
+            if (data[2].alimentGps) { cellsCuerpo.push({ value: item.alimentGps, ...this.bodyRowsConfig }); };
+            if (data[2].nivelBateria) { cellsCuerpo.push({ value: item.nivelBateria, ...this.bodyRowsConfig }); };
+            if (data[2].nivelCobertura) { cellsCuerpo.push({ value: item.nivelCobertura, ...this.bodyRowsConfig }); };
+            if (data[2].temperaturaGps) { cellsCuerpo.push({ value: item.temperaturaGps, ...this.bodyRowsConfig }); };
+            if (data[2].satelite) { cellsCuerpo.push({ value: item.satelite, ...this.bodyRowsConfig }); };
+
+            if (data[2].recFacial) { cellsCuerpo.push({ value: item.recFacial, ...this.bodyRowsConfig }); };
+            if (data[2].onOff) { cellsCuerpo.push({ value: item.onOff, ...this.bodyRowsConfig }); };
+            if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, ...this.bodyRowsConfig }); };
+            if (data[2].parametros) { cellsCuerpo.push({ value: parametros, ...this.bodyRowsConfig, wrap: true }); };
+            if (data[2].ubicacion) { cellsCuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig }); };
+            if (data[2].referencia) { cellsCuerpo.push({ value: rreeff, ...this.bodyRowsConfig }); };
+            if (data[2].fatiga) { cellsCuerpo.push({ value: item.fatiga, ...this.bodyRowsConfig }); };
+            if (data[2].fExBrusca) { cellsCuerpo.push({ value: item.fExBrusca, ...this.bodyRowsConfig }); };
+            if (data[2].fBrusca) { cellsCuerpo.push({ value: item.fBrusca, ...this.bodyRowsConfig }); };
+            if (data[2].aBrusca) { cellsCuerpo.push({ value: item.aBrusca, ...this.bodyRowsConfig }); };
+
 
             rows.push({
                 cells:cellsCuerpo,
@@ -5980,32 +6045,42 @@ export class ResultComponent implements OnDestroy, OnInit {
               );
             }
           }
-          if (bool_col_ubicacion) {  column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) } )}
-          if (bool_col_velGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) } )}
-          if (bool_col_velECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) } )}
-          if (bool_col_velGPS_speed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) } )}
 
-          if (bool_col_altitud) {  column_config.push( { width: this.calculateColWidth(altitud_cell_ch_width) } )}
-          if (bool_col_angulo) { column_config.push( { width: this.calculateColWidth(angulo_cell_ch_width) } )}
-          if (bool_col_fatiga) { column_config.push( { width: this.calculateColWidth(fatiga_cell_ch_width) } )}
-          if (bool_col_fExBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_extrema_brusca_cell_ch_width) } )}
-          if (bool_col_fBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_brusca_cell_ch_width) } )}
-          if (bool_col_aBrusca) {  column_config.push( { width: this.calculateColWidth(acelaracion_brusca_cell_ch_width) } )}
-          if (bool_col_RPMAlta) {  column_config.push( { width: this.calculateColWidth(rpm_alta_cell_ch_width) } )}
-
-          if (bool_col_alcoholemia) {  column_config.push( { width: this.calculateColWidth(alcoholemia_cell_ch_width) } )}
-          if (bool_col_parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) } )}
-          if (bool_col_cNivel) { column_config.push( { width: this.calculateColWidth(nivel_de_combustible_cell_ch_width) } )}
-          if (bool_col_cRestante) {  column_config.push( { width: this.calculateColWidth(c_restante_cell_ch_width) } )}
-          if (bool_col_cMotor) { column_config.push( { width: this.calculateColWidth(c_motor_cell_ch_width) } )}
-          if (bool_col_odometro) { column_config.push( { width: this.calculateColWidth(odometro_cell_ch_width) } )}
-          if (bool_col_onOff) {  column_config.push( { width: this.calculateColWidth(on_off_cell_ch_width) } )}
-          if (bool_col_RxM) {  column_config.push( { width: this.calculateColWidth(rev_x_min_cell_ch_width) } )}
-          if (bool_col_recFacial) {  column_config.push( { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) } )}
+          if (bool_col_pCercano) {  column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) } )}
           if (bool_col_velCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) } )}
-          if (bool_col_pCercano) { column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) } )}
-          if (bool_col_referencia) { column_config.push( { width: this.calculateColWidth(referencia_cell_ch_width) } )}
+          if (bool_col_velGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) } )}
+          if (bool_col_velGPS_speed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) } )}
+          if (bool_col_velMobileye_ME460) {  column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) } )}
+
+          if (bool_col_velECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) } )}
           if (bool_col_DUOT2state) { column_config.push( { width: this.calculateColWidth(duot2_state_cell_ch_width) } )}
+          if (bool_col_RxM) {  column_config.push( { width: this.calculateColWidth(rev_x_min_cell_ch_width) } )}
+          if (bool_col_RPMAlta) {  column_config.push( { width: this.calculateColWidth(rpm_alta_cell_ch_width) } )}
+          if (bool_col_cNivel) {  column_config.push( { width: this.calculateColWidth(nivel_de_combustible_cell_ch_width) } )}
+          if (bool_col_cRestante) {  column_config.push( { width: this.calculateColWidth(c_restante_cell_ch_width) } )}
+          if (bool_col_cMotor) {  column_config.push( { width: this.calculateColWidth(c_motor_cell_ch_width) } )}
+          if (bool_col_odometro) { column_config.push( { width: this.calculateColWidth(odometro_cell_ch_width) } )}
+          if (bool_col_altitud) { column_config.push( { width: this.calculateColWidth(altitud_cell_ch_width) } )}
+          if (bool_col_angulo) {  column_config.push( { width: this.calculateColWidth(angulo_cell_ch_width) } )}
+
+          if (bool_col_alimentGps) { column_config.push( { width: this.calculateColWidth(alimentacion_gps_cell_ch_width) } )}
+          if (bool_col_nivelBateria) { column_config.push( { width: this.calculateColWidth(nivel_bateria_cell_ch_width) } )}
+          if (bool_col_nivelCobertura) {  column_config.push( { width: this.calculateColWidth(nivel_cobertura_cell_ch_width) } )}
+          if (bool_col_temperaturaGps) {  column_config.push( { width: this.calculateColWidth(temperatura_gps_cell_ch_width) } )}
+          if (bool_col_satelite) {  column_config.push( { width: this.calculateColWidth(satelite_cell_ch_width) } )}
+
+          if (bool_col_recFacial) { column_config.push( { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) } )}
+          if (bool_col_onOff) { column_config.push( { width: this.calculateColWidth(on_off_cell_ch_width) } )}
+          if (bool_col_alcoholemia) {  column_config.push( { width: this.calculateColWidth(alcoholemia_cell_ch_width) } )}
+          if (bool_col_parametros) {  column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) } )}
+          if (bool_col_ubicacion) {  column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) } )}
+          if (bool_col_referencia) { column_config.push( { width: this.calculateColWidth(referencia_cell_ch_width) } )}
+          if (bool_col_fatiga) { column_config.push( { width: this.calculateColWidth(fatiga_cell_ch_width) } )}
+          if (bool_col_fExBrusca) { column_config.push( { width: this.calculateColWidth(frenada_extrema_brusca_cell_ch_width) } )}
+          if (bool_col_fBrusca) { column_config.push( { width: this.calculateColWidth(frenada_brusca_cell_ch_width) } )}
+          if (bool_col_aBrusca) {  column_config.push( { width: this.calculateColWidth(acelaracion_brusca_cell_ch_width) } )}
+
+          //==========================================
 
 
           exportFileEx.push({
@@ -6017,32 +6092,38 @@ export class ResultComponent implements OnDestroy, OnInit {
           rows: rows
           });
 
-          ubicacion_cell_ch_width = "Ubicacion".length;
-          vel_gps_cell_ch_width = "Velocidad gps".length;
-          vel_eco_cell_ch_width = "Velocidad eco".length;
-          vel_gps_speed_cell_ch_width = "Velocidad GPS speed".length;
-
-          altitud_cell_ch_width = "Altitud".length;
-          angulo_cell_ch_width = "Angulo".length;
-          fatiga_cell_ch_width = "Fatiga".length;
-          frenada_extrema_brusca_cell_ch_width = "Extrema brusca".length;
-          frenada_brusca_cell_ch_width = "Frenada".length;
-          acelaracion_brusca_cell_ch_width = "Aceleracion".length;
+          pc_cell_ch_width = "Punto Cercano".length;
+          vel_can_cell_ch_width = "Velocidad".length;
+          vel_gps_cell_ch_width = "Velocidad".length;
+          vel_gps_speed_cell_ch_width = "Velocidad".length;
+          vel_mobileye_cell_ch_width = "Velocidad".length;
+          vel_eco_cell_ch_width = "Velocidad".length;
+          duot2_state_cell_ch_width = "DUOT2 state".length;
+          rev_x_min_cell_ch_width = "Rev.x.min".length;
           rpm_alta_cell_ch_width = "RPM Alta".length;
-
-          alcoholemia_cell_ch_width = "Alcoholemia".length;
-          parametros_cell_ch_width = "Parametros".length;
           nivel_de_combustible_cell_ch_width = "Combustible".length;
           c_restante_cell_ch_width = "C. Restante".length;
           c_motor_cell_ch_width = "C. Motor".length;
           odometro_cell_ch_width = "Odometro".length;
-          on_off_cell_ch_width = "On-off".length;
-          rev_x_min_cell_ch_width = "Rev.x.min".length;
+          altitud_cell_ch_width = "Altitud".length;
+          angulo_cell_ch_width = "Angulo".length;
+      
+          alimentacion_gps_cell_ch_width = "Alimentación GPS".length;
+          nivel_bateria_cell_ch_width = "Nivel de Batería".length;
+          nivel_cobertura_cell_ch_width = "Nivel de Cobertura".length;
+          temperatura_gps_cell_ch_width = "Temperatura GPS".length;
+          satelite_cell_ch_width = "Satélite".length;
+          
           reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
-          vel_can_cell_ch_width = "Velocidad".length;
-          pc_cell_ch_width = "Punto Cercano".length;
+          on_off_cell_ch_width = "On-off".length;
+          alcoholemia_cell_ch_width = "Alcoholemia".length;
+          parametros_cell_ch_width = "Parametros".length;
+          ubicacion_cell_ch_width = "Ubicacion".length;
           referencia_cell_ch_width = "Referencia".length;
-          duot2_state_cell_ch_width = "DUOT2 state".length;
+          fatiga_cell_ch_width = "Fatiga".length;
+          frenada_extrema_brusca_cell_ch_width = "Extrema brusca".length;
+          frenada_brusca_cell_ch_width = "Frenada".length;
+          acelaracion_brusca_cell_ch_width = "Aceleracion".length;
 
 
         }
@@ -6107,32 +6188,40 @@ export class ResultComponent implements OnDestroy, OnInit {
           );
         }
       }
-      if (bool_col_ubicacion) {  column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) } )}
-      if (bool_col_velGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) } )}
-      if (bool_col_velECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) } )}
-      if (bool_col_velGPS_speed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) } )}
 
-      if (bool_col_altitud) {  column_config.push( { width: this.calculateColWidth(altitud_cell_ch_width) } )}
-      if (bool_col_angulo) { column_config.push( { width: this.calculateColWidth(angulo_cell_ch_width) } )}
-      if (bool_col_fatiga) { column_config.push( { width: this.calculateColWidth(fatiga_cell_ch_width) } )}
-      if (bool_col_fExBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_extrema_brusca_cell_ch_width) } )}
-      if (bool_col_fBrusca) {  column_config.push( { width: this.calculateColWidth(frenada_brusca_cell_ch_width) } )}
-      if (bool_col_aBrusca) {  column_config.push( { width: this.calculateColWidth(acelaracion_brusca_cell_ch_width) } )}
-      if (bool_col_RPMAlta) {  column_config.push( { width: this.calculateColWidth(rpm_alta_cell_ch_width) } )}
-
-      if (bool_col_alcoholemia) {  column_config.push( { width: this.calculateColWidth(alcoholemia_cell_ch_width) } )}
-      if (bool_col_parametros) { column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) } )}
-      if (bool_col_cNivel) { column_config.push( { width: this.calculateColWidth(nivel_de_combustible_cell_ch_width) } )}
-      if (bool_col_cRestante) {  column_config.push( { width: this.calculateColWidth(c_restante_cell_ch_width) } )}
-      if (bool_col_cMotor) { column_config.push( { width: this.calculateColWidth(c_motor_cell_ch_width) } )}
-      if (bool_col_odometro) { column_config.push( { width: this.calculateColWidth(odometro_cell_ch_width) } )}
-      if (bool_col_onOff) {  column_config.push( { width: this.calculateColWidth(on_off_cell_ch_width) } )}
-      if (bool_col_RxM) {  column_config.push( { width: this.calculateColWidth(rev_x_min_cell_ch_width) } )}
-      if (bool_col_recFacial) {  column_config.push( { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) } )}
+      if (bool_col_pCercano) {  column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) } )}
       if (bool_col_velCAN) { column_config.push( { width: this.calculateColWidth(vel_can_cell_ch_width) } )}
-      if (bool_col_pCercano) { column_config.push( { width: this.calculateColWidth(pc_cell_ch_width) } )}
-      if (bool_col_referencia) { column_config.push( { width: this.calculateColWidth(referencia_cell_ch_width) } )}
+      if (bool_col_velGPS) { column_config.push( { width: this.calculateColWidth(vel_gps_cell_ch_width) } )}
+      if (bool_col_velGPS_speed) { column_config.push( { width: this.calculateColWidth(vel_gps_speed_cell_ch_width) } )}
+      if (bool_col_velMobileye_ME460) {  column_config.push( { width: this.calculateColWidth(vel_mobileye_cell_ch_width) } )}
+
+      if (bool_col_velECO) { column_config.push( { width: this.calculateColWidth(vel_eco_cell_ch_width) } )}
       if (bool_col_DUOT2state) { column_config.push( { width: this.calculateColWidth(duot2_state_cell_ch_width) } )}
+      if (bool_col_RxM) {  column_config.push( { width: this.calculateColWidth(rev_x_min_cell_ch_width) } )}
+      if (bool_col_RPMAlta) {  column_config.push( { width: this.calculateColWidth(rpm_alta_cell_ch_width) } )}
+      if (bool_col_cNivel) {  column_config.push( { width: this.calculateColWidth(nivel_de_combustible_cell_ch_width) } )}
+      if (bool_col_cRestante) {  column_config.push( { width: this.calculateColWidth(c_restante_cell_ch_width) } )}
+      if (bool_col_cMotor) {  column_config.push( { width: this.calculateColWidth(c_motor_cell_ch_width) } )}
+      if (bool_col_odometro) { column_config.push( { width: this.calculateColWidth(odometro_cell_ch_width) } )}
+      if (bool_col_altitud) { column_config.push( { width: this.calculateColWidth(altitud_cell_ch_width) } )}
+      if (bool_col_angulo) {  column_config.push( { width: this.calculateColWidth(angulo_cell_ch_width) } )}
+
+      if (bool_col_alimentGps) { column_config.push( { width: this.calculateColWidth(alimentacion_gps_cell_ch_width) } )}
+      if (bool_col_nivelBateria) { column_config.push( { width: this.calculateColWidth(nivel_bateria_cell_ch_width) } )}
+      if (bool_col_nivelCobertura) {  column_config.push( { width: this.calculateColWidth(nivel_cobertura_cell_ch_width) } )}
+      if (bool_col_temperaturaGps) {  column_config.push( { width: this.calculateColWidth(temperatura_gps_cell_ch_width) } )}
+      if (bool_col_satelite) {  column_config.push( { width: this.calculateColWidth(satelite_cell_ch_width) } )}
+
+      if (bool_col_recFacial) { column_config.push( { width: this.calculateColWidth(reconocimiento_facial_cell_ch_width) } )}
+      if (bool_col_onOff) { column_config.push( { width: this.calculateColWidth(on_off_cell_ch_width) } )}
+      if (bool_col_alcoholemia) {  column_config.push( { width: this.calculateColWidth(alcoholemia_cell_ch_width) } )}
+      if (bool_col_parametros) {  column_config.push( { width: this.calculateColWidth(parametros_cell_ch_width) } )}
+      if (bool_col_ubicacion) {  column_config.push( { width: this.calculateColWidth(ubicacion_cell_ch_width) } )}
+      if (bool_col_referencia) { column_config.push( { width: this.calculateColWidth(referencia_cell_ch_width) } )}
+      if (bool_col_fatiga) { column_config.push( { width: this.calculateColWidth(fatiga_cell_ch_width) } )}
+      if (bool_col_fExBrusca) { column_config.push( { width: this.calculateColWidth(frenada_extrema_brusca_cell_ch_width) } )}
+      if (bool_col_fBrusca) { column_config.push( { width: this.calculateColWidth(frenada_brusca_cell_ch_width) } )}
+      if (bool_col_aBrusca) {  column_config.push( { width: this.calculateColWidth(acelaracion_brusca_cell_ch_width) } )}
 
       exportFileEx.push({
         freezePane: {
@@ -12501,11 +12590,10 @@ export class ResultComponent implements OnDestroy, OnInit {
             if (clave == 'Parametros') { cont = cont - 1; }
 
         }
+        console.log("cont = "+ cont);
     }
 
     console.log("cont = "+ cont);
-
-
 
     //vm.dateHour();
     var exportFileEx = [];
@@ -12514,7 +12602,8 @@ export class ResultComponent implements OnDestroy, OnInit {
     //var table_width = 12 + (this.chkDateHour? 2: 1) +1 + (this.user_id == 923? -2: 0);
     var table_width = cont;
 
-    var vehiculo_width = (this.chkDateHour? 5: 4) +1 + (this.user_id == 923? -2: 0);
+    //var vehiculo_width = (this.chkDateHour? 5: 4) + (this.user_id == 923? -2: 0);
+    var vehiculo_width = 5 + (this.user_id == 923? -2: 0);
 
     // var feha_evento_cell_ch_width = "Fecha Evento".length;
     // var hora_evento_cell_ch_width = "Hora Evento".length;
@@ -12543,14 +12632,31 @@ export class ResultComponent implements OnDestroy, OnInit {
     var enlace_cell_ch_width = "Archivo".length; //Enlace a Archivo
     var parametros_cell_ch_width = "Parametros".length; //Enlace a Archivo
 
+    // if (this.report_data.num_rep == 'R011') {
+    //   if (this.chkFrenada && this.chkAceleracion) {
+    //     nom_excel = "ReporteFrenadaAceleracionBrusca.xlsx";
+    //   } else {
+    //     if (this.chkFrenada) {
+    //       nom_excel = "ReporteFrenadaBrusca.xlsx";
+    //     }
+    //     if (this.chkAceleracion) {
+    //       nom_excel = "ReporteAceleracionBrusca.xlsx";
+    //     }
+    //   }
+    // }
 
-
+    var nom_excel = '';
+    if (this.report_data.num_rep == 'R040') {
+        nom_excel = "ReporteEventosInternos.xlsx"; //'REPORTE DE EVENTOS INTERNO';
+    } else if(this.report_data.num_rep == 'R037') {
+        nom_excel = "ReporteEventos.xlsx"; //'REPORTE DE EVENTOS';
+    }
 
     // var allRows = [
     var allRows: AllRows[] = [
         {
           cells: [
-            { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+            { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
           ],
           height: this.headerRowsHeight
         },
@@ -12565,7 +12671,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         var rows:AllRows[] = [
           {
             cells: [
-              { value: "REPORTE DE EVENTOS.", ...this.headerCellConfig, colSpan: table_width }
+              { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
             ],
             height: this.headerRowsHeight
           },
@@ -12601,7 +12707,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig }); };
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Hora Servidor", ...this.colHeaderConfig }); };
 
-          if (rs.Evento) { array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig }); };
+          if (rs.Evento) { array_campos_cabecera.push({ value: "Descripción", ...this.colHeaderConfig }); };
           if (rs.Codigo) { array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig }); };
           if (rs.Placa) { array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig }); };
           if (rs.TipoUnidad) { array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig }); };
@@ -12851,7 +12957,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "ReporteEventos_.xlsx"
+        fileName: nom_excel //"ReporteEventos_.xlsx"
       });
 
     } else {
@@ -12936,7 +13042,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var allRows: AllRows[] = [
         {
           cells: [
-            { value: "REPORTE DE ATENCION DE EVENTOS CIPIA.", ...this.headerCellConfig, colSpan: table_width }
+            { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
           ],
           height: this.headerRowsHeight
         },
@@ -12951,7 +13057,8 @@ export class ResultComponent implements OnDestroy, OnInit {
         var rows:AllRows[] = [
           {
             cells: [
-              { value: "REPORTE DE ATENCION DE EVENTOS CIPIA.", ...this.headerCellConfig, colSpan: table_width }
+              //{ value: "REPORTE DE ATENCION DE EVENTOS CIPIA.", ...this.headerCellConfig, colSpan: table_width }
+              { value: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos, ...this.headerCellConfig, colSpan: table_width }
             ],
             height: this.headerRowsHeight
           },
@@ -12987,7 +13094,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Fecha Servidor", ...this.colHeaderConfig }); };
           if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) {  array_campos_cabecera.push({ value: "Hora Servidor", ...this.colHeaderConfig }); };
 
-          if (rs.Evento) { array_campos_cabecera.push({ value: "Evento", ...this.colHeaderConfig }); };
+          if (rs.Evento) { array_campos_cabecera.push({ value: "Descripción", ...this.colHeaderConfig }); };
           if (rs.Codigo) { array_campos_cabecera.push({ value: "Código", ...this.colHeaderConfig }); };
           if (rs.Placa) { array_campos_cabecera.push({ value: "Placa", ...this.colHeaderConfig }); };
           if (rs.TipoUnidad) { array_campos_cabecera.push({ value: "Tipo de Unidad", ...this.colHeaderConfig }); };
@@ -13296,7 +13403,7 @@ export class ResultComponent implements OnDestroy, OnInit {
 
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
-        fileName: "ReporteEventos_.xlsx"
+        fileName: "ReporteAtencionEventos.xlsx"
       });
 
     } else {
@@ -14517,6 +14624,306 @@ export class ResultComponent implements OnDestroy, OnInit {
       kendo.saveAs({
         dataURI: workbook.toDataURL(),
         fileName: "ReporteExcesosVelocidad.xlsx"
+      });
+
+    } else {
+      alert('No se han encontrado datos para exportar');
+    }
+  }
+
+
+
+  exportExcelCombustibleResumen(vrs: number) {
+    //vm.dateHour();
+    var exportFileEx = [];
+    var bol_datos_ex = false;
+
+    var table_width = 16;// + (this.chkDateHour? 2: 1);
+    //var vehiculo_width = 4 + (this.chkDateHour? 2: 1);
+    var column_config = [];
+
+    var codigo_cell_ch_width = "codigo".length;
+    var placa_cell_ch_width = "placa".length;
+
+    var fecha_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+    var hora_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+    var fecha_fin_gps_cell_ch_width = "Fecha Fin GPS".length;
+    var hora_fin_gps_cell_ch_width = "Hora Fin GPS".length;
+
+    var distancia_recorrida_cell_ch_width = "Distancia Recorrida".length;
+    var combustible_consumido_cell_ch_width = "Combustible Consumido".length;
+    var rendimiento_galon_cell_ch_width = "Rendimiento por Galón".length;
+    var velocidad_promedio_cell_ch_width = "Vel. Promedio".length;
+
+    var tiempo_movimiento_cell_ch_width = "Tiempo en Movimiento".length;
+    var tiempo_relenti_cell_ch_width = "Tiempo Relenti".length;
+    var tiempo_apagado_cell_ch_width = "Tiempo Apagado".length;
+    var odometro_inicial_cell_ch_width = "Odómetro Inicial".length;
+    var odometro_final_cell_ch_width = "Odometro Final".length;
+
+
+    var header_two_lines = true;
+
+    var allRows: AllRows[] = [
+        {
+          cells: [
+            { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+          ],
+          height: this.headerRowsHeight
+        },
+        ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+    ];
+
+
+    this.data.forEach((data: any,idx:any) => {
+
+      if(data[1].length > 0){
+        bol_datos_ex = true;
+
+        var rows:AllRows[] = [
+          {
+            cells: [
+              { value: this.report_data.rep_title, ...this.headerCellConfig, colSpan: table_width }
+            ],
+            height: this.headerRowsHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.headerRowSpan, this.headerRowsHeight),
+          {
+            cells: [
+              // { value: "VEHÍCULO : " + data[0][1], color: "#FFF", background: "#000", vAlign: "center", hAlign: "center", fontSize: this.t2, colSpan: 2 },
+              { value: "PERIODO", ...this.subHeaderPeriodHeaderConfig, colSpan: table_width },
+            ],
+            height: this.subHeaderHeight
+          },
+          {
+            cells: [
+              //{ value: data[0][1], ...this.subHeaderVehicleContentConfig, colSpan: vehiculo_width },
+              { value: this.period, ...this.subHeaderPeriodContentConfig, colSpan: table_width },
+            ],
+            height: this.subHeaderContentHeight
+          },
+          ...this.generateEmptyRowsForRowSpan(this.subHeaderContentRowSpan, this.subHeaderContentHeight),
+        ];
+
+        //if(this.chkDateHour) {
+          rows.push({
+            cells: [
+
+              { value: "Item", ...this.colHeaderConfig },
+              { value: "Código", ...this.colHeaderConfig },
+              { value: "Placa", ...this.colHeaderConfig },
+
+              { value: "Fecha Inicio GPS", ...this.colHeaderConfig },
+              { value: "Hora Inicio GPS", ...this.colHeaderConfig },
+              { value: "Fecha Fin GPS", ...this.colHeaderConfig },
+              { value: "Hora Fin GPS", ...this.colHeaderConfig },
+
+              { value: "Distancia Recorrida", ...this.colHeaderConfig },
+              { value: "Combustible Consumido", ...this.colHeaderConfig },
+              { value: "Rendimiento por Galón", ...this.colHeaderConfig },
+              { value: "Vel. Promedio", ...this.colHeaderConfig },
+
+              { value: "Tiempo en Movimiento", ...this.colHeaderConfig },
+              { value: "Tiempo Relenti", ...this.colHeaderConfig },
+              { value: "Tiempo Apagado", ...this.colHeaderConfig },
+
+              { value: "Odómetro Inicial", ...this.colHeaderConfig },
+              { value: "Odometro Final", ...this.colHeaderConfig },
+
+              //=======================================
+
+            ],
+            height: header_two_lines? this.colsHeaderHeightTwoLine: this.colsHeaderHeight,
+          });
+
+
+
+          data[1].forEach((item: { odometro_fin:any; odometro_ini:any; tiempo_apagado:any; tiempo_relenti:any; tiempo_movimiento:any; velocidad_promedio:any; rendimiento_por_galon:any; combustible_consumido:any; total_distancia:any; hora_final:any; fecha_final:any; hora_inicio:any; fecha_inicio: any;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; nombre_zona: any; v0: any; velocidad: any;}, index: number) => {
+
+            // var fh = item.fecha.split(" ");
+            // var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+            codigo_cell_ch_width = Math.max( codigo_cell_ch_width, (item.codigo??'').toString().length);
+            placa_cell_ch_width = Math.max( placa_cell_ch_width, (item.placa??'').toString().length);
+
+            fecha_inicio_gps_cell_ch_width = Math.max( fecha_inicio_gps_cell_ch_width, (item.fecha_inicio??'').toString().length);
+            hora_inicio_gps_cell_ch_width = Math.max( hora_inicio_gps_cell_ch_width, (item.hora_inicio??'').toString().length);
+            fecha_fin_gps_cell_ch_width = Math.max( fecha_fin_gps_cell_ch_width, (item.fecha_final??'').toString().length);
+            hora_fin_gps_cell_ch_width = Math.max( hora_fin_gps_cell_ch_width, (item.hora_final??'').toString().length);
+
+            distancia_recorrida_cell_ch_width = Math.max( distancia_recorrida_cell_ch_width, (item.total_distancia??'').toString().length);
+            combustible_consumido_cell_ch_width = Math.max( combustible_consumido_cell_ch_width, (item.combustible_consumido??'').toString().length);
+            rendimiento_galon_cell_ch_width = Math.max( rendimiento_galon_cell_ch_width, (item.rendimiento_por_galon??'').toString().length);
+            velocidad_promedio_cell_ch_width = Math.max( velocidad_promedio_cell_ch_width, (item.velocidad_promedio??'').toString().length);
+
+            tiempo_movimiento_cell_ch_width = Math.max( tiempo_movimiento_cell_ch_width, (item.tiempo_movimiento??'').toString().length);
+            tiempo_relenti_cell_ch_width = Math.max( tiempo_relenti_cell_ch_width, (item.tiempo_relenti??'').toString().length);
+            tiempo_apagado_cell_ch_width = Math.max( tiempo_apagado_cell_ch_width, (item.tiempo_apagado??'').toString().length);
+            odometro_inicial_cell_ch_width = Math.max( odometro_inicial_cell_ch_width, (item.odometro_ini??'').toString().length);
+            odometro_final_cell_ch_width = Math.max( odometro_final_cell_ch_width, (item.odometro_fin??'').toString().length);
+            //=============================================
+            
+            rows.push({
+              cells: [
+                { value: (index + 1), ...this.bodyRowsConfig },
+                { value: item.codigo, ...this.bodyRowsConfig },
+                { value: item.placa, ...this.bodyRowsConfig },
+
+                { value: item.fecha_inicio, ...this.bodyRowsConfig },
+                { value: item.hora_inicio, ...this.bodyRowsConfig },
+                { value: item.fecha_final, ...this.bodyRowsConfig },
+                { value: item.hora_final, ...this.bodyRowsConfig },
+
+                { value: item.total_distancia, ...this.bodyRowsConfig },
+                { value: item.combustible_consumido, ...this.bodyRowsConfig },
+                { value: item.rendimiento_por_galon, ...this.bodyRowsConfig },
+                { value: item.velocidad_promedio, ...this.bodyRowsConfig },
+
+                { value: item.tiempo_movimiento, ...this.bodyRowsConfig },
+                { value: item.tiempo_relenti, ...this.bodyRowsConfig },
+                { value: item.tiempo_apagado, ...this.bodyRowsConfig },
+                { value: item.odometro_ini, ...this.bodyRowsConfig },
+                { value: item.odometro_fin, ...this.bodyRowsConfig },
+
+              ],
+              height: this.bodyRowsHeight
+            });
+          });
+
+        //}
+
+        // //********************************************* excel version 1 *********************************
+    if (vrs == 1) {
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.w_date },
+        { width: this.w_hour },
+        { width: this.w_date },
+        { width: this.w_hour },
+      ];
+
+
+      column_config.push(
+        // { width: this.calculateColWidth(fecha_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(fecha_fin_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_fin_gps_cell_ch_width) },
+
+        { width: this.calculateColWidth(distancia_recorrida_cell_ch_width) },
+        { width: this.calculateColWidth(combustible_consumido_cell_ch_width) },
+        { width: this.calculateColWidth(rendimiento_galon_cell_ch_width) },
+        { width: this.calculateColWidth(velocidad_promedio_cell_ch_width) },
+
+        { width: this.calculateColWidth(tiempo_movimiento_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_relenti_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_apagado_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_inicial_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_final_cell_ch_width) },
+      );
+
+
+
+
+      exportFileEx.push({
+      freezePane: {
+        rowSplit: this.headerRowSpan + this.subHeaderContentRowSpan + 2
+        },
+      columns: column_config,
+      title: "Resultado",//data[0][1],
+      rows: rows
+      });
+
+      codigo_cell_ch_width = "codigo".length;
+      placa_cell_ch_width = "placa".length;
+
+      fecha_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+      hora_inicio_gps_cell_ch_width = "Fecha Inicio GPS".length;
+      fecha_fin_gps_cell_ch_width = "Fecha Fin GPS".length;
+      hora_fin_gps_cell_ch_width = "Hora Fin GPS".length;
+
+      distancia_recorrida_cell_ch_width = "Distancia Recorrida".length;
+      combustible_consumido_cell_ch_width = "Combustible Consumido".length;
+      rendimiento_galon_cell_ch_width = "Rendimiento por Galón".length;
+      velocidad_promedio_cell_ch_width = "Vel. Promedio".length;
+
+      tiempo_movimiento_cell_ch_width = "Tiempo en Movimiento".length;
+      tiempo_relenti_cell_ch_width = "Tiempo Relenti".length;
+      tiempo_apagado_cell_ch_width = "Tiempo Apagado".length;
+      odometro_inicial_cell_ch_width = "Odómetro Inicial".length;
+      odometro_final_cell_ch_width = "Odometro Final".length;
+
+
+
+    }
+    // //********************************************* excel version 1 *********************************
+
+    // //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      rows.splice(0, this.headerRowSpan);
+      rows.push(...this.spaceBetweenTables);
+      allRows = allRows.concat(rows);
+    }
+    // //********************************************* excel version 2 *********************************
+
+
+      }
+    });
+
+    //********************************************* excel version 2 *********************************
+    if (vrs == 2) {
+      allRows[0].cells![0].colSpan = table_width;
+
+      column_config = [
+        { width: this.w_item },
+        { width: this.calculateColWidth(codigo_cell_ch_width) },
+        { width: this.calculateColWidth(placa_cell_ch_width) },
+        { width: this.w_date },
+        { width: this.w_hour },
+        { width: this.w_date },
+        { width: this.w_hour },
+      ];
+      column_config.push(
+        // { width: this.calculateColWidth(fecha_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_inicio_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(fecha_fin_gps_cell_ch_width) },
+        // { width: this.calculateColWidth(hora_fin_gps_cell_ch_width) },
+
+        { width: this.calculateColWidth(distancia_recorrida_cell_ch_width) },
+        { width: this.calculateColWidth(combustible_consumido_cell_ch_width) },
+        { width: this.calculateColWidth(rendimiento_galon_cell_ch_width) },
+        { width: this.calculateColWidth(velocidad_promedio_cell_ch_width) },
+
+        { width: this.calculateColWidth(tiempo_movimiento_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_relenti_cell_ch_width) },
+        { width: this.calculateColWidth(tiempo_apagado_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_inicial_cell_ch_width) },
+        { width: this.calculateColWidth(odometro_final_cell_ch_width) },
+      );
+
+      exportFileEx.push({
+        freezePane: {
+          rowSplit: this.headerRowSpan
+        },
+        columns: column_config,
+        title: "Resultado",//data[0][1],
+        rows: allRows
+      });
+    }
+    //********************************************* excel version 2 *********************************
+
+    console.log(exportFileEx);
+
+    if(bol_datos_ex){
+      var workbook = new kendo.ooxml.Workbook({
+        sheets: exportFileEx
+      });
+
+      kendo.saveAs({
+        dataURI: workbook.toDataURL(),
+        fileName: "ReporteCombustibleResumen.xlsx"
       });
 
     } else {
@@ -19484,8 +19891,4 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 }
-
-
-
-
 

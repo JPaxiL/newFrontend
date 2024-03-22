@@ -248,33 +248,44 @@ export class ModalComponent implements OnInit, OnDestroy {
                 }
 
         };
-        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+
+
+
+        //==================================
+        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].velGPS) { cellsCampos.push({ value: "Velocidad GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].velGPS_speed) { cellsCampos.push({ value: "Velocidad GPS speed", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].velMobileye_ME460) { cellsCampos.push({ value: "Velocidad Mobileye", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-
-        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].velECO) { cellsCampos.push({ value: "Velocidad ECO", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].RPMAlta) { cellsCampos.push({ value: "RPM Alta", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-
-        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].cNivel) { cellsCampos.push({ value: "Nivel de Combustible", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].cRestante) { cellsCampos.push({ value: "C.Restante", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].cMotor) { cellsCampos.push({ value: "C.Motor", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].odometro) { cellsCampos.push({ value: "Odómetro", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].RxM) { cellsCampos.push({ value: "Rev.X.Min", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].altitud) { cellsCampos.push({ value: "Altitud", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].angulo) { cellsCampos.push({ value: "Angulo", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+
+        if (data[2].alimentGps) { cellsCampos.push({ value: "Alimentación GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].nivelBateria) { cellsCampos.push({ value: "Nivel de Bateríar", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].nivelCobertura) { cellsCampos.push({ value: "Nivel de Cobertura", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].temperaturaGps) { cellsCampos.push({ value: "Temperatura GPS", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].satelite) { cellsCampos.push({ value: "Satélite", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+
         if (data[2].recFacial) { cellsCampos.push({ value: "Reconocimiento Facial", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].velCAN) { cellsCampos.push({ value: "Velocidad CAN", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].pCercano) { cellsCampos.push({ value: "Punto Cercano", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].onOff) { cellsCampos.push({ value: "On/Off", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].alcoholemia) { cellsCampos.push({ value: "Alcoholemia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].parametros) { cellsCampos.push({ value: "Parámetros", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].ubicacion) { cellsCampos.push({ value: "Ubicación", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
         if (data[2].referencia) { cellsCampos.push({ value: "Referencia", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
-        if (data[2].DUOT2state) { cellsCampos.push({ value: "DUOT2 state", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].fatiga) { cellsCampos.push({ value: "Fatiga", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].fExBrusca) { cellsCampos.push({ value: "Frenada Extrema Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].fBrusca) { cellsCampos.push({ value: "Frenada Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+        if (data[2].aBrusca) { cellsCampos.push({ value: "Aceleración Brusca", bold: true, color: "#ffffff", background: "#128fe8", vAlign: "center", hAlign: "center", fontSize: this.t3 }); };
+
+
 
         rows.push({
             cells: cellsCampos
@@ -283,7 +294,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         //================= FIN CABECERA =================
 
         //====================  CUERPO =============================
-        data[1].forEach((item: { fecha: number;  lat: number; lng: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any;
+        data[1].forEach((item: { satelite:any; temperaturaGps:any; nivelCobertura:any; nivelBateria:any; alimentGps:any;fecha: number;  lat: number; lng: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any;
           vel_gps_speed: any; vel_can: any; tramo: string; PC: any;
         referencia:any; fServidor:any; velGPS:any; velECO:any; velGPS_speed:any; velMobileye_ME460:any; altitud:any; angulo:any; fatiga:any; fExBrusca:any; fBrusca:any; aBrusca:any; RPMAlta:any;
         alcohol_nombre:any; parametros:any; cNivel:any; cRestante:any; cMotor:any; odometro:any; onOff:any; RxM:any; recFacial:any; velCAN:any; pCercano:any; DUOT2state:any;
@@ -313,34 +324,40 @@ export class ModalComponent implements OnInit, OnDestroy {
               }
             };
 
-            if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            //-------------
+            if (data[2].pCercano) { cellsCuerpo.push({ value: item.pCercano, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].velCAN) { cellsCuerpo.push({ value: item.velCAN, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].velGPS) { cellsCuerpo.push({ value: item.velGPS, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].velGPS_speed) { cellsCuerpo.push({ value: item.velGPS_speed, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].velMobileye_ME460) { cellsCuerpo.push({ value: item.velMobileye_ME460, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-
-            if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].fatiga) { cellsCuerpo.push({ value: item.fatiga, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].fExBrusca) { cellsCuerpo.push({ value: item.fExBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].fBrusca) { cellsCuerpo.push({ value: item.fBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].aBrusca) { cellsCuerpo.push({ value: item.aBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].velECO) { cellsCuerpo.push({ value: item.velECO, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].DUOT2state) { cellsCuerpo.push({ value: item.DUOT2state, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].RxM) { cellsCuerpo.push({ value: item.RxM, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].RPMAlta) { cellsCuerpo.push({ value: item.RPMAlta, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-
-            if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].parametros) { cellsCuerpo.push({ value: item.parametros, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].cNivel) { cellsCuerpo.push({ value: item.cNivel, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].cRestante) { cellsCuerpo.push({ value: item.cRestante, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].cMotor) { cellsCuerpo.push({ value: item.cMotor, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
             if (data[2].odometro) { cellsCuerpo.push({ value: item.odometro, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].onOff) { cellsCuerpo.push({ value: item.onOff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].RxM) { cellsCuerpo.push({ value: item.RxM, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].recFacial) { cellsCuerpo.push({ value: item.recFacial, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].velCAN) { cellsCuerpo.push({ value: item.velCAN, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].pCercano) { cellsCuerpo.push({ value: item.pCercano, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
-            if (data[2].referencia) { cellsCuerpo.push({ value: rreeff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].altitud) { cellsCuerpo.push({ value: item.altitud, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].angulo) { cellsCuerpo.push({ value: item.angulo, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
 
-            if (data[2].DUOT2state) { cellsCuerpo.push({ value: item.DUOT2state, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].alimentGps) { cellsCuerpo.push({ value: item.alimentGps, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].nivelBateria) { cellsCuerpo.push({ value: item.nivelBateria, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].nivelCobertura) { cellsCuerpo.push({ value: item.nivelCobertura, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].temperaturaGps) { cellsCuerpo.push({ value: item.temperaturaGps, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].satelite) { cellsCuerpo.push({ value: item.satelite, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+           
+           
+            if (data[2].recFacial) { cellsCuerpo.push({ value: item.recFacial, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].onOff) { cellsCuerpo.push({ value: item.onOff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].alcoholemia) { cellsCuerpo.push({ value: item.alcohol_nombre, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].parametros) { cellsCuerpo.push({ value: item.parametros, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].ubicacion) { cellsCuerpo.push({ value: ubicacion, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].referencia) { cellsCuerpo.push({ value: rreeff, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].fatiga) { cellsCuerpo.push({ value: item.fatiga, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].fExBrusca) { cellsCuerpo.push({ value: item.fExBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].fBrusca) { cellsCuerpo.push({ value: item.fBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
+            if (data[2].aBrusca) { cellsCuerpo.push({ value: item.aBrusca, vAlign: "center", hAlign: "center", fontSize: this.c1 }); };
 
             rows.push({
                 cells:cellsCuerpo

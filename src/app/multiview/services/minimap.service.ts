@@ -16,7 +16,7 @@ import { DriversService } from 'src/app/drivers/services/drivers.service';
   providedIn: 'root'
 })
 export class MinimapService {
-  
+
   @ViewChild('popupText') popupText!: ElementRef;
 
   public maps: IMapMinimap[] = [];
@@ -58,9 +58,10 @@ export class MinimapService {
     this.userDataService.getUserData();
     this.userDataService.userDataCompleted.subscribe(res=>{
       this.driversService.initialize(); //NECESITA INFO DE USER DATA
+      this.vehicleService.setDefaultStatusDataVehicle();
+      this.vehicleService.initialize();
     })
-    this.vehicleService.setDefaultStatusDataVehicle();
-    this.vehicleService.initialize();
+
     this.vehicleService.dataCompleted.subscribe(vehicles=>{
         console.log("user data completadoooo",vehicles);
         this.vehicleServiceIsReady = true;
@@ -153,7 +154,7 @@ export class MinimapService {
             tiempoParada: tiempoParada,
           };
           // console.log("auxxxx",aux);
-          
+
           //Una vez llegado el evento con la data de tiempo de parada de un vehiculo,
           //Buscamos a que mapas pertenece el vehiculo y actualizamos el valor de imeiPopu y time_stop
           // de cada mapa ya que seran tomados al llamar a printPopup con el mapa correspondiente
@@ -228,7 +229,7 @@ export class MinimapService {
       }
 
       mapItem.markerClusterGroup.clearLayers();
-      
+
       for (const property in e){
         console.log("e----- ", property);
         console.log("e.hasOwnProperty(property)", e.hasOwnProperty(property));
@@ -276,7 +277,7 @@ export class MinimapService {
   }
   private async drawIcon(data:any, mapItem: IMapMinimap): Promise<void>{
     // console.log("dataaaaa---",data);
-    
+
     //let iconUrl = './assets/images/objects/nuevo/'+data.icon;
     let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+data.icon);
     if(data.speed>0){
@@ -292,36 +293,36 @@ export class MinimapService {
     let nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
     const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
     if (nameGroup){
-      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
         '<small>'+nameGroup+'</small><br>'+
         // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"> Conductor: </i></span>'+data.namedriver+'</small><br>'+
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
-        '<small>REFERENCIA: '+'NN'+'</small><br>'+
-        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-        '<small>TIEMPO DE PARADA: '+mapItem.time_stop+'</small>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"> Ubicacion: </i></span><a href=" ' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"> Referencia: </i></span> '+'NN'+'</small><br>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"> Fehca de Transmision: </i></span> '+data.dt_tracker+'</small><br>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"> Tiempo de Parada: </i></span>'+mapItem.time_stop+'</small>'+
       '</aside>';
     }else{
-      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+      var popupText = '<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">'+data.speed+' km/h</strong></div></div>'+
       '<aside #popupText class="">'+
-        '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-        '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"> Conductor: </i></span>'+data.namedriver+'</small><br>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"> Ubicacion: </i></span><a href=" ' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
         // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-        '<small>REFERENCIA: '+'NN'+'</small><br>'+
-        '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-        '<small>TIEMPO DE PARADA: '+mapItem.time_stop+'</small>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"> Referencia: </i></span> '+'NN'+'</small><br>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"> Fecha de Transmision: </i></span> '+data.dt_tracker+'</small><br>'+
+        '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"> Tiempo de Parada: </i></span>'+mapItem.time_stop+'</small>'+
       '</aside>';
     }
-    
+
 
     // const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker});//.addTo(map).bindPopup(popupText);
     const tempMarker = L.marker([data.latitud, data.longitud], {icon: iconMarker}).bindPopup(popupText);
     // tempMarker.imei = data.IMEI;
     // tempMarker.bindLabel("My Label");
-    tempMarker.bindTooltip(`<span>${data.name}</span>`, { 
-      permanent: true, 
+    tempMarker.bindTooltip(`<span>${data.name}</span>`, {
+      permanent: true,
       offset: [0, 12],
       className: 'vehicle-tooltip', });
     let options = {
@@ -357,7 +358,7 @@ export class MinimapService {
         cont++;
       }
     }
-    
+
     mapItem.markerClusterGroup.addTo(mapItem.map,{renderer:L.canvas()});
     //let layers = mapItem.markerClusterGroup.getLayers();
   }
@@ -413,30 +414,37 @@ export class MinimapService {
 
       if(layers[key]['_tooltip']['_content']==this.marker[data.imei]._tooltip._content){
         // console.log("this.markerClusterGroup.getLayers()[key]",this.markerClusterGroup.getLayers()[key]);
+
+         // Eliminar el tooltip activo
+        /*  const activeTooltip = document.querySelector('.tooltip');
+         if (activeTooltip) {
+           activeTooltip.remove();
+         } */
+
         const nameGroup = this.setNameGroup(data.nameoperation,data.namegrupo,data.nameconvoy);
         const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
           if (nameGroup){
-            mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+            mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">'+data.speed+' km/h</strong></div></div>'+
           '<aside class="">'+
           // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
           '<small>'+nameGroup+'</small><br>'+
-          '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-          '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"> Conductor: </i></span>'+data.namedriver+'</small><br>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"> Ubicacion: </i></span><a href=" ' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
           // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-          '<small>REFERENCIA: '+data.ref+'</small><br>'+
-          '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-          '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"> Referencia: </i></span> '+data.ref+'</small><br>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"> Fehca de Transmision: </i></span> '+data.dt_tracker+'</small><br>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"> Tiempo de Parada: </i></span>'+data.tiempoParada+'</small>'+
           '</aside>');
           }else{
-            mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong>'+data.speed+' km/h</strong></div></div>'+
+            mapItem.markerClusterGroup.getLayers()[key]['_popup'].setContent('<div class="row"><div class="col-6" align="left"><strong>'+data.name+'</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">'+data.speed+' km/h</strong></div></div>'+
           '<aside class="">'+
           // '<small>CONVOY: '+data.nameconvoy+'</small><br>'+
-          '<small>CONDUCTOR: '+data.namedriver+'</small><br>'+
-          '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"> Conductor: </i></span>'+data.namedriver+'</small><br>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"> Ubicacion: </i></span><a href=" ' + googleMapsLink + '" target="_blank">' + data.latitud + ', ' + data.longitud + '</a></small><br>' +
           // '<small>UBICACION: '+data.latitud+', '+data.longitud+'</small><br>'+
-          '<small>REFERENCIA: '+data.ref+'</small><br>'+
-          '<small>FECHA DE TRANSMISION: '+data.dt_tracker+'</small><br>'+
-          '<small>TIEMPO DE PARADA: '+data.tiempoParada+'</small>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"> Referencia: </i></span> '+data.ref+'</small><br>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"> Fecha de Transmision: </i></span> '+data.dt_tracker+'</small><br>'+
+          '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"> Tiempo de Parada: </i></span>'+data.tiempoParada+'</small>'+
           '</aside>');
           }
       }
@@ -472,18 +480,18 @@ export class MinimapService {
     return diferenciaEnSegundos > 15;
   }
   private async monitor(data: any): Promise<void>{
-    
+
     // console.log('DATA INGRESADA ->',data);
     this.maps.forEach(async (item) => {
       //console.log("vehicles in item: ", item.configuration?.vehicles);
       const resultado = item.minimapConf?.vehicles!.find(vehi => vehi.IMEI?.toString() == data.IMEI.toString());
       //console.log("data IMEI: ", data.IMEI.toString());
       //console.log("vehicles IMEIs: ", item.configuration?.vehicles!.map(item=> {return item.tracker_imei}));
-      
+
       if(resultado){
         const index = item.minimapConf!.vehicles!.indexOf(resultado);
         console.log("resultado e indice: ", resultado, index);
-        
+
         // const fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
         // if(this.diffSecondsNow(fecha_tracker)){
         //   console.log('DATA NO ENTRA POR SER DE VOLCADO');
@@ -492,7 +500,7 @@ export class MinimapService {
         data.fecha_tracker = moment(data.fecha_tracker).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss');
         // if(data.IMEI =='860640057372346'){
         //   data.driver_id=489;
-        //   console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker,data.fecha_tracker); 
+        //   console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker,data.fecha_tracker);
         //   console.log('TRAMA',data);
         //   console.log('VEHICLE OLD',item.minimapConf!.vehicles![index]);
         //   console.log(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker));
@@ -502,7 +510,7 @@ export class MinimapService {
         // }
         if(item.minimapConf!.vehicles![index].dt_tracker != data.fecha_tracker && item.minimapConf!.vehicles![index].driver_id != data.driver_id && !this.diffSecondsNow(data.fecha_tracker)){
           item.minimapConf!.vehicles![index].driver_id = data.driver_id;
-          // console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker); 
+          // console.log('Fecha Diferente',item.minimapConf!.vehicles![index].dt_tracker);
           // data.fecha_tracker = fecha_tracker;
           // console.log('TRAMA',data);
           // OBTENER EL NOMBRE EN BASE AL ID DRIVER
@@ -526,7 +534,7 @@ export class MinimapService {
         // console.log('Info Driver',tempInfoDriver);
         console.log("["+resultado.numero_placa+"] item.imeiPopup==data.IMEI.toString()", item.imeiPopup==data.IMEI.toString());
         if(item.imeiPopup==data.IMEI.toString()){
-          
+
           let options = {
             imei: data.IMEI,
             name: item.minimapConf!.vehicles![index].name,
@@ -547,7 +555,7 @@ export class MinimapService {
 
         console.log("["+resultado.numero_placa+"] item.configuration!.vehicles![index].eye", item.minimapConf!.vehicles![index].eye);
         if(item.minimapConf!.vehicles![index].eye){
-          
+
           let cont = 0;
           let object = item.markerClusterGroup.getLayers();
           for (const key in object) {
@@ -555,7 +563,7 @@ export class MinimapService {
             if (object[key]['_tooltip']['_content']=="<span>"+item.minimapConf!.vehicles![index].name+"</span>") {
               cont++;
               let oldCoords = item.markerClusterGroup.getLayers()[key].getLatLng();
-              
+
               let coord = {
                 lat : parseFloat(item.minimapConf!.vehicles![index].latitud!),
                 lng : parseFloat(item.minimapConf!.vehicles![index].longitud!)
@@ -563,7 +571,10 @@ export class MinimapService {
 
               // console.log('INFO DEL VEHICLE--->',item.minimapConf!.vehicles![index]);
               if (item.minimapConf!.vehicles![index].parametros!.includes('di4=') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=')){
-                let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.minimapConf!.vehicles![index].icon);
+                 let iconUrl = await MinimapService.loadAndConvertSVGToPNG('./assets/images/objects/nuevo/'+item.minimapConf!.vehicles![index].icon);
+
+                //let iconUrl = this.userDataService.getDirectionSvg(item.minimapConf!.vehicles![index].tipo!,'default',this.direction);
+
                 if (this.userDataService.changeItemIcon == 'vehicles' && (item.minimapConf!.vehicles![index].parametros!.includes('|di4=1|') || item.minimapConf!.vehicles![index].parametros!.includes('Custom_ign=1'))){
                   //FUNCION PARA CAMBIAR DE COLOR VEHICULOS ICON
                   // Si la cadena contiene |di4=1| o custom_ign=1
@@ -593,26 +604,26 @@ export class MinimapService {
                 const googleMapsLink = `https://www.google.com/maps?q=${data.latitud},${data.longitud}`;
                 const nameGroup = this.setNameGroup(item.minimapConf!.vehicles![index].nameoperation!,item.minimapConf!.vehicles![index].namegrupo!,item.minimapConf!.vehicles![index].nameconvoy!);
                 if (nameGroup){
-                  item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
+                  item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
                   '<aside class="">'+
                     // '<small>CONVOY: '+item.minimapConf!.vehicles![index].nameconvoy+'</small><br>'+
                     '<small>'+nameGroup+'</small><br>'+
-                    '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
-                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"> Conductor: </i></span>'+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"> Ubicacion: </i></span><a href=" ' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
                     // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
-                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                    '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
-                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"> Referencia: </i></span> '+'Calculando ...'+'</small><br>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"> Fehca de Transmision: </i></span> '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"> Tiempo de Parada: </i></span> Calculando ...</small>'+
                   '</aside>';
                 }else{
-                  item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong>'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
+                  item.markerClusterGroup.getLayers()[key]['_popup']['_content'] = '<div class="row"><div class="col-6" align="left"><strong>'+item.minimapConf!.vehicles![index].name+'</strong></div><div class="col-6" align="right"><strong class="bg-secondary bg-opacity-25 p-1 rounded ">'+item.minimapConf!.vehicles![index].speed+' km/h</strong></div></div>'+
                   '<aside class="">'+
-                    '<small>CONDUCTOR: '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
-                    '<small>UBICACION: <a href="' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Conductor"><i class="fas fa-user-circle"> Conductor: </i></span> '+item.minimapConf!.vehicles![index].namedriver+'</small><br>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Ubicacion"><i class="fas fa-crosshairs"> Ubicacion: </i></span><a href=" ' + googleMapsLink + '" target="_blank">' + item.minimapConf!.vehicles![index].latitud + ', ' + item.minimapConf!.vehicles![index].longitud + '</a></small><br>' +
                     // '<small>UBICACION: '+item.minimapConf!.vehicles![index].latitud+', '+item.minimapConf!.vehicles![index].longitud+'</small><br>'+
-                    '<small>REFERENCIA: '+'Calculando ...'+'</small><br>'+
-                    '<small>FECHA DE TRANSMISION: '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
-                    '<small>TIEMPO DE PARADA: Calculando ...</small>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Referencia"><i class="fas fa-map-marked-alt"> Referencia: </i></span> '+'Calculando ...'+'</small><br>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Fecha de Transmision"><i class="fas fa-calendar-alt"> Fehca de Transmision: </i></span> '+item.minimapConf!.vehicles![index].dt_tracker+'</small><br>'+
+                    '<small><span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Tiempo de Parada"><i class="fas fa-hourglass-half"> Tiempo de Parada: </i></span> Calculando ...</small>'+
                   '</aside>';
                 }
                 // EN DUDA SI COMENTARLO
@@ -644,11 +655,11 @@ export class MinimapService {
                     if(coord.lat > oldCoords.lat){
                       //arriba
                       this.direction_Y = 'up';
-                      this.dif_Y = coord.lat-oldCoords.lat;  
+                      this.dif_Y = coord.lat-oldCoords.lat;
                       if(this.dif_Y >= this.dif_mayor){
-                        this.dif_mayor = this.dif_Y; 
+                        this.dif_mayor = this.dif_Y;
                         this.direction = 'up';
-                        this.dif_divide = this.dif_Y/2; 
+                        this.dif_divide = this.dif_Y/2;
                       }
                     }else{
                       //abajo
@@ -658,14 +669,14 @@ export class MinimapService {
                         this.dif_mayor = this.dif_Y;
                         this.direction = 'down';
                         this.dif_divide = this.dif_Y/2;
-                        
+
                       }
                     }
-    
+
                     if(coord.lng > oldCoords.lng){
                       //derecha
                       this.direction_X = 'right';
-                      this.dif_X = coord.lng-oldCoords.lng; 
+                      this.dif_X = coord.lng-oldCoords.lng;
                       if(this.dif_X >= this.dif_mayor){
                         this.dif_mayor = this.dif_X;
                         this.direction = 'right';
@@ -681,35 +692,35 @@ export class MinimapService {
                         this.dif_divide = this.dif_X/2;
                       }
                     }
-                    
+
                     if(this.direction == 'up' || this.direction == 'down'){
-    
-                      if(this.dif_X >= this.dif_divide){ 
-    
+
+                      if(this.dif_X >= this.dif_divide){
+
                         this.final_direction = `${this.direction}-${this.direction_X}`;
-    
+
                       }else{
-    
+
                         this.final_direction = `${this.direction}`;
-                        
+
                       }
-    
+
                     }else{
-    
+
                       if(this.dif_Y >= this.dif_divide){
-    
+
                         this.final_direction = `${this.direction_Y}-${this.direction}`;
                       }else{
-    
+
                         this.final_direction = `${this.direction}`;
-                        
+
                       }
                     }
 
                     //this.changePositionArrow(this.final_direction,key);
 
                     // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${this.final_direction}.svg`);
-                    // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60]; 
+                    // item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
                     if(this.userDataService.changeItemIcon == 'cursor' && item.minimapConf!.vehicles![index].speed! > item.minimapConf!.vehicles![index].limit_speed!){
                       item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
                       item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/excessCursor/arrow_${this.final_direction}.svg`);
@@ -731,12 +742,12 @@ export class MinimapService {
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/excessCursor/arrow_${old_direction[1]}.svg`;
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/excessCursor/arrow_${old_direction[1]}`);
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                        
+
                       }else{
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/arrow_${old_direction[1]}.svg`;
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/arrow_${old_direction[1]}`);
                         item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                      } 
+                      }
                     }
                     else{
                       item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
@@ -749,7 +760,7 @@ export class MinimapService {
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/relentiCursor/arrow_${old_direction[1]}.svg`;
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/relentiCursor/arrow_${old_direction[1]}`);
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowAnchor']=[14,60];
-                    
+
                   }else{
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['currentDirection']= `./assets/images/relentiCursor/arrow_down-left.svg`;
                     item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']= await MinimapService.loadAndConvertSVGToPNG(`./assets/images/relentiCursor/arrow_down-left.svg`);
@@ -757,7 +768,7 @@ export class MinimapService {
                   }
                 }else{
                   item.markerClusterGroup.getLayers()[key]['options']['icon']['options']['shadowUrl']='';
-                  
+
                 }
                 item.markerClusterGroup.getLayers()[key].setLatLng(coord);
                 let aux = item.markerClusterGroup.getLayers()[key];
@@ -820,7 +831,7 @@ export class MinimapService {
   }
 
   public changeClusteringVisibility(visibility: boolean){
-    
+
     this.clustering = visibility;
   }
 
@@ -831,7 +842,7 @@ export class MinimapService {
   static async loadAndConvertSVGToPNG(svgURL: string): Promise<string> {
     // Crear un elemento de imagen
     const img = new Image();
-    
+
     // Cargar el SVG desde la URL
     return new Promise<string>((resolve, reject) => {
       img.onload = async () => {
@@ -840,11 +851,11 @@ export class MinimapService {
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-    
+
         if (ctx) {
           // Dibujar la imagen en el lienzo
           ctx.drawImage(img, 0, 0, img.width, img.height);
-    
+
           // Convertir el lienzo a un formato PNG
           const dataURL = canvas.toDataURL('image/png');
           canvas.remove();
@@ -853,11 +864,11 @@ export class MinimapService {
           reject('Failed to get 2D context for canvas');
         }
       };
-    
+
       img.onerror = () => {
         reject('Failed to load SVG image');
       };
-    
+
       img.src = svgURL;
     });
   }

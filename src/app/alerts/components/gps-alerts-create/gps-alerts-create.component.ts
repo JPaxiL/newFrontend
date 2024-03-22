@@ -123,33 +123,19 @@ export class GpsAlertsCreateComponent implements OnInit {
 
       // Obtén todos los elementos de la lista de sonidos hasta el id 27
       let sonidosObtenidos = this.AlertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
-      if (alert.id === 3) {
+      if (alert.name === 'Aceleracion Brusca') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 28
+          (sonido: { id: any }) => sonido.id === 27
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
         }
-      } else if (alert.id === 4) {
+      } else if (alert.name === 'Frenada Brusca') {
         const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 35
-        );
-        if (vozPersonalizada) {
-          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
-        }
-      } else if (alert.id === 64) {
-        const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 33
-        );
-        if (vozPersonalizada) {
-          sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
-        }
-      } else if (alert.id === 29) {
-        const vozPersonalizada = this.AlertService.listaSonidos.find(
-          (sonido: { id: any }) => sonido.id === 37
+          (sonido: { id: any }) => sonido.id === 34
         );
         if (vozPersonalizada) {
           sonidosObtenidos = [vozPersonalizada, ...sonidosObtenidos];
@@ -166,7 +152,7 @@ export class GpsAlertsCreateComponent implements OnInit {
       }
     } else {
       this.listaSonidos = this.AlertService.listaSonidos.filter(
-        (sonido: { id: any }) => sonido.id <= 27
+        (sonido: { id: any }) => sonido.id <= 26
       );
 
       if (this.listaSonidos.length > 0) {

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../../services/vehicle.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-vehicle',
@@ -12,7 +14,8 @@ export class VehicleComponent implements OnInit {
   public nameColor: string="red";
   public tooltipText: string="Sin señal";
 
-  constructor(private vehicleService: VehicleService) {
+  constructor(private vehicleService: VehicleService,private sanitizer: DomSanitizer,
+    private domSanitizer:DomSanitizer ) {
    }
 
   ngOnInit(): void {

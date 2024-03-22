@@ -29,6 +29,13 @@ export interface UnitItem {
 }
 
 export interface UserTracker {
+    sanitizer_custom_svg?: any;
+    customurlupleft?: any;
+    customurlleft?: any;
+    customurlright?: any;
+    customurlupright?: any;
+    customurldownleft?: any;
+    customurldownright?: any;
     // timeLast?: boolean;
     driver_id?: string; //PARA LLAVE IBUTTON O ICIPIA
     nameconvoy?: string;
@@ -103,7 +110,7 @@ export interface UserTracker {
     relenti_svg?:any,
     movement_svg?:any,
     excess_svg?:any,
-    movement_onda?:any | null,
+    //movement_onda?:any | null,
 }
 
 export interface ScreenView {
