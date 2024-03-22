@@ -6,6 +6,10 @@ import { UserDataService } from 'src/app/profile-config/services/user-data.servi
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { Subscription } from 'rxjs';
 
+import { ColorPickerModule } from 'primeng-lts/colorpicker';
+
+
+
 
 @Component({
   selector: 'app-user-config',
@@ -13,7 +17,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./user-config.component.scss']
 })
 export class UserConfigComponent implements OnInit {
-  
+
 
   private userDataCompletedSubscription: Subscription | undefined;
   private vehicleCompletedSubscription: Subscription | undefined;
@@ -25,10 +29,11 @@ export class UserConfigComponent implements OnInit {
   typeVehiclesList:any = {};
   userTypeVehicleConfig: any = {};
   showChangeItem:boolean = false;
-  
 
   showDirectionVehicles:boolean=false;
 
+
+  showIcon: boolean = false;
 
   bol_ondas!:boolean;
   bol_cursor!:boolean;
@@ -39,10 +44,6 @@ export class UserConfigComponent implements OnInit {
   originalValues: any[] | undefined;
 
   filteredColorsVehicles: any[] = [];
-
-
-  color!: string;
-
 
   colorsVehicles: any[] = [
     { name: 'Por defecto', code: 'c4c2c1',color: '#c4c2c1' }, // Celeste
@@ -63,6 +64,7 @@ export class UserConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("vehicle",this.userDataService.typeVehiclesUserData)
     this.userDataService.spinner.show('loadingAlertData'); // Nombre opcional, puedes usarlo para identificar el spinner
     this.typeVehiclesList = this.userDataService.typeVehicles;
     //console.log("this.typeVehiclesList",this.typeVehiclesList)
@@ -74,11 +76,7 @@ export class UserConfigComponent implements OnInit {
     }
     this.showDirectionVehicles = this.userDataService.changeRotateIcon;
 
-    if(this.userForm.bol_ondas == true || this.userForm.bol_vehicle == true){
-      this.hideStateColors(true)
-    }else{
-      this.hideStateColors(false)
-    }
+
     this.initFormTableVehiclesDefault();
   }
 
@@ -93,15 +91,22 @@ export class UserConfigComponent implements OnInit {
     this.userForm.vehicles = this.typeVehiclesList ?? [];
   }
   
+  onColorChange(event: any, item: any):void {
+
+    console.log("item", item, event);
+  }
+  
+
+
   initFormTableVehiclesDefault(){
     let aux = this.userDataService.typeVehiclesUserData;
     for (const userDataItem of this.typeVehiclesList) {
       const itemVehicle = aux.find((item: { type_vehicle_id: any; }) => item.type_vehicle_id === userDataItem.id);
       if (itemVehicle) {
-        userDataItem.var_color = itemVehicle.var_color;
+        userDataItem.code_color = itemVehicle.code_color;
         userDataItem.var_galon = itemVehicle.var_galon;
       } else {
-        userDataItem.var_color = '#c4c2c1';
+        userDataItem.code_color = '#c4c2c1';
         userDataItem.var_galon = '';
       }
     }
@@ -110,65 +115,29 @@ export class UserConfigComponent implements OnInit {
     this.originalValues = JSON.parse(JSON.stringify(this.typeVehiclesList)); // Guardar una copia profunda de los valores originales
   }
 
+
   changeItemCheckbox(){
     if (this.showChangeItem == false){
       this.userForm.bol_ondas = false;
       this.userForm.bol_cursor = false;
       this.userForm.bol_vehicle = false;
       this.userForm.bol_direction = false;
-      this.hideStateColors(false);
+      this.showIcon = false;
     }else{
       this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
       this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
       this.userForm.bol_vehicle = this.userDataService.userData.bol_vehicle;
       this.userForm.bol_direction = this.userDataService.userData.bol_direction;
-      if(this.userForm.bol_ondas == true || this.userForm.bol_vehicle == true){
-        this.hideStateColors(true)
-      }else{
-        this.hideStateColors(false)
-      }
+
     }
 
     
   }
 
   changeDirectionVehiclesCheckbox(){
-   /*  if(this.showDirectionVehicles == false){
-      this.userForm.bol_direction = false;
-    }else{
-      this.userForm.bol_direction = this.userDataService.userData.bol_direction;
-    } */
     this.userForm.bol_direction = this.showDirectionVehicles;
     console.log(this.showDirectionVehicles);
   }
-
-  /* switchActive(option:number){
-    if (option == 1) {
-      this.userForm.bol_cursor = false;
-      this.userForm.bol_vehicle = false;
-      
-      this.hideStateColors(this.userForm.bol_cursor);
-    } else if (option == 2) {
-      this.userForm.bol_ondas = false;
-      this.userForm.bol_vehicle = false;
-      this.hideStateColors(false);
-      
-    } else if (option == 3) {
-      this.userForm.bol_ondas = false;
-      this.userForm.bol_cursor = false;
-      this.hideStateColors(this.userForm.bol_vehicle);
-
-    } else if (option == 4){
-      this.userForm.bol_direction = true;
-    } else{
-      this.userForm.bol_direction = false;
-      this.userForm.bol_ondas = false;
-      this.userForm.bol_cursor = false;
-      this.userForm.bol_vehicle = false;
-      this.hideStateColors(false);
-    }
-    // console.log('Mostrando changes...',this.userForm);
-  } */
 
 
   switchActive(option: number) {
@@ -176,20 +145,26 @@ export class UserConfigComponent implements OnInit {
       case 1:
         this.userForm.bol_cursor = false;
         this.userForm.bol_vehicle = false;
-        this.hideStateColors(this.userForm.bol_cursor);
         console.log("OPCION 1",this.userForm.bol_ondas);
+        this.showIcon = false;
         break;
       case 2:
         this.userForm.bol_ondas = false;
         this.userForm.bol_vehicle = false;
-        this.hideStateColors(false);
         console.log("OPCION 2",this.userForm.bol_cursor);
+        this.showIcon = false;
+
         break;
       case 3:
         this.userForm.bol_ondas = false;
         this.userForm.bol_cursor = false;
-        this.hideStateColors(this.userForm.bol_vehicle);
         console.log("OPCION 3",this.userForm.bol_vehicle);
+
+        if (!this.userForm.bol_vehicle) {
+          this.showIcon = false;
+        }else{
+          this.showIcon = true;
+        }
         break;
       case 4:
         if (!this.userForm.bol_direction) {
@@ -205,7 +180,7 @@ export class UserConfigComponent implements OnInit {
         this.userForm.bol_ondas = false;
         this.userForm.bol_cursor = false;
         this.userForm.bol_vehicle = false;
-        this.hideStateColors(false);
+        this.showIcon = false;
         break;
     }
     // console.log('Mostrando changes...',this.userForm);
@@ -241,17 +216,17 @@ export class UserConfigComponent implements OnInit {
         this.userForm.vehicles[existingIndex] = {
           id: item.id,
           var_nombre: item.var_nombre,
-          var_color: item.var_color,
+          code_color: item.code_color,
           var_galon: item.var_galon
         };
       } else {
-        if(item.var_color == "#c4c2c1"){
-          item.var_color = "c4c2c1";
+        if(item.code_color == "#c4c2c1"){
+          item.code_color = "c4c2c1";
         }
         this.userForm.vehicles.push({
           id: item.id,
           var_nombre: item.var_nombre,
-          var_color: item.var_color,
+          code_color: item.code_color,
           var_galon: item.var_galon
         });
       }
@@ -375,25 +350,6 @@ export class UserConfigComponent implements OnInit {
   unSubscribeVehicleCompleted(){
     if (this.vehicleCompletedSubscription){
       this.vehicleCompletedSubscription.unsubscribe();
-    }
-  }
-
-  hideStateColors(hideColor:boolean){
-    if (hideColor == true) {
-      // console.log('CAMBIOS EN TRUE');
-      //ACTUALIZAR COLORES SELECCIONADOS
-      this.typeVehiclesList.forEach((vehicle: { var_color: string; }) => {
-        if (vehicle.var_color === '45A9FF' || vehicle.var_color === '1DA80E') {
-          vehicle.var_color = 'c4c2c1'; // Cambiar al color por defecto c4c2c1
-        }
-      });
-      //FILTRAR LISTA DE COLORES
-      this.filteredColorsVehicles = this.colorsVehicles.filter(
-        (color) => color.code !== '45A9FF' && color.code !== '1DA80E'
-      );
-    } else {
-      // console.log('CAMBIOS EN FALSE');
-      this.filteredColorsVehicles = this.colorsVehicles;
     }
   }
 

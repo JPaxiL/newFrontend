@@ -1,20 +1,27 @@
 <div class="d-flex" style="height: 100%; overflow:auto;">
     <div class="modal-body p-fluid flex-grow-1 p-0 overflow-auto" style="position: relative;">
-        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" name="loadingAlertData" size = "medium" color = "#fff" type = "ball-pulse" [fullScreen] = "false"><p style="color: white" class="text-center"> Cargando información... </p></ngx-spinner>
+        <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" name="loadingAlertData" size="medium" color="#fff" type="ball-pulse"
+            [fullScreen]="false">
+            <p style="color: white" class="text-center"> Cargando información... </p>
+        </ngx-spinner>
+
         <form (submit)="confirm()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
-            <div class="panel-izq-container h-100" >
+
+
+            <div class="panel-izq-container h-100">
                 <div class="panel-izq-form">
                     <div class="row my-3">
                         <div class="col-12 d-flex justify-content-center">
                             <div class="profile-picture-container">
-                                <span class="one-character-circled profile-picture">{{ userDataService.firstLetter }}</span>
+                                <span class="one-character-circled profile-picture">{{ userDataService.firstLetter
+                                    }}</span>
                             </div>
                         </div>
                         <span class="col-12 text-center w-100 mt-2">
                             {{userDataService.userEmail}}
                         </span>
                     </div>
-                    
+
                     <div class="panel-izq-table-container">
                         <table>
                             <thead>
@@ -25,6 +32,8 @@
                                 </tr>
                             </thead>
                             <tbody>
+
+
                                 <ng-container *ngFor="let item of typeVehiclesList; let i = index">
                                     <tr>
                                         <td style="width: 30%;">
@@ -34,51 +43,33 @@
                                         </td>
                                         <td style="width: 40%;">
                                             <div class="row">
-                                                <div class="col-12 d-flex">
-                                                    <p-colorPicker [(ngModel)]="color2" [inline]="true"></p-colorPicker>
-
-                                                    <div class="col-12">
-                                                        <p-dropdown
-                                                          [options]="filteredColorsVehicles"
-                                                          optionLabel="name"
-                                                          optionValue="code"
-                                                          name="var_color_{{i}}"
-                                                          [(ngModel)]="item.var_color"
-                                                          [showClear]="false"
-                                                          [appendTo]="'body'"
-                                                          [style]="{ 'display': 'flex', 'align-items': 'center' }"
-                                                        >
-                                                        <ng-template let-color pTemplate="selectedItem">
-                                                            <div class="color-option">
-                                                              <div class="color-box" [style.background-color]="color.color"></div>
-                                                              <span>{{ color.name }}</span>
-                                                            </div>
-                                                        </ng-template>
-                                                        <ng-template let-color pTemplate="item">
-                                                            <div class="color-option">
-                                                              <div class="color-box" [style.background-color]="color.color"></div>
-                                                              <span>{{ color.name }}</span>
-                                                            </div>
-                                                          </ng-template>
-                                                        </p-dropdown>
-                                                      </div>
+                                                <div class="col-12 d-flex justify-content-center">
+                                                    <input type="color" class="form-control form-control-color"
+                                                        [(ngModel)]="item.code_color" name="var_color_{{i}}"
+                                                        [value]="item.code_color">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" name="var_galon_{{i}}" [(ngModel)]="item.var_galon" pInputText placeholder="Galones..." pTooltip="Ingrese la cantidad en galones" tooltipPosition="right" />
+                                            <input type="text" name="var_galon_{{i}}" [(ngModel)]="item.var_galon"
+                                                pInputText placeholder="Galones..."
+                                                pTooltip="Ingrese la cantidad en galones" tooltipPosition="right" />
                                         </td>
                                     </tr>
                                 </ng-container>
                             </tbody>
                         </table>
-                    </div> 
-                    <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid" >
+                    </div>
+                    <div class="flex flex-wrap gap-4 justify-center w-full py-4 rounded-lg icon-box grid">
 
                         <div class="col-12 d-flex">
                             <label>
-                                <p-checkbox [(ngModel)]="showDirectionVehicles" (onChange)="changeDirectionVehiclesCheckbox();" name="checkbox_changeDirectionVehicless" [binary]="true" inputId="binary"></p-checkbox>
-                                &nbsp;&nbsp;<span>{{ showDirectionVehicles ? 'Desactivar' : 'Activar' }}</span> Direccionamiento de vehiculos
+                                <p-checkbox [(ngModel)]="showDirectionVehicles"
+                                    (onChange)="changeDirectionVehiclesCheckbox();"
+                                    name="checkbox_changeDirectionVehicless" [binary]="true"
+                                    inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<span>{{ showDirectionVehicles ? 'Desactivar' : 'Activar' }}</span>
+                                Direccionamiento de vehiculos
                             </label>
                         </div>
 
@@ -88,13 +79,14 @@
                                     <div class="col-4 checks ">
                                         <div class="flex align-items h-5 column">
                                             <div>
-                                                <object data="assets/images/user_config/gifcompleto.gif" style="width: 70px;"></object>
+                                                <object data="assets/images/user_config/gifcompleto.gif"
+                                                    style="width: 70px;"></object>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </ng-container>
 
 
@@ -104,36 +96,27 @@
 
                         <div class="col-12 d-flex">
                             <label>
-                                <p-checkbox [(ngModel)]="showChangeItem" (onChange)="changeItemCheckbox();" name="checkbox_changeItem" [binary]="true" inputId="binary"></p-checkbox>
-                                &nbsp;&nbsp;<span>{{ showChangeItem ? 'Desactivar' : 'Activar' }}</span> Cambio de Color según Estado
+                                <p-checkbox [(ngModel)]="showChangeItem" (onChange)="changeItemCheckbox();"
+                                    name="checkbox_changeItem" [binary]="true" inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<span>{{ showChangeItem ? 'Desactivar' : 'Activar' }}</span> Cambio de Color
+                                según Estado
                                 (En movimiento: VERDE, Exceso de Límite de velocidad: ROJO, Relenti: AZUL)
                             </label>
                         </div>
-                        
+
                         <ng-container *ngIf="showChangeItem == true">
                             <div class="container contenido_checkbox">
                                 <div class="row">
                                     <div class="col-4 checks">
                                         <div class="flex align-items h-5 column">
-                                            <div>
-                                                <object data="assets/images/user_config/gifcompleto.gif" style="width: 70px;"></object>
+                                            <div class="d-flex align-items-center" style="width: 70px;height: 95px">
+                                                <object data="assets/images/user_config/gifcompleto.gif"
+                                                    style="height: 60px;width: 70px;"></object>
                                             </div>
                                             <div class="d-flex justify-content-center">
                                                 <label class="switch ">
-                                                    <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas" type="checkbox" (change)="switchActive(1);">
-                                                    <span class="slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 checks">
-                                        <div class="flex align-items h-5 column">
-                                            <div >
-                                                <object data="assets/images/user_config/flecha3colores.gif" style="width: 70px;"></object>
-                                            </div>
-                                            <div class="d-flex justify-content-center">
-                                                <label class="switch">
-                                                    <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor" type="checkbox" (change)="switchActive(2);">
+                                                    <input [(ngModel)]="userForm.bol_ondas" name="bol_ondas"
+                                                        type="checkbox" (change)="switchActive(1);">
                                                     <span class="slider"></span>
                                                 </label>
                                             </div>
@@ -142,41 +125,65 @@
                                     <div class="col-4 checks">
                                         <div class="flex align-items h-5 column">
                                             <div>
-                                                <object data="assets/images/user_config/vista2bus.gif " style="width: 70px;"></object>
+                                                <object data="assets/images/user_config/flecha3colores.gif"
+                                                    style="height: 90px;width: 70px"></object>
                                             </div>
-                                            <div  class="d-flex justify-content-center">
+                                            <div class="d-flex justify-content-center">
                                                 <label class="switch">
-                                                    <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles" type="checkbox" (change)="switchActive(3);">
+                                                    <input [(ngModel)]="userForm.bol_cursor" name="bol_cursor"
+                                                        type="checkbox" (change)="switchActive(2);">
                                                     <span class="slider"></span>
                                                 </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 checks">
+                                        <div class="flex align-items h-5 column position-relative">
+                                            <div class="position-relative">
+                                                <object data="assets/images/user_config/vista2bus.gif "
+                                                    style="height: 90px;width: 70px"></object>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <label class="switch">
+                                                    <input [(ngModel)]="userForm.bol_vehicle" name="bol_vehicles"
+                                                        type="checkbox" (change)="switchActive(3); ">
+                                                    <span class="slider"></span>
+                                                </label>
+                                                <span *ngIf="showIcon" class="d-flex align-items-center ps-2" style="position: absolute;translate: none;top: 70px;width: 30%;" data-bs-toggle="tooltip" data-bs-placement="right"
+                                                    data-bs-title="Tenga cuidado en seleccionar un color parecido a los estados de los vehiculos">
+                                                    <i class="fas fa-exclamation" style="font-size:1.5rem ;color: red; "></i>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </ng-container>
-                        
 
 
-                        
 
-                        
-                    </div> 
+
+
+
+                    </div>
                     <p-footer>
                         <div class="row d-flex justify-content-center">
                             <div class="col-6">
-                                <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button" class="btn-gl-cancel btn-dark-hover btn-sm w-100" [disabled]="loading">Cancelar</button>
+                                <button (click)="onClickCancel()" _ngcontent-cic-c118="" type="button"
+                                    class="btn-gl-cancel btn-dark-hover btn-sm w-100"
+                                    [disabled]="loading">Cancelar</button>
                             </div>
                             <div class="col-6">
-                                <button _ngcontent-cic-c118="" class="btn-gl-save btn-dark-hover btn-sm w-100" [disabled]="loading" type="submit" >Guardar</button>
+                                <button _ngcontent-cic-c118="" class="btn-gl-save btn-dark-hover btn-sm w-100"
+                                    [disabled]="loading" type="submit">Guardar</button>
                             </div>
-                            </div>
-                            <div class="" *ngIf="loading">
+                        </div>
+                        <div class="" *ngIf="loading">
                         </div>
                     </p-footer>
                 </div>
             </div>
         </form>
-    </div> 
+    </div>
 </div>
