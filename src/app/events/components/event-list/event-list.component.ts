@@ -149,7 +149,7 @@ export class EventListComponent implements OnInit {
     public eventService: EventService,
     public referenceService: ReferenceService,
     public mapService: MapServicesService,
-    public ess: EventSocketService,
+    public eventSocketService: EventSocketService,
     private spinner: NgxSpinnerService,
     private http: HttpClient,
     private resolver: ComponentFactoryResolver,
@@ -273,7 +273,7 @@ export class EventListComponent implements OnInit {
     }
   }
   clickDatosDebug(): void {
-    this.ess.debug(this.imei_debug);
+    this.eventSocketService.debug(this.imei_debug);
   }
   clickEndDeveloper(): void {
     this.eventService.eventDeveloperStatus = false;
@@ -308,7 +308,7 @@ export class EventListComponent implements OnInit {
     antes de procesar parametros  string
     event-list.component.ts:130 despues de procesar parametros  object
     */
-   console.log("event",event);
+   // console.log("event",event);
 
     if (event.parametros && typeof event.parametros == 'string') {
       event.parametros.split('|').forEach((item: any) => {
@@ -348,7 +348,7 @@ export class EventListComponent implements OnInit {
       { padding: [50, 50] }
     );
 
-    console.log("eventlayer",event.layer)
+    // console.log("eventlayer",event.layer)
 
     event.layer.bindPopup(getContentPopup(event), {
       className: eventClass,
