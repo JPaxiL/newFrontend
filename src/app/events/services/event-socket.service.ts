@@ -68,14 +68,24 @@ export class EventSocketService extends Socket {
     this.ioSocket.emit('status-imei',data);
 
   }
+  public evaluationEmit (uuid: any){
+    this.ioSocket.emit('event-evaluation',uuid);
+  }
   public listen() {
     this.AlertService.getAll();
 
     this.socketOnRes();
     this.socketOnEvents();
+    this.socketOnEvaluation();
 
   }
 
+  public socketOnEvaluation () {
+    this.ioSocket.on('event-evaluation', (uuid: any) => {
+      // console.log("uuid evaluation -----> ", uuid);
+      this.eventService.evaluationEventStream.emit(uuid);
+    })
+  }
   public socketOnEvents () {
     this.ioSocket.on('events', (event: any, users: any) => {
 
@@ -156,7 +166,19 @@ export class EventSocketService extends Socket {
       this.eventService.debugEventStream.emit(info);
     });
   }
-
+  // public socketOnEventEvaluation(){
+  //   this.ioSocket.on('event-evaluation', (uuid: any) => {
+  //     /*
+  //       espero recibir
+  //       {
+  //         event_id: 123,
+  //         value: 1;
+  //       }
+  //     */
+  //     console.log("event-evaluation",uuid);
+  //     this.eventService.evaluationEventStream.emit(uuid);
+  //   })
+  // }
   private setAlert(event: any, vehicle: any) {
 
 

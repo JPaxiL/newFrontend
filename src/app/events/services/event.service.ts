@@ -23,6 +23,7 @@ export class EventService {
   private URL_NAME = environment.apiUrl + '/api/event-name';
   @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() debugEventStream: EventEmitter<any> = new EventEmitter<any>();
+  @Output() evaluationEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() pinPopupStream: EventEmitter<any> = new EventEmitter<any>();
   componentKey = new Subject<Number>();
   public eventDeveloperCount = 0;
@@ -172,6 +173,20 @@ export class EventService {
 
       }
     }
+    this.getVehiclesPlate();
+    this.attachClassesToEvents();
+    this.newEventStream.emit(data);
+  }
+  public integrateEvaluationEvent (uuid: any) {
+    console.log("integrando evaluacion ...",uuid);
+    let data = [];
+    for (const key in this.events) {
+      if(this.events[key].uuid_event == uuid){
+        this.events[key].evaluated=1;
+        data.push(this.events[key]);
+      }
+    }
+    console.log("enviando data:",data);
     this.getVehiclesPlate();
     this.attachClassesToEvents();
     this.newEventStream.emit(data);

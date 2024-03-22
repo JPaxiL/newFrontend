@@ -27,12 +27,12 @@ import Swal from 'sweetalert2';
 })
 export class EventListComponent implements OnInit {
   tipoEvento: any = [];
-
   selectedEvent: any[] = [];
   activeEvent: any = false;
-
   noResults: boolean = false;
   expanded = false;
+
+  public uuid_evaluation: any = [];
   public events: any[] = [];
   public placa: string = '';
 
@@ -204,8 +204,13 @@ export class EventListComponent implements OnInit {
     this.selectedEvent = storedFilter ? [{ value: storedFilter }] : []; */
 
     this.eventService.debugEventStream.subscribe((res) => {
-      // console.log("desde event list ",res);
+      console.log("desde event list -> debugEventStream res: ",res);
       this.data_debug = res.data;
+    });
+    this.eventService.evaluationEventStream.subscribe((uuid) => {
+      console.log("desde event list -> evaluationEventStream uuid: ",uuid);
+      // this.data_debug = res.data;
+      this.eventService.integrateEvaluationEvent(uuid);
     });
     this.eventService.newEventStream.subscribe(() => {
       // console.log("desde event list ",res);
@@ -300,6 +305,13 @@ export class EventListComponent implements OnInit {
     this.eventService.showEventPanel();
 
     /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
+  }
+
+  public addEvaluation (uuid: any) {
+    let max = 10;
+    this.uuid_evaluation.push(uuid);
+    if(this.uuid_evaluation.length>max) this.uuid_evaluation.shift();
+
   }
 
   public showEvent(event: any) {
@@ -582,6 +594,8 @@ export class EventListComponent implements OnInit {
         realEvent.evaluated += 1;
         //console.log("realEvent after response-->>",realEvent);
         Swal.fire('Éxito', 'Los cambios se guardaron exitosamente', 'success');
+        this.addEvaluation(realEvent.uuid_event);
+        this.eventSocketService.evaluationEmit(realEvent.uuid_event);
       })
       .catch((error) => {
         Swal.fire('Error', 'No se pudo guardar la evaluación', 'error');
