@@ -109,7 +109,6 @@ export class EventListComponent implements OnInit {
 
   operators = [
     {
-<<<<<<< HEAD
        label: 'Operadores',
         items: [
             {label: 'HUACHO OCHOA, Gonzalo Joe', value: 'HUACHO OCHOA, Gonzalo Joe'},
@@ -123,39 +122,6 @@ export class EventListComponent implements OnInit {
         ]
     }
   ]
-=======
-      label: 'Operadores',
-      items: [
-        // {
-        //   label: 'HANCCO DIAZ, Gary Maurizio',
-        //   value: 'HANCCO DIAZ, Gary Maurizio',
-        // },
-        {
-          label: 'HUACHO OCHOA, Gonzalo Joe',
-          value: 'HUACHO OCHOA, Gonzalo Joe',
-        },
-        { label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel' },
-        {
-          label: 'ROJAS RONDON, Carla Alejandra',
-          value: 'ROJAS RONDON, Carla Alejandra',
-        },
-        {
-          label: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
-          value: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
-        },
-        {
-          label: '⁠HUAMANI MILLIO, Maria Belen',
-          value: '⁠HUAMANI MILLIO, Maria Belen',
-        },
-        {
-          label: '⁠SUAREZ PACURI, Ayelen Melani',
-          value: '⁠⁠SUAREZ PACURI, Ayelen Melani',
-        },
-
-      ],
-    },
-  ];
->>>>>>> 4289a196dfa797234b09d3e90f39f0a628c6dbbf
 
   loading_evaluation = false;
   expandedRows: { [s: string]: boolean } = {};
