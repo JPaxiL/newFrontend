@@ -3,6 +3,7 @@ import * as L from 'leaflet';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { ToolbarMapService } from './toolbar-map.service';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -76,7 +77,20 @@ export class MapServicesService {
 
     var geos = L.layerGroup(geofences.map( (geo:any) => { return geo.geo_elemento}));
 
-    var geoPoints =  L.layerGroup(points.map( (point:any) => { return point.geo_elemento}));
+ 
+    /* var geoPoints =  L.layerGroup(points.map( (point:any) => { return point.geo_elemento})); */
+
+    const geoPoints = L.layerGroup(
+      points.map((point: any) => {
+      return L.layerGroup([
+        point.geo_elemento,
+        point.marker_name
+      ]);
+    })
+  );
+
+    /* console.log("321GEO",geoPoints) */
+      
 
     var circular_geos = L.layerGroup(circular_geofences.map( (circular_geo:any) => { return circular_geo.geo_elemento}));
 

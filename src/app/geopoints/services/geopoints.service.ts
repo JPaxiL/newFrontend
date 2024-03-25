@@ -69,6 +69,7 @@ export class GeopointsService {
         // console.log(response);
 
         this.geopoints = response.data;
+        console.log("this.geopoints",this.geopoints)
         this.initializeTable();
 
         for (let i = 0; i < this.geopoints.length; i++) {

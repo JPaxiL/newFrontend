@@ -94,18 +94,14 @@
 
               <td><span class="d-flex text-start">{{geo.trama.geopunto_name}}</span></td>
 
+              
               <td class="inline-png-checkbox text-center">
-                <!-- <input class="" type="checkbox"  (click)="clickShowNameGeocerca(geo.trama.geopunto_id)"  [(ngModel)]="geo.trama.geopunto_nombre_visible_bol"> -->
                 <p-checkbox [(ngModel)]="geo.trama.geopunto_nombre_visible_bol" (onChange)="clickShowNameGeocerca(geo.trama.geopunto_id)" [binary]="true"></p-checkbox>
               </td>
 
-              <!-- <td>{{ geo.trama.vel_max>0? geo.trama.vel_max: '&mdash;'}}</td> -->
 
               <td *ngIf="geopointsService.showBtnEdit">
                 <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
-                  <!-- <button class="btn btn-xs btn-link edit-column" ngbDropdownToggle>
-                    <i class="fa fa-pencil fa-lg"></i>
-                  </button> -->
                   <i class="fa fa-pencil" ngbDropdownToggle></i>
                   <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
                     <div ngbDropdownItem (click)="clickConfigurarGeopunto(geo.trama.geopunto_id)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
