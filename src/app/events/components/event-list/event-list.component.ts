@@ -109,37 +109,22 @@ export class EventListComponent implements OnInit {
 
   operators = [
     {
-      label: 'Operadores',
-      items: [
-        // {
-        //   label: 'HANCCO DIAZ, Gary Maurizio',
-        //   value: 'HANCCO DIAZ, Gary Maurizio',
-        // },
-        {
-          label: 'HUACHO OCHOA, Gonzalo Joe',
-          value: 'HUACHO OCHOA, Gonzalo Joe',
-        },
-        { label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel' },
-        {
-          label: 'ROJAS RONDON, Carla Alejandra',
-          value: 'ROJAS RONDON, Carla Alejandra',
-        },
-        {
-          label: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
-          value: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
-        },
-        {
-          label: '⁠HUAMANI MILLIO, Maria Belen',
-          value: '⁠HUAMANI MILLIO, Maria Belen',
-        },
-        {
-          label: '⁠SUAREZ PACURI, Ayelen Melani',
-          value: '⁠⁠SUAREZ PACURI, Ayelen Melani',
-        },
+       label: 'Operadores',
+        items: [
+            {label: 'HUACHO OCHOA, Gonzalo Joe', value: 'HUACHO OCHOA, Gonzalo Joe'},
+            {label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel'},
+            {label: 'ROJAS RONDON, Carla Alejandra', value: 'ROJAS RONDON, Carla Alejandra'},
+            {label: 'HUAMANI MILLIO, Maria Belen', value: 'HUAMANI MILLIO, Maria Belen'},
+            {label: 'FERNANDEZ CRUZ, Rosellia Yanina', value: 'FERNANDEZ CRUZ, Rosellia Yanina'},
+            {label: '⁠NUÑEZ CHAMBI, Michelle Solzire', value: '⁠NUÑEZ CHAMBI, Michelle Solzire'},
+            {label: 'ROJAS RONDON, Carla Beatriz', value: 'ROJAS RONDON, Carla Beatriz'},
+            // {label: 'SUAREZ PACURI, Ayelen Melani', value: 'SUAREZ PACURI, Ayelen Melani'},
+            // {label: 'BARREDA SOTOMAYOR, Stephanie Mariana', value: 'BARREDA SOTOMAYOR, Stephanie Mariana'},
+            // {label: 'OCHOA ARANA, Fatima Araceli', value: 'OCHOA ARANA, Fatima Araceli'},
 
-      ],
-    },
-  ];
+        ]
+    }
+  ]
 
   loading_evaluation = false;
   expandedRows: { [s: string]: boolean } = {};

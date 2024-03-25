@@ -252,6 +252,44 @@
           </div> -->
         </div>
       </div>
+
+
+
+
+
+      <div class="row two-column-checkbox-container" *ngIf="showCombustibleOpt">
+
+        <div class="col-12">
+          <label class="bg-subtitle">Seleccione la configuración del reporte:</label>
+        </div>
+
+        <div class="col-12 d-flex flex-column gap-2 py-3" style="padding: 0rem 1.25rem;">
+
+          <div class="row">
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="chkCombustibleResumen" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                Resumen</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-field">
+                <label>
+                  <p-checkbox [(ngModel)]="!chkCombustibleResumen" [binary]="true" inputId="binary" [disabled]="reportService.workingOnReport"></p-checkbox>
+                  Detallado</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
       <div class="row" *ngIf="showLimitTime">
         <div class="col-12">
           <label class="bg-subtitle">Límite de tiempo:</label>
