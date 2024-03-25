@@ -9,7 +9,7 @@ build_dev:
     - npm install -g @angular/cli@11.2.14
     - npm install || true
     - npm install --legacy-peer-deps
-    - ng build --configuration=development
+    - ng build --configuration=test
   artifacts:
     paths:
       - dist/
