@@ -6,8 +6,9 @@ build_dev:
   image: node:16.20.2
   stage: build
   script:
+    - npm install || true
     - npm install --legacy-peer-deps
-    - npm install -g @angular/cli@11.2.12
+    - npm install -g @angular/cli@11.2.13
     - ng build --configuration=development
   artifacts:
     paths:
@@ -18,8 +19,9 @@ build_test:
   image: node:16.20.2
   stage: build
   script:
+    - npm install || true
     - npm install --legacy-peer-deps
-    - npm install -g @angular/cli@11.2.12
+    - npm install -g @angular/cli@11.2.13
     - ng build --configuration=test
   artifacts:
     paths:
@@ -30,8 +32,9 @@ build_prod:
   image: node:16.20.2
   stage: build
   script:
+    - npm install || true
     - npm install --legacy-peer-deps
-    - npm install -g @angular/cli@11.2.12
+    - npm install -g @angular/cli@11.2.13
     - ng build --configuration=production
   artifacts:
     paths:

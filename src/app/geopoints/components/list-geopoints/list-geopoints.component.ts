@@ -79,6 +79,7 @@ export class ListGeopointsComponent implements OnInit {
 
       geo.geopunto_visible  = "false";
       this.mapService.map.removeLayer(geo.geo_elemento);
+      
 
       if(geo.geopunto_nombre_visible == 'true'){
         this.clickShowNameGeocerca(id);
@@ -106,7 +107,7 @@ export class ListGeopointsComponent implements OnInit {
     //console.log("Mostrar/Ocultar nombre");
     var geo = this.geopointsService.geopoints.filter((item:any)=> item.geopunto_id == id)[0];
 
-    //console.log(geo);
+    /* console.log("LITGEO",geo); */
 
     if (geo.geopunto_nombre_visible == "true") {
 
@@ -126,7 +127,6 @@ export class ListGeopointsComponent implements OnInit {
 
     if(typeof comesFromInputSwitch == 'undefined' || !comesFromInputSwitch){
       this.geopointsService.tagNamesEyeState = this.geopointsService.geopointTagCounters.visible != 0;
-      console.log(this.geopointsService.geopointTagCounters);
     }
 
   }
