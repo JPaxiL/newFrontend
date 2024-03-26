@@ -1693,7 +1693,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         // console.log(tipoU.var_galon);
         // console.log(parseInt(tipoU.var_galon));
 
-        if (tipoU.var_galon == null) {
+        if (tipoU === undefined || tipoU.var_galon == null) {
+        // if (tipoU.var_galon == null) {
           kilometrajeTotal = '-.';
         } else {
           // galones x kilometros
@@ -1763,7 +1764,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
         console.log(tipoUnidad + ' ================ ' + tipoU);
 
-        if (tipoU.var_galon == null) {
+        if (tipoU === undefined || tipoU.var_galon == null) {
           kilometrajeTotal = '-.';
         } else {
           console.log(' ================ 111');
