@@ -420,6 +420,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   dataTableEndingIndex: number = -1;
   user_id: any;
 
+  operators: string[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
@@ -563,7 +564,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         console.log('Recibiendo data en result', data);
 
         this.dt_completed = 0;
-
+        this.operators = data.operators; // PARA LISTA DE OPERADORES DE MONITOREO
         this.report_data.num_rep = data.numRep;
         this.report_data.rep_title = data.repTitle;
         this.report_data.rep_subtitle = data.repSubtitle;
@@ -5565,7 +5566,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nivel_cobertura_cell_ch_width = "Nivel de Cobertura".length;
     var temperatura_gps_cell_ch_width = "Temperatura GPS".length;
     var satelite_cell_ch_width = "Satélite".length;
-    
+
     var reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
     var on_off_cell_ch_width = "On-off".length;
     var alcoholemia_cell_ch_width = "Alcoholemia".length;
@@ -5612,7 +5613,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bool_col_fBrusca = false;
     var bool_col_aBrusca = false;
 
-  
+
 
     var header_two_lines = false;
 
@@ -6107,13 +6108,13 @@ export class ResultComponent implements OnDestroy, OnInit {
           odometro_cell_ch_width = "Odometro".length;
           altitud_cell_ch_width = "Altitud".length;
           angulo_cell_ch_width = "Angulo".length;
-      
+
           alimentacion_gps_cell_ch_width = "Alimentación GPS".length;
           nivel_bateria_cell_ch_width = "Nivel de Batería".length;
           nivel_cobertura_cell_ch_width = "Nivel de Cobertura".length;
           temperatura_gps_cell_ch_width = "Temperatura GPS".length;
           satelite_cell_ch_width = "Satélite".length;
-          
+
           reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
           on_off_cell_ch_width = "On-off".length;
           alcoholemia_cell_ch_width = "Alcoholemia".length;
@@ -14762,7 +14763,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             odometro_inicial_cell_ch_width = Math.max( odometro_inicial_cell_ch_width, (item.odometro_ini??'').toString().length);
             odometro_final_cell_ch_width = Math.max( odometro_final_cell_ch_width, (item.odometro_fin??'').toString().length);
             //=============================================
-            
+
             rows.push({
               cells: [
                 { value: (index + 1), ...this.bodyRowsConfig },
