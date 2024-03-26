@@ -6761,6 +6761,10 @@
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
 
+                  <td *ngIf="reportService.eC.EnlaceArchivo">
+                    <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+                  </td>
+                  
                   <td *ngIf="reportService.eC.OperadorMonitoreo" >
 
                       <!-- <input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.OperadorMonitoreo"> -->
