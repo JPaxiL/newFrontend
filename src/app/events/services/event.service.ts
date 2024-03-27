@@ -465,7 +465,7 @@ export class EventService {
     { tipo: 'ignicion-activada-360', clase: 'ignicion-activada-360' },
     { tipo: 'conductor-adormitado-360', clase: 'conductor-adormitado-360' },
     { tipo: 'conductor-somnoliento-360', clase: 'conductor-somnoliento-360' },
-    { tipo: 'uso-del-celular-360', clase: 'celular-detectado' },
+    { tipo: 'uso-del-celular-360', clase: 'celular-detectado-360' },
     { tipo: 'sistema-ok-360', clase: 'sistema-ok-360' },
     { tipo: 'sistema-reseteado-360', clase: 'sistema-reseteado-360' },
     { tipo: 'deteccion-manipulacion-360', clase: 'deteccion-manipulacion-360' },

@@ -65,7 +65,7 @@ export interface UserTracker {
     name?: string,
     name_old?: string,
     icon_def?: string,
-    icon?:  string,
+    icon?: string,
     icon_name?: string,
     icon_color?: string,
     limit_speed?: number,
@@ -81,7 +81,7 @@ export interface UserTracker {
     id_container?: string,
     vehicles?: UserTracker[],
     point_color?: string,
-    active?:boolean,
+    active?: boolean,
     angulo?: string,
     bol_correctivo_fin?: boolean,
     bol_correctivo_ini?: boolean,
@@ -107,9 +107,9 @@ export interface UserTracker {
     cod_interno?: string | null,
     custom_url?: string;
     custom_svg?: any,
-    relenti_svg?:any,
-    movement_svg?:any,
-    excess_svg?:any,
+    relenti_svg?: any,
+    movement_svg?: any,
+    excess_svg?: any,
     //movement_onda?:any | null,
 }
 
@@ -133,8 +133,8 @@ export interface GridItem {
 export interface StructureGrid {
     row: number,
     col: number,
-    span:number,
-    structure_index?:number,
+    span: number,
+    structure_index?: number,
     gridItem_id: string,
 }
 
@@ -152,10 +152,11 @@ export interface IMapBase {
     containerId: string;
     map?: L.Map | null;
     markerClusterGroup?: any,
+    markerClusterGroupOnda?: any,
     markerClusterData?: any,
-    createMap(dataFitBounds:[number,number][], zoom?:number, maxZoom?:number, editable?:boolean): void;
-    setFitBounds(dataFitBounds:[number, number][]): void;
-    setViewMap(dataFitBounds:[number, number][],zoom?:number): void;
+    createMap(dataFitBounds: [number, number][], zoom?: number, maxZoom?: number, editable?: boolean): void;
+    setFitBounds(dataFitBounds: [number, number][]): void;
+    setViewMap(dataFitBounds: [number, number][], zoom?: number): void;
     getDataFitBounds(vehicles: UserTracker[]): [number, number][];
 }
 
@@ -169,18 +170,18 @@ export type MapItemConfiguration = {
 export interface IMapPopup extends IMapBase {
     popupConf: PopupContent,
     createMap(): void;
-    drawIcon(data:Vehicle[],event: any): Promise<void>;
+    drawIcon(data: Vehicle[], event: any): Promise<void>;
 }
 
 export type PopupContent = {
-    id:string;
+    id: string;
     vehicles?: Vehicle[],
     event?: any,
     mapConf?: MapItemConfiguration
 }
 
 export type PopupWrapper = {
-    active:boolean;
+    active: boolean;
     content?: PopupContent;
 }
 
@@ -226,9 +227,9 @@ export interface MultimediaItem {
 }
 
 export interface CipiaMultimediaParam {
-    imei:string,
-    eventId?:string,
-    type:TypeCipiaMultimedia,
+    imei: string,
+    eventId?: string,
+    type: TypeCipiaMultimedia,
     from?: string, //date in UTC0 "2023-10-09 19:12:00"
     seconds?: number, // max= 30
     source: SourceCipiaMultimedia

@@ -200,8 +200,7 @@
     --event-main-color: #d27615;
   }
 
-  .celular-detectado,
-  .celular-detectado {
+  .celular-detectado-360,.celular_detectado_360{
     --event-main-color: #d1623a;
   }
 
@@ -343,10 +342,11 @@
     .conductor-somnoliento, .conductor-somnoliento,
     .conductor-distraido-360, .conductor-distraido-360,
     .cinturon-desabrochado-360, .cinturon-desabrochado-360,
-    .celular-detectado, .celular-detectado,
+    .celular-detectado-360,.celular_detectado_360,
     .conductor-fumando-360, .conductor-fumando-360,
     .deteccion-manipulacion-360, .deteccion-manipulacion-360,
     .error-de-camara-360, .error-de-camara-360, .dvr-inoperativo,
+    .conductor-somnoliento-360,
     
     /* DEFINIDOS */
     .zona-entrada, .zona-de-entrada,
