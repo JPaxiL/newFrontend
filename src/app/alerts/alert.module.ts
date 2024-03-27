@@ -36,6 +36,7 @@ import { InputNumberModule } from 'primeng-lts/inputnumber';
 import { CheckboxModule } from 'primeng-lts/checkbox';
 import { InputTextModule } from 'primeng-lts/inputtext';
 import { CalendarModule } from 'primeng-lts/calendar';
+import { HasPermissionDirective } from 'src/app/permiss/has-permission.directive';
 
 
 
@@ -57,7 +58,8 @@ import { CalendarModule } from 'primeng-lts/calendar';
     AlertAccessoriesCreateComponent,
     AlertAccessoriesEditComponent,
     AlertGpsEditComponent,
-    PlatformAlertsEditComponent
+    PlatformAlertsEditComponent,
+    HasPermissionDirective
   ],
   imports: [
     CommonModule,
@@ -93,7 +95,8 @@ import { CalendarModule } from 'primeng-lts/calendar';
     AlertAccessoriesCreateComponent,
     AlertAccessoriesEditComponent,
     AlertGpsEditComponent,
-    PlatformAlertsEditComponent
+    PlatformAlertsEditComponent,
+    HasPermissionDirective
   ]
 })
 export class AlertModule {
