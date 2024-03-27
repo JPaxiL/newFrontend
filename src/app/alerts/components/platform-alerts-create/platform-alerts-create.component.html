@@ -234,7 +234,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-6 p-field">
+            <div class="col-6 p-field" *appHasPermission="'evaluation.show'">
               <div class="col-12">
                 <label>ATENCIÓN DE EVENTOS:</label>
               </div>
@@ -321,7 +321,7 @@
           *ngIf="!showInfraccion"
           class="gl-middleline gl-permanent-middleline gl-row-underline"
         >
-          <div class="row">
+          <div *appHasPermission="'evaluation.show'" class="row">
             <div class="col-6 p-field">
               <div class="col-12">
                 <label>ATENCIÓN DE EVENTOS:</label>
