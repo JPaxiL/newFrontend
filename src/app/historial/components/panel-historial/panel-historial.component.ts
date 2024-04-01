@@ -670,7 +670,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       for (let i = 0; i < iH.length; i++) {
         if (dH[iH[i]].marker == 'PARADA') {
           if (this.form.chckParada) {
-            //this.transfers.push({icono:"assets/images/stop.png", tooltip: "Parada",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
+            //this.transfers.push({icono:"assets/images/stop.svg", tooltip: "Parada",trama:dH[iH[i]],icono_width:"11px",icono_height:"13px",dt_tracker:dH[iH[i]].dt_tracker});
             dH[iH[i]].layer.addTo(this.mapService.map);
           }
         }
@@ -1693,7 +1693,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         // console.log(tipoU.var_galon);
         // console.log(parseInt(tipoU.var_galon));
 
-        if (tipoU.var_galon == null) {
+        if (tipoU === undefined || tipoU.var_galon == null) {
+        // if (tipoU.var_galon == null) {
           kilometrajeTotal = '-.';
         } else {
           // galones x kilometros
@@ -1763,7 +1764,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
         console.log(tipoUnidad + ' ================ ' + tipoU);
 
-        if (tipoU.var_galon == null) {
+        if (tipoU === undefined || tipoU.var_galon == null) {
           kilometrajeTotal = '-.';
         } else {
           console.log(' ================ 111');
@@ -2071,7 +2072,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
       this.transfers = [];
       this.transfers.push({
-        icono: 'assets/images/start.png',
+        icono: 'assets/images/route_start.svg',
         tooltip: 'Inicio',
         trama: dH[0],
         icono_width: '13px',
@@ -2085,7 +2086,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
         if (dH[iH[i]].marker == 'PARADA') {
           if (this.form.chckParada) {
             this.transfers.push({
-              icono: 'assets/images/stop.png',
+              icono: 'assets/images/stop.svg',
               tooltip: 'Parada',
               trama: dH[iH[i]],
               icono_width: '11px',
@@ -2095,7 +2096,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           }
         } else {
           this.transfers.push({
-            icono: 'assets/images/drive.png',
+            icono: 'assets/images/drive.svg',
             tooltip: 'Movimiento',
             trama: dH[iH[i]],
             icono_width: '13px',
@@ -2352,7 +2353,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
     if (this.conHistorial) {
       this.transfers = [];
       this.transfers.push({
-        icono: 'assets/images/start.png',
+        icono: 'assets/images/route_start.png',
         tooltip: 'Inicio',
         trama: dH[0],
         icono_width: '13px',
@@ -2370,7 +2371,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
           if (this.form.chckParada) {
             this.transfers.push({
-              icono: 'assets/images/stop.png',
+              icono: 'assets/images/stop.svg',
               tooltip: 'Parada',
               trama: dH[iH[i]],
               icono_width: '11px',
@@ -2383,7 +2384,7 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
           // console.log('movimi = '+iH[i]+' - '+x1);
           // console.log(dH[iH[i]]);
           this.transfers.push({
-            icono: 'assets/images/drive.png',
+            icono: 'assets/images/drive.svg',
             tooltip: 'Movimiento',
             trama: dH[iH[i]],
             icono_width: '13px',
@@ -2622,11 +2623,11 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
       //console.log("--ultimo ----");
       trama.layerN.fireEvent('click');
       this.mapService.map.setView([trama.lat, trama.lng], 15);
-    } else if (row.icono == 'assets/images/stop.png') {
+    } else if (row.icono == 'assets/images/stop.svg') {
       //console.log("-----parada ----");
       trama.layer.fireEvent('click');
       this.mapService.map.setView([trama.lat, trama.lng], 15);
-    } else if (row.icono == 'assets/images/drive.png') {
+    } else if (row.icono == 'assets/images/drive.svg') {
       // var rdH = this.historialService.arrayRecorridos;
 
       // for (let i = 0; i < rdH.length; i++) {
@@ -3162,8 +3163,8 @@ export class PanelHistorialComponent implements OnInit, OnDestroy {
 
     var marker = L.marker([trama.lat, trama.lng], {
       icon: L.icon({
-        iconUrl: 'assets/images/stop.png',
-        iconAnchor: [7, 26],
+        iconUrl: 'assets/images/stop.svg',
+        iconAnchor: [26, 26],
       }),
       //clickable: true
     }).bindPopup(contenido, { offset: new L.Point(0, -13) });

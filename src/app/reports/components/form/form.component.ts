@@ -15,6 +15,7 @@ import { EventService } from 'src/app/events/services/event.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
+import { Operator } from 'src/app/events/models/interfaces';
 
 import Swal from 'sweetalert2';
 // import { threadId } from 'worker_threads';
@@ -377,6 +378,7 @@ export class FormComponent implements OnInit {
 
   isEverythingLoaded: boolean = false;
 
+  optionOperators: Operator[] = [];
   constructor(
     private browserDetectorService: BrowserDetectorService,
     private toastr: ToastrService,
@@ -425,7 +427,15 @@ export class FormComponent implements OnInit {
         this.endInit();
       });
 
-
+      // EN ESPERA DE USAR OPERADORES DE PANEL ADMIN
+      // this.eventService.initializeOperators();
+      // this.eventService.operatorsComplete.subscribe(operators=>{
+      //   operators.forEach((item: string) => {
+      //     const newItem: Operator = {label: item,value: item,};
+      //    this.optionOperators.push(newItem);
+      //   });
+      //   console.log('OPERADORES LISTOS',this.optionOperators);
+      // })
 
       this.http.post(environment.apiUrl + '/api/getReports', {}).subscribe({
         next: data => {
@@ -523,6 +533,7 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     //LISTA DE EVENTOS
     this.eventService.getEventsForUser().subscribe(
       async (data) => {
@@ -1169,8 +1180,8 @@ export class FormComponent implements OnInit {
         param.numRep = 'R042';
         param.url = "/api/reports/combustible_resumen";
         repTitle = "REPORTE DE COMBUSTIBLE RESUMEN";
-   
-      } 
+
+      }
 
     }
 
@@ -1205,6 +1216,7 @@ export class FormComponent implements OnInit {
           isVehicleReport: !cv,
           chkTableDropdown: !this.chkSimultaneousTables,
           params : this.reportService.getParams(),
+          operators: this.optionOperators
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
@@ -1461,7 +1473,7 @@ export class FormComponent implements OnInit {
           }
 
       break;
-      case 'R038':  //   - R038	REPORTE DE ATENCIÓN DE EVENTOS 
+      case 'R038':  //   - R038	REPORTE DE ATENCIÓN DE EVENTOS
           this.showLimitTime = true;
           this.showAtencionEventsCipia = true;
           // this.showEvents = true;

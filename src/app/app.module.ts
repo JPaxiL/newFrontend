@@ -159,6 +159,7 @@ import { AddTagComponent } from './geofences/components/add-tag/add-tag.componen
 import { UnixTimeToDatePipe } from './core/pipes/unix-time-to-date.pipe';
 import {ToastModule} from 'primeng-lts/toast';
 import { TagImeiComponent } from './vehicles/components/tag-imei/tag-imei.component';
+import { HasPermissionDirective } from './permiss/has-permission.directive';
 
 @NgModule({
   declarations: [
@@ -256,7 +257,7 @@ import { TagImeiComponent } from './vehicles/components/tag-imei/tag-imei.compon
     SliderMultimediaComponent,
     AddTagComponent,
     UnixTimeToDatePipe,
-    TagImeiComponent
+    TagImeiComponent,
   ],
   imports: [
     ToastrModule.forRoot({
@@ -267,7 +268,7 @@ import { TagImeiComponent } from './vehicles/components/tag-imei/tag-imei.compon
       maxOpened: 4,
       autoDismiss: true,
     }),
-    RouterModule, 
+    RouterModule,
     BrowserModule,
     DataTablesModule,
     CommonModule,

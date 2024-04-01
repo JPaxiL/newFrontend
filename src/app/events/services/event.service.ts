@@ -21,6 +21,7 @@ import { DriversService } from 'src/app/drivers/services/drivers.service';
 })
 export class EventService {
   private URL_NAME = environment.apiUrl + '/api/event-name';
+  @Output() operatorsComplete = new EventEmitter<any>();
   @Output() newEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() debugEventStream: EventEmitter<any> = new EventEmitter<any>();
   @Output() evaluationEventStream: EventEmitter<any> = new EventEmitter<any>();
@@ -86,6 +87,8 @@ export class EventService {
   public filterEventBackInTime: number = 48;
   public filterEventRequestLengh: number = 500;
 
+  public listOperators: any =[];
+  public stateListOperators: boolean = false;
   constructor(
     private http: HttpClient,
     public mapService: MapServicesService,
@@ -246,6 +249,7 @@ export class EventService {
     page: number = 1
   ) {
     // console.log('[event.service] getAll()');
+    // await this.initializeOperators();
     await this.http
       .get<ResponseInterface>(`${environment.apiUrl}/api/event-user`)
       .toPromise()
@@ -461,7 +465,7 @@ export class EventService {
     { tipo: 'ignicion-activada-360', clase: 'ignicion-activada-360' },
     { tipo: 'conductor-adormitado-360', clase: 'conductor-adormitado-360' },
     { tipo: 'conductor-somnoliento-360', clase: 'conductor-somnoliento-360' },
-    { tipo: 'uso-del-celular-360', clase: 'celular-detectado' },
+    { tipo: 'uso-del-celular-360', clase: 'celular-detectado-360' },
     { tipo: 'sistema-ok-360', clase: 'sistema-ok-360' },
     { tipo: 'sistema-reseteado-360', clase: 'sistema-reseteado-360' },
     { tipo: 'deteccion-manipulacion-360', clase: 'deteccion-manipulacion-360' },
@@ -873,4 +877,28 @@ export class EventService {
     this.eventsUserLoaded = true;
     return map;
   }
+
+
+
+  // EN ESPERA DE USAR OPERADORES DE PANEL ADMIN
+  // public async initializeOperators() {
+  //   if (this.stateListOperators == false){
+  //     this.getListOperators().subscribe(
+  //       async (response) => {
+  //         console.log('OPERADORES OBTENIDOS: 1 vez',response);
+  //         this.listOperators = response.data;
+  //         this.stateListOperators = true;
+  //         this.operatorsComplete.emit(this.listOperators);
+  //       },
+  //       (error) => {
+  //         // Maneja los errores si ocurre alguno durante la solicitud
+  //         console.error('Error al obtener los Operadores de Monitoreo:', error);
+  //       }
+  //     )
+  //   }
+  // }
+  // public getListOperators(): Observable<any> {
+  //   return this.http.get<any>(`${environment.apiUrl}/api/listOperators`);
+  // }
+
 }

@@ -18,6 +18,8 @@ import { environment } from 'src/environments/environment';
 import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { Alert, Evaluation } from 'src/app/alerts/models/alert.interface';
+import { Operator } from '../../models/interfaces';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -207,6 +209,30 @@ export class EventListComponent implements OnInit {
       this.showEvent(event);
     });
 
+    // EN ESPERA DE USAR OPERADORES DE PANEL ADMIN
+    // if (this.eventService.stateListOperators == false){
+    //   this.spinner.show('loadingEventList');
+    //   this.eventService.getListOperators().subscribe(
+    //     async (response) => {
+    //       console.log('OPERADORES OBTENIDOS: 1 vez',response);
+    //       this.eventService.listOperators = response.data;
+    //       this.operators = this.generateOperatorsItems(this.eventService.listOperators);
+    //       this.eventService.stateListOperators = true;
+    //       this.spinner.hide('loadingEventList');
+    //     },
+    //     (error) => {
+    //       // Maneja los errores si ocurre alguno durante la solicitud
+    //       console.error('Error al obtener los Operadores de Monitoreo:', error);
+    //     }
+    //   )
+    // }else{
+    //   this.spinner.show('loadingEventList');
+    //   console.log('OPERADORES LOADED');
+    //   this.operators = this.generateOperatorsItems(this.eventService.listOperators);
+    //   this.eventService.stateListOperators = true;
+    //   this.spinner.hide('loadingEventList');
+    // }
+
     if (this.eventService.eventsUserLoaded == false) {
       //this.spinner.show('loadingEventsPanel');
       this.eventService.getEventsForUser().subscribe(
@@ -234,6 +260,17 @@ export class EventListComponent implements OnInit {
       // );
       this.spinner.hide('loadingHistorialForm');
     }
+  }
+
+  public generateOperatorsItems(listItems:string[]):any{
+    var auxOperators: { label: string, items: Operator[] }[] = [{
+      label: 'Operadores',items: []
+    }];
+    listItems.forEach((item: string) => {
+      const newItem: Operator = {label: item,value: item};
+      auxOperators[0].items.push(newItem);
+    });
+    return auxOperators;
   }
 
   public changeTypeEvent() {

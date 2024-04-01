@@ -6,6 +6,7 @@ export abstract class MapBase implements IMapBase {
     map?: L.Map | null; 
     markerClusterGroup?: any;
     markerClusterData?: any;
+    markerClusterGroupOnda?: any;
     
     constructor(containerId:string){
         this._containerId = containerId;
@@ -24,6 +25,10 @@ export abstract class MapBase implements IMapBase {
             removeOutsideVisibleBounds: true,
             zoomToBoundsOnClick: false
         }),
+        this.markerClusterGroupOnda = L.markerClusterGroup({
+            removeOutsideVisibleBounds: true,
+            zoomToBoundsOnClick: false,
+          });
         this.setFitBounds(dataFitBounds);
     };
 

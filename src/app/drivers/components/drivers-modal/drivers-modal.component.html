@@ -6,14 +6,14 @@
         <strong [innerHTML]="this.driversService.action == 'edit' ? 'Configurar Conductor' : 'Agregar nuevo Conductor' " ></strong>
       </div>
     </ng-template>
-  
+
 
     <form [formGroup]="driversForm" (submit)="onSubmit()" (keydown.enter)="$event.preventDefault()" autocomplete="off">
-  
+
       <div class="dialog-body-container">
-  
+
         <div class="p-fluid p-formgrid p-grid" style="font-size: 12px;">
-  
+
           <div class="dialog-form-container d-flex" >
 
             <div class="row">
@@ -126,7 +126,7 @@
                 </label>
               </div>
             </div>
-            <div class="row">
+            <div class="row" *appHasPermission="'ibuttons.show'">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
@@ -149,7 +149,7 @@
               </div>
             </div>
 
-            <div class="row">
+            <div class="row" *appHasPermission="'icipia.show'">
               <div class="col p-field">
                 <label class="row gl-row-underline">
                   <div class="col-5 d-flex align-items-center justify-content-start text-start fw-bold">
@@ -184,13 +184,12 @@
             </div>
           </div>
       <!-- </ng-template> -->
-  
-  
+
+
     </form>
-  
+
     <ng-template pTemplate="footer" style="width: 60vw;">
     </ng-template>
-  
-  
+
+
   </p-dialog>
-  

@@ -6761,6 +6761,10 @@
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
 
+                  <td *ngIf="reportService.eC.EnlaceArchivo">
+                    <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
+                  </td>
+                  
                   <td *ngIf="reportService.eC.OperadorMonitoreo" >
 
                       <!-- <input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.OperadorMonitoreo"> -->
@@ -6776,6 +6780,8 @@
                         <option value="FERNANDEZ CRUZ, Rosellia Yanina">FERNANDEZ CRUZ, Rosellia Yanina</option>
                         <option value="⁠NUÑEZ CHAMBI, Michelle Solzire">NUÑEZ CHAMBI, Michelle Solzire</option>
                         <option value="ROJAS RONDON, Carla Beatriz">ROJAS RONDON, Carla Beatriz</option>
+                        <!-- EN ESPERA DE USAR OPERADORES DE PANEL ADMIN -->
+                        <!-- <option *ngFor="let operator of operators" [value]="operator.value">{{ operator.label }}</option> -->
                         <option value="OTRO">OTRO</option>
                       </select>
 

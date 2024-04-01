@@ -81,7 +81,7 @@ export class GeopointsService {
 
 
           var latlng = this.geopoints[i].geopunto_vertices.split(',');
-          console.log("coodernadalatlng",latlng)
+          // console.log("coodernadalatlng",latlng)
 
           const svgIcon = L.divIcon({
             html: this.geopointHTMLMarkerIcon(this.geopoints[i].geopunto_color),
@@ -90,10 +90,10 @@ export class GeopointsService {
             iconAnchor: [12, 41.86],
           });
 
-          
-          
+
+
            var popupText = '<span>Latitud: ' + latlng[0] + '<br>Longitud: ' + latlng[1] + '</span>';
- 
+
           //this.actualizarcoordenadas(latlng[0],latlng[1]);
 
 
@@ -101,7 +101,7 @@ export class GeopointsService {
             [parseFloat(latlng[0]), parseFloat(latlng[1])],
             { icon: svgIcon }
           ).bindPopup(popupText,{ offset: [0, -20] });
- 
+
 
           if (this.geopoints[i].geopunto_visible == 'true') {
             this.geopoints[i].geo_elemento.addTo(this.mapService.map);
@@ -138,7 +138,7 @@ export class GeopointsService {
 
         }
 
-        
+
         this.updateGeoCounters();
         this.updateGeoTagCounters();
         this.eyeInputSwitch = this.geopointCounters.visible != 0;
@@ -156,7 +156,7 @@ export class GeopointsService {
 
   // En el servicio geopointsService
  /*  actualizarcoordenadas(lat: any, lng: any) {
-  
+
   // Buscar el geo correspondiente por su ID y actualizar sus coordenadas
   console.log("lat - lng",lat,lng)
   for (let i = 0; i < this.geopoints.length; i++) {
@@ -164,7 +164,7 @@ export class GeopointsService {
       this.geopoints[i].geopunto_vertices = lat + ',' + lng;
       break;
     }
-  } 
+  }
 } */
 
 

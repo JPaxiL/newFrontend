@@ -79,7 +79,7 @@
                                     <div class="col-4 checks ">
                                         <div class="flex align-items h-5 column">
                                             <div>
-                                                <object data="assets/images/user_config/gifcompleto.gif"
+                                                <object data="assets/images/user_config/VehicleDirection.gif"
                                                     style="width: 70px;"></object>
                                             </div>
                                         </div>
@@ -106,8 +106,8 @@
 
                         <ng-container *ngIf="showChangeItem == true">
                             <div class="container contenido_checkbox">
-                                <div class="row">
-                                    <div class="col-4 checks">
+                                <div class="row" style="flex: auto;">
+                                    <div class="col-4 checks" *appHasPermission="'configuration-state-onda.show'">
                                         <div class="flex align-items h-5 column">
                                             <div class="d-flex align-items-center" style="width: 70px;height: 95px">
                                                 <object data="assets/images/user_config/gifcompleto.gif"
@@ -122,7 +122,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4 checks">
+                                    <div class="col-6 checks">
                                         <div class="flex align-items h-5 column">
                                             <div>
                                                 <object data="assets/images/user_config/flecha3colores.gif"
@@ -137,7 +137,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4 checks">
+                                    <div class="col-6 checks">
                                         <div class="flex align-items h-5 column position-relative">
                                             <div class="position-relative">
                                                 <object data="assets/images/user_config/vista2bus.gif "
