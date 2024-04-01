@@ -3498,7 +3498,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       // // console.log(this.sortedDataOneTabla );
       // // console.log("_____________________________________");
 
-      this[fn_name as keyof ResultComponent];
+      this[fn_name as keyof ResultComponent]();
 
   }
 
