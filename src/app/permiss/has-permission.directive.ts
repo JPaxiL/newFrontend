@@ -9,8 +9,8 @@ export class HasPermissionDirective {
 
   constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef, private permissionService: PermissionService) {}
 
-  ngOnInit() {
-    if (this.permissionService.hasPermission(this.appHasPermission)) {
+  async ngOnInit() {
+    if (await this.permissionService.hasPermission(this.appHasPermission)) {
       this.viewContainer.createEmbeddedView(this.templateRef);
       console.log('Permiso Valido');
     } else {

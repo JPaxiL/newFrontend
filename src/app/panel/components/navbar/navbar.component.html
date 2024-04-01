@@ -922,7 +922,6 @@ c39 21 55 37 78 80 l28 54 -3 900 c-4 995 0 938 -68 1084 -28 59 -29 66 -16
           <span>Eventos</span>
         </li>
         <li
-          *appHasPermission="'m-dashboard.show'"
           class="nav-item"
           [ngClass]="
             panelService.nombreComponente == 'MULTIVIEW' ? 'active' : ''
@@ -1914,7 +1913,6 @@ c39 21 55 37 78 80 l28 54 -3 900 c-4 995 0 938 -68 1084 -28 59 -29 66 -16
             panelService.nombreComponente == 'MULTIVIEW' ? 'active' : ''
           "
           (click)="clickShowModalMultiview()"
-          *appHasPermission="'m-dashboard.show'"
         >
           <div class="d-flex justify-content-center">
             <button class="btn btn-navbar">
@@ -2683,9 +2681,9 @@ c39 21 55 37 78 80 l28 54 -3 900 c-4 995 0 938 -68 1084 -28 59 -29 66 -16
               <!-- <i class="fa fa-book" aria-hidden="true"></i> -->
               <span>Auditoría</span>
             </button>
-            <ng-container *appHasPermission="'m-subaccount.show'">
+            <ng-container *ngIf="showBtnSubcuentas">
               <button
-                *ngIf="showBtnSubcuentas"
+                *appHasPermission="'m-subaccount.show'"
                 ngbDropdownItem
                 class="btn-navbar d-flex align-items-center"
                 [ngClass]="
@@ -2917,7 +2915,6 @@ c39 21 55 37 78 80 l28 54 -3 900 c-4 995 0 938 -68 1084 -28 59 -29 66 -16
               >
             </button>
             <button
-              *appHasPermission="'m-dashboard.show'"
               ngbDropdownItem
               class="btn-navbar d-flex align-items-center"
               [ngClass]="
