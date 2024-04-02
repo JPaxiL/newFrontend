@@ -7164,12 +7164,12 @@
         <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-success" (click)="showSelectPdf('exportPdfParadasMovimientos');">EXPORTAR PDF</button>
 
         <!--<button *ngIf="report_data.num_rep == 1" class="btn btn-success" (click)="exportPdfExcesosVelocidad();">EXPORTAR PDF</button> -->
-        <!-- <button *ngIf="report_data.num_rep == 2" class="btn btn-success" (click)="exportPdfEntradaSalida();">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 3" class="btn btn-success" (click)="showSelectExcel('exportPdfCombustible');">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R003'" class="btn btn-success" (click)="exportPdfEntradaSalida();">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R004'" class="btn btn-success" (click)="showSelectExcel('exportPdfCombustible');">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 4" class="btn btn-success" (click)="showSelectExcel('exportPdfExcesosEnZona');">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 5" class="btn btn-success" (click)="showSelectExcel('exportPdfGeneral');">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R006'" class="btn btn-success" (click)="exportPdfGeneral();">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportPdfEventos');">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR PDF</button> -->
+        <button *ngIf="report_data.num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR PDF</button>
 
         <button *ngIf="report_data.num_rep == 'R011'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfFrenadaAceleracionBrusca();">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 'R012'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDistraccionPosibleFatiga();">EXPORTAR PDF</button>

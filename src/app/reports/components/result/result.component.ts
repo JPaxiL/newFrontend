@@ -17052,16 +17052,16 @@ export class ResultComponent implements OnDestroy, OnInit {
             cabecera.push({ text: 'Fecha de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Hora de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
           } else {
-            cabecera.push({ text: 'Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
-            cabecera.push({ text: 'Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Fecha Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Fecha Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
           };
 
           cabecera.push({ text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
 
           if ( data[2].Paradas == true) 	{ cabecera.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
-          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Recorrido', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
-          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad máxima', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
-          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Vel. máx. CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Distancia Recorrida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad Máxima GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad Máxima CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
 
           if ( data[2].Paradas == true) 	{ cabecera.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
           if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad Promedio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
@@ -17465,10 +17465,511 @@ export class ResultComponent implements OnDestroy, OnInit {
       }
     }
 
+
     // Dejarlo por el momento
     exportPdfEntradaSalida() {
-    }
+			//vm.dateHour();
+      var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
 
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+      
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: 'REPORTE DE ENTRADA Y SALIDA',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+          exportFilePdf.push({
+            table: {
+              widths: ['*'],
+              body: [[" "], [" "]]
+            },
+            layout: {
+              hLineWidth: function(i:any, node:any) {
+                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+              },
+              vLineWidth: function(i:any, node:any) {
+                return 0;
+              },
+            }
+          });
+
+
+          //============================================================================================
+
+          console.log("===============================================================================");
+          console.log(data);
+          var tabla : any[] = [];
+
+					//--------- CABECERA ------------
+					if(this.chkDateHour){
+						tabla.push([
+							{ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Fecha de Entrada', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Hora de Entrada', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Fecha de Salida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Hora de Salida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Nombre de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Posición de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+						]);
+            
+						data[1].forEach((item:any, index2:any) => {
+
+							var fh_ini  = '-';
+              var fh_out  = '-';
+              var fh2_ini = '-';
+              var fh2_out = '-';
+              if (item.fecha != "n/a") {
+                var fh = item.fecha.split(" ");
+                fh_ini  = fh[0];
+                fh_out  = fh[1];
+              }
+              if (item.fecha_out != "n/a") {
+                var fh2 = item.fecha_out.split(" ");
+                fh2_ini  = fh2[0];
+                fh2_out  = fh2[1];
+              }
+
+							var a = (index2 + 1).toString();
+							//var ubicacion = item.latitud + "," + item.longitud;
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+							tabla.push([
+								{ text: a, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh_ini, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh_out, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: fh2_ini, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh2_out, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.duracion, bold: true, fontSize: 6, alignment: 'center'},
+								{ text: item.nombre_zona, bold: true, fontSize: 6, alignment: 'center'},
+                { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+		        	]);
+
+						});
+
+					} else {
+
+						tabla.push([
+							{ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Fecha de Entrada', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha de Salida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Nombre de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Posición de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+
+							var a = (index2 + 1).toString();
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+							tabla.push([
+                  { text: a, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.fecha, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.fecha_out, bold: true, fontSize: 6, alignment: 'center'},
+
+                  { text: item.duracion, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.nombre_zona, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+              ]);
+              
+						});
+					}
+
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+
+				}
+			});
+
+      // console.log("==========================================");
+      // //console.log(tabla);
+			// console.log(exportFilePdf);
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+          // pageOrientation: 'landscape',
+          pageSize: 'A4',
+          //pageMargins: [ 0, 0, 0, 0 ],
+          pageMargins: [ 40, 40, 40, 40 ],
+
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    // {
+                    //   text: page.toString() + '/' + pages.toString(),
+                    //   alignment: 'Left',
+                    //   fontSize: 8,
+                    //   margin: [30, 0, 0, 15]
+                    // },
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            //header: function(currentPage:any, pageCount:any, pageSize:any) {
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteEntradaSalida.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+
+
+			// if(bol_datos_pdf){
+			// 		var docDefinition = {
+			//       	content: exportFilePdf,
+			//       	footer: function(page:any, pages:any) {
+			//           	return {
+			//                 columns: [
+			//                     {
+			//                         alignment: 'center',
+			//                         text: [
+			//                             { text: '----------------------------------------------------------------------- ' + page.toString()},
+			//                             ' de ',
+			//                             { text: pages.toString() + ' -----------------------------------------------------------------------'}
+			//                         ]
+			//                     }
+			//                 ],
+			//                 margin: [0, 0]
+
+			//           	};
+			//       	}
+
+			//     };
+			//     pdfMake.createPdf(docDefinition).download('ReporteEntradaSalida.pdf');
+
+			// } else {
+			// 	alert('No se han encontrado datos para exportar');
+			// }
+
+		}
+
+
+    		//-->4
+		exportPdfGeneral() {
+			var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: 'REPORTE GENERAL',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+				        table: {
+				            widths: ['*'],
+				            body: [[" "], [" "]]
+				        },
+				        layout: {
+				            hLineWidth: function(i:any, node:any) {
+				                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+				            },
+				            vLineWidth: function(i:any, node:any) {
+				                return 0;
+				            },
+				        }
+				    });
+
+					//---**
+					var tabla = [];
+					var cellsCampos = [];
+
+					cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+					if (this.chkDateHour) {
+						cellsCampos.push({ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+						cellsCampos.push({ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+					} else {
+						cellsCampos.push({ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+					}
+
+          if (data[2].fServidor) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+          if (data[2].pCercano) { cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velCAN) { cellsCampos.push({ text: 'Velocidad CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velGPS) { cellsCampos.push({ text: 'Velocidad GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velGPS_speed) { cellsCampos.push({ text: 'Velocidad GPS speed', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velMobileye_ME460) { cellsCampos.push({ text: 'Velocidad Mobileye', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velECO) { cellsCampos.push({ text: 'Velocidad ECO', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].DUOT2state) { cellsCampos.push({ text: 'DUOT2 state', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].RxM) { cellsCampos.push({ text: 'Rev.X.Min', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].RPMAlta) { cellsCampos.push({ text: 'RPM Alta', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].cNivel) { cellsCampos.push({ text: 'Nivel de Combustible', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].cRestante) { cellsCampos.push({ text: 'C.Restante', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].cMotor) { cellsCampos.push({ text: 'C.Motor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].odometro) { cellsCampos.push({ text: 'Odómetro', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].altitud) { cellsCampos.push({ text: 'Altitud', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].angulo) { cellsCampos.push({ text: 'Angulo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (data[2].alimentGps) { cellsCampos.push({ text: 'Alimentación GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].nivelBateria) { cellsCampos.push({ text: 'Nivel de Batería', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].nivelCobertura) { cellsCampos.push({ text: 'Nivel de Cobertura', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].temperaturaGps) { cellsCampos.push({ text: 'Temperatura GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].satelite) { cellsCampos.push({ text: 'Satélite', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+					if (data[2].recFacial) { cellsCampos.push({ text: 'Reconocimiento Facial', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].onOff) { cellsCampos.push({ text: 'On/Off', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].alcoholemia) { cellsCampos.push({ text: 'Alcoholemia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].parametros) { cellsCampos.push({ text: 'Parámetros', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].ubicacion) { cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].referencia) { cellsCampos.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].fatiga) { cellsCampos.push({ text: 'Fatiga', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].fExBrusca) { cellsCampos.push({ text: 'Frenada Extrema Brusca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].fBrusca) { cellsCampos.push({ text: 'Frenada Brusca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].aBrusca) { cellsCampos.push({ text: 'Aceleración Brusca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+
+					tabla.push(cellsCampos);
+
+					data[1].forEach( (item:any, index:any) => {
+
+						var cellsCuerpo = [];
+
+						var a = (index + 1).toString();
+						var ubicacion = item.lat + "," + item.lng + "";
+
+            var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+
+						cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+
+						if (this.chkDateHour) {
+							var fh = item.fecha.split(" ");
+							cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+							cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+						} else {
+							cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+						}
+
+            if (data[2].fServidor) {
+              if (this.chkDateHour) {
+                var fh = item.fServidor.split(" ");
+                cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+              } else {
+                cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+              }  
+            };
+
+
+            if (data[2].pCercano) { cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velCAN) { cellsCuerpo.push({ text: item.velCAN, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velGPS) { cellsCuerpo.push({ text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velGPS_speed) { cellsCuerpo.push({ text: item.velGPS_speed, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velMobileye_ME460) { cellsCuerpo.push({ text: item.velMobileye_ME460, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velECO) { cellsCuerpo.push({ text: item.velECO, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].DUOT2state) { cellsCuerpo.push({ text: item.DUOT2state, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].RxM) { cellsCuerpo.push({ text: item.RxM, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].RPMAlta) { cellsCuerpo.push({ text: item.RPMAlta, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].cNivel) { cellsCuerpo.push({ text: item.cNivel, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].cRestante) { cellsCuerpo.push({ text: item.cRestante, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].cMotor) { cellsCuerpo.push({ text: item.cMotor, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].odometro) { cellsCuerpo.push({ text: item.odometro, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].altitud) { cellsCuerpo.push({ text: item.altitud, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].angulo) { cellsCuerpo.push({ text: item.angulo, bold: true, fontSize: 6, alignment: 'center' }); };
+
+						if (data[2].alimentGps) { cellsCuerpo.push({ text: item.alimentGps, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].nivelBateria) { cellsCuerpo.push({ text: item.nivelBateria, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].nivelCobertura) { cellsCuerpo.push({ text: item.nivelCobertura, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].temperaturaGps) { cellsCuerpo.push({ text: item.temperaturaGps, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].satelite) { cellsCuerpo.push({ text: item.satelite, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            if (data[2].recFacial) { cellsCuerpo.push({ text: item.recFacial, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].onOff) { cellsCuerpo.push({ text: item.onOff, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].alcoholemia) { cellsCuerpo.push({ text: item.alcohol_nombre, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].parametros) { cellsCuerpo.push({ text: item.parametros, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].ubicacion) { cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].referencia) { cellsCuerpo.push({ text: rreeff, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].fatiga) { cellsCuerpo.push({ text: item.fatiga, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].fExBrusca) { cellsCuerpo.push({ text: item.fExBrusca, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].fBrusca) { cellsCuerpo.push({ text: item.fBrusca, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].aBrusca) { cellsCuerpo.push({ text: item.aBrusca, bold: true, fontSize: 6, alignment: 'center' }); };
+
+
+						tabla.push(cellsCuerpo);
+					});
+
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+				}
+			});
+
+			console.log(exportFilePdf);
+
+
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+            pageOrientation: 'landscape',
+            pageSize: 'A4',
+            pageMargins: [ 40, 40, 40, 40 ],
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteGeneral.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
 
 
     // PDF DE MINA
@@ -19892,4 +20393,3 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 }
-
