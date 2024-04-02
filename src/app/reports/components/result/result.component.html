@@ -6620,7 +6620,7 @@
                   <th *ngIf="reportService.eC.Ubicacion">Ubicacion</th>
                   <th *ngIf="reportService.eC.Referencia">Referencia</th>
                   <th *ngIf="reportService.eC.EnlaceArchivo">Enlace a Archivo</th>
-                  <th *ngIf="reportService.eC.Parametros">Parámetros</th>
+                  <!-- <th *ngIf="reportService.eC.Parametros">Parámetros</th> -->
 
                   <th *ngIf="reportService.eC.OperadorMonitoreo">Operador de Monitoreo</th>
 
@@ -6760,7 +6760,7 @@
                   <td *ngIf="reportService.eC.Ubicacion">
                     <a href="http://maps.google.com/maps?q={{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}&amp;t=m" target="_blank">{{row.latitud.toFixed(6)}},{{row.longitud.toFixed(6)}}</a>
                   </td>
-
+                  <td *ngIf="reportService.eC.Referencia">{{row.referencia}}</td>
                   <td *ngIf="reportService.eC.EnlaceArchivo">
                     <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
                   </td>
@@ -7180,10 +7180,17 @@
         <button *ngIf="report_data.num_rep == 'R017'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDesvioCarrilIzquierda();">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 'R018'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDesvioCarrilDerecha();">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 'R019'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfBloqueoVisionMobileye();">EXPORTAR PDF</button>
+
+        <button *ngIf="report_data.num_rep == 'R037'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfEventosCIPIA();">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R038'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfEventosEvaluacionCIPIA();">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R040'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfEventosCIPIA();">EXPORTAR PDF</button>
+
         <!-- <button *ngIf="report_data.num_rep == 20" class="btn btn-success" (click)="exportPdfExcesosVelocidadFormatoExtendido();">EXPORTAR PDF</button> -->
 
     </div>
 
   </ng-container>
 </div>
+
+
 
