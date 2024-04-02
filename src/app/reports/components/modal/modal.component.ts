@@ -630,7 +630,7 @@ export class ModalComponent implements OnInit, OnDestroy {
               cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
               cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
             } else {
-              cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: item.fServidor, bold: true, fontSize: 6, alignment: 'center' });
             }  
           };
 
@@ -738,5 +738,3 @@ export class ModalComponent implements OnInit, OnDestroy {
 
 
 }
-
-

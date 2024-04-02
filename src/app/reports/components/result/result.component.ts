@@ -12737,6 +12737,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           data[1].forEach((item: { parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
               //var fh = item.fecha.split(" ");
+              var ubicacion_url = item.latitud + "," + item.longitud;
               var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
               evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
@@ -12795,7 +12796,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
               // if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
-              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula: 'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig}); };
+              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula: 'HYPERLINK("http://maps.google.com/maps?q='+ubicacion_url+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig}); };
 
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
 
@@ -12826,7 +12827,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_date } );  }
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  }
 
-      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
+      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(evento_cell_ch_width) }  );  };
       if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
       if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
@@ -13103,9 +13104,9 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (rs.IdConductor) { array_campos_cabecera.push({ value: "ID Conductor", ...this.colHeaderConfig }); };
           if (rs.Conductor) { array_campos_cabecera.push({ value: "Conductor", ...this.colHeaderConfig }); };
 
-          if (!this.chkDateHour && rs.FechaEvaluacion) { array_campos_cabecera.push({ value: "Fecha/Hora Evento", ...this.colHeaderConfig }); }
-          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Fecha Evento", ...this.colHeaderConfig }); };
-          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Hora Evento", ...this.colHeaderConfig }); };
+          if (!this.chkDateHour && rs.FechaEvaluacion) { array_campos_cabecera.push({ value: "Fecha/Hora de Evaluación", ...this.colHeaderConfig }); }
+          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Fecha de Evaluación", ...this.colHeaderConfig }); };
+          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Hora de Evaluación", ...this.colHeaderConfig }); };
 
           if (rs.CriterioEvaluacion) { array_campos_cabecera.push({ value: "Criterio de Evaluación", ...this.colHeaderConfig }); };
           if (rs.Observacion) { array_campos_cabecera.push({ value: "Observación", ...this.colHeaderConfig }); };
@@ -13136,8 +13137,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           data[1].forEach((item: {fecha_evaluacion:any, operador_monitoreo:any, observacion_evaluacion:any, criterio_evaluacion:any, parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
               //var fh = item.fecha.split(" ");
-              var ubicacion = item.latitud + "," + item.longitud;
-
+              var ubicacion_url = item.latitud + "," + item.longitud;
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
               evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
               codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
@@ -13206,7 +13207,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
               //if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
-              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig, fontSize: this.c1_2 }); };
+              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion_url+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig, fontSize: this.c1_2 }); };
 
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
               if (rs.EnlaceArchivo) {
@@ -13241,7 +13242,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  }
 
 
-      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
+      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(evento_cell_ch_width) }  );  };
       if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
       if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
@@ -17865,7 +17866,7 @@ export class ResultComponent implements OnDestroy, OnInit {
                 cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
                 cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
               } else {
-                cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.fServidor, bold: true, fontSize: 6, alignment: 'center' });
               }  
             };
 
@@ -17964,6 +17965,559 @@ export class ResultComponent implements OnDestroy, OnInit {
 
         };
         pdfMake.createPdf(docDefinition).download('ReporteGeneral.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
+
+
+
+    exportPdfEventosCIPIA() {
+			var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+      var rs = this.reportService.eC;
+
+      var nom_pdf = '';
+      if (this.report_data.num_rep == 'R040') {
+          nom_pdf = "ReporteEventosInternos.pdf"; //'REPORTE DE EVENTOS INTERNO';
+      } else if(this.report_data.num_rep == 'R037') {
+          nom_pdf = "ReporteEventos.pdf"; //'REPORTE DE EVENTOS';
+      }
+  
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+                  text: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos,//'REPORTE GENERAL',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+				        table: {
+				            widths: ['*'],
+				            body: [[" "], [" "]]
+				        },
+				        layout: {
+				            hLineWidth: function(i:any, node:any) {
+				                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+				            },
+				            vLineWidth: function(i:any, node:any) {
+				                return 0;
+				            },
+				        }
+				    });
+
+					//---**
+					var tabla = [];
+					var cellsCampos = [];
+
+					cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          if (rs.Fecha) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+          if (rs.FechaServidor) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+
+          if (rs.Evento) { cellsCampos.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Codigo) { cellsCampos.push({ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Placa) { cellsCampos.push({ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.TipoUnidad) { cellsCampos.push({ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.IdConductor) { cellsCampos.push({ text: 'ID Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Conductor) { cellsCampos.push({ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.VelMobileye) { cellsCampos.push({ text: 'Vel.Mobileye', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPS) { cellsCampos.push({ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPSspeed) { cellsCampos.push({ text: 'Vel.GPS speed', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelCAN) { cellsCampos.push({ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelECO) { cellsCampos.push({ text: 'Vel.ECO', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.Zona) { cellsCampos.push({ text: 'Geocerca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.PuntoCercano) { cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Ubicacion) { cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Referencia) { cellsCampos.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.EnlaceArchivo) { 
+              cellsCampos.push({ text: 'Enlace a Archivos', colSpan:2, bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); 
+              cellsCampos.push({ });
+            };
+          if (rs.Parametros) { cellsCampos.push({ text: 'Parámetros', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+
+					tabla.push(cellsCampos);
+
+					data[1].forEach( (item:any, index:any) => {
+
+						var cellsCuerpo = [];
+
+						var a = (index + 1).toString();
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+            var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+
+						cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+
+            if (rs.Fecha) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+                }
+            }
+
+            if (rs.FechaServidor) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha_servidor.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha_servidor, bold: true, fontSize: 6, alignment: 'center' });
+                }  
+            };
+
+
+
+            // if (rs.Evento) { cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' }); };
+	
+
+            if (rs.Evento) { cellsCuerpo.push({ text: item.descripcion_evento, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Codigo) { cellsCuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Placa)  { cellsCuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.TipoUnidad) { cellsCuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.IdConductor) { cellsCuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Conductor) { cellsCuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.VelMobileye) { cellsCuerpo.push({ text: item.vel_mobileye, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPS) { cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPSspeed) { cellsCuerpo.push({ text: item.vel_gps_speed, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelCAN) { cellsCuerpo.push({ text: item.vel_can, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelECO) { cellsCuerpo.push({ text: item.vel_eco, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.Zona) { cellsCuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.PuntoCercano) { cellsCuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Ubicacion) { cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Referencia) { cellsCuerpo.push({ text: rreeff, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            if (rs.EnlaceArchivo) { 
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+
+              cellsCuerpo.push({ text: 'Imagen', link: item.enlaceImageCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+              cellsCuerpo.push({ text: 'Video', link: item.enlaceVideoCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+            };
+            if (rs.Parametros) { cellsCuerpo.push({ text: item.parametros, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            //{ text: 'google', link: 'http://google.com' }
+
+
+						tabla.push(cellsCuerpo);
+					});
+
+
+          console.log(tabla);
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+				}
+			});
+      
+
+
+			console.log(exportFilePdf);
+
+
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+            pageOrientation: 'landscape',
+            pageSize: 'A4',
+            pageMargins: [ 40, 40, 40, 40 ],
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download(nom_pdf);
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
+
+    exportPdfEventosEvaluacionCIPIA() {
+			var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+      var rs = this.reportService.eC;
+
+      var nom_pdf = '';
+      nom_pdf = "ReporteAtencionEventos.pdf"; //'REPORTE DE EVENTOS INTERNO';
+
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos,//'REPORTE GENERAL',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+				        table: {
+				            widths: ['*'],
+				            body: [[" "], [" "]]
+				        },
+				        layout: {
+				            hLineWidth: function(i:any, node:any) {
+				                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+				            },
+				            vLineWidth: function(i:any, node:any) {
+				                return 0;
+				            },
+				        }
+				    });
+
+					//---**
+					var tabla = [];
+					var cellsCampos = [];
+
+					cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          if (rs.Fecha) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+          if (rs.FechaServidor) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+
+          if (rs.Evento) { cellsCampos.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Codigo) { cellsCampos.push({ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Placa) { cellsCampos.push({ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.TipoUnidad) { cellsCampos.push({ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.IdConductor) { cellsCampos.push({ text: 'ID Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Conductor) { cellsCampos.push({ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+          if (rs.FechaEvaluacion) {
+            if(this.chkDateHour) {
+                cellsCampos.push({ text: 'Fecha de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                cellsCampos.push({ text: 'Hora de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            } else {
+                cellsCampos.push({ text: 'Fecha/Hora de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            }
+          };
+
+          if (rs.CriterioEvaluacion) { cellsCampos.push({ text: 'Criterio de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Observacion) { cellsCampos.push({ text: 'Observación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+          if (rs.VelMobileye) { cellsCampos.push({ text: 'Vel.Mobileye', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPS) { cellsCampos.push({ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPSspeed) { cellsCampos.push({ text: 'Vel.GPS speed', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelCAN) { cellsCampos.push({ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelECO) { cellsCampos.push({ text: 'Vel.ECO', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.Zona) { cellsCampos.push({ text: 'Geocerca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.PuntoCercano) { cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Ubicacion) { cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Referencia) { cellsCampos.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.EnlaceArchivo) { 
+              cellsCampos.push({ text: 'Enlace a Archivos', colSpan:2, bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); 
+              cellsCampos.push({ });
+            };
+          //if (rs.Parametros) { cellsCampos.push({ text: 'Parámetros', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.OperadorMonitoreo) { cellsCampos.push({ text: 'Operador de Monitoreo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+					tabla.push(cellsCampos);
+
+					data[1].forEach( (item:any, index:any) => {
+
+						var cellsCuerpo = [];
+
+						var a = (index + 1).toString();
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+            var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+
+						cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+
+            if (rs.Fecha) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+                }
+            }
+
+            if (rs.FechaServidor) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha_servidor.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha_servidor, bold: true, fontSize: 6, alignment: 'center' });
+                }  
+            };
+
+
+            // if (rs.Evento) { cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' }); };
+	
+
+            if (rs.Evento) { cellsCuerpo.push({ text: item.descripcion_evento, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Codigo) { cellsCuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Placa)  { cellsCuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.TipoUnidad) { cellsCuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.IdConductor) { cellsCuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Conductor) { cellsCuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+
+            if (rs.FechaEvaluacion) {
+                if(this.chkDateHour) {
+                    var fh:any = ['',''];
+                    if (item.fecha_evaluacion == "") {
+                    } else {
+                      fh = item.fecha_evaluacion.split(" ");
+                    }
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha_evaluacion, bold: true, fontSize: 6, alignment: 'center' });
+                }
+            };
+  
+            if (rs.CriterioEvaluacion) { cellsCuerpo.push({ text: item.criterio_evaluacion, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Observacion) { cellsCuerpo.push({ text: item.observacion_evaluacion, bold: true, fontSize: 6, alignment: 'center' }); };
+
+
+            if (rs.VelMobileye) { cellsCuerpo.push({ text: item.vel_mobileye, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPS) { cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPSspeed) { cellsCuerpo.push({ text: item.vel_gps_speed, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelCAN) { cellsCuerpo.push({ text: item.vel_can, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelECO) { cellsCuerpo.push({ text: item.vel_eco, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.Zona) { cellsCuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.PuntoCercano) { cellsCuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Ubicacion) { cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Referencia) { cellsCuerpo.push({ text: rreeff, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            if (rs.EnlaceArchivo) { 
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+
+              cellsCuerpo.push({ text: 'Imagen', link: item.enlaceImageCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+              cellsCuerpo.push({ text: 'Video', link: item.enlaceVideoCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+            };
+            //if (rs.Parametros) { cellsCuerpo.push({ text: item.parametros, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.OperadorMonitoreo) { cellsCuerpo.push({ text: item.operador_monitoreo, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            //{ text: 'google', link: 'http://google.com' }
+
+
+						tabla.push(cellsCuerpo);
+					});
+
+
+          console.log(tabla);
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+				}
+			});
+      
+
+
+			//console.log(exportFilePdf);
+
+
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+            pageOrientation: 'landscape',
+            pageSize: 'A4',
+            pageMargins: [ 40, 40, 40, 40 ],
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download(nom_pdf);
 
       } else {
         alert('No se han encontrado datos para exportar');
