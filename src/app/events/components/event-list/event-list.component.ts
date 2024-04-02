@@ -21,6 +21,7 @@ import { Alert, Evaluation } from 'src/app/alerts/models/alert.interface';
 import { Operator } from '../../models/interfaces';
 
 import Swal from 'sweetalert2';
+import { event } from 'jquery';
 
 @Component({
   selector: 'app-event-list',
@@ -40,7 +41,15 @@ export class EventListComponent implements OnInit {
 
   public imei_debug: string = '864200050708453';
   public data_debug: any = ['-', '-', '-', '-'];
-
+  evaluation_criteria_filter : any[] = [];
+  list_events_slug_criteria = [
+    'conductor-adormitado-360',
+    'conductor-somnoliento-360',
+    'posible-fatiga',
+    'conductor-distraido-360',
+    'cinturon-desabrochado-360',
+    'conductor-fumando-360'
+  ];
   evaluation_criteria = [
     {
       label: 'Señales de posible fatiga',
@@ -106,6 +115,53 @@ export class EventListComponent implements OnInit {
           value: 'Uso de maquillaje en el rostro',
         },
       ],
+    },
+    {
+      label: 'DISTRACCIÓN',
+      items: [
+        { label: 'Deslumbramiento / Reflejo de sol', value: 'Deslumbramiento / Reflejo de sol' },
+        { label: 'Maniobras de conducción', value: 'Maniobras de conducción' },
+        { label: 'Manipulación de dispositivos del vehículo', value: 'Manipulación de dispositivos del vehículo' },
+        { label: 'Visualización de la vía', value: 'Visualización de la vía' },
+        { label: 'Visualización de tablero', value: 'Visualización de tablero' },
+      ]
+    },
+    {
+      label: 'SOMNOLENCIA',
+      items: [
+        { label: 'Lentes mal puestos', value: 'Lentes mal puestos' },
+        { label: 'Lentes obstruyendo parpados', value: 'Lentes obstruyendo parpados' },
+        { label: 'Parpadeo', value: 'Parpadeo' },
+        { label: 'Uso de sobrelentes', value: 'Uso de sobrelentes' },
+        { label: 'Visualización de tablero', value: 'Visualización de tablero' },
+      ]
+    },
+    {
+      label: 'CONDUCTOR ADORMITADO',
+      items: [
+        { label: 'Boztezo sin signos de fatiga', value: 'Boztezo sin signos de fatiga'},
+        { label: 'Inclinación hacia adelante', value: 'Inclinación hacia adelante'},
+        { label: 'Manipulación de dispositivos del vehículo', value: 'Manipulación de dispositivos del vehículo'},
+        { label: 'Visualización de tablero', value: 'Visualización de tablero'},
+      ]
+    },
+    {
+      label: 'CINTURÓN',
+      items: [
+        { label: 'Cinta reflectiva del chaleco y/o casaca', value: 'Cinta reflectiva del chaleco y/o casaca' },
+        { label: 'Deslumbramiento / Reflejo de sol', value: 'Deslumbramiento / Reflejo de sol'},
+        { label: 'Uso de Chalina', value: 'Uso de Chalina'},
+      ]
+    },
+    {
+      label: 'FUMAR',
+      items: [
+        { label: 'Cinta reflectiva del chaleco y/o casaca', value: 'Cinta reflectiva del chaleco y/o casaca' },
+        { label: 'Conductor haciendo uso del petete', value: 'Conductor haciendo uso del petete'},
+        { label: 'Deslumbramiento / Reflejo de sol', value: 'Deslumbramiento / Reflejo de sol'},
+        { label: 'Mano cerca al rostro', value: 'Mano cerca al rostro'},
+        { label: 'Uso de Palillo o mondadientes', value: 'Uso de Palillo o mondadientes'},
+      ]
     },
   ];
 
@@ -458,11 +514,13 @@ export class EventListComponent implements OnInit {
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement) {
     console.log("switchEventOnMap #########################");
+    console.log('FILTER TEST EVENT:',event,);
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if (false) {
       // this.hideEvent(this.eventService.activeEvent);
     } else {
+      await this.switchTypeEventFilter(event.tipo);
       currentRow.classList.add('watched-event');
       //console.log('Mostrando evento con ID: ', event.evento_id);
       // let reference = await this.eventService.getReference(
@@ -505,6 +563,34 @@ export class EventListComponent implements OnInit {
     //console.log(this.noResults);
   }
 
+  public async switchTypeEventFilter(event_slug:string):Promise<void>{
+    console.log('FILTER TEST Switch Slug:',event_slug,);
+    if(event_slug == 'conductor-distraido-360'){
+      this.filterCriteriaByEvent('DISTRACCIÓN');
+    }else if(event_slug == 'cinturon-desabrochado-360'){
+      this.filterCriteriaByEvent('CINTURÓN');
+    }else if(event_slug == 'conductor-fumando-360'){
+      this.filterCriteriaByEvent('FUMAR');
+    }else{
+      this.filterCriteriaByEvent('ALL');
+      // PARA ESTO Y PARA CUALQUIER OTRO
+      // 'conductor-adormitado-360',
+      // 'conductor-somnoliento-360',
+      // 'posible-fatiga',
+    }
+
+  }
+  public filterCriteriaByEvent(event_filter: string): void {
+    console.log('FILTER TEST event_filter:',event_filter,);
+    if(event_filter == 'ALL'){
+      this.evaluation_criteria_filter = this.evaluation_criteria.slice(0, 2);
+    }else{
+      // Filtrar los elementos de evaluation_criteria que coincidan con el evento seleccionado
+      this.evaluation_criteria_filter = this.evaluation_criteria.filter(criteria => criteria.label === event_filter);
+    }
+    console.log('FILTER TEST CRITERIOS:',this.evaluation_criteria);
+    console.log('FILTER TEST CRITERIOS:',this.evaluation_criteria_filter);
+  }
   private eventFilter(event: any) {
 
     // console.log("eventFilter filter ===> ");
