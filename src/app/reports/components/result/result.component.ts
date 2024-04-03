@@ -6728,7 +6728,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
             placa_cell_ch_width = Math.max(placa_cell_ch_width, (item.placa??'').toString().length);
             status_cell_ch_width = Math.max(status_cell_ch_width, (item.estado??'').toString().length);
-            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.estado??'').toString().length);
+            conductor_cell_ch_width = Math.max(conductor_cell_ch_width, (item.conductor??'').toString().length);
             vel_gps_cell_ch_width = Math.max(vel_gps_cell_ch_width, ((item.velocidad??'')+" km/h").length);
             vel_can_cell_ch_width = Math.max(vel_can_cell_ch_width, ((item.velocidad_can??'')+" km/h").length);
             odometro_cell_ch_width = Math.max(odometro_cell_ch_width, (item.odometro??'').toString().length);
@@ -6819,13 +6819,14 @@ export class ResultComponent implements OnDestroy, OnInit {
           freezePane: {
               rowSplit: this.headerRowSpan
             },
-          columns: [
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
-            { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
-          ],
+          columns: column_config,
+          // [
+          //   { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+          //   { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+          //   { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+          //   { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },
+          //   { width: 200 },{ width: 200 },{ width: 200 },{ width: 200 },{ width: 200 }
+          // ],
           title: "Resultado",//data[0][1],
           rows: allRows
         });
@@ -17467,7 +17468,6 @@ export class ResultComponent implements OnDestroy, OnInit {
     }
 
 
-    // Dejarlo por el momento
     exportPdfEntradaSalida() {
 			//vm.dateHour();
       var exportFilePdf :any = [];
@@ -17722,8 +17722,6 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 		}
 
-
-    		//-->4
 		exportPdfGeneral() {
 			var exportFilePdf :any = [];
 			var bol_datos_pdf = false;
@@ -17971,8 +17969,6 @@ export class ResultComponent implements OnDestroy, OnInit {
       }
 
 		}
-
-
 
     exportPdfEventosCIPIA() {
 			var exportFilePdf :any = [];
@@ -18524,6 +18520,675 @@ export class ResultComponent implements OnDestroy, OnInit {
       }
 
 		}
+
+    exportPdfPosicion() {
+      //vm.dateHour();
+      var exportFilePdf :any = [];
+      var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+      console.log("============= DATA ==============");
+      console.log(this.data);
+      
+      //this.data.forEach((data:any, index:any) =>{
+        //if(data[1].length > 0){
+        if(this.sortedData.length > 0){
+          bol_datos_pdf = true;
+
+          exportFilePdf.push({
+            columns: [
+              [
+                {
+                  text: this.report_data.rep_title, //'REPORTE DE POSICIÓN',
+                  fontSize: 10,//this.c1,
+                  bold: true,
+                  alignment: 'left',
+                  margin: [0, 25, 0, 0]
+                },
+                {
+                  text: this.report_data.rep_subtitle, //'Nombre del vehículo: ' + data[0][1],
+                  fontSize: this.c1,//10,
+                  alignment: 'left'
+                },
+                // {
+                //   text: 'Fechas: ' + this.period,
+                //   fontSize: 10,
+                //   alignment: 'left'
+                // }
+              ]
+            ],
+            //pageBreak: index != 0 ? 'before' : ''
+            pageBreak: 0 != 0 ? 'before' : ''
+
+          });
+
+          exportFilePdf.push({
+            table: {
+              widths: ['*'],
+              body: [[" "], [" "]]
+            },
+            layout: {
+              hLineWidth: function(i:any, node:any) {
+                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+              },
+              vLineWidth: function(i:any, node:any) {
+                return 0;
+              },
+            }
+          });
+
+          var tabla : any[] = [];
+          //--------- CABECERA ------------
+          if(this.chkDateHour){
+            tabla.push([
+              { text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Status', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Velocidad GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Velocidad CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Odómetro', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Geocerca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+            ]);
+            
+            this.sortedData.forEach((item:any, index2:any) => {
+
+    
+              var a = (index2 + 1).toString();
+              //var ubicacion = item.latitud + "," + item.longitud;
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+              var fh = item.fecha.split(" ");
+              var fh_ini  = fh[0];
+              var fh_out  = fh[1];
+
+              tabla.push([
+                { text: a, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+
+                { text: fh_ini, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh_out, bold: true, fontSize: 6, alignment: 'center' },
+
+                { text: item.estado, bold: true, fontSize: 6, alignment: 'center'},
+                { text: item.conductor, bold: true, fontSize: 6, alignment: 'center'},
+                { text: item.velocidad, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.velocidad_can, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.odometro, bold: true, fontSize: 6, alignment: 'center'},
+                { text: ubicacion , bold: true, fontSize: 6, alignment: 'center'},
+                { text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.referencia, bold: true, fontSize: 6, alignment: 'center' },
+
+              ]);
+
+            });
+
+          } else {
+
+            tabla.push([
+              { text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Fecha y Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Status', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Velocidad GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Velocidad CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Odómetro', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Geocerca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+            ]);
+
+            this.sortedData.forEach((item:any, index2:any) => {
+
+              var a = (index2 + 1).toString();
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+              tabla.push([
+                  { text: a, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.codigo, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.placa, bold: true, fontSize: 6, alignment: 'center' },
+  
+                  { text: item.fecha, bold: true, fontSize: 6, alignment: 'center' },
+  
+                  { text: item.estado, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.conductor, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.velocidad, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.velocidad_can, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.odometro, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: ubicacion , bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.tramo, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.referencia, bold: true, fontSize: 6, alignment: 'center' },
+              ]);
+              
+            });
+          }
+
+          exportFilePdf.push({
+                columns: [
+                    { width: '*', text: ''},
+                    {
+                      width: 'auto',
+                      table: {
+                        body: tabla
+                      }
+                    },
+                    { width: '*', text: ''}
+                ]
+              });
+
+        }
+      //});
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+          pageOrientation: 'landscape',
+          pageSize: 'A4',
+          //pageMargins: [ 0, 0, 0, 0 ],
+          pageMargins: [ 40, 40, 40, 40 ],
+
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReportePosicion.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+    }
+
+ 
+    //exportPdfExcesosVelocidadNuevoFormato
+    exportPdfExcesosVelocidadNuevoFormato() {
+			//vm.dateHour();
+      var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: this.report_data.rep_title,//'REPORTE DE EXCESOS DE VELOCIDAD (NUEVO FORMATO)',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+          exportFilePdf.push({
+            table: {
+              widths: ['*'],
+              body: [[" "], [" "]]
+            },
+            layout: {
+              hLineWidth: function(i:any, node:any) {
+                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+              },
+              vLineWidth: function(i:any, node:any) {
+                return 0;
+              },
+            }
+          });
+
+          //============================================================================================
+          console.log("===============================================================================");
+          console.log(data);
+
+          var tabla : any[] = [];
+					//--------- CABECERA ------------
+					if(this.chkDateHour){
+						tabla.push([
+							{ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Límite de Velocidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Exceso de Velocidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+						]);
+            
+						data[1].forEach((item:any, index2:any) => {
+
+              var a = (index2 + 1).toString();
+              var fh = item.fecha_inicio.split(" ");
+    
+							//var ubicacion = item.latitud + "," + item.longitud;
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+							tabla.push([
+								{ text: a, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh[0], bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh[1], bold: true, fontSize: 6, alignment: 'center' },
+								
+								{ text: item.codigo, bold: true, fontSize: 6, alignment: 'center'},
+                { text: item.placa, bold: true, fontSize: 6, alignment: 'center'},
+                { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center'},
+
+								{ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center'},
+								{ text: item.conductor, bold: true, fontSize: 6, alignment: 'center'},
+
+								{ text: item.nombre_zona, bold: true, fontSize: 6, alignment: 'center'},
+                { text: item.v0+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.velocidad+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+                { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+		        	]);
+
+						});
+
+					} else {
+
+						tabla.push([
+							{ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Id Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Tramo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Límite de Velocidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Exceso de Velocidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+
+							var a = (index2 + 1).toString();
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+							tabla.push([
+                  { text: a, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.fecha_inicio, bold: true, fontSize: 6, alignment: 'center' },
+                  
+                  { text: item.codigo, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.placa, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center'},
+
+                  { text: item.idConductor, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.conductor, bold: true, fontSize: 6, alignment: 'center'},
+
+                  { text: item.nombre_zona, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.v0+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.velocidad+" Km/h", bold: true, fontSize: 6, alignment: 'center' },
+                  { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+
+              ]);
+              
+						});
+					}
+
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+
+				}
+			});
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+          pageOrientation: 'landscape',
+          pageSize: 'A4',
+          //pageMargins: [ 0, 0, 0, 0 ],
+          pageMargins: [ 40, 40, 40, 40 ],
+
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            //header: function(currentPage:any, pageCount:any, pageSize:any) {
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteExcesosVelocidadFormatoExtendido.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
+
+
+     
+    //exportPdfExcesosVelocidadNuevoFormato
+    exportPdfExcesosVelocidadLimitePersonalizado() {
+			//vm.dateHour();
+      var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: this.report_data.rep_title,//'REPORTE DE EXCESOS DE VELOCIDAD DE LÍMITE PERSONALIZADO',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+          exportFilePdf.push({
+            table: {
+              widths: ['*'],
+              body: [[" "], [" "]]
+            },
+            layout: {
+              hLineWidth: function(i:any, node:any) {
+                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+              },
+              vLineWidth: function(i:any, node:any) {
+                return 0;
+              },
+            }
+          });
+
+          //============================================================================================
+          // console.log("===============================================================================");
+          // console.log(data);
+
+          var tabla : any[] = [];
+          var cellsCampos = [];
+					//--------- CABECERA ------------
+
+          if(this.chkDuracion){ 
+
+              cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              if(this.chkDateHour) { 
+                cellsCampos.push({ text: 'Fecha de Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                cellsCampos.push({ text: 'Hora de Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                cellsCampos.push({ text: 'Fecha de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                cellsCampos.push({ text: 'Hora de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                cellsCampos.push({ text: 'Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                cellsCampos.push({ text: 'Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+              cellsCampos.push({ text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Cant. de Tramas', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Tramas', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Vel. Min.', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Vel. Máx.', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Zona Cercana', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          } else {
+
+            cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cellsCampos.push({ text: 'Nombre', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            if(this.chkDateHour) { 
+              cellsCampos.push({ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              cellsCampos.push({ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            } else {
+              cellsCampos.push({ text: 'Fecha y Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            }
+            cellsCampos.push({ text: 'Máxima Velocidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cellsCampos.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          }
+
+					tabla.push(cellsCampos);
+
+          if(this.chkDuracion){
+              data[1].forEach( (item:any, index:any) => {
+
+                var cellsCuerpo = [];
+
+                var a = (index + 1).toString();
+                var fh = item.fecha_inicial.split(" ");
+                var ffh = item.fecha_final.split(" ");
+                var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+                // var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+  
+                cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+    
+                if (this.chkDateHour) {
+                    var fh = item.fecha.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: ffh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: ffh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha_inicial, bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: item.fecha_final, bold: true, fontSize: 6, alignment: 'center' });
+                }
+        
+                cellsCuerpo.push({ text: item.duracion, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.cant_tramas, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.string_tramas, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_min, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.vel_max, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: item.ZC, bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
+                
+                tabla.push(cellsCuerpo);
+
+              });
+          } else {
+            data[1].forEach( (item:any, index:any) => {
+
+              var cellsCuerpo = [];
+
+              var a = (index + 1).toString();
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+              var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+              cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: item.nombre, bold: true, fontSize: 6, alignment: 'center' });
+              if (this.chkDateHour) {
+                  var fh = item.fecha.split(" ");
+                  cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                  cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+              } else {
+                  cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+              }
+              cellsCuerpo.push({ text: item.maxima_velocidad, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' });
+              cellsCuerpo.push({ text: rreeff, bold: true, fontSize: 6, alignment: 'center' });
+
+              tabla.push(cellsCuerpo);
+
+            });
+
+          }
+
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+
+				}
+			});
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+          pageOrientation: 'landscape',
+          pageSize: 'A4',
+          //pageMargins: [ 0, 0, 0, 0 ],
+          pageMargins: [ 40, 40, 40, 40 ],
+
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            //header: function(currentPage:any, pageCount:any, pageSize:any) {
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteExcesosVelocidad.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
+
+
+
 
 
     // PDF DE MINA
