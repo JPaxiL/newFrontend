@@ -11,6 +11,7 @@ import { EventSocketService } from './../../services/event-socket.service';
 import { MapServicesService } from 'src/app/map/services/map-services.service';
 import { EventService } from '../../services/event.service';
 import { ReferenceService } from '../../services/reference.service';
+import { ConnectionService } from '../../services/connection.service';
 import { getContentPopup } from '../../helpers/event-helper';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpClient } from '@angular/common/http';
@@ -191,6 +192,7 @@ export class EventListComponent implements OnInit {
   constructor(
     public eventService: EventService,
     public referenceService: ReferenceService,
+    public connectionService: ConnectionService,
     public mapService: MapServicesService,
     public eventSocketService: EventSocketService,
     private spinner: NgxSpinnerService,
@@ -235,8 +237,11 @@ export class EventListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    //console.log("event list on init ========================================================================");
+    // console.log("event list on init ========================================================================");
+
     this.selectedEvent = [];
+
+    // this.connectionService.monitor();
 
     if (!this.eventService.eventsLoaded || !this.eventService.filterLoaded) {
       this.spinner.show('loadingEventList');
@@ -431,14 +436,15 @@ export class EventListComponent implements OnInit {
       (eventClass: any) => eventClass.tipo == event.tipo
     );
     eventClass = eventClass.length > 0 ? eventClass[0].clase : 'default-event';
-
+console.log(" ############ eventclass: ",eventClass);
     this.mapService.map.fitBounds(
       [[event.layer.getLatLng().lat, event.layer.getLatLng().lng]],
       { padding: [50, 50] }
     );
 
     // console.log("eventlayer",event.layer)
-
+//no-rostro
+//infraccion-geocerca
     event.layer.bindPopup(getContentPopup(event), {
       className: eventClass,
       minWidth: 250,

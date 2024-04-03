@@ -496,6 +496,7 @@ export class EventService {
     { tipo: 'dvr-operativo', clase: 'dvr-operativo' },
     { tipo: 'dvr-inoperativo', clase: 'dvr-inoperativo' },
     { tipo: 'antena-gps-desconectada', clase: 'antena-gps-desconectada' },
+    { tipo: 'infraccion-geocerca', clase: 'infraccion-geocerca' }
   ];
 
   public async ShowAllHistorial(param: any) {
