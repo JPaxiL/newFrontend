@@ -305,7 +305,7 @@ export class AlertService {
   public getSoundAll() {
     return this.listaSonidos;
   }
-  
+
 
   //FIN TEST
 }

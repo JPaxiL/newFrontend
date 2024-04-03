@@ -230,7 +230,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-6 p-field">
+            <div class="col-6 p-field" *appHasPermission="'evaluation.show'">
               <div class="col-12">
                 <label>ATENCIÓN DE EVENTOS:</label>
               </div>
@@ -255,8 +255,23 @@
           class="gl-middleline gl-permanent-middleline gl-row-underline"
         >
           <div class="row">
-            <div class="col p-field d-flex flex-column justify-content9-center">
+            <div class="col p-field d-flex flex-column justify-content-center">
               <label class="row">
+                <span class="col-9 control-label align-middle"
+                  >TOLERANCIA:</span
+                >
+                <div class="col-2 d-flex flex-column justify-content-center">
+                  <p-checkbox
+                    name="groupname"
+                    [binary]="true"
+                    formControlName="chkFijarLimiteVelocidad"
+                    (onChange)="changechkFijarLimiteVelocidad()"
+                  ></p-checkbox>
+                </div>
+              </label>
+            </div>
+            <div class="col p-field d-flex flex-column justify-content9-center">
+              <label class="row" *appHasPermission="'infraccion_geocerca-tiempo.show'" >
                 <span class="col-9 control-label align-middle"
                   >POR TIEMPO:</span
                 >
@@ -270,24 +285,19 @@
                 </div>
               </label>
             </div>
-            <div class="col p-field d-flex flex-column justify-content-center">
-              <label class="row">
-                <span class="col-9 control-label align-middle"
-                  >POR LÍMITE DE TOLERANCIA:</span
-                >
-                <div class="col-2 d-flex flex-column justify-content-center">
-                  <p-checkbox
-                    name="groupname"
-                    [binary]="true"
-                    formControlName="chkFijarLimiteVelocidad"
-                    (onChange)="changechkFijarLimiteVelocidad()"
-                  ></p-checkbox>
-                </div>
-              </label>
-            </div>
           </div>
           <div class="row">
-            <div class="col p-field">
+            <div class="col-6 p-field">
+              <p-inputNumber
+                formControlName="velocidad_limite_infraccion"
+                suffix=" km/h"
+                [placeholder]="'0 km/h'"
+                [min]="0"
+                [max]="1000"
+                [showButtons]="true"
+              ></p-inputNumber>
+            </div>
+            <div *appHasPermission="'infraccion_geocerca-tiempo.show'"  class="col-6 p-field">
               <p-dropdown
                 [options]="fijarTiempoOptions"
                 formControlName="tiempo_limite_infraccion"
@@ -298,20 +308,11 @@
                 [appendTo]="'body'"
               ></p-dropdown>
             </div>
-            <div class="col p-field">
-              <p-inputNumber
-                formControlName="velocidad_limite_infraccion"
-                suffix=" km/h"
-                [placeholder]="'0 km/h'"
-                [min]="0"
-                [max]="1000"
-                [showButtons]="true"
-              ></p-inputNumber>
-            </div>
           </div>
         </div>
         <!--INFRACCION GEOCERCA-->
-        <div
+        <ng-container *appHasPermission="'evaluation.show'">
+          <div
           *ngIf="!showInfraccion"
           class="gl-middleline gl-permanent-middleline gl-row-underline"
         >
@@ -334,6 +335,7 @@
             </div>
           </div>
         </div>
+        </ng-container>
         <!-- emails -->
         <br />
         <div class="row d-flex justify-content-center">
@@ -492,7 +494,7 @@
                             <option value="" disabled selected hidden>Seleccione un tipo de alerta</option>
                             <option *ngFor="let event of events" [value]="event.name">{{ event.name }}</option>
                         </select>
-                    </div> 
+                    </div>
                 </div>
             </div>
 
@@ -540,7 +542,7 @@
                         [maxSelectedLabels]="3"
                         [selectedItemsLabel]="'{0} geocercas seleccionadas'"
                     ></p-multiSelect>
-                    </div>               
+                    </div>
                 </div>
             </div> -->
 
@@ -685,7 +687,7 @@
                 <div class="form-group col-12">
                     <label class="control-label">Infracción:</label>
                 </div>
-                
+
                 <div class="col-12">
                     <div class="row">
                         <div class="col-6 d-flex flex-column justify-content-center">
@@ -747,7 +749,7 @@
                         </div>
                     </label>
                 </div>
-                <div class="col-5"></div>               
+                <div class="col-5"></div>
             </div>
 
             <div class="row"></div>

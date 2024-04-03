@@ -19,7 +19,10 @@ import { environment } from 'src/environments/environment';
 import { SliderMultimediaComponent } from 'src/app/shared/components/slider-multimedia/slider-multimedia.component';
 import { VehicleService } from 'src/app/vehicles/services/vehicle.service';
 import { Alert, Evaluation } from 'src/app/alerts/models/alert.interface';
+import { Operator } from '../../models/interfaces';
+
 import Swal from 'sweetalert2';
+import { event } from 'jquery';
 
 @Component({
   selector: 'app-event-list',
@@ -39,7 +42,15 @@ export class EventListComponent implements OnInit {
 
   public imei_debug: string = '864200050708453';
   public data_debug: any = ['-', '-', '-', '-'];
-
+  evaluation_criteria_filter : any[] = [];
+  list_events_slug_criteria = [
+    'conductor-adormitado-360',
+    'conductor-somnoliento-360',
+    'posible-fatiga',
+    'conductor-distraido-360',
+    'cinturon-desabrochado-360',
+    'conductor-fumando-360'
+  ];
   evaluation_criteria = [
     {
       label: 'Señales de posible fatiga',
@@ -106,41 +117,73 @@ export class EventListComponent implements OnInit {
         },
       ],
     },
+    {
+      label: 'DISTRACCIÓN',
+      items: [
+        { label: 'Deslumbramiento / Reflejo de sol', value: 'Deslumbramiento / Reflejo de sol' },
+        { label: 'Maniobras de conducción', value: 'Maniobras de conducción' },
+        { label: 'Manipulación de dispositivos del vehículo', value: 'Manipulación de dispositivos del vehículo' },
+        { label: 'Visualización de la vía', value: 'Visualización de la vía' },
+        { label: 'Visualización de tablero', value: 'Visualización de tablero' },
+      ]
+    },
+    {
+      label: 'SOMNOLENCIA',
+      items: [
+        { label: 'Lentes mal puestos', value: 'Lentes mal puestos' },
+        { label: 'Lentes obstruyendo parpados', value: 'Lentes obstruyendo parpados' },
+        { label: 'Parpadeo', value: 'Parpadeo' },
+        { label: 'Uso de sobrelentes', value: 'Uso de sobrelentes' },
+        { label: 'Visualización de tablero', value: 'Visualización de tablero' },
+      ]
+    },
+    {
+      label: 'CONDUCTOR ADORMITADO',
+      items: [
+        { label: 'Boztezo sin signos de fatiga', value: 'Boztezo sin signos de fatiga'},
+        { label: 'Inclinación hacia adelante', value: 'Inclinación hacia adelante'},
+        { label: 'Manipulación de dispositivos del vehículo', value: 'Manipulación de dispositivos del vehículo'},
+        { label: 'Visualización de tablero', value: 'Visualización de tablero'},
+      ]
+    },
+    {
+      label: 'CINTURÓN',
+      items: [
+        { label: 'Cinta reflectiva del chaleco y/o casaca', value: 'Cinta reflectiva del chaleco y/o casaca' },
+        { label: 'Deslumbramiento / Reflejo de sol', value: 'Deslumbramiento / Reflejo de sol'},
+        { label: 'Uso de Chalina', value: 'Uso de Chalina'},
+      ]
+    },
+    {
+      label: 'FUMAR',
+      items: [
+        { label: 'Cinta reflectiva del chaleco y/o casaca', value: 'Cinta reflectiva del chaleco y/o casaca' },
+        { label: 'Conductor haciendo uso del petete', value: 'Conductor haciendo uso del petete'},
+        { label: 'Deslumbramiento / Reflejo de sol', value: 'Deslumbramiento / Reflejo de sol'},
+        { label: 'Mano cerca al rostro', value: 'Mano cerca al rostro'},
+        { label: 'Uso de Palillo o mondadientes', value: 'Uso de Palillo o mondadientes'},
+      ]
+    },
   ];
 
   operators = [
     {
-      label: 'Operadores',
-      items: [
-        // {
-        //   label: 'HANCCO DIAZ, Gary Maurizio',
-        //   value: 'HANCCO DIAZ, Gary Maurizio',
-        // },
-        {
-          label: 'HUACHO OCHOA, Gonzalo Joe',
-          value: 'HUACHO OCHOA, Gonzalo Joe',
-        },
-        { label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel' },
-        {
-          label: 'ROJAS RONDON, Carla Alejandra',
-          value: 'ROJAS RONDON, Carla Alejandra',
-        },
-        {
-          label: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
-          value: '⁠FERNANDEZ CRUZ, Rosellia Yanina',
-        },
-        {
-          label: '⁠HUAMANI MILLIO, Maria Belen',
-          value: '⁠HUAMANI MILLIO, Maria Belen',
-        },
-        {
-          label: '⁠SUAREZ PACURI, Ayelen Melani',
-          value: '⁠⁠SUAREZ PACURI, Ayelen Melani',
-        },
+       label: 'Operadores',
+        items: [
+            {label: 'HUACHO OCHOA, Gonzalo Joe', value: 'HUACHO OCHOA, Gonzalo Joe'},
+            {label: 'MAMANI SIERRA, Raquel', value: 'MAMANI SIERRA, Raquel'},
+            {label: 'ROJAS RONDON, Carla Alejandra', value: 'ROJAS RONDON, Carla Alejandra'},
+            {label: 'HUAMANI MILLIO, Maria Belen', value: 'HUAMANI MILLIO, Maria Belen'},
+            {label: 'FERNANDEZ CRUZ, Rosellia Yanina', value: 'FERNANDEZ CRUZ, Rosellia Yanina'},
+            {label: '⁠NUÑEZ CHAMBI, Michelle Solzire', value: '⁠NUÑEZ CHAMBI, Michelle Solzire'},
+            {label: 'ROJAS RONDON, Carla Beatriz', value: 'ROJAS RONDON, Carla Beatriz'},
+            // {label: 'SUAREZ PACURI, Ayelen Melani', value: 'SUAREZ PACURI, Ayelen Melani'},
+            // {label: 'BARREDA SOTOMAYOR, Stephanie Mariana', value: 'BARREDA SOTOMAYOR, Stephanie Mariana'},
+            // {label: 'OCHOA ARANA, Fatima Araceli', value: 'OCHOA ARANA, Fatima Araceli'},
 
-      ],
-    },
-  ];
+        ]
+    }
+  ]
 
   loading_evaluation = false;
   expandedRows: { [s: string]: boolean } = {};
@@ -227,6 +270,30 @@ export class EventListComponent implements OnInit {
       this.showEvent(event);
     });
 
+    // EN ESPERA DE USAR OPERADORES DE PANEL ADMIN
+    // if (this.eventService.stateListOperators == false){
+    //   this.spinner.show('loadingEventList');
+    //   this.eventService.getListOperators().subscribe(
+    //     async (response) => {
+    //       console.log('OPERADORES OBTENIDOS: 1 vez',response);
+    //       this.eventService.listOperators = response.data;
+    //       this.operators = this.generateOperatorsItems(this.eventService.listOperators);
+    //       this.eventService.stateListOperators = true;
+    //       this.spinner.hide('loadingEventList');
+    //     },
+    //     (error) => {
+    //       // Maneja los errores si ocurre alguno durante la solicitud
+    //       console.error('Error al obtener los Operadores de Monitoreo:', error);
+    //     }
+    //   )
+    // }else{
+    //   this.spinner.show('loadingEventList');
+    //   console.log('OPERADORES LOADED');
+    //   this.operators = this.generateOperatorsItems(this.eventService.listOperators);
+    //   this.eventService.stateListOperators = true;
+    //   this.spinner.hide('loadingEventList');
+    // }
+
     if (this.eventService.eventsUserLoaded == false) {
       //this.spinner.show('loadingEventsPanel');
       this.eventService.getEventsForUser().subscribe(
@@ -254,6 +321,17 @@ export class EventListComponent implements OnInit {
       // );
       this.spinner.hide('loadingHistorialForm');
     }
+  }
+
+  public generateOperatorsItems(listItems:string[]):any{
+    var auxOperators: { label: string, items: Operator[] }[] = [{
+      label: 'Operadores',items: []
+    }];
+    listItems.forEach((item: string) => {
+      const newItem: Operator = {label: item,value: item};
+      auxOperators[0].items.push(newItem);
+    });
+    return auxOperators;
   }
 
   public changeTypeEvent() {
@@ -306,7 +384,6 @@ export class EventListComponent implements OnInit {
     }
     this.tipoEvento = this.eventService.getFilters();
     console.log('filtrosobtenidos', this.tipoEvento);
-
     this.eventService.showEventPanel();
 
     /* this.tipoEvento.unshift({ id: 0, option: 'Todos los Eventos', tipo: '' }); */
@@ -443,11 +520,13 @@ console.log(" ############ eventclass: ",eventClass);
 
   public async switchEventOnMap(event: any, currentRow: HTMLElement) {
     console.log("switchEventOnMap #########################");
+    console.log('FILTER TEST EVENT:',event,);
     // console.log("this.eventService.activeEvent.id",this.eventService.activeEvent.id);
     // if(event.event_id == this.eventService.activeEvent.id){
     if (false) {
       // this.hideEvent(this.eventService.activeEvent);
     } else {
+      await this.switchTypeEventFilter(event.tipo);
       currentRow.classList.add('watched-event');
       //console.log('Mostrando evento con ID: ', event.evento_id);
       // let reference = await this.eventService.getReference(
@@ -490,6 +569,34 @@ console.log(" ############ eventclass: ",eventClass);
     //console.log(this.noResults);
   }
 
+  public async switchTypeEventFilter(event_slug:string):Promise<void>{
+    console.log('FILTER TEST Switch Slug:',event_slug,);
+    if(event_slug == 'conductor-distraido-360'){
+      this.filterCriteriaByEvent('DISTRACCIÓN');
+    }else if(event_slug == 'cinturon-desabrochado-360'){
+      this.filterCriteriaByEvent('CINTURÓN');
+    }else if(event_slug == 'conductor-fumando-360'){
+      this.filterCriteriaByEvent('FUMAR');
+    }else{
+      this.filterCriteriaByEvent('ALL');
+      // PARA ESTO Y PARA CUALQUIER OTRO
+      // 'conductor-adormitado-360',
+      // 'conductor-somnoliento-360',
+      // 'posible-fatiga',
+    }
+
+  }
+  public filterCriteriaByEvent(event_filter: string): void {
+    console.log('FILTER TEST event_filter:',event_filter,);
+    if(event_filter == 'ALL'){
+      this.evaluation_criteria_filter = this.evaluation_criteria.slice(0, 2);
+    }else{
+      // Filtrar los elementos de evaluation_criteria que coincidan con el evento seleccionado
+      this.evaluation_criteria_filter = this.evaluation_criteria.filter(criteria => criteria.label === event_filter);
+    }
+    console.log('FILTER TEST CRITERIOS:',this.evaluation_criteria);
+    console.log('FILTER TEST CRITERIOS:',this.evaluation_criteria_filter);
+  }
   private eventFilter(event: any) {
 
     // console.log("eventFilter filter ===> ");

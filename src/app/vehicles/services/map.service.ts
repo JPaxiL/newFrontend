@@ -879,11 +879,7 @@ export class MapService {
           let object = this.markerClusterGroup.getLayers();
           //let onda = this.markerClusterGroupOnda.getLayers();
 
-          // console.log("object",object)
-          /* console.log("onda",onda) */
-
           for (const key in object) {
-            // console.log("object[key]['_tooltip']['_content']==vehicles[index].name==>"+object[key]['_tooltip']['_content']+"=="+vehicles[index].name)
             if (
               object[key]['_tooltip']['_content'] ==
               '<span>' + vehicles[index].name + '</span>'
@@ -900,11 +896,6 @@ export class MapService {
                 lng: vehicles[index].longitud,
               };
 
-              //console.log("coordenadaold",oldCoords)
-              //console.log("coordenadanew",coord)
-
-              //console.log("direccion",vehicles[index], vehicles[index].IMEI)
-
 
               if (
                 vehicles[index].parametros!.includes('di4=') ||
@@ -912,7 +903,7 @@ export class MapService {
               ) {
 
                 let iconUrl = vehicles[index].custom_svg;
-
+                
                 if (
                   vehicles[index].parametros!.includes('di4=1') ||
                   vehicles[index].parametros!.includes('Custom_ign=1')
@@ -976,7 +967,7 @@ export class MapService {
 
                   } else if (this.userDataService.changeItemIcon == 'ondas') {
                     console.log('ONDA');
-                    let iconUrl2 = this.getStateOndas(vehicles[index]);
+                    let iconUrl2 = await this.getStateOndas(vehicles[index]);
                     this.markerClusterGroupOnda.getLayers()[key]['options'][
                       'icon'
                     ]['options']['iconUrl'] = iconUrl2;
@@ -1160,7 +1151,7 @@ export class MapService {
                         'icon'
                       ]['options'][
                         'shadowUrl'
-                      ] = `./assets/images/excessCursor/arrow_${this.final_direction}.svg`;
+                      ] = `./assets/images/excessCursor/arrow_${this.final_direction}.webp`;
                       this.markerClusterGroup.getLayers()[key]['options'][
                         'icon'
                       ]['options']['shadowAnchor'] = [14, 60];
@@ -1169,7 +1160,7 @@ export class MapService {
                         'icon'
                       ]['options'][
                         'shadowUrl'
-                      ] = `./assets/images/arrow_${this.final_direction}.svg`;
+                      ] = `./assets/images/arrow_${this.final_direction}.webp`;
                       this.markerClusterGroup.getLayers()[key]['options'][
                         'icon'
                       ]['options']['shadowAnchor'] = [14, 60];
@@ -1252,7 +1243,7 @@ export class MapService {
                       'options'
                     ][
                       'shadowUrl'
-                    ] = `./assets/images/relentiCursor/arrow_down-left.svg`;
+                    ] = `./assets/images/relentiCursor/arrow_down-left.webp`;
                     this.markerClusterGroup.getLayers()[key]['options']['icon'][
                       'options'
                     ]['shadowAnchor'] = [14, 60];
@@ -1598,7 +1589,7 @@ export class MapService {
     return 'default';
   }
 
-  public getStateOndas(data: any): string {
+  public async getStateOndas(data: any): Promise<string> {
     //console.log('detsateondas', data);
     if (
       data.parametros!.includes('di4=1') ||
@@ -1627,11 +1618,11 @@ export class MapService {
   }
 
 
-  private drawIcon(data: any, map: any): void {
+  private async drawIcon(data: any, map: any): Promise<void> {
     let iconUrl = data.custom_svg;
 
     if (this.userDataService.changeItemIcon == 'ondas') {
-      let iconUrl2 = this.getStateOndas(data);
+      let iconUrl2 = await this.getStateOndas(data);
       //console.log('1234', iconUrl2);
       const myIcono = L.icon({
         iconUrl: iconUrl2,

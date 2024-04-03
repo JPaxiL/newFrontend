@@ -106,7 +106,7 @@ export class TreeTableComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private followService: FollowService,
     private sanitizer: DomSanitizer,
-    private domSanitizer:DomSanitizer 
+    private domSanitizer:DomSanitizer
     ) {
     // this.vehicleService.listTable=1;
     if (this.loading) {
@@ -166,7 +166,7 @@ export class TreeTableComponent implements OnInit {
   }
 
 
- 
+
 
 
   headerScrollHandler() {
@@ -302,11 +302,33 @@ export class TreeTableComponent implements OnInit {
       this.vehicleService.reloadTableTree.emit();
       this.displayEditGroup = false;
     } else {
+      const list1Filtered = this.list1.map((item: UserTracker) => ({
+        id: item.id,
+        IMEI: item.IMEI,
+        idoperation: item.idoperation,
+        idgrupo: item.idgrupo,
+        idconvoy: item.idconvoy,
+        nameoperation: item.nameoperation,
+        namegrupo: item.namegrupo,
+        nameconvoy: item.nameconvoy,
+      }));
+      const list2Filtered = this.list2.map((item: UserTracker) => ({
+        id: item.id,
+        IMEI: item.IMEI,
+        idoperation: item.idoperation,
+        idgrupo: item.idgrupo,
+        idconvoy: item.idconvoy,
+        nameoperation: item.nameoperation,
+        namegrupo: item.namegrupo,
+        nameconvoy: item.nameconvoy,
+      }));
       const req = {
         type: this.dataEdit.type,
         id: this.dataEdit.id,
-        list1: this.list1,
-        list2: this.list2,
+        // list1: this.list1,
+        list1: list1Filtered,
+        // list2: this.list2,
+        list2: list2Filtered,
         name: this.nameEdit.nativeElement.value,
       };
       await this.vehicleConfigService

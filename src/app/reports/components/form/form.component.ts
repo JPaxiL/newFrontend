@@ -15,6 +15,7 @@ import { EventService } from 'src/app/events/services/event.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';
 import { UserDataService } from 'src/app/profile-config/services/user-data.service';
 import { UserTracker } from 'src/app/multiview/models/interfaces';
+import { Operator } from 'src/app/events/models/interfaces';
 
 import Swal from 'sweetalert2';
 // import { threadId } from 'worker_threads';
@@ -155,6 +156,7 @@ export class FormComponent implements OnInit {
   chkAllVehicles = false;
   chkAllZones = false;
   showBlockedTabDialog = false;
+  showCombustibleOpt = false;
 
   showLimitTime = false;
   areVehiclesLoaded = false;
@@ -186,6 +188,9 @@ export class FormComponent implements OnInit {
   showOdomOpt: boolean = false;
   chkOdomVirtual: boolean = false;
   odometroVirtual: number= 0;
+
+  chkCombustibleResumen: boolean = false;
+	chkCombustibleDetallado: boolean = true;
 
   //Reporte 4 - Frenada y Aceleracion Brusca
   showBrakeAccel: boolean = false;
@@ -373,6 +378,7 @@ export class FormComponent implements OnInit {
 
   isEverythingLoaded: boolean = false;
 
+  optionOperators: Operator[] = [];
   constructor(
     private browserDetectorService: BrowserDetectorService,
     private toastr: ToastrService,
@@ -421,7 +427,15 @@ export class FormComponent implements OnInit {
         this.endInit();
       });
 
-
+      // EN ESPERA DE USAR OPERADORES DE PANEL ADMIN
+      // this.eventService.initializeOperators();
+      // this.eventService.operatorsComplete.subscribe(operators=>{
+      //   operators.forEach((item: string) => {
+      //     const newItem: Operator = {label: item,value: item,};
+      //    this.optionOperators.push(newItem);
+      //   });
+      //   console.log('OPERADORES LISTOS',this.optionOperators);
+      // })
 
       this.http.post(environment.apiUrl + '/api/getReports', {}).subscribe({
         next: data => {
@@ -519,6 +533,7 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     //LISTA DE EVENTOS
     this.eventService.getEventsForUser().subscribe(
       async (data) => {
@@ -1000,7 +1015,7 @@ export class FormComponent implements OnInit {
 		var M2_t = f2.format("YYYY-MM-DD") + ' ' + h2.format("HH:mm:00");
     /* var M1 = f1.format("YYYY-MM-DD") + 'T' + this.timeInit + ':00-05:00';
 		var M2 = f2.format("YYYY-MM-DD") + 'T' + this.timeEnd + ':00-05:00'; */
-/* 		var M1_t = f1.format("YYYY-MM-DD") + ' ' + this.timeInit + ':00';
+    /* 		var M1_t = f1.format("YYYY-MM-DD") + ' ' + this.timeInit + ':00';
 		var M2_t = f2.format("YYYY-MM-DD") + ' ' + this.timeEnd + ':00'; */
 
 		var diffTime = moment( new Date( M2 ) ).diff( new Date( M1 ) );
@@ -1140,6 +1155,7 @@ export class FormComponent implements OnInit {
     }
 
     if (param.numRep == 'R037' || param.numRep == 'R038'|| param.numRep == 'R040') {
+        //REPORTE DE EVENTOS , EVALUACION DE EVENTOS , EVENTOS INTERNOS
         this.reportService.str_nombre_eventos = " : ";
         this.events.forEach((event: { name_form: string | number; active: boolean; name_event: string }) => {
           if (event.active) {
@@ -1153,6 +1169,22 @@ export class FormComponent implements OnInit {
     } else {
       this.reportService.str_nombre_eventos = "";
     }
+
+
+    //if (param.numRep == 'R004' || param.numRep == 'R042') {
+    if (param.numRep == 'R004') {
+      //REPORTE DE COMBUSTIBLE , COMBUSTIBLE RESUMEN
+      // console.log(this.chkCombustibleDetallado+"  -  "+this.chkCombustibleResumen);
+      if (this.chkCombustibleResumen) {
+        console.log("ESTE REPORTE ES RESUMEN");
+        param.numRep = 'R042';
+        param.url = "/api/reports/combustible_resumen";
+        repTitle = "REPORTE DE COMBUSTIBLE RESUMEN";
+
+      }
+
+    }
+
 
     console.log('API: ',environment.apiUrl + param.url, param);
     this.http.post(environment.apiUrl + param.url, param).subscribe({
@@ -1184,6 +1216,7 @@ export class FormComponent implements OnInit {
           isVehicleReport: !cv,
           chkTableDropdown: !this.chkSimultaneousTables,
           params : this.reportService.getParams(),
+          operators: this.optionOperators
         }
         if(new_tab === undefined || new_tab == true){
           //Report in the same tab
@@ -1309,6 +1342,8 @@ export class FormComponent implements OnInit {
 		this.showFatigaOp = false; //Configuracion de opcion de fatiga 2
 		this.showBrakeAccel = false; //Configuración Aceleracion y frenada
     this.showFatigaDistraccion = false; //Configuracion Distraccion y posible fatiga
+    this.showCombustibleOpt = false; //Configuracion de reporte de combustible
+
 		/* this.showTimeLlegada = false;
 		this.showTimePeriodoDia = false; */
 
@@ -1338,6 +1373,7 @@ export class FormComponent implements OnInit {
       case 'R004': // 3 - R004	REPORTE DE COMBUSTIBLE
         this.showLimitTime = true;
         this.showOdomOpt = true;
+        this.showCombustibleOpt = true;
         break;
       case 'R005': // 4 - R005	REPORTE DE EXCESOS EN ZONA
         this.showLimitTime = true;
@@ -1437,7 +1473,7 @@ export class FormComponent implements OnInit {
           }
 
       break;
-      case 'R038':  //   - R038	REPORTE DE ATENCIÓN DE EVENTOS 
+      case 'R038':  //   - R038	REPORTE DE ATENCIÓN DE EVENTOS
           this.showLimitTime = true;
           this.showAtencionEventsCipia = true;
           // this.showEvents = true;

@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { EventService } from './event.service';
 import { VehicleService } from '../../vehicles/services/vehicle.service';
-import { UsersService } from 'src/app/dashboard/service/users.service';
 import { AlertService } from 'src/app/alerts/service/alert.service';
 import { PopupService } from './popup.service';
 import { DriversService } from 'src/app/drivers/services/drivers.service';

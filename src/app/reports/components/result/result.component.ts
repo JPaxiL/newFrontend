@@ -420,6 +420,7 @@ export class ResultComponent implements OnDestroy, OnInit {
   dataTableEndingIndex: number = -1;
   user_id: any;
 
+  operators: string[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private http:HttpClient,
@@ -563,7 +564,7 @@ export class ResultComponent implements OnDestroy, OnInit {
         console.log('Recibiendo data en result', data);
 
         this.dt_completed = 0;
-
+        this.operators = data.operators; // PARA LISTA DE OPERADORES DE MONITOREO
         this.report_data.num_rep = data.numRep;
         this.report_data.rep_title = data.repTitle;
         this.report_data.rep_subtitle = data.repSubtitle;
@@ -3497,7 +3498,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       // // console.log(this.sortedDataOneTabla );
       // // console.log("_____________________________________");
 
-      this[fn_name as keyof ResultComponent];
+      this[fn_name as keyof ResultComponent]();
 
   }
 
@@ -5565,7 +5566,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var nivel_cobertura_cell_ch_width = "Nivel de Cobertura".length;
     var temperatura_gps_cell_ch_width = "Temperatura GPS".length;
     var satelite_cell_ch_width = "Satélite".length;
-    
+
     var reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
     var on_off_cell_ch_width = "On-off".length;
     var alcoholemia_cell_ch_width = "Alcoholemia".length;
@@ -5612,7 +5613,7 @@ export class ResultComponent implements OnDestroy, OnInit {
     var bool_col_fBrusca = false;
     var bool_col_aBrusca = false;
 
-  
+
 
     var header_two_lines = false;
 
@@ -6107,13 +6108,13 @@ export class ResultComponent implements OnDestroy, OnInit {
           odometro_cell_ch_width = "Odometro".length;
           altitud_cell_ch_width = "Altitud".length;
           angulo_cell_ch_width = "Angulo".length;
-      
+
           alimentacion_gps_cell_ch_width = "Alimentación GPS".length;
           nivel_bateria_cell_ch_width = "Nivel de Batería".length;
           nivel_cobertura_cell_ch_width = "Nivel de Cobertura".length;
           temperatura_gps_cell_ch_width = "Temperatura GPS".length;
           satelite_cell_ch_width = "Satélite".length;
-          
+
           reconocimiento_facial_cell_ch_width = "Reconocimiento".length;
           on_off_cell_ch_width = "On-off".length;
           alcoholemia_cell_ch_width = "Alcoholemia".length;
@@ -12736,6 +12737,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           data[1].forEach((item: { parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
               //var fh = item.fecha.split(" ");
+              var ubicacion_url = item.latitud + "," + item.longitud;
               var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
               evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
@@ -12794,7 +12796,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
               // if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
-              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula: 'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig}); };
+              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula: 'HYPERLINK("http://maps.google.com/maps?q='+ubicacion_url+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig}); };
 
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
 
@@ -12825,7 +12827,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_date } );  }
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  }
 
-      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
+      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(evento_cell_ch_width) }  );  };
       if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
       if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
@@ -13102,9 +13104,9 @@ export class ResultComponent implements OnDestroy, OnInit {
           if (rs.IdConductor) { array_campos_cabecera.push({ value: "ID Conductor", ...this.colHeaderConfig }); };
           if (rs.Conductor) { array_campos_cabecera.push({ value: "Conductor", ...this.colHeaderConfig }); };
 
-          if (!this.chkDateHour && rs.FechaEvaluacion) { array_campos_cabecera.push({ value: "Fecha/Hora Evento", ...this.colHeaderConfig }); }
-          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Fecha Evento", ...this.colHeaderConfig }); };
-          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Hora Evento", ...this.colHeaderConfig }); };
+          if (!this.chkDateHour && rs.FechaEvaluacion) { array_campos_cabecera.push({ value: "Fecha/Hora de Evaluación", ...this.colHeaderConfig }); }
+          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Fecha de Evaluación", ...this.colHeaderConfig }); };
+          if (this.chkDateHour && rs.FechaEvaluacion) {  array_campos_cabecera.push({ value: "Hora de Evaluación", ...this.colHeaderConfig }); };
 
           if (rs.CriterioEvaluacion) { array_campos_cabecera.push({ value: "Criterio de Evaluación", ...this.colHeaderConfig }); };
           if (rs.Observacion) { array_campos_cabecera.push({ value: "Observación", ...this.colHeaderConfig }); };
@@ -13124,6 +13126,7 @@ export class ResultComponent implements OnDestroy, OnInit {
           // if (rs.Parametros) { array_campos_cabecera.push({ value: "Parámetros", ...this.colHeaderConfig }); };
           if (rs.OperadorMonitoreo) { array_campos_cabecera.push({ value: "Operador de Monitoreo", ...this.colHeaderConfig }); };
 
+            var array_campos_cuerpo= [];
 
 
           rows.push({
@@ -13134,8 +13137,8 @@ export class ResultComponent implements OnDestroy, OnInit {
           data[1].forEach((item: {fecha_evaluacion:any, operador_monitoreo:any, observacion_evaluacion:any, criterio_evaluacion:any, parametros:any, vel_eco:any, vel_gps_speed:any, vel_mobileye:any, referencia:any, enlaceVideoCIPIA:any, enlaceImageCIPIA:any, descripcion_evento:any; fecha_tracker: number; fecha_servidor: number;  latitud: number; longitud: number; codigo: any; placa: any; tipo_unidad: any; idConductor: any; conductor: any; vel_gps: any; vel_can: any; tramo: string; PC: any; sonidoEnCabina: any;}, index: number) => {
 
               //var fh = item.fecha.split(" ");
-              var ubicacion = item.latitud + "," + item.longitud;
-
+              var ubicacion_url = item.latitud + "," + item.longitud;
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
 
               evento_cell_ch_width = Math.max(evento_cell_ch_width, (item.descripcion_evento??'').toString().length);
               codigo_cell_ch_width = Math.max(codigo_cell_ch_width, (item.codigo??'').toString().length);
@@ -13163,7 +13166,6 @@ export class ResultComponent implements OnDestroy, OnInit {
               referencia_cell_ch_width = Math.max(referencia_cell_ch_width, (item.referencia??'').toString().length);
               enlace_cell_ch_width = Math.max(enlace_cell_ch_width, (ubicacion??'').toString().length);
               // parametros_cell_ch_width = Math.max(parametros_cell_ch_width, (item.parametros??'').toString().length);
-
 
 
               var array_campos_cuerpo= [];
@@ -13205,7 +13207,7 @@ export class ResultComponent implements OnDestroy, OnInit {
               if (rs.Zona) { array_campos_cuerpo.push({ value: item.tramo, ...this.bodyRowsConfig }); };
               if (rs.PuntoCercano) { array_campos_cuerpo.push({ value: item.PC, ...this.bodyRowsConfig }); };
               //if (rs.Ubicacion) { array_campos_cuerpo.push({ value: ubicacion, ...this.bodyRowsConfig }); };
-              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig, fontSize: this.c1_2 }); };
+              if (rs.Ubicacion) { array_campos_cuerpo.push({ formula:  'HYPERLINK("http://maps.google.com/maps?q='+ubicacion_url+'&amp;t=m","'+ubicacion+'")', color:'#0000FF', ...this.bodyRowsConfig, fontSize: this.c1_2 }); };
 
               if (rs.Referencia) { array_campos_cuerpo.push({ value: item.referencia, ...this.bodyRowsConfig }); };
               if (rs.EnlaceArchivo) {
@@ -13240,7 +13242,7 @@ export class ResultComponent implements OnDestroy, OnInit {
       if (this.chkDateHour && this.user_id != 923 && rs.FechaServidor) { column_config.push( { width: this.w_hour } );  }
 
 
-      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
+      if (rs.Evento) {  column_config.push( { width: this.calculateColWidth(evento_cell_ch_width) }  );  };
       if (rs.Codigo) {  column_config.push( { width: this.calculateColWidth(codigo_cell_ch_width) }  );  };
       if (rs.Placa)  {  column_config.push( { width: this.calculateColWidth(placa_cell_ch_width) }  );  };
       if (rs.TipoUnidad) { column_config.push( { width: this.calculateColWidth(tipo_unidad_cell_ch_width) }  );  };
@@ -14762,7 +14764,7 @@ export class ResultComponent implements OnDestroy, OnInit {
             odometro_inicial_cell_ch_width = Math.max( odometro_inicial_cell_ch_width, (item.odometro_ini??'').toString().length);
             odometro_final_cell_ch_width = Math.max( odometro_final_cell_ch_width, (item.odometro_fin??'').toString().length);
             //=============================================
-            
+
             rows.push({
               cells: [
                 { value: (index + 1), ...this.bodyRowsConfig },
@@ -17051,16 +17053,16 @@ export class ResultComponent implements OnDestroy, OnInit {
             cabecera.push({ text: 'Fecha de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
             cabecera.push({ text: 'Hora de Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
           } else {
-            cabecera.push({ text: 'Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
-            cabecera.push({ text: 'Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Fecha Inicio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            cabecera.push({ text: 'Fecha Fin', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
           };
 
           cabecera.push({ text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
 
           if ( data[2].Paradas == true) 	{ cabecera.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
-          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Recorrido', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
-          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad máxima', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
-          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Vel. máx. CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Distancia Recorrida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad Máxima GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
+          if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad Máxima CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
 
           if ( data[2].Paradas == true) 	{ cabecera.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
           if ( data[2].Movimientos == true) 	{ cabecera.push({ text: 'Velocidad Promedio', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }) };
@@ -17464,10 +17466,1064 @@ export class ResultComponent implements OnDestroy, OnInit {
       }
     }
 
+
     // Dejarlo por el momento
     exportPdfEntradaSalida() {
-    }
+			//vm.dateHour();
+      var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
 
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+      
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: 'REPORTE DE ENTRADA Y SALIDA',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+          exportFilePdf.push({
+            table: {
+              widths: ['*'],
+              body: [[" "], [" "]]
+            },
+            layout: {
+              hLineWidth: function(i:any, node:any) {
+                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+              },
+              vLineWidth: function(i:any, node:any) {
+                return 0;
+              },
+            }
+          });
+
+
+          //============================================================================================
+
+          console.log("===============================================================================");
+          console.log(data);
+          var tabla : any[] = [];
+
+					//--------- CABECERA ------------
+					if(this.chkDateHour){
+						tabla.push([
+							{ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Fecha de Entrada', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Hora de Entrada', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+							{ text: 'Fecha de Salida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Hora de Salida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+
+              { text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Nombre de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Posición de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }
+						]);
+            
+						data[1].forEach((item:any, index2:any) => {
+
+							var fh_ini  = '-';
+              var fh_out  = '-';
+              var fh2_ini = '-';
+              var fh2_out = '-';
+              if (item.fecha != "n/a") {
+                var fh = item.fecha.split(" ");
+                fh_ini  = fh[0];
+                fh_out  = fh[1];
+              }
+              if (item.fecha_out != "n/a") {
+                var fh2 = item.fecha_out.split(" ");
+                fh2_ini  = fh2[0];
+                fh2_out  = fh2[1];
+              }
+
+							var a = (index2 + 1).toString();
+							//var ubicacion = item.latitud + "," + item.longitud;
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+							tabla.push([
+								{ text: a, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh_ini, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh_out, bold: true, fontSize: 6, alignment: 'center' },
+								{ text: fh2_ini, bold: true, fontSize: 6, alignment: 'center' },
+                { text: fh2_out, bold: true, fontSize: 6, alignment: 'center' },
+
+								{ text: item.duracion, bold: true, fontSize: 6, alignment: 'center'},
+								{ text: item.nombre_zona, bold: true, fontSize: 6, alignment: 'center'},
+                { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+                { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+		        	]);
+
+						});
+
+					} else {
+
+						tabla.push([
+							{ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Fecha de Entrada', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Fecha de Salida', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+              { text: 'Duración', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Nombre de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Posición de Zona', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+							{ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' },
+						]);
+
+						data[1].forEach((item:any, index2:any) => {
+
+							var a = (index2 + 1).toString();
+              var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6) + "";
+
+							tabla.push([
+                  { text: a, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.fecha, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.fecha_out, bold: true, fontSize: 6, alignment: 'center'},
+
+                  { text: item.duracion, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: item.nombre_zona, bold: true, fontSize: 6, alignment: 'center'},
+                  { text: ubicacion, bold: true, fontSize: 6, alignment: 'center' },
+                  { text: item.PC, bold: true, fontSize: 6, alignment: 'center' },
+              ]);
+              
+						});
+					}
+
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+
+				}
+			});
+
+      // console.log("==========================================");
+      // //console.log(tabla);
+			// console.log(exportFilePdf);
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+          // pageOrientation: 'landscape',
+          pageSize: 'A4',
+          //pageMargins: [ 0, 0, 0, 0 ],
+          pageMargins: [ 40, 40, 40, 40 ],
+
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    // {
+                    //   text: page.toString() + '/' + pages.toString(),
+                    //   alignment: 'Left',
+                    //   fontSize: 8,
+                    //   margin: [30, 0, 0, 15]
+                    // },
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            //header: function(currentPage:any, pageCount:any, pageSize:any) {
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteEntradaSalida.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+
+
+			// if(bol_datos_pdf){
+			// 		var docDefinition = {
+			//       	content: exportFilePdf,
+			//       	footer: function(page:any, pages:any) {
+			//           	return {
+			//                 columns: [
+			//                     {
+			//                         alignment: 'center',
+			//                         text: [
+			//                             { text: '----------------------------------------------------------------------- ' + page.toString()},
+			//                             ' de ',
+			//                             { text: pages.toString() + ' -----------------------------------------------------------------------'}
+			//                         ]
+			//                     }
+			//                 ],
+			//                 margin: [0, 0]
+
+			//           	};
+			//       	}
+
+			//     };
+			//     pdfMake.createPdf(docDefinition).download('ReporteEntradaSalida.pdf');
+
+			// } else {
+			// 	alert('No se han encontrado datos para exportar');
+			// }
+
+		}
+
+
+    		//-->4
+		exportPdfGeneral() {
+			var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: 'REPORTE GENERAL',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+				        table: {
+				            widths: ['*'],
+				            body: [[" "], [" "]]
+				        },
+				        layout: {
+				            hLineWidth: function(i:any, node:any) {
+				                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+				            },
+				            vLineWidth: function(i:any, node:any) {
+				                return 0;
+				            },
+				        }
+				    });
+
+					//---**
+					var tabla = [];
+					var cellsCampos = [];
+
+					cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+					if (this.chkDateHour) {
+						cellsCampos.push({ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+						cellsCampos.push({ text: 'Hora', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+					} else {
+						cellsCampos.push({ text: 'Fecha', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+					}
+
+          if (data[2].fServidor) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+          if (data[2].pCercano) { cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velCAN) { cellsCampos.push({ text: 'Velocidad CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velGPS) { cellsCampos.push({ text: 'Velocidad GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velGPS_speed) { cellsCampos.push({ text: 'Velocidad GPS speed', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velMobileye_ME460) { cellsCampos.push({ text: 'Velocidad Mobileye', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].velECO) { cellsCampos.push({ text: 'Velocidad ECO', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].DUOT2state) { cellsCampos.push({ text: 'DUOT2 state', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].RxM) { cellsCampos.push({ text: 'Rev.X.Min', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].RPMAlta) { cellsCampos.push({ text: 'RPM Alta', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].cNivel) { cellsCampos.push({ text: 'Nivel de Combustible', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].cRestante) { cellsCampos.push({ text: 'C.Restante', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].cMotor) { cellsCampos.push({ text: 'C.Motor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].odometro) { cellsCampos.push({ text: 'Odómetro', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].altitud) { cellsCampos.push({ text: 'Altitud', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].angulo) { cellsCampos.push({ text: 'Angulo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (data[2].alimentGps) { cellsCampos.push({ text: 'Alimentación GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].nivelBateria) { cellsCampos.push({ text: 'Nivel de Batería', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].nivelCobertura) { cellsCampos.push({ text: 'Nivel de Cobertura', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].temperaturaGps) { cellsCampos.push({ text: 'Temperatura GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].satelite) { cellsCampos.push({ text: 'Satélite', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+					if (data[2].recFacial) { cellsCampos.push({ text: 'Reconocimiento Facial', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].onOff) { cellsCampos.push({ text: 'On/Off', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].alcoholemia) { cellsCampos.push({ text: 'Alcoholemia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].parametros) { cellsCampos.push({ text: 'Parámetros', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].ubicacion) { cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].referencia) { cellsCampos.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].fatiga) { cellsCampos.push({ text: 'Fatiga', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].fExBrusca) { cellsCampos.push({ text: 'Frenada Extrema Brusca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].fBrusca) { cellsCampos.push({ text: 'Frenada Brusca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+					if (data[2].aBrusca) { cellsCampos.push({ text: 'Aceleración Brusca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+
+					tabla.push(cellsCampos);
+
+					data[1].forEach( (item:any, index:any) => {
+
+						var cellsCuerpo = [];
+
+						var a = (index + 1).toString();
+						var ubicacion = item.lat + "," + item.lng + "";
+
+            var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+
+						cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+
+						if (this.chkDateHour) {
+							var fh = item.fecha.split(" ");
+							cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+							cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+						} else {
+							cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+						}
+
+            if (data[2].fServidor) {
+              if (this.chkDateHour) {
+                var fh = item.fServidor.split(" ");
+                cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+              } else {
+                cellsCuerpo.push({ text: item.fServidor, bold: true, fontSize: 6, alignment: 'center' });
+              }  
+            };
+
+
+            if (data[2].pCercano) { cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velCAN) { cellsCuerpo.push({ text: item.velCAN, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velGPS) { cellsCuerpo.push({ text: item.velGPS, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velGPS_speed) { cellsCuerpo.push({ text: item.velGPS_speed, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velMobileye_ME460) { cellsCuerpo.push({ text: item.velMobileye_ME460, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].velECO) { cellsCuerpo.push({ text: item.velECO, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].DUOT2state) { cellsCuerpo.push({ text: item.DUOT2state, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].RxM) { cellsCuerpo.push({ text: item.RxM, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].RPMAlta) { cellsCuerpo.push({ text: item.RPMAlta, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].cNivel) { cellsCuerpo.push({ text: item.cNivel, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].cRestante) { cellsCuerpo.push({ text: item.cRestante, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].cMotor) { cellsCuerpo.push({ text: item.cMotor, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].odometro) { cellsCuerpo.push({ text: item.odometro, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].altitud) { cellsCuerpo.push({ text: item.altitud, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].angulo) { cellsCuerpo.push({ text: item.angulo, bold: true, fontSize: 6, alignment: 'center' }); };
+
+						if (data[2].alimentGps) { cellsCuerpo.push({ text: item.alimentGps, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].nivelBateria) { cellsCuerpo.push({ text: item.nivelBateria, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].nivelCobertura) { cellsCuerpo.push({ text: item.nivelCobertura, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].temperaturaGps) { cellsCuerpo.push({ text: item.temperaturaGps, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].satelite) { cellsCuerpo.push({ text: item.satelite, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            if (data[2].recFacial) { cellsCuerpo.push({ text: item.recFacial, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].onOff) { cellsCuerpo.push({ text: item.onOff, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].alcoholemia) { cellsCuerpo.push({ text: item.alcohol_nombre, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].parametros) { cellsCuerpo.push({ text: item.parametros, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].ubicacion) { cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].referencia) { cellsCuerpo.push({ text: rreeff, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].fatiga) { cellsCuerpo.push({ text: item.fatiga, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].fExBrusca) { cellsCuerpo.push({ text: item.fExBrusca, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].fBrusca) { cellsCuerpo.push({ text: item.fBrusca, bold: true, fontSize: 6, alignment: 'center' }); };
+						if (data[2].aBrusca) { cellsCuerpo.push({ text: item.aBrusca, bold: true, fontSize: 6, alignment: 'center' }); };
+
+
+						tabla.push(cellsCuerpo);
+					});
+
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+				}
+			});
+
+			console.log(exportFilePdf);
+
+
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+            pageOrientation: 'landscape',
+            pageSize: 'A4',
+            pageMargins: [ 40, 40, 40, 40 ],
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download('ReporteGeneral.pdf');
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
+
+
+
+    exportPdfEventosCIPIA() {
+			var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+      var rs = this.reportService.eC;
+
+      var nom_pdf = '';
+      if (this.report_data.num_rep == 'R040') {
+          nom_pdf = "ReporteEventosInternos.pdf"; //'REPORTE DE EVENTOS INTERNO';
+      } else if(this.report_data.num_rep == 'R037') {
+          nom_pdf = "ReporteEventos.pdf"; //'REPORTE DE EVENTOS';
+      }
+  
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+                  text: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos,//'REPORTE GENERAL',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+				        table: {
+				            widths: ['*'],
+				            body: [[" "], [" "]]
+				        },
+				        layout: {
+				            hLineWidth: function(i:any, node:any) {
+				                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+				            },
+				            vLineWidth: function(i:any, node:any) {
+				                return 0;
+				            },
+				        }
+				    });
+
+					//---**
+					var tabla = [];
+					var cellsCampos = [];
+
+					cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          if (rs.Fecha) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+          if (rs.FechaServidor) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+
+          if (rs.Evento) { cellsCampos.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Codigo) { cellsCampos.push({ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Placa) { cellsCampos.push({ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.TipoUnidad) { cellsCampos.push({ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.IdConductor) { cellsCampos.push({ text: 'ID Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Conductor) { cellsCampos.push({ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.VelMobileye) { cellsCampos.push({ text: 'Vel.Mobileye', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPS) { cellsCampos.push({ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPSspeed) { cellsCampos.push({ text: 'Vel.GPS speed', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelCAN) { cellsCampos.push({ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelECO) { cellsCampos.push({ text: 'Vel.ECO', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.Zona) { cellsCampos.push({ text: 'Geocerca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.PuntoCercano) { cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Ubicacion) { cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Referencia) { cellsCampos.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.EnlaceArchivo) { 
+              cellsCampos.push({ text: 'Enlace a Archivos', colSpan:2, bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); 
+              cellsCampos.push({ });
+            };
+          if (rs.Parametros) { cellsCampos.push({ text: 'Parámetros', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+
+					tabla.push(cellsCampos);
+
+					data[1].forEach( (item:any, index:any) => {
+
+						var cellsCuerpo = [];
+
+						var a = (index + 1).toString();
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+            var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+
+						cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+
+            if (rs.Fecha) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+                }
+            }
+
+            if (rs.FechaServidor) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha_servidor.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha_servidor, bold: true, fontSize: 6, alignment: 'center' });
+                }  
+            };
+
+
+
+            // if (rs.Evento) { cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' }); };
+	
+
+            if (rs.Evento) { cellsCuerpo.push({ text: item.descripcion_evento, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Codigo) { cellsCuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Placa)  { cellsCuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.TipoUnidad) { cellsCuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.IdConductor) { cellsCuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Conductor) { cellsCuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.VelMobileye) { cellsCuerpo.push({ text: item.vel_mobileye, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPS) { cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPSspeed) { cellsCuerpo.push({ text: item.vel_gps_speed, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelCAN) { cellsCuerpo.push({ text: item.vel_can, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelECO) { cellsCuerpo.push({ text: item.vel_eco, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.Zona) { cellsCuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.PuntoCercano) { cellsCuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Ubicacion) { cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Referencia) { cellsCuerpo.push({ text: rreeff, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            if (rs.EnlaceArchivo) { 
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+
+              cellsCuerpo.push({ text: 'Imagen', link: item.enlaceImageCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+              cellsCuerpo.push({ text: 'Video', link: item.enlaceVideoCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+            };
+            if (rs.Parametros) { cellsCuerpo.push({ text: item.parametros, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            //{ text: 'google', link: 'http://google.com' }
+
+
+						tabla.push(cellsCuerpo);
+					});
+
+
+          console.log(tabla);
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+				}
+			});
+      
+
+
+			console.log(exportFilePdf);
+
+
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+            pageOrientation: 'landscape',
+            pageSize: 'A4',
+            pageMargins: [ 40, 40, 40, 40 ],
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download(nom_pdf);
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
+
+    exportPdfEventosEvaluacionCIPIA() {
+			var exportFilePdf :any = [];
+			var bol_datos_pdf = false;
+
+      var fecha_ejecucion = moment(new Date()).format("YYYY/MM/DD HH:mm:ss");
+      console.log(fecha_ejecucion);
+
+      var rs = this.reportService.eC;
+
+      var nom_pdf = '';
+      nom_pdf = "ReporteAtencionEventos.pdf"; //'REPORTE DE EVENTOS INTERNO';
+
+
+			this.data.forEach((data:any, index:any) =>{
+				if(data[1].length > 0){
+					bol_datos_pdf = true;
+
+					exportFilePdf.push({
+						columns: [
+							[
+								{
+									text: this.report_data.rep_title+" "+this.reportService.str_nombre_eventos,//'REPORTE GENERAL',
+									fontSize: this.c1,
+									bold: true,
+									alignment: 'left',
+									margin: [0, 25, 0, 0]
+								},
+								{
+									text: 'Nombre del vehículo: ' + data[0][1],
+									fontSize: 10,
+									alignment: 'left'
+								},
+								{
+									text: 'Fechas: ' + this.period,
+									fontSize: 10,
+									alignment: 'left'
+								}
+							]
+							// ,
+							// {
+							// 	image: img,
+							// 	width: 125,
+							// 	height: 80,
+							// 	alignment: 'justify'
+							// }
+						],
+						pageBreak: index != 0 ? 'before' : ''
+					});
+
+					exportFilePdf.push({
+				        table: {
+				            widths: ['*'],
+				            body: [[" "], [" "]]
+				        },
+				        layout: {
+				            hLineWidth: function(i:any, node:any) {
+				                return (i === 0 || i === node.table.body.length) ? 0 : 2;
+				            },
+				            vLineWidth: function(i:any, node:any) {
+				                return 0;
+				            },
+				        }
+				    });
+
+					//---**
+					var tabla = [];
+					var cellsCampos = [];
+
+					cellsCampos.push({ text: 'Ítem', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+
+          if (rs.Fecha) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Evento', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+          if (rs.FechaServidor) {
+              if(this.chkDateHour) {
+                  cellsCampos.push({ text: 'Fecha Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                  cellsCampos.push({ text: 'Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              } else {
+                  cellsCampos.push({ text: 'Fecha/Hora Servidor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+              }
+          };
+
+
+          if (rs.Evento) { cellsCampos.push({ text: 'Descripción', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Codigo) { cellsCampos.push({ text: 'Código', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Placa) { cellsCampos.push({ text: 'Placa', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.TipoUnidad) { cellsCampos.push({ text: 'Tipo de Unidad', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.IdConductor) { cellsCampos.push({ text: 'ID Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Conductor) { cellsCampos.push({ text: 'Conductor', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+          if (rs.FechaEvaluacion) {
+            if(this.chkDateHour) {
+                cellsCampos.push({ text: 'Fecha de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+                cellsCampos.push({ text: 'Hora de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            } else {
+                cellsCampos.push({ text: 'Fecha/Hora de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' });
+            }
+          };
+
+          if (rs.CriterioEvaluacion) { cellsCampos.push({ text: 'Criterio de Evaluación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Observacion) { cellsCampos.push({ text: 'Observación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+          if (rs.VelMobileye) { cellsCampos.push({ text: 'Vel.Mobileye', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPS) { cellsCampos.push({ text: 'Vel.GPS', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelGPSspeed) { cellsCampos.push({ text: 'Vel.GPS speed', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelCAN) { cellsCampos.push({ text: 'Vel.CAN', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.VelECO) { cellsCampos.push({ text: 'Vel.ECO', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+          if (rs.Zona) { cellsCampos.push({ text: 'Geocerca', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.PuntoCercano) { cellsCampos.push({ text: 'Punto Cercano', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Ubicacion) { cellsCampos.push({ text: 'Ubicación', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.Referencia) { cellsCampos.push({ text: 'Referencia', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.EnlaceArchivo) { 
+              cellsCampos.push({ text: 'Enlace a Archivos', colSpan:2, bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); 
+              cellsCampos.push({ });
+            };
+          //if (rs.Parametros) { cellsCampos.push({ text: 'Parámetros', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+          if (rs.OperadorMonitoreo) { cellsCampos.push({ text: 'Operador de Monitoreo', bold: true, fontSize: 10, color: '#005277', alignment: 'center' }); };
+
+
+					tabla.push(cellsCampos);
+
+					data[1].forEach( (item:any, index:any) => {
+
+						var cellsCuerpo = [];
+
+						var a = (index + 1).toString();
+
+            //var fh = item.fecha.split(" ");
+            var ubicacion = item.latitud.toFixed(6) + "," + item.longitud.toFixed(6);
+            var rreeff = ((item.referencia == "NN") ? '' : item.referencia);
+
+
+						cellsCuerpo.push({ text: a, bold: true, fontSize: 6, alignment: 'center' });
+
+            if (rs.Fecha) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha, bold: true, fontSize: 6, alignment: 'center' });
+                }
+            }
+
+            if (rs.FechaServidor) {
+                if (this.chkDateHour) {
+                    var fh = item.fecha_servidor.split(" ");
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha_servidor, bold: true, fontSize: 6, alignment: 'center' });
+                }  
+            };
+
+
+            // if (rs.Evento) { cellsCuerpo.push({ text: item.pCercano, bold: true, fontSize: 6, alignment: 'center' }); };
+	
+
+            if (rs.Evento) { cellsCuerpo.push({ text: item.descripcion_evento, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Codigo) { cellsCuerpo.push({ text: item.codigo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Placa)  { cellsCuerpo.push({ text: item.placa, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.TipoUnidad) { cellsCuerpo.push({ text: item.tipo_unidad, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.IdConductor) { cellsCuerpo.push({ text: item.idConductor, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Conductor) { cellsCuerpo.push({ text: item.conductor, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+
+            if (rs.FechaEvaluacion) {
+                if(this.chkDateHour) {
+                    var fh:any = ['',''];
+                    if (item.fecha_evaluacion == "") {
+                    } else {
+                      fh = item.fecha_evaluacion.split(" ");
+                    }
+                    cellsCuerpo.push({ text: fh[0], bold: true, fontSize: 6, alignment: 'center' });
+                    cellsCuerpo.push({ text: fh[1], bold: true, fontSize: 6, alignment: 'center' });
+                } else {
+                    cellsCuerpo.push({ text: item.fecha_evaluacion, bold: true, fontSize: 6, alignment: 'center' });
+                }
+            };
+  
+            if (rs.CriterioEvaluacion) { cellsCuerpo.push({ text: item.criterio_evaluacion, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Observacion) { cellsCuerpo.push({ text: item.observacion_evaluacion, bold: true, fontSize: 6, alignment: 'center' }); };
+
+
+            if (rs.VelMobileye) { cellsCuerpo.push({ text: item.vel_mobileye, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPS) { cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelGPSspeed) { cellsCuerpo.push({ text: item.vel_gps_speed, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelCAN) { cellsCuerpo.push({ text: item.vel_can, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.VelECO) { cellsCuerpo.push({ text: item.vel_eco, bold: true, fontSize: 6, alignment: 'center' }); };
+  
+            if (rs.Zona) { cellsCuerpo.push({ text: item.tramo, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.PuntoCercano) { cellsCuerpo.push({ text: item.PC, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Ubicacion) { cellsCuerpo.push({ text: ubicacion, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.Referencia) { cellsCuerpo.push({ text: rreeff, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            if (rs.EnlaceArchivo) { 
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+              // cellsCuerpo.push({ text: item.vel_gps, bold: true, fontSize: 6, alignment: 'center' });
+
+              cellsCuerpo.push({ text: 'Imagen', link: item.enlaceImageCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+              cellsCuerpo.push({ text: 'Video', link: item.enlaceVideoCIPIA, bold: true, fontSize: 6, alignment: 'center', color:'#0000FF' }); 
+            };
+            //if (rs.Parametros) { cellsCuerpo.push({ text: item.parametros, bold: true, fontSize: 6, alignment: 'center' }); };
+            if (rs.OperadorMonitoreo) { cellsCuerpo.push({ text: item.operador_monitoreo, bold: true, fontSize: 6, alignment: 'center' }); };
+
+            //{ text: 'google', link: 'http://google.com' }
+
+
+						tabla.push(cellsCuerpo);
+					});
+
+
+          console.log(tabla);
+					exportFilePdf.push({
+				        columns: [
+				            { width: '*', text: ''},
+				            {
+				              width: 'auto',
+				              table: {
+				                body: tabla
+				              }
+				            },
+				            { width: '*', text: ''}
+				        ]
+			        });
+				}
+			});
+      
+
+
+			//console.log(exportFilePdf);
+
+
+
+      if(bol_datos_pdf){
+        var docDefinition = {
+            pageOrientation: 'landscape',
+            pageSize: 'A4',
+            pageMargins: [ 40, 40, 40, 40 ],
+            content: exportFilePdf,
+            footer: function(page:any, pages:any) {
+              return {
+                  columns: [
+                    {
+                      text: page.toString() + '/' + pages.toString(),
+                      alignment: 'right',
+                      fontSize: 8,
+                      margin: [0, 0, 30, 15]
+                    }
+                  ]
+
+              };
+            },
+
+            header: (currentPage:any, pageCount:any, pageSize:any) => {
+                return {
+                    columns: [
+                      { text: fecha_ejecucion, alignment: 'left',fontSize: 8, margin: [30, 15, 0, 0]},
+                      {
+                        image: this.logo_gltracker2,
+                        width: 90,
+                        height: 25,
+                        alignment: 'right',
+                        margin: [0, 5, 0, 0]
+                      },
+                      { width: 30, text: ''},
+                    ]
+                };
+            },
+
+        };
+        pdfMake.createPdf(docDefinition).download(nom_pdf);
+
+      } else {
+        alert('No se han encontrado datos para exportar');
+      }
+
+		}
 
 
     // PDF DE MINA
@@ -19891,4 +20947,3 @@ export class ResultComponent implements OnDestroy, OnInit {
 
 
 }
-
