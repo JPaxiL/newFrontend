@@ -6764,7 +6764,7 @@
                   <td *ngIf="reportService.eC.EnlaceArchivo">
                     <a href="{{row.enlaceImageCIPIA}}" target="_blank">Imagen</a>/<a href="{{row.enlaceVideoCIPIA}}" target="_blank">Video</a>
                   </td>
-                  
+
                   <td *ngIf="reportService.eC.OperadorMonitoreo" >
 
                       <!-- <input style="font-size: 12px;" size="30" type="text" [(ngModel)]="row.OperadorMonitoreo"> -->
@@ -7110,14 +7110,24 @@
 
 
     <div *ngIf="dtRendered" class="export-container">
-      <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R002'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R003'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
+      <ng-container *appHasPermission="'report_paradas_movements_export_excel.show'">
+        <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelParadasMovimientos');">EXPORTAR EXCEL</button>
+      </ng-container>
+      <ng-container *appHasPermission="'report_excesos_limite_personalizado_export_excel.show'">
+        <button *ngIf="report_data.num_rep == 'R002'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidad');">EXPORTAR EXCEL</button>
+      </ng-container>
+      <ng-container *appHasPermission="'report_entrada_salida_export_excel.show'">
+        <button *ngIf="report_data.num_rep == 'R003'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEntradaSalida');">EXPORTAR EXCEL</button>
+      </ng-container>
       <button *ngIf="report_data.num_rep == 'R004'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCombustible');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R005'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosEnZona');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R006'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
+      <ng-container *appHasPermission="'report_general_export_excel.show'">
+        <button *ngIf="report_data.num_rep == 'R006'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
+      </ng-container>
       <button *ngIf="report_data.num_rep == 'R007'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R008'" class="btn btn-gl btn-success btn-dark-hover" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
+      <ng-container *appHasPermission="'report_posicion_export_excel.show'">
+        <button *ngIf="report_data.num_rep == 'R008'" class="btn btn-gl btn-success btn-dark-hover" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
+      </ng-container>
       <button *ngIf="report_data.num_rep == 'R011'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R012' || report_data.num_rep == 'R022'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R013'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
@@ -7141,7 +7151,9 @@
       <button *ngIf="report_data.num_rep == 'R034'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCoordenadasGeopuntos');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R035'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCoordenadasGeocercasCirculares');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R036'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R037'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>
+      <ng-container *appHasPermission="'report_events_export_excel.show'">
+        <button *ngIf="report_data.num_rep == 'R037'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>
+      </ng-container>
       <button *ngIf="report_data.num_rep == 'R038'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosEvaluacionCIPIA');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R039'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosVelocidadNuevoFormato');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R040'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventosCIPIA');">EXPORTAR EXCEL</button>

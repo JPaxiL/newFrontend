@@ -43,7 +43,12 @@ export class PermissionService {
     // DASHBOARD
     // REPORTES
     // { name: 'report_export_pdf.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
-    { name: 'report_event_export_excel.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
+    { name: 'report_events_export_excel.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
+    { name: 'report_paradas_movements_export_excel.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
+    { name: 'report_excesos_limite_personalizado_export_excel.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
+    { name: 'report_general_export_excel.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
+    { name: 'report_posicion_export_excel.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
+    { name: 'report_entrada_salida_export_excel.show', roles: ['CdsUser','TLineaOperador','GLMonitoreo','user','admin', 'manager'] },
     // AUDITORIA
     // SUBACCOUNT
     // MULTIVIEW
