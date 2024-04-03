@@ -280,7 +280,9 @@
   .infraccion {
     --event-main-color: #003a07;
   }
-
+  .infraccion-geocerca {
+    --event-main-color: #005d0b;
+  }
   .sos-event,
   .sos {
     --event-main-color: #ff1919;
@@ -347,7 +349,7 @@
     .conductor-fumando-360, .conductor-fumando-360,
     .deteccion-manipulacion-360, .deteccion-manipulacion-360,
     .error-de-camara-360, .error-de-camara-360, .dvr-inoperativo,
-    
+
     /* DEFINIDOS */
     .zona-entrada, .zona-de-entrada,
     .zona-salida, .zona-de-salida,
@@ -360,6 +362,7 @@
     .exceso-velocidad,
     .tiempo-estadia-zona,
     .conductor-identificado,
+    .infraccion-geocerca,
     .default-event {
     .leaflet-popup-content-wrapper,
     a.leaflet-popup-close-button,

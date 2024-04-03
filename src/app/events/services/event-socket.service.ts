@@ -106,7 +106,7 @@ export class EventSocketService extends Socket {
 
 
         } else {
-          console.log("vehiculo no existe para este usuario");
+          console.log(event.tracker_imei+" | vehiculo no existe para este usuario #####");
           // vehiculo no existe para el usuario
         }
 
