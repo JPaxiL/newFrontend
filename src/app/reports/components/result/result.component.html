@@ -7117,7 +7117,7 @@
       <button *ngIf="report_data.num_rep == 'R005'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelExcesosEnZona');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R006'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R007'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelEventos');">EXPORTAR EXCEL</button>
-      <button *ngIf="report_data.num_rep == 'R008'" class="btn btn-gl btn-success btn-dark-hover" (click)="exportExcelPosicion(1);">EXPORTAR EXCEL</button>
+      <button *ngIf="report_data.num_rep == 'R008'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelPosicion');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R011'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelFrenadaAceleracionBrusca');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R012' || report_data.num_rep == 'R022'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelDistraccionPosibleFatiga');">EXPORTAR EXCEL</button>
       <button *ngIf="report_data.num_rep == 'R013'" class="btn btn-gl btn-success btn-dark-hover" (click)="showSelectExcel('exportExcelCalificacionManejo');">EXPORTAR EXCEL</button>
@@ -7161,15 +7161,15 @@
         <!-- <md-button ng-if="res.mostrarPdf()" class="md-raised md-primary" ng-click="res.exportPdfPosicion()">EXPORTAR PDF</md-button> -->
 
 
-        <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-success" (click)="showSelectPdf('exportPdfParadasMovimientos');">EXPORTAR PDF</button>
-
-        <!--<button *ngIf="report_data.num_rep == 1" class="btn btn-success" (click)="exportPdfExcesosVelocidad();">EXPORTAR PDF</button> -->
-        <button *ngIf="report_data.num_rep == 'R003'" class="btn btn-success" (click)="exportPdfEntradaSalida();">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 'R004'" class="btn btn-success" (click)="showSelectExcel('exportPdfCombustible');">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 4" class="btn btn-success" (click)="showSelectExcel('exportPdfExcesosEnZona');">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 'R006'" class="btn btn-success" (click)="exportPdfGeneral();">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportPdfEventos');">EXPORTAR PDF</button>
-        <button *ngIf="report_data.num_rep == 7" class="btn btn-success" (click)="exportExcelPosicion(1);">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R001'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="showSelectPdf('exportPdfParadasMovimientos');">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R002'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfExcesosVelocidadLimitePersonalizado();">EXPORTAR PDF</button>
+        
+        <button *ngIf="report_data.num_rep == 'R003'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfEntradaSalida();">EXPORTAR PDF</button>
+        <button *ngIf="report_data.num_rep == 'R004'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="showSelectExcel('exportPdfCombustible');">EXPORTAR PDF</button>
+        <!-- <button *ngIf="report_data.num_rep == 4" class="btn btn-success" (click)="showSelectExcel('exportPdfExcesosEnZona');">EXPORTAR PDF</button> -->
+        <button *ngIf="report_data.num_rep == 'R006'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfGeneral();">EXPORTAR PDF</button>
+        <!-- <button *ngIf="report_data.num_rep == 6" class="btn btn-success" (click)="showSelectExcel('exportPdfEventos');">EXPORTAR PDF</button> -->
+        <button *ngIf="report_data.num_rep == 'R008'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfPosicion();">EXPORTAR PDF</button>
 
         <button *ngIf="report_data.num_rep == 'R011'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfFrenadaAceleracionBrusca();">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 'R012'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfDistraccionPosibleFatiga();">EXPORTAR PDF</button>
@@ -7183,6 +7183,10 @@
 
         <button *ngIf="report_data.num_rep == 'R037'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfEventosCIPIA();">EXPORTAR PDF</button>
         <button *ngIf="report_data.num_rep == 'R038'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfEventosEvaluacionCIPIA();">EXPORTAR PDF</button>
+
+
+        <button *ngIf="report_data.num_rep == 'R039'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfExcesosVelocidadNuevoFormato();">EXPORTAR PDF</button>
+
         <button *ngIf="report_data.num_rep == 'R040'" class="btn btn-gl btn-gl-red btn-dark-hover" (click)="exportPdfEventosCIPIA();">EXPORTAR PDF</button>
 
         <!-- <button *ngIf="report_data.num_rep == 20" class="btn btn-success" (click)="exportPdfExcesosVelocidadFormatoExtendido();">EXPORTAR PDF</button> -->
