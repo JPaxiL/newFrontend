@@ -246,11 +246,7 @@
               </div>
               <div>
                 <label>
-                  <p-checkbox
-                    [(ngModel)]="showVehiclesFixes"
-                    (change)="onChangeUnitsFixes()"
-                    [binary]="true"
-                  ></p-checkbox>
+                  <p-checkbox (onChange)="onChangeUnitsFixes()" [(ngModel)]="showVehiclesFixes" [binary]="true"></p-checkbox>
                   Ver Unidades Fijadas
                 </label>
               </div>

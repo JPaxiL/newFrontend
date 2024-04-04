@@ -5,6 +5,7 @@ import { VehicleService } from '../../services/vehicle.service';
 import { VehicleConfigService } from '../../services/vehicle-config.service';
 import Swal from 'sweetalert2';
 import { DIR_DOCUMENT } from '@angular/cdk/bidi';
+import { UserTracker } from 'src/app/multiview/models/interfaces';
 
 @Component({
   selector: 'app-vehicle-group',
@@ -53,7 +54,7 @@ export class VehicleGroupComponent implements OnInit {
   isFormName: boolean = false; //para validar NameObligatorio en Operacion/Grupo/Convoy
   isExistNameByType: boolean = false; //para validar NameExistente en Operacion/Grupo/Convoy
   listVehiclesEmpty: boolean = false; //para validar si el array de list2 esta vacio en la creacion
-  
+
 
   constructor(
     private vehicleService: VehicleService,
@@ -288,9 +289,21 @@ export class VehicleGroupComponent implements OnInit {
     */
     let req = {};
 
+    const list2Filtered = this.list2.map((item: UserTracker) => ({
+      id: item.id,
+      IMEI: item.IMEI,
+      idoperation: item.idoperation,
+      idgrupo: item.idgrupo,
+      idconvoy: item.idconvoy,
+      nameoperation: item.nameoperation,
+      namegrupo: item.namegrupo,
+      nameconvoy: item.nameconvoy,
+    }));
+
     if(this.option=='grupo'){
       req = {
-        vehicles : this.list2,
+        // vehicles : this.list2,
+        vehicles : list2Filtered,
         name : this.nameTarget,
         description : this.descriptionTarget,
         operation_id : this.selectedOperation,
@@ -299,7 +312,7 @@ export class VehicleGroupComponent implements OnInit {
       };
     }else if(this.option=='operacion'){
       req = {
-        vehicles : this.list2,
+        vehicles : list2Filtered,
         name : this.nameTarget,
         description : this.descriptionTarget,
         enm_type: this.option
@@ -307,7 +320,7 @@ export class VehicleGroupComponent implements OnInit {
       };
     }else if(this.option=='convoy'){
       req = {
-        vehicles : this.list2,
+        vehicles : list2Filtered,
         name : this.nameTarget,
         description : this.descriptionTarget,
         operation_id : this.selectedOperation,
@@ -323,7 +336,7 @@ export class VehicleGroupComponent implements OnInit {
     //   // }
     // };
 
-    // //console.log("submit",req);
+    console.log("submit",req);
     // //console.log("dat enviada",req);
 
     if(this.vehicleService.demo){
@@ -343,7 +356,7 @@ export class VehicleGroupComponent implements OnInit {
           // console.log("post group res =",info);
           if(info.res){
             this.addGroup(info);
-            this.selectedGroup = {};  
+            this.selectedGroup = {};
             // const vehicles = this.vehicleService.vehicles;
             // for (const key in this.list2) {
             //   const index = vehicles.indexOf(this.list2[key])
@@ -467,7 +480,7 @@ export class VehicleGroupComponent implements OnInit {
     }
     return false;
   }
-  
+
   onConfirmGroup(){
     this.loading = true;
     let currOption = this.option;

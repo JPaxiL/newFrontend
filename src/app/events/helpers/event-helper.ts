@@ -28,6 +28,8 @@ export const getIconUrlHistory = (event: any): string => {
     iconUrl = 'assets/images/events-history/mant_preventivo_realizado.svg';
   } else if (event.tipo == 'exceso-velocidad') {
     iconUrl = 'assets/images/events-history/exceso_velocidad.svg';
+  } else if (event.tipo == 'infraccion-geocerca') {
+    iconUrl = 'assets/images/events-history/exceso_velocidad.svg';
   } else if (event.tipo == 'infraccion') {
     iconUrl = 'assets/images/events-history/infraccion.svg';
   } else if (event.tipo == 'vehiculo-sin-programacion') {
@@ -104,7 +106,7 @@ export const getIconUrlHistory = (event: any): string => {
     iconUrl = 'assets/images/events-history/conductor_identificado_360.svg';
   } else if (event.tipo == 'actualizacion-estado-gps-360') {
     iconUrl = 'assets/images/events-history/actualizacion_gps_icon_360.svg';
-  } else {
+  }else{
     iconUrl = 'assets/images/eventos/pin_point.svg';
   }
   return iconUrl;
@@ -139,6 +141,8 @@ export const getIconUrlPopups = (event: any): string => {
   } else if (event.tipo == 'mantenimiento-preventivo-realizado') {
     iconUrl = 'assets/images/events-icons/mant_preventivo_realizado.svg';
   } else if (event.tipo == 'exceso-velocidad') {
+    iconUrl = 'assets/images/events-icons/exceso_velocidad.svg';
+  } else if (event.tipo == 'infraccion-geocerca') {
     iconUrl = 'assets/images/events-icons/exceso_velocidad.svg';
   } else if (event.tipo == 'infraccion') {
     iconUrl = 'assets/images/events-icons/infraccion.svg';
@@ -218,7 +222,19 @@ export const getIconUrlPopups = (event: any): string => {
     iconUrl = 'assets/images/events-icons/conductor_identificado_360.svg';
   } else if (event.tipo == 'actualizacion-estado-gps-360') {
     iconUrl = 'assets/images/events-icons/actualizacion_gps_icon_360.svg';
-  } else {
+  }
+
+  else if (event.tipo == 'colision-con-peaton-360') {
+    iconUrl = 'assets/images/events-icons/colision_peaton.svg';
+  } else if (event.tipo == 'colision-frontal-360') {
+    iconUrl = 'assets/images/events-icons/colision_delantera.svg';
+  } else if (event.tipo == 'colision-frontal-urbana-360') {
+    iconUrl = 'assets/images/events-icons/colision_delantera.svg';
+  } else if (event.tipo == 'advertencia-cambio-carril-derecha-360') {
+    iconUrl = 'assets/images/events-icons/desvio_derecha.svg';
+  } else if (event.tipo == 'advertencia-cambio-carril-izquierda-360') {
+    iconUrl = 'assets/images/events-icons/desvio_izquierda.svg';
+  }else {
     iconUrl = 'assets/images/eventos/pin_point.svg';
   }
   return iconUrl;
@@ -442,6 +458,22 @@ export const getContentPopup = (event: any, d: any = '...') => {
       },
       iconUrl
     );
+  } else if (event.tipo == 'infraccion-geocerca') {
+      return render_leaflet_tootlip(
+        {
+          tipo: event.nombre ?? event.name,
+          nombre_objeto: event.nombre_objeto,
+          latitud: event.latitud,
+          longitud: event.longitud,
+          name_driver: event.namedriver,
+          velocidad: event.velocidad,
+          velocidad_limite: event.velocidad_limite,
+          referencia: event.referencia,
+          geocerca: event.nombre_zona,
+          fecha_tracker: event.fecha_tracker,
+        },
+        iconUrl
+      );
   } else if (event.tipo == 'infraccion') {
     if (event.nombre_zona == '') {
       return render_leaflet_tootlip(
@@ -1170,6 +1202,96 @@ export const getContentPopup = (event: any, d: any = '...') => {
       iconUrl
     );
   } else if (event.tipo == 'actualizacion-estado-gps-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre ?? event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl ?? '',
+        parametros: event.parametros,
+        imei: event.imei,
+      },
+      iconUrl
+    );
+  } else if (event.tipo == 'colision-con-peaton-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre ?? event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl ?? '',
+        parametros: event.parametros,
+        imei: event.imei,
+      },
+      iconUrl
+    );
+  } else if (event.tipo == 'colision-frontal-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre ?? event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl ?? '',
+        parametros: event.parametros,
+        imei: event.imei,
+      },
+      iconUrl
+    );
+  } else if (event.tipo == 'colision-frontal-urbana-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre ?? event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl ?? '',
+        parametros: event.parametros,
+        imei: event.imei,
+      },
+      iconUrl
+    );
+  } else if (event.tipo == 'advertencia-cambio-carril-derecha-360') {
+    return render_leaflet_tootlip(
+      {
+        tipo: event.nombre ?? event.name,
+        nombre_objeto: event.nombre_objeto,
+        latitud: event.latitud,
+        longitud: event.longitud,
+        name_driver: event.namedriver,
+
+        velocidad: event.velocidad,
+        referencia: event.referencia,
+        fecha_tracker: event.fecha_tracker,
+        videoUrl: event.videoUrl ?? '',
+        parametros: event.parametros,
+        imei: event.imei,
+      },
+      iconUrl
+    );
+  } else if (event.tipo == 'advertencia-cambio-carril-izquierda-360') {
     return render_leaflet_tootlip(
       {
         tipo: event.nombre ?? event.name,

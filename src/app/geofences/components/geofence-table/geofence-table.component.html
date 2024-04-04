@@ -171,8 +171,9 @@
           <col style="width: 60%;" />
           <col style="width: 16%;"/>
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
-          <col *ngIf="geofencesService.showBtnEdit" width="20%" />
-          <col *ngIf="!geofencesService.showBtnEdit" width="15%" />
+          <ng-container *appHasPermission="'geofences-edit.show'">
+            <col *ngIf="geofencesService.showBtnEdit" width="20%" />
+          </ng-container>
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -302,7 +303,7 @@
               </g>
             </svg>
           </th>
-          <th><i class="fa fa-pencil fa-lg ag-grid-header-icon"></i></th>
+          <th *appHasPermission="'geofences-edit.show'"><i class="fa fa-pencil fa-lg ag-grid-header-icon"></i></th>
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
@@ -359,7 +360,7 @@
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
                 <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [ngStyle]="{'background-color': rowData.zone_color}"></div>
                 <div *ngIf="(rowData['type'])=='circ'" class="circle" [ngStyle]="{'background-color': rowData.zone_color}"></div>
-                <div *ngIf="(rowData['type'])=='lin'" class="" > 
+                <div *ngIf="(rowData['type'])=='lin'" class="" >
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" [style]="{'fill': rowData.zone_color}" stroke="none">
@@ -384,15 +385,18 @@
           <td style="min-width: 215px;" class="geofence-column">
               <strong>{{rowData['vel_max']+" km/h"}}</strong>
           </td>
-          <td *ngIf="geofencesService.showBtnEdit">
-            <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
-              <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
-              <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
-                <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+          <ng-container *appHasPermission="'geofences-edit.show'">
+            <td *ngIf="geofencesService.showBtnEdit">
+              <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+                <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
+                <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                  <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                  <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                </div>
               </div>
-            </div>
-          </td>
+            </td>
+          </ng-container>
+
         </tr>
       </ng-template>
     </p-treeTable>
@@ -416,8 +420,12 @@
           <col style="width: 55%;" />
           <col style="width: 16%;"/>
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
+          <ng-container *appHasPermission="'geofences-edit.show'">
+            <col *ngIf="geofencesService.showBtnEdit" width="20%" />
+          </ng-container>
+          <!-- <col *ngIf="geofencesService.showBtnEdit" width="20%" />
           <col *ngIf="geofencesService.showBtnEdit" width="20%" />
-          <col *ngIf="!geofencesService.showBtnEdit" width="15%" />
+          <col *ngIf="!geofencesService.showBtnEdit" width="15%" /> -->
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -547,7 +555,7 @@
               </g>
             </svg>
           </th>
-          <th><i class="fa fa-pencil fa-lg ag-grid-header-icon"></i></th>
+          <th *appHasPermission="'geofences-edit.show'"><i class="fa fa-pencil fa-lg ag-grid-header-icon"></i></th>
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
@@ -562,7 +570,7 @@
             <button (click)="clickLocate(rowData['id'],rowData['type'])" class="btnGeo d-flex justify-content-center align-items-center mx-2" style="border: none;">
                 <div *ngIf="(rowData['type'])=='polig'" class="pentagon" [ngStyle]="{'background-color': rowData.zone_color}"></div>
                 <div *ngIf="(rowData['type'])=='circ'" class="circle" [ngStyle]="{'background-color': rowData.zone_color}"></div>
-                <div *ngIf="(rowData['type'])=='lin'" class="" > 
+                <div *ngIf="(rowData['type'])=='lin'" class="" >
                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="20px" height="20px" viewBox="0 0 30.000000 30.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,30.000000) scale(0.100000,-0.100000)" [style]="{'fill': rowData.zone_color}" stroke="none">
@@ -587,17 +595,19 @@
           <td style="min-width: 215px;" class="geofence-column">
               <strong>{{rowData['vel_max']+" km/h"}}</strong>
           </td>
-          <td *ngIf="geofencesService.showBtnEdit">
-            <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
-              <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
-              <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
-                <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
-                <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+          <ng-container *appHasPermission="'geofences-edit.show'">
+            <td *ngIf="geofencesService.showBtnEdit">
+              <div ngbDropdown container="body" class="d-flex justify-content-center align-items-center edit-column" [autoClose]="true" placement="right-top right-bottom left-top left-bottom">
+                <i class="fa fa-pencil fa-lg" ngbDropdownToggle></i>
+                <div ngbDropdownMenu class="gl-custom-dropdown geofences-table-dropdown">
+                  <div ngbDropdownItem (click)="clickConfigGeocerca(rowData['id'], rowData['type'])"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar</div>
+                  <div ngbDropdownItem (click)="clickDeleteGeo(rowData['id'], rowData['type'])"><i class="fa fa-trash-o" aria-hidden="true"></i> Eliminar</div>
+                </div>
               </div>
-            </div>
-          </td>
+            </td>
+          </ng-container>
         </tr>
-      </ng-template>     
+      </ng-template>
     </p-treeTable>
   </div>
 </div>

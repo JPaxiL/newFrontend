@@ -48,7 +48,7 @@ export class UserConfigComponent implements OnInit {
   colorsVehicles: any[] = [
     { name: 'Por defecto', code: 'c4c2c1',color: '#c4c2c1' }, // Celeste
     { name: 'Celeste', code: '00ffff',color: '#00FFFF' }, // Celeste
-    { name: 'Verde', code: '1da80e',color: '#1DA80E' }, // Verde 
+    { name: 'Verde', code: '1da80e',color: '#1DA80E' }, // Verde
     { name: 'Azul', code: '45a9ff',color: '#45A9FF' }, // Azul
     { name: 'Guinda', code: '800000',color: '#800000' }, // Guinda
     { name: 'Morado', code: '9370db',color: '#9370DB' }, // Morado
@@ -57,7 +57,7 @@ export class UserConfigComponent implements OnInit {
     { name: 'Naranja', code: 'ffa500',color: '#FFA500' }, // Naranja
     { name: 'Amarillo', code: 'ffff00',color: '#FFFF00' }, // Amarillo
   ];
-  constructor(       
+  constructor(
     public userDataService: UserDataService,
     private panelService: PanelService,
     private vehicleService: VehicleService) {
@@ -81,8 +81,8 @@ export class UserConfigComponent implements OnInit {
   }
 
   initForm() {
-    // this.userForm.oldPass = ''; 
-    // this.userForm.newPass = ''; 
+    // this.userForm.oldPass = '';
+    // this.userForm.newPass = '';
     // this.userForm.newPassRepeat = '';
     this.userForm.bol_ondas = this.userDataService.userData.bol_ondas;
     this.userForm.bol_cursor = this.userDataService.userData.bol_cursor;
@@ -90,12 +90,12 @@ export class UserConfigComponent implements OnInit {
     this.userForm.bol_direction = this.userDataService.userData.bol_direction;
     this.userForm.vehicles = this.typeVehiclesList ?? [];
   }
-  
+
   onColorChange(event: any, item: any):void {
 
     console.log("item", item, event);
   }
-  
+
 
 
   initFormTableVehiclesDefault(){
@@ -131,7 +131,7 @@ export class UserConfigComponent implements OnInit {
 
     }
 
-    
+
   }
 
   changeDirectionVehiclesCheckbox(){
@@ -204,10 +204,10 @@ export class UserConfigComponent implements OnInit {
 
   }
   onSubmit(){
-  
+
     // Limpiar el array antes de agregar los datos actualizados
     this.userForm.vehicles = [];
-    
+
     // Iterar sobre la lista de vehículos y agregarlos al array userForm.Vehicle
     this.typeVehiclesList.forEach((item: any) => {
       const existingIndex = this.userForm.vehicles.findIndex((vehicle: any) => vehicle.id == item.id);
@@ -271,11 +271,11 @@ export class UserConfigComponent implements OnInit {
         confirmButton: 'col-4',
       },
       preConfirm: async () => {
-        
+
         this.userDataService.updateUserConfig(response).subscribe(
           async (response) => {
             // Manejar la respuesta del servidor si es necesario
-            console.log('Actualización exitosa:', response);  
+            console.log('Actualización exitosa:', response);
             if (!response.res){
               this.loading=false;
               Swal.fire(
@@ -297,7 +297,7 @@ export class UserConfigComponent implements OnInit {
               //   'Los datos se guardaron y actualizaron correctamente!!',
               //   'success'
               // );
-              
+
               await this.userDataService.setDefaultStatusUserData();
               await this.userDataService.getUserData();
               this.userDataCompletedSubscription = this.userDataService.userDataCompleted.subscribe(async (userDataCompleted: boolean) => {

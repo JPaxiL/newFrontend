@@ -278,14 +278,21 @@
           <div class="col">
 
           </div>
-          <div class="col">
 
-          </div>
           <div class="col">
             <div class="col-md-auto">
               <button class="btn btn-success" (click)="showSelectExcel('exportExcelGeneral');">EXPORTAR EXCEL</button>
             </div>
           </div>
+
+          <div class="col">
+            <div class="col-md-auto">
+              <button class="btn btn-success" (click)="exportPdfGeneral();">EXPORTAR PDF</button>
+            </div>
+          </div>
+
+
+          
           <div class="col">
             <div class="col-md-auto">
               <p-button (click)="reportService.modalActive=false" label="Cerrar"></p-button>
